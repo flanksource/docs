@@ -14,7 +14,7 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "16.0.0"
       - run: make build-docs deploy-docs
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
