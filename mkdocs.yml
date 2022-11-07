@@ -44,9 +44,9 @@ markdown_extensions:
 nav:
   - Overview:  ./index.md
   - Products:
-    - ConfigDB:
+    - Configuration:
       - Install CLI: ./
-      - Getting Started with ConfigDB: ./tutorials/config-db/getting-started-configdb.md
+      - Getting Started: ./tutorials/config-db/getting-started-configdb.md
     - Canary Checker:
       - Overview: ./tutorials/canary-checker/overview.md
       - Getting Started: ./tutorials/canary-checker/getting-started.md
@@ -54,7 +54,7 @@ nav:
       - Install CLI: ./tutorials/canary-checker/run.md
       - Install on Standalone Server: ./tutorials/canary-checker/server.md
       - Install Kubernetes Operator: ./tutorials/canary-checker/operator.md
-  - Installation:
+  - Installations:
     - Helm Chart: ./
   - Concepts:
     - Secret Management: ./
