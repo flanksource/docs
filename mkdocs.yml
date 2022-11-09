@@ -45,8 +45,8 @@ nav:
   - Home:  ./index.md
   - Installation: ./installation.md
   - Configuration:
-    - Install CLI: ./config-db/config-db/install-cli.md
-    - Getting Started: ./config-db/config-db/getting-started-configdb.md
+    - Install CLI: ./config-db/tutorials/install-cli.md
+    - Getting Started: ./config-db/tutorials/getting-started-configdb.md
   - Health Checks:
     - Overview: ./canary-checker/tutorials/overview.md
     - Getting Started: ./canary-checker/tutorials/getting-started.md
