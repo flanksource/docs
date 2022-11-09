@@ -43,21 +43,17 @@ markdown_extensions:
       linenums: true
 nav:
   - Home:  ./index.md
+  - Installation: ./installation.md
   - Configuration:
-    - Install CLI: ./tutorials/config-db/install-cli.md
-    - Getting Started: ./tutorials/config-db/getting-started-configdb.md
-  - Canary Checker:
-    - Overview: ./tutorials/canary-checker/overview.md
-    - Getting Started: ./tutorials/canary-checker/getting-started.md
-    - Contributing: ./tutorials/canary-checker/dev-guide.md
-    - Install CLI: ./tutorials/canary-checker/run.md
-    - Install on Standalone Server: ./tutorials/canary-checker/server.md
-    - Install Kubernetes Operator: ./tutorials/canary-checker/operator.md
-  - Installations:
-    - Helm Chart: 
-      - Configuration: ./
-      - Canary-checker: ./
-      - Incident-commander: ./
+    - Install CLI: ./config-db/config-db/install-cli.md
+    - Getting Started: ./config-db/config-db/getting-started-configdb.md
+  - Health Checks:
+    - Overview: ./canary-checker/tutorials/overview.md
+    - Getting Started: ./canary-checker/tutorials/getting-started.md
+    - Contributing: ./canary-checker/tutorials/dev-guide.md
+    - Install CLI: ./canary-checker/tutorials/run.md
+    - Install on Standalone Server: ./canary-checker/tutorials/server.md
+    - Install Kubernetes Operator: ./canary-checker/tutorials/operator.md
   - Concepts:
     - Secret Management: ./
     - Templating: ./
