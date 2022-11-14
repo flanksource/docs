@@ -105,7 +105,7 @@ Where server is the `hostname` `e$`` is the sharename and `a/b/c` is the searchP
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify JSON path for use in template| string |  |
-| template | Specify jinja template for use | string |  |
+| jsonPath | Specify path to JSON element for use in template | string |  |
+| template | Specify Go template for use | string |  |
 | expr | Specify expression for use in template  | string |  |
 | javascript | Specify javascript syntax for template | string |  |

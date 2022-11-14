@@ -53,7 +53,7 @@ This check will try to connect to a specified MsSQL database, run a query agains
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify JSON path for use in template| string |  |
-| template | Specify jinja template for use | string |  |
+| jsonPath | Specify path to JSON element for use in template | string |  |
+| template | Specify Go template for use | string |  |
 | expr | Specify expression for use in template  | string |  |
 | javascript | Specify javascript syntax for template | string |  |

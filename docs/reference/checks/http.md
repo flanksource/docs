@@ -69,7 +69,7 @@ This check performs queries on HTTP endpoints, and Kubernetes Namespaces to moni
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify JSON path for use in template| string |  |
-| template | Specify jinja template for use | string |  |
-| expr | Specify expression for use in template  | string |  |
+| jsonPath | Specify path to JSON element for use in template | string |  |
+| template | Specify Go template for use | string |  |
+| expr | Specify expression for use in template | string |  |
 | javascript | Specify javascript syntax for template | string |  |

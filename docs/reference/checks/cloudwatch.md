@@ -7,20 +7,20 @@ This checks Cloudwatch for all the Active alarms and responses with the corespon
      apiVersion: canaries.flanksource.com/v1
      kind: Canary
      metadata:
-       name: dns-pass
+       name: cloudwatch-check
      spec:
        interval: 30
        cloudwatch:
          - accessKey:
              valueFrom:
                secretKeyRef:
-                 key: aws
-                 name: access-key
+                 key: AWS_ACCESS_KEY_ID
+                 name: aws-credentials
            secretKey:
              valueFrom:
                secretKeyRef:
-                 key: aws
-                 name: secrey-key
+                 key: AWS_SECRET_ACCESS_KEY
+                 name: aws-credentials
            region: "us-east-1"
            #skipTLSVerify: true
      ```
@@ -45,10 +45,10 @@ This checks Cloudwatch for all the Active alarms and responses with the corespon
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify JSON path for use in template| string |  |
-| template | Specify jinja template for use | string |  |
+| jsonPath | Specify path to JSON element for use in template| string |  |
+| template | Specify Go template for use | string |  |
 | expr | Specify expression for use in template  | string |  |
-| javascript | Specify javascript syntax for template | string |  |
+| javascript | Specify javascript syntax to run for template | string |  |
 
 
 ## CloudWatchFilter

@@ -45,7 +45,7 @@ This check performs regular backups for you CloudSQL instance at specified inter
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify JSON path for use in template| string |  |
-| template | Specify jinja template for use | string |  |
+| jsonPath | Specify path to JSON element for use in template | string |  |
+| template | Specify Go template for use | string |  |
 | expr | Specify expression for use in template  | string |  |
 | javascript | Specify javascript syntax for template | string |  |

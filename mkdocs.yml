@@ -55,9 +55,10 @@ nav:
     - Install on Standalone Server: ./canary-checker/tutorials/server.md
     - Install Kubernetes Operator: ./canary-checker/tutorials/operator.md
   - Concepts:
-    - Secret Management: ./
-    - Templating: ./
+    - Secret Management: ./concepts/secret-management.md
+    - Templating: ./concepts/templating.md
   - Reference:
+    - Glossary: ./
     - Checks:
       - Cloudwatch: ./reference/checks/cloudwatch.md
       - ConfigDB: ./reference/checks/configdb.md
