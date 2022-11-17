@@ -34,7 +34,7 @@ markdown_extensions:
   - fenced_code
   - pymdownx.smartsymbols
   - toc:
-      permalink: True
+      toc_depth : "1-1"
   - pymdownx.superfences
   - pymdownx.snippets
   - pymdownx.details
@@ -47,6 +47,7 @@ nav:
   - Configuration:
     - Install CLI: ./config-db/tutorials/install-cli.md
     - Getting Started: ./config-db/tutorials/getting-started-configdb.md
+    - Deploy to Kubernetes: ./config-db/tutorials/install-kubernetes.md
   - Health Checks:
     - Overview: ./canary-checker/tutorials/overview.md
     - Getting Started: ./canary-checker/tutorials/getting-started.md
@@ -58,7 +59,7 @@ nav:
     - Secret Management: ./concepts/secret-management.md
     - Templating: ./concepts/templating.md
   - Reference:
-    - Glossary: ./
+    - Glossary: ./reference/glossary.md
     - Checks:
       - Cloudwatch: ./reference/checks/cloudwatch.md
       - ConfigDB: ./reference/checks/configdb.md

@@ -208,6 +208,7 @@ INFO[0000] Loaded 7 config rules
 We can see that our scraper executed once, fetching our configuration from our repository, and then exited.
 
 This can be useful for quickly updating configuration and verifying diffs.
+
 ## Next steps
 
 In this guide, you’ve learnt what `config-db` is and how it can be useful to you. Additionally, you’ve seen how it can be used to scrape configuration from a Git repository.
