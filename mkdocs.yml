@@ -49,7 +49,7 @@ nav:
     - Getting Started: ./config-db/tutorials/getting-started-configdb.md
     - Deploy to Kubernetes: ./config-db/tutorials/install-kubernetes.md
   - Health Checks:
-    - Overview: ./canary-checker/tutorials/overview.md
+    - Overview: ./canary-checker/overview.md
     - Getting Started: ./canary-checker/tutorials/getting-started.md
     - Contributing: ./canary-checker/tutorials/dev-guide.md
     - Install CLI: ./canary-checker/tutorials/run.md

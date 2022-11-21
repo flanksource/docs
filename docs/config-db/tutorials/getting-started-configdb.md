@@ -18,7 +18,7 @@ We will use the PostgreSQL command line utility `createdb` to create our databas
 
 Run the following command in your terminal:
 
-```
+```bash
 createdb -h localhost -p 5432 -U postgres config
 ```
 
@@ -26,7 +26,7 @@ Where `config` is the name of the database we’re creating.
 
 We can then simply export the connection URL for the database as an environment variable for `config-db` to use by running the following in our terminal:
 
-```
+```bash
 export DB_URL=postgres://postgres@localhost:5432/config
 ```
 ## Scraping
@@ -37,7 +37,7 @@ You can find the repository here.
 
 Clone the repository and run the following command in the project's root.
 
-```
+```bash
 make build
 ```
 
@@ -45,7 +45,7 @@ This will build the project and prepare us to start scraping.
 
 Once the build is complete, we can ensure everything is working by running `config-db` with the default configuration for scraping.
 
-```
+```console
 % ./.bin/config-db serve
 INFO[0000] Loaded 7 config rules
 2022-10-12T19:08:14.962+0200	INFO	Initialized DB: localhost:5432/config (7503 kB)
@@ -75,7 +75,7 @@ As an example, we will scrape the configuration from a sample repository. We rec
 
 This repository contains a simple YAML definition for a canary that can be used by canary-checker.
 
-```
+```yaml
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
@@ -98,7 +98,7 @@ spec:
 To get started, let’s create a simple scraping configuration to let `config-db` scrape the configuration from our repository.
 
 
-```
+```yaml
 file:
  - type: $.kind
    id: $.metadata.name
@@ -116,7 +116,7 @@ We can now have `config-db` run this scraper on a specified schedule. If we don�
 
 To start `config-db` with this scraper configuration, run the following command in your terminal:
 
-```
+```bash
 ./.bin/config-db serve scrape-git.yaml –default-schedule=’@every 20s’
 ``` 
 
@@ -128,7 +128,7 @@ We can now make a change to our configuration and push it to remote, and `config
 
 Let’s change the `interval` field in our configuration from 40 to 30.
 
-```
+```yaml
 ...
    canary: http
 spec:
@@ -144,8 +144,8 @@ We can easily view the output of the configuration changes using the HTTP API pr
 
 We can access the API for configuration changes by executing the following curl request:
 
-```
-% curl -s http://localhost:3000/config_changes | jq
+```console
+curl -s http://localhost:3000/config_changes | jq
 [
   {
     "id": "0183cd72-c66f-6c48-f066-709ab9a8725a",
@@ -196,7 +196,7 @@ So far, we’ve illustrated how to get `config-db` running and scrape on an ongo
 
 We will continue using our `scrape-git.yaml` scraper configuration, but instead of using the `serve` command, we will use the `run` command as follows:
 
-```
+```console
 % ./.bin/config-db run scrape-git.yaml
 INFO[0000] Loaded 7 config rules
 2022-10-12T20:53:44.453+0200	INFO	Scrapping [scrape-git.yaml]

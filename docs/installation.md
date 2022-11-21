@@ -13,8 +13,10 @@ With Helm installed and running, add the Flanksource Helm repository as shown be
 helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
 ```
+
 ### Prerequisites
 Kubernetes 1.14+
+
 ---
 ## Canary-checker
 As per [Canary-checker documentation](/canary-checker/tutorials/overview.md)
@@ -67,8 +69,9 @@ helm inspect values flanksource/canary-checker
 # Helm 3
 helm show values flanksource/canary-checker
 ```
+
 ---
----
+
 ## Config-db
 As per [Config-db documentation](/config-db/tutorials/getting-started-config-db.md)
 > `config-db` is a straightforward JSON-based configuration management database. It enables you to scrape configuration from several sources on an ongoing basis and navigate that configuration in an easy-to-navigate and search JSON tree.
@@ -120,7 +123,7 @@ helm inspect values flanksource/config-db
 # Helm 3
 helm show values flanksource/config-db
 ```
----
+
 ---
 ## Incident Commander
 
@@ -208,6 +211,7 @@ helm inspect values flanksource/incident-commander
 # Helm 3
 helm show values flanksource/incident-commander
 ```
+
 ---
----
+
 

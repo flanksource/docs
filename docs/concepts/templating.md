@@ -16,11 +16,11 @@ To specify the template to be used for representing your data, the following opt
 The Go Expression Evaluation Language, [Expr](https://github.com/antonmedv/expr/) comes builtin with the Canary checker and is used for working with expressions. You use can expressions to render your data the way you see fit. 
 Below is an example for the supported field `test` for the `Canary` object.
 
-```
+```yaml
 exec:
-    - description: "exec dummy check"
-      script: |
-        echo "hello"
+  - description: "exec dummy check"
+    script: |
+      echo "hello"
       name: exec-pass-check
       test:
         expr: 'results.Stdout == "hello"'
@@ -30,7 +30,7 @@ The expression, `expr: 'results.Stdout == "hello"'` performs a test to check if 
 ### Go Template
 The [Go template](https://pkg.go.dev/text/template) comes supported with the Canary checker to customize your output however you want it. 
 Below is an example for the `display` field. 
-```
+```yaml
 prometheus:
     - host: https://prometheus.canary.lab.flanksource.com/
       name: prometheus-check
@@ -43,7 +43,7 @@ A Go template is specified in `template` under `display`. The template extracts 
 ### Javascript
 In-line javascript does come supported with the Canary checker. Javascript code can be ran side-by-side with the checks to filter or render your data. 
 Below is an example of in-line Javascript in use.
-```
+```yaml
 properties:
   - name: pod-metrics
     lookup:
