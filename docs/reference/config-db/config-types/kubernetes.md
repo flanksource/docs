@@ -19,12 +19,12 @@ The `kubernetes` config type scrapes the configurations of your Kubernetes resou
             - certificaterequest
             - orders.acme.cert-manager.io
     ```
-    
+
 ### Kubernetes (`kubernetes`)
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| [BaseScraper](#BaseScraper) |  | inline |
-| `namespace` | Specify namespace for scraping of resources |  |
+| [BaseScraper](#BaseScraper) | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | inline |
+| `namespace` | Specify namespace for scraping of Kubernetes resources |  |
 | `useCache` |
 | `allowIncomplete` |
 | `scope` |
