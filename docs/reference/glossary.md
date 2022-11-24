@@ -525,5 +525,102 @@ This glossary is meant to be an exhaustive, consistent list of the terms and fie
 
       
 ??? Config-db
+    ## Sub Fields
+    ### Filter (`filter`)
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+
+    ### Script (`script`)
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+
+    ### Transform (`transform`)
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+
+    ## BaseScraper
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+
+    ### Authentication (`authentication`)
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+
+    ### AWSConnection
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+
+    ### GCPConnection
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+
+    ### Template 
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+
+    ### CloudTrail (`cloudtrail`)
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+    
+    ### ResourceSelector (`selector`)
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+    | `namespace` |
+    | `kind` |
+    | `name` |
+    | `labelSelector` |
+    | `fieldSelector` |
+
+
+    ---
+
+    ## Configuration Types
+    ### AWS (`aws`)
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+    | compliance |
+    | patch_states |
+    | trusted_advisor_check |
+    | patch_details |
+    | cost_reporting |
+    | cloud_trail |
+    | include |
+    | exclude |
+    | inventory |
+
+    ### File (`file`)
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+    | [BaseScraper](#BaseScraper) |  | inline |
+    | `url` |  | string | 
+    | `paths` |  | string |
+    | `ignore` |  | string |
+
+    ### Kubernetes (`kubernetes`)
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+    | [BaseScraper](#BaseScraper) |  | inline |
+    | `namespace` |
+    | `useCache` |
+    | `allowIncomplete` |
+    | `scope` |
+    | `since` |
+    | `selector` |
+    | `fieldSelector` |
+    | `maxInflight` |
+    | `exclusions` |
+    | `kubeconfig` |   
+
+    ### KubernetesFile (`kubernetesFile`)
+    | Field | Description | Scheme | Required |
+    | ----- | ----------- | ------ | -------- |
+    | [BaseScraper](#BaseScraper) |  | inline |
+
+    
+
+
+
+
+
 
 ??? Incident-commander
