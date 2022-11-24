@@ -17,7 +17,7 @@ The KubernetesFile config type is used to scrape configurations contained in you
 ### KubernetesFile (`kubernetesFile`)
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| [BaseScraper](#BaseScraper) | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | inline |
+| [**BaseScraper**](#basescraper) | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | [BaseScraper](#basescraper) |
 | [`selector`](#resourceselector-selector) | Specify Kubernetes resource for configuration based on `namespace`, `kind`, `name` and more. | string |  |
 | `container` |
 | [`files`](#PodFile) | Specify path to file contained in Pod | string |
