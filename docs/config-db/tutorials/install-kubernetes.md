@@ -18,9 +18,6 @@ You’ll create some Kubernetes resources required to manually deploy ConfigDB t
 Before you commence deploying ConfigDB to Kubernetes, a Postgres database is required. See the following tutorial for the [installation process](https://phoenixnap.com/kb/postgresql-kubernetes).
 With a Postgres database installed, you can go ahead to deploying Config-db to Kubernetes.
 
-!!! note "Note"
-    *To avoid permission denied issues when deploying Config-db tries to create a role, you need to give your user **SUPER USER** privileges.* 
-
 - For Config-db to work properly it needs to have access to the already created Postgres database to perform migrations. Create a Secret configuration containing your Postgres database connection string. 
     ```bash
     $ kubectl create secret generic postgres-conn-string \
@@ -128,6 +125,56 @@ Create a file called `config-db-service.yaml`, add the following configurations 
     19/Nov/2022:09:27:12 +0000: Schema cache loaded
     ```
 
-  
+- Once the  `config-db` installation is confirmed and running as expected, you can go ahead to create a simple configuration to scrape your sample configuration from a Git repository. Create a file called `scrape-git-config.yaml` and attach the following code snippet:
+  ```yaml
+  file:
+    - type: $.kind
+      id: $.metadata.name
+      url: github.com/joeshiett/sample-configuration
+      paths:
+        - sample-config.yaml
+  ```
 
+  The supported values for the `type` and `id` field is the JSONPath. The `type` field specifies the `type` of the configuration which is `Canary`, the `id` field specifies the `name` of the configuration. The `url` field specifies the git repository containing the configuration to be scraped. The `paths` field specifies configuration file to be scraped in this case which is `sample-config.yaml`. For this example, the configuration is contained in a repository called `sample-configuration`.
+  The file `sample-config.yaml` looks like this:
+  ```yaml
+  apiVersion: canaries.flanksource.com/v1
+  kind: Canary
+  metadata:
+    name: http-check
+  spec:
+    interval: 30
+    http:
+      - endpoint: http://status.savanttools.com/?code=200
+        thresholdMillis: 3000
+        responseCodes: [201, 200, 301]
+        responseContent: ""
+        maxSSLExpiry: 7
+  ```
+- To scrape your configuration at once, perform the following command:
+  ```bash
+  # Copy scrape-git-config.yaml to Config-db pod
+  kubectl cp scrape-git-config.yaml <config-db-pod-name>:config/scrape-git-config.yaml
+
+  # Install git in the Pod, and run scrape-git-config.yaml configuration
+  kubectl exec -it <config-db-pod-name> -- /bin/bash -c "apt install -y git && ./config-db run config/scrape-git-config.yaml"
+  ```
+  To confirm the `scrape-git-config.yaml` configuration has run properly, you should get the following output:
+  ```console
+  INFO[0000] Loaded 7 config rules
+  INFO[0000] Loaded 1 change rules
+  2022-11-22T20:47:24.400Z	INFO	Scrapping [scrape-gi-config.yaml]
+  2022-11-22T20:47:24.413Z	INFO	Initialized DB: 10.42.0.11:5432/config_db (8045 kB)
+  2022/11/22 20:47:24 goose: no migrations to run. current version: 99
+  2022-11-22T20:47:24.446Z	INFO	Scraping files from (PWD: /app)
+  2022-11-22T20:47:25.232Z	INFO	Exporting 1 resources to DB
+  ``` 
+
+- Now you've been able to scrape your configuration. To confirm the configuration is scraped and added to Config-db, you need to query the Config-db API. You can do so by performing the following commands:
+  ```bash
+  ## This command extracts the endpoint for the config-db service
+  export endpoint=$(kubectl get endpoints -o go-template='{{range.items}}{{if eq .metadata.name "config-db"}}{{(index (index .subsets 0).addresses 0).ip}}:{{(index (index .subsets 0).ports 0).port}}{{end}}{{end}}')
+
+  curl http://$endpoint/config_items
+  ```
 
