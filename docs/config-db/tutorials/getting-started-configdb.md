@@ -130,9 +130,9 @@ Let’s change the `interval` field in our configuration from 40 to 30.
 
 ```yaml
 ...
-   canary: http
+  canary: http
 spec:
- interval: 30
+  interval: 30
 ...
 ```
 
