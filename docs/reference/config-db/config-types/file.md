@@ -14,7 +14,7 @@ The file config type is set to scrape configurations or configurations in common
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| [BaseScraper](#BaseScraper) | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | [BaseScraper](#basescraper) |
+| [**BaseScraper**](#BaseScraper) | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | [BaseScraper](#basescraper) |
 | `url` | Specify URL e.g github repository containing the configuration(s) | string | 
 | `path` | Specify path to configuration(s) for scraping | string |
 | `ignore` | Set configurations to ignore | string |
