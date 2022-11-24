@@ -59,47 +59,44 @@ nav:
     - Secret Management: ./concepts/secret-management.md
     - Templating: ./concepts/templating.md
   - Reference:
-    - Glossary: ./reference/glossary.md
-    - Canary-checker:
-      - Checks:
-        - Cloudwatch: ./reference/canary-checker/checks/cloudwatch.md
-        - ConfigDB: ./reference/canary-checker/checks/configdb.md
-        - Containerd Pull: ./reference/canary-checker/checks/containerd-pull.md
-        - Containerd Push: ./reference/canary-checker/checks/containerd-push.md
-        - DNS: ./reference/canary-checker/checks/dns.md
-        - Docker Pull: ./reference/canary-checker/checks/docker-pull.md
-        - Docker Push: ./reference/canary-checker/checks/docker-push.md
-        - EC2: ./reference/canary-checker/checks/ec2.md
-        - Elasticsearch: ./reference/canary-checker/checks/elasticsearch.md
-        - Exec: ./reference/canary-checker/checks/exec.md
-        - GCSBucket: ./referencecanary-checker/checks/gcs-bucket.md
-        - GCS Database Backup: ./reference/canary-checker/checks/gcs-database-backup.md
-        - Helm: ./reference/canary-checker/checks/helm.md
-        - HTTP: ./reference/canary-checker/checks/http.md
-        - ICMP: ./reference/canary-checker/checks/icmp.md
-        - JMeter: ./reference/canary-checker/checks/jmeter.md
-        - JUnit: ./reference/canary-checker/checks/junit.md
-        - Kubernetes: ./reference/canary-checker/checks/kubernetes.md
-        - LDAP: ./reference/canary-checker/checks/ldap.md
-        - Mongo: ./reference/canary-checker/checks/mongo.md
-        - MsSql: ./reference/canary-checker/checks/mssql.md
-        - MySQL: ./reference/canary-checker/checks/mysql.md
-        - Namespace: ./reference/canary-checker/checks/namespace.md
-        - Pod: ./reference/canary-checker/checks/pod.md
-        - Postgres: ./reference/canary-checker/checks/postgres.md
-        - Prometheus: ./reference/canary-checker/checks/prometheus.md
-        - Redis: ./reference/canary-checker/checks/redis.md
-        - Restic: ./reference/canary-checker/checks/restic.md
-        - S3 Bucket: ./reference/canary-checker/checks/s3-bucket.md
-        - S3: ./reference/canary-checker/checks/s3.md
-        - SFTP: ./reference/canary-checker/checks/sftp.md
-        - SMB / CIFS: ./reference/canary-checker/checks/smb.md
-    - Config-db:
-      - Config Types:
-        - AWS: ./reference/config-db/config-types/aws.md
-        - File: ./reference/config-db/config-types/file.md
-        - Kubernetes: ./reference/config-db/config-types/kubernetes.md
-        - KubernetesFile: ./reference/config-db/config-types/kubernetes-file.md
+    - Checks:
+      - Cloudwatch: ./reference/checks/cloudwatch.md
+      - ConfigDB: ./reference/checks/configdb.md
+      - Containerd Pull: ./reference/checks/containerd-pull.md
+      - Containerd Push: ./reference/checks/containerd-push.md
+      - DNS: ./reference/checks/dns.md
+      - Docker Pull: ./reference/checks/docker-pull.md
+      - Docker Push: ./reference/checks/docker-push.md
+      - EC2: ./reference/checks/ec2.md
+      - Elasticsearch: ./reference/checks/elasticsearch.md
+      - Exec: ./reference/checks/exec.md
+      - GCSBucket: ./referencechecks/gcs-bucket.md
+      - GCS Database Backup: ./reference/checks/gcs-database-backup.md
+      - Helm: ./reference/checks/helm.md
+      - HTTP: ./reference/checks/http.md
+      - ICMP: ./reference/checks/icmp.md
+      - JMeter: ./reference/checks/jmeter.md
+      - JUnit: ./reference/checks/junit.md
+      - Kubernetes: ./reference/checks/kubernetes.md
+      - LDAP: ./reference/checks/ldap.md
+      - Mongo: ./reference/checks/mongo.md
+      - MsSql: ./reference/checks/mssql.md
+      - MySQL: ./reference/checks/mysql.md
+      - Namespace: ./reference/checks/namespace.md
+      - Pod: ./reference/checks/pod.md
+      - Postgres: ./reference/checks/postgres.md
+      - Prometheus: ./reference/checks/prometheus.md
+      - Redis: ./reference/checks/redis.md
+      - Restic: ./reference/checks/restic.md
+      - S3 Bucket: ./reference/checks/s3-bucket.md
+      - S3: ./reference/checks/s3.md
+      - SFTP: ./reference/checks/sftp.md
+      - SMB / CIFS: ./reference/checks/smb.md
+    - Configuration:
+        - AWS: ./reference/configuration/aws.md
+        - File: ./reference/configuration/file.md
+        - Kubernetes: ./reference/configuration/kubernetes.md
+        - KubernetesFile: ./reference/configuration/kubernetes-file.md
     - Topology:
       - Common:
         - Kubernetes Cluster: ./topology/common/kubernetes-cluster.md
