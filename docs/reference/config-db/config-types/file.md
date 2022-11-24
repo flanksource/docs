@@ -14,7 +14,7 @@ The file config type is set to scrape configurations or configurations in common
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| [BaseScraper](#BaseScraper) | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | inline |
+| [BaseScraper](#BaseScraper) | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | [BaseScraper](#basescraper) |
 | `url` | Specify URL e.g github repository containing the configuration(s) | string | 
 | `path` | Specify path to configuration(s) for scraping | string |
 | `ignore` | Set configurations to ignore | string |
@@ -27,16 +27,16 @@ The file config type is set to scrape configurations or configurations in common
 | `name` | A static value or JSONPath expression to use as the Name for the resource. | string |  |
 | `items` | A JSONPath expression to use to extract individual items from the resource | string |  |
 | `type` | A static value or JSONPath expression to use as the type for the resource. | string |  |
-| [`transform`](#transform) | Specify field to transform result | string |  |
-| `format` | Format of config item, defaults to JSON, available options are JSON, properties |  |
+| [`transform`](#transform) | Specify field to transform result | [Transform](#transform) |  |
+| `format` | Format of config item, defaults to JSON, available options are JSON | string |
 
 ### Transform
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | [`script`](#script) | Script to transform scrape result |  |
-| [`include`](#Filter) | Specify fields to include in the configuration | string  |
-| [`exclude`](#filter) | Specify fields to remove from the config, useful for removing sensitive data and fields |  |
+| [`include`](#Filter) | Specify fields to include in the configuration | [Filter](#filter)  |  |
+| [`exclude`](#filter) | Specify fields to remove from the config, useful for removing sensitive data and fields | [Filter](#filter) |  |
 
 ### Filter 
 
