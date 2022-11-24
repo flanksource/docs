@@ -4,17 +4,19 @@
 
 By doing this, `config-db` enables you to view and search the change history of your configuration across multiple dimensions (node, zone, environment, application, technology, etc). As well as compare and view the differences between configurations across environments.
 
-In this guide, we will illustrate how to set up `config-db` and configure it to scrape configuration from a Git repository, in line with the GitOps philosophy.
+In this guide, you'll see how to set up `config-db` and configure it to scrape configuration from a Git repository, in line with the GitOps philosophy.
 
-The scraped configuration will be branch and environment aware, enabling us to see the differences between those dimensions.
+The scraped configuration will be branch and environment aware, enabling you to see the differences between those dimensions.
 
-Additionally - we will illustrate how `config-db` can keep track of configuration changes should we modify the configuration in our Git repository.
+Additionally - you'll see how `config-db` can keep track of configuration changes should there be any modifications to the configuration in your Git repository.
+
 ## Installation
+
 ### Database Configuration
 
 `config-db` needs a backing PostgreSQL database to run its migrations against. 
 
-We will use the PostgreSQL command line utility `createdb` to create our database.
+You'll use the PostgreSQL command line utility `createdb` to create our database.
 
 Run the following command in your terminal:
 
@@ -24,26 +26,17 @@ createdb -h localhost -p 5432 -U postgres config
 
 Where `config` is the name of the database we’re creating.
 
-We can then simply export the connection URL for the database as an environment variable for `config-db` to use by running the following in our terminal:
+You can then simply export the connection URL for the database as an environment variable for `config-db` to use by running the following in our terminal:
 
 ```bash
 export DB_URL=postgres://postgres@localhost:5432/config
 ```
 ## Scraping
 
-Before getting started with scraping, we will need to clone and build the `config-db` project.
+!!! info "Info"
+  Before getting started with scraping, you need to have Config-db running locally in your system. See the [Config-db Installation Guide](install-cli/#installation) on how to install the Config-db CLI.
 
-You can find the repository here.
-
-Clone the repository and run the following command in the project's root.
-
-```bash
-make build
-```
-
-This will build the project and prepare us to start scraping.
-
-Once the build is complete, we can ensure everything is working by running `config-db` with the default configuration for scraping.
+Once the installation is complete, ensure everything is working by running `config-db` with the default configuration for scraping.
 
 ```console
 % ./.bin/config-db serve
@@ -68,10 +61,11 @@ ____________________________________O/_______
 12/Oct/2022:19:08:15 +0200: Schema cache loaded
 ```
 
-Once we’ve verified that we can build and start `config-db`, we can move on to scraping configuration from a Git repository.
-Scraping configuration from Git
+Once you've verified that you can start `config-db`, you can now move on to scraping configurations from a Git repository.
 
-As an example, we will scrape the configuration from a sample repository. We recommend forking this repository so that you can modify it and play with the different features that `config-db` provides.
+## Scraping configuration from Git
+
+As an example, you'll scrape the configuration from a sample repository. It is recommended you fork this repository so you can modify it and play with the different features that `config-db` provides.
 
 This repository contains a simple YAML definition for a canary that can be used by canary-checker.
 
@@ -95,7 +89,7 @@ spec:
        expr: 'code == 200'
 ```
 
-To get started, let’s create a simple scraping configuration to let `config-db` scrape the configuration from our repository.
+To get started, create a simple scraping configuration to let `config-db` scrape the configuration from your Github repository.
 
 
 ```yaml
@@ -107,26 +101,26 @@ file:
      - simple-config.yaml
 
 ```
-We can save this configuration as `scrape-git.yaml`. You will notice that for `type` and `id` we use the `$.` syntax. This lets `config-db` know to look for those fields in the scraped configuration. In our case, those fields should evaluate as follows:
+Save this configuration as `scrape-git.yaml`. You'll notice that for `type` and `id` the `$.` syntax is used. This lets `config-db` know to look for those fields in the scraped configuration. In this case, those fields should evaluate as follows:
 
 `type` should be equal to “Canary”
 `id` should be equal to “http-pass-single”
 
-We can now have `config-db` run this scraper on a specified schedule. If we don’t specify a schedule, the scraper will run every 60 minutes by default.
+You can now have `config-db` run this scraper on a specified schedule. If a schedule isn't specified, the scraper will run every 60 minutes by default.
 
 To start `config-db` with this scraper configuration, run the following command in your terminal:
 
 ```bash
-./.bin/config-db serve scrape-git.yaml –default-schedule=’@every 20s’
+config-db serve scrape-git.yaml –default-schedule=’@every 20s’
 ``` 
 
-This will start `config-db` and run the scraper we’ve defined every 20 seconds.
+This will start `config-db` and run the scraper you've defined every 20 seconds.
 
 
 
-We can now make a change to our configuration and push it to remote, and `config-db` will detect that configuration change and reflect it on the next scraper run.
+Make a change to your configuration and push it to your remote repository (Github). `config-db` will detect that configuration change and reflect it on the next scraper run.
 
-Let’s change the `interval` field in our configuration from 40 to 30.
+Change the `interval` field in your configuration from `40` to `30`.
 
 ```yaml
 ...
@@ -142,7 +136,7 @@ Once `config-db` detects your change, you should see log output as follows:
 
 We can easily view the output of the configuration changes using the HTTP API provided by `config-db`.
 
-We can access the API for configuration changes by executing the following curl request:
+You can access the API for configuration changes by executing the following curl request:
 
 ```console
 curl -s http://localhost:3000/config_changes | jq
@@ -186,18 +180,18 @@ curl -s http://localhost:3000/config_changes | jq
 ]
 ```
 
-We can see that all changes to our configuration have been detected and stored as patches by `config-db`.
+You can see that all changes to your configuration have been detected and stored as patches by `config-db`.
 
-Additionally, we can view our full configuration via the `config_items` API. Accessible via `http://localhost:3000/config_items`.
+Additionally, you can view your full configuration via the `config_items` API. Accessible via `http://localhost:3000/config_items`.
 
 ## Scraping using the CLI
 
-So far, we’ve illustrated how to get `config-db` running and scrape on an ongoing basis. But that isn’t always necessary. In cases where you just want to scrape once-off, you can use the CLI.
+So far, it was illustrated how to get `config-db` running and scrape on an ongoing basis. But that isn’t always necessary. In cases where you just want to scrape once-off, the CLI does support this option.
 
-We will continue using our `scrape-git.yaml` scraper configuration, but instead of using the `serve` command, we will use the `run` command as follows:
+You'll continue to use your `scrape-git.yaml` scraper configuration, but instead of using the `serve` command, you'll use the `run` command as follows:
 
 ```console
-% ./.bin/config-db run scrape-git.yaml
+% config-db run scrape-git.yaml
 INFO[0000] Loaded 7 config rules
 2022-10-12T20:53:44.453+0200	INFO	Scrapping [scrape-git.yaml]
 2022-10-12T20:53:44.496+0200	INFO	Initialized DB: localhost:5432/config (7959 kB)
@@ -213,8 +207,6 @@ This can be useful for quickly updating configuration and verifying diffs.
 
 In this guide, you’ve learnt what `config-db` is and how it can be useful to you. Additionally, you’ve seen how it can be used to scrape configuration from a Git repository.
 
-We’ve also illustrated the usage of the HTTP API that is built into `config-db` to interrogate configuration items and their patches easily.
+It has also illustrated, the usage of the HTTP API that is built into `config-db` to interrogate configuration items and their patches easily.
 
-In our next guide - we illustrate how to install `config-db` via Helm into your Kubernetes cluster, as well as how to set it up for other types of configuration.
-
-
+In the next guide - you'll see how to install `config-db` via Helm into your Kubernetes cluster, as well as how to set it up for other types of configuration.
