@@ -1,4 +1,4 @@
-## Getting Started with Canary Checker
+# Getting Started with Canary Checker
 
 Canary checker is a monitoring system for executing synthetic tests, providing a built-in user interface, CLI and multi-cluster and multi-instance aggregation. Canary checker is designed with multi-tenancy in mind. 
 
@@ -6,10 +6,10 @@ You are able to write your own tests and execute them to continually verify that
 
 In this guide, you'll see how to use canary-checker to test a Postgres database in several ways, using the CLI.
 
-### Prerequisities
+## Prerequisities
 For the purposes of this guide, you need a PostgreSQL instance running in Kubernetes. See the following guide on [how to install PostgreSQL](https://phoenixnap.com/kb/postgresql-kubernetes) in your Kubernetes Cluster via Helm. 
 
-### Installing the CLI
+## Installing the CLI
 
 > For this guide, Docker Desktop is used to create a Kubernetes cluster on MacOS. You can create your Cluster on the environment of your choice.
 
@@ -47,7 +47,7 @@ Global Flags:
       --shared-library stringArray   Add javascript files to be shared by all javascript templates
 ```
 
-### Creating a synthetic check for PostgreSQL
+## Creating a synthetic check for PostgreSQL
 
 You'll define a check against our database that will connect to it, run a query against it and verify the results. Additionally, you'll see how canary-checker responds when the results are incorrect.
 
@@ -169,7 +169,7 @@ canary-checker run ../postgres-canaries/postgres-canary-local-does-admin-user-ex
 2022-09-08T13:21:39+02:00 	PASS [postgres] default/postgres-succeed/postgres schemas check duration=100
 2022-09-08T13:21:39.647+0200	INFO	1 passed, 0 failed in 112ms
 ```
-### Installing canary-checker as a Kubernetes operator
+## Installing canary-checker as a Kubernetes operator
 
 So far, you've been running canary-checker using the CLI, but it's recommended you install it in your cluster and deploy a few Canaries with it.
 

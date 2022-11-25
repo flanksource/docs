@@ -58,7 +58,7 @@ EOF
 You can test the canary status by running: `kubectl get canaries.canaries.flanksource.com`
 
 Sample output:
-```
+```console
 kubectl get canaries.canaries.flanksource.com
 NAME        INTERVAL   STATUS   MESSAGE   UPTIME 1H    LATENCY 1H   LAST TRANSITIONED   LAST CHECK
 http-pass   30         Passed             1/1 (100%)   500ms                            7s
