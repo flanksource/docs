@@ -35,28 +35,28 @@ This config type is used to scrape information about your AWS infrastructure.
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `compliance` | Specify compliance metadata for scraping |  |
-| `patch_states` | Set boolean value for scraping of patch state status, and report | boolean  |
-| `trusted_advisor_check` | Set boolean value for enabling/disabling trusted advisor | boolean |
-| `patch_details` | Set boolean value  | boolean |  |
-| [`cost_reporting`](#CostReporting) | Specify cost reporting for scraping of data | [CostReporting](#costreporting)
-| [`cloud_trail`](#cloudtrail-cloudtrail) | Set CloudTrail specifications | [CloudTrail](#cloudtrail-cloudtrail) |  |
-| `include` | Specify AWS resources to include for scraping | []string |
-| `exclude` | Specify AWS resources to exclude from scraping | []string |
-| `inventory` | Toggle scrape of *metadata* for AWS resources | boolean |
+| `compliance` | Toggle scraping of compliance metadata | *bool* |
+| `patch_states` | Set boolean value for scraping of patch state status, and report | *bool*  |
+| `trusted_advisor_check` | Set boolean value for enabling/disabling trusted advisor | *bool* |
+| `patch_details` | Set boolean value to enable/disable scraping of patch details | *bool* |  |
+| [`cost_reporting`](#CostReporting) | Specify cost reporting for scraping of data | [*CostReporting*](#costreporting)
+| [`cloud_trail`](#cloudtrail-cloudtrail) | Set CloudTrail specifications | [*CloudTrail*](#cloudtrail-cloudtrail) |  |
+| `include` | Specify AWS resources to include for scraping | *string (list)* |
+| `exclude` | Specify AWS resources to exclude from scraping | *string (list)* |
+| `inventory` | Toggle scrape of *metadata* for AWS resources | *bool* |
 
 ### CloudTrail (`cloudtrail`)
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `exclude` | Set events to be excluded from scraping | []string |
-| `max_age` | Set maximum age of events for scraping | string |
+| `exclude` | Set events to be excluded from scraping | *string (list)* |
+| `max_age` | Set maximum age of events for scraping | *string* |
 
 ### CostReporting (`cost_reporting`)
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `s3_bucket_path` | Set path for S3 bucket to scrape published AWS billing reports | string |
-| `table` | Specify table containing cost and usage data | string |
-| `database` | Specify database containing cost and usage data | string |
-| `region` | Specify region for S3 bucket | string |
+| `s3_bucket_path` | Set path for S3 bucket to scrape published AWS billing reports | *string* |
+| `table` | Specify table containing cost and usage data | *string* |
+| `database` | Specify database containing cost and usage data | *string* |
+| `region` | Specify region for S3 bucket | *string* |
