@@ -38,7 +38,8 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.snippets
   - pymdownx.details
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - codehilite:
       linenums: true
 nav:
@@ -53,8 +54,6 @@ nav:
     - Getting Started: ./canary-checker/tutorials/getting-started.md
     - Contributing: ./canary-checker/tutorials/dev-guide.md
     - Install CLI: ./canary-checker/tutorials/run.md
-    - Install on Standalone Server: ./canary-checker/tutorials/server.md
-    - Install Kubernetes Operator: ./canary-checker/tutorials/operator.md
   - Concepts:
     - Secret Management: ./concepts/secret-management.md
     - Templating: ./concepts/templating.md
