@@ -69,7 +69,7 @@ nav:
       - EC2: ./reference/checks/ec2.md
       - Elasticsearch: ./reference/checks/elasticsearch.md
       - Exec: ./reference/checks/exec.md
-      - GCSBucket: ./referencechecks/gcs-bucket.md
+      - GCSBucket: ./reference/checks/gcs-bucket.md
       - GCS Database Backup: ./reference/checks/gcs-database-backup.md
       - Helm: ./reference/checks/helm.md
       - HTTP: ./reference/checks/http.md
