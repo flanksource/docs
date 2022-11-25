@@ -34,7 +34,7 @@ The `kubernetes` config type scrapes the configurations of your Kubernetes resou
 | `fieldSelector` | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running` | *string* |
 | `maxInflight` | Set value for maximum inflight requests | *int* | 
 | `exclusions` | Specify Kubernetes resources to be excluded from scraping | *string (list)* |
-| **`kubeconfig`** | Specify kubeconfig for access to your Kubernetes Cluster |[*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | *string* | yes |
+| **`kubeconfig`** | Specify kubeconfig for access to your Kubernetes Cluster |[*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes |
 
 ### BaseScraper
 | Field | Description | Scheme | Required |
