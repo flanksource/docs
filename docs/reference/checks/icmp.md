@@ -1,6 +1,6 @@
 ## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/icmp.svg' style='height: 32px'/> ICMP
 
-This check performs ICMP requests for information on ICMP packet loss and duration.
+This check performs ICMP requests for information on ICMP packet loss, duration and response.
 
 ??? example
      ```yaml
@@ -20,10 +20,10 @@ This check performs ICMP requests for information on ICMP packet loss and durati
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| description | Description for the check | string |  |
-| **endpoint** | Address to query using ICMP | string | Yes |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| name | Name of the check | string |  |
-| packetCount | Total number of packets to send per check | int |  |
-| packetLossThreshold | Percent of total packets that are allowed to be lost | int64 |  |
-| thresholdMillis | Expected response time threshold in ms | int64 |  |
+| `description` | Description for the check | *string* |  |
+| **`endpoint`** | Address to query using ICMP | *string* | Yes |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| `name` | Name of the check | *string* |  |
+| `packetCount` | Total number of packets to send per check | *int* |  |
+| `packetLossThreshold` | Percent of total packets that are allowed to be lost | *int64* |  |
+| `thresholdMillis` | Expected response time threshold in ms | *int64* |  |

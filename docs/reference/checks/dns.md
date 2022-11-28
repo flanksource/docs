@@ -83,14 +83,14 @@ This check performs queries to a DNS server to obtain the required information.
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| description | Description for the check | string |  |
-| exactreply | Expected exact match result(s) | \[\]string |  |
-| **server** | Address of DNS server to query | string | Yes |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| minrecords | Minimum records | int |  |
-| name | Name of the check | string |  |
-| port | Port to query DNS server on | int | Yes |
-| query | Domain name to lookup | string |  |
-| querytype | Record type to query | string | Yes |
-| thresholdMillis | Threshold response time from DNS server	 | int | Yes |
-| timeout | Maximum timeout for DNS query | int | Yes |
+| `description` | Description for the check | *string* |  |
+| `exactreply` | Expected exact match result(s) | *string (list)* |  |
+| **`server`** | Address of DNS server to query | *string* | Yes |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| `minrecords` | Minimum records | *int* |  |
+| `name` | Name of the check | *string* |  |
+| `port` | Port to query DNS server on | *int* | Yes |
+| `query` | Domain name to lookup | *string* |  |
+| `querytype` | Record type to query | *string* | Yes |
+| `thresholdMillis` | Threshold response time from DNS server	| *int* | Yes |
+| `timeout` | Maximum timeout for DNS query | *int* | Yes |

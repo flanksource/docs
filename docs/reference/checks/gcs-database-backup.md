@@ -19,15 +19,15 @@ This check performs regular backups for you CloudSQL instance at specified inter
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| description | Description for the check | string |  |
-| display | Template to display server response in text (overrides default bar format for UI) | [Template](#template) |  |
-| gcp | Connect to GCP project and instance | *[GCPDatabase](#gcpdatabase) |  |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| labels | Labels for the check | Labels |  |
-| maxAge | Max age for backup allowed, eg. 5h30m | Duration |  |
-| **name** | Name of the check | string | Yes |
-| test | Template to test the result against | [Template](#template) |  |
-| transform | Template to transform results to | [Template](#template) |  |
+| `description` | Description for the check | *string* |  |
+| `display` | Template to display server response in text (overrides default bar format for UI) | [*Template*](#template) |  |
+| `gcp` | Connect to GCP project and instance | [*GCPDatabase*](#gcpdatabase) |  |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| `labels` | Labels for the check | *Labels* |  |
+| `maxAge` | Max age for backup allowed, eg. 5h30m | *Duration* |  |
+| **`name`** | Name of the check | *string* | Yes |
+| `test` | Template to test the result against | [*Template*](#template) |  |
+| `transform` | Template to transform results to | [*Template*](#template) |  |
 
 ---
 # Scheme Reference
@@ -36,16 +36,23 @@ This check performs regular backups for you CloudSQL instance at specified inter
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| project | Specify GCP project | string | Yes |
-| instance | Specify GCP instance | string | Yes |
-| gcpConnection | Set up gcpConnection with GCP `endpoint` and `credentials` |  |
+| `project` | Specify GCP project | *string* | Yes |
+| `instance` | Specify GCP instance | *string* | Yes |
+| `gcpConnection` | Set up gcpConnection with GCP `endpoint` and `credentials` | [GCPConnection](#gcpconnection) |
+
+## GCPConnection
+
+| Field | Description | Scheme | Required |
+| ----- | ----------- | ------ | -------- |
+| **`credentials`** | Set GCP credentials | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| **`endpoint`** | Specify GCS HTTP endpoint | *string* | Yes |
 
 
 ## Template
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify path to JSON element for use in template | string |  |
-| template | Specify Go template for use | string |  |
-| expr | Specify expression for use in template  | string |  |
-| javascript | Specify javascript syntax for template | string |  |
+| `jsonPath` | Specify path to JSON element for use in template | *string* |  |
+| `template` | Specify Go template for use | *string* |  |
+| `expr` | Specify expression for use in template  | *string* |  |
+| `javascript` | Specify javascript syntax for template | *strin*g* |  |

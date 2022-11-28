@@ -22,13 +22,13 @@ The Prometheus Check connects to the Prometheus host, performs the desired query
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| description | Description for the check | string |  |
-| display | Template to display the result in | [Template](#template) |  |
-| **host** | Address of the prometheus server | string | Yes |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| name | Name of the check | string |  |
-| **query** | PromQL query | string | Yes |
-| test | Template to test the result against | [Template](#template) |  |
+| `description` | Description for the check | string |  |
+| `display` | Template to display the result in | [Template](#template) |  |
+| **`host`** | Address of the prometheus server | string | Yes |
+| `icon` | Icon for overwriting default icon on the dashboard | string |  |
+| `name` | Name of the check | string |  |
+| **`query`** | PromQL query | string | Yes |
+| `test` | Template to test the result against | [Template](#template) |  |
 
 ---
 # Scheme Reference
@@ -36,7 +36,7 @@ The Prometheus Check connects to the Prometheus host, performs the desired query
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify path to JSON element for use in template | string |  |
-| template | Specify Go template for use | string |  |
-| expr | Specify expression for use in template  | string |  |
-| javascript | Specify javascript syntax for template | string |  |
+| `jsonPath` | Specify path to JSON element for use in template | *string* |  |
+| `template` | Specify Go template for use | *string* |  |
+| `expr` | Specify expression for use in template  | *string* |  |
+| `javascript` | Specify javascript syntax for template | *string* |  |

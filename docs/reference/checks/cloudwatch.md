@@ -1,6 +1,6 @@
 ## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/cloudwatch.svg' style='height: 32px'/> CloudWatch
 
-This checks Cloudwatch for all the Active alarms and responses with the coresponding reasons for each. 
+This checks Cloudwatch for all the Active alarms and responses with the corresponding reasons for each. 
 
 ??? example
      ```yaml
@@ -35,7 +35,7 @@ This checks Cloudwatch for all the Active alarms and responses with the corespon
 | `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
 | `name` | Name of the check | *string* |  |
 | `region` | Region for cloudwatch | *string* |  |
-| **secretKey** | Secret key value or valueFrom configMapKeyRef or SecretKeyRef to access cloudwatch | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| **`secretKey`** | Secret key value or valueFrom configMapKeyRef or SecretKeyRef to access cloudwatch | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
 | `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* |  |
 | `test` | Template to test the result against | [*Template*](#template) |  |
 

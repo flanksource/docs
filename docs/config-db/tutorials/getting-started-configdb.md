@@ -1,4 +1,4 @@
-# Getting started with config-db
+# Getting started with Config-db
 
 `config-db` is a straightforward JSON-based configuration management database. It enables you to scrape configuration from several sources on an ongoing basis and navigate that configuration in an easy-to-navigate and search JSON tree.
 
@@ -34,7 +34,7 @@ export DB_URL=postgres://postgres@localhost:5432/config
 ## Scraping
 
 !!! info "Info"
-  Before getting started with scraping, you need to have Config-db running locally in your system. See the [Config-db Installation Guide](install-cli/#installation) on how to install the Config-db CLI.
+    Before getting started with scraping, you need to have Config-db running locally in your system. See the [Config-db Installation Guide](install-cli/#installation) on how to install the Config-db CLI.
 
 Once the installation is complete, ensure everything is working by running `config-db` with the default configuration for scraping.
 

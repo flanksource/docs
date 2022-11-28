@@ -34,7 +34,8 @@ markdown_extensions:
   - fenced_code
   - pymdownx.smartsymbols
   - toc:
-      toc_depth : "1-1"
+      permalink: False
+      anchorlink: True
   - pymdownx.superfences
   - pymdownx.snippets
   - pymdownx.details

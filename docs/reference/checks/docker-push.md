@@ -28,11 +28,11 @@ DockerPush check will try to create and push a Docker image to a specified regis
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| auth | Username and password value, configMapKeyRef or SecretKeyRef for elasticsearch server | *[Authentication](#authentication) |  |
-| description | Description for the check | string |  |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| **image** | Full path to image, including registry | string | Yes |
-| name | Name of the check | string |  |
+| `auth` | Username and password value, configMapKeyRef or SecretKeyRef for elasticsearch server | [*Authentication*](#authentication) |  |
+| `description` | Description for the check | *string* |  |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| **`image`** | Full path to image, including registry | *string* | Yes |
+| `name` | Name of the check | *string* |  |
 
 ---
 # Scheme Reference
@@ -40,5 +40,5 @@ DockerPush check will try to create and push a Docker image to a specified regis
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **password** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **username** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes | 
+| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes | 

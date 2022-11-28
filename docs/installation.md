@@ -1,8 +1,4 @@
-# Table of Contents
-1. [Inital Set up](#initial-set-up)
-2. [Health Checks](#canary-checker)
-3. [Configuration](#config-db)
----
+
 # Flanksource Helm Charts
 ---
 ## Initial Set up

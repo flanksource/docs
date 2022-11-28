@@ -80,55 +80,53 @@ The S3Bucket Check:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **accessKey** | Access key value or valueFrom configMapKeyRef or SecretKeyRef to access your s3 | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **bucket** | Array of [Bucket](#bucket) objects to be checked | string | Yes |
-| description | Description for the check | string |  |
-| display | Template to display the result in | [Template](#template) |  |
-| endpoint | S3/Minio HTTP Endpoint to establish connection | string |  |
-| filter | Used to filter the objects  | [FolderFilter](#folderfilter) |  |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| maxAge | MaxAge the latest object should be younger than defined age | Duration |  |
-| maxCount | MinCount the minimum number of files inside the searchPath | *int |  |
-| maxSize | MaxSize of the files inside the searchPath | Size |  |
-| minAge | MinAge the latest object should be older than defined age | Duration |  |
-| minCount | MinCount the minimum number of files inside the searchPath | *int |  |
-| minSize | MinSize of the files inside the searchPath | Size |  |
-| name | Name of the check | string |  |
-| objectPath | glob path to restrict matches to a subset | string |  |
-| region | Region where S3 bucket is located | string |  |
-| **secretKey** | secret key value or valueFrom configMapKeyRef or SecretKeyRef to access your s3/minio bucket | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| skipTLSVerify | Skip TLS verify when connecting to aws | bool |  |
-| test | Template to test the result against | [Template](#template) |  |
-| usePathStyle | Use path style path: http://s3.amazonaws.com/BUCKET/KEY instead of http://BUCKET.s3.amazonaws.com/KEY | bool |  |
+| **`accessKey`** | Access key value or valueFrom configMapKeyRef or SecretKeyRef to access your s3 | [***kommons.EnvVar***](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| **`bucket`** | Array of [Bucket](#bucket) objects to be checked | [Bucket](#bucket) | Yes |
+| `description` | Description for the check | *string* |  |
+| `display` | Template to display the result in | [Template](#template) |  |
+| `endpoint` | S3/Minio HTTP Endpoint to establish connection | *string* |  |
+| `filter` | Used to filter the objects  | [*FolderFilter*](#folderfilter) |  |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| `maxAge` | MaxAge the latest object should be younger than defined age | *Duration* |  |
+| `maxCount` | MinCount the minimum number of files inside the searchPath | *int* |  |
+| `maxSize` | MaxSize of the files inside the searchPath | *Size* |  |
+| `minAge` | MinAge the latest object should be older than defined age | *Duration* |  |
+| `minCount` | MinCount the minimum number of files inside the searchPath | *int* |  |
+| `minSize` | MinSize of the files inside the searchPath | *Size* |  |
+| `name` | Name of the check | *string* |  |
+| `objectPath` | glob path to restrict matches to a subset | *string* |  |
+| `region` | Region where S3 bucket is located | *string* |  |
+| **`secretKey`** | secret key value or valueFrom configMapKeyRef or SecretKeyRef to access your s3/minio bucket | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* |  |
+| `test`| Template to test the result against | [*Template*](#template) |  |
+| `usePathStyle` | Use path style path: http://s3.amazonaws.com/BUCKET/KEY instead of http://BUCKET.s3.amazonaws.com/KEY | *bool* |  |
 
 ---
 # Scheme Reference
 ## Bucket
 
-
-
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **endpoint** | Set bucket HTTP endpoint | string | Yes |
-| **name** | Specify name for bucket | string | Yes |
-| **region** | Specify region for bucket | string | Yes |
+| **`endpoint`** | Set bucket HTTP endpoint | *string* | Yes |
+| **`name`** | Specify name for bucket | *string* | Yes |
+| **`region`** | Specify region for bucket | *string* | Yes |
 
 ## FolderFilter
 
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| maxAge | MaxAge the latest object should be younger than defined age | Duration |  |
-| maxSize | MaxSize of the files inside the searchPath | Size |  |
-| minAge | MinAge the latest object should be older than defined age | Duration |  |
-| minSize | MinSize of the files inside the searchPath | Size |  |
-| regex | Filter files based on regular expression  | string |  |
+| `maxAge` | MaxAge the latest object should be younger than defined age | *Duration* |  |
+| `maxSize` | MaxSize of the files inside the searchPath | *Size* |  |
+| `minAge` | MinAge the latest object should be older than defined age | *Duration* |  |
+| `minSize` | MinSize of the files inside the searchPath | *Size* |  |
+| `regex` | Filter files based on regular expression  | *string* |  |
 
 ## Template
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify path to JSON element for use in template | string |  |
-| template | Specify Go template for use | string |  |
-| expr | Specify expression for use in template  | string |  |
-| javascript | Specify javascript syntax for template | string |  |
+| `jsonPath` | Specify path to JSON element for use in template | *string* |  |
+| `template` | Specify Go template for use | *string* |  |
+| `expr` | Specify expression for use in template  | *string* |  |
+| `javascript` | Specify javascript syntax for template | *string* |  |

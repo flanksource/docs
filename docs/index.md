@@ -1,4 +1,3 @@
-# Overview
 <div align="center"> <img src="images/flanksource.png" height="64px"></img></div>
 ---
 <h1 style="text-align:center"> Flanksource Documentation</h1>
