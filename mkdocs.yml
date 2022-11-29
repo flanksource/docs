@@ -24,8 +24,11 @@ theme:
     - content.tabs.link
     - search.suggest
     - search.highlight
-    # - navigation.instant
-    # - navigation.sections
+    - navigation.indexes
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - toc.integrate
     # - navigation.tracking
     # - navigation.expand
     # - navigation.top
@@ -98,4 +101,5 @@ nav:
         - KubernetesFile: ./reference/configuration/kubernetes-file.md
     - Topology:
       - Common:
-        - Kubernetes Cluster: ./topology/common/kubernetes-cluster.md
+        - Kubernetes: ./topology/common/kubernetes.md
+        - Selector: ./topology/common/selector.md
