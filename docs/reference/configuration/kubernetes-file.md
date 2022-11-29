@@ -25,7 +25,7 @@ The KubernetesFile config type is used to scrape configurations contained in you
 ### PodFile 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `path` | Set path to file contained in Pod | *string (list)* |  |
+| `path` | Set path to file contained in Pod | *\[\]string* |  |
 | `format` | Specify format of file | *string* |
 
 ### ResourceSelector (`selector`)

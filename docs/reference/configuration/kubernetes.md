@@ -33,7 +33,7 @@ The `kubernetes` config type scrapes the configurations of your Kubernetes resou
 | `selector` | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels` | *string*  |
 | `fieldSelector` | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running` | *string* |
 | `maxInflight` | Set value for maximum inflight requests | *int* | 
-| `exclusions` | Specify Kubernetes resources to be excluded from scraping | *string (list)* |
+| `exclusions` | Specify Kubernetes resources to be excluded from scraping | *\[\]string* |
 | **`kubeconfig`** | Specify kubeconfig for access to your Kubernetes Cluster |[*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes |
 
 ### BaseScraper
@@ -59,3 +59,12 @@ The `kubernetes` config type scrapes the configurations of your Kubernetes resou
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | `jsonPath` | Specify JSONPath expression for the fields | *string* |
+
+### Script 
+
+| Field | Description | Scheme | Required |
+| ----- | ----------- | ------ | -------- |
+| `gotemplate` | Specify Go template for use in script | *string* |
+| `jsonPath` | Specify path to JSON element for use in script | *string* |
+| `expr` | Specify expression for use in script | *string* |
+| `javascript` | Specify javascript syntax for script | *string* |

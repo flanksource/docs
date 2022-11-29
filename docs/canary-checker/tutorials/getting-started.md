@@ -207,6 +207,7 @@ You can then deploy this canary into our namespace using:
 ```bash
 kubectl apply -f http_pass.yaml
 ```
+```
 canary.canaries.flanksource.com/http-pass created
 ```
 

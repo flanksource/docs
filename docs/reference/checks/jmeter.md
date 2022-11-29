@@ -30,7 +30,7 @@ This check will execute the JMeter CLI to execute the JMX test plan on the speci
 | **`jmx`** | Jmx defines the ConfigMap or Secret reference to get the JMX test plan | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
 | `name` | Name of the check | *string* |  |
 | `port` | Port on which the server is running | *int32* |  |
-| `properties` | Properties defines the local Jmeter properties | *string (list)* |  |
+| `properties` | Properties defines the local Jmeter properties | *\[\]string* |  |
 | `responseDuration` | ResponseDuration under which the all the test should pass | *string* |  |
-| `systemProperties` | SystemProperties defines the java system property | *string (list)* |  |
+| `systemProperties` | SystemProperties defines the java system property | *\[\]string* |  |
 

@@ -41,15 +41,15 @@ This config type is used to scrape information about your AWS infrastructure.
 | `patch_details` | Set boolean value to enable/disable scraping of patch details | *bool* |  |
 | [`cost_reporting`](#CostReporting) | Specify cost reporting for scraping of data | [*CostReporting*](#costreporting)
 | [`cloud_trail`](#cloudtrail-cloudtrail) | Set CloudTrail specifications | [*CloudTrail*](#cloudtrail-cloudtrail) |  |
-| `include` | Specify AWS resources to include for scraping | *string (list)* |
-| `exclude` | Specify AWS resources to exclude from scraping | *string (list)* |
+| `include` | Specify AWS resources to include for scraping | *\[\]string* |
+| `exclude` | Specify AWS resources to exclude from scraping | *\[\]string* |
 | `inventory` | Toggle scrape of *metadata* for AWS resources | *bool* |
 
 ### CloudTrail (`cloudtrail`)
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `exclude` | Set events to be excluded from scraping | *string (list)* |
+| `exclude` | Set events to be excluded from scraping | *\[\]string* |
 | `max_age` | Set maximum age of events for scraping | *string* |
 
 ### CostReporting (`cost_reporting`)

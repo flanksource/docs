@@ -57,6 +57,6 @@ This checks Cloudwatch for all the Active alarms and responses with the correspo
 | ----- | ----------- | ------ | -------- |
 | `actionPrefix` | Use to filter the results of the operation to only those alarms that use a certain alarm action. For example, you could specify the ARN of an SNS topic to find all alarms that send notifications to that topic. | *string* |  |
 | `alarmPrefix` | Specify to receive information about all alarms that have names that start with this prefix. | *string* |  |
-| `alarms` | Set field to retrieve information about alarm | *string (list)* |  |
+| `alarms` | Set field to retrieve information about alarm | *\[\]string* |  |
 | `state` | Specify to retrieve state value of alarm | *string* |  |
 
