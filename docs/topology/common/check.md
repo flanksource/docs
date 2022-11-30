@@ -79,25 +79,25 @@ The check topology fetches and displays results as set for each Check configured
 ### Properties
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `color` |  | *string* |
-| `configLookup` |  | [*Config*](#configs-configs)
-| `headline` |  | *bool* |
-| `icon` |  | *string* |
-| `label` |  | *string*
-| `lastTransition` |  | *string* |
-| `links` |  | [*Links*](#links-links)
-| `lookup` | Set based on Canary checks as documented in [Check reference](/reference/checks/).
-| `max` |  | *int64*
-| `min` |  | *int64*
-| `name` |  | *string* 
-| `order` |  | *int*
-| `status` |  | *string* 
-| `summary` |  | [*Summary*](#summary-summary)
-| `text` |  | *string* |
-| `tooltip` |  | *string* |
-| `type` |  | *string* |
-| `unit` | e.g. milliseconds, bytes, millicores, epoch etc. | string
-| `value` |  | *int64* |
+| ``color`` |  | *string* |
+| ``configLookup`` |  | [*Config*](#configs-configs)
+| ``headline`` |  | *bool* |
+| ``icon`` |  | *string* |
+| ``label`` |  | *string*
+| ``lastTransition`` |  | *string* |
+| ``links`` |  | [*Links*](#links-links)
+| ``lookup`` | Set based on Canary checks as documented in [Check reference](/reference/checks/).
+| ``max`` |  | *int64*
+| ``min`` |  | *int64*``
+| ``name`` |  | *string* 
+| ``order`` |  | *int*
+| ``status`` |  | *string* 
+| ``summary`` |  | [*Summary*](#summary-summary)
+| ``text`` |  | *string* |
+| ``tooltip`` |  | *string* |
+| ``type`` |  | *string* |
+| ``unit`` | e.g. milliseconds, bytes, millicores, epoch etc. | string
+| ``value`` |  | *int64* |
 
 
 ### Checks
@@ -116,7 +116,7 @@ For including checks as inline, see the [Check reference](/reference/checks/) fo
 | `label` |  | *string* |
 | `text` |  | *string* |
 | `tooltip` |  | *string* |
-| `type` | e.g. documentation, support, playbook | string 
+| `type` | e.g. documentation, support, playbook | *string* 
 | `url` |  | *string* |
 
 ### Selector
@@ -132,7 +132,3 @@ For including checks as inline, see the [Check reference](/reference/checks/) fo
 | `info` |  | *int* |
 | `unhealthy` |  | *int* |
 | `warning` |  | *int* |
-
-
-
-

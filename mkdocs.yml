@@ -24,11 +24,11 @@ theme:
     - content.tabs.link
     - search.suggest
     - search.highlight
-    - navigation.indexes
-    - navigation.instant
-    - navigation.sections
-    - navigation.tabs
-    - toc.integrate
+    # - navigation.indexes
+    # - navigation.instant
+    # - navigation.sections
+    # - navigation.tabs
+    # - toc.integrate
     # - navigation.tracking
     # - navigation.expand
     # - navigation.top
