@@ -1,6 +1,5 @@
 
 # Flanksource Helm Charts
----
 ## Initial Set up
 
 Helm must be installed to use the charts. Refer the Helm documentation to get started.
@@ -10,9 +9,10 @@ helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
 ```
 
-### Prerequisites
-Kubernetes 1.14+
-
+## Prerequisites
+To properly install and run the Incident Commander chart on your Kubernetes Cluster you need to have the following prerequisites.
+- A Kubernetes installation of version 1.14 or higher.
+- Config-db installed and running in your Kubernetes Cluster. See the [Config-db Helm installation guide](config-db/tutorials/install-helm)  for more information.
 
 ## Incident Commander
 
