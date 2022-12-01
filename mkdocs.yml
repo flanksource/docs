@@ -52,6 +52,7 @@ nav:
   - Configuration:
     - Install CLI: ./config-db/tutorials/install-cli.md
     - Getting Started: ./config-db/tutorials/getting-started-configdb.md
+    - Install Helm: ./config-db/tutorials/install-helm.md
   - Health Checks:
     - Overview: ./canary-checker/overview.md
     - Getting Started: ./canary-checker/tutorials/getting-started.md
