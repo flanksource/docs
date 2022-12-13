@@ -24,8 +24,11 @@ theme:
     - content.tabs.link
     - search.suggest
     - search.highlight
+    # - navigation.indexes
     # - navigation.instant
     # - navigation.sections
+    # - navigation.tabs
+    # - toc.integrate
     # - navigation.tracking
     # - navigation.expand
     # - navigation.top
@@ -34,11 +37,13 @@ markdown_extensions:
   - fenced_code
   - pymdownx.smartsymbols
   - toc:
-      permalink: True
+      permalink: False
+      anchorlink: True
   - pymdownx.superfences
   - pymdownx.snippets
   - pymdownx.details
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - codehilite:
       linenums: true
 nav:
@@ -47,18 +52,16 @@ nav:
   - Configuration:
     - Install CLI: ./config-db/tutorials/install-cli.md
     - Getting Started: ./config-db/tutorials/getting-started-configdb.md
+    - Install Helm: ./config-db/tutorials/install-helm.md
   - Health Checks:
-    - Overview: ./canary-checker/tutorials/overview.md
+    - Overview: ./canary-checker/overview.md
     - Getting Started: ./canary-checker/tutorials/getting-started.md
     - Contributing: ./canary-checker/tutorials/dev-guide.md
     - Install CLI: ./canary-checker/tutorials/run.md
-    - Install on Standalone Server: ./canary-checker/tutorials/server.md
-    - Install Kubernetes Operator: ./canary-checker/tutorials/operator.md
   - Concepts:
     - Secret Management: ./concepts/secret-management.md
     - Templating: ./concepts/templating.md
   - Reference:
-    - Glossary: ./
     - Checks:
       - Cloudwatch: ./reference/checks/cloudwatch.md
       - ConfigDB: ./reference/checks/configdb.md
@@ -92,6 +95,12 @@ nav:
       - S3: ./reference/checks/s3.md
       - SFTP: ./reference/checks/sftp.md
       - SMB / CIFS: ./reference/checks/smb.md
+    - Configuration:
+        - AWS: ./reference/configuration/aws.md
+        - File: ./reference/configuration/file.md
+        - Kubernetes: ./reference/configuration/kubernetes.md
+        - KubernetesFile: ./reference/configuration/kubernetes-file.md
     - Topology:
       - Common:
-        - Kubernetes Cluster: ./topology/common/kubernetes-cluster.md
+        - Kubernetes: ./topology/common/kubernetes.md
+        - Selector: ./topology/common/selector.md

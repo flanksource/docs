@@ -1,7 +1,7 @@
 ## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/smb.svg' style='height: 32px'/> Smb
 
 The Smb check connects to the given Samba server to check folder freshness. 
-The check also:
+The check:
 * Verifies the most recently modified file that fulfills the `minAge` and `maxAge` constraints. (each an optional bound)
 * Verifies files present in the mount is more than `minCount`.
 
@@ -58,54 +58,51 @@ The check also:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **auth** | username and password value, configMapKeyRef or SecretKeyRef for SMB server | *[Authentication](#authentication) | Yes |
-| description | Description for the check | string |  |
-| display | Template to display the result in | [Template](#template) |  |
-| domain | Domain... | string |  |
-| filter | Used to filter the objects | [FolderFilter](#folderfilter) |  |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| maxAge | MaxAge the latest object should be younger than defined age | Duration |  |
-| maxCount | MaxCount the Maximum number of files inside the searchPath | *int |  |
-| maxSize | MaxSize of the files inside the searchPath | Size |  |
-| minAge | MinAge the latest object should be older than defined age | Duration |  |
-| minCount | MinCount the minimum number of files inside the searchPath | *int |  |
-| minSize | MinSize of the files inside the searchPath | Size |  |
-| name | Name of the check | string |  |
-| port | Port on which smb server is running. Defaults to 445 | int |  |
-| searchPath | SearchPath sub-path inside the mount location | string |  |
-| **server** | Server location of smb server. Can be `hostname/ip` or in `\\server\e$\a\b\c` syntax
-Where server is the `hostname` `e$`` is the sharename and `a/b/c` is the searchPath location | string | Yes |
-| sharename | Sharename to mount from the samba server | string |  |
-| test | Template to test the result against | [Template](#template) |  |
-| workstation | Workstation... | string |  |
+| **`auth`** | username and password value, configMapKeyRef or SecretKeyRef for SMB server | [***Authentication***](#authentication) | Yes |
+| `description` | Description for the check | *string* |  |
+| `display` | Template to display the result in | [*Template*](#template) |  |
+| `domain` | Specify domain member | *string* |  |
+| `filter` | Used to filter the objects | [*FolderFilter*](#folderfilter) |  |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| `maxAge` | MaxAge the latest object should be younger than defined age | *Duration* |  |
+| `maxCount` | MaxCount the Maximum number of files inside the searchPath | *int* |  |
+| `maxSize` | MaxSize of the files inside the searchPath | *Size* |  |
+| `minAge` | MinAge the latest object should be older than defined age | *Duration* |  |
+| `minCount` | MinCount the minimum number of files inside the searchPath | *int* |  |
+| `minSize` | MinSize of the files inside the searchPath | *Size* |  |
+| `name` | Name of the check | *string* |  |
+| `port` | Port on which smb server is running. Defaults to 445 | *int* |  |
+| `searchPath` | SearchPath sub-path inside the mount location | *string* |  |
+| **`server`** | Server location of smb server. Can be `hostname/ip` or in `\\server\e$\a\b\c` syntax
+Where server is the `hostname` `e$`` is the sharename and `a/b/c` is the searchPath location | *string* | Yes |
+| `sharename` | Sharename to mount from the samba server | *string* |  |
+| `test` | Template to test the result against | [*Template*](#template) |  |
+| `workstation` | Workstation... | *string* |  |
 
 ---
 # Scheme Reference
 ## Authentication
 
-
-
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **password** |  | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **username** |  | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| **`password`** |  | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| **`username`** |  | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
 
 ## FolderFilter
 
-
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| maxAge | MaxAge the latest object should be younger than defined age | Duration |  |
-| maxSize | MaxSize of the files inside the searchPath | Size |  |
-| minAge | MinAge the latest object should be older than defined age | Duration |  |
-| minSize | MinSize of the files inside the searchPath | Size |  |
-| regex | Filter files based on regular expression  | string |  |
+| `maxAge` | MaxAge the latest object should be younger than defined age | *Duration* |  |
+| `maxSize` | MaxSize of the files inside the searchPath | *Size* |  |
+| `minAge` | MinAge the latest object should be older than defined age | *Duration* |  |
+| `minSize` | MinSize of the files inside the searchPath | *Size* |  |
+| `regex` | Filter files based on regular expression  | *string* |  |
 
 ## Template
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify path to JSON element for use in template | string |  |
-| template | Specify Go template for use | string |  |
-| expr | Specify expression for use in template  | string |  |
-| javascript | Specify javascript syntax for template | string |  |
+| `jsonPath` | Specify path to JSON element for use in template | *string* |  |
+| `template` | Specify Go template for use | *string* |  |
+| `expr` | Specify expression for use in template  | *string* |  |
+| `javascript` | Specify javascript syntax for template | *string* |  |

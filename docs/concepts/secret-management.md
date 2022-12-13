@@ -19,10 +19,11 @@ kubectl get secret <secret-name> -o jsonpath='{.data.AWS_ACCESS_KEY_ID}' | base6
 kubectl get secret <secret-name> -o jsonpath='{.data.AWS_SECRET_ACCESS_KEY}' | base64 --decode
 ```
 Output:
-```
+```console
 {"AWS_ACCESS_KEY_ID":"<base-64-encoded-aws_access_key_id>","AWS_SECRET_ACCESS_KEY":"<base-64-encoded-aws_secret_access_key>"}
 ```
 The steps above can be used to create Kubernetes secrets for other credentials, such as ElasticSearch, Docker, Helm, and more.
+
 ## Recommendations
 Kubernetes Secrets are, by default, stored unencrypted in the API server's underlying data store (etcd). Anyone with API access can retrieve or modify a Secret, and so can anyone with access to etcd. With this in mind, it is recommended to implement some level of security to prevent unauthorized access to your Kubernetes secrets. 
 You may consider the following for your encryption and security needs:

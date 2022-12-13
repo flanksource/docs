@@ -1,6 +1,6 @@
 ## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/configdb.svg' style='height: 32px'/> ConfigDB
 
-ConfigDB check will connect to the specified database host, run a specified query for your configuration data, and return the result.
+ConfigDB check connects to the specified database host, run a specified query for your configuration data, and return the result.
 
 ??? example
      ```yaml
@@ -30,16 +30,16 @@ ConfigDB check will connect to the specified database host, run a specified quer
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| authentication | Username and password value, configMapKeyRef or SecretKeyRef for ConfigDB server | [Authentication](#authentication) |  |
-| description | Description for the check | string |  |
-| display | Template to display query results in text (overrides default bar format for UI) | [Template](#template) |  |
-| **host** | Host is the server against which check needs to be executed | string | Yes |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| labels | Labels for the check | Labels |  |
-| **name** | Name of the check | string | Yes |
-| **query** | Query that needs to be executed on the server | string | Yes |
-| test | Template to test the result against | [Template](#template) |  |
-| transform | Template to transform results to | [Template](#template) |  |
+| `authentication` | Username and password value, configMapKeyRef or SecretKeyRef for ConfigDB server | [*Authentication*](#authentication) |  |
+| `description` | Description for the check | *string* |  |
+| `display` | Template to display query results in text (overrides default bar format for UI) | [*Template*](#template) |  |
+| **`host`** | Host is the server against which check needs to be executed | *string* | Yes |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| `labels` | Labels for the check | [*Labels*](#labels) |  |
+| **`name`** | Name of the check | *string* | Yes |
+| **`query`** | Query that needs to be executed on the server | *string* | Yes |
+| `test` | Template to test the result against | [*Template*](#template) |  |
+| `transform` | Template to transform results to | [*Template*](#template) |  |
 
 ---
 # Scheme Reference
@@ -47,14 +47,14 @@ ConfigDB check will connect to the specified database host, run a specified quer
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify path to JSON element for use in template | string |  |
-| template | Specify go template for use | string |  |
-| expr | Specify expression for use in template  | string |  |
-| javascript | Specify javascript syntax for template | string |  |
+| `jsonPath` | Specify path to JSON element for use in template | *string* |  |
+| `template` | Specify go template for use | *string* |  |
+| `expr` | Specify expression for use in template  | *string* |  |
+| `javascript` | Specify javascript syntax for template | *string* |  |
 
 ## Authentication
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **password** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **username** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes | 
+| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes | 

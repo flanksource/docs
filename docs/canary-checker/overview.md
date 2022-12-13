@@ -1,4 +1,3 @@
-# Overview
 ![canary-checker](images/canary-checker.png)
   <p align="center">Kubernetes operator for executing synthetic tests</p>
 <p align="center">

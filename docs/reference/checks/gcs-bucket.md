@@ -36,23 +36,23 @@ This check:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **bucket** |  | string | Yes |
-| **credentials** |  | *[kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| description | Description for the check | string |  |
-| display |  | [Template](#template) |  |
-| **endpoint** | GCS Bucket URL endpoint | string | Yes |
-| filter |  | [FolderFilter](#folderfilter) |  |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| maxAge | MaxAge the latest object should be younger than defined age | Duration |  |
-| maxCount | MinCount the minimum number of files inside the searchPath | *int |  |
-| maxSize | MaxSize of the files inside the searchPath | Size |  |
-| minAge | MinAge the latest object should be older than defined age | Duration |  |
-| minCount | MinCount the minimum number of files inside the searchPath | *int |  |
-| minSize | MinSize of the files inside the searchPath | Size |  |
-| name | Name of the check | string |  |
-| path | Path to the object, needs to be prefixed with the protocol. See example above | string | Yes
-| gcpConnection | Creates connection to GCS bucket via credentials set | Object | Yes
-| test |  | [Template](#template) |  |
+| **`bucket`** | Specify path to GCS bucket with `gcs://` prefix| string | Yes |
+| **`credentials`** | Set GCP credentials | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| `description` | Description for the check | *string* |  |
+| `display` | Template to display the result in | [*Template*](#template) |  |
+| **`endpoint`** | GCS Bucket URL endpoint | *string* | Yes |
+| filter | Filter objects based on `maxAge`, `maxSize`, `regex` and more | [*FolderFilter*](#folderfilter) |  |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| `maxAge` | MaxAge the latest object should be younger than defined age | *duration* |  |
+| `maxCount` | MinCount the minimum number of files inside the searchPath | *int* |  |
+| `maxSize` | MaxSize of the files inside the searchPath | *Size* |  |
+| `minAge` | MinAge the latest object should be older than defined age | *Duration* |  |
+| `minCount` | MinCount the minimum number of files inside the searchPath | *int* |  |
+| `minSize` | MinSize of the files inside the searchPath | *Size* |  |
+| `name` | Name of the check | *string* |  |
+| `path` | Path to the object, needs to be prefixed with the protocol. See example above | *string* | Yes
+| `gcpConnection` | Creates connection to GCS bucket via credentials set | [*GCPConnection*](#gcpconnection) | Yes
+| `test` | Template to test the result against | [*Template*](#template) |  |
 
 ---
 # Scheme Reference
@@ -61,17 +61,27 @@ This check:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| maxAge | MaxAge the latest object should be younger than defined age | Duration |  |
-| maxSize | MaxSize of the files inside the searchPath | Size |  |
-| minAge | MinAge the latest object should be older than defined age | Duration |  |
-| minSize | MinSize of the files inside the searchPath | Size |  |
-| regex | Filter files based on regular expression  | string |  |
+| `maxAge` | MaxAge the latest object should be younger than defined age | *Duration* |  |
+| `maxSize` | MaxSize of the files inside the searchPath | Size |  |
+| `minAge` | MinAge the latest object should be older than defined age | *Duration* |  |
+| `minSize` | MinSize of the files inside the searchPath | *Size* |  |
+| `regex` | Filter files based on regular expression  | *String* |  |
+
+
+
+## GCPConnection
+
+| Field | Description | Scheme | Required |
+| ----- | ----------- | ------ | -------- |
+| **`credentials`** | Set GCP credentials | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| **`endpoint`** | Specify GCS HTTP endpoint | *string* | Yes |
+
 
 ## Template
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify path to JSON element for use in template | string |  |
-| template | Specify Go template for use | string |  |
-| expr | Specify expression for use in template  | string |  |
-| javascript | Specify javascript syntax for template | string |  |
+| `jsonPath` | Specify path to JSON element for use in template | *string* |  |
+| `template` | Specify Go template for use | *string* |  |
+| `expr` | Specify expression for use in template  | *string* |  |
+| `javascript` | Specify javascript syntax for template | *string* |  |

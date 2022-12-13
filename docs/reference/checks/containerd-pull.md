@@ -19,13 +19,13 @@ This check will try to pull a Docker image from specified registry using contain
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| auth | Username and password value, configMapKeyRef or SecretKeyRef for registry | [Authentication](#authentication) |  |
-| description | Description for the check | string |  |
-| expectedDigest | Expected digest of the pulled image | string | Yes |
-| expectedSize | Expected size of the pulled image | int64 | Yes |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| **image** | Full path to image, including registry | string | Yes |
-| name | Name of the check | string |  |
+| `auth` | Username and password value, configMapKeyRef or SecretKeyRef for registry | [*Authentication*](#authentication) |  |
+| `description` | Description for the check | string |  |
+| `expectedDigest` | Expected digest of the pulled image | *string* | Yes |
+| `expectedSize` | Expected size of the pulled image | *int64* | Yes |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| **`image`** | Full path to image, including registry | *string* | Yes |
+| `name` | Name of the check | string |  |
 
 ---
 # Scheme Reference
@@ -33,5 +33,5 @@ This check will try to pull a Docker image from specified registry using contain
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **password** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **username** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes | 
+| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes | 

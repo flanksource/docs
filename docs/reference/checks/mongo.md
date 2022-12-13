@@ -32,11 +32,11 @@ The Mongo check tries to connect to a specified Mongo Database to ensure connect
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| auth | Username and password value, configMapKeyRef or SecretKeyRef for Mongo server | [Authentication](#authentication) |  |
-| **connection** | Connection string to connect to the Mongo server | string | Yes |
-| description | Description for the check | string |  |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| name | Name of the check | string |  |
+| `auth` | Username and password value, configMapKeyRef or SecretKeyRef for Mongo server | [*Authentication*](#authentication) |  |
+| **`connection`** | Connection string to connect to the Mongo server | *string* | Yes |
+| `description` | Description for the check | *string* |  |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| `name` | Name of the check | *string* |  |
 
 ---
 # Scheme Reference
@@ -44,5 +44,5 @@ The Mongo check tries to connect to a specified Mongo Database to ensure connect
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **password** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **username** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes | 
+| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes | 

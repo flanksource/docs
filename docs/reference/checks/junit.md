@@ -34,14 +34,14 @@ Junit check performs a Unit test, parses the Junit test reports in a container a
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| description | Description for the check | string |  |
-| display | Template to display the result in | [Template](#template) |  |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| name | Name of the check | string |  |
-| **spec** | Pod specification | [v1.PodSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) | Yes |
-| test | Template to test the result against | [Template](#template) |  |
-| **testResults** | Directory where the results will be published | string | Yes |
-| timeout | Timeout in minutes to wait for specified container to finish its job. Defaults to 5 minutes | int |  |
+| `description` | Description for the check | *string* |  |
+| `display` | Template to display the result in | [*Template*](#template) |  |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| `name` | Name of the check | *string* |  |
+| **`spec`** | Pod specification | [*v1.PodSpec*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) | Yes |
+| `test` | Template to test the result against | [*Template*](#template) |  |
+| **`testResults`** | Directory where the results will be published | *string* | Yes |
+| `timeout` | Timeout in minutes to wait for specified container to finish its job. Defaults to 5 minutes | *int* |  |
 
 ---
 # Scheme Reference
@@ -49,7 +49,7 @@ Junit check performs a Unit test, parses the Junit test reports in a container a
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| jsonPath | Specify path to JSON element for use in template | string |  |
-| template | Specify Go template for use | string |  |
-| expr | Specify expression for use in template  | string |  |
-| javascript | Specify javascript syntax for template | string |  |
+| `jsonPath` | Specify path to JSON element for use in template | *string* |  |
+| `template` | Specify Go template for use | *string* |  |
+| `expr` | Specify expression for use in template  | *string* |  |
+| `javascript` | Specify javascript syntax for template | *string* |  |

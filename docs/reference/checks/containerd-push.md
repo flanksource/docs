@@ -21,9 +21,9 @@ This check will try to push a Docker image to a specified registry using contain
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| description | Description for the check | string |  |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| **image** | Full path to image, including registry | string | Yes |
-| name | Name of the check | string |  |
-| **password** | Password to access Containerd | string | Yes |
-| **username** | Username to access Containerd | string | Yes |
+| `description` | Description for the check | *string* |  |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| **`image`** | Full path to image, including registry | *string* | Yes |
+| `name` | Name of the check | *string* |  |
+| **`password`** | Password to access Containerd | *string* | Yes |
+| **`username`** | Username to access Containerd | *string* | Yes |

@@ -31,12 +31,12 @@ The Redis check connects to a specified Redis database instance to check its ava
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **addr** | host:port address | string | Yes |
-| auth | username and password value, configMapKeyRef or SecretKeyRef for redis server | *[Authentication](#authentication) |  |
-| **db** | Database to be selected after connecting to the server | int | Yes |
-| description | Description for the check | string |  |
-| icon | Icon for overwriting default icon on the dashboard | string |  |
-| name | Name of the check | string |  |
+| **`addr`** | host:port address | string | Yes |
+| `auth` | username and password value, configMapKeyRef or SecretKeyRef for redis server | [*Authentication*](#authentication) |  |
+| **`db`** | Database to be selected after connecting to the server | *int* | Yes |
+| `description` | Description for the check | *string* |  |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| `name` | Name of the check | *string* |  |
 
 ---
 # Scheme Reference
@@ -44,5 +44,5 @@ The Redis check connects to a specified Redis database instance to check its ava
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **password** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **username** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [kommons.EnvVar](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes | 
+| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes | 
