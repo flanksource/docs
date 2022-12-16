@@ -1,33 +1,38 @@
 repo_url: https://github.com/flanksource/docs/
-repo_name: Flanksource Docs
-site_name: Flanksource Docs
+repo_name: Flanksource Mission Control
+site_name: Flanksource Mission Control
+extra:
+  generator: false
+extra_css:
+  - style.css
 theme:
-  logo: ./images/flanksource-white.svg
+  logo: ./images/flanksource-icon-white.svg
   favicon: ./images/flanksource-icon.png
   name: material
   palette:
-  - media: '(prefers-color-scheme: light)'
-    scheme: default
-    primary: indigo
-    accent: light-blue
-    toggle:
-      icon: material/lightbulb
-      name: Switch to light mode
-  - media: '(prefers-color-scheme: dark)'
-    scheme: slate
-    primary: indigo
-    accent: light-blue
-    toggle:
-      icon: material/lightbulb-outline
-      name: Switch to dark mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: light-blue
+      toggle:
+        icon: material/lightbulb
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: light-blue
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to dark mode
   features:
     - content.tabs.link
     - search.suggest
     - search.highlight
+    - header.autohide
     # - navigation.indexes
-    # - navigation.instant
-    # - navigation.sections
-    # - navigation.tabs
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
     # - toc.integrate
     # - navigation.tracking
     # - navigation.expand
@@ -35,6 +40,7 @@ theme:
 markdown_extensions:
   - admonition
   - fenced_code
+  - def_list
   - pymdownx.smartsymbols
   - toc:
       permalink: False
@@ -47,60 +53,83 @@ markdown_extensions:
   - codehilite:
       linenums: true
 nav:
-  - Home:  ./index.md
+  - Home: ./index.md
   - Installation: ./installation.md
   - Configuration:
-    - Install CLI: ./config-db/tutorials/install-cli.md
-    - Getting Started: ./config-db/tutorials/getting-started-configdb.md
-    - Install Helm: ./config-db/tutorials/install-helm.md
+      - Overviwew: ./config-db/overview.md
+      - Getting Started: ./config-db/tutorials/getting-started-configdb.md
+      - AWS: ./config-db/aws.md
+      - Azure DevOps: ./config-db/azure-devops.md
+      - Files (Local/HTTP/Git): ./config-db/file.md
+      - Files (Kubernetes): ./config-db/kubernetes-file.md
+      - Kubernetes: ./config-db/kubernetes.md
+      - SQL: ./config-db/sql.md
+      - Local Development:
+          - CLI: ./config-db/tutorials/install-cli.md
+
   - Health Checks:
-    - Overview: ./canary-checker/overview.md
-    - Getting Started: ./canary-checker/tutorials/getting-started.md
-    - Contributing: ./canary-checker/tutorials/dev-guide.md
-    - Install CLI: ./canary-checker/tutorials/run.md
+      - Overview: ./canary-checker/overview.md
+      - Getting Started: ./canary-checker/tutorials/getting-started.md
+      - Local Development:
+          - CLI: ./canary-checker/tutorials/run.md
+
+  - Logging:
+      # - Overview: ./apm-hub/logging.md
+      - Kubernetes: ./apm-hub/kubernetes.md
+
+  - Topology:
+      - Overview: ./topology/overview.md
+      - Components: ./topology/components.md
+      - Health Checks: ./topology/health-checks.md
+      - Configuration: /topology/configuration.md
+      - Properties: ./canary-checker/properties.md
+      - Examples:
+          Kubernetes: ./topology/kubernetes.md
+          Kubernetes (Workload): ./topology-kubernetes-workload.md
+          From Configuration: ./topology-configuration.md
+
   - Concepts:
-    - Secret Management: ./concepts/secret-management.md
-    - Templating: ./concepts/templating.md
+      - Secret Management: ./concepts/secret-management.md
+      - Templating: ./concepts/templating.md
   - Reference:
-    - Checks:
-      - Cloudwatch: ./reference/checks/cloudwatch.md
-      - ConfigDB: ./reference/checks/configdb.md
-      - Containerd Pull: ./reference/checks/containerd-pull.md
-      - Containerd Push: ./reference/checks/containerd-push.md
-      - DNS: ./reference/checks/dns.md
-      - Docker Pull: ./reference/checks/docker-pull.md
-      - Docker Push: ./reference/checks/docker-push.md
-      - EC2: ./reference/checks/ec2.md
-      - Elasticsearch: ./reference/checks/elasticsearch.md
-      - Exec: ./reference/checks/exec.md
-      - GCSBucket: ./reference/checks/gcs-bucket.md
-      - GCS Database Backup: ./reference/checks/gcs-database-backup.md
-      - Helm: ./reference/checks/helm.md
-      - HTTP: ./reference/checks/http.md
-      - ICMP: ./reference/checks/icmp.md
-      - JMeter: ./reference/checks/jmeter.md
-      - JUnit: ./reference/checks/junit.md
-      - Kubernetes: ./reference/checks/kubernetes.md
-      - LDAP: ./reference/checks/ldap.md
-      - Mongo: ./reference/checks/mongo.md
-      - MsSql: ./reference/checks/mssql.md
-      - MySQL: ./reference/checks/mysql.md
-      - Namespace: ./reference/checks/namespace.md
-      - Pod: ./reference/checks/pod.md
-      - Postgres: ./reference/checks/postgres.md
-      - Prometheus: ./reference/checks/prometheus.md
-      - Redis: ./reference/checks/redis.md
-      - Restic: ./reference/checks/restic.md
-      - S3 Bucket: ./reference/checks/s3-bucket.md
-      - S3: ./reference/checks/s3.md
-      - SFTP: ./reference/checks/sftp.md
-      - SMB / CIFS: ./reference/checks/smb.md
-    - Configuration:
-        - AWS: ./reference/configuration/aws.md
-        - File: ./reference/configuration/file.md
-        - Kubernetes: ./reference/configuration/kubernetes.md
-        - KubernetesFile: ./reference/configuration/kubernetes-file.md
-    - Topology:
-      - Common:
-        - Kubernetes: ./topology/common/kubernetes.md
-        - Selector: ./topology/common/selector.md
+      - Checks:
+          - Cloudwatch: ./reference/checks/cloudwatch.md
+          - ConfigDB: ./reference/checks/configdb.md
+          - DNS: ./reference/checks/dns.md
+          - EC2: ./reference/checks/ec2.md
+          - Elasticsearch: ./reference/checks/elasticsearch.md
+          - Exec: ./reference/checks/exec.md
+          - GCS Bucket: ./reference/checks/gcs-bucket.md
+          - GCS Database Backup: ./reference/checks/gcs-database-backup.md
+          - Helm: ./reference/checks/helm.md
+          - HTTP: ./reference/checks/http.md
+          - ICMP: ./reference/checks/icmp.md
+          - JMeter: ./reference/checks/jmeter.md
+          - JUnit: ./reference/checks/junit.md
+          - Kubernetes: ./reference/checks/kubernetes.md
+          - LDAP: ./reference/checks/ldap.md
+          - Mongo: ./reference/checks/mongo.md
+          - MS SQL Server: ./reference/checks/mssql.md
+          - MySQL: ./reference/checks/mysql.md
+          - Namespace: ./reference/checks/namespace.md
+          - Pod: ./reference/checks/pod.md
+          - Postgres: ./reference/checks/postgres.md
+          - Prometheus: ./reference/checks/prometheus.md
+          - Redis: ./reference/checks/redis.md
+          - Restic: ./reference/checks/restic.md
+          - S3 Bucket: ./reference/checks/s3-bucket.md
+          - S3: ./reference/checks/s3.md
+          - SFTP: ./reference/checks/sftp.md
+          - SMB / CIFS: ./reference/checks/smb.md
+      - Configuration:
+          - AWS: ./reference/configuration/aws.md
+          - Azure Devops: ./reference/configuration/azureDevops.md
+          - File: ./reference/configuration/file.md
+          - File (Kubernetes): ./reference/configuration/kubernetes-file.md
+          - Kubernetes: ./reference/configuration/kubernetes.md
+          - SQL: ./reference/configuration/sql.md
+      - Topology:
+          - Components: ./reference/topology/components.md
+          - Properties: ./reference/topology/properties.md
+          - Health Checks: ./reference/topology/health-checks.md
+          - System Template: ./reference/topology/system-template.md

@@ -1,42 +1,25 @@
-## Kubernetes 
-The `kubernetes` config type scrapes the configurations of your Kubernetes resources as specified with the fields; `namespace`, `selector`, `fieldSelector` and more. 
+## Kubernetes
 
-??? example
+The `kubernetes` config type scrapes the configurations of your Kubernetes resources as specified with the fields; `namespace`, `selector`, `fieldSelector` and more.
 
-    ```yaml
-      kubernetes:
-        - exclusions:
-            - Secret
-            - ReplicaSet
-            - APIService
-            - events
-            - endpoints.discovery.k8s.io
-            - endpointslices.discovery.k8s.io
-            - leases.coordination.k8s.io
-            - podmetrics.metrics.k8s.io
-            - nodemetrics.metrics.k8s.io
-            - customresourcedefinition
-            - controllerrevision
-            - certificaterequest
-            - orders.acme.cert-manager.io
-    ```
+```yaml
+  kubernetes:
+    - exclusions:
+        - Secret
+        - ReplicaSet
+        - APIService
+        - events
+        - endpoints.discovery.k8s.io
+        - endpointslices.discovery.k8s.io
+        - leases.coordination.k8s.io
+        - podmetrics.metrics.k8s.io
+        - nodemetrics.metrics.k8s.io
+        - customresourcedefinition
+        - controllerrevision
+        - certificaterequest
+        - orders.acme.cert-manager.io
+```
 
-### Kubernetes (`kubernetes`)
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| [**BaseScraper**](#BaseScraper) | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | [***BaseScraper***](#basescraper) | *yes* |
-| `namespace` | Specify namespace for scraping of Kubernetes resources | *string* |
-| `useCache` | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd | *bool* |
-| `allowIncomplete` | 
-| `scope` | Specify scope for scrape. e.g `cluster` for scraping at Cluster level | *string* |  |
-| `since` | Set time constraint for scraping resources within the set period | *string* |  |
-| `selector` | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels` | *string*  |
-| `fieldSelector` | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running` | *string* |
-| `maxInflight` | Set value for maximum inflight requests | *int* | 
-| `exclusions` | Specify Kubernetes resources to be excluded from scraping | *\[\]string* |
-| **`kubeconfig`** | Specify kubeconfig for access to your Kubernetes Cluster |[*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes |
-
-### BaseScraper
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | `id` | A static value or JSONPath expression to use as the ID for the resource. | *string* |  |
@@ -45,6 +28,16 @@ The `kubernetes` config type scrapes the configurations of your Kubernetes resou
 | `type` | A static value or JSONPath expression to use as the type for the resource. | *string* |  |
 | [`transform`](#transform) | Specify field to transform result | *string* |
 | `format` | Format of config item, defaults to JSON, available options are JSON | *string* |
+| `namespace` | Specify namespace for scraping of Kubernetes resources | *string* |
+| `useCache` | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd | *bool* |
+| `allowIncomplete` |
+| `scope` | Specify scope for scrape. e.g `cluster` for scraping at Cluster level | *string* |  |
+| `since` | Set time constraint for scraping resources within the set period | *string* |  |
+| `selector` | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels` | *string*  |
+| `fieldSelector` | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running` | *string* |
+| `maxInflight` | Set value for maximum inflight requests | *int* |
+| `exclusions` | Specify Kubernetes resources to be excluded from scraping | *\[\]string* |
+| **`kubeconfig`** | Specify kubeconfig for access to your Kubernetes Cluster |[*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes |
 
 ### Transform
 
@@ -54,13 +47,13 @@ The `kubernetes` config type scrapes the configurations of your Kubernetes resou
 | [`include`](#Filter) | Specify fields to include in the configuration | [*Filter*](#filter)  |  |
 | [`exclude`](#filter) | Specify fields to remove from the config. It is useful for removing sensitive data and fields | [*Filter*](#filter) |  |
 
-### Filter 
+### Filter
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | `jsonPath` | Specify JSONPath expression for the fields | *string* |
 
-### Script 
+### Script
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |

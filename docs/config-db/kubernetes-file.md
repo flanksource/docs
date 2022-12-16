@@ -1,20 +1,21 @@
-## KubernetesFile 
+## KubernetesFile
+
 The KubernetesFile config type is used to scrape configurations contained in your specified resource e.g Pod.
 
-??? example 
-    ```yaml
-      kubernetesFile:
-        - selector:
-          namespace: demo
-          kind: Statefulset
-          name: postgresql
-        files:
-          - path:
-              - /var/lib/postgresql/data/pgdata/postgresql.conf
-            format: properties
-    ```
+```yaml
+  kubernetesFile:
+    - selector:
+      namespace: demo
+      kind: Statefulset
+      name: postgresql
+    files:
+      - path:
+          - /var/lib/postgresql/data/pgdata/postgresql.conf
+        format: properties
+```
 
 ### KubernetesFile (`kubernetesFile`)
+
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | [**BaseScraper**](#basescraper) | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | [*BaseScraper*](#basescraper) | yes |
@@ -22,13 +23,15 @@ The KubernetesFile config type is used to scrape configurations contained in you
 | `container` | Set container name | *string* |
 | [`files`](#PodFile) | Specify path to file contained in Pod | *string* |
 
-### PodFile 
+### PodFile
+
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | `path` | Set path to file contained in Pod | *\[\]string* |  |
 | `format` | Specify format of file | *string* |
 
 ### ResourceSelector (`selector`)
+
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | `namespace` | Specify Namespace for Kubernetes resource | *string* |  |
@@ -56,7 +59,7 @@ The KubernetesFile config type is used to scrape configurations contained in you
 | [`include`](#Filter) | Specify fields to include in the configuration | [*Filter*](#filter)  |  |
 | [`exclude`](#filter) | Specify fields to remove from the config. It is useful for removing sensitive data and fields | [*Filter*](#filter) |  |
 
-### Filter 
+### Filter
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="135" height="140" stroke="#000" stroke-linecap="round"
+  stroke-linejoin="round" fill="#fff" fill-rule="evenodd">
+  <defs>
+    <linearGradient id="A" x1="208.20%" y1="-1170.24%" x2="302.64%" y2="-1170.24%">
+      <stop offset="0%" stop-color="#fff" />
+      <stop offset="100%" stop-color="#fff" />
+    </linearGradient>
+    <linearGradient id="B" x1="327.23%" y1="-1616.83%" x2="417.93%" y2="-1616.83%">
+      <stop offset="0%" stop-color="#fff" />
+      <stop offset="100%" stop-color="#fff" />
+    </linearGradient>
+    <linearGradient id="C" x1="635.39%" y1="-2492.20%" x2="719.42%" y2="-2492.20%">
+      <stop offset="0%" stop-color="#fff" />
+      <stop offset="100%" stop-color="#fff" />
+    </linearGradient>
+    <linearGradient id="D" x1="7360.78%" y1="4772.69%" x2="7272.04%" y2="4772.69%">
+      <stop offset="0%" stop-color="#fff" />
+      <stop offset="100%" stop-color="#fff" />
+    </linearGradient>
+    <linearGradient id="E" x1="10431.63%" y1="5808.18%" x2="10344.77%" y2="5808.18%">
+      <stop offset="0%" stop-color="#fff" />
+      <stop offset="100%" stop-color="#fff" />
+    </linearGradient>
+    <linearGradient id="F" x1="16668.17%" y1="6863.29%" x2="16590.63%" y2="6863.29%">
+      <stop offset="0%" stop-color="#fff" />
+      <stop offset="100%" stop-color="#fff" />
+    </linearGradient>
+  </defs>
+  <g stroke="none" fill-rule="nonzero">
+    <path d="M95.0301 100.52l9.81 9.59a1.53 1.53 0 0 1 0 2.15c-.1753.1695-.3875.2961-.62.37L15.58 138.89 3.2601 126.83z"
+      fill="url(#A)" />
+    <path d="M61.2601 69.89l9.8499 9.74a1.5 1.5 0 0 1 0 2.12c-.1875.1908-.422.3288-.6799.4l-58 16.08-12.13-12z"
+      fill="url(#B)" />
+    <path d="M30.3101 40.45l8.9399 9a1.52 1.52 0 0 1 0 2.14 1.619 1.619 0 0 1-.71.4L11 59.16 0 48.03z" fill="url(#C)" />
+    <path d="M33.4901 44.24L14.7 25.45c-.5848-.5856-.5848-1.5344 0-2.12a1.581 1.581 0 0 1 .7201-.41L107.2601 0l20 20z"
+      fill="url(#D)" />
+    <path d="M66.7099 75.74L50.62 59.42a1.51 1.51 0 0 1 0-2.14 1.53 1.53 0 0 1 .69-.39l60.58-16.1 17.54 17.54z"
+      fill="url(#E)" />
+    <path d="M101.7199 107.5L84.39 90.03a1.51 1.51 0 0 1 0-2.14c.18-.181.404-.3119.65-.38l29.0599-8.45L133.26 98.17z"
+      fill="url(#F)" />
+  </g>
+</svg>
