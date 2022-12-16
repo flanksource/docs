@@ -1,4 +1,4 @@
 [build]
-  command = "pip3 install -r requirements.txt &&  mkdocs build -d build"
+  command = " mkdocs build -d build"
   publish = "build"
   environment = { PYTHON_VERSION = "3.8" }
