@@ -16,7 +16,7 @@ Whether you are looking to improve your incident response times, better understa
 
 ## Incident Commander
 
-The Incident Commander is a tool that is designed to help organizations manage and respond to emergencies, crises, and other types of incidents. It is typically used by incident commanders, SRE and DevOps engineers to coordinate and communicate with other response team members, track the incident's status and make decisions about how to best manage the situation.
+The Incident Commander is a tool that is designed to help organizations manage and respond to emergencies, crises and other types of incidents. It is typically used by incident commanders, SRE and DevOps engineers to coordinate and communicate with other response team members, track the incident's status and make decisions about how to best manage the situation.
 
 Incident commander includes features such as:
 
@@ -127,8 +127,8 @@ Config-db is an open source tool that allows developers to easily configure, scr
 
 Canary checker is an open source tool that allows users to monitor the status of their canaries (server monitoring tools) in real-time. Canary checker allows users to set up alerts for when their canaries go down or encounter any issues, giving them the ability to quickly respond and fix any potential problems before they become more significant. It also provides users with detailed logs and analytics of their canary activity, giving them valuable insights into the performance and reliability of their systems. Canary checker is an essential tool for anyone who relies on canaries for server monitoring and maintenance, helping them to ensure the stability and uptime of their systems.
 
-One potential use of Canary Checker is if you want to get the cert expiry dates for your URLs and get warn when we are X number of days from the expiry date.
+One potential use of Canary Checker is, if you want to get the cert expiry dates for your URLs and get warn when we are X number of days from the expiry date.
 
 ![Screen_Shot_2022-12-19_at_8.17.39_AM_agdslp.png](https://res.cloudinary.com/dbm8wg3bn/image/upload/v1671528375/Screen_Shot_2022-12-19_at_8.17.57_AM_kwkjql.png)
 
-With Incident Commander up and running, this helps one have a better understand of thier infrastructure, which helps in planning of disaster recovery and reducing downtime to the bearest minimum.
+With Incident Commander up and running, one can have a better understanding of thier infrastructure, which helps in planning of disaster recovery and reducing downtime to the bearest minimum.
