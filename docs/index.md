@@ -27,7 +27,7 @@ Incident commander includes features such as:
 - Configuration tool that enables you to view and search the change history of your configuration across multiple dimensions (node, zone, environment, application, technology, etc).
 - Integration with other systems such as; scrape data from network device in order to help incident commanders make informed decisions.
 
-Incident commander installs two main component: 
+Incident commander installs two main component:
 
 - Canary checker
 - Config db
@@ -46,11 +46,13 @@ To properly install and run the Incident Commander chart on your Kubernetes Clus
 - Config-db installed and running in your Kubernetes Cluster. See the [Config-db Helm installation guide](https://candid-bunny-c77dca.netlify.app/installation/config-db/tutorials/install-helm) for more information.
 
 ### Install Chart
+
 ```console
 helm install [RELEASE_NAME] flanksource/incident-commander
 ```
 
 To set custom values file for your incident-commander helm chart installation to override existing values in [`incident-commander-chart`](https://github.com/flanksource/incident-commander-chart/blob/main/chart/values.yaml).
+
 ```bash
 cat > myvalues.yaml << EOT
 canary-checker:
@@ -100,7 +102,7 @@ _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command doc
 ### Upgrading Chart
 
 ```console
-$ helm upgrade [RELEASE_NAME] [CHART] --install
+helm upgrade [RELEASE_NAME] [CHART] --install
 ```
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
@@ -121,7 +123,6 @@ Config-db is an open source tool that allows developers to easily configure, scr
 
 ![Screen_Shot_2022-12-19_at_8.17.57_AM_kwkjql.png](https://res.cloudinary.com/dbm8wg3bn/image/upload/v1671528375/Screen_Shot_2022-12-19_at_8.17.57_AM_kwkjql.png)
 
-
 ## Canary Checker
 
 Canary checker is an open source tool that allows users to monitor the status of their canaries (server monitoring tools) in real-time. Canary checker allows users to set up alerts for when their canaries go down or encounter any issues, giving them the ability to quickly respond and fix any potential problems before they become more significant. It also provides users with detailed logs and analytics of their canary activity, giving them valuable insights into the performance and reliability of their systems. Canary checker is an essential tool for anyone who relies on canaries for server monitoring and maintenance, helping them to ensure the stability and uptime of their systems.
@@ -129,6 +130,5 @@ Canary checker is an open source tool that allows users to monitor the status of
 One potential use of Canary Checker is if you want to get the cert expiry dates for your URLs and get warn when we are X number of days from the expiry date.
 
 ![Screen_Shot_2022-12-19_at_8.17.39_AM_agdslp.png](https://res.cloudinary.com/dbm8wg3bn/image/upload/v1671528375/Screen_Shot_2022-12-19_at_8.17.57_AM_kwkjql.png)
-
 
 With Incident Commander up and running, this helps one have a better understand of thier infrastructure, which helps in planning of disaster recovery and reducing downtime to the bearest minimum.
