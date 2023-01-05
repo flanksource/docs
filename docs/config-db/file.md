@@ -1,21 +1,20 @@
 ## File
+
 The file config type is set to scrape configurations or configurations in common with the related elements that can be specified in the fields; `type`, and `id`. The paths to the configuration(s) to be scraped is set with the field `path` as a list.
 
-??? example 
-    ```yaml
-      file:
-        - type: $.Config.InstanceType
-          id: $.Config.InstanceId
-          path:
-            - config*.json
-            - test*.json
-    ```
-
+```yaml
+  file:
+    - type: $.Config.InstanceType
+      id: $.Config.InstanceId
+      path:
+        - config*.json
+        - test*.json
+```
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | [**BaseScraper**](#BaseScraper) | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | [BaseScraper](#basescraper) |
-| `url` | Specify URL e.g github repository containing the configuration(s) | *string* | 
+| `url` | Specify URL e.g github repository containing the configuration(s) | *string* |
 | `path` | Specify path to configuration(s) for scraping | *string* |
 | `ignore` | Set configurations to ignore | *string* |
 
@@ -38,13 +37,13 @@ The file config type is set to scrape configurations or configurations in common
 | [`include`](#Filter) | Specify fields to include in the configuration | [*Filter*](#filter)  |  |
 | [`exclude`](#filter) | Specify fields to remove from the config. It is useful for removing sensitive data and fields | [*Filter](#filter) |  |
 
-### Filter 
+### Filter
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | `jsonPath` | Specify JSONPath expression for the fields | *string* |
 
-### Script 
+### Script
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
