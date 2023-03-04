@@ -4,7 +4,7 @@ Canary checker is a monitoring system for executing synthetic tests, providing a
 
 You are able to write your own tests and execute them to continually verify that your applications and clusters are working the way you expect.
 
-In this guide, you'll see how to use canary-checker to test a Postgres database in several ways, using the CLI.
+In this guide, you'll see how to use canary-checker to test a Postgres database in several ways, using the CLI, and Kubernetes Operator.
 
 ## Prerequisities
 For the purposes of this guide, you need a PostgreSQL instance running in Kubernetes. See the following guide on [how to install PostgreSQL](https://phoenixnap.com/kb/postgresql-kubernetes) in your Kubernetes Cluster via Helm. 
@@ -17,7 +17,7 @@ For the purposes of this guide, you need a PostgreSQL instance running in Kubern
 The canary-checker CLI will allow you to quickly and simply execute checks that you have defined, via a single CLI command.
  
 !!! info "Info"
-    To install the CLI for preferred environment, See the [Canary-checker Installation guide](run/#installation) for more information.
+    To install the CLI for preferred environment, See the [Canary-checker Installation guide](run.md#installation) for more information.
 
 
 To verify whether the CLI has been installed correctly, run `canary-checker run -h` from your terminal. You should see the following output:
@@ -171,21 +171,128 @@ canary-checker run ../postgres-canaries/postgres-canary-local-does-admin-user-ex
 ```
 ## Installing canary-checker as a Kubernetes operator
 
-So far, you've been running canary-checker using the CLI, but it's recommended you install it in your cluster and deploy a few Canaries with it.
+Before installing the Canary Checker, please ensure you have the [prerequisites installed](prereqs.md) on your Kubernetes cluster.
 
-To do this, you can use the operator for canary-checker.
+The recommended method for installing Canary Checker is using [helm](https://helm.sh/)
 
-From your terminal, run the following command to install canary-checker (Ensure that you have the prerequisites installed on your cluster first).
+### Install Helm
+
+The following steps will install the latest version of helm
 
 ```bash
-kubectl apply -f https://github.com/flanksource/canary-checker/releases/download/v0.38.154/release.yaml
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
 ```
 
-Once the operator has been installed, you should be able to run `kubectl get canary` to see any canaries that you've deployed into our namespace.
+### Add the Flanksource helm repository
 
-To get started using the operator, let’s deploy a simple HTTP canary to our namespace.
+```bash
+helm repo add flanksource https://flanksource.github.io/charts
+helm repo update
+```
 
-Create a file called `http_pass.yaml` containing the below resource definition.
+### Configurable fields
+
+See the [values file](chart/values.yaml) for the full list of configurable fields.  Mandatory configuration values are for the configuration of the database, and it is recommended to also configure the UI ingress.
+
+### DB
+
+Canary Checker should optimally be run connected to a dedicated Postgres Server, but can run an embedded postgres instance for development and testing.
+
+#### Embedded database (default):
+
+|                     |                   |
+|---------------------|-------------------|
+| db.external.enabled | `false` (default) |
+| db.embedded.storageClass | Set to name of a storageclass available in the cluster |
+| db.embedded.storage | Set to volume of storage to request |
+
+The Canary Checker statefulset will be configured to start an embedded postgres server in the pod, which stores data to a PVC
+
+To connect to the embedded database: 
+
+```shell
+kubectl port-forward canary-checker-0 6432:6432 
+psql -U postgres localhost -p 6432 canary with password postgres #password will be postgres
+```
+
+
+
+#### Fully automatic Postgres Server creation:
+
+|                     |                   |
+|---------------------|-------------------|
+| db.external.enabled | `true` |
+| db.external.create  | `true` |
+| db.external.storageClass | Set to name of a storageclass available in the cluster |
+| db.external.storage | Set to volume of storage to request |
+
+The helm chart will create a postgres server statefulset, with a random password and default port, along with a canarychecker database hosted on the server.
+
+To specify a username and password for the chart-managed Postgres server, create a secret in the namespace that the chart will install to, named `postgres-connection`, which contains `POSTGRES_USER` and `POSTGRES_PASSWORD` keys.
+
+#### External Postgres Server:
+
+In order to connect to an existing Postgres server, a database must be created on the server, along with a user that has administrator permissions for the database.git 
+
+|                     |                   |
+|---------------------|-------------------|
+| db.external.enabled | `true` |
+| db.external.create  | `false` |
+| db.external.secretKeyRef.name | Set to name of name of secret that contains a key containging the postgres connection URI |
+| db.external.secretKeyRef.key | Set to the name of the key in the secret that contains the postgres connection URI |
+
+The connection URI must be specified in the format `postgresql://"$user":"$password"@"$host"/"$database"`
+
+### Flanksource UI
+
+The canary checker itself only presents an API.  To view the data graphically, the Flanksource UI is required, and is installed by default. The UI should be configured to allow external access to via ingress
+
+|                     |                   |
+|---------------------|-------------------|
+| flanksource-ui.ingress.host | URL at which the UI will be accessed |
+| flanksource-ui.ingress.annotations | Map of annotations required by the ingress controller or certificate issuer |
+| flanksource-ui.ingress.tls | Map of configuration options for TLS |
+
+More details regarding ingress configuration can be found in the [kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+
+|                     |                   |
+|---------------------|-------------------|
+| flanksource-ui.backendURL | Required to be set to the name of the canary-checker service.  The name will default to 'canary-checker' unless `nameOverride` is specified.  If `nameOverride is set, `backendURL` must be set to the same value |
+
+Due to a limitation in Helm, there is no way to automatically propogate the generated service name to a child chart, and it must be aligned by the user.
+
+### Deploy using Helm
+
+To install into a new `canary-checker` namespace, run
+
+```bash
+helm install canary-checker-demo --wait -n canary-checker --create-namespace flanksource/canary-checker -f values.yaml
+```
+
+where `values.yaml` contains the configuration options detailed above.  eg
+
+```yaml
+db:
+  external: 
+    enabled: true
+    create: true
+    storageClass: default
+    storage: 30Gi
+flanksource-ui:
+  ingress:
+    host: canary-checker.flanksource.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    tls:
+      - secretName: canary-checker-tls
+        hosts:
+        - canary-checker.flanksource.com
+```
+
+### Deploy a sample Canary
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
@@ -199,27 +306,22 @@ spec:
       thresholdMillis: 3000
       responseCodes: [201, 200, 301]
       responseContent: ""
-      maxSSLExpiry: 7`
+      maxSSLExpiry: 7
 ```
 
-You can then deploy this canary into our namespace using:
+### Check the results of the Canary
 
 ```bash
-kubectl apply -f http_pass.yaml
-```
-```
-canary.canaries.flanksource.com/http-pass created
+kubectl get canary
 ```
 
-You can then check the status of our canary by running:
+`sample output`
 
 ```
-TODO - Add the status
+NAMESPACE         NAME   INTERVAL   STATUS   MESSAGE   UPTIME 1H      LATENCY 1H   LAST TRANSITIONED   LAST CHECK
+platform-system   dns    30         Passed             0/2 (0%)                                        6s
+platform-system   lan    30         Passed             12/12 (100%)   1033         139m                6s
+platform-system   ldap   30         Passed             5/5 (100%)     323                              1s
+platform-system   pod    120        Passed             1/2 (50%)      10904        45m                 24s
+platform-system   s3     30         Passed             5/5 (100%)     1091         5m35s               5s
 ```
-
-### Wrapping up
-
-In this guide, you've seen how to get started with canary-checker and run a few synthetic tests against PostgreSQL running in Kubernetes. You've also seen how you can deploy canary-checker as a Kubernetes operator and deploy a Canary into our Kubernetes cluster to continuously monitor our systems.
-
-In the next guide, You'll take a look at how to model an application and Kubernetes cluster using SystemTemplates, as well as how to link components together - eventually linking components to canaries.
-
