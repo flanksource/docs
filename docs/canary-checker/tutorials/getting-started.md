@@ -294,6 +294,10 @@ flanksource-ui:
 
 ### Deploy a sample Canary
 
+```bash
+kubectl apply -f http_pass.yaml
+```
+
 ```yaml
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
