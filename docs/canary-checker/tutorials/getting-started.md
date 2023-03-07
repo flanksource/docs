@@ -194,7 +194,7 @@ helm repo update
 
 ### Configurable fields
 
-See the [values file](chart/values.yaml) for the full list of configurable fields.  Mandatory configuration values are for the configuration of the database, and it is recommended to also configure the UI ingress.
+See the [Helm chart and values file](https://github.com/flanksource/canary-checker/tree/master/chart) for the full list of configurable fields.  Mandatory configuration values are for the configuration of the database, and it is recommended to also configure the UI ingress.
 
 ### DB
 
