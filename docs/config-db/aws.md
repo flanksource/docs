@@ -30,33 +30,33 @@ transform:
     - jsonpath: subnetArn
 ```
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `compliance` | Toggle scraping of compliance metadata | *bool* |
-| `patch_states` | Set boolean value for scraping of patch state status, and report | *bool*  |
-| `trusted_advisor_check` | Set boolean value for enabling/disabling trusted advisor | *bool* |
-| `patch_details` | Set boolean value to enable/disable scraping of patch details | *bool* |  |
-| [`cost_reporting`](#cost-reporting) | Specify cost reporting for scraping of data | [*CostReporting*](#cost-reporting)
-| [`cloud_trail`](#cloudtrail-cloudtrail-cloudtrail) | Set CloudTrail specifications | [*CloudTrail*](#cloudtrail-cloudtrail) |  |
-| `include` | Specify AWS resources to include for scraping | *\[\]string* |
-| `exclude` | Specify AWS resources to exclude from scraping | *\[\]string* |
-| `inventory` | Toggle scrape of *metadata* for AWS resources | *bool* |
+| Field                                              | Description                                                      | Scheme                                 | Required |
+| -------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------- | -------- |
+| `compliance`                                       | Toggle scraping of compliance metadata                           | _bool_                                 |          |
+| `patch_states`                                     | Set boolean value for scraping of patch state status, and report | _bool_                                 |          |
+| `trusted_advisor_check`                            | Set boolean value for enabling/disabling trusted advisor         | _bool_                                 |          |
+| `patch_details`                                    | Set boolean value to enable/disable scraping of patch details    | _bool_                                 |          |
+| [`cost_reporting`](#cost-reporting)                | Specify cost reporting for scraping of data                      | [_CostReporting_](#cost-reporting)     |          |
+| [`cloud_trail`](#cloudtrail-cloudtrail-cloudtrail) | Set CloudTrail specifications                                    | [_CloudTrail_](#cloudtrail-cloudtrail) |          |
+| `include`                                          | Specify AWS resources to include for scraping                    | _\[\]string_                           |          |
+| `exclude`                                          | Specify AWS resources to exclude from scraping                   | _\[\]string_                           |          |
+| `inventory`                                        | Toggle scrape of _metadata_ for AWS resources                    | _bool_                                 |          |
 
 ### CloudTrail (`cloudtrail`)
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `exclude` | Set events to be excluded from scraping | *\[\]string* |
-| `max_age` | Set maximum age of events for scraping | *string* |
+| Field     | Description                             | Scheme       | Required |
+| --------- | --------------------------------------- | ------------ | -------- |
+| `exclude` | Set events to be excluded from scraping | _\[\]string_ |          |
+| `max_age` | Set maximum age of events for scraping  | _string_     |          |
 
 ### Cost Reporting (`cost_reporting`)
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `s3_bucket_path` | Set path for S3 bucket to scrape published AWS billing reports | *string* |
-| `table` | Specify table containing cost and usage data | *string* |
-| `database` | Specify database containing cost and usage data | *string* |
-| `region` | Specify region for S3 bucket | *string* |
+| Field            | Description                                                    | Scheme   | Required |
+| ---------------- | -------------------------------------------------------------- | -------- | -------- |
+| `s3_bucket_path` | Set path for S3 bucket to scrape published AWS billing reports | _string_ |          |
+| `table`          | Specify table containing cost and usage data                   | _string_ |          |
+| `database`       | Specify database containing cost and usage data                | _string_ |          |
+| `region`         | Specify region for S3 bucket                                   | _string_ |          |
 
 ### Supported Resources
 

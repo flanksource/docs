@@ -4,7 +4,7 @@ The example below creates a new `MSSQL::Database` configuration for each databas
 
 ```yaml
 sql:
-  - connection: "sqlserver://localhost:1433?database=master"
+  - connection: 'sqlserver://localhost:1433?database=master'
     auth:
       username:
         value: sa
