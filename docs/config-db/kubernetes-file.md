@@ -14,12 +14,20 @@ The KubernetesFile config type is used to scrape configurations contained in you
 
 ### KubernetesFile
 
-| Field       | Description                                                                                  | Scheme                                     | Required |
-| ----------- | -------------------------------------------------------------------------------------------- | ------------------------------------------ | -------- |
-| -           | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format`              | [**`BaseScraper`**](./base.md#basescraper) | yes      |
-| `selector`  | Specify Kubernetes resource for configuration based on `namespace`, `kind`, `name` and more. | [`ResourceSelector`](./resourceselector)   | yes      |
-| `container` | Set container name                                                                           | `string`                                   |          |
-| `files`     | Specify path to file contained in Pod                                                        | `[]PodFile`                                |          |
+| Field             | Description                                                                                                                                                             | Scheme                                   | Required |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | -------- |
+| `id`              | A static value or JSONPath expression to use as the ID for the resource.                                                                                                | `string`                                 | `true`   |
+| `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                                 | `false`  |
+| `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                                 | `false`  |
+| `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                                 | `true`   |
+| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](#transform)                | `false`  |
+| `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                 | `false`  |
+| `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                 | `false`  |
+| `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                               | `false`  |
+| `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                               | `false`  |
+| `selector`        | Specify Kubernetes resource for configuration based on `namespace`, `kind`, `name` and more.                                                                            | [`ResourceSelector`](./resourceselector) | yes      |
+| `container`       | Set container name                                                                                                                                                      | `string`                                 |          |
+| `files`           | Specify path to file contained in Pod                                                                                                                                   | `[]PodFile`                              |          |
 
 ### PodFile
 
