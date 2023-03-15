@@ -1,5 +1,3 @@
-## File
-
 The file config type is set to scrape configurations or configurations in common with the related elements that can be specified in the fields; `type`, and `id`. The paths to the configuration(s) to be scraped is set with the field `path` as a list.
 
 ```yaml

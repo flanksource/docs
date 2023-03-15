@@ -1,5 +1,3 @@
-### SQL
-
 The SQL configuration scraper will execute a SQL query and then create a configuration item for each returned row.
 
 The example below creates a new `MSSQL::Database` configuration for each database on the sql server, and then creates a roles object container the SQL Server login to database role mapping. With change detection this will highlight when new users are added / modified / removed on an individual databases.

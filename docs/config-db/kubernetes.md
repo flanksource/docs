@@ -1,5 +1,3 @@
-## Kubernetes
-
 The `kubernetes` config type scrapes the configurations of your Kubernetes resources as specified with the fields; `namespace`, `selector`, `fieldSelector` and more.
 
 ```yaml

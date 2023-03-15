@@ -1,5 +1,3 @@
-## AWS
-
 This config type is used to scrape information about your AWS infrastructure.
 
 ```yaml

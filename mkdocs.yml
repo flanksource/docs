@@ -55,14 +55,15 @@ markdown_extensions:
 nav:
   - Home: ./index.md
   - Configuration:
-      - Overviwew: ./config-db/overview.md
+      - Overview: ./config-db/overview.md
       - Getting Started: ./config-db/tutorials/getting-started-configdb.md
-      - AWS: ./config-db/aws.md
-      - Azure DevOps: ./config-db/azure-devops.md
-      - Files (Local/HTTP/Git): ./config-db/file.md
-      - Files (Kubernetes): ./config-db/kubernetes-file.md
-      - Kubernetes: ./config-db/kubernetes.md
-      - SQL: ./config-db/sql.md
+      - Scrappers:
+        - AWS: ./config-db/aws.md
+        - Azure DevOps: ./config-db/azure-devops.md
+        - Files (Local/HTTP/Git): ./config-db/file.md
+        - Files (Kubernetes): ./config-db/kubernetes-file.md
+        - Kubernetes: ./config-db/kubernetes.md
+        - SQL: ./config-db/sql.md
       - Local Development:
           - CLI: ./config-db/tutorials/install-cli.md
 

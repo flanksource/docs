@@ -1,4 +1,3 @@
-
 The Azure Devops  scanner will create a new configuration item for each unique pipeline (combination of name and variables).
 
 Each time the pipeline is run it will create a change for that configuration item.

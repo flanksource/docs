@@ -1,5 +1,3 @@
-## KubernetesFile
-
 The KubernetesFile config type is used to scrape configurations contained in your specified resource e.g Pod.
 
 ```yaml
