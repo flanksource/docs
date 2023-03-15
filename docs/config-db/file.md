@@ -9,9 +9,11 @@ file:
       - test*.json
 ```
 
-| Field    | Description                                                                     | Scheme                                   | Required |
-| -------- | ------------------------------------------------------------------------------- | ---------------------------------------- | -------- |
-| -        | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | [**BaseScraper**](./base.md#basescraper) |          |
-| `url`    | Specify URL e.g github repository containing the configuration(s)               | `string`                                 | `false`  |
-| `paths`  | Specify paths to configuration(s) for scraping                                  | `[]string`                               | `true`   |
-| `ignore` | Set configurations to ignore                                                    | `[]string`                               | `false`  |
+For more examples of configuration file, please check the [GitHub repo](https://github.com/flanksource/config-db/tree/main/fixtures)
+
+| Field    | Description                                                                     | Scheme                                     | Required |
+| -------- | ------------------------------------------------------------------------------- | ------------------------------------------ | -------- |
+| -        | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | [**`BaseScraper`**](./base.md#basescraper) |          |
+| `url`    | Specify URL e.g github repository containing the configuration(s)               | `string`                                   | `false`  |
+| `paths`  | Specify paths to configuration(s) for scraping                                  | `[]string`                                 | `true`   |
+| `ignore` | Set configurations to ignore                                                    | `[]string`                                 | `false`  |

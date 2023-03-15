@@ -2,11 +2,11 @@ The `kubernetes` config type scrapes the configurations of your Kubernetes resou
 
 ```yaml
 kubernetes:
-  - exclusions:
+  - clusterName: local-kind-cluster
+    exclusions:
       - Secret
       - ReplicaSet
       - APIService
-      - events
       - endpoints.discovery.k8s.io
       - endpointslices.discovery.k8s.io
       - leases.coordination.k8s.io
@@ -16,11 +16,23 @@ kubernetes:
       - controllerrevision
       - certificaterequest
       - orders.acme.cert-manager.io
+    event:
+      exclusions:
+        - SuccessfulCreate
+        - Created
+        - DNSConfigForming
+      severityKeywords:
+        error:
+          - failed
+          - error
+        warn:
+          - backoff
+          - nodeoutofmemory
 ```
 
 | Field             | Description                                                                                      | Scheme                                                                       | Required |
 | ----------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | -------- |
-| -                 | Specify inline fields, `id`, `name`, `items`, etc, See [BaseScraper](#basescraper)               | [**BaseScraper**](./base.md#basescraper)                                     |          |
+| -                 | Specify inline fields, `id`, `name`, `items`, etc, See [BaseScraper](#basescraper)               | [**`BaseScraper`**](./base.md#basescraper)                                   |          |
 | `clusterName`     | Specify cluster name                                                                             | `string`                                                                     |          |
 | `namespace`       | Specify namespace for scraping of Kubernetes resources                                           | `string`                                                                     |          |
 | `useCache`        | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd | `bool`                                                                       |          |
@@ -43,7 +55,7 @@ In addition, you can also specify keywords used to identify the severity of the 
 | Field              | Description                                                                                | Scheme                                  | Required |
 | ------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------- | -------- |
 | `exclusions`       | A list of keywords used to exclude event objects based on the reason                       | `[]string`                              | `false`  |
-| `severityKeywords` | Specify keywords used to identify the severity of the Kubernetes Event based on the reason | `[SeverityKeywords](#severitykeywords)` | `false`  |
+| `severityKeywords` | Specify keywords used to identify the severity of the Kubernetes Event based on the reason | [`SeverityKeywords`](#severitykeywords) | `false`  |
 
 ## SeverityKeywords
 

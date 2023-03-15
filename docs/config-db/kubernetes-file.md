@@ -12,14 +12,12 @@ The KubernetesFile config type is used to scrape configurations contained in you
         format: properties
 ```
 
-### KubernetesFile (`kubernetesFile`)
-
-| Field       | Description                                                                                  | Scheme                                   | Required |
-| ----------- | -------------------------------------------------------------------------------------------- | ---------------------------------------- | -------- |
-| -           | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format`              | [**BaseScraper**](./base.md#basescraper) | yes      |
-| `selector`  | Specify Kubernetes resource for configuration based on `namespace`, `kind`, `name` and more. | [`ResourceSelector`](./resourceselector) | yes      |
-| `container` | Set container name                                                                           | `string`                                 |          |
-| `files`     | Specify path to file contained in Pod                                                        | `[]PodFile`                              |          |
+| Field       | Description                                                                                  | Scheme                                     | Required |
+| ----------- | -------------------------------------------------------------------------------------------- | ------------------------------------------ | -------- |
+| -           | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format`              | [**`BaseScraper`**](./base.md#basescraper) | yes      |
+| `selector`  | Specify Kubernetes resource for configuration based on `namespace`, `kind`, `name` and more. | [`ResourceSelector`](./resourceselector)   | yes      |
+| `container` | Set container name                                                                           | `string`                                   |          |
+| `files`     | Specify path to file contained in Pod                                                        | `[]PodFile`                                |          |
 
 ### PodFile
 
