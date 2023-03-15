@@ -30,6 +30,8 @@ transform:
     - jsonpath: subnetArn
 ```
 
+### AWS
+
 | Field                                              | Description                                                      | Scheme                                 | Required |
 | -------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------- | -------- |
 | `compliance`                                       | Toggle scraping of compliance metadata                           | _bool_                                 |          |

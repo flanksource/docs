@@ -63,3 +63,26 @@ sql:
 
       select * from @mytable
 ```
+
+### SQL
+
+| Field    | Description                                                                     | Scheme                      | Required |
+| -------- | ------------------------------------------------------------------------------- | --------------------------- | -------- |
+| -        | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | [BaseScraper](#basescraper) |          |
+| -        | Specify connection details to the database                                      | [Connection](#connection)   |          |
+| `driver` | Specify the name of the driver to use for connecting to the database            | `string`                    | `false`  |
+| `query`  | Specify the SQL query to execute                                                | `string`                    | `true`   |
+
+### Connection
+
+| Field      | Description                                                       | Scheme                              | Required |
+| ---------- | ----------------------------------------------------------------- | ----------------------------------- | -------- |
+| connection | Specify the connection string for the database                    | string                              | `true`   |
+| auth       | Specify the authentication details for connecting to the database | [`Authentication`](#authentication) | `false`  |
+
+### Authentication
+
+| Field    | Description          | Scheme                                                                       | Required |
+| -------- | -------------------- | ---------------------------------------------------------------------------- | -------- |
+| username | Specify the username | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | `true`   |
+| password | Specify the password | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | `true`   |

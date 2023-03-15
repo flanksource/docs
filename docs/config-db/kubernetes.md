@@ -30,6 +30,8 @@ kubernetes:
           - nodeoutofmemory
 ```
 
+### Kubernetes
+
 | Field             | Description                                                                                      | Scheme                                                                       | Required |
 | ----------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | -------- |
 | -                 | Specify inline fields, `id`, `name`, `items`, etc, See [BaseScraper](#basescraper)               | [**`BaseScraper`**](./base.md#basescraper)                                   |          |
@@ -43,10 +45,10 @@ kubernetes:
 | `fieldSelector`   | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running`        | `string`                                                                     |          |
 | `maxInflight`     | Set value for maximum inflight requests                                                          | `int64`                                                                      |          |
 | `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                        | `[]string`                                                                   |          |
-| **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                         | [_kommons.EnvVar_](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes      |
+| **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                         | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes      |
 | `event`           | Specify configuration to handle kubernetes events. See [**KubernetesEvent**](#kubernetesevent)   | [`KubernetesEvent`](#kubernetesevent)                                        | yes      |
 
-## KubernetesEvent
+### KubernetesEvent
 
 `config-db` maps Kuberenetes Event objects to config changes unlike other objects that are mapped to config items. This configuration allows you to exclude or include the Kubernetes Event objects based on the reason.
 
@@ -57,7 +59,7 @@ In addition, you can also specify keywords used to identify the severity of the 
 | `exclusions`       | A list of keywords used to exclude event objects based on the reason                       | `[]string`                              | `false`  |
 | `severityKeywords` | Specify keywords used to identify the severity of the Kubernetes Event based on the reason | [`SeverityKeywords`](#severitykeywords) | `false`  |
 
-## SeverityKeywords
+### SeverityKeywords
 
 | Field   | Description                                                                                                                                                            | Scheme     | Required |
 | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------- |

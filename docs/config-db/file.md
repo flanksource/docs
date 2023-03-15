@@ -11,6 +11,8 @@ file:
 
 For more examples of configuration file, please check the [GitHub repo](https://github.com/flanksource/config-db/tree/main/fixtures)
 
+### File
+
 | Field    | Description                                                                     | Scheme                                     | Required |
 | -------- | ------------------------------------------------------------------------------- | ------------------------------------------ | -------- |
 | -        | Specify inline fields, `id`, `name`, `items`, `type`, `transform`, and `format` | [**`BaseScraper`**](./base.md#basescraper) |          |
