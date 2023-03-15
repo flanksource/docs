@@ -5,6 +5,11 @@ Script allows you to transform the scraped configuration using Javascript and [G
 | `gotemplate` | Specify Go template for use in script | `string` | `false`  |
 | `javascript` | Specify javascript syntax for script  | `string` | `false`  |
 
+!!! note
+
+    Unlike other transformation functions, script is ran before the attributes _(id, name, type, ...)_ are extracted.
+    So please make sure your transformation scripts are inline with the JSONPath selectors for the attributes.
+
 ## JavaScript
 
 You can supply a JavaScript code to transform the scraped configuration. Your JS code will have access to the special `config` variable which will contain the scraped config. Your script is expected to return a stringified JSON object which will be the new configuration.
