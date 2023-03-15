@@ -23,11 +23,26 @@ Transformation can be useful when you want to
 | `expr`       | Specify expression for use in script           | `string` |          |
 | `javascript` | Specify javascript syntax for script           | `string` |          |
 
-## Filter
+## Exclude
+
+This feature allows you to remove certain fields from the scraped configuration. This is useful when you want to remove sensitive or just useless data from the scraped configuration.
+
+### Filter
 
 | Field      | Description                                | Scheme   | Required |
 | ---------- | ------------------------------------------ | -------- | -------- |
-| `jsonpath` | Specify JSONPath expression for the fields | `string` |          |
+| `jsonpath` | Specify JSONPath expression for the fields | `string` | `true`   |
+
+Example: With the following `config-db` configuration for AWS, the transformation will delete the `tags` and `privateDnsNameOptionsOnLaunch` fields from the scraped configuration.
+
+```yaml
+aws:
+  - type: AWS
+    transform:
+      exclude:
+        - jsonpath: $.tags
+        - jsonpath: $.privateDnsNameOptionsOnLaunch
+```
 
 ## Mask
 
