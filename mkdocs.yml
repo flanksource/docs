@@ -57,7 +57,11 @@ nav:
   - Configuration:
       - Overview: ./config-db/overview.md
       - Getting Started: ./config-db/tutorials/getting-started-configdb.md
-      - Transform: ./config-db/transform.md
+      - Transform:
+          - Overview: ./config-db/transform/overview.md
+          - Mask: ./config-db/transform/mask.md
+          - Script: ./config-db/transform/script.md
+          - Exclude: ./config-db/transform/exclude.md
       - Scrapers:
           - AWS: ./config-db/aws.md
           - Azure DevOps: ./config-db/azure-devops.md
