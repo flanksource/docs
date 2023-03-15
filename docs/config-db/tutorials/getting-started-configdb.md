@@ -14,7 +14,7 @@ Additionally - you'll see how `config-db` can keep track of configuration change
 
 ### Database Configuration
 
-`config-db` needs a backing PostgreSQL database to run its migrations against. 
+`config-db` needs a backing PostgreSQL database to run its migrations against.
 
 You'll use the PostgreSQL command line utility `createdb` to create our database.
 
@@ -31,17 +31,25 @@ You can then simply export the connection URL for the database as an environment
 ```bash
 export DB_URL=postgres://postgres@localhost:5432/config
 ```
-## Scraping
 
-!!! info "Info"
-    Before getting started with scraping, you need to have Config-db running locally in your system. See the [Config-db Installation Guide](install-cli/#installation) on how to install the Config-db CLI.
+You also have the option to pass in the database connection url via the `--db` flag.
+
+```sh
+config-db --db='postgres://postgres@localhost:5432/config'
+```
+
+!!! info
+    
+    For the purpose of this tutorial we'll use the environment variable approach to pass in the database connection URL.
+
+### Verify installation
 
 Once the installation is complete, ensure everything is working by running `config-db` with the default configuration for scraping.
 
 ```console
-% ./.bin/config-db serve
+% .bin/config-db serve
 INFO[0000] Loaded 7 config rules
-2022-10-12T19:08:14.962+0200	INFO	Initialized DB: localhost:5432/config (7503 kB)
+2022-10-12T19:08:14.962+0200  INFO  Initialized DB: localhost:5432/config (7503 kB)
 2022-10-12 19:08:14.984859 I | goose: no migrations to run. current version: 99
 
    ____    __
@@ -65,58 +73,65 @@ Once you've verified that you can start `config-db`, you can now move on to scra
 
 ## Scraping configuration from Git
 
+!!! info "Info"
+
+    Before getting started with scraping, you need to have `config-db` installed locally in your system.
+
 As an example, you'll scrape the configuration from a sample repository. It is recommended you fork this repository so you can modify it and play with the different features that `config-db` provides.
 
-This repository contains a simple YAML definition for a canary that can be used by canary-checker.
+This repository contains a simple YAML definition for a canary that can be used by `canary-checker`.
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
- name: http-pass-single
- labels:
-   canary: http
+  name: http-pass-single
+  labels:
+    canary: http
 spec:
- interval: 40
- http:
-   - endpoint: http://status.savanttools.com/?code=200
-     name: sample-check
-     thresholdMillis: 3000
-     responseCodes: [201, 200, 301]
-     responseContent: ""
-     maxSSLExpiry: 7
-     test:
-       expr: 'code == 200'
+  interval: 40
+  http:
+    - endpoint: http://status.savanttools.com/?code=200
+      name: sample-check
+      thresholdMillis: 3000
+      responseCodes: [201, 200, 301]
+      responseContent: ''
+      maxSSLExpiry: 7
+      test:
+        expr: 'code == 200'
 ```
 
-To get started, create a simple scraping configuration to let `config-db` scrape the configuration from your Github repository.
-
+To get started, create a simple scraping configuration to let `config-db` scrape the configuration from your GitHub repository.
 
 ```yaml
 file:
- - type: $.kind
-   id: $.metadata.name
-   url: github.com/cishiv/sample-configuration
-   paths:
-     - simple-config.yaml
-
+  - type: $.kind
+    id: $.metadata.name
+    url: github.com/cishiv/sample-configuration
+    paths:
+      - simple-config.yaml
 ```
-Save this configuration as `scrape-git.yaml`. You'll notice that for `type` and `id` the `$.` syntax is used. This lets `config-db` know to look for those fields in the scraped configuration. In this case, those fields should evaluate as follows:
 
-`type` should be equal to “Canary”
-`id` should be equal to “http-pass-single”
+Save this configuration as `scrape-git.yaml`.
+
+#### JsonPath Expression
+
+`config-db` uses JSONPath expression to extract then necessary values from the configuration.
+
+In the above `scrape-git.yaml` example, you'll notice that for `type` and `id` the `$.` syntax is used. This lets `config-db` know where to look for those fields in the scraped configuration. In this case, those fields should evaluate as follows:
+
+- `type` should be equal to “Canary”
+- `id` should be equal to “http-pass-single”
 
 You can now have `config-db` run this scraper on a specified schedule. If a schedule isn't specified, the scraper will run every 60 minutes by default.
 
 To start `config-db` with this scraper configuration, run the following command in your terminal:
 
-```bash
-config-db serve scrape-git.yaml –default-schedule=’@every 20s’
-``` 
+```sh
+config-db serve scrape-git.yaml –-default-schedule=’@every 20s’
+```
 
 This will start `config-db` and run the scraper you've defined every 20 seconds.
-
-
 
 Make a change to your configuration and push it to your remote repository (Github). `config-db` will detect that configuration change and reflect it on the next scraper run.
 
@@ -130,9 +145,7 @@ spec:
 ...
 ```
 
-Once `config-db` detects your change, you should see log output as follows:
-
-
+Once `config-db` detects your change, you should see the log output as follows:
 
 We can easily view the output of the configuration changes using the HTTP API provided by `config-db`.
 
@@ -193,12 +206,13 @@ You'll continue to use your `scrape-git.yaml` scraper configuration, but instead
 ```console
 % config-db run scrape-git.yaml
 INFO[0000] Loaded 7 config rules
-2022-10-12T20:53:44.453+0200	INFO	Scrapping [scrape-git.yaml]
-2022-10-12T20:53:44.496+0200	INFO	Initialized DB: localhost:5432/config (7959 kB)
+2022-10-12T20:53:44.453+0200  INFO  Scrapping [scrape-git.yaml]
+2022-10-12T20:53:44.496+0200  INFO  Initialized DB: localhost:5432/config (7959 kB)
 2022-10-12 20:53:44.513877 I | goose: no migrations to run. current version: 99
-2022-10-12T20:53:44.535+0200	INFO	Scraping files from (PWD: /Users/shiv/personal/flanksource/config-db)
-2022-10-12T20:53:47.341+0200	INFO	Exporting 1 resources to DB
+2022-10-12T20:53:44.535+0200  INFO  Scraping files from (PWD: /Users/shiv/personal/flanksource/config-db)
+2022-10-12T20:53:47.341+0200  INFO  Exporting 1 resources to DB
 ```
+
 We can see that our scraper executed once, fetching our configuration from our repository, and then exited.
 
 This can be useful for quickly updating configuration and verifying diffs.
