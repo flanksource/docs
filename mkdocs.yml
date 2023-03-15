@@ -58,6 +58,7 @@ nav:
       - Overview: ./config-db/overview.md
       - Getting Started: ./config-db/tutorials/getting-started-configdb.md
       - Scrappers:
+        - Base: ./config-db/base.md
         - AWS: ./config-db/aws.md
         - Azure DevOps: ./config-db/azure-devops.md
         - Files (Local/HTTP/Git): ./config-db/file.md

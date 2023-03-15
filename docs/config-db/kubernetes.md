@@ -18,58 +18,21 @@ kubernetes:
       - orders.acme.cert-manager.io
 ```
 
-| Field                           | Description                                                                                      | Scheme                                                                       | Required |
-| ------------------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | -------- |
-| [**BaseScraper**](#BaseScraper) | Specify inline fields, `id`, `name`, `items`, etc, See [BaseScraper](#basescraper)               | [BaseScraper](#basescraper)                                                  |          |
-| `clusterName`                   | Specify cluster name                                                                             | `string`                                                                     |          |
-| `namespace`                     | Specify namespace for scraping of Kubernetes resources                                           | `string`                                                                     |          |
-| `useCache`                      | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd | `bool`                                                                       |          |
-| `allowIncomplete`               |                                                                                                  | `bool`                                                                       |          |
-| `scope`                         | Specify scope for scrape. e.g `cluster` for scraping at Cluster level                            | `string`                                                                     |          |
-| `since`                         | Set time constraint for scraping resources within the set period                                 | `string`                                                                     |          |
-| `selector`                      | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels`                       | `string`                                                                     |          |
-| `fieldSelector`                 | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running`        | `string`                                                                     |          |
-| `maxInflight`                   | Set value for maximum inflight requests                                                          | `int64`                                                                      |          |
-| `exclusions`                    | Specify Kubernetes resources to be excluded from scraping                                        | `[]string`                                                                   |          |
-| **`kubeconfig`**                | Specify kubeconfig for access to your Kubernetes Cluster                                         | [_kommons.EnvVar_](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes      |
-| `event`                         | Specify configuration to handle kubernetes events. See [**KubernetesEvent**](#kubernetesevent)   | [`KubernetesEvent`](#kubernetesevent)                                        | yes      |
-
-### BaseScraper
-
-| Field                     | Description                                                                                                                                                             | Scheme                    | Required |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- | -------- |
-| `id`                      | A static value or JSONPath expression to use as the ID for the resource.                                                                                                | `string`                  | `true`   |
-| `name`                    | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                  | `false`  |
-| `items`                   | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                  | `false`  |
-| `type`                    | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                  | `true`   |
-| [`transform`](#transform) | Specify field to transform result                                                                                                                                       | [`Transform`](#transform) | `false`  |
-| `format`                  | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                  | `false`  |
-| `timestampFormat`         | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                  | `false`  |
-| `createFields`            | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                | `false`  |
-| `deleteFields`            | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                | `false`  |
-
-### Transform
-
-| Field                | Description                                                                                   | Scheme              | Required |
-| -------------------- | --------------------------------------------------------------------------------------------- | ------------------- | -------- |
-| [`script`](#script)  | Script to transform scrape result                                                             | [_Script_](#script) |          |
-| [`include`](#Filter) | Specify fields to include in the configuration                                                | [_Filter_](#filter) |          |
-| [`exclude`](#filter) | Specify fields to remove from the config. It is useful for removing sensitive data and fields | [_Filter_](#filter) |          |
-
-### Filter
-
-| Field      | Description                                | Scheme   | Required |
-| ---------- | ------------------------------------------ | -------- | -------- |
-| `jsonPath` | Specify JSONPath expression for the fields | `string` |          |
-
-### Script
-
-| Field        | Description                                    | Scheme   | Required |
-| ------------ | ---------------------------------------------- | -------- | -------- |
-| `gotemplate` | Specify Go template for use in script          | `string` |          |
-| `jsonPath`   | Specify path to JSON element for use in script | `string` |          |
-| `expr`       | Specify expression for use in script           | `string` |          |
-| `javascript` | Specify javascript syntax for script           | `string` |          |
+| Field             | Description                                                                                      | Scheme                                                                       | Required |
+| ----------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | -------- |
+| -                 | Specify inline fields, `id`, `name`, `items`, etc, See [BaseScraper](#basescraper)               | [**BaseScraper**](./base.md#basescraper)                                     |          |
+| `clusterName`     | Specify cluster name                                                                             | `string`                                                                     |          |
+| `namespace`       | Specify namespace for scraping of Kubernetes resources                                           | `string`                                                                     |          |
+| `useCache`        | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd | `bool`                                                                       |          |
+| `allowIncomplete` |                                                                                                  | `bool`                                                                       |          |
+| `scope`           | Specify scope for scrape. e.g `cluster` for scraping at Cluster level                            | `string`                                                                     |          |
+| `since`           | Set time constraint for scraping resources within the set period                                 | `string`                                                                     |          |
+| `selector`        | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels`                       | `string`                                                                     |          |
+| `fieldSelector`   | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running`        | `string`                                                                     |          |
+| `maxInflight`     | Set value for maximum inflight requests                                                          | `int64`                                                                      |          |
+| `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                        | `[]string`                                                                   |          |
+| **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                         | [_kommons.EnvVar_](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes      |
+| `event`           | Specify configuration to handle kubernetes events. See [**KubernetesEvent**](#kubernetesevent)   | [`KubernetesEvent`](#kubernetesevent)                                        | yes      |
 
 ## KubernetesEvent
 
