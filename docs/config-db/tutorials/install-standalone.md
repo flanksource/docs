@@ -1,3 +1,33 @@
+## CLI Installation
+
+=== "Linux (amd64)"
+    ```bash
+    wget https://github.com/flanksource/config-db/releases/latest/download/config-db_linux_amd64 \
+      -O /usr/bin/config-db && \
+      chmod +x /usr/bin/config-db
+    ```
+
+=== "MacOSX (amd64)"
+    ```bash
+    wget https://github.com/flanksource/config-db/releases/latest/download/config-db_darwin_amd64 \
+      -O /usr/local/bin/config-db && \
+      chmod +x /usr/local/bin/config-db
+    ```
+
+=== "Makefile"
+    ```Makefile
+    OS = $(shell uname -s | tr '[:upper:]' '[:lower:]')
+    ARCH = $(shell uname -m | sed 's/x86_64/amd64/')
+    wget -nv -nc https://github.com/flanksource/config-db/releases/latest/download/config-db_$(OS)_$(ARCH) \
+      -O /usr/local/bin/config-db && \
+      chmod +x /usr/local/bin/config-db
+    ```
+    
+=== "Windows"
+    ```bash
+    wget -nv -nc -O https://github.com/flanksource/canary-checker/releases/latest/download/config-db.exe
+    ```
+
 ## Database Configuration
 
 `config-db` needs a backing PostgreSQL database to run its migrations against.

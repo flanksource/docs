@@ -61,12 +61,13 @@ nav:
               - Standalone: ./config-db/tutorials/install-standalone.md
               - Full Suite: ./config-db/tutorials/install-helm.md
           - Configuration: ./config-db/tutorials/configuration.md
+          - CLI: ./config-db/tutorials/cli.md
           - Example: ./config-db/tutorials/example-git-file.md
-      - Transform:
-          - Overview: ./config-db/transform/overview.md
-          - Mask: ./config-db/transform/mask.md
-          - Script: ./config-db/transform/script.md
-          - Exclude: ./config-db/transform/exclude.md
+      - Concepts:
+          - Transform: ./config-db/concepts/transform.md
+          - Mask: ./config-db/concepts/mask.md
+          - Script: ./config-db/concepts/script.md
+          - Exclude: ./config-db/concepts/exclude.md
       - Scrapers:
           - AWS: ./config-db/aws.md
           - Azure DevOps: ./config-db/azure-devops.md
@@ -74,8 +75,6 @@ nav:
           - Files (Kubernetes): ./config-db/kubernetes-file.md
           - Kubernetes: ./config-db/kubernetes.md
           - SQL: ./config-db/sql.md
-      - Local Development:
-          - CLI: ./config-db/tutorials/install-cli.md
 
   - Health Checks:
       - Overview: ./canary-checker/overview.md
