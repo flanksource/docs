@@ -64,6 +64,7 @@ nav:
           - CLI: ./config-db/tutorials/cli.md
           - Example: ./config-db/tutorials/example-git-file.md
       - Concepts:
+          - Config within config: ./config-db/concepts/full.md
           - Transform: ./config-db/concepts/transform.md
           - Mask: ./config-db/concepts/mask.md
           - Script: ./config-db/concepts/script.md
