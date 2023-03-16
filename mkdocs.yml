@@ -87,6 +87,35 @@ nav:
           - Templating: ./canary-checker/concepts/templating.md
       - Local Development:
           - CLI: ./canary-checker/tutorials/run.md
+      - References:
+          - Cloudwatch: ./canary-checker/reference/cloudwatch.md
+          - ConfigDB: ./canary-checker/reference/configdb.md
+          - DNS: ./canary-checker/reference/dns.md
+          - EC2: ./canary-checker/reference/ec2.md
+          - Elasticsearch: ./canary-checker/reference/elasticsearch.md
+          - Exec: ./canary-checker/reference/exec.md
+          - GCS Bucket: ./canary-checker/reference/gcs-bucket.md
+          - GCS Database Backup: ./canary-checker/reference/gcs-database-backup.md
+          - Helm: ./canary-checker/reference/helm.md
+          - HTTP: ./canary-checker/reference/http.md
+          - ICMP: ./canary-checker/reference/icmp.md
+          - JMeter: ./canary-checker/reference/jmeter.md
+          - JUnit: ./canary-checker/reference/junit.md
+          - Kubernetes: ./canary-checker/reference/kubernetes.md
+          - LDAP: ./canary-checker/reference/ldap.md
+          - Mongo: ./canary-checker/reference/mongo.md
+          - MS SQL Server: ./canary-checker/reference/mssql.md
+          - MySQL: ./canary-checker/reference/mysql.md
+          - Namespace: ./canary-checker/reference/namespace.md
+          - Pod: ./canary-checker/reference/pod.md
+          - Postgres: ./canary-checker/reference/postgres.md
+          - Prometheus: ./canary-checker/reference/prometheus.md
+          - Redis: ./canary-checker/reference/redis.md
+          - Restic: ./canary-checker/reference/restic.md
+          - S3 Bucket: ./canary-checker/reference/s3-bucket.md
+          - S3: ./canary-checker/reference/s3.md
+          - SFTP: ./canary-checker/reference/sftp.md
+          - SMB / CIFS: ./canary-checker/reference/smb.md
 
   - Logging:
       # - Overview: ./apm-hub/logging.md
@@ -105,39 +134,7 @@ nav:
           Kubernetes: ./topology/kubernetes.md
           Kubernetes (Workload): ./topology-kubernetes-workload.md
           From Configuration: ./topology-configuration.md
-
-  - Reference:
-      - Checks:
-          - Cloudwatch: ./reference/checks/cloudwatch.md
-          - ConfigDB: ./reference/checks/configdb.md
-          - DNS: ./reference/checks/dns.md
-          - EC2: ./reference/checks/ec2.md
-          - Elasticsearch: ./reference/checks/elasticsearch.md
-          - Exec: ./reference/checks/exec.md
-          - GCS Bucket: ./reference/checks/gcs-bucket.md
-          - GCS Database Backup: ./reference/checks/gcs-database-backup.md
-          - Helm: ./reference/checks/helm.md
-          - HTTP: ./reference/checks/http.md
-          - ICMP: ./reference/checks/icmp.md
-          - JMeter: ./reference/checks/jmeter.md
-          - JUnit: ./reference/checks/junit.md
-          - Kubernetes: ./reference/checks/kubernetes.md
-          - LDAP: ./reference/checks/ldap.md
-          - Mongo: ./reference/checks/mongo.md
-          - MS SQL Server: ./reference/checks/mssql.md
-          - MySQL: ./reference/checks/mysql.md
-          - Namespace: ./reference/checks/namespace.md
-          - Pod: ./reference/checks/pod.md
-          - Postgres: ./reference/checks/postgres.md
-          - Prometheus: ./reference/checks/prometheus.md
-          - Redis: ./reference/checks/redis.md
-          - Restic: ./reference/checks/restic.md
-          - S3 Bucket: ./reference/checks/s3-bucket.md
-          - S3: ./reference/checks/s3.md
-          - SFTP: ./reference/checks/sftp.md
-          - SMB / CIFS: ./reference/checks/smb.md
-      - Topology:
-          - Components: ./reference/topology/components.md
-          - Properties: ./reference/topology/properties.md
-          - Health Checks: ./reference/topology/health-checks.md
-          - System Template: ./reference/topology/system-template.md
+      - References:
+          - Configs: ./topology/reference/configs.md
+          - Properties: ./topology/reference/properties.md
+          - System Template: ./topology/reference/system-template.md
