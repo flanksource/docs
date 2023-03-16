@@ -64,6 +64,8 @@ nav:
           - CLI: ./config-db/tutorials/cli.md
           - Example: ./config-db/tutorials/example-git-file.md
       - Concepts:
+          - Secret Management: ./concepts/secret-management.md
+          - Templating: ./concepts/templating.md
           - Config within config: ./config-db/concepts/full.md
           - Transform: ./config-db/concepts/transform.md
           - Mask: ./config-db/concepts/mask.md
@@ -80,6 +82,9 @@ nav:
   - Health Checks:
       - Overview: ./canary-checker/overview.md
       - Getting Started: ./canary-checker/tutorials/getting-started.md
+      - Concepts:
+          - Secret Management: ./canary-checker/concepts/secret-management.md
+          - Templating: ./canary-checker/concepts/templating.md
       - Local Development:
           - CLI: ./canary-checker/tutorials/run.md
 
@@ -93,14 +98,14 @@ nav:
       - Health Checks: ./topology/health-checks.md
       - Configuration: /topology/configuration.md
       - Properties: ./canary-checker/properties.md
+      - Concepts:
+          - Secret Management: ./topology/concepts/secret-management.md
+          - Templating: ./topology/concepts/templating.md
       - Examples:
           Kubernetes: ./topology/kubernetes.md
           Kubernetes (Workload): ./topology-kubernetes-workload.md
           From Configuration: ./topology-configuration.md
 
-  - Concepts:
-      - Secret Management: ./concepts/secret-management.md
-      - Templating: ./concepts/templating.md
   - Reference:
       - Checks:
           - Cloudwatch: ./reference/checks/cloudwatch.md
@@ -131,13 +136,6 @@ nav:
           - S3: ./reference/checks/s3.md
           - SFTP: ./reference/checks/sftp.md
           - SMB / CIFS: ./reference/checks/smb.md
-      - Configuration:
-          - AWS: ./reference/configuration/aws.md
-          - Azure Devops: ./reference/configuration/azureDevops.md
-          - File: ./reference/configuration/file.md
-          - File (Kubernetes): ./reference/configuration/kubernetes-file.md
-          - Kubernetes: ./reference/configuration/kubernetes.md
-          - SQL: ./reference/configuration/sql.md
       - Topology:
           - Components: ./reference/topology/components.md
           - Properties: ./reference/topology/properties.md
