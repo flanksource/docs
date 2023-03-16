@@ -71,12 +71,13 @@ nav:
           - Mask: ./config-db/concepts/mask.md
           - Exclude: ./config-db/concepts/exclude.md
       - Scrapers:
-          - AWS: ./config-db/aws.md
-          - Azure DevOps: ./config-db/azure-devops.md
-          - Files (Local/HTTP/Git): ./config-db/file.md
-          - Files (Kubernetes): ./config-db/kubernetes-file.md
-          - Kubernetes: ./config-db/kubernetes.md
-          - SQL: ./config-db/sql.md
+          - AWS: ./config-db/scrapers/aws.md
+          - Azure DevOps: ./config-db/scrapers/azure-devops.md
+          - Files (Local/HTTP/Git): ./config-db/scrapers/file.md
+          - Files (Kubernetes): ./config-db/scrapers/kubernetes-file.md
+          - Kubernetes: ./config-db/scrapers/kubernetes.md
+          - SQL: ./config-db/scrapers/sql.md
+          - Custom: ./config-db/scrapers/custom.md
 
   - Health Checks:
       - Overview: ./canary-checker/overview.md

@@ -1,8 +1,8 @@
-### `full` flag
+If you have the need to extract configuration and changes from the scraped configuration itself, the `full` flag will enable you to do so. This is a very niche use case and might only make sense when the source returns arbitrary data; example: HTTP, SQL, git, etc...
 
-When `full` is set to `true`, `config-db` will extract changes and the config itself from the scraped configuration.
+### Example
 
-Example: consider that we have a configuration for `config-db`
+Consider that we have the following configuration file
 
 ```yaml
 full: true
@@ -13,7 +13,7 @@ file:
       - fixtures/data/car_changes.json
 ```
 
-The config points to this file
+where `fixtures/data/car_changes.json` is
 
 ```json
 {
@@ -48,3 +48,5 @@ and the following new config change would be registered for that particular conf
   "unrelated_stuff": 123
 }
 ```
+
+It is expected that config and changes are available with keys `config` and `changes` respectively.
