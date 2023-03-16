@@ -66,7 +66,7 @@ nav:
       - Concepts:
           - Secret Management: ./config-db/concepts/secret-management.md
           - Templating: ./config-db/concepts/templating.md
-          - Config within config: ./config-db/concepts/full.md
+          - Maping custom creation/deletion time: ./config-db/concepts/custom-creation-deletion-time.md
           - Transform: ./config-db/concepts/transform.md
           - Mask: ./config-db/concepts/mask.md
           - Exclude: ./config-db/concepts/exclude.md
