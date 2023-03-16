@@ -39,7 +39,7 @@ config-db --db='postgres://postgres@localhost:5432/config'
 ```
 
 !!! info
-    
+
     For the purpose of this tutorial we'll use the environment variable approach to pass in the database connection URL.
 
 ### Verify installation
@@ -71,15 +71,15 @@ ____________________________________O/_______
 
 Once you've verified that you can start `config-db`, you can now move on to scraping configurations from a Git repository.
 
-## Scraping configuration from Git
+## Example: Scraping configuration from Git
 
-!!! info "Info"
+As an example, you'll scrape the configuration from this sample repository on Github - [github.com/cishiv/sample-configuration](https://github.com/cishiv/sample-configuration).
 
-    Before getting started with scraping, you need to have `config-db` installed locally in your system.
+!!! info
 
-As an example, you'll scrape the configuration from a sample repository. It is recommended you fork this repository so you can modify it and play with the different features that `config-db` provides.
+    It is recommended that you fork this repository so you can modify it and play with the different features that `config-db` provides.
 
-This repository contains a simple YAML definition for a canary that can be used by `canary-checker`.
+This repository contains a simple YAML definition (`simple-config.yaml`) for a canary that can be used by `canary-checker`.
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
@@ -101,6 +101,8 @@ spec:
         expr: 'code == 200'
 ```
 
+### Prepare the configuration
+
 To get started, create a simple scraping configuration to let `config-db` scrape the configuration from your GitHub repository.
 
 ```yaml
@@ -114,18 +116,43 @@ file:
 
 Save this configuration as `scrape-git.yaml`.
 
-#### JsonPath Expression
+**JSONPath Expression**
 
-`config-db` uses JSONPath expression to extract then necessary values from the configuration.
+`config-db` uses JSONPath expressions extensively. In the above `scrape-git.yaml` example, you'll notice that it is used to extract `type` and `id` from the scraped configuration. In this case, those fields should evaluate as follows:
 
-In the above `scrape-git.yaml` example, you'll notice that for `type` and `id` the `$.` syntax is used. This lets `config-db` know where to look for those fields in the scraped configuration. In this case, those fields should evaluate as follows:
+| field | selector          | value              |
+| ----- | ----------------- | ------------------ |
+| type  | `$.kind`          | `Canary`           |
+| id    | `$.metadata.name` | `http-pass-single` |
 
-- `type` should be equal to “Canary”
-- `id` should be equal to “http-pass-single”
+!!! resource
 
-You can now have `config-db` run this scraper on a specified schedule. If a schedule isn't specified, the scraper will run every 60 minutes by default.
+    Read more about JSONPath expressions [here](../../concepts/templating.md#jsonpath)
 
-To start `config-db` with this scraper configuration, run the following command in your terminal:
+**URL**
+
+`config-db` supports scraping configuration from several protocols
+
+- Local files
+- Git
+- Mercurial
+- HTTP
+- Amazon S3
+- Google GCP
+
+In this case, we're scraping configuration from a Github repository. The contents of the URL is downloaded in a local cache directory and then scraped.
+
+**Paths**
+
+Once the git repository is cached locally, `config-db` will scrape the configuration from the specified paths.
+
+### Run the scraper
+
+That's all you need to get started with scraping configuration from a Git repository. You can run the scraper as a one-off command or run it on a schedule.
+
+#### Running on a schedule
+
+To run on a schedule you'll need to use the `serve` command. Run the following command in your terminal:
 
 ```sh
 config-db serve scrape-git.yaml –-default-schedule=’@every 20s’
@@ -133,7 +160,11 @@ config-db serve scrape-git.yaml –-default-schedule=’@every 20s’
 
 This will start `config-db` and run the scraper you've defined every 20 seconds.
 
-Make a change to your configuration and push it to your remote repository (Github). `config-db` will detect that configuration change and reflect it on the next scraper run.
+!!! info
+
+    If a schedule isn't specified, the scraper will run every 60 minutes by default.
+
+Make a change to your configuration and push it to your remote repository. `config-db` will detect that configuration change and reflect it on the next scraper run.
 
 Change the `interval` field in your configuration from `40` to `30`.
 
@@ -197,14 +228,13 @@ You can see that all changes to your configuration have been detected and stored
 
 Additionally, you can view your full configuration via the `config_items` API. Accessible via `http://localhost:3000/config_items`.
 
-## Scraping using the CLI
+#### One-off scraping
 
-So far, it was illustrated how to get `config-db` running and scrape on an ongoing basis. But that isn’t always necessary. In cases where you just want to scrape once-off, the CLI does support this option.
+To run the scraper as a one-off command, you'll continue to use your `scrape-git.yaml` scraper configuration, but instead of using the `serve` command, you'll use the `run` command as follows:
 
-You'll continue to use your `scrape-git.yaml` scraper configuration, but instead of using the `serve` command, you'll use the `run` command as follows:
+```sh
+> config-db run scrape-git.yaml
 
-```console
-% config-db run scrape-git.yaml
 INFO[0000] Loaded 7 config rules
 2022-10-12T20:53:44.453+0200  INFO  Scrapping [scrape-git.yaml]
 2022-10-12T20:53:44.496+0200  INFO  Initialized DB: localhost:5432/config (7959 kB)
