@@ -56,7 +56,12 @@ nav:
   - Home: ./index.md
   - Configuration:
       - Overview: ./config-db/overview.md
-      - Getting Started: ./config-db/tutorials/getting-started-configdb.md
+      - Getting Started:
+          - Installation:
+              - Standalone: ./config-db/tutorials/install-standalone.md
+              - Full Suite: ./config-db/tutorials/install-helm.md
+          - Configuration: ./config-db/tutorials/configuration.md
+          - Example: ./config-db/tutorials/example-git-file.md
       - Transform:
           - Overview: ./config-db/transform/overview.md
           - Mask: ./config-db/transform/mask.md

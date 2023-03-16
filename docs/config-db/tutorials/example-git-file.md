@@ -1,79 +1,8 @@
-# Getting started with Config-db
-
-`config-db` is a straightforward JSON-based configuration management database. It enables you to scrape configuration from several sources on an ongoing basis and navigate that configuration in an easy-to-navigate and search JSON tree.
-
-By doing this, `config-db` enables you to view and search the change history of your configuration across multiple dimensions (node, zone, environment, application, technology, etc). As well as compare and view the differences between configurations across environments.
-
-In this guide, you'll see how to set up `config-db` and configure it to scrape configuration from a Git repository, in line with the GitOps philosophy.
+In this guide, you'll see how to run `config-db` to scrape configuration from a sample Git repository on GitHub [github.com/cishiv/sample-configuration](https://github.com/cishiv/sample-configuration), in line with the GitOps philosophy.
 
 The scraped configuration will be branch and environment aware, enabling you to see the differences between those dimensions.
 
 Additionally - you'll see how `config-db` can keep track of configuration changes should there be any modifications to the configuration in your Git repository.
-
-## Installation
-
-### Database Configuration
-
-`config-db` needs a backing PostgreSQL database to run its migrations against.
-
-You'll use the PostgreSQL command line utility `createdb` to create our database.
-
-Run the following command in your terminal:
-
-```bash
-createdb -h localhost -p 5432 -U postgres config
-```
-
-Where `config` is the name of the database we’re creating.
-
-You can then simply export the connection URL for the database as an environment variable for `config-db` to use by running the following in our terminal:
-
-```bash
-export DB_URL=postgres://postgres@localhost:5432/config
-```
-
-You also have the option to pass in the database connection url via the `--db` flag.
-
-```sh
-config-db --db='postgres://postgres@localhost:5432/config'
-```
-
-!!! info
-
-    For the purpose of this tutorial we'll use the environment variable approach to pass in the database connection URL.
-
-### Verify installation
-
-Once the installation is complete, ensure everything is working by running `config-db` with the default configuration for scraping.
-
-```console
-% .bin/config-db serve
-INFO[0000] Loaded 7 config rules
-2022-10-12T19:08:14.962+0200  INFO  Initialized DB: localhost:5432/config (7503 kB)
-2022-10-12 19:08:14.984859 I | goose: no migrations to run. current version: 99
-
-   ____    __
-  / __/___/ /  ___
- / _// __/ _ \/ _ \
-/___/\__/_//_/\___/ v4.6.3
-High performance, minimalist Go web framework
-https://echo.labstack.com
-____________________________________O/_______
-                                    O\
-⇨ http server started on [::]:8080
-12/Oct/2022:19:08:15 +0200: Attempting to connect to the database...
-12/Oct/2022:19:08:15 +0200: Connection successful
-12/Oct/2022:19:08:15 +0200: Listening on port 3000
-12/Oct/2022:19:08:15 +0200: Listening for notifications on the pgrst channel
-12/Oct/2022:19:08:15 +0200: Config re-loaded
-12/Oct/2022:19:08:15 +0200: Schema cache loaded
-```
-
-Once you've verified that you can start `config-db`, you can now move on to scraping configurations from a Git repository.
-
-## Example: Scraping configuration from Git
-
-As an example, you'll scrape the configuration from this sample repository on Github - [github.com/cishiv/sample-configuration](https://github.com/cishiv/sample-configuration).
 
 !!! info
 
@@ -101,7 +30,7 @@ spec:
         expr: 'code == 200'
 ```
 
-### Prepare the configuration
+## Prepare the configuration
 
 To get started, create a simple scraping configuration to let `config-db` scrape the configuration from your GitHub repository.
 
@@ -146,16 +75,18 @@ In this case, we're scraping configuration from a Github repository. The content
 
 Once the git repository is cached locally, `config-db` will scrape the configuration from the specified paths.
 
-### Run the scraper
+## Run the scraper
 
 That's all you need to get started with scraping configuration from a Git repository. You can run the scraper as a one-off command or run it on a schedule.
 
-#### Running on a schedule
+For the purpose of this example we'll use the environment variable approach to pass in the database connection URL.
+
+### Running on a schedule
 
 To run on a schedule you'll need to use the `serve` command. Run the following command in your terminal:
 
 ```sh
-config-db serve scrape-git.yaml –-default-schedule=’@every 20s’
+config-db serve scrape-git.yaml --default-schedule=’@every 20s’
 ```
 
 This will start `config-db` and run the scraper you've defined every 20 seconds.
@@ -228,7 +159,7 @@ You can see that all changes to your configuration have been detected and stored
 
 Additionally, you can view your full configuration via the `config_items` API. Accessible via `http://localhost:3000/config_items`.
 
-#### One-off scraping
+### One-off scraping
 
 To run the scraper as a one-off command, you'll continue to use your `scrape-git.yaml` scraper configuration, but instead of using the `serve` command, you'll use the `run` command as follows:
 
@@ -246,11 +177,3 @@ INFO[0000] Loaded 7 config rules
 We can see that our scraper executed once, fetching our configuration from our repository, and then exited.
 
 This can be useful for quickly updating configuration and verifying diffs.
-
-## Next steps
-
-In this guide, you’ve learnt what `config-db` is and how it can be useful to you. Additionally, you’ve seen how it can be used to scrape configuration from a Git repository.
-
-It has also illustrated, the usage of the HTTP API that is built into `config-db` to interrogate configuration items and their patches easily.
-
-In the next guide - you'll see how to install `config-db` via Helm into your Kubernetes cluster, as well as how to set it up for other types of configuration.

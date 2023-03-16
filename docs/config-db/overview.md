@@ -1,3 +1,7 @@
+`config-db` is a straightforward JSON-based configuration management database. It enables you to scrape configuration from several sources on an ongoing basis and navigate that configuration in an easy-to-navigate and search JSON tree.
+
+By doing this, `config-db` enables you to view and search the change history of your configuration across multiple dimensions (node, zone, environment, application, technology, etc). As well as compare and view the differences between configurations across environments.
+
 Mission Control is able to scan multiple configuration sources including
 
 - [AWS Cloud Resources](./aws.md)
@@ -11,20 +15,6 @@ Each configuration has:
 - Configuration - Normally JSON, but XML and properties files are also available
 - Insights - Security, cost, performance, and other recommendations from scanners including AWS Trusted Advisor, AWS Config rules, etc...
 - Changes - Either change directly on the config _(recorded as diff change type)_ or changes identified via AWS Cloudtrail, etc...
-
-## Configuration file
-
-| Field            | Description                                                                                      | Scheme                                                    | Required |
-| ---------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------- | -------- |
-| `logLevel`       | Specify the level of logging.                                                                    | `string`                                                  | `false`  |
-| `schedule`       | Specify the interval to scrape configuration files in cron format. Defaults to every 60 minutes. | `string`                                                  | `false`  |
-| `full`           | Set to `true` to extract changes from scraped configurations. Defaults to `false`.               | `bool`                                                    | `false`  |
-| `aws`            | Specifies the list of AWS configurations to scrape.                                              | [`[]AWS`](./aws.md#aws)                                   | `false`  |
-| `file`           | Specifies the list of local file paths to scrape.                                                | [`[]File`](./file.md#file)                                | `false`  |
-| `kubernetes`     | Specifies the list of Kubernetes configurations to scrape.                                       | [`[]Kubernetes`](./kubernetes.md#kubernetes)              | `false`  |
-| `kubernetesFile` | Specifies the list of Kubernetes configurations from a file to scrape.                           | [`[]KubernetesFile`](./kubernetes-file.md#kubernetesfile) | `false`  |
-| `azureDevops`    | Specifies the list of Azure DevOps configurations to scrape.                                     | [`[]AzureDevops`](./azure-devops.md#azuredevops)          | `false`  |
-| `sql`            | Specifies the list of SQL configurations to scrape.                                              | [`[]SQL`](./sql.md#sql)                                   | `false`  |
 
 ### `full` flag
 
