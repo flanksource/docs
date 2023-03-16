@@ -64,8 +64,8 @@ nav:
           - CLI: ./config-db/tutorials/cli.md
           - Example: ./config-db/tutorials/example-git-file.md
       - Concepts:
-          - Secret Management: ./concepts/secret-management.md
-          - Templating: ./concepts/templating.md
+          - Secret Management: ./config-db/concepts/secret-management.md
+          - Templating: ./config-db/concepts/templating.md
           - Config within config: ./config-db/concepts/full.md
           - Transform: ./config-db/concepts/transform.md
           - Mask: ./config-db/concepts/mask.md
