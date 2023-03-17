@@ -2,10 +2,13 @@ To get you setup and running we'll take a quick look at using apm-hub to query n
 
 This guide involves the following steps:
 
-1. [Install APM Hub](./install.md)
-2. [Create configuration file for nginx](#1-prepare-configuration-file)
-3. [Start apm-hub](#2-start-apm-hub)
-4. [Make a query](#3-make-a-query)
+1. [Create configuration file for nginx](#1-prepare-configuration-file)
+2. [Start apm-hub](#2-start-apm-hub)
+3. [Make a query](#3-make-a-query)
+
+!!! note
+
+    This guide assumes that you have already installed `apm-hub`. If you haven't, please follow the [installation guide](./install.md).
 
 ### 1. Prepare configuration file
 
