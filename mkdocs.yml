@@ -83,7 +83,6 @@ nav:
           - Secret Management: ./apm-hub/concepts/secret-management.md
           - Searching: ./apm-hub/concepts/search.md
           - Routing: ./apm-hub/concepts/routing.md
-          - Additive: ./apm-hub/concepts/additive.md
       - Backends:
           - File: ./apm-hub/backends/file.md
           - Kubernetes: ./apm-hub/backends/kubernetes.md
