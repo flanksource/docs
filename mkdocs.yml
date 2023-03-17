@@ -77,6 +77,7 @@ nav:
       - Getting Started:
           - Installation: ./apm-hub/tutorials/install.md
           - CLI: ./apm-hub/tutorials/cli.md
+          - Configuration: ./apm-hub/tutorials/configuration.md
           - Example: ./apm-hub/tutorials/example.md
       - Concepts:
           - Secret Management: ./apm-hub/concepts/secret-management.md
@@ -84,8 +85,9 @@ nav:
           - Routing: ./apm-hub/concepts/routing.md
       - Backends:
           - File: ./apm-hub/backends/file.md
-          - Elasticsearch: ./apm-hub/backends/elasticsearch.md
           - Kubernetes: ./apm-hub/backends/kubernetes.md
+          - Elasticsearch: ./apm-hub/backends/elasticsearch.md
+          - OpenSearch: ./apm-hub/backends/opensearch.md
 
   - Topology:
       - Overview: ./topology/overview.md
