@@ -14,19 +14,19 @@
       chmod +x /usr/local/bin/config-db
     ```
 
-=== "Makefile"
-    ```Makefile
-    OS = $(shell uname -s | tr '[:upper:]' '[:lower:]')
-    ARCH = $(shell uname -m | sed 's/x86_64/amd64/')
-    wget -nv -nc https://github.com/flanksource/config-db/releases/latest/download/config-db_$(OS)_$(ARCH) \
-      -O /usr/local/bin/config-db && \
-      chmod +x /usr/local/bin/config-db
-    ```
-    
 === "Windows"
     ```bash
-    wget -nv -nc -O https://github.com/flanksource/canary-checker/releases/latest/download/config-db.exe
+    wget -nv -nc -O https://github.com/flanksource/config-db/releases/latest/download/config-db.exe
     ```
+
+=== "Build locally"
+    ```sh
+    git clone https://github.com/flanksource/config-db
+    cd config-db
+    make build
+    make install
+    ```
+    
 
 ## Database Configuration
 
