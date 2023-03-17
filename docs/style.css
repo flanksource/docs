@@ -1,3 +1,7 @@
 td code {
   white-space: nowrap;
 }
+
+label.md-nav__link {
+  font-size: 110%;
+}

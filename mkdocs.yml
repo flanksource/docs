@@ -78,7 +78,7 @@ nav:
           - Installation: ./apm-hub/tutorials/install.md
           - CLI: ./apm-hub/tutorials/cli.md
           - Configuration: ./apm-hub/tutorials/configuration.md
-          - Example: ./apm-hub/tutorials/example.md
+          - Quick Start: ./apm-hub/tutorials/quick-start.md
       - Concepts:
           - Secret Management: ./apm-hub/concepts/secret-management.md
           - Searching: ./apm-hub/concepts/search.md

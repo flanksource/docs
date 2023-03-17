@@ -33,4 +33,4 @@ Result is the individual log message fetched from the underlying backends.
 | `id`        | The unique identifier provided by the underlying system, use to link to a point in time of a log stream. | `string`            |
 | `timestamp` | RFC3339 timestamp.                                                                                       | `string`            |
 | `message`   | The log message.                                                                                         | `string`            |
-| `labels`    | Returned labels.                                                                                         | `map[string]string` |
+| `labels`    | Labels specified in the search query along with possibly other labels attached by the search backend.    | `map[string]string` |
