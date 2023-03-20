@@ -1,4 +1,4 @@
-When `apm-hub` runs with the `search` command, it will expose a `/search` endpoint that can be used to search for logs from all the configured backends. The search endpoint accepts a [`SearchParam`](#search-param) and returns a [`SearchResult`](#search-result).
+`apm-hub` exposes `/search` endpoint that can be used to search for logs from all the configured backends. The search endpoint accepts a [`SearchParam`](#search-param) and returns a [`SearchResult`](#search-result).
 
 ## Search Param
 

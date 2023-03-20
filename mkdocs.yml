@@ -73,14 +73,14 @@ nav:
           - CLI: ./canary-checker/tutorials/run.md
 
   - Logging:
-      - Getting Started:
-          - Overview: ./apm-hub/overview.md
-          - Quick Start: ./apm-hub/quick-start.md
+      - Overview: ./apm-hub/overview.md
+      - Quick Start: ./apm-hub/quick-start.md
       - Concepts:
           - Configuration: ./apm-hub/concepts/configuration.md
           - Authentication: ./apm-hub/concepts/authentication.md
           - API: ./apm-hub/concepts/api.md
           - Routing: ./apm-hub/concepts/routing.md
+          - Templating: ./apm-hub/concepts/templating.md
       - Backends:
           - File: ./apm-hub/backends/file.md
           - Kubernetes: ./apm-hub/backends/kubernetes.md
