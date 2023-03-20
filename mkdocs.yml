@@ -56,14 +56,11 @@ nav:
   - Home: ./index.md
   - Configuration:
       - Overview: ./config-db/overview.md
+      - Installation: ./config-db/tutorials/install-helm.md
       - Getting Started:
-          - Installation:
-              - Standalone: ./config-db/tutorials/install-standalone.md
-              - Full Suite: ./config-db/tutorials/install-helm.md
-          - Configuration: ./config-db/tutorials/configuration.md
-          - CLI: ./config-db/tutorials/cli.md
-          - Example: ./config-db/tutorials/example-git-file.md
+          - Quick Start: ./config-db/tutorials/example-git-file.md
       - Concepts:
+          - Configuration: ./config-db/tutorials/configuration.md
           - Secret Management: ./config-db/concepts/secret-management.md
           - Templating: ./config-db/concepts/templating.md
           - Maping custom creation/deletion time: ./config-db/concepts/custom-creation-deletion-time.md
@@ -78,6 +75,9 @@ nav:
           - Kubernetes: ./config-db/scrapers/kubernetes.md
           - SQL: ./config-db/scrapers/sql.md
           - Custom: ./config-db/scrapers/custom.md
+      - Local Development:
+          - Installation: ./config-db/tutorials/install-standalone.md
+          - CLI: ./config-db/tutorials/cli.md
 
   - Health Checks:
       - Overview: ./canary-checker/overview.md
