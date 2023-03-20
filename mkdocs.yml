@@ -55,9 +55,9 @@ markdown_extensions:
 nav:
   - Home: ./index.md
   - Configuration:
-      - Overview: ./config-db/overview.md
       - Installation: ./config-db/tutorials/install-helm.md
       - Getting Started:
+          - Overview: ./config-db/overview.md
           - Quick Start: ./config-db/tutorials/example-git-file.md
       - Concepts:
           - Configuration: ./config-db/tutorials/configuration.md
