@@ -1,10 +1,12 @@
 `apm-hub` can possibly serve hundreds of backends but you might not want all of them to serve a request. Routing helps you to control which backends should serve a given request based on the parameters shown below.
 
+![Routing Diagram](../routing.svg)
+
 ## Route
 
 | Field      | Description                                                                                  | Scheme              | Required   |
 | ---------- | -------------------------------------------------------------------------------------------- | ------------------- | ---------- |
-| `type`     | Serve queries if this `type`.                                                                | `string`            | `optional` |
+| `type`     | Serve queries if the `type` matches this value.                                              | `string`            | `optional` |
 | `idPrefix` | Serve queries if the `id` has this prefix.                                                   | `string`            | `optional` |
 | `labels`   | Serve queries matching these labels.                                                         | `map[string]string` | `true`     |
 | `additive` | Specifies whether this backend should return results exclusively.<br>_(Defaults to `false`)_ | `bool`              | `optional` |
@@ -13,13 +15,13 @@ Every backend should have at least one route defined. If multiple routes are def
 
 ## Wildcard
 
-If you need a backend to serve all the requests, you have the option to specify a wildcard route. An empty route indicates a wildcard route.
+If you need a backend to serve all the requests, you have the option to specify a wildcard route. A route with an empty value for idPrefix indicates a wildcard route.
 
 ```yaml
 backends:
   - kubernetes:
       routes:
-        -
+        - idPrefix: ''
 ```
 
 ## Labels matching
@@ -80,7 +82,12 @@ backends:
 
 As you can imagine, a single search query can possibly be served by numerous backends. A non-additive route enables a backend to return the results exclusively. This means that if a backend is configured with a non-additive route, then it will discard all the results from other backends collected so far and return only its results. Once a non-additive route is matched, the search will stop and the results will be returned.
 
+!!! info
 All routes are non-additive by default.
+
+![Non additive route](../non-additive-route.svg)
+
+````yaml
 
 ```yaml
 backends:
@@ -90,4 +97,4 @@ backends:
           labels:
             app: !frontend
             env: dev,stage
-```
+````
