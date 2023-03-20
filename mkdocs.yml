@@ -62,6 +62,7 @@ nav:
       - Concepts:
           - Configuration: ./config-db/tutorials/configuration.md
           - Secret Management: ./config-db/concepts/secret-management.md
+          - Extraction: ./config-db/concepts/extraction.md
           - Templating: ./config-db/concepts/templating.md
           - Maping custom creation/deletion time: ./config-db/concepts/custom-creation-deletion-time.md
           - Transform: ./config-db/concepts/transform.md
