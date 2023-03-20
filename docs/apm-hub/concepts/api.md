@@ -37,4 +37,43 @@ Result is the individual log message fetched from the underlying backends.
 
 ## Example
 
-Take a look at the [Quick start - Making query section](../quick-start.md#3-make-a-query) to see how search is done.
+Assuming that you have `apm-hub` running, you can issue a search request as follows.
+
+```sh
+curl -d '{"limit": 10, "labels":{"app" :"nginx"}}' \
+-H "Content-Type: application/json" localhost:8080/search
+```
+
+The search response would be a JSON objects similar to the following.
+
+```json
+{
+  "total": 3,
+  "results": [
+    {
+      "timestamp": "2020-11-05T09:47:22+05:45",
+      "message": "127.0.0.1 - - [05/Nov/2020:09:47:17 +0545] \"GET /the HTTP/1.1\" 304 0 \"-\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36\"",
+      "labels": {
+        "app": "nginx",
+        "path": "/var/log/nginx/access.log"
+      }
+    },
+    {
+      "timestamp": "2020-11-05T09:47:22+05:45",
+      "message": "127.0.0.1 - - [05/Nov/2020:09:47:17 +0545] \"GET /best HTTP/1.1\" 304 0 \"-\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36\"",
+      "labels": {
+        "app": "nginx",
+        "path": "/var/log/nginx/access.log"
+      }
+    },
+    {
+      "timestamp": "2020-11-05T09:47:22+05:45",
+      "message": "127.0.0.1 - - [05/Nov/2020:09:47:19 +0545] \"GET /league HTTP/1.1\" 200 612 \"-\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36\"",
+      "labels": {
+        "app": "nginx",
+        "path": "/var/log/nginx/access.log"
+      }
+    }
+  ]
+}
+```
