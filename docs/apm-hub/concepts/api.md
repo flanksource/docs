@@ -35,5 +35,6 @@ Result is the individual log message fetched from the underlying backends.
 | `message`   | The log message.                                                                                         | `string`            |
 | `labels`    | Labels specified in the search query along with possibly other labels attached by the search backend.    | `map[string]string` |
 
-
 ## Example
+
+Take a look at the [Quick start - Making query section](../quick-start.md#3-make-a-query) to see how search is done.
