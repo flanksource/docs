@@ -83,7 +83,8 @@ backends:
 As you can imagine, a single search query can possibly be served by numerous backends. A non-additive route enables a backend to return the results exclusively. This means that if a backend is configured with a non-additive route, then it will discard all the results from other backends collected so far and return only its results. Once a non-additive route is matched, the search will stop and the results will be returned.
 
 !!! info
-All routes are non-additive by default.
+
+    All routes are non-additive by default.
 
 ![Non additive route](../non-additive-route.svg)
 
