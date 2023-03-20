@@ -34,3 +34,6 @@ Result is the individual log message fetched from the underlying backends.
 | `timestamp` | RFC3339 timestamp.                                                                                       | `string`            |
 | `message`   | The log message.                                                                                         | `string`            |
 | `labels`    | Labels specified in the search query along with possibly other labels attached by the search backend.    | `map[string]string` |
+
+
+## Example

@@ -8,7 +8,7 @@ This guide involves the following steps:
 
 !!! note
 
-    This guide assumes that you have already installed `apm-hub`. If you haven't, please follow the [installation guide](./install.md).
+    This guide assumes that you have already installed `apm-hub`. If you haven't, please follow the [installation guide](./tutorials/install.md).
 
 ### 1. Prepare configuration file
 

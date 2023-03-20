@@ -73,21 +73,22 @@ nav:
           - CLI: ./canary-checker/tutorials/run.md
 
   - Logging:
-      - Overview: ./apm-hub/overview.md
       - Getting Started:
-          - Installation: ./apm-hub/tutorials/install.md
-          - CLI: ./apm-hub/tutorials/cli.md
-          - Configuration: ./apm-hub/tutorials/configuration.md
-          - Quick Start: ./apm-hub/tutorials/quick-start.md
+          - Overview: ./apm-hub/overview.md
+          - Quick Start: ./apm-hub/quick-start.md
       - Concepts:
-          - Secret Management: ./apm-hub/concepts/secret-management.md
-          - Searching: ./apm-hub/concepts/search.md
+          - Configuration: ./apm-hub/concepts/configuration.md
+          - Authentication: ./apm-hub/concepts/authentication.md
+          - API: ./apm-hub/concepts/api.md
           - Routing: ./apm-hub/concepts/routing.md
       - Backends:
           - File: ./apm-hub/backends/file.md
           - Kubernetes: ./apm-hub/backends/kubernetes.md
           - Elasticsearch: ./apm-hub/backends/elasticsearch.md
           - OpenSearch: ./apm-hub/backends/opensearch.md
+      - Local Development:
+          - Installation: ./apm-hub/tutorials/install.md
+          - CLI: ./apm-hub/tutorials/cli.md
 
   - Topology:
       - Overview: ./topology/overview.md
