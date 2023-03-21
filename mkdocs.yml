@@ -55,22 +55,68 @@ markdown_extensions:
 nav:
   - Home: ./index.md
   - Configuration:
-      - Overviwew: ./config-db/overview.md
-      - Getting Started: ./config-db/tutorials/getting-started-configdb.md
-      - AWS: ./config-db/aws.md
-      - Azure DevOps: ./config-db/azure-devops.md
-      - Files (Local/HTTP/Git): ./config-db/file.md
-      - Files (Kubernetes): ./config-db/kubernetes-file.md
-      - Kubernetes: ./config-db/kubernetes.md
-      - SQL: ./config-db/sql.md
+      - Installation: ./config-db/tutorials/install-helm.md
+      - Getting Started:
+          - Overview: ./config-db/overview.md
+          - Quick Start: ./config-db/tutorials/example-git-file.md
+      - Concepts:
+          - Configuration: ./config-db/tutorials/configuration.md
+          - Secret Management: ./config-db/concepts/secret-management.md
+          - Extraction: ./config-db/concepts/extraction.md
+          - Templating: ./config-db/concepts/templating.md
+          - Maping custom creation/deletion time: ./config-db/concepts/custom-creation-deletion-time.md
+          - Transform: ./config-db/concepts/transform.md
+          - Mask: ./config-db/concepts/mask.md
+          - Exclude: ./config-db/concepts/exclude.md
+      - Scrapers:
+          - AWS: ./config-db/scrapers/aws.md
+          - Azure DevOps: ./config-db/scrapers/azure-devops.md
+          - Files (Local/HTTP/Git): ./config-db/scrapers/file.md
+          - Files (Kubernetes): ./config-db/scrapers/kubernetes-file.md
+          - Kubernetes: ./config-db/scrapers/kubernetes.md
+          - SQL: ./config-db/scrapers/sql.md
+          - Custom: ./config-db/scrapers/custom.md
       - Local Development:
-          - CLI: ./config-db/tutorials/install-cli.md
+          - Installation: ./config-db/tutorials/install-standalone.md
+          - CLI: ./config-db/tutorials/cli.md
 
   - Health Checks:
       - Overview: ./canary-checker/overview.md
       - Getting Started: ./canary-checker/tutorials/getting-started.md
+      - Concepts:
+          - Secret Management: ./canary-checker/concepts/secret-management.md
+          - Templating: ./canary-checker/concepts/templating.md
       - Local Development:
           - CLI: ./canary-checker/tutorials/run.md
+      - References:
+          - Cloudwatch: ./canary-checker/reference/cloudwatch.md
+          - ConfigDB: ./canary-checker/reference/configdb.md
+          - DNS: ./canary-checker/reference/dns.md
+          - EC2: ./canary-checker/reference/ec2.md
+          - Elasticsearch: ./canary-checker/reference/elasticsearch.md
+          - Exec: ./canary-checker/reference/exec.md
+          - GCS Bucket: ./canary-checker/reference/gcs-bucket.md
+          - GCS Database Backup: ./canary-checker/reference/gcs-database-backup.md
+          - Helm: ./canary-checker/reference/helm.md
+          - HTTP: ./canary-checker/reference/http.md
+          - ICMP: ./canary-checker/reference/icmp.md
+          - JMeter: ./canary-checker/reference/jmeter.md
+          - JUnit: ./canary-checker/reference/junit.md
+          - Kubernetes: ./canary-checker/reference/kubernetes.md
+          - LDAP: ./canary-checker/reference/ldap.md
+          - Mongo: ./canary-checker/reference/mongo.md
+          - MS SQL Server: ./canary-checker/reference/mssql.md
+          - MySQL: ./canary-checker/reference/mysql.md
+          - Namespace: ./canary-checker/reference/namespace.md
+          - Pod: ./canary-checker/reference/pod.md
+          - Postgres: ./canary-checker/reference/postgres.md
+          - Prometheus: ./canary-checker/reference/prometheus.md
+          - Redis: ./canary-checker/reference/redis.md
+          - Restic: ./canary-checker/reference/restic.md
+          - S3 Bucket: ./canary-checker/reference/s3-bucket.md
+          - S3: ./canary-checker/reference/s3.md
+          - SFTP: ./canary-checker/reference/sftp.md
+          - SMB / CIFS: ./canary-checker/reference/smb.md
 
   - Logging:
       - Overview: ./apm-hub/overview.md
@@ -96,53 +142,14 @@ nav:
       - Health Checks: ./topology/health-checks.md
       - Configuration: /topology/configuration.md
       - Properties: ./canary-checker/properties.md
+      - Concepts:
+          - Secret Management: ./topology/concepts/secret-management.md
+          - Templating: ./topology/concepts/templating.md
       - Examples:
           Kubernetes: ./topology/kubernetes.md
           Kubernetes (Workload): ./topology-kubernetes-workload.md
           From Configuration: ./topology-configuration.md
-
-  - Concepts:
-      - Secret Management: ./concepts/secret-management.md
-      - Templating: ./concepts/templating.md
-  - Reference:
-      - Checks:
-          - Cloudwatch: ./reference/checks/cloudwatch.md
-          - ConfigDB: ./reference/checks/configdb.md
-          - DNS: ./reference/checks/dns.md
-          - EC2: ./reference/checks/ec2.md
-          - Elasticsearch: ./reference/checks/elasticsearch.md
-          - Exec: ./reference/checks/exec.md
-          - GCS Bucket: ./reference/checks/gcs-bucket.md
-          - GCS Database Backup: ./reference/checks/gcs-database-backup.md
-          - Helm: ./reference/checks/helm.md
-          - HTTP: ./reference/checks/http.md
-          - ICMP: ./reference/checks/icmp.md
-          - JMeter: ./reference/checks/jmeter.md
-          - JUnit: ./reference/checks/junit.md
-          - Kubernetes: ./reference/checks/kubernetes.md
-          - LDAP: ./reference/checks/ldap.md
-          - Mongo: ./reference/checks/mongo.md
-          - MS SQL Server: ./reference/checks/mssql.md
-          - MySQL: ./reference/checks/mysql.md
-          - Namespace: ./reference/checks/namespace.md
-          - Pod: ./reference/checks/pod.md
-          - Postgres: ./reference/checks/postgres.md
-          - Prometheus: ./reference/checks/prometheus.md
-          - Redis: ./reference/checks/redis.md
-          - Restic: ./reference/checks/restic.md
-          - S3 Bucket: ./reference/checks/s3-bucket.md
-          - S3: ./reference/checks/s3.md
-          - SFTP: ./reference/checks/sftp.md
-          - SMB / CIFS: ./reference/checks/smb.md
-      - Configuration:
-          - AWS: ./reference/configuration/aws.md
-          - Azure Devops: ./reference/configuration/azureDevops.md
-          - File: ./reference/configuration/file.md
-          - File (Kubernetes): ./reference/configuration/kubernetes-file.md
-          - Kubernetes: ./reference/configuration/kubernetes.md
-          - SQL: ./reference/configuration/sql.md
-      - Topology:
-          - Components: ./reference/topology/components.md
-          - Properties: ./reference/topology/properties.md
-          - Health Checks: ./reference/topology/health-checks.md
-          - System Template: ./reference/topology/system-template.md
+      - References:
+          - Configs: ./topology/reference/configs.md
+          - Properties: ./topology/reference/properties.md
+          - System Template: ./topology/reference/system-template.md
