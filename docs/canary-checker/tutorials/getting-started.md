@@ -17,7 +17,7 @@ For the purposes of this guide, you need a PostgreSQL instance running in Kubern
 The canary-checker CLI will allow you to quickly and simply execute checks that you have defined, via a single CLI command.
 
 !!! info "Info"
-    To install the CLI for preferred environment, See the [Canary-checker Installation guide](run/#installation) for more information.
+    To install the CLI for preferred environment, See the [Canary-checker Installation guide](../run/#installation) for more information.
 
 
 To verify whether the CLI has been installed correctly, run `canary-checker run -h` from your terminal. You should see the following output:
