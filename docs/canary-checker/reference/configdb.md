@@ -1,4 +1,4 @@
-## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/configdb.svg' style='height: 32px'/> ConfigDB
+## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/config.svg' style='height: 32px'/> ConfigDB
 
 ConfigDB check connects to the specified database host, run a specified query for your configuration data, and return the result.
 

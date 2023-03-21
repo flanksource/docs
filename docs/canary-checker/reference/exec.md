@@ -1,4 +1,4 @@
-## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/exec.svg' style='height: 32px'/> Exec
+## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/console.svg' style='height: 32px'/> Exec
 
 Exec Check executes a command or script file on the target host. The type of scripts executed include:
 - Bash scripts

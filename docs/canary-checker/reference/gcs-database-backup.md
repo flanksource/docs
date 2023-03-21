@@ -1,4 +1,4 @@
-## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/databasebackupcheck.svg' style='height: 32px'/> DatabaseBackup
+## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/database2.svg' style='height: 32px'/> DatabaseBackup
 
 This check performs regular backups for you CloudSQL instance at specified intervals. 
 
