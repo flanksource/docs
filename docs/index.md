@@ -27,7 +27,7 @@ Incident commander includes features such as:
 - Configuration tool that enables you to view and search the change history of your configuration across multiple dimensions (node, zone, environment, application, technology, etc).
 - Integration with other systems such as; scrape data from network device in order to help incident commanders make informed decisions.
 
-Incident commander installs two main component:
+Incident commander installs two main components:
 
 - Canary checker
 - Config db
