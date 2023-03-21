@@ -1,5 +1,5 @@
 
-## Helm Install
+# Installation
 
 Canary Checker can be deployed to a Kubernetes cluster via Helm.
 
