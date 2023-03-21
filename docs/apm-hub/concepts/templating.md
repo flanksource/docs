@@ -4,7 +4,7 @@
 
 > Simply a way to represent data in different forms.
 
-Templating comes in handy when you want to dynamically craft your elastic search queries that you provide in the config file. At the moment, only go templates are supported
+Templating comes in handy when you want to dynamically craft your ElasticSearch queries that you provide in the configuration file. At the moment, only go templates are supported
 
 ## Go Template
 
