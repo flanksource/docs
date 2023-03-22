@@ -1,24 +1,24 @@
 ## Component
 
-| Field           | Description                                                                                                                                                        | Scheme                                              | Required   |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------- | ---------- |
-| `id`            | Specify unique ID for component                                                                                                                                    | [`ID`](#id)                                         |            |
-| `name`          | Set name for component                                                                                                                                             | `string`                                            |            |
-| `tooltip`       | Set tooltip outlining information pertaining to the component                                                                                                      | `string`                                            |            |
-| `type`          | Set type of component e.g. service, API, website, library, database, etc.                                                                                          | `string`                                            |            |
-| `icon`          | Specify icon for component                                                                                                                                         | `string`                                            |            |
-| `lifecycle`     | The lifecycle state of the component e.g. production, staging, dev, etc.                                                                                           | `string`                                            |            |
-| `owner`         | Specify owner of component                                                                                                                                         | `string`                                            |            |
-| `order`         | Set integer order value for component                                                                                                                              | `int`                                               |            |
-| `components`    | RawMessage is a raw encoded JSON value. It implements Marshaler and Unmarshaler and can be used to delay JSON decoding or precompute a JSON encoding.              | `[]JSONObject`                                      |            |
-| `summary`       | Set summary for component                                                                                                                                          | [`Summary`](#summary)                               |            |
-| `checks`        | Specify checks based on `inline` and `selector`                                                                                                                    | [`[]Checks`](#componentcheck)                       |            |
-| `configs`       | Set configuration used by the specified component                                                                                                                  | [`[]Config`](./configs.md#configs)                  |            |
-| `lookup`        | Lookup component definitions from an external source, use the `forEach` property to iterate over the results to further enrich each component.                     | [`CanarySpec`]()                                    |            |
-| `properties`    | Customize component properties as to be visualized on Incident commander UI                                                                                        | [`[]Property`](../reference/properties.md#property) |            |
-| `relationships` | Specify relationship of component                                                                                                                                  | [`[]RelationshipSpec`](#relationshipspec)           |            |
-| `selectors`     | Specify component for topology based on `fieldSelector` and `labelSelector`                                                                                        | [`[]ResourceSelector`](#resourceselector)           |            |
-| `forEach`       | Only applies when using lookup, when specified the components and properties specified under ForEach will be templated using the components returned by the lookup | [`ForEach`](#foreach)                               | `optional` |
+| Field           | Description                                                                                                                                                        | Scheme                                                        | Required   |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------- | ---------- |
+| `id`            | Specify unique ID for component                                                                                                                                    | [`ID`](#id)                                                   |            |
+| `name`          | Set name for component                                                                                                                                             | `string`                                                      |            |
+| `tooltip`       | Set tooltip outlining information pertaining to the component                                                                                                      | `string`                                                      |            |
+| `type`          | Set type of component e.g. service, API, website, library, database, etc.                                                                                          | `string`                                                      |            |
+| `icon`          | Specify icon for component                                                                                                                                         | `string`                                                      |            |
+| `lifecycle`     | The lifecycle state of the component e.g. production, staging, dev, etc.                                                                                           | `string`                                                      |            |
+| `owner`         | Specify owner of component                                                                                                                                         | `string`                                                      |            |
+| `order`         | Set integer order value for component                                                                                                                              | `int`                                                         |            |
+| `components`    | RawMessage is a raw encoded JSON value. It implements Marshaler and Unmarshaler and can be used to delay JSON decoding or precompute a JSON encoding.              | `[]JSONObject`                                                |            |
+| `summary`       | Set summary for component                                                                                                                                          | [`Summary`](#summary)                                         |            |
+| `checks`        | Specify checks based on `inline` and `selector`                                                                                                                    | [`[]Checks`](#componentcheck)                                 |            |
+| `configs`       | Set configuration used by the specified component                                                                                                                  | [`[]Config`](./configs.md#configs)                            |            |
+| `lookup`        | Lookup component definitions from an external source, use the `forEach` property to iterate over the results to further enrich each component.                     | [`CanarySpec`](../../canary-checker/reference/canary-spec.md) |            |
+| `properties`    | Customize component properties as to be visualized on Incident commander UI                                                                                        | [`[]Property`](../reference/properties.md#property)           |            |
+| `relationships` | Specify relationship of component                                                                                                                                  | [`[]RelationshipSpec`](#relationshipspec)                     |            |
+| `selectors`     | Specify component for topology based on `fieldSelector` and `labelSelector`                                                                                        | [`[]ResourceSelector`](#resourceselector)                     |            |
+| `forEach`       | Only applies when using lookup, when specified the components and properties specified under ForEach will be templated using the components returned by the lookup | [`ForEach`](#foreach)                                         | `optional` |
 
 ### ID
 
@@ -40,7 +40,7 @@
 
 | Field      | Description | Scheme                                  | Required |
 | ---------- | ----------- | --------------------------------------- | -------- |
-| `inline`   |             | [`CanarySpec`]()                        |          |
+| `inline`   |             | [`CanarySpec`](../../canary-checker/reference/canary-spec.md)                        |          |
 | `selector` |             | [`ResourceSelector`](#resourceselector) |          |
 
 ### ResourceSelector

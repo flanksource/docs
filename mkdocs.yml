@@ -89,8 +89,10 @@ nav:
       - Local Development:
           - CLI: ./canary-checker/tutorials/run.md
       - References:
+          - CanarySpec: ./canary-checker/reference/canary-spec.md
           - Cloudwatch: ./canary-checker/reference/cloudwatch.md
           - ConfigDB: ./canary-checker/reference/configdb.md
+          - ContainerdPush: ./canary-checker/reference/containerd-push.md
           - DNS: ./canary-checker/reference/dns.md
           - EC2: ./canary-checker/reference/ec2.md
           - Elasticsearch: ./canary-checker/reference/elasticsearch.md
