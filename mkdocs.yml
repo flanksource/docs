@@ -93,8 +93,11 @@ nav:
           - AlertManager: ./canary-checker/reference/alert-manager.md
           - CloudWatch: ./canary-checker/reference/cloudwatch.md
           - ConfigDB: ./canary-checker/reference/configdb.md
+          - ContainerdPull: ./canary-checker/reference/containerd-pull.md
           - ContainerdPush: ./canary-checker/reference/containerd-push.md
           - DNS: ./canary-checker/reference/dns.md
+          - DockerPull: ./canary-checker/reference/docker-pull.md
+          - DockerPush: ./canary-checker/reference/docker-push.md
           - EC2: ./canary-checker/reference/ec2.md
           - Elasticsearch: ./canary-checker/reference/elasticsearch.md
           - Exec: ./canary-checker/reference/exec.md
