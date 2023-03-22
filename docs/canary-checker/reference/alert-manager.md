@@ -14,9 +14,9 @@ This checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest
       alertmanager:
         - auth:
             username:
-              value: admin  
+              value: admin
             password:
-              passowrd: secret password
+              passowrd: secretpassword
     ```
 
 | Field         | Description                                        | Scheme                              | Required |
@@ -34,8 +34,6 @@ This checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest
 | `filters`     | Used to filter the objects                         | `map[string]string`                 |          |
 | `ignore`      | Region for cloudwatch                              | `[]string`                          |          |
 
----
-
 ## Scheme Reference
 
 ### Template
@@ -49,7 +47,7 @@ This checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest
 
 ### Authentication
 
-| Field      | Description           | Scheme   | Required |
-| ---------- | --------------------- | -------- | -------- |
-| `username` | Specify the username. | `string` |          |
-| `password` | Specify the password. | `string` |          |
+| Field      | Description           | Scheme                                                                       | Required |
+| ---------- | --------------------- | ---------------------------------------------------------------------------- | -------- |
+| `username` | Specify the username. | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) |          |
+| `password` | Specify the password. | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) |          |
