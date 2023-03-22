@@ -1,4 +1,4 @@
-`apm-hub` can possibly serve hundreds of backends but you might not want all of them to serve a request. Routing helps you to control which backends should serve a given request based on the parameters shown below.
+`apm-hub` can possibly serve hundreds of backends, but you might not want all of them to serve a request. Routing helps you to control which backends should serve a given request based on the parameters shown below.
 
 ![Routing Diagram](../images/routing.svg)
 

@@ -27,7 +27,7 @@ Incident commander includes features such as:
 - Configuration tool that enables you to view and search the change history of your configuration across multiple dimensions (node, zone, environment, application, technology, etc).
 - Integration with other systems such as; scrape data from network device in order to help incident commanders make informed decisions.
 
-Incident commander installs two main component:
+Incident commander installs two main components:
 
 - Canary checker
 - Config db
@@ -79,7 +79,7 @@ flanksource-ui:
           - incident-commander.canary.lab.flanksource.com
 db:
   storageClass: gp2
-  storage: 50Gi       
+  storage: 50Gi
 EOT
 
 helm install [RELEASE_NAME] -f myvalues.yaml flanksource/incident-commander
@@ -131,4 +131,4 @@ One potential use of Canary Checker is, if you want to get the cert expiry dates
 
 ![Screen_Shot_2022-12-19_at_8.17.39_AM_agdslp.png](https://res.cloudinary.com/dbm8wg3bn/image/upload/v1671528375/Screen_Shot_2022-12-19_at_8.17.57_AM_kwkjql.png)
 
-With Incident Commander up and running, one can have a better understanding of thier infrastructure, which helps in planning of disaster recovery and reducing downtime to the bearest minimum.
+With Incident Commander up and running, one can have a better understanding of their infrastructure, which helps in planning of disaster recovery and reducing downtime to the bearest minimum.

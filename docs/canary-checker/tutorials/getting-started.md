@@ -1,13 +1,13 @@
 # Getting Started with Canary Checker
 
-Canary checker is a monitoring system for executing synthetic tests, providing a built-in user interface, CLI and multi-cluster and multi-instance aggregation. Canary checker is designed with multi-tenancy in mind. 
+Canary checker is a monitoring system for executing synthetic tests, providing a built-in user interface, CLI and multi-cluster and multi-instance aggregation. Canary checker is designed with multi-tenancy in mind.
 
 You are able to write your own tests and execute them to continually verify that your applications and clusters are working the way you expect.
 
 In this guide, you'll see how to use canary-checker to test a Postgres database in several ways, using the CLI.
 
 ## Prerequisities
-For the purposes of this guide, you need a PostgreSQL instance running in Kubernetes. See the following guide on [how to install PostgreSQL](https://phoenixnap.com/kb/postgresql-kubernetes) in your Kubernetes Cluster via Helm. 
+For the purposes of this guide, you need a PostgreSQL instance running in Kubernetes. See the following guide on [how to install PostgreSQL](https://phoenixnap.com/kb/postgresql-kubernetes) in your Kubernetes Cluster via Helm.
 
 ## Installing the CLI
 
@@ -15,9 +15,9 @@ For the purposes of this guide, you need a PostgreSQL instance running in Kubern
 
 
 The canary-checker CLI will allow you to quickly and simply execute checks that you have defined, via a single CLI command.
- 
+
 !!! info "Info"
-    To install the CLI for preferred environment, See the [Canary-checker Installation guide](run/#installation) for more information.
+    To install the CLI for preferred environment, See the [Canary-checker Installation guide](../run/#installation) for more information.
 
 
 To verify whether the CLI has been installed correctly, run `canary-checker run -h` from your terminal. You should see the following output:
@@ -219,7 +219,6 @@ TODO - Add the status
 
 ### Wrapping up
 
-In this guide, you've seen how to get started with canary-checker and run a few synthetic tests against PostgreSQL running in Kubernetes. You've also seen how you can deploy canary-checker as a Kubernetes operator and deploy a Canary into our Kubernetes cluster to continuously monitor our systems.
+In this guide, you've seen how to get started with canary-checker and run a few synthetic tests against PostgreSQL running in Kubernetes. You've also seen how you can deploy canary-checker as a Kubernetes operator and deploy a Canary into your Kubernetes cluster to continuously monitor your systems.
 
 In the next guide, You'll take a look at how to model an application and Kubernetes cluster using SystemTemplates, as well as how to link components together - eventually linking components to canaries.
-
