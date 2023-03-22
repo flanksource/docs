@@ -32,7 +32,7 @@
 | `prometheus`     | List of Prometheus checks to run.                                                             | [`[]PrometheusCheck`](./prometheus.md)              |          |
 | `mongodb`        | List of MongoDB checks to run.                                                                | [`[]MongoDBCheck`](./mongo.md)                      |          |
 | `cloudwatch`     | List of CloudWatch checks to run.                                                             | [`[]CloudWatchCheck`](./cloudwatch.md)              |          |
-| `github`         | List of GitHub checks to run.                                                                 | [`[]GitHubCheck`]()                                 |          |
+| `github`         | List of GitHub checks to run.                                                                 | [`[]GitHubCheck`](./github.md)                      |          |
 | `kubernetes`     | List of Kubernetes checks to run.                                                             | [`[]KubernetesCheck`](./kubernetes.md)              |          |
 | `folder`         | List of folder checks to run.                                                                 | [`[]FolderCheck`]()                                 |          |
 | `exec`           | List of exec checks to run.                                                                   | [`[]ExecCheck`](./exec.md)                          |          |

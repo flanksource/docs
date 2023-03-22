@@ -1,4 +1,4 @@
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/dbdac44e826e82f4f91064cea264b338a960e36a/src/icons/alert.svg' style='height: 32px'/> AlertManager
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/alert.svg' style='height: 32px'/> AlertManager
 
 This checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/) ...
 
