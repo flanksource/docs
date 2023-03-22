@@ -140,12 +140,12 @@ nav:
 
   - Topology:
       - Overview: ./topology/overview.md
-      - Health Checks: ./topology/health-checks.md
       - Concepts:
           - Topology: ./topology/concepts/topology.md
           - Components: ./topology/concepts/components.md
           - Configs: ./topology/concepts/configs.md
           - Properties: ./topology/concepts/properties.md
+          - Health Checks: ./topology/concepts/health-checks.md
           - Secret Management: ./topology/concepts/secret-management.md
           - Templating: ./topology/concepts/templating.md
       - Examples:
