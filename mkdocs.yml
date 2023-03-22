@@ -138,18 +138,16 @@ nav:
 
   - Topology:
       - Overview: ./topology/overview.md
-      - Components: ./topology/components.md
       - Health Checks: ./topology/health-checks.md
-      - Configuration: /topology/configuration.md
-      - Properties: ./canary-checker/properties.md
       - Concepts:
+          - Topology: ./topology/concepts/topology.md
+          - Components: ./topology/concepts/components.md
+          - Configs: ./topology/concepts/configs.md
           - Secret Management: ./topology/concepts/secret-management.md
           - Templating: ./topology/concepts/templating.md
       - Examples:
-          Kubernetes: ./topology/kubernetes.md
-          Kubernetes (Workload): ./topology-kubernetes-workload.md
+          Kubernetes: ./topology/examples/kubernetes.md
+          Kubernetes (Workload): ./topology/examples/topology-kubernetes-workload.md
           From Configuration: ./topology-configuration.md
       - References:
-          - Configs: ./topology/reference/configs.md
           - Properties: ./topology/reference/properties.md
-          - System Template: ./topology/reference/system-template.md

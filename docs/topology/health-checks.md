@@ -7,18 +7,18 @@ Health checks can be associated in 2 ways:
 1. Selecting an exising health check using `checks.selector`
 2. Defining the health check inline using `checks.inline`
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `inline` |  | [*Inline*](#inline-health-checks) |
-| `selector` |  | [*Selector*](#selecting-health-checks)
+| Field      | Description | Scheme                                 | Required |
+| ---------- | ----------- | -------------------------------------- | -------- |
+| `inline`   |             | [_Inline_](#inline-health-checks)      |          |
+| `selector` |             | [_Selector_](#selecting-health-checks) |          |
 
 ### Selecting Health Checks
 
-| Field     | Description | Scheme |
-| -----     | ----------- | ------ |
-| `fieldSelector`    | Select Kubernetes or Canary object based on the value of specified resource field | *string*
-| `labelSelector` | Select Kubernetes or Canary object based on label. e.g. app, canary. | *string*
-| `name` | Set name for selector | *string* |
+| Field           | Description                                                                       | Scheme   |
+| --------------- | --------------------------------------------------------------------------------- | -------- |
+| `fieldSelector` | Select Kubernetes or Canary object based on the value of specified resource field | _string_ |
+| `labelSelector` | Select Kubernetes or Canary object based on label. e.g. app, canary.              | _string_ |
+| `name`          | Set name for selector                                                             | _string_ |
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
@@ -63,7 +63,7 @@ metadata:
 spec:
   type: Website
   icon: Application
-  schedule: "@every 5m"
+  schedule: '@every 5m'
   components:
     - checks:
         - inline:
