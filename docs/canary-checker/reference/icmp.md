@@ -1,4 +1,4 @@
-## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/icmp.svg' style='height: 32px'/> ICMP
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/icmp.svg' style='height: 32px'/> ICMP
 
 This check performs ICMP requests for information on ICMP packet loss, duration and response.
 

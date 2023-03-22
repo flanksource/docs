@@ -1,4 +1,4 @@
-## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/dockerPull.svg' style='height: 32px'/> DockerPull
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/dockerPull.svg' style='height: 32px'/> DockerPull
 
 This check will try to pull a Docker image from a specified registry, verify it's checksum and size.
 

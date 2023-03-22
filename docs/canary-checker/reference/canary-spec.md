@@ -15,7 +15,7 @@
 | `containerd`     | List of containerd pull checks to run.                                                        | [`[]ContainerdPullCheck`](./containerd-pull.md)     |          |
 | `containerdPush` | List of containerd push checks to run.                                                        | [`[]ContainerdPushCheck`](./containerd-push.md)     |          |
 | `s3`             | List of S3 checks to run.                                                                     | [`[]S3Check`](./s3.md)                              |          |
-| `tcp`            | List of TCP checks to run.                                                                    | [`[]TCPCheck`](./tcp.md)                                    |          |
+| `tcp`            | List of TCP checks to run.                                                                    | [`[]TCPCheck`](./tcp.md)                            |          |
 | `pod`            | List of pod checks to run.                                                                    | [`[]PodCheck`](./pod.md)                            |          |
 | `ldap`           | List of LDAP checks to run.                                                                   | [`[]LDAPCheck`](./ldap.md)                          |          |
 | `icmp`           | List of ICMP checks to run.                                                                   | [`[]ICMPCheck`](./icmp.md)                          |          |
