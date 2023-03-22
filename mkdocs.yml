@@ -90,6 +90,7 @@ nav:
           - CLI: ./canary-checker/tutorials/run.md
       - References:
           - CanarySpec: ./canary-checker/reference/canary-spec.md
+          - Alert Manager: ./canary-checker/reference/alert-manager.md
           - Cloudwatch: ./canary-checker/reference/cloudwatch.md
           - ConfigDB: ./canary-checker/reference/configdb.md
           - ContainerdPush: ./canary-checker/reference/containerd-push.md
