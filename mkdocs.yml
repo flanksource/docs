@@ -121,6 +121,7 @@ nav:
           - S3: ./canary-checker/reference/s3.md
           - SFTP: ./canary-checker/reference/sftp.md
           - SMB / CIFS: ./canary-checker/reference/smb.md
+          - TCP: ./canary-checker/reference/tcp.md
 
   - Logging:
       - Overview: ./apm-hub/overview.md
