@@ -101,6 +101,7 @@ nav:
           - EC2: ./canary-checker/reference/ec2.md
           - Elasticsearch: ./canary-checker/reference/elasticsearch.md
           - Exec: ./canary-checker/reference/exec.md
+          - Folder: ./canary-checker/reference/folder.md
           - GCS Bucket: ./canary-checker/reference/gcs-bucket.md
           - GCS Database Backup: ./canary-checker/reference/gcs-database-backup.md
           - GitHub: ./canary-checker/reference/github.md

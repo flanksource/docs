@@ -34,7 +34,7 @@
 | `cloudwatch`     | List of CloudWatch checks to run.                                                             | [`[]CloudWatchCheck`](./cloudwatch.md)              |          |
 | `github`         | List of GitHub checks to run.                                                                 | [`[]GitHubCheck`](./github.md)                      |          |
 | `kubernetes`     | List of Kubernetes checks to run.                                                             | [`[]KubernetesCheck`](./kubernetes.md)              |          |
-| `folder`         | List of folder checks to run.                                                                 | [`[]FolderCheck`]()                                 |          |
+| `folder`         | List of folder checks to run.                                                                 | [`[]FolderCheck`](./folder.md)                      |          |
 | `exec`           | List of exec checks to run.                                                                   | [`[]ExecCheck`](./exec.md)                          |          |
 | `awsConfig`      | List of AWS Config checks to run.                                                             | [`[]AwsConfigCheck`]()                              |          |
 | `awsConfigRule`  | List of AWS Config Rule checks to run.                                                        | [`[]AwsConfigRuleCheck`]()                          |          |
