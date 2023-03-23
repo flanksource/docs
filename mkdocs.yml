@@ -91,6 +91,7 @@ nav:
       - References:
           - CanarySpec: ./canary-checker/reference/canary-spec.md
           - AlertManager: ./canary-checker/reference/alert-manager.md
+          - AWS Config: ./canary-checker/reference/aws-config.md
           - CloudWatch: ./canary-checker/reference/cloudwatch.md
           - ConfigDB: ./canary-checker/reference/configdb.md
           - ContainerdPull: ./canary-checker/reference/containerd-pull.md
