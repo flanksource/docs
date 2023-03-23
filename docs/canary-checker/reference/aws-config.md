@@ -1,4 +1,4 @@
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/folder.svg' style='height: 32px'/> AWS Config
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/aws-config.svg' style='height: 32px'/> AWS Config
 
 AWS Config checks ...
 
@@ -27,7 +27,7 @@ AWS Config checks ...
 | `display`        | Template to display the result in                  | [`Template`](#template)           |            |
 | `transform`      | Template for transformation                        | [`Template`](#template)           |            |
 | `query`          | The SQL query SELECT command                       | `string`                          | `true`     |
-| `awsConnection`  | AWS connection details for S3 bucket               | [`AWSConnection`](#awsconnection) |            |
+| `awsConnection`  | AWS connection details.                            | [`AWSConnection`](#awsconnection) |            |
 | `aggregatorName` | Specify the name of the configuration aggregator   | `string`                          | `optional` |
 
 ---
