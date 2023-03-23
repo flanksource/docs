@@ -88,6 +88,7 @@ nav:
           - Templating: ./canary-checker/concepts/templating.md
       - Local Development:
           - CLI: ./canary-checker/tutorials/run.md
+          - Helm: ./canary-checker/tutorials/helm.md
       - References:
           - Cloudwatch: ./canary-checker/reference/cloudwatch.md
           - ConfigDB: ./canary-checker/reference/configdb.md
