@@ -1,4 +1,4 @@
-# Config-db Helm Installation Guide 
+# Config DB Helm Installation Guide 
 ## Initial Set up
 
 Helm must be installed to use the charts. Refer the Helm documentation to get started.
@@ -12,10 +12,10 @@ helm repo update
 A Kubernetes installation of version 1.14 or higher.
 
 !!! note "Note"
-    Config-db Helm installation comes with service account configuration. If you are an AWS EKS user, you need to create an IAM role so the So the service account can query the AWS API. See the [IAM roles for service accounts](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) AWS documentation for more information. 
+    Config DB Helm installation comes with service account configuration. If you are an AWS EKS user, you need to create an IAM role so the So the service account can query the AWS API. See the [IAM roles for service accounts](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) AWS documentation for more information. 
 
 
-## Config-db Installation
+## Config DB Installation
 ```console
 helm install [RELEASE_NAME] flanksource/config-db
 ```
