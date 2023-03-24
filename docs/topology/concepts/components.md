@@ -11,7 +11,6 @@
 | `owner`         | Specify owner of component                                                                                                                                         | `string`                                                      |            |
 | `order`         | Set integer order value for component                                                                                                                              | `int`                                                         |            |
 | `components`    | RawMessage is a raw encoded JSON value. It implements Marshaler and Unmarshaler and can be used to delay JSON decoding or precompute a JSON encoding.              | `[]JSONObject`                                                |            |
-| `summary`       | Set summary for component                                                                                                                                          | [`Summary`](#summary)                                         |            |
 | `checks`        | Specify checks based on `inline` and `selector`                                                                                                                    | [`[]Checks`](#componentcheck)                                 |            |
 | `configs`       | Set configuration used by the specified component                                                                                                                  | [`[]Config`](./configs.md#configs)                            |            |
 | `lookup`        | Lookup component definitions from an external source, use the `forEach` property to iterate over the results to further enrich each component.                     | [`CanarySpec`](../../canary-checker/reference/canary-spec.md) |            |
@@ -38,10 +37,10 @@
 
 ### ComponentCheck
 
-| Field      | Description | Scheme                                  | Required |
-| ---------- | ----------- | --------------------------------------- | -------- |
-| `inline`   |             | [`CanarySpec`](../../canary-checker/reference/canary-spec.md)                        |          |
-| `selector` |             | [`ResourceSelector`](#resourceselector) |          |
+| Field      | Description | Scheme                                                        | Required |
+| ---------- | ----------- | ------------------------------------------------------------- | -------- |
+| `inline`   |             | [`CanarySpec`](../../canary-checker/reference/canary-spec.md) |          |
+| `selector` |             | [`ResourceSelector`](#resourceselector)                       |          |
 
 ### ResourceSelector
 
@@ -50,15 +49,6 @@
 | `name`          | Set name for selector                                                             | `string` |          |
 | `fieldSelector` | Select Kubernetes or Canary object based on the value of specified resource field | `string` |          |
 | `labelSelector` | Select Kubernetes or Canary object based on label. e.g. app, canary.              | `string` |          |
-
-### Summary
-
-| Field       | Description                                           | Scheme | Required |
-| ----------- | ----------------------------------------------------- | ------ | -------- |
-| `healthy`   | Set threshold integer value for healthy component     | `int`  |          |
-| `info`      | Set integer value for info for component              | `int`  |          |
-| `unhealthy` | Set threshold integer value for healthy component     | `int`  |          |
-| `warning`   | Set threshold integer value for warning for component | `int`  |          |
 
 ### ForEach
 

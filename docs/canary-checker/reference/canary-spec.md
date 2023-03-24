@@ -10,7 +10,7 @@
 | `resultmode`     | Result mode of the check.                                                                     | `string`                                            |          |
 | `alertmanager`   | List of AlertManager checks to run.                                                           | [`[]AlertManagerCheck`](./alert-manager.md)         |          |
 | `awsConfig`      | List of AWS Config checks to run.                                                             | [`[]AwsConfigCheck`](./aws-config.md)               |          |
-| `awsConfigRule`  | List of AWS Config Rule checks to run.                                                        | [`[]AwsConfigRuleCheck`]()                          |          |
+| `awsConfigRule`  | List of AWS Config Rule checks to run.                                                        | [`[]AwsConfigRuleCheck`](./aws-config-rule.md)      |          |
 | `cloudwatch`     | List of CloudWatch checks to run.                                                             | [`[]CloudWatchCheck`](./cloudwatch.md)              |          |
 | `configDB`       | List of config DB checks to run.                                                              | [`[]ConfigDBCheck`](./configdb.md)                  |          |
 | `containerd`     | List of containerd pull checks to run.                                                        | [`[]ContainerdPullCheck`](./containerd-pull.md)     |          |
