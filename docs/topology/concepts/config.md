@@ -9,7 +9,7 @@ Config is used to associate config items with your components.
             type: EKS
     ```
 
-## Configs
+## Config
 
 | Field       | Description              | Scheme              | Required |
 | ----------- | ------------------------ | ------------------- | -------- |

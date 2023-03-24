@@ -152,8 +152,8 @@ nav:
       - Concepts:
           - Topology: ./topology/concepts/topology.md
           - Component: ./topology/concepts/components.md
-          - Configs: ./topology/concepts/configs.md
-          - Properties: ./topology/concepts/properties.md
+          - Config: ./topology/concepts/config.md
+          - Property: ./topology/concepts/property.md
           - Lookup: ./topology/concepts/lookup.md
           - Health Checks: ./topology/concepts/health-checks.md
           - Secret Management: ./topology/concepts/secret-management.md
