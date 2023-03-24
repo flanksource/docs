@@ -13,7 +13,7 @@ Components are the building blocks of a Topology. The comopnent specification pr
 | `owner`         | Specify owner of component                                                                                                                                           | `string`                                  |            |
 | `order`         | Set integer order value for component                                                                                                                                | `int`                                     |            |
 | `components`    | RawMessage is a raw encoded JSON value. It implements Marshaler and Unmarshaler and can be used to delay JSON decoding or precompute a JSON encoding.                | [`[]Component`](#component)               |            |
-| `checks`        | Specify checks based on `inline` and `selector`                                                                                                                      | [`[]Checks`](#componentcheck)             |            |
+| `checks`        | Specify checks based on `inline` and `selector`                                                                                                                      | [`[]Check`](./health-checks.md#check)     |            |
 | `configs`       | Set configuration used by the specified component                                                                                                                    | [`[]Config`](./config.md#config)          |            |
 | `lookup`        | Lookup component definitions from an external source, use the `forEach` property to iterate over the results to further enrich each component.                       | [`Lookup`](lookup.md#lookup)              |            |
 | `properties`    | Customize component properties as to be visualized on Incident commander UI                                                                                          | [`[]Property`](./property.md#property)    |            |
@@ -37,13 +37,6 @@ Components are the building blocks of a Topology. The comopnent specification pr
 | `ref`  | Set reference for components relationship                                                | `string` |          |
 | `type` | Set the type of relationship, e.g. dependsOn, subcomponentOf, providesApis, consumesApis | `string` |          |
 
-### ComponentCheck
-
-| Field      | Description | Scheme                                                        | Required |
-| ---------- | ----------- | ------------------------------------------------------------- | -------- |
-| `inline`   |             | [`CanarySpec`](../../canary-checker/reference/canary-spec.md) |          |
-| `selector` |             | [`ResourceSelector`](#resourceselector)                       |          |
-
 ### ResourceSelector
 
 | Field           | Description                                                                       | Scheme   | Required |
@@ -60,4 +53,4 @@ Components are the building blocks of a Topology. The comopnent specification pr
 | `properties`    | Set name for property     | [`[]Property`](#property)                 |          |
 | `configs`       | Set name for config       | [`[]Config`](#config)                     |          |
 | `relationshisp` | Set name for relationship | [`[]RelationshipSpec`](#relationshipspec) |          |
-| `checks`        | Set name for check        | [`[]Checks`](#componentcheck)             |          |
+| `checks`        | Set name for check        | [`[]Check`](./health-checks.md#check)     |          |

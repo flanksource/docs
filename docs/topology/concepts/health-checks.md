@@ -1,5 +1,3 @@
-## Health Checks
-
 Components can be associated with a health check, when the health checks associated to the component become unhealthy, the component will also become unhealthy.
 
 Health checks can be associated in 2 ways:
@@ -7,12 +5,14 @@ Health checks can be associated in 2 ways:
 1. Selecting an exising health check using `checks.selector`
 2. Defining the health check inline using `checks.inline`
 
-| Field      | Description | Scheme                                 | Required |
-| ---------- | ----------- | -------------------------------------- | -------- |
-| `inline`   |             | [_Inline_](#inline-health-checks)      |          |
-| `selector` |             | [_Selector_](#selecting-health-checks) |          |
+## Check
 
-### Selecting Health Checks
+| Field      | Description | Scheme                                                        | Required |
+| ---------- | ----------- | ------------------------------------------------------------- | -------- |
+| `inline`   |             | [`CanarySpec`](../../canary-checker/reference/canary-spec.md) |          |
+| `selector` |             | [`[]Selector`](#selector)                                     |          |
+
+### Selector
 
 | Field           | Description                                                                       | Scheme   |
 | --------------- | --------------------------------------------------------------------------------- | -------- |
@@ -75,4 +75,4 @@ spec:
       name: inline-canary
 ```
 
-The inline object can specify any [Check](/reference/checks/)
+The inline object can specify any [Check](../../canary-checker/reference/canary-spec.md)

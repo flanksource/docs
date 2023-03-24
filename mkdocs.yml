@@ -156,8 +156,6 @@ nav:
           - Property: ./topology/concepts/property.md
           - Lookup: ./topology/concepts/lookup.md
           - Health Checks: ./topology/concepts/health-checks.md
-          - Secret Management: ./topology/concepts/secret-management.md
-          - Templating: ./topology/concepts/templating.md
       - Examples:
           Kubernetes: ./topology/examples/kubernetes.md
           Kubernetes (Workload): ./topology/examples/kubernetes-workload.md
