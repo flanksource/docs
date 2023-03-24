@@ -1,5 +1,4 @@
-Define what topology is
-TODO: Add more details
+This page defines the specification for Topology. There are few samples in the examples section.
 
 ## Topology
 
