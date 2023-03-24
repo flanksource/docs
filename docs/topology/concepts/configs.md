@@ -1,3 +1,14 @@
+Config is used to associate config items with your components.
+
+??? Example
+
+    ```yaml
+    components:
+      - configs:
+          - name: flanksource-canary-cluster
+            type: EKS
+    ```
+
 ## Configs
 
 | Field       | Description              | Scheme              | Required |

@@ -151,13 +151,24 @@ nav:
       - Overview: ./topology/overview.md
       - Concepts:
           - Topology: ./topology/concepts/topology.md
-          - Components: ./topology/concepts/components.md
+          - Component: ./topology/concepts/components.md
           - Configs: ./topology/concepts/configs.md
           - Properties: ./topology/concepts/properties.md
+          - Lookup: ./topology/concepts/lookup.md
           - Health Checks: ./topology/concepts/health-checks.md
           - Secret Management: ./topology/concepts/secret-management.md
           - Templating: ./topology/concepts/templating.md
       - Examples:
           Kubernetes: ./topology/examples/kubernetes.md
           Kubernetes (Workload): ./topology/examples/kubernetes-workload.md
-          From Configuration: ./topology-configuration.md
+      - References:
+          - ConfigDB: ./topology/references/configdb.md
+          - Exec: ./topology/references/exec.md
+          - HTTP: ./topology/references/http.md
+          - Kubernetes: ./topology/references/kubernetes.md
+          - Mongo: ./topology/references/mongo.md
+          - MS SQL Server: ./topology/references/mssql.md
+          - MySQL: ./topology/references/mysql.md
+          - Postgres: ./topology/references/postgres.md
+          - Prometheus: ./topology/references/prometheus.md
+          - Redis: ./topology/references/redis.md
