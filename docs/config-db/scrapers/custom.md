@@ -31,7 +31,7 @@ where `fixtures/data/car_changes.json` is
 }
 ```
 
-Since `full=true`, `config-db` will extract the `config` and `changes` from the scraped JSON config. So, the actual config will simply be
+Since `full=true`, `Config DB` will extract the `config` and `changes` from the scraped JSON config. So, the actual config will simply be
 
 ```json
 {

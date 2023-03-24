@@ -31,7 +31,7 @@
 
 ## Verify installation
 
-Once the installation is complete, ensure everything is working by running `config-db` with the default configuration for scraping.
+Once the installation is complete, ensure everything is working by running `Config DB` with the default configuration for scraping.
 
 ```sh
 > apm-hub serve

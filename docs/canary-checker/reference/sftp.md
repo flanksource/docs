@@ -1,4 +1,4 @@
-## SFTPConnection
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/sftp.svg' style='height: 32px'/> SFTPConnection
 
 The SFTP check connects to an SFTP server to check for folder freshness. 
 The check:

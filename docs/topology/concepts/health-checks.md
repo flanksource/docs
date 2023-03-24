@@ -1,5 +1,3 @@
-## Health Checks
-
 Components can be associated with a health check, when the health checks associated to the component become unhealthy, the component will also become unhealthy.
 
 Health checks can be associated in 2 ways:
@@ -7,18 +5,20 @@ Health checks can be associated in 2 ways:
 1. Selecting an exising health check using `checks.selector`
 2. Defining the health check inline using `checks.inline`
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `inline` |  | [*Inline*](#inline-health-checks) |
-| `selector` |  | [*Selector*](#selecting-health-checks)
+## Check
 
-### Selecting Health Checks
+| Field      | Description | Scheme                                                        | Required |
+| ---------- | ----------- | ------------------------------------------------------------- | -------- |
+| `inline`   |             | [`CanarySpec`](../../canary-checker/reference/canary-spec.md) |          |
+| `selector` |             | [`[]Selector`](#selector)                                     |          |
 
-| Field     | Description | Scheme |
-| -----     | ----------- | ------ |
-| `fieldSelector`    | Select Kubernetes or Canary object based on the value of specified resource field | *string*
-| `labelSelector` | Select Kubernetes or Canary object based on label. e.g. app, canary. | *string*
-| `name` | Set name for selector | *string* |
+### Selector
+
+| Field           | Description                                                                       | Scheme   |
+| --------------- | --------------------------------------------------------------------------------- | -------- |
+| `fieldSelector` | Select Kubernetes or Canary object based on the value of specified resource field | _string_ |
+| `labelSelector` | Select Kubernetes or Canary object based on label. e.g. app, canary.              | _string_ |
+| `name`          | Set name for selector                                                             | _string_ |
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
@@ -63,7 +63,7 @@ metadata:
 spec:
   type: Website
   icon: Application
-  schedule: "@every 5m"
+  schedule: '@every 5m'
   components:
     - checks:
         - inline:
@@ -75,4 +75,4 @@ spec:
       name: inline-canary
 ```
 
-The inline object can specify any [Check](/reference/checks/)
+The inline object can specify any [Check](../../canary-checker/reference/canary-spec.md)

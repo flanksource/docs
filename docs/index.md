@@ -3,8 +3,7 @@ hide:
   - toc
 ---
 
-<div align="center"> <img src="images/flanksource.svg" height="64px"></img></div>
----
+## <div align="center"> <img src="images/flanksource.svg" height="64px"></img></div>
 
 ### Welcome to the Flanksource Mission Control documentation page
 
@@ -32,7 +31,7 @@ Incident commander installs two main components:
 - Canary checker
 - Config db
 
-*NB: canary checker performs health checks on the system, while the config-db keeps track of configuration changes should there be any modifications to the configuration in your Git repository.*
+_NB: canary checker performs health checks on the system, while the Config DB keeps track of configuration changes should there be any modifications to the configuration in your Git repository._
 
 ## Quick Start
 
@@ -43,7 +42,7 @@ How to Install Incident commander with helm
 To properly install and run the Incident Commander chart on your Kubernetes Cluster, you need to have the following prerequisites;
 
 - A Kubernetes installation of version 1.14 or higher.
-- Config-db installed and running in your Kubernetes Cluster. See the [Config-db Helm installation guide](https://candid-bunny-c77dca.netlify.app/installation/config-db/tutorials/install-helm) for more information.
+- Config DB installed and running in your Kubernetes Cluster. See the [Config DB Helm installation guide](https://candid-bunny-c77dca.netlify.app/installation/config-db/tutorials/install-helm) for more information.
 
 ### Install Chart
 
@@ -117,11 +116,11 @@ helm show values flanksource/incident-commander
 
 ---
 
-## Config-db
+## Config DB
 
-Config-db is an open source tool that allows developers to easily configure, scrape and manage data within their application.  It provides a user-friendly interface for setting up and managing database connections, as well as configuring tables and fields within the database. This tool can be particularly useful for developers who need to quickly set up a database for their application, without having to manually write complex SQL queries or code. It also allows for easy updates and changes to the database as the application evolves, making it a useful tool for maintaining a healthy and efficient database.
+Config DB is an open source tool that allows developers to easily configure, scrape and manage data within their application. It provides a user-friendly interface for setting up and managing database connections, as well as configuring tables and fields within the database. This tool can be particularly useful for developers who need to quickly set up a database for their application, without having to manually write complex SQL queries or code. It also allows for easy updates and changes to the database as the application evolves, making it a useful tool for maintaining a healthy and efficient database.
 
-![Screen_Shot_2022-12-19_at_8.17.57_AM_kwkjql.png](https://res.cloudinary.com/dbm8wg3bn/image/upload/v1671528375/Screen_Shot_2022-12-19_at_8.17.57_AM_kwkjql.png)
+![Configs](./images/config.png)
 
 ## Canary Checker
 

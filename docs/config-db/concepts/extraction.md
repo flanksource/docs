@@ -1,4 +1,4 @@
-`config-db` needs to extract few important pieces of information from the config. For example: to know the id of a config item it needs to extract the id from the scraped config. For this, it makes heavy use of JSONPath expression.
+`Config DB` needs to extract few important pieces of information from the config. For example: to know the id of a config item it needs to extract the id from the scraped config. For this, it makes heavy use of JSONPath expression.
 
 ## JSONPath
 

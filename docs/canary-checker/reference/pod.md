@@ -1,4 +1,4 @@
-## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/k8s-pod.svg' style='height: 32px'/> Pod
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/k8s-pod.svg' style='height: 32px'/> Pod
 
 The Pod check creates a new pod and verifies its reachability.
 

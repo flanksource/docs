@@ -1,12 +1,12 @@
-In this guide, you'll see how to run `config-db` to scrape configuration from a sample Git repository on GitHub [github.com/cishiv/sample-configuration](https://github.com/cishiv/sample-configuration), in line with the GitOps philosophy.
+In this guide, you'll see how to run `Config DB` to scrape configuration from a sample Git repository on GitHub [github.com/cishiv/sample-configuration](https://github.com/cishiv/sample-configuration), in line with the GitOps philosophy.
 
 The scraped configuration will be branch and environment aware, enabling you to see the differences between those dimensions.
 
-Additionally - you'll see how `config-db` can keep track of configuration changes should there be any modifications to the configuration in your Git repository.
+Additionally - you'll see how `Config DB` can keep track of configuration changes should there be any modifications to the configuration in your Git repository.
 
 !!! info
 
-    It is recommended that you fork this repository so you can modify it and play with the different features that `config-db` provides.
+    It is recommended that you fork this repository so you can modify it and play with the different features that `Config DB` provides.
 
 This repository contains a simple YAML definition (`simple-config.yaml`) for a canary that can be used by `canary-checker`.
 
@@ -32,7 +32,7 @@ spec:
 
 ## Prepare the configuration
 
-To get started, create a simple scraping configuration to let `config-db` scrape the configuration from your GitHub repository.
+To get started, create a simple scraping configuration to let `Config DB` scrape the configuration from your GitHub repository.
 
 ```yaml
 file:
@@ -47,7 +47,7 @@ Save this configuration as `scrape-git.yaml`.
 
 **JSONPath Expression**
 
-`config-db` uses JSONPath expressions extensively. In the above `scrape-git.yaml` example, you'll notice that it is used to extract `type` and `id` from the scraped configuration. In this case, those fields should evaluate as follows:
+`Config DB` uses JSONPath expressions extensively. In the above `scrape-git.yaml` example, you'll notice that it is used to extract `type` and `id` from the scraped configuration. In this case, those fields should evaluate as follows:
 
 | field | selector          | value              |
 | ----- | ----------------- | ------------------ |
@@ -60,7 +60,7 @@ Save this configuration as `scrape-git.yaml`.
 
 **URL**
 
-`config-db` supports scraping configuration from several protocols
+`Config DB` supports scraping configuration from several protocols
 
 - Local files
 - Git
@@ -73,7 +73,7 @@ In this case, we're scraping configuration from a Github repository. The content
 
 **Paths**
 
-Once the git repository is cached locally, `config-db` will scrape the configuration from the specified paths.
+Once the git repository is cached locally, `Config DB` will scrape the configuration from the specified paths.
 
 ## Run the scraper
 
@@ -89,13 +89,13 @@ To run on a schedule you'll need to use the `serve` command. Run the following c
 config-db serve scrape-git.yaml --default-schedule=’@every 20s’
 ```
 
-This will start `config-db` and run the scraper you've defined every 20 seconds.
+This will start `Config DB` and run the scraper you've defined every 20 seconds.
 
 !!! info
 
     If a schedule isn't specified, the scraper will run every 60 minutes by default.
 
-Make a change to your configuration and push it to your remote repository. `config-db` will detect that configuration change and reflect it on the next scraper run.
+Make a change to your configuration and push it to your remote repository. `Config DB` will detect that configuration change and reflect it on the next scraper run.
 
 Change the `interval` field in your configuration from `40` to `30`.
 
@@ -107,9 +107,9 @@ spec:
 ...
 ```
 
-Once `config-db` detects your change, you should see the log output as follows:
+Once `Config DB` detects your change, you should see the log output as follows:
 
-We can easily view the output of the configuration changes using the HTTP API provided by `config-db`.
+We can easily view the output of the configuration changes using the HTTP API provided by `Config DB`.
 
 You can access the API for configuration changes by executing the following curl request:
 
@@ -155,7 +155,7 @@ curl -s http://localhost:3000/config_changes | jq
 ]
 ```
 
-You can see that all changes to your configuration have been detected and stored as patches by `config-db`.
+You can see that all changes to your configuration have been detected and stored as patches by `Config DB`.
 
 Additionally, you can view your full configuration via the `config_items` API. Accessible via `http://localhost:3000/config_items`.
 

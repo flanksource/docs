@@ -1,4 +1,4 @@
-## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/jmeter.svg' style='height: 32px'/> Jmeter
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/jmeter.svg' style='height: 32px'/> Jmeter
 
 This check will execute the JMeter CLI to execute the JMX test plan on the specified host.
 

@@ -1,4 +1,4 @@
-## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/helm.svg' style='height: 32px'/> Helm
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/helm.svg' style='height: 32px'/> Helm
 
 This check builds and pushes your helm chart to the Open-source Helm Chart repository, ChartMuseum.
 
