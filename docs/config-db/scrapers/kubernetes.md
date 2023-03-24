@@ -58,7 +58,7 @@ kubernetes:
 
 ### KubernetesEvent
 
-`config-db` maps Kuberenetes Event objects to config changes unlike other objects that are mapped to config items. This configuration allows you to exclude or include the Kubernetes Event objects based on the reason.
+`Config DB` maps Kuberenetes Event objects to config changes unlike other objects that are mapped to config items. This configuration allows you to exclude or include the Kubernetes Event objects based on the reason.
 
 In addition, you can also specify keywords used to identify the severity of the Kubernetes Event based on the reason.
 

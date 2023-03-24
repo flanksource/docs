@@ -1,4 +1,4 @@
-`config-db` allows you to transform the configuration after they've been scraped from the target. This is supported by all the scrapers.
+`Config DB` allows you to transform the configuration after they've been scraped from the target. This is supported by all the scrapers.
 
 Transformation can be useful when you want to
 
@@ -30,7 +30,7 @@ Script allows you to transform the scraped configuration using Javascript and [G
 
 You can supply a JavaScript code to transform the scraped configuration. Your JS code will have access to the special `config` variable which will contain the scraped config. Your script is expected to return a stringified JSON object which will be the new configuration.
 
-_Example_: The following `config-db` configuration specifies a transformation that'll add a new field `"hello"` with the value `"world"` to all the scraped configurations.
+_Example_: The following `Config DB` configuration specifies a transformation that'll add a new field `"hello"` with the value `"world"` to all the scraped configurations.
 
 ```yaml
 file:

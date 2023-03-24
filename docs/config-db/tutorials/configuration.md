@@ -1,9 +1,9 @@
-Configuration in `config-db` can refer to two things:
+Configuration in `Config DB` can refer to two things:
 
-- The configuration YAML file required by `config-db` to scrape external configuration files
-- The external configurations scraped by `config-db` _(referred to as scraped configuration)_
+- The configuration YAML file required by `Config DB` to scrape external configuration files
+- The external configurations scraped by `Config DB` _(referred to as scraped configuration)_
 
-In order to run `config-db` you need to first have a configuration file. Below is the structure of the configuration file.
+In order to run `Config DB` you need to first have a configuration file. Below is the structure of the configuration file.
 
 ## Configuration file
 

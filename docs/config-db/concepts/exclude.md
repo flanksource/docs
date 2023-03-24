@@ -6,7 +6,7 @@ This transformation function allows you to remove certain fields from the scrape
 | ---------- | ------------------------------------------ | -------- | -------- |
 | `jsonpath` | Specify JSONPath expression for the fields | `string` | `true`   |
 
-_Example_: With the following `config-db` configuration for AWS, the transformation will delete the `tags` and `privateDnsNameOptionsOnLaunch` fields from the scraped configuration.
+_Example_: With the following `Config DB` configuration for AWS, the transformation will delete the `tags` and `privateDnsNameOptionsOnLaunch` fields from the scraped configuration.
 
 ```yaml
 aws:

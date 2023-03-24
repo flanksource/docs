@@ -32,7 +32,7 @@ Incident commander installs two main components:
 - Canary checker
 - Config db
 
-*NB: canary checker performs health checks on the system, while the config-db keeps track of configuration changes should there be any modifications to the configuration in your Git repository.*
+*NB: canary checker performs health checks on the system, while the Config DB keeps track of configuration changes should there be any modifications to the configuration in your Git repository.*
 
 ## Quick Start
 

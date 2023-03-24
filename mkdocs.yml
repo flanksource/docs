@@ -54,7 +54,7 @@ markdown_extensions:
       linenums: true
 nav:
   - Home: ./index.md
-  - Configuration:
+  - Configuration Management:
       - Installation: ./config-db/tutorials/install-helm.md
       - Getting Started:
           - Overview: ./config-db/overview.md

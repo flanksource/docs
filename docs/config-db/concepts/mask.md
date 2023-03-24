@@ -8,7 +8,7 @@ _Example_: You could set the `value` to `***` and all the fields that match the 
 | `jsonpath` | Specify JSONPath expression for the fields                                                                          | `string`                        | `true`   |
 | `value`    | Value can be a name of a hash function or just a string. See [supported hash functions](#supported-hash-functions). | `string`                        | `true`   |
 
-As an example let's take the following configuration file for `config-db`
+As an example let's take the following configuration file for `Config DB`
 
 ```yaml
 file:
@@ -47,4 +47,4 @@ At the moment, only `md5sum` is supported. More hash functions will be added in 
 | ------ | ----------------------------------------- | -------- | -------- |
 | `type` | Type is the config type to apply the mask | `string` | `true`   |
 
-`config-db` allows selectively applying masks to certain types of configs. So you could apply a mask to all the `Config` types and another mask to all the `Secret` types.
+`Config DB` allows selectively applying masks to certain types of configs. So you could apply a mask to all the `Config` types and another mask to all the `Secret` types.
