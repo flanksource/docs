@@ -1,6 +1,6 @@
 Configs can be associated to a component using the `config` property. A linked config shows up in the component page in the right hand side panel.
 
-![Conmponent Config relationship](../images/component-config-relationship.jpg)
+![Component Config relationship](../images/component-config-relationship.jpg)
 
 ??? Example
 
