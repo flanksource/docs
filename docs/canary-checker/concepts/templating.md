@@ -104,4 +104,6 @@ The `transform` can be used to convert one canary check into multiple checks pro
 In the above example, the check will return multiple alerts from alertmanager. By default, all of those alerts will be grouped in a single check.
 
 But if we want to display each alert as its own check in the UI, we can use the `transform` function for this. The transform function takes a `Template` as input and the output from the template expected
-are the checks in JSON format. Here, if there are 9 different alerts, each alert will have its own check that can be managed and interacted with equally.
+are the checks in JSON format. Only the `name`, `labels`, `icon`, `message` and `description` fields need to be populated, others fields are generated automatically.
+
+For example, if there are 9 different alerts, each alert will have its own check that can be managed and interacted with equally.
