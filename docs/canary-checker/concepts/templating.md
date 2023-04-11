@@ -100,6 +100,7 @@ The `transform` can be used to convert one canary check into multiple checks pro
                 }
               })
               JSON.stringify(out);
+    ```
 
 In the above example, the check will return multiple alerts from alertmanager. By default, all of those alerts will be grouped in a single check.
 
