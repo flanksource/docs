@@ -153,7 +153,7 @@ nav:
       - Concepts:
           - Topology: ./topology/concepts/topology.md
           - Component: ./topology/concepts/components.md
-          - Config: ./topology/concepts/config.md
+          - Linking Config Item: ./topology/concepts/config.md
           - Property: ./topology/concepts/property.md
           - Lookup: ./topology/concepts/lookup.md
           - Health Checks: ./topology/concepts/health-checks.md
