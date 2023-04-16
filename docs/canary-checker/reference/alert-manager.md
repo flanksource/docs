@@ -8,15 +8,27 @@ This checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest
     apiVersion: canaries.flanksource.com/v1
     kind: Canary
     metadata:
-      name: cloudwatch-check
+      name: alertmanager-check
     spec:
       schedule: "*/5 * * * *"
       alertmanager:
-        - auth:
-            username:
-              value: admin
-            password:
-              passowrd: secretpassword
+        - host: alertmanager.example.com
+          alerts:
+            - .*
+          ignore:
+            - KubeScheduler.*
+          transform:
+            javascript: |
+              var out = _.map(results, function(r) {
+                return {
+                  name: r.name,
+                  labels: r.labels,
+                  icon: 'alert',
+                  message: r.message,
+                  description: r.message,
+                }
+              })
+              JSON.stringify(out);
     ```
 
 | Field         | Description                                        | Scheme                              | Required |
@@ -28,7 +40,7 @@ This checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest
 | `test`        | Template to test the result against                | [`Template`](#template)             |          |
 | `display`     | Template to display the result in                  | [`Template`](#template)             |          |
 | `transform`   | Template for transformation                        | [`Template`](#template)             |          |
-| `host`        | Template for transformation                        | `string`                            |          |
+| `host`        | Host endpoint                                      | `string`                            |          |
 | `auth`        | Credentials for AlertManager                       | [`Authentication`](#authentication) |          |
 | `alerts`      | Cloudwatch HTTP Endpoint to establish connection   | `[]string`                          |          |
 | `filters`     | Used to filter the objects                         | `map[string]string`                 |          |
