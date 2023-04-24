@@ -164,11 +164,7 @@ Now, running the Canary again, you see the expected behaviour occurs - and our d
 ```bash
 canary-checker run ../postgres-canaries/postgres-canary-local-does-admin-user-exist.yaml
 ```
-```
-2022-09-08T13:21:39.540+0200	INFO	Checking ../postgres-canaries/postgres-canary-local-does-admin-user-exist.yaml, 1 checks found
-2022-09-08T13:21:39+02:00 	PASS [postgres] default/postgres-succeed/postgres schemas check duration=100
-2022-09-08T13:21:39.647+0200	INFO	1 passed, 0 failed in 112ms
-```
+
 ## Installing canary-checker as a Kubernetes operator
 
 So far, you've been running canary-checker using the CLI, but it's recommended you install it in your cluster and deploy a few Canaries with it.

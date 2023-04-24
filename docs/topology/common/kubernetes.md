@@ -40,7 +40,7 @@
 | `name` | Set name for component | *string* |
 | `order` | Set integer order value for component  | *int* |
 | `owner` | Specify owner of component | *string* |
-| `properties` | Customize component properties as to be visualized on Incident commander UI | [*Properties*](#properties-properties) |
+| `properties` | Customize component properties as to be visualized on Mission control UI | [*Properties*](#properties-properties) |
 | `relationships` | Specify relationship of component | [*Relationships*](#relationships-relationships)
 | `selectors` | Specify component for topology based on `fieldSelector` and `labelSelector` | [*Selectors*](#selector-selector)
 | `summary` | Set summary for component | [*Summary*](#summary)

@@ -1,3 +1,9 @@
+
+
+
+
+![](../../images/topology-overview.svg)
+
 This page defines the specification for Topology. There are few samples in the examples section.
 
 ## Topology
@@ -10,7 +16,7 @@ This page defines the specification for Topology. There are few samples in the e
 | `icon`       | Specify icon for component.                                                       | `string`                                   |          |
 | `label`      | Set label for component.                                                          | `string`                                   |          |
 | `owner`      | Specify owner of component.                                                       | `string`                                   |          |
-| `properties` | Customize component properties as to be visualized on Incident commander UI.      | [`Properties`](#properties-properties)     |          |
+| `properties` | Customize component properties as to be visualized on Mission control UI.      | [`Properties`](#properties-properties)     |          |
 | `schedule`   | Set schedule to update component at the set interval.                             | `string`                                   |          |
 | `text`       | Set description or text of choice pertaining to component.                        | `string`                                   |          |
 | `tooltip`    | Set tooltip outlining information pertaining to the component.                    | `string`                                   |          |

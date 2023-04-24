@@ -2,22 +2,20 @@
 
 This check performs ICMP requests for information on ICMP packet loss, duration and response.
 
-??? example
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: icmp-check
+spec:
+  interval: 30
+  icmp:
+    - endpoint: https://api.github.com
+      thresholdMillis: 600
+      packetLossThreshold: 10
+      packetCount: 2
 
-    ```yaml
-    apiVersion: canaries.flanksource.com/v1
-    kind: Canary
-    metadata:
-      name: icmp-check
-    spec:
-      interval: 30
-      icmp:
-        - endpoint: https://api.github.com
-          thresholdMillis: 600
-          packetLossThreshold: 10
-          packetCount: 2
-
-    ```
+```
 
 | Field                 | Description                                          | Scheme   | Required |
 | --------------------- | ---------------------------------------------------- | -------- | -------- |

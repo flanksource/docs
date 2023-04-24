@@ -86,7 +86,7 @@ sql:
 | Field      | Description                                                       | Scheme                              | Required |
 | ---------- | ----------------------------------------------------------------- | ----------------------------------- | -------- |
 | connection | Specify the connection string for the database                    | string                              | `true`   |
-| auth       | Specify the authentication details for connecting to the database | [`Authentication`](#authentication) | `false`  |
+| auth       | Specify the authentication details for connecting to the database | [`Authentication`](../concepts/authentication.md) | `false`  |
 
 ### Authentication
 

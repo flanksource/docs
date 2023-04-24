@@ -6,20 +6,18 @@ Folder Check checks if a given folder exists or not. In addition to supporting l
 - SMB
 - SFTP
 
-??? example
-
-    ```yaml
-    apiVersion: canaries.flanksource.com/v1
-    kind: Canary
-    metadata:
-      name: exec-check
-    spec:
-      interval: 30
-      exec:
-      - description: "Check the secret folder"
-        name: secret folder check
-				path: /home/flanksource/secrets
-    ```
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: exec-check
+spec:
+  interval: 30
+  exec:
+  - description: "Check the secret folder"
+    name: secret folder check
+    path: /home/flanksource/secrets
+```
 
 | Field            | Description                                                                                           | Scheme                              | Required |
 | ---------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------- | -------- |
@@ -27,9 +25,9 @@ Folder Check checks if a given folder exists or not. In addition to supporting l
 | `description`    | Description for the check                                                                             | `string`                            |          |
 | `icon`           | Icon for overwriting default icon on the dashboard                                                    | `string`                            |          |
 | `labels`         | Labels for check                                                                                      | `map[string]string`                 |          |
-| `test`           | Template to test the result against                                                                   | [`Template`](#template)             |          |
-| `display`        | Template to display the result in                                                                     | [`Template`](#template)             |          |
-| `transform`      | Template for transformation                                                                           | [`Template`](#template)             |          |
+| `test`           | Template to test the result against                                                                   | [`Template`](../concepts/templating.md)             |          |
+| `display`        | Template to display the result in                                                                     | [`Template`](../concepts/templating.md)             |          |
+| `transform`      | Template for transformation                                                                           | [`Template`](../concepts/templating.md)             |          |
 | `path`           | Path to folder or object storage, e.g. `s3://<bucket-name>`, `gcs://<bucket-name>`, `/path/tp/folder` | `string`                            |          |
 | `filter`         | Specify filters                                                                                       | [`FolderFilter`](#folderfilter)     |          |
 | `awsConnection`  | AWS connection details for S3 bucket                                                                  | [`AWSConnection`](#awsconnection)   |          |
@@ -40,15 +38,6 @@ Folder Check checks if a given folder exists or not. In addition to supporting l
 ---
 
 ## Scheme Reference
-
-### Template
-
-| Field        | Description                                      | Scheme   | Required |
-| ------------ | ------------------------------------------------ | -------- | -------- |
-| `jsonPath`   | Specify path to JSON element for use in template | `string` |          |
-| `template`   | Specify Go template for use                      | `string` |          |
-| `expr`       | Specify expression for use in template           | `string` |          |
-| `javascript` | Specify javascript syntax to run for template    | `string` |          |
 
 ### FolderFilter
 
@@ -70,7 +59,7 @@ Folder Check checks if a given folder exists or not. In addition to supporting l
 | `endpoint`      | Specify the endpoint                                                                                  | `string`                                                                     |          |
 | `skipTLSVerify` | Skip TLS verification when connecting to AWS                                                          | `bool`                                                                       |          |
 | `objectPath`    | Glob path to restrict matches to a subset                                                             | `string`                                                                     |          |
-| `usePathStyle`  | Use path style path: http://s3.amazonaws.com/BUCKET/KEY instead of http://BUCKET.s3.amazonaws.com/KEY | `bool`                                                                       |          |
+| `usePathStyle`  | Use path style path: <http://s3.amazonaws.com/BUCKET/KEY> instead of <http://BUCKET.s3.amazonaws.com/KEY> | `bool`                                                                       |          |
 
 ### GCPConnection
 

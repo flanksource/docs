@@ -14,18 +14,15 @@ Health checks can be associated in 2 ways:
 
 ### Selector
 
-| Field           | Description                                                                       | Scheme   |
-| --------------- | --------------------------------------------------------------------------------- | -------- |
-| `fieldSelector` | Select Kubernetes or Canary object based on the value of specified resource field | _string_ |
-| `labelSelector` | Select Kubernetes or Canary object based on label. e.g. app, canary.              | _string_ |
-| `name`          | Set name for selector                                                             | _string_ |
+
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
 kind: SystemTemplate
 metadata:
   name: single-check
-spec:
+spec| `id`      | The UUID of config item, rarely used                       | `string`                       |          |
+
   type: Website
   icon: Application
   schedule: "@every 5m"
@@ -33,7 +30,6 @@ spec:
     - checks:
         - labelSelector: "check=http-200" # labels specified on an existing check
       name: single-check
-
 ---
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
@@ -50,6 +46,12 @@ spec:
 ```
 
 By selecting health checks rather than inlining them you are able to re-use the same health check across multiple components.
+
+| Field           | Description                                                                       | Scheme   |
+| --------------- | --------------------------------------------------------------------------------- | -------- |
+| `fieldSelector` | Select Kubernetes or Canary object based on the value of specified resource field | _string_ |
+| `labelSelector` | Select Kubernetes or Canary object based on label. e.g. app, canary.              | _string_ |
+| `name`          | Set name for selector                                                             | _string_ |
 
 ### Inline Health Checks
 
