@@ -86,6 +86,7 @@ nav:
                       - Files (Kubernetes): ./config-db/scrapers/kubernetes-file.md
                       - Kubernetes: ./config-db/scrapers/kubernetes.md
                       - SQL: ./config-db/scrapers/sql.md
+                      - Trivy: ./config-db/scrapers/trivy.md
                       - Custom: ./config-db/scrapers/custom.md
               - Local Development:
                       - Installation: ./config-db/tutorials/install-standalone.md
