@@ -128,6 +128,7 @@ nav:
 
                       - DevOps:
                               - GitHub: ./canary-checker/reference/github.md
+                              - Azure Devops: ./canary-checker/reference/azure-devops.md
 
                       - Folders:
                               - Folder: ./canary-checker/reference/folder.md
