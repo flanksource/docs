@@ -5,8 +5,8 @@
 1. Docker
 2. Helm
 3. kubectl
-4. Install Minikube: [https://minikube.sigs.k8s.io/docs/start/](https://minikube.sigs.k8s.io/docs/start/)
-5. Install `mkcert` using `brew install mkcert`  or [https://github.com/FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
+4. `minikube` [https://minikube.sigs.k8s.io/docs/start/](https://minikube.sigs.k8s.io/docs/start/)
+5. `mkcert` [https://github.com/FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
 
 ## Start Minikube
 
@@ -52,14 +52,14 @@ flanksource-ui:
 
 ## Access Mission Control UI
 
-1. Add line similar to the following one to the bottom of the `/etc/hosts` file on your computer (you will need administrator access) 
+1. Add line similar to the following one to the bottom of the `/etc/hosts` file on your computer (you will need administrator access) *C:\Windows\System32\drivers\etc*
 
    `127.0.0.1        incident-manager-ui.local`
 
 2. `minikube tunnel`
 3. [https://incident-manager-ui.local/login](https://incident-manager-ui.local/login)
 4. Username: **admin@local**  
-Pass: **admin**
+   Pass: **admin**
 
 ## Validation steps
 
