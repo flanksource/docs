@@ -27,20 +27,21 @@ _Fig: A detailed view of the analysis on the postgres container_
 | `format`          | Format of config item, defaults to JSON, available options are JSON.                                                                               | `string`                                | `false`  |
 | `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`. | `string`                                | `false`  |
 | `version`         | Specify the Trivy version to use. (default 0.40.0)                                                                                                 | `string`                                | `false`  |
-| `kubernetes`      | Specify the trivy option to scan kubernetes objects.                                                                                               | [`TrivyOptions`](#trivyoptions)         | `true`   |
+| `compliance`      | compliance report to generate</br>(k8s-nsa, k8s-cis, k8s-pss-baseline, k8s-pss-restricted).                                                        | `string`                                | `false`  |
+| `ignoredLicenses` | specify a list of license to ignore.                                                                                                               | `[]string`                              | `false`  |
+| `ignoreUnfixed`   | display only fixed vulnerabilities.                                                                                                                | `bool`                                  | `false`  |
+| `licenseFull`     | eagerly look for licenses in source code headers and license files.                                                                                | `bool`                                  | `false`  |
+| `severity`        | severities of security issues to be displayed (comma separated)</br>_(default "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL")_.                                | `string`                                | `false`  |
+| `vulnType`        | comma-separated list of vulnerability types (comma separated)</br>_(default "os,library")_.                                                        | `string`                                | `false`  |
+| `kubernetes`      | Specify the trivy option to scan kubernetes objects.                                                                                               | [`K8sOptions`](#k8soptions)             | `true`   |
 
-### TrivyOptions
+### K8sOptions
 
 Trivy Options consist of selected few flags that are passed on to trivy.
 
-| Field             | Description                                                                                                         | Scheme     | Required |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `compliance`      | compliance report to generate</br>(k8s-nsa, k8s-cis, k8s-pss-baseline, k8s-pss-restricted).                         | `string`   | `false`  |
-| `components`      | specify which components to scan</br>_(default workload, infra)._                                                   | `[]string` | `false`  |
-| `ignoredLicenses` | specify a list of license to ignore.                                                                                | `[]string` | `false`  |
-| `ignoreUnfixed`   | display only fixed vulnerabilities.                                                                                 | `bool`     | `false`  |
-| `kubeconfig`      | A static value or JSONPath expression to use as the kubeconfig for the resource.                                    | `string`   | `false`  |
-| `licenseFull`     | eagerly look for licenses in source code headers and license files.                                                 | `bool`     | `false`  |
-| `namespace`       | Kubernetes namespace to scan.                                                                                       | `string`   | `true`   |
-| `severity`        | severities of security issues to be displayed (comma separated)</br>_(default "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL")_. | `string`   | `false`  |
-| `vulnType`        | comma-separated list of vulnerability types (comma separated)</br>_(default "os,library")_.                         | `string`   | `false`  |
+| Field        | Description                                                                            | Scheme     | Required |
+| ------------ | -------------------------------------------------------------------------------------- | ---------- | -------- |
+| `components` | Specify which components to scan</br>_(default workload, infra)._                      | `[]string` | `false`  |
+| `kubeconfig` | Specify the kubeconfig file path to use as a static value or as a JSONPath expression. | `string`   | `false`  |
+| `namespace`  | Specify a namespace to scan.                                                           | `string`   | `true`   |
+| `context`    | Specify a context to scan.                                                             | `string`   | `false`  |
