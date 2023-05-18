@@ -1,11 +1,9 @@
 # Install Mission Control on AWS EKS cluster
 
-
 ## Prerequisites
 
-1. Dashboard URL
-2. cert-manager
-3. Ingress controller
+1. Kubernetes 1.22+ with Identity Federation enabled
+2. [cert-manager](https://cert-manager.io/docs/)
 
 ---
 ## Deployment steps
@@ -13,11 +11,10 @@
 1. `helm repo add flanksource [https://flanksource.github.io/charts]`
 2. `helm repo update`
 3. `helm install flanksource flanksource/mission-control -n flanksource`
-4. To set custom values file for your mission-control helm chart installation to override existing values in [mission-control-chart](https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml).
+4. To set custom values file for your mission-control helm chart installation, override existing values in [mission-control-chart](https://github.com/flanksource/mission-control-chart/tree/main/chart). Some common values that can be changed can be found [here](https://docs.flanksource.com/#install-chart)
 ---
 
 ## Enable Config Scrapers
-<br>
 
 ### Create a read-only IAM role
 
@@ -29,6 +26,27 @@ Create a role to allow mission-control to configuration of your AWS resources. A
 
 Attach one Customer managed policy to the role with [this json policy document](https://github.com/flanksource/docs/blob/main/docs/installation/resources/iam-policy.json)
 
+Modify the trust policy of the IAM role by changing the OIDC arn, OIDC endpoint and the namespace below. 
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Federated": "arn:aws:iam::7458xxxxxxxx:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+                "StringEquals": {
+                    "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:config-db-sa",
+                    "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:aud": "sts.amazonaws.com"
+                }
+            }
+        }
+    ]
+}
+```
 ### Annotate the service account
 
 - Modify the helm chart values for incident commander and pass the role ARN 
