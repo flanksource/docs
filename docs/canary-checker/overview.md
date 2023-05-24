@@ -1,40 +1,61 @@
-![canary-checker](images/canary-checker.png)
-  <p align="center">Kubernetes operator for executing synthetic tests</p>
-<p align="center">
-<a href="https://github.com/flanksource/canary-checker/actions"><img src="https://github.com/flanksource/canary-checker/workflows/Test/badge.svg"></a>
-<a href="https://goreportcard.com/report/github.com/flanksource/canary-checker"><img src="https://goreportcard.com/badge/github.com/flanksource/canary-checker"></a>
-<img src="https://img.shields.io/github/license/flanksource/canary-checker.svg?style=flat-square"/>
-<a href="https://canary-checker.docs.flanksource.com"> <img src="https://img.shields.io/badge/☰-Docs-lightgrey.svg"/> </a>
-</p>
-
 ---
-## What is Canary Checker?
-Canary Checker is a Kubernetes native [Synthetic Monitoring](https://en.wikipedia.org/wiki/Synthetic_monitoring) system. It works with standard Kubernetes monitoring tools like [Prometheus](https://prometheus.io) to proactively monitor your applications across multi-tenant environments to ensure application availability.
+hide:
+  - toc
+---
+# Health Checks
 
-Today many applications are written as microservices with service dependencies. This is especially true for applications that run on Kubernetes. For example, you may have a microservice running as a deployment that requires access to a database like [MongoDB](https://www.mongodb.com/kubernetes) or [Postgres](https://www.postgresql.org/). As an [SRE](https://en.wikipedia.org/wiki/Site_Reliability_Engineering) you can create a few canary checks that alert you if the system were about to experience any major issues: 
-
-* You could create a check that ensures the PostgreSQL service responds within `3000` milliseconds 
-* You could create a check that ensures you can run a query on Postgres and ensure the query result is as expected.
-
-If any one of these checks fails, (e.g: the service doesn't respond after 3000 milliseconds) you would know that something is not performing as expected in your environment.  You could then take actions to remediate the issues before your end users are even aware there was an issue. 
-
-## Features
-
-![dashboard](images/ui01.png)
-
-* Built-in UI/Dashboard with multi-cluster aggregation
-* CRD based configuration and status reporting
-* Prometheus Integration
-* Runnable as a CLI for once-off checks or as a standalone server outside kubernetes
-* Many built-in check types
+Health Checks in Mission Control are built on top of the  **flank**source open-source [canary-checker](https://github.com/flanksource/canary-checker) tool.
 
 
-## Comparisons
+Canary checker can collect health about systems in few different ways:
+
+* **Active** **Application** health checks involve sending periodic requests to the service or application and checking the response to ensure that it is working correctly,  Active health checks are proactive and can detect issues quickly, but they can also introduce some load on the system being monitored.
+* **Active Infrastructure** health checks are similar to application health checks, but instead of sending a requst to the application it sends a request to the infrastructure to deploy a new appplication or infrastructure component e.g. a new Kubernetes pod or EC2 instance.
+* **Passive** health checks rely on monitoring the activity in the system, analyzing it, and detecting anomalies or errors. Passive health checks are less intrusive than active health checks, but they may not detect issues as quickly.
+
+Health checks can be defined in 3 different ways:
+
+1. **UI**: Navigate to Settings --> Health --> Click on the :material-plus-circle: button
+1. **[GitOps](./concepts/gitops.md)**:  canary-checker is fully Gitops enabled using Kubernetes Custom Resource Definitions (CRD)
+1. **[CLI](./tutorials/run.md)**: For rapid development and feedback, canary-checker can be run as a normal CLI application by specifying the health check definition in a config file.
 
 
-| App                                                     | Comparison                                                   |
-| ------------------------------------------------------- | ------------------------------------------------------------ |
-| Prometheus                                              | canary-checker is not a replacement for prometheus, rather a companion. While prometheus provides persistent time series storage, canary-checker only has a small in-memory cache of recent checks.  Canary-checker also exposes metrics via `/metrics` that are scraped by prometheus. |
-| Grafana                                                 | The built-in UI provides a mechanism to display check results across 1 or more instances without a dependency on grafana/prometheus running. The UI  will also display long-term graphs of check results by quering prometheus. |
-| [Kuberhealthy](https://github.com/Comcast/kuberhealthy) | Very similar goals, but Kuberhealthy relies on external containers to implement checks and does not provide a UI or multi-cluster/instance aggregation. |
-| [Cloudprober](https://cloudprober.org/)                 | Very similar goals, but Cloudprober is designed for very high scale, not multi-tenancy. Only has ICMP, DNS, HTTP, UDP built-in checks. |
+Canary checker runs health checks on a pre-defined CRON schedule and provides a fully customizable platform that:
+
+1. Accesses [authentication](./concepts/authentication.md) credentials from kubernetes secrets and configmaps.
+1. Parses and  [transforms](./concepts/transforms.md) the response using JSONPath, Go templates or Javascript to validate, extrapolate or aggregate results.
+
+## Check Types
+
+
+| Protocol                            | Status             | Checks |
+| ----------------------------------- | ------------------ | ---- |
+| HTTP(s)                             | GA                 | Response body, headers and duration |
+| DNS                                 | GA                 | Response and duration |
+| Ping/ICMP                           | GA | Duration and packet loss |
+| **Data Sources**                    |                    |      |
+| SQL (MySQL, PostgreSQL, SQL Server) | GA | Ability to login, results, duration, health exposed via stored procedures |
+| LDAP                                | GA | Ability to login, response time |
+| Elasticsearch                       | GA | Ability to login, response time, size of search results |
+| Mongo                               | GA | Ability to login, results, duration, |
+| Redis                               | GA | Ability to login, results, duration, |
+| Prometheus | GA | Ability to login, results, duration, |
+| **Alerts**                 |                    | Prometheus |
+| Prometheus Alert Manager | GA | Pending and firing alerts |
+| AWS Cloudwatch Alarms | GA | Pending and firing alerts |
+| **File Systems** |                    |      |
+| Git                                 | GA |  |
+| Disk / S3 / SMB / CIFS / SFTP / | GA | Too many/few files matching critera, files that too large or too big |
+| **Config**                          |                    |      |
+| AWS Config                          | GA | AWS Config Rules that are firing, Custom AWS Config queries |
+| Mission Control Config              | GA | Custom config queries |
+| Kubernetes Resources                | GA | Kubernetes resources that are missing or are in a non-ready state |
+| **Backups**                         |                    |      |
+| GCP Databases                | GA | Backup freshness |
+| Restic                              | GA | Backup freshness and integrrity |
+| **Infrastructure** |  | |
+| EC2 | GA | Ability to launch new EC2 instances |
+| Kubernetes | GA | Ability to schedule and then route traffic via an ingress to a pod |
+| Docker | GA | Ability to push and pull containers via docker/containerd |
+| Helm | GA | Ability to push and pull helm charts |
+

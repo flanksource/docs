@@ -2,25 +2,24 @@
 
 This check will execute the JMeter CLI to execute the JMX test plan on the specified host.
 
-??? example
-     ```yaml
-      apiVersion: canaries.flanksource.com/v1
-      kind: Canary
-      metadata:
-        name: jmeter-check
-      spec:
-        interval: 30
-        spec:
-          jmeter:
-            - name: jmeter check
-              host: 192.168.1.5
-              jmx:
-                valueFrom: 
-                  configMapKeyRef:
-                    name: jmeter-config
-                    key: sample-test.jmx
-              port: 1099
-     ```
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: jmeter-check
+spec:
+  interval: 30
+  spec:
+    jmeter:
+      - name: jmeter check
+        host: 192.168.1.5
+        jmx:
+          valueFrom:
+            configMapKeyRef:
+              name: jmeter-config
+              key: sample-test.jmx
+        port: 1099
+```
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
@@ -33,4 +32,3 @@ This check will execute the JMeter CLI to execute the JMX test plan on the speci
 | `properties` | Properties defines the local Jmeter properties | *\[\]string* |  |
 | `responseDuration` | ResponseDuration under which the all the test should pass | *string* |  |
 | `systemProperties` | SystemProperties defines the java system property | *\[\]string* |  |
-

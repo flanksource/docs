@@ -2,14 +2,12 @@ Configs can be associated to a component using the `config` property. A linked c
 
 ![Component Config relationship](../images/component-config-relationship.jpg)
 
-??? Example
-
-    ```yaml
-    components:
-      - configs:
-          - name: flanksource-canary-cluster
-            type: EKS
-    ```
+```yaml
+components:
+  - configs:
+      - name: flanksource-canary-cluster
+        type: EKS
+```
 
 ## Config
 
@@ -20,6 +18,6 @@ Configs can be associated to a component using the `config` property. A linked c
 | `type`      | Specify type of config item.              | `string`            | `optional` |
 | `tags`      | Specify tags of config item.              | `map[string]string` | `optional` |
 
-This `Config` object is used to find the config item to associate with the component. It's important to note that there can be multiple config items that can match the same `Config` object. The first match is used in that case. 
+This `Config` object is used to find the config item to associate with the component. It's important to note that there can be multiple config items that can match the same `Config` object. The first match is used in that case.
 
 To get a better result, you can provide more information in the `Config` object; example: provide name, namespace and type instead of just providing the namespace.

@@ -1,35 +1,34 @@
 # <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/cloudwatch.svg' style='height: 32px'/> CloudWatch
 
-This checks Cloudwatch for all the Active alarms and responses with the corresponding reasons for each. 
+This checks Cloudwatch for all the Active alarms and responses with the corresponding reasons for each.
 
-??? example
-     ```yaml
-     apiVersion: canaries.flanksource.com/v1
-     kind: Canary
-     metadata:
-       name: cloudwatch-check
-     spec:
-       interval: 30
-       cloudwatch:
-         - accessKey:
-             valueFrom:
-               secretKeyRef:
-                 key: AWS_ACCESS_KEY_ID
-                 name: aws-credentials
-           secretKey:
-             valueFrom:
-               secretKeyRef:
-                 key: AWS_SECRET_ACCESS_KEY
-                 name: aws-credentials
-           region: "us-east-1"
-           #skipTLSVerify: true
-     ```
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: cloudwatch-check
+spec:
+  interval: 30
+  cloudwatch:
+    - accessKey:
+        valueFrom:
+          secretKeyRef:
+            key: AWS_ACCESS_KEY_ID
+            name: aws-credentials
+      secretKey:
+        valueFrom:
+          secretKeyRef:
+            key: AWS_SECRET_ACCESS_KEY
+            name: aws-credentials
+      region: "us-east-1"
+      #skipTLSVerify: true
+```
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | **`accessKey`** | Access key value or valueFrom configMapKeyRef or SecretKeyRef to access your cloudwatch | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
 | `description` | Description for the check | *string* |  |
-| `display` | Template to display the result in | [*Template*](#template) |  |
+| `display` | Template to display the result in | [*Template*](../concepts/templating.md) |  |
 | `endpoint` | Cloudwatch HTTP Endpoint to establish connection | *string* |  |
 | `filter` | Used to filter the objects | [`CloudWatchFilter`](#cloudwatchfilter) |  |
 | `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
@@ -37,19 +36,11 @@ This checks Cloudwatch for all the Active alarms and responses with the correspo
 | `region` | Region for cloudwatch | *string* |  |
 | **`secretKey`** | Secret key value or valueFrom configMapKeyRef or SecretKeyRef to access cloudwatch | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
 | `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* |  |
-| `test` | Template to test the result against | [*Template*](#template) |  |
+| `test` | Template to test the result against | [*Template*](../concepts/templating.md) |  |
 
 ---
+
 # Scheme Reference
-## Template
-
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `jsonPath` | Specify path to JSON element for use in template | *string* |  |
-| `template` | Specify Go template for use | *string* |  |
-| `expr` | Specify expression for use in template  | *string* |  |
-| `javascript` | Specify javascript syntax to run for template | *string* |  |
-
 
 ## CloudWatchFilter
 
@@ -59,4 +50,3 @@ This checks Cloudwatch for all the Active alarms and responses with the correspo
 | `alarmPrefix` | Specify to receive information about all alarms that have names that start with this prefix. | *string* |  |
 | `alarms` | Set field to retrieve information about alarm | *\[\]string* |  |
 | `state` | Specify to retrieve state value of alarm | *string* |  |
-

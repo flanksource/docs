@@ -2,20 +2,18 @@
 
 This checks whether the given address is reachable within the specified timeout period.
 
-??? example
-
-    ```yaml
-    apiVersion: canaries.flanksource.com/v1
-    kind: Canary
-    metadata:
-      name: tcp-check
-    spec:
-      schedule: "*/1 * * * *"
-      tcp:
-        - name: "flanksource website"
-          endpoint: https://www.flanksource.com
-          thresholdMillis: 1200
-    ```
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: tcp-check
+spec:
+  schedule: "*/1 * * * *"
+  tcp:
+    - name: "flanksource website"
+      endpoint: https://www.flanksource.com
+      thresholdMillis: 1200
+```
 
 | Field             | Description                                        | Scheme              | Required |
 | ----------------- | -------------------------------------------------- | ------------------- | -------- |

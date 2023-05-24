@@ -2,20 +2,18 @@
 
 AWS Config checks ...
 
-??? example
-
-    ```yaml
-    apiVersion: canaries.flanksource.com/v1
-    kind: Canary
-    metadata:
-      name: exec-check
-    spec:
-      interval: 30
-      awsConfig:
-        - description: "Check the config"
-          name: config check
-          query: "SELECT * FROM aws_config_rule"
-    ```
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: exec-check
+spec:
+  interval: 30
+  awsConfig:
+    - description: "Check the config"
+      name: config check
+      query: "SELECT * FROM aws_config_rule"
+```
 
 | Field            | Description                                        | Scheme                            | Required   |
 | ---------------- | -------------------------------------------------- | --------------------------------- | ---------- |
@@ -23,9 +21,9 @@ AWS Config checks ...
 | `description`    | Description for the check                          | `string`                          |            |
 | `icon`           | Icon for overwriting default icon on the dashboard | `string`                          |            |
 | `labels`         | Labels for check                                   | `map[string]string`               |            |
-| `test`           | Template to test the result against                | [`Template`](#template)           |            |
-| `display`        | Template to display the result in                  | [`Template`](#template)           |            |
-| `transform`      | Template for transformation                        | [`Template`](#template)           |            |
+| `test`           | Template to test the result against                | [`Template`](../concepts/templating.md)           |            |
+| `display`        | Template to display the result in                  | [`Template`](../concepts/templating.md)           |            |
+| `transform`      | Template for transformation                        | [`Template`](../concepts/templating.md)           |            |
 | `query`          | The SQL query SELECT command                       | `string`                          | `true`     |
 | `awsConnection`  | AWS connection details.                            | [`AWSConnection`](#awsconnection) |            |
 | `aggregatorName` | Specify the name of the configuration aggregator   | `string`                          | `optional` |
@@ -33,15 +31,6 @@ AWS Config checks ...
 ---
 
 ## Scheme Reference
-
-### Template
-
-| Field        | Description                                      | Scheme   | Required |
-| ------------ | ------------------------------------------------ | -------- | -------- |
-| `jsonPath`   | Specify path to JSON element for use in template | `string` |          |
-| `template`   | Specify Go template for use                      | `string` |          |
-| `expr`       | Specify expression for use in template           | `string` |          |
-| `javascript` | Specify javascript syntax to run for template    | `string` |          |
 
 ### AWSConnection
 
@@ -53,4 +42,4 @@ AWS Config checks ...
 | `endpoint`      | Specify the endpoint                                                                                  | `string`                                                                     |          |
 | `skipTLSVerify` | Skip TLS verification when connecting to AWS                                                          | `bool`                                                                       |          |
 | `objectPath`    | Glob path to restrict matches to a subset                                                             | `string`                                                                     |          |
-| `usePathStyle`  | Use path style path: http://s3.amazonaws.com/BUCKET/KEY instead of http://BUCKET.s3.amazonaws.com/KEY | `bool`                                                                       |          |
+| `usePathStyle`  | Use path style path: <http://s3.amazonaws.com/BUCKET/KEY> instead of <http://BUCKET.s3.amazonaws.com/KEY> | `bool`                                                                       |          |

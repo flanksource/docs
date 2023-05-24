@@ -14,5 +14,8 @@ You only need to define things that are different from the defaults listed in
 that file. After configuring the values.yaml file, install Canary Checker with
 
 ```bash
-helm install --namespace <NAMESPACE> canary-checker -f <VALUES_FILE> flanksource/canary-checker
+helm install \
+    --namespace canary-checker \
+    -f values.yaml \
+    flanksource/canary-checker
 ```
