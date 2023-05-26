@@ -99,7 +99,7 @@
                 "s3:ReplicateDelete",
                 "s3:GetObjectVersion"
             ],
-            "Resource": "arn:aws:s3:::flanksource-cost-reports/*"
+            "Resource": "arn:aws:s3:::flanksource-cost-report-demo-account/*"
         },
         {
             "Sid": "VisualEditor1",

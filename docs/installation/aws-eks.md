@@ -24,8 +24,6 @@ Create a role to allow mission-control to configuration of your AWS resources. A
 2. AWSConfigUserAccess
 3. AWSQuicksightAthenaAccess
 
-Attach one Customer managed policy to the role with [this json policy document](https://github.com/flanksource/docs/blob/main/docs/installation/resources/iam-policy.json)
-
 Modify the trust policy of the IAM role by changing the OIDC arn, OIDC endpoint and the namespace below. 
 ```
 {
@@ -68,7 +66,13 @@ config-db:
 - Check the reference doc for [AWS config scraper](https://github.com/flanksource/docs/blob/main/docs/config-db/scrapers/aws.md) to define your own config scraper
 - You can create configs for scrapers from the dashboard or by creating a custom resource like [this one](https://github.com/flanksource/docs/blob/main/docs/installation/resources/scrapers.yaml)
 
+### Enable AWS cost and usage reports
 
+Mission Control can read the cost and usage reports stored in the S3 bucket and map it to the resources it discovers in your AWS environment. To achieve this, 
+1. Setup Cost and Usage Reports in your AWS account and integrate it with Athena. Refer this [AWS documentation](https://docs.aws.amazon.com/cur/latest/userguide/use-athena-cf.html)
+2. Modify the config db IAM role used by the config scraper above to give Mission Control the permissions to read the cost reports. Attach a Customer managed policy to the role with [this json policy document](https://github.com/flanksource/docs/blob/main/docs/installation/resources/iam-policy.json)
+
+---
 ### Validate
 
 - Visit the Config section on incident commander dashboard at https://my-dashboard-url/configs
