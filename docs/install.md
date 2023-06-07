@@ -78,3 +78,59 @@ See [Customizing the Chart Before Installing](https://helm.sh/docs/intro/using_h
 ```console
 helm show values flanksource/mission-control
 ```
+
+### OIDC Integration
+
+We use [kratos](https://www.ory.sh/kratos/) for identity management. Login via email/password is the default flow but we can integrate any OIDC provider with in.
+
+Steps:
+
+1. Update helm values file to add the provider data
+
+    ```yaml
+    kratos:
+      kratos:
+        config:
+          selfservice:
+            methods:
+              oidc:
+                enabled: true
+                providers:
+                  - id: <provider-id> # Used in Authorization callback URL. DO NOT CHANGE IT ONCE SET!
+                    provider: <provider-type> # Can be google, github, microsoft, gitlab, slack etc
+                    client_id: ...
+                    client_secret: ...
+                    mapper_url: "base64://{YOUR_BASE64_ENCODED_JSONNET_HERE}"
+                    <Provider specific metdata>
+    ```
+
+    The provider metadata varies per provider and the relevant documentation can be found on [https://www.ory.sh/docs/kratos/social-signin/overview](https://www.ory.sh/docs/kratos/social-signin/overview)
+
+2. Generate mapper url
+
+    We need to map user data from provider to our kratos instance. We do this by creating a jsonnet file to map the data
+
+    ```jsonnet
+    // claims contains all the data sent by the upstream.
+    local claims = std.extVar('claims');
+
+    {
+      identity: {
+        traits: {
+          email: claims.email,
+          name: {
+            first: claims.<mapping>,
+            last: claims.<mapping>,
+        },
+      },
+    }
+    ```
+
+    In our case, `traits.email`, `traits.name.first` and `traits.name.last` are used. If the provider only provides name, `traits.name.last` can be left blank.
+
+    We then encode the file via base64 and use that output as the mapper url
+    ```console
+    cat mapping.jsonnet | base64
+    ```
+
+3. Update the provider URL and callback URL, follow [the guide](https://www.ory.sh/docs/kratos/social-signin/generic) for provider specific steps
