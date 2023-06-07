@@ -9,23 +9,22 @@ metadata:
   name: redis-check
 spec:
   interval: 30
-  spec:
-    redis:
-      - addr: "redis.default.svc:6379"
-        name: redis-check
-        auth:
-          username:
-            valueFrom:
-              secretKeyRef:
-                name: redis-credentials
-                key: USERNAME
-          password:
-            valueFrom:
-              secretKeyRef:
-                name: redis-credentials
-                key: PASSWORD
-        db: 0
-        description: "The redis check"
+  redis:
+    - addr: "redis.default.svc:6379"
+      name: redis-check
+      auth:
+        username:
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: USERNAME
+        password:
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: PASSWORD
+      db: 0
+      description: "The redis check"
 ```
 
 | Field | Description | Scheme | Required |

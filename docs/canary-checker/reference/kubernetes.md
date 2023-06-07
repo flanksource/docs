@@ -20,7 +20,7 @@ spec:
       - namespace:
           name: default
         kind: Pod
-        name: k8s-ready pods
+        name: k8s-not-ready pods
         ready: false
         resource:
           labelSelector: app=k8s-not-ready

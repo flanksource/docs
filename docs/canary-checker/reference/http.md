@@ -12,17 +12,20 @@ metadata:
 spec:
   interval: 30
   http:
-    - endpoint: http://status.savanttools.com/?code=200
+    - name: http pass response 200 status code
+      endpoint: http://status.savanttools.com/?code=200
       thresholdMillis: 3000
       responseCodes: [201, 200, 301]
       responseContent: ""
       maxSSLExpiry: 7
-    - endpoint: http://status.savanttools.com/?code=404
+    - name: http pass response 404 status code
+      endpoint: http://status.savanttools.com/?code=404
       thresholdMillis: 3000
       responseCodes: [404]
       responseContent: ""
       maxSSLExpiry: 7
-    - endpoint: http://status.savanttools.com/?code=500
+    - name: http pass response 500 status code
+      endpoint: http://status.savanttools.com/?code=500
       thresholdMillis: 3000
       responseCodes: [500]
       responseContent: ""

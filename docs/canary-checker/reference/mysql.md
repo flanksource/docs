@@ -9,23 +9,22 @@ metadata:
   name: mysql-check
 spec:
   interval: 30
-  spec:
-    mysql:
-      - connection: "$(username):$(password)@tcp(mysql.default.svc:3306)/mysqldb"
-        name: mysql ping check
-        auth:
-          username:
-            valueFrom:
-              secretKeyRef:
-                name: mysql-credentials
-                key: USERNAME
-          password:
-            valueFrom:
-              secretKeyRef:
-                name: mysql-credentials
-                key: PASSWORD
-        query: <insert-query>
-        results: 1
+  mysql:
+    - connection: "$(username):$(password)@tcp(mysql.default.svc:3306)/mysqldb"
+      name: mysql ping check
+      auth:
+        username:
+          valueFrom:
+            secretKeyRef:
+              name: mysql-credentials
+              key: USERNAME
+        password:
+          valueFrom:
+            secretKeyRef:
+              name: mysql-credentials
+              key: PASSWORD
+      query: <insert-query>
+      results: 1
 ```
 
 | Field | Description | Scheme | Required |

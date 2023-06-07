@@ -9,23 +9,23 @@ metadata:
   name: mongo-check
 spec:
   interval: 30
-  spec:
-    mongodb:
-      - connection: mongodb://$(username):$(password)@mongo.default.svc:27017/?authSource=admin
-        description: mongo ping
-        auth:
-          username:
-            valueFrom:
-              secretKeyRef:
-                name: mongo-credentials
-                key: USERNAME
-          password:
-            valueFrom:
-              secretKeyRef:
-                name: mongo-credentials
-                key: PASSWORD
-        dns:
-          - query: mongo.default.svc
+  mongodb:
+    - name: mongo password
+      connection: mongodb://$(username):$(password)@mongo.default.svc:27017/?authSource=admin
+      description: mongo ping
+      auth:
+        username:
+          valueFrom:
+            secretKeyRef:
+              name: mongo-credentials
+              key: USERNAME
+        password:
+          valueFrom:
+            secretKeyRef:
+              name: mongo-credentials
+              key: PASSWORD
+      dns:
+        - query: mongo.default.svc
 
 ```
 

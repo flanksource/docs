@@ -11,7 +11,6 @@ spec:
   interval: 30
   pod:
     - name: golang
-      namespace: default
       spec: |
         apiVersion: v1
         kind: Pod
@@ -26,8 +25,6 @@ spec:
               image: quay.io/toni0/hello-webserver-golang:latest
       port: 8080
       path: /foo/bar
-      ingressName: hello-world-golang
-      ingressHost: "hello-world-golang.127.0.0.1.nip.io"
       scheduleTimeout: 20000
       readyTimeout: 10000
       httpTimeout: 7000
@@ -39,7 +36,6 @@ spec:
       expectedHttpStatuses: [200, 201, 202]
       priorityClass: canary-checker-priority
     - name: ruby
-      namespace: default
       spec: |
         apiVersion: v1
         kind: Pod
@@ -55,8 +51,6 @@ spec:
               imagePullPolicy: Always
       port: 8080
       path: /foo/bar
-      ingressName: hello-world-ruby
-      ingressHost: "hello-world-ruby.127.0.0.1.nip.io"
       scheduleTimeout: 30000
       readyTimeout: 12000
       httpTimeout: 7000

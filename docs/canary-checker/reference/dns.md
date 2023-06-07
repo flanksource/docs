@@ -10,7 +10,8 @@ metadata:
 spec:
   interval: 30
   dns:
-    - server: 8.8.8.8
+    - name: A record query
+      server: 8.8.8.8
       port: 53
       query: "1.2.3.4.nip.io"
       querytype: "A"
@@ -18,7 +19,8 @@ spec:
       exactreply: ["1.2.3.4"]
       timeout: 10
       thresholdMillis: 1000
-    - server: 8.8.8.8
+    - name: PTR query
+      server: 8.8.8.8
       port: 53
       query: "8.8.8.8"
       querytype: "PTR"
@@ -26,7 +28,8 @@ spec:
       exactreply: ["dns.google."]
       timeout: 10
       thresholdMillis: 100
-    - server: 8.8.8.8
+    - name: cname query
+      server: 8.8.8.8
       port: 53
       query: "dns.google"
       querytype: "CNAME"
@@ -34,7 +37,8 @@ spec:
       exactreply: ["dns.google."]
       timeout: 10
       thresholdMillis: 1000
-    - server: 8.8.8.8
+    - name: mx query
+      server: 8.8.8.8
       port: 53
       query: "flanksource.com"
       querytype: "MX"

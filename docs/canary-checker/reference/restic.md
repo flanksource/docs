@@ -13,26 +13,25 @@ metadata:
   name: restic-check
 spec:
   interval: 30
-  spec:
-    restic:
-      - repository: s3:http://minio.minio:9000/restic-canary-checker
-        name: restic check
-        password:
-          valueFrom:
-            secretKeyRef:
-              name: restic-credentials
-              key: PASSWORD
-        maxAge: 1h
-        accessKey:
-          valueFrom:
-            secretKeyRef:
-              name: restic-credentials
-              key: ACCESS_KEY_ID
-        secretKey:
-          valueFrom:
-            secretKeyRef:
-              name: restic-credentials
-              key: SECRET_ACCESS_KEY
+  restic:
+    - repository: s3:http://minio.minio:9000/restic-canary-checker
+      name: restic check
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: restic-credentials
+            key: PASSWORD
+      maxAge: 1h
+      accessKey:
+        valueFrom:
+          secretKeyRef:
+            name: restic-credentials
+            key: ACCESS_KEY_ID
+      secretKey:
+        valueFrom:
+          secretKeyRef:
+            name: restic-credentials
+            key: SECRET_ACCESS_KEY
 ```
 
 | Field | Description | Scheme | Required |

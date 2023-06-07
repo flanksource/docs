@@ -1,7 +1,7 @@
 # <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/ec2.svg' style='height: 32px'/> EC2
 
-This check connects to an AWS account with the specified credentials, launch and EC2 instance with an option for `userData`.
-
+This check connects to an AWS account with the specified credentials, launch an EC2 instance with an option for `userData`.
+ami, capacity, az, backup & restore
 ```yaml
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
@@ -9,31 +9,32 @@ metadata:
   name: ec2-check
 spec:
   interval: 30
-  spec:
-    ec2:
-      - description: test instance
-        accessKeyID:
-          valueFrom:
-            secretKeyRef:
-              name: aws-credentials
-              key: AWS_ACCESS_KEY_ID
-        secretKey:
-          valueFrom:
-            secretKeyRef:
-              name: aws-credentials
-              key: AWS_SECRET_ACCESS_KEY
-        region: af-south-1
-        userData: |
-          #!/bin/bash
-          yum install -y httpd
-          systemctl start httpd
-          systemctl enable httpd
-          usermod -a -G apache ec2-user
-          chown -R ec2-user:apache /var/www
-          chmod 2775 /var/www
-          find /var/www -type d -exec chmod 2775 {} \;
-          find /var/www -type f -exec chmod 0664 {} \;
-        securityGroup: WebAccess
+  ec2:
+    - name: ec2-check
+      ami: ami-04f7efe62f419d9f5
+      description: test instance
+      accessKeyID:
+        valueFrom:
+          secretKeyRef:
+            name: aws-credentials
+            key: AWS_ACCESS_KEY_ID
+      secretKey:
+        valueFrom:
+          secretKeyRef:
+            name: aws-credentials
+            key: AWS_SECRET_ACCESS_KEY
+      region: af-south-1
+      userData: |
+        #!/bin/bash
+        yum install -y httpd
+        systemctl start httpd
+        systemctl enable httpd
+        usermod -a -G apache ec2-user
+        chown -R ec2-user:apache /var/www
+        chmod 2775 /var/www
+        find /var/www -type d -exec chmod 2775 {} \;
+        find /var/www -type f -exec chmod 0664 {} \;
+      securityGroup: WebAccess
 ```
 
 | Field | Description | Scheme | Required |

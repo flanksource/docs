@@ -9,22 +9,22 @@ metadata:
   name: mssql-check
 spec:
   interval: 30
-  spec:
-    mssql:
-      - connection: "server=mssql.default.svc;user id=$(username);password=$(password);port=1433;database=master"
-        auth:
-          username:
-            valueFrom:
-              secretKeyRef:
-                name: mssql-credentials
-                key: USERNAME
-          password:
-            valueFrom:
-              secretKeyRef:
-                name: mssql-credentials
-                key: PASSWORD
-        query: <insert-query>
-        results: 1
+  mssql:
+    - name: mssql pass
+      connection: "server=mssql.default.svc;user id=$(username);password=$(password);port=1433;database=master"
+      auth:
+        username:
+          valueFrom:
+            secretKeyRef:
+              name: mssql-credentials
+              key: USERNAME
+        password:
+          valueFrom:
+            secretKeyRef:
+              name: mssql-credentials
+              key: PASSWORD
+      query: <insert-query>
+      results: 1
 ```
 
 | Field | Description | Scheme | Required |

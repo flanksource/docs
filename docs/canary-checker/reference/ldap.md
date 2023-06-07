@@ -13,7 +13,8 @@ metadata:
 spec:
   interval: 30
   ldap:
-    - host: ldap://apacheds.ldap.svc:10389
+    - name: ldap-org
+      host: ldap://apacheds.ldap.svc:10389
       auth:
         username:
           # value: uid=admin,ou=system
@@ -28,7 +29,8 @@ spec:
               key: PASSWORD
       bindDN: ou=users,dc=example,dc=com
       userSearch: "(&(objectClass=organizationalPerson))"
-    - host: ldap://apacheds.ldap.svc:10389
+    - name: ldap-group
+      host: ldap://apacheds.ldap.svc:10389
       auth:
         username:
           # value: uid=admin,ou=system
