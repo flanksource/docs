@@ -1,7 +1,7 @@
 # <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/ec2.svg' style='height: 32px'/> EC2
 
-This check connects to an AWS account with the specified credentials, launch an EC2 instance with an option for `userData`.
-ami, capacity, az, backup & restore
+This check connects to an AWS account with the specified credentials, launch an EC2 instance with an option for `userData`. 
+This test can be used to check the availability of an ami, account service limits, run backup & restore operations, etc.
 ```yaml
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
