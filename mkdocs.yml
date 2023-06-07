@@ -210,3 +210,12 @@ nav:
                               - Postgres: ./topology/references/postgres.md
                               - Prometheus: ./topology/references/prometheus.md
                               - Redis: ./topology/references/redis.md
+      - Incidents:
+            - Overview: ./incidents/overview.md
+            - Concepts:
+                  - Evidence: ./incidents/concepts/evidence.md
+                  - Hypothesis: ./incidents/concepts/hypothesis.md
+                  - Rules: ./incidents/concepts/rules.md
+                  - Responders: ./incidents/concepts/responders.md
+                  - Notifications: ./incidents/concepts/notifications.md
+                  - Done definition: ./incidents/concepts/done-definition.md
