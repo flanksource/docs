@@ -6,6 +6,14 @@ Any event capable of causing a disruption in your organization's workflow qualif
 
 Incidents are integrated within the Flanksource system, side by side with the configs & health checks. This allows for a comprehensive view and effective filtering of incidents relevant to your situation.
 
+## Involved People
+
+| Person             | Description                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------ |
+| Incident Commander | An individual responsible for overseeing the entire response to an incident.                           |
+| Communicator       | An individual responsible for managing all communications related to an incident.                      |
+| Creator            | The person who created the incident. Can also be the system if the incident was created automatically. |
+
 ## Severity Levels
 
 Incidents can be classified into different severity levels based on their potential impact on your operations. The severity levels are as follows:
@@ -37,10 +45,10 @@ Incidents can also be classified based on their nature. The incident types are a
 
 Status describes the current state of the incident. The incident status labels are as follows:
 
-|  Status   |                                                Description                                                |
-| ------- | ------------------------------------------------------------------------------------------------------- |
-|   Open    |                       The incident has been reported and is awaiting investigation.                       |
-|  Closed   |                  The incident has been fully resolved and no further action is required.                  |
+| Status    | Description                                                                                               |
+| --------- | --------------------------------------------------------------------------------------------------------- |
+| Open      | The incident has been reported and is awaiting investigation.                                             |
+| Closed    | The incident has been fully resolved and no further action is required.                                   |
 | Mitigated | Temporary measures have been taken to manage the incident, but further investigation or action is needed. |
-| Resolved  |                  The root cause of the incident has been addressed, resolving the issue.                  |
-| Cancelled |    The incident was closed without a resolution, typically because it was a false alarm or duplicate.     |
+| Resolved  | The root cause of the incident has been addressed, resolving the issue.                                   |
+| Cancelled | The incident was closed without a resolution, typically because it was a false alarm or duplicate.        |
