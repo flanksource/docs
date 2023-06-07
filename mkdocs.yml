@@ -219,4 +219,3 @@ nav:
                   - Responders: ./incidents/concepts/responders.md
                   - Notifications: ./incidents/concepts/notifications.md
                   - Done definition: ./incidents/concepts/done-definition.md
-                  - ChangeLog: ./incidents/concepts/changelog.md
