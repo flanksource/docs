@@ -1,6 +1,6 @@
 # Responders
 
-Responders allow you to link up the incident to an external incident management tool. At them moment, we only support
+Responders allow you to link up the incident to an external incident management tool. At the moment, we only support
 
 - MS Planner, and
 - Jira
@@ -13,7 +13,7 @@ Once the responder is linked up, the comments are synced between Flanksource and
 
 ## How to add a responder
 
-Responders clients are configured via the team spec.
+Responder clients are configured via the team spec.
 
 **Example:**
 

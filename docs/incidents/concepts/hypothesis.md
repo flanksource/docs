@@ -7,7 +7,7 @@ Hypotheses allow you to theorize possible causes of an incident. You can manage 
 When an incident occurs, it's crucial to quickly develop hypotheses about what might be causing the problem. By default, a root hypothesis is created for any new incident. To create a new hypothesis:
 
 - Open the relevant incident.
-- Go to "Action Plan" tab.
+- Go to the "Action Plan" tab.
 - Click on "Add Factor" to create a new hypothesis.
 
 ## Evaluating Hypotheses
@@ -19,10 +19,10 @@ Once a hypothesis has been added, it becomes part of the incident's information.
 To update the hypothesis status:
 
 - Open the relevant incident.
-- Go to "Action Plan" tab.
-- On the relevant hypothesis and click on the icon at the begining and select the desired status.
+- Go to the "Action Plan" tab.
+- On the relevant hypothesis and click on the icon at the beginning and select the desired status.
 
-![Updating status of a hypothesis](../../images/hypothesis-status.png)
+![Updating the status of a hypothesis](../../images/hypothesis-status.png)
 
 ### Commenting
 
