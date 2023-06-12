@@ -15,7 +15,8 @@ spec:
   interval: 30
   s3Bucket:
     # Check for any backup not older than 7 days and min size 25 bytes
-    - bucket: tests-e2e-1
+    - name: s3-backup
+      bucket: tests-e2e-1
       accessKey:
         valueFrom:
           secretKeyRef:
@@ -35,7 +36,8 @@ spec:
       usePathStyle: true
       skipTLSVerify: true
     # Check for any mysql backup not older than 7 days and min size 25 bytes
-    - bucket: tests-e2e-1
+    - name: s3-sql-backup
+      bucket: tests-e2e-1
       accessKey:
         valueFrom:
           secretKeyRef:
@@ -55,7 +57,8 @@ spec:
       usePathStyle: true
       skipTLSVerify: true
     # Check for any pg backup not older than 7 days and min size 50 bytes
-    - bucket: tests-e2e-1
+    - name: s3-pg-backup
+      bucket: tests-e2e-1
       accessKey:
         valueFrom:
           secretKeyRef:

@@ -10,7 +10,8 @@ metadata:
 spec:
   interval: 30
   cloudwatch:
-    - accessKey:
+    - name: cloudwatch-check
+      accessKey:
         valueFrom:
           secretKeyRef:
             key: AWS_ACCESS_KEY_ID

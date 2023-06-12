@@ -9,16 +9,15 @@ metadata:
   name: jmeter-check
 spec:
   interval: 30
-  spec:
-    jmeter:
-      - name: jmeter check
-        host: 192.168.1.5
-        jmx:
-          valueFrom:
-            configMapKeyRef:
-              name: jmeter-config
-              key: sample-test.jmx
-        port: 1099
+  jmeter:
+    - name: jmeter check
+      host: 192.168.1.5
+      jmx:
+        valueFrom:
+          configMapKeyRef:
+            name: jmeter-config
+            key: sample-test.jmx
+      port: 1099
 ```
 
 | Field | Description | Scheme | Required |

@@ -13,24 +13,23 @@ metadata:
   name: sftp-check
 spec:
   interval: 30
-  spec:
-    folder:
-      - path: /tmp
-        name: sample sftp check
-        sftpConnection:
-          host: 192.168.1.5
-          auth:
-            username:
-              valueFrom:
-                secretKeyRef:
-                  name: sftp-credentials
-                  key: USERNAME
-            password:
-              valueFrom:
-                secretKeyRef:
-                  name: sftp-credentials
-                  key: PASSWORD
-        maxCount: 10
+  folder:
+    - path: /tmp
+      name: sample sftp check
+      sftpConnection:
+        host: 192.168.1.5
+        auth:
+          username:
+            valueFrom:
+              secretKeyRef:
+                name: sftp-credentials
+                key: USERNAME
+          password:
+            valueFrom:
+              secretKeyRef:
+                name: sftp-credentials
+                key: PASSWORD
+      maxCount: 10
 ```
 
 | Field | Description | Scheme | Required |
