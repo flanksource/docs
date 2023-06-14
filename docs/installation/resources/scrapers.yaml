@@ -1,0 +1,46 @@
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  namespace: demo
+  name: aws-kubernetes
+spec:
+  kubernetes:
+    - clusterName: aws-demo-cluster
+      exclusions:
+         - Secret
+         - ReplicaSet
+         - APIService
+         - events
+         - endpoints.discovery.k8s.io
+         - endpointslices.discovery.k8s.io
+         - leases.coordination.k8s.io
+         - podmetrics.metrics.k8s.io
+         - nodemetrics.metrics.k8s.io
+         - customresourcedefinition
+         - controllerrevision
+         - certificaterequest
+         - orders.acme.cert-manager.io
+---
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws
+  namespace: demo
+spec:
+  aws:
+    - region:
+      - eu-west-1
+      - us-east-1
+      - af-south-1
+      - ap-south-1
+      - eu-central-1
+      compliance: true
+      patch_states: true
+      trusted_advisor_check: false
+      patch_details: true
+      inventory: true
+      cost_reporting:
+        s3_bucket_path: s3://my-cost-reports/query-results
+        database: athenacurcfn_my_report
+        table: my_report
+        region: us-east-1
