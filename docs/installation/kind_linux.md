@@ -11,7 +11,7 @@
 
 The demo requires access to mission control via an ingress configuration. To route traffic into the kind cluster, it must be configured with a binding to a port on the host. Create a kind.config file:
 
-```yaml
+```yaml title="kind.config"
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -68,7 +68,7 @@ helm repo update
 
 The following minimal config is recommended to deploy Mission Control into the Kind cluster:
 
-```yaml
+```yaml title="kind-values.yaml"
 db:
   create: true
   storageClass: standard
@@ -104,7 +104,7 @@ password: admin
 
 Create a file containing canary defintions, for example:
 
-```yaml
+```yaml title=canaries.yaml
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
