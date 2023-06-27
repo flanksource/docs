@@ -6,7 +6,7 @@ You are able to write your own tests and execute them to continually verify that
 
 In this guide, you'll see how to use canary-checker to test a Postgres database in several ways, using the CLI.
 
-## Prerequisities
+## Prerequisites
 For the purposes of this guide, you need a PostgreSQL instance running in Kubernetes. See the following guide on [how to install PostgreSQL](https://phoenixnap.com/kb/postgresql-kubernetes) in your Kubernetes Cluster via Helm.
 
 ## Installing the CLI

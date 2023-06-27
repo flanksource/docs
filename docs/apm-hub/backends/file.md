@@ -3,24 +3,29 @@ The file backend will fetch logs from files on the local filesystem. Those sourc
 ## Example configuration
 
 ```yaml
-backends:
-  - file:
-      - routes:
-          type: nginx
-          idPrefix: pod-1-
-        labels:
-          name: acmehost
-          type: Nginx
-        path:
-          - /var/log/nginx/access.log
-      - routes:
-          type: apache
-          idPrefix: pod-1-
-        labels:
-          name: acmehost
-          type: Apache
-        path:
-          - /var/log/apache2/access.log
+apiVersion: apm-hub.flanksource.com/v1
+kind: LoggingBackend
+metadata:
+  name: k8s-backend
+spec:
+  backends:
+    - file:
+        - routes:
+            type: nginx
+            idPrefix: pod-1-
+          labels:
+            name: acmehost
+            type: Nginx
+          path:
+            - /var/log/nginx/access.log
+        - routes:
+            type: apache
+            idPrefix: pod-1-
+          labels:
+            name: acmehost
+            type: Apache
+          path:
+            - /var/log/apache2/access.log
 ```
 
 ## FileConfig

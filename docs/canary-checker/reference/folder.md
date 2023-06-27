@@ -1,43 +1,94 @@
 # <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/folder.svg' style='height: 32px'/> Folder
 
-Folder Check checks if a given folder exists or not. In addition to supporting local folder check it also supports other protocols like
+Checks the contents of a folder for size, age and count. Folder based checks are useful in a number of scenarios:
 
-- Cloud Object storage (example: AWS S3 and Google Cloud Storage)
-- SMB
-- SFTP
+* Verifying that backups have been uploaded and are the appropiate size
+* Checking that logs or other temporary files are being cleaned up
+* For batch processes:
+  * Checking if files are being processed (and/or produced)
+  * Checking the size of queue processing backlog
+  * Checking if any error (`.err` or `.log`) files have been produced.
+  
 
-```yaml
+```yaml title="folder-check.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
-  name: exec-check
+  name: folder-check
 spec:
   interval: 30
-  exec:
-  - description: "Check the secret folder"
-    name: secret folder check
-    path: /home/flanksource/secrets
+  folder:
+    - path: /etc/
+      name: folder-check-min
+      description: Checks if there are at least 10 files in the folder
+      minCount: 10
 ```
 
-| Field            | Description                                                                                           | Scheme                              | Required |
-| ---------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------- | -------- |
-| `name`           | Name of the check                                                                                     | `string`                            |          |
-| `description`    | Description for the check                                                                             | `string`                            |          |
-| `icon`           | Icon for overwriting default icon on the dashboard                                                    | `string`                            |          |
-| `labels`         | Labels for check                                                                                      | `map[string]string`                 |          |
-| `test`           | Template to test the result against                                                                   | [`Template`](../concepts/templating.md)             |          |
-| `display`        | Template to display the result in                                                                     | [`Template`](../concepts/templating.md)             |          |
-| `transform`      | Template for transformation                                                                           | [`Template`](../concepts/templating.md)             |          |
-| `path`           | Path to folder or object storage, e.g. `s3://<bucket-name>`, `gcs://<bucket-name>`, `/path/tp/folder` | `string`                            |          |
-| `filter`         | Specify filters                                                                                       | [`FolderFilter`](#folderfilter)     |          |
-| `awsConnection`  | AWS connection details for S3 bucket                                                                  | [`AWSConnection`](#awsconnection)   |          |
-| `gcpConnection`  | GCP connection details for GCS bucket                                                                 | [`GCPConnection`](#gcpconnection)   |          |
-| `smbConnection`  | SMB connection details for SMB bucket                                                                 | [`SMBConnection`](#smbconnection)   |          |
-| `sftpConnection` | SFTP connection details for SFTP bucket                                                               | [`SFTPConnection`](#sftpconnection) |          |
 
----
+| Field         | Description                                                  | Scheme                                  | Required |
+| ------------- | ------------------------------------------------------------ | --------------------------------------- | -------- |
+| **`name`**    | Name of the check                                            | *string*                                | Yes      |
+| **`path`**    | A local folder path or a remote folder ([SMB](../smb), [SFTP](../sftp), [S3](../s3-bucket), [GCS](../gcs-bucket)) | string                                  | Yes      |
+| `filter`      | Filter objects out before checking if they are valid         | [*FolderFilter*](#folderfilter)         |          |
+| `minCount`    | The minimum number of files inside the `path`                | int                                     |          |
+| `maxCount`    | The maximum number of files inside the `path`, can be used in conjunction with `filter.regex` to detect error files | *int*                                   |          |
+| `minAge`      | The youngest age a file can be                               | [*Duration*](#duration)                 |          |
+| `maxAge`      | The oldest age a file can be, often used to check for unprocessed files or files that have not been cleaned up | [*Duration*](#duration)                 |          |
+| `minSize`     | The minimum file size, can be used to detect backups that did not upload successfully | [Size](#size)                           |          |
+| `maxSize`     | The maximim file size                                        | [Size](#size)                           |          |
+| `test`        | Custom script to test the files against, the [FolderResult](#folderResult) object will be available | [*Template*](../concepts/templating.md) |          |
+| `icon`        | Icon for overwriting default icon on the dashboard           | *string*                                |          |
+| `description` | Description for the check                                    | *string*                                |          |
+| `display`     | Custom script to change the display value                    | [*Template*](../concepts/templating.md) |          |
 
-## Scheme Reference
+## Duration
+
+Durations are strings with an optional fraction and unit e.g.  `300ms`, `1.5h` or `2h45m`. Valid time units are `ms`, `s`, `m`, `h`.
+
+## Size
+
+Sizes are string with a unit suffix e.g. `100` / `100b`, `10mb`, Valid size units are `kb`, `mb`, `gb`, `tb`
+
+## FolderFilter
+
+| Field     | Description                                                 | Scheme                                               | Required |
+| --------- | ----------------------------------------------------------- | ---------------------------------------------------- | -------- |
+| `maxAge`  | MaxAge the latest object should be younger than defined age | [*Duration*](#duration)                              |          |
+| `maxSize` | MaxSize of the files inside the searchPath                  | [Size](#size)                                        |          |
+| `minAge`  | MinAge the latest object should be older than defined age   | [*Duration*](#duration)                              |          |
+| `minSize` | MinSize of the files inside the searchPath                  | [Size](#size)                                        |          |
+| `regex`   | Filter files based on regular expression                    | *[regex](https://github.com/google/re2/wiki/Syntax)* |          |
+
+e.g. to verify that database backups are being performed
+
+```yaml title="postgres-backup-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: folder-check
+spec:
+  interval: 30
+  folder:
+    - path: /data/backups
+      filter:
+        regex: "pg-backups-.*.zip"
+      maxAge: 1d # require a daily backup
+      minSize: 10mb # the backup should be at least 10mb
+```
+
+## FolderResult
+
+| Field                 | Scheme                                             |
+| --------------------- | -------------------------------------------------- |
+| `Oldest`                | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `Newest`                | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `MinSize`               | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `MaxSize`               | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `SupportsTotalSize` (Only true for SMB folders) | bool                                               |
+| `SupportsAvailableSize` (Only true for SMB folders) | bool                                               |
+| `TotalSize`             | int64                                              |
+| `AvailableSize`         | int64                                              |
+| `Files`                 | [[]os.FileInfo](https://pkg.go.dev/io/fs#FileInfo) |
 
 ### FolderFilter
 
@@ -48,48 +99,3 @@ spec:
 | `minSize` |             | [`Size`](#size)         |          |
 | `maxSize` |             | [`Size`](#size)         |          |
 | `regex`   |             | `string`                |          |
-
-### AWSConnection
-
-| Field           | Description                                                                                           | Scheme                                                                       | Required |
-| --------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | -------- |
-| `accessKey`     | Specify the access key                                                                                | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) |          |
-| `secretKey`     | Specify the secret key                                                                                | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) |          |
-| `region`        | Specify the region                                                                                    | `string`                                                                     |          |
-| `endpoint`      | Specify the endpoint                                                                                  | `string`                                                                     |          |
-| `skipTLSVerify` | Skip TLS verification when connecting to AWS                                                          | `bool`                                                                       |          |
-| `objectPath`    | Glob path to restrict matches to a subset                                                             | `string`                                                                     |          |
-| `usePathStyle`  | Use path style path: <http://s3.amazonaws.com/BUCKET/KEY> instead of <http://BUCKET.s3.amazonaws.com/KEY> | `bool`                                                                       |          |
-
-### GCPConnection
-
-| Field         | Description             | Scheme                                                                       | Required |
-| ------------- | ----------------------- | ---------------------------------------------------------------------------- | -------- |
-| `endpoint`    | Specify the endpoint    | `string`                                                                     |          |
-| `credentials` | Specify the credentials | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) |          |
-
-### SMBConnection
-
-| Field         | Description                                          | Scheme   | Required |
-| ------------- | ---------------------------------------------------- | -------- | -------- |
-| `port`        | Port on which smb server is running. Defaults to 445 | `int`    |          |
-| `auth`        | Authentication details for the SMB server            |          |          |
-| `domain`      | Domain                                               | `string` |          |
-| `workstation` | Workstation                                          | `string` |          |
-| `sharename`   | Sharename to mount from the samba server             | `string` |          |
-| `searchPath`  | Sub-path inside the mount location                   | `string` |          |
-
-### SFTPConnection
-
-| Field  | Description                                | Scheme   | Required |
-| ------ | ------------------------------------------ | -------- | -------- |
-| `port` | Port for the SSH server. Defaults to 22    | `int`    |          |
-| `host` | Hostname of the SFTP server                | `string` |          |
-| `auth` | Authentication details for the SFTP server |          |          |
-
-### Authentication
-
-| Field      | Description | Scheme                                                                       | Required |
-| ---------- | ----------- | ---------------------------------------------------------------------------- | -------- |
-| `username` | Username    | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) |          |
-| `password` | Password    | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) |          |

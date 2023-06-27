@@ -1,4 +1,4 @@
-Components are the building blocks of a Topology. The comopnent specification provides a way for you to define the properties and characteristics of each Component in the Topology.
+Components are the building blocks of a Topology. The component specification provides a way for you to define the properties and characteristics of each Component in the Topology.
 
 ### Component
 

@@ -30,7 +30,7 @@ spec:
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | **`addr`** | host:port address | string | Yes |
-| `auth` | username and password value, configMapKeyRef or SecretKeyRef for redis server | [*Authentication*](../concepts/authentication.md) |  |
+| `auth` | username and password value, configMapKeyRef or SecretKeyRef for Redis server | [*Authentication*](../concepts/authentication.md) |  |
 | **`db`** | Database to be selected after connecting to the server | *int* | Yes |
 | `description` | Description for the check | *string* |  |
 | `icon` | Icon for overwriting default icon on the dashboard | *string* |  |

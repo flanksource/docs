@@ -1,6 +1,10 @@
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/elasticsearch.svg' style='height: 32px'/> Elasticsearch
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/elasticsearch.svg' style='height: 32px'/> ElasticSearch
 
-This check will try to connect to a specified Elasticsearch database, run a query against it and verify the results.
+This check will try to connect to a specified ElasticSearch database, run a query against it and verify the results.
+
+!!! note "Opensearch"
+    To connect to Opensearch use `opensearch` field instead of `elasticsearch`
+
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
@@ -39,7 +43,7 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `auth` | username and password value, configMapKeyRef or SecretKeyRef for elasticsearch server | [*Authentication*](../concepts/authentication.md) |  |
+| `auth` | username and password value, configMapKeyRef or SecretKeyRef for ElasticSearch server | [*Authentication*](../concepts/authentication.md) |  |
 | `description` | Description for the check | *string* |  |
 | `display` | Template to display the result in  | [*Template*](../concepts/templating.md) |  |
 | `icon` | Icon for overwriting default icon on the dashboard | *string* |  |

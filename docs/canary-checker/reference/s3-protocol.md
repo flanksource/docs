@@ -1,4 +1,10 @@
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/aws-s3.svg' style='height: 32px'/> S3
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/aws-s3.svg' style='height: 32px'/> S3 Protocol
+
+
+!!! note
+
+    This check if S3 compatible endpoints are functioning correctly, to check the contents of
+    a S3 bucket use (S3)(../s3-bucket)
 
 The S3 check:
 
@@ -38,13 +44,14 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **`accessKey`** | AWS access Key to access Bucket | *string* | Yes |
+| **`accessKey`** | AWS access key | *string* | Yes |
+| **`secretKey`** | AWS secret keu | *string* | Yes |
 | **`bucket`** | Array of [Bucket](#bucket) objects to be checked | [*Bucket*](#bucket) | Yes |
 | `description` | Description for the check | *string* |  |
 | `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
 | `name` | Name of the check | *string* |  |
 | **`objectPath`** | Path of object in bucket to | *string* | Yes |
-| **`secretKey`** | AWS secret Key to access Bucket | *string* | Yes |
+|                  |                                                    |                     |          |
 | `skipTLSVerify` | Skip TLS verify when connecting to s3 | *bool* |  |
 
 ---

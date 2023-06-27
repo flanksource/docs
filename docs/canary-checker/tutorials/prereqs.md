@@ -1,10 +1,10 @@
 # Optional Prerequisites
 
-Canary Checker can integrate with Prometheous and ships with a few defined promethues service monitors. While not strictly required this guide explains how to install the optional dependencies. 
+Canary Checker can integrate with Prometheus and ships with a few defined Prometheus service monitors. While not strictly required this guide explains how to install the optional dependencies. 
 
 ## A Kubernetes Cluster
 
-This is pretty obvious, but first [install](https://github.com/flanksource/karina) a kubernetes cluster and ensure you are able to run basic `kubectl` commands to create pods, services, and that cluster DNS is functioning properly. 
+This is pretty obvious, but first [install](https://github.com/flanksource/karina) a Kubernetes cluster and ensure you are able to run basic `kubectl` commands to create pods, services, and that cluster DNS is functioning properly. 
 
 ## Metrics Server
 

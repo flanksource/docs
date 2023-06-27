@@ -38,7 +38,7 @@ spec:
 | ----- | ----------- | ------ | -------- |
 | **`accessKey`** | AccessKey access key id for connection with aws s3, minio, wasabi, alibaba oss | [***kommons.EnvVar***](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) |  |
 | `caCert` | CaCert path to the root cert. In case of self-signed certificates | string |  |
-| `checkIntegrity` | CheckIntegrity when enabled will check the Integrity and consistency of the restic reposiotry | bool |  |
+| `checkIntegrity` | CheckIntegrity when enabled will check the Integrity and consistency of the restic repository | bool |  |
 | `description`| Description for the check | string |  |
 | `icon` | Icon for overwriting default icon on the dashboard | string |  |
 | **`maxAge`** | MaxAge for backup freshness | string | Yes |

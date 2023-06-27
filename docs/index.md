@@ -20,7 +20,7 @@ Flanksource Mission Control is an internal developer platform that helps teams t
 
 Config DB is an open source tool that allows developers to easily configure, scrape and manage data within their application. It provides a user-friendly interface for setting up and managing database connections, as well as configuring tables and fields within the database. This tool can be particularly useful for developers who need to quickly set up a database for their application, without having to manually write complex SQL queries or code. It also allows for easy updates and changes to the database as the application evolves, making it a useful tool for maintaining a healthy and efficient database.
 
-![Configs](/Users/moshe/go/src/github.com/flanksource/docs/docs/images/config-db.png)
+
 
 ## Health Checks
 
@@ -28,6 +28,4 @@ Canary checker is an open source tool that allows users to monitor the status of
 
 One potential use of Canary Checker is, if you want to get the cert expiry dates for your URLs and get warn when we are X number of days from the expiry date.
 
-![Screen_Shot_2022-12-19_at_8.17.39_AM_agdslp.png](/Users/moshe/go/src/github.com/flanksource/docs/docs/images/health-checks.png)
-
-With Mission Control up and running, one can have a better understanding of their infrastructure, which helps in planning of disaster recovery and reducing downtime to the bearest minimum.
+With Mission Control up and running, one can have a better understanding of their infrastructure, which helps in planning of disaster recovery and reducing downtime to the   minimum.

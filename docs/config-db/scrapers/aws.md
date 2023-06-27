@@ -85,5 +85,5 @@ transform:
 - RDS
 - Route53
 - Subnet
-- Trusted Advisir
+- Trusted Advisor
 - VPC

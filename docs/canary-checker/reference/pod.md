@@ -76,7 +76,7 @@ spec:
 | `httpRetryInterval` | Interval in ms to retry HTTP connections to the created pod | *int64* |  |
 | `deadline` | Overall time before which an HTTP connection to the pod must be established | *int64* |  |
 | `port` | Port on which the created pod will serve traffic | *int64* |  |
-| `path` | Path on whcih the created pod will respond to requests | *string* |  |
+| `path` | Path on which the created pod will respond to requests | *string* |  |
 | **`ingressName`** | Name to use for the ingress object that will expose the created pod | *string* | Yes |
 | **`ingressHost`** | URL to be used by the ingress to expose the created pod | *string* | Yes |
 | `expectedContent` | Expected content of an HTTP response from the created pod | *string* |  |

@@ -1,7 +1,7 @@
 
 ## Transformation
 
-The `transform` can be used to convert one canary check into multiple checks programatically.
+The `transform` can be used to convert one canary check into multiple checks programmatically.
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1

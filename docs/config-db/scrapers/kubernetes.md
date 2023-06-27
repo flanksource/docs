@@ -54,11 +54,11 @@ kubernetes:
 | `maxInflight`     | Set value for maximum inflight requests                                                                                                                                 | `int64`                                                                      |          |
 | `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                                                                                               | `[]string`                                                                   |          |
 | **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                                                                                                | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes      |
-| `event`           | Specify configuration to handle kubernetes events. See [**KubernetesEvent**](#kubernetesevent)                                                                          | [`KubernetesEvent`](#kubernetesevent)                                        | yes      |
+| `event`           | Specify configuration to handle Kubernetes events. See [**KubernetesEvent**](#kubernetesevent)                                                                          | [`KubernetesEvent`](#kubernetesevent)                                        | yes      |
 
 ### KubernetesEvent
 
-`Config DB` maps Kuberenetes Event objects to config changes unlike other objects that are mapped to config items. This configuration allows you to exclude or include the Kubernetes Event objects based on the reason.
+`Config DB` maps Kubernetes Event objects to config changes unlike other objects that are mapped to config items. This configuration allows you to exclude or include the Kubernetes Event objects based on the reason.
 
 In addition, you can also specify keywords used to identify the severity of the Kubernetes Event based on the reason.
 

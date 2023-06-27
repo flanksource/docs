@@ -55,7 +55,7 @@ spec:
 | **`auth.password`** | LDAP bind password | [*Authentication*](../concepts/authentication.md) | Yes |
 | **`bindDN`** | BindDN to use in query | *string* | Yes |
 | description | Description for the check | *string* |  |
-| **`host`** | URL of LDAP server to be qeuried | *string* | Yes |
+| **`host`** | URL of LDAP server to be queried | *string* | Yes |
 | `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
 | `skipTLSVerify` | Skip check of LDAP server TLS certificates | *bool* |  |
 | `userSearch` | UserSearch to use in query | *string* |  |

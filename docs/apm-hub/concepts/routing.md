@@ -1,3 +1,5 @@
+# Routing
+
 `apm-hub` can possibly serve hundreds of backends, but you might not want all of them to serve a request. Routing helps you to control which backends should serve a given request based on the parameters shown below.
 
 ![Routing Diagram](../images/routing.svg)
@@ -37,7 +39,7 @@ backends:
             env: prod
 ```
 
-For the configuration above, the kubernetes backend will be used if the search request contained those labels.
+For the configuration above, the Kubernetes backend will be used if the search request contained those labels.
 
 ### Wildcard labels
 
@@ -89,8 +91,6 @@ As you can imagine, a single search query can possibly be served by numerous bac
 ![Non additive route](../images/non-additive-route.svg)
 
 ````yaml
-
-```yaml
 backends:
   - kubernetes:
       routes:

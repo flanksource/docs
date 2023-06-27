@@ -1,18 +1,22 @@
-The Kubernetes backend fetches logs from Kubernetes pods.
+The Kubernetes backend fetches logs from Kubernetes pods using the Kubernetes Log API.
 
-## Example configuration
 
 ```yaml
-backends:
-  - kubernetes:
-      routes:
-        type: nginx
-        idPrefix: pod-1-
-      labels:
-        name: acmehost
-        type: Nginx
-      namespace: default
-      kubeconfig: # empty kubeconfig means the current kubeconfig will be used for connection.
+apiVersion: apm-hub.flanksource.com/v1
+kind: LoggingBackend
+metadata:
+  name: k8s-backend
+spec:
+  backends:
+    - kubernetes:
+        routes:
+          type: nginx
+          idPrefix: pod-1-
+        labels:
+          name: acmehost
+          type: Nginx
+        namespace: default
+        kubeconfig: # empty kubeconfig means the current kubeconfig will be used for connection.
 ```
 
 ## KubernetesConfig

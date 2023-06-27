@@ -61,7 +61,7 @@ spec:
 | `namespaceAnnotations` | Metadata annotations to apply to created namespace | *map[string]string* |  |
 | `namespaceLabels` | Metadata labels to apply to created namespace | *map[string]string* |  |
 | `namespaceNamePrefix` | Prefix string to identity namespace | *string* |  |
-| `path` | Path on whcih the created pod will respond to requests | *string* |  |
+| `path` | Path on which the created pod will respond to requests | *string* |  |
 | **`podSpec`** | Spec of pod to be created in check namespace | *string* | Yes |
 |`port` | Port on which the created pod will serve traffic | *int64* |  |
 | `priorityClass` | Pod priority class | *string* |  |

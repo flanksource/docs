@@ -1,107 +1,95 @@
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/s3Bucket.svg' style='height: 32px'/> S3Bucket
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/s3Bucket.svg' style='height: 32px'/> S3
 
-The S3Bucket Check:
+Checks the contents of a S3 bucket for size, age and count.
 
-* Searches objects matching the provided object path pattern.
-* Checks that the latest object is no older than provided `MaxAge` value in seconds
-* Checks that the latest object size is not smaller than provided `MinSize` value in bytes.
+See [Folder](../folder) for a full description.
 
-```yaml
+!!! note
+
+    This check looks at the contents of an S3 bucket, to verify that an S3 compatible
+    object storage endpoint is functioning correctly use [S3 Protocol](../s3-protocol)
+
+```yaml title="folder-check.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
-  name: s3-bucket-check
+  name: folder-check
 spec:
   interval: 30
-  s3Bucket:
-    # Check for any backup not older than 7 days and min size 25 bytes
-    - name: s3-backup
-      bucket: tests-e2e-1
-      accessKey:
-        valueFrom:
-          secretKeyRef:
-            name: aws-credentials
-            key: AWS_ACCESS_KEY_ID
-      secretKey:
-        valueFrom:
-          secretKeyRef:
-            name: aws-credentials
-            key: AWS_SECRET_ACCESS_KEY
-      region: "minio"
-      endpoint: "http://minio.minio:9000"
-      filter:
-        regex: "(.*)backup.zip$"
-      maxAge: 7d
-      minSize: 25b
-      usePathStyle: true
-      skipTLSVerify: true
-    # Check for any mysql backup not older than 7 days and min size 25 bytes
-    - name: s3-sql-backup
-      bucket: tests-e2e-1
-      accessKey:
-        valueFrom:
-          secretKeyRef:
-            name: aws-credentials
-            key: AWS_ACCESS_KEY_ID
-      secretKey:
-        valueFrom:
-          secretKeyRef:
-            name: aws-credentials
-            key: AWS_SECRET_ACCESS_KEY
-      region: "minio"
-      endpoint: "http://minio.minio:9000"
-      filter:
-        regex: "mysql\\/backups\\/(.*)\\/mysql.zip$"
-      maxAge: 7d
-      minSize: 25b
-      usePathStyle: true
-      skipTLSVerify: true
-    # Check for any pg backup not older than 7 days and min size 50 bytes
-    - name: s3-pg-backup
-      bucket: tests-e2e-1
-      accessKey:
-        valueFrom:
-          secretKeyRef:
-            name: aws-credentials
-            key: AWS_ACCESS_KEY_ID
-      secretKey:
-        valueFrom:
-          secretKeyRef:
-            name: aws-credentials
-            key: AWS_SECRET_ACCESS_KEY
-      region: "minio"
-      endpoint: "http://minio.minio:9000"
-      filter:
-        regex: "pg\\/backups\\/(.*)\\/backup.zip$"
-      maxAge: 7d
-      minSize: 25b
-      usePathStyle: true
-      skipTLSVerify: true
-
+  folder:
+    - path: s3://some-bucket/folder
+      name: folder-check-min
+      description: Checks if there are at least 10 files in the folder
+      minCount: 10
 ```
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `name` | Name of the check | *string* |  |
+| Field      | Description                                                | Scheme                | Required |
+| ---------- | ---------------------------------------------------------- | --------------------- | -------- |
+| **`name`** | Name of the check                                          | *string*              | Yes      |
+| **`path`** | A path to a S3 bucket and folder e.g. `s3://bucket/folder` | string                | Yes      |
+| `awsConnection` | AWS Access credentials | [AWSConnection](#aws-connection) |  |
+| `*`          | All other fields available in the folder check             | [*Folder*](../folder) |          |
 
-| **`accessKey`** | Access key value or valueFrom configMapKeyRef or SecretKeyRef to access your s3 | [***kommons.EnvVar***](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **`secretKey`** | secret key value or valueFrom configMapKeyRef or SecretKeyRef to access your s3/minio bucket | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+### Connecting to AWS
 
-| **`bucket`** | Array of [Bucket](#bucket) objects to be checked | [Bucket](#bucket) | Yes |
-| `description` | Description for the check | *string* |  |
-| `display` | Template to display the result in | [Template](../concepts/templating.md) |  |
-| `endpoint` | S3/Minio HTTP Endpoint to establish connection | *string* |  |
-| `region` | Region where S3 bucket is located | *string* |  |
-| `filter` | Used to filter the objects  | [*FolderFilter*](#folderfilter) |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
-| `minAge` | The latest object should be older than defined age | *Duration* |  |
-| `maxAge` | The latest object should be younger than defined age | *Duration* |  |
-| `minCount` | The minimum minimum number of files inside the searchPath | *int* |  |
-| `maxCount` | The maximum number of files inside the searchPath | *int* |  |
-| `minSize` | The minimum size of the files inside the searchPath | *Size* |  |
-| `maxSize` | The max size of the files inside the searchPath | *Size* |  |
-| `regex` | Filter files based on regular expression  | *string* |  |
-| `objectPath` | glob path to restrict matches to a subset | *string* |  |
-| `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* |  |
-| `test`| Template to test the result against | [*Template*](../concepts/templating.md) |  |
-| `usePathStyle` | Use path style path: <http://s3.amazonaws.com/BUCKET/KEY> instead of <http://BUCKET.s3.amazonaws.com/KEY> | *bool* |  |
+There are 3 options when connecting to AWS:
+
+1. An AWS [instance profile](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html) or [pod identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-configuration.html) (the default if no `connection` or `accessKey` is specified)
+2. `connection`, this is the recommended method, connections are reusable and secure
+
+    ```yaml title="aws-connection.yaml"
+    apiVersion: canaries.flanksource.com/v1
+    kind: Canary
+    metadata:
+      name:  aws-config-rule
+    spec:
+      interval: 30
+      folder:
+        - path: s3://some-bucket/folder
+         awsConnection:
+            connection: connection://aws/s3
+          name: folder-check-min
+          minCount: 10
+          description: Checks if there are at least 10 files in the folder
+
+    ```
+
+3. `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret.
+
+    ```yaml title="aws.yaml"
+    apiVersion: canaries.flanksource.com/v1
+    kind: Canary
+    metadata:
+      name: s3-bucket
+    spec:
+      interval: 30
+      folder:
+        - path: s3://some-bucket/folder
+          name: folder-check-min
+          minCount: 10
+          description: Checks if there are at least 10 files in the folder
+          awsConnection:
+            accessKey:
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credentials
+                  key: AWS_ACCESS_KEY_ID
+            secretKey:
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credentials
+                  key: AWS_SECRET_ACCESS_KEY
+         region: us-east-1AWS connection fields
+ ```
+
+## AWS Connection
+
+| Field           | Description                                                  | Scheme                                            |
+| --------------- | ------------------------------------------------------------ | ------------------------------------------------- |
+| `connection`    | Path of existing connection e.g. `connection://aws/instance`/ Mutually exclusive with `accessKey` | [Connection](../../concepts/connections)          |
+| `accessKey`     | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
+| `secretKey`     | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
+| `endpoint`      | Custom AWS Cloudwatch endpoint                               | *string*                                          |
+| `region`        | AWS region                                                   | *string*                                          |
+| `skipTLSVerify` | Skip TLS verify when connecting to aws                       | *bool*                                            |
+| `usePathStyle`  | Use path style URL's `http://s3.amazonaws.com/BUCKET/KEY` instead of `http://BUCKET.s3.amazonaws.com/KEY`, needed for S3 compatible object stores without wildcard DNS support | bool                                              |

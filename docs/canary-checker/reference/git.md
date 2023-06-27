@@ -1,6 +1,6 @@
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/github.svg' style='height: 32px'/> Github Check
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/git.svg' style='height: 32px'/> Git
 
-This check will execute a SQL style query against a github repo using [github.com/mergestat/mergestat-lite](https://github.com/mergestat/mergestat-lite).
+Execute as SQL style query against a github repo using [github.com/mergestat/mergestat-lite](https://github.com/mergestat/mergestat-lite).
 
 ```
 SELECT count(*) from commits

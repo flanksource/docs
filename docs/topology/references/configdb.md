@@ -4,26 +4,30 @@ ConfigDB check connects to the specified database host, run a specified query fo
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
-kind: Canary
+kind: SystemTemplate
 metadata:
-  name: configdb-check
+  name: cluster
+labels:
+  canary: "kubernetes-cluster"
 spec:
-  interval: 30
-  configDB:
-    - name: ConfigDB Check
-      host: <insert-database-host>
-      authentication:
-        username:
-          valueFrom:
-          secretKeyRef:
-            name: configdb-credentials
-            key: USERNAME
-        password:
-          valueFrom:
-          secretKeyRef:
-            name: configdb-credentials
-            key: PASSWORD
-      query: <insert-query>
+  type: KubernetesCluster
+  icon: kubernetes
+  schedule: "@every 10m"
+  id:
+    javascript: properties.id
+  configs:
+    - name: flanksource-canary-cluster
+      type: EKS
+  components:
+    - name: nodes
+      icon: server
+      owner: infra
+      id:
+        javascript: properties.zone + "/" + self.name
+      type: KubernetesNode
+      lookup:
+        configDB:
+          query: <insert-query>
 ```
 
 | Field | Description | Scheme | Required |

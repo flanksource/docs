@@ -1,8 +1,8 @@
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/database2.svg' style='height: 32px'/> DatabaseBackup
+# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/database2.svg' style='height: 32px'/> GCP CloudSQL Backups
 
-This check performs regular backups for you CloudSQL instance at specified intervals.
+Checks if a GCP CloudSQL instance has been successfully backed up recently.
 
-```yaml
+```yaml title="gcp-database.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
@@ -18,31 +18,72 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
+| **`name`** | Name of the check | *string* | Yes |
+| **`gcp`** | Connect to GCP project and instance | [*GCPDatabase*](#gcpdatabase) | Yes |
+| **`maxAge`** | Max age for backup allowed, eg. 5h30m | *Duration* |  |
 | `description` | Description for the check | *string* |  |
 | `display` | Template to display server response in text (overrides default bar format for UI) | [*Template*](../concepts/templating.md) |  |
-| `gcp` | Connect to GCP project and instance | [*GCPDatabase*](#gcpdatabase) |  |
 | `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
 | `labels` | Labels for the check | *Labels* |  |
-| `maxAge` | Max age for backup allowed, eg. 5h30m | *Duration* |  |
-| **`name`** | Name of the check | *string* | Yes |
 | `test` | Template to test the result against | [*Template*](../concepts/templating.md) |  |
 | `transform` | Template to transform results to | [*Template*](../concepts/templating.md) |  |
 
----
+## Duration
 
-# Scheme Reference
+Durations are strings with an optional fraction and unit e.g.  `300ms`, `1.5h` or `2h45m`. Valid time units are `ms`, `s`, `m`, `h`.
 
 ## GCPDatabase
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `project` | Specify GCP project | *string* | Yes |
-| `instance` | Specify GCP instance | *string* | Yes |
-| `gcpConnection` | Set up gcpConnection with GCP `endpoint` and `credentials` | [GCPConnection](#gcpconnection) |
+| `project` | GCP project name | *string* | Yes |
+| `instance` | Google CloudSQL instance name | *string* | Yes |
 
-## GCPConnection
+### Connecting to GCP
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`credentials`** | Set GCP credentials | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **`endpoint`** | Specify GCS HTTP endpoint | *string* | Yes |
+There are 3 options when connecting to GCP:
+
+1. GKE [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) (the default if no `connection` or `credentials` is specified)
+2. `connection`, this is the recommended method, connections are reusable and secure
+
+```yaml title="aws-connection.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: database-backup-check
+spec:
+  interval: 60
+  databaseBackup:
+    - maxAge: 6h
+      gcp:
+        project: google-project-name
+        instance: cloudsql-instance-name
+      	connection: connection://gcp/internal
+```
+
+3.  `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret.
+
+```yaml title="aws.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: database-backup-check
+spec:
+  interval: 60
+  databaseBackup:
+    - name: gcp db check
+      maxAge: 6h
+      gcp:
+        project: google-project-name
+        credentials:
+          valueFrom:
+            secretKeyRef:
+              name: gcp-credentials
+              key: AUTH_ACCESS_TOKEN
+
+```
+
+| Field         | Description                                                  | Scheme                                         | Required |
+| ------------- | ------------------------------------------------------------ | ---------------------------------------------- | -------- |
+| `connection`  | Path of an  existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` | [Connection](../concepts/connections)          |          |
+| `credentials` | GCP Access Token File. Mutually exclusive with `connection`  | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |

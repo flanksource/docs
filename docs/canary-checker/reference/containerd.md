@@ -22,15 +22,15 @@ spec:
 
 ```
 
-| Field            | Description                                                               | Scheme                              | Required |
-| ---------------- | ------------------------------------------------------------------------- | ----------------------------------- | -------- |
-| `auth`           | Username and password value, configMapKeyRef or SecretKeyRef for registry | [_Authentication_](../concepts/authentication.md#reference) |          |
-| `description`    | Description for the check                                                 | string                              |          |
-| `expectedDigest` | Expected digest of the pulled image                                       | _string_                            | Yes      |
-| `expectedSize`   | Expected size of the pulled image                                         | _int64_                             | Yes      |
-| `icon`           | Icon for overwriting default icon on the dashboard                        | _string_                            |          |
-| **`image`**      | Full path to image, including registry                                    | _string_                            | Yes      |
-| `name`           | Name of the check                                                         | string                              |          |
+| Field            | Description                                                  | Scheme                                            | Required |
+| ---------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
+| `auth`           | Username and password value, configMapKeyRef or SecretKeyRef for registry | [_Authentication_](../concepts/authentication.md) |          |
+| `description`    | Description for the check                                    | string                                            |          |
+| `expectedDigest` | Expected digest of the pulled image                          | _string_                                          | Yes      |
+| `expectedSize`   | Expected size of the pulled image                            | _int64_                                           | Yes      |
+| `icon`           | Icon for overwriting default icon on the dashboard           | _string_                                          |          |
+| **`image`**      | Full path to image, including registry                       | _string_                                          | Yes      |
+| `name`           | Name of the check                                            | string                                            |          |
 
 ---
 

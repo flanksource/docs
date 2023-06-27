@@ -1,75 +1,78 @@
 # <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/gcsBucket.svg' style='height: 32px'/> GCSBucket
 
-This check:
+Checks the contents of a GCP bucket for size, age and count.
 
-* Searches objects matching the provided object path pattern
-* Checks that latest object is no older than provided maxAge value in seconds
-* Checks that latest object size is not smaller than provided minSize value in bytes
+See [Folder](../folder) for a full description.
 
-**Note:** For working with the `folder` check, the bucket name needs to be prefixed with `gcs://`
-
-```yaml
+```yaml title="gcs-folder-check.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
-  name: gcs-bucket check
+  name: gcs-bucket-check
 spec:
   interval: 30
   spec:
     folder:
-      - description: gcs auth test
+      - name: gcs auth test
         path: gcs://somegcsbucket
-        gcpConnection:
-          endpoint: <gcs-bucket-endpoint>
-          credentials:
-            valueFrom:
-              configMapKeyRef:
-                key: canary-checker-df017acc453c.json
-                name: sa
-        minAge: 1m
-        maxAge: 5h
-        minSize: 2M
-        maxCount: 2
         minCount: 5
 ```
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **`bucket`** | Specify path to GCS bucket with `gcs://` prefix| string | Yes |
-| **`credentials`** | Set GCP credentials | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| `description` | Description for the check | *string* |  |
-| `display` | Template to display the result in | [*Template*](../concepts/templating.md) |  |
-| **`endpoint`** | GCS Bucket URL endpoint | *string* | Yes |
-| filter | Filter objects based on `maxAge`, `maxSize`, `regex` and more | [*FolderFilter*](#folderfilter) |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
-| `maxAge` | MaxAge the latest object should be younger than defined age | *duration* |  |
-| `maxCount` | MinCount the minimum number of files inside the searchPath | *int* |  |
-| `maxSize` | MaxSize of the files inside the searchPath | *Size* |  |
-| `minAge` | MinAge the latest object should be older than defined age | *Duration* |  |
-| `minCount` | MinCount the minimum number of files inside the searchPath | *int* |  |
-| `minSize` | MinSize of the files inside the searchPath | *Size* |  |
-| `name` | Name of the check | *string* |  |
-| `path` | Path to the object, needs to be prefixed with the protocol. See example above | *string* | Yes
-| `gcpConnection` | Creates connection to GCS bucket via credentials set | [*GCPConnection*](#gcpconnection) | Yes
-| `test` | Template to test the result against | [*Template*](../concepts/templating.md) |  |
+| **`name`** | Name of the check                                            | *string*              | Yes      |
+| **`path`** | A path to a GCS bucket and folder e.g. `gcs://bucket/folder` | string                | Yes      |
+| `gcpConnection` | Connection details for GCP | [GCPConnection](#gcp-connection) |  |
+| `*`        | All other fields available in the folder check               | [*Folder*](../folder) |          |
 
 ---
 
-# Scheme Reference
+### Connecting to GCP
 
-## FolderFilter
+There are 3 options when connecting to GCP:
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `maxAge` | MaxAge the latest object should be younger than defined age | *Duration* |  |
-| `maxSize` | MaxSize of the files inside the searchPath | Size |  |
-| `minAge` | MinAge the latest object should be older than defined age | *Duration* |  |
-| `minSize` | MinSize of the files inside the searchPath | *Size* |  |
-| `regex` | Filter files based on regular expression  | *String* |  |
+1. GKE [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) (the default if no `connection` or `credentials` is specified)
+2. `connection`, this is the recommended method, connections are reusable and secure
 
-## GCPConnection
+```yaml title="aws-connection.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: database-backup-check
+spec:
+  interval: 60
+  folder:
+      - name: gcs auth test
+        path: gcs://somegcsbucket
+        gcpConnection:
+      		connection: connection://gcp/internal
+```
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`credentials`** | Set GCP credentials | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **`endpoint`** | Specify GCS HTTP endpoint | *string* | Yes |
+3.  `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret.
+
+```yaml title="aws.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: database-backup-check
+spec:
+  interval: 60
+  folder:
+      - name: gcs auth test
+        path: gcs://somegcsbucket
+        gcpConnection:
+          credentials:
+            valueFrom:
+              secretKeyRef:
+                name: gcp-credentials
+                key: AUTH_ACCESS_TOKEN
+
+```
+
+## GCP Connection
+
+| Field         | Description                                                  | Scheme                                            | Required |
+| ------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
+| `connection`  | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` | [Connection](../../concepts/connections)          |          |
+| `credentials` | GCP Access Token File. Mutually exclusive with `connection`  | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+

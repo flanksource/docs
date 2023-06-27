@@ -1,45 +1,50 @@
-Elastic search backend fetches logs from elastic search instances. The backend requires credentials to access the elastic search instance. The credentials can be provided as a Kuberenetes secret or right in the config file itself. Read more about authentication [here](../concepts/authentication.md).
+Elastic search backend fetches logs from elastic search instances. The backend requires credentials to access the elastic search instance. The credentials can be provided as a Kubernetes secret or right in the config file itself. Read more about authentication [here](../concepts/authentication.md).
 
 You can craft the elastic search query using [Go Templates](../concepts/templating.md). The view data for the template is the [search param](../concepts/api.md#search-params).
 
 ## Example configuration
 
 ```yaml
-backends:
-  - elasticsearch:
-      routes:
-        - type: 'logs'
-          idPrefix: 'es-'
-          labels:
-            foo: bar,baz
-            name: flanksource-*,!flanksource-demo
-      address: 'https://logs.example.com'
-      fields:
-        message: 'log'
-        timestamp: '@timestamp'
-        exclusions:
-          - 'transaction'
-      username:
-        value: 'elastic'
-      password:
-        value: 'my-secure-password'
-      index: 'backend-logs'
-      query: |
-        {
-          {{if .Page}}"search_after": {{ .Page }},{{end}}
-          "sort": [{ "@timestamp": { "order": "desc", "unmapped_type": "boolean" } }],
-          "query": {
-            "bool": {
-              "filter": [
-                {"match_all": {}}
-              ],
-              "must_not":[
-                {"match_phrase": { "agent.name": "nginx-ingress-controller-f6zx7" }},
-                {"match_phrase": { "agent.name": "nginx-ingress-controller-r46vg" }}
-              ]
+apiVersion: apm-hub.flanksource.com/v1
+kind: LoggingBackend
+metadata:
+  name: k8s-backend
+spec:
+  backends:
+    - elasticsearch:
+        routes:
+          - type: 'logs'
+            idPrefix: 'es-'
+            labels:
+              foo: bar,baz
+              name: flanksource-*,!flanksource-demo
+        address: 'https://logs.example.com'
+        fields:
+          message: 'log'
+          timestamp: '@timestamp'
+          exclusions:
+            - 'transaction'
+        username:
+          value: 'elastic'
+        password:
+          value: 'my-secure-password'
+        index: 'backend-logs'
+        query: |
+          {
+            {{if .Page}}"search_after": {{ .Page }},{{end}}
+            "sort": [{ "@timestamp": { "order": "desc", "unmapped_type": "boolean" } }],
+            "query": {
+              "bool": {
+                "filter": [
+                  {"match_all": {}}
+                ],
+                "must_not":[
+                  {"match_phrase": { "agent.name": "nginx-ingress-controller-f6zx7" }},
+                  {"match_phrase": { "agent.name": "nginx-ingress-controller-r46vg" }}
+                ]
+              }
             }
           }
-        }
 ```
 
 ## ElasticSearchConfig

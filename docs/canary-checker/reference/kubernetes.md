@@ -35,7 +35,7 @@ spec:
 | **`kind`** | Specifies the kind of Kubernetes object for interaction | *string* | Yes |
 | `labels` | Labels for the check | *string* |  |
 | **`name`** | Name of the check | *string* | Yes |
-| `namespace` | Specifies namespce for Kubernetes object | [*ResourceSelector*](#resourceselector) |  |
+| `namespace` | Specifies namespace for Kubernetes object | [*ResourceSelector*](#resourceselector) |  |
 | `ready` | Boolean value of true or false to query and display resources based on availability | *bool* |  |
 | `resource` | Queries resources related to specified Kubernetes object | [*ResourceSelector*](#resourceselector) |  |
 | `test` | Template to test the result against | [*Template*](../concepts/templating.md) |  |

@@ -2,7 +2,7 @@ Components can be associated with a health check, when the health checks associa
 
 Health checks can be associated in 2 ways:
 
-1. Selecting an exising health check using `checks.selector`
+1. Selecting an existing health check using `checks.selector`
 2. Defining the health check inline using `checks.inline`
 
 ## Check

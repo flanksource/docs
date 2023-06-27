@@ -4,10 +4,6 @@ Mission Control uses the Kubernetes ValuesFrom pattern to retrieve sensitive val
 
 Whenever a field uses the `EnvVar` object type you have the option of specifying the value in 3 ways:
 
-
-
-## EnvVar
-
 1. Statically in the `value` field
 1. Via a Kubernetes Config Map via the `configMapKeyRef` field
 1. Via a Kubernetes Secret via the `secretKeyRef` field

@@ -1,6 +1,6 @@
 # <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/postgres.svg' style='height: 32px'/> Postgres
 
-This check will try to connect to a specified Postgresql database, run a query against it and verify the results.
+This check will try to connect to a specified Postgres database, run a query against it and verify the results.
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1

@@ -15,7 +15,7 @@ In this guide we'll be working with [kind](https://kind.sigs.k8s.io/).
 
 ### Install Metrics Server and Prometheus
 
-For installing and configuring metrics server and prometheus please see the [prereqs](prereqs.md).
+For installing and configuring metrics server and Prometheus please see the [prereqs](prereqs.md).
 
 ## Install Node
 
@@ -58,6 +58,7 @@ EOF
 You can test the canary status by running: `kubectl get canaries.canaries.flanksource.com`
 
 Sample output:
+
 ```console
 kubectl get canaries.canaries.flanksource.com
 NAME        INTERVAL   STATUS   MESSAGE   UPTIME 1H    LATENCY 1H   LAST TRANSITIONED   LAST CHECK

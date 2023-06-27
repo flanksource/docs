@@ -20,7 +20,7 @@
 | `docker`         | List of Docker pull checks to run.                                                            | [`[]DockerPullCheck`](./docker-pull.md)             |          |
 | `dockerPush`     | List of Docker push checks to run.                                                            | [`[]DockerPushCheck`](./docker-push.md)             |          |
 | `ec2`            | List of EC2 checks to run.                                                                    | [`[]EC2Check`](./ec2.md)                            |          |
-| `elasticsearch`  | List of Elasticsearch checks to run.                                                          | [`[]ElasticsearchCheck`](./elasticsearch.md)        |          |
+| `elasticsearch`  | List of ElasticSearch checks to run.                                                          | [`[]ElasticsearchCheck`](./elasticsearch.md)        |          |
 | `exec`           | List of exec checks to run.                                                                   | [`[]ExecCheck`](./exec.md)                          |          |
 | `folder`         | List of folder checks to run.                                                                 | [`[]FolderCheck`](./folder.md)                      |          |
 | `github`         | List of GitHub checks to run.                                                                 | [`[]GitHubCheck`](./github.md)                      |          |

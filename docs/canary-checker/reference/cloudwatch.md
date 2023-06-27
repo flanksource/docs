@@ -1,8 +1,8 @@
 # <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/cloudwatch.svg' style='height: 32px'/> CloudWatch
 
-This checks Cloudwatch for all the Active alarms and responses with the corresponding reasons for each.
+Cloudwatch checks  for all active alarms
 
-```yaml
+```yaml title="cloudwatch-alarms.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
@@ -27,21 +27,63 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **`accessKey`** | Access key value or valueFrom configMapKeyRef or SecretKeyRef to access your cloudwatch | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| `description` | Description for the check | *string* |  |
-| `display` | Template to display the result in | [*Template*](../concepts/templating.md) |  |
-| `endpoint` | Cloudwatch HTTP Endpoint to establish connection | *string* |  |
-| `filter` | Used to filter the objects | [`CloudWatchFilter`](#cloudwatchfilter) |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
 | `name` | Name of the check | *string* |  |
-| `region` | Region for cloudwatch | *string* |  |
-| **`secretKey`** | Secret key value or valueFrom configMapKeyRef or SecretKeyRef to access cloudwatch | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* |  |
+| `filter` | Used to filter the objects | [`CloudWatchFilter`](#cloudwatchfilter) |  |
+| `description` | Description for the check | *string* |  |
+| `icon` | Icon for overwriting default icon on the dashboard | *string* | |
+| `display` | Template to display the result in | [*Template*](../concepts/templating.md) |  |
 | `test` | Template to test the result against | [*Template*](../concepts/templating.md) |  |
 
----
+### Connecting to AWS
 
-# Scheme Reference
+There are 3 options when connecting to AWS:
+
+1. An AWS [instance profile](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html) or [pod identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-configuration.html) (the default if no `connection` or `accessKey` is specified)
+2. `connection`, this is the recommended method, connections are reusable and secure
+
+    ```yaml title="aws-connection.yaml"
+    apiVersion: canaries.flanksource.com/v1
+    kind: Canary
+    metadata:
+      name: cloudwatch-check
+    spec:
+      interval: 30
+      cloudwatch:
+        - connection: connection://aws/internal
+          region: us-east-1 # optional if specified in the connection
+    ```
+
+3. `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret.
+
+    ```yaml title="aws.yaml"
+    apiVersion: canaries.flanksource.com/v1
+    kind: Canary
+    metadata:
+      name: cloudwatch-check
+    spec:
+      interval: 30
+      cloudwatch:
+        - accessKey:
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: AWS_ACCESS_KEY_ID
+          secretKey:
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: AWS_SECRET_ACCESS_KEY
+          region: us-east-1
+    ```
+
+| Field           | Description                                                  | Scheme                                         | Required |
+| --------------- | ------------------------------------------------------------ | ---------------------------------------------- | -------- |
+| `connection`    | Path of existing connection e.g. `connection://aws/instance`/ | [Connection](../concepts/connections)          |          |
+| `accessKey`     |                                                              | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+| `secretKey`     |                                                              | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+| `endpoint`      | Custom AWS Cloudwatch endpoint                               | *string*                                       |          |
+| `region`        | AWS region                                                   | *string*                                       |          |
+| `skipTLSVerify` | Skip TLS verify when connecting to aws                       | *bool*                                         |          |
 
 ## CloudWatchFilter
 

@@ -29,5 +29,5 @@ backends:
 | --------------- | --------------------------------------- | ---------------------------------------------------------------- | ---------- |
 | `elasticsearch` | configuration for elastic search v8.0+. | `ElasticSearchConfig`                                            | `optional` |
 | `opensearch`    | configuration for elastic search < v8.0 | `OpenSearchConfig`                                               | `optional` |
-| `kubernetes`    | configuration for kubernetes            | [`KubernetesSearch`](../backends/kubernetes.md#kubernetesconfig) | `optional` |
+| `kubernetes`    | configuration for Kubernetes            | [`KubernetesSearch`](../backends/kubernetes.md#kubernetesconfig) | `optional` |
 | `file`          | configuration for file                  | [`[]FileConfig`](../backends/file.md#fileconfig)                 | `optional` |
