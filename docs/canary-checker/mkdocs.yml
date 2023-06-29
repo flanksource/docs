@@ -1,14 +1,14 @@
 repo_url: https://github.com/flanksource/canary-checker/
 repo_name: Canary Checker
-site_name: Canary Checker
+site_name: ""
 docs_dir: ./
 extra:
         generator: false
 extra_css:
         - style.css
 theme:
-        logo: ./images/flanksource-icon-white.svg
-        favicon: ./images/flanksource-icon.png
+        logo: ./images/canary-checker-white.svg
+        favicon: ./images/canary-checker-icon.svg
         name: material
         palette:
                 - media: "(prefers-color-scheme: light)"
@@ -64,8 +64,9 @@ markdown_extensions:
 
 nav:
         - Getting Started:
-                  - Overview: ./overview.md
+                  - Overview: ./index.md
                   - CLI: ./tutorials/run.md
+                  - Database: ./database.md
                   - Helm: ./tutorials/helm.md
         - Concepts:
                   - Gitops: ./concepts/gitops.md

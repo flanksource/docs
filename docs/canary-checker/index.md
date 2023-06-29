@@ -13,7 +13,6 @@ Canary Checker can collect health about systems in few different ways:
 
 Health checks can be defined in 3 different ways:
 
-1. **UI**: Navigate to Settings --> Health --> Click on the :material-plus-circle: button
 1. **[GitOps](./concepts/gitops.md)** canary-checker is fully Gitops enabled using Kubernetes Custom Resource Definitions (CRD)
 1. **[CLI](./tutorials/run.md)** For rapid development and feedback, canary-checker can be run as a normal CLI application by specifying the health check definition in a config file.
 
