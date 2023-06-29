@@ -28,22 +28,12 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `description` | Description for the check | string |  |
-| `display` | Template to display query results in text (overrides default bar format for UI) | [*Template*](../concepts/templating.md) |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
-| `ignore` | Ignore the specified resources from the fetched resources. Can be a glob pattern. | *\[\]string* |  |
 | **`kind`** | Specifies the kind of Kubernetes object for interaction | *string* | Yes |
-| `labels` | Labels for the check | *string* |  |
-| **`name`** | Name of the check | *string* | Yes |
-| `namespace` | Specifies namespace for Kubernetes object | [*ResourceSelector*](#resourceselector) |  |
+| `resource` | Queries resources related to specified Kubernetes object | [*ResourceSelector*](#resourceselector) | |
+| `namespace` | Specifies namespace for Kubernetes object                    | [*ResourceSelector*](#resourceselector) |          |
+| `ignore`    | Ignore the specified resources from the fetched resources. Can be a glob pattern. | *\[\]string*                            |  |
 | `ready` | Boolean value of true or false to query and display resources based on availability | *bool* |  |
-| `resource` | Queries resources related to specified Kubernetes object | [*ResourceSelector*](#resourceselector) |  |
-| `test` | Template to test the result against | [*Template*](../concepts/templating.md) |  |
-| `transform` | Template to transform results to | [*Template*](../concepts/templating.md) |  |
-
----
-
-# Scheme Reference
+| `*` | All other common fields | [*Common*](../common) |  |
 
 ## ResourceSelector
 

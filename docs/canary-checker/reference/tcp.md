@@ -11,15 +11,12 @@ spec:
   schedule: "*/1 * * * *"
   tcp:
     - name: "flanksource website"
-      endpoint: https://www.flanksource.com
+      endpoint: www.flanksource.com:80
       thresholdMillis: 1200
 ```
 
-| Field             | Description                                        | Scheme              | Required |
-| ----------------- | -------------------------------------------------- | ------------------- | -------- |
-| `name`            | Name of the check                                  | `string`            |          |
-| `description`     | Description for the check                          | `string`            |          |
-| `icon`            | Icon for overwriting default icon on the dashboard | `string`            |          |
-| `labels`          | Labels for check                                   | `map[string]string` |          |
-| `endpoint`        | Connection URL                                     | `string`            |          |
-| `thresholdMillis` | Expected response time threshold in ms             | `int64`             |          |
+| Field             | Description                            | Scheme                | Required |
+| ----------------- | -------------------------------------- | --------------------- | -------- |
+| **`endpoint`**    | `host:port`  to connect to             | `string`              | Yes      |
+| `thresholdMillis` | Expected response time threshold in ms | `int64`               |          |
+| `*`               | All other common fields                 | [*Common*](../common) |          |

@@ -25,21 +25,17 @@ spec:
 ```
 
 
-| Field         | Description                                                  | Scheme                                  | Required |
-| ------------- | ------------------------------------------------------------ | --------------------------------------- | -------- |
-| **`name`**    | Name of the check                                            | *string*                                | Yes      |
-| **`path`**    | A local folder path or a remote folder ([SMB](../smb), [SFTP](../sftp), [S3](../s3-bucket), [GCS](../gcs-bucket)) | string                                  | Yes      |
-| `filter`      | Filter objects out before checking if they are valid         | [*FolderFilter*](#folderfilter)         |          |
-| `minCount`    | The minimum number of files inside the `path`                | int                                     |          |
-| `maxCount`    | The maximum number of files inside the `path`, can be used in conjunction with `filter.regex` to detect error files | *int*                                   |          |
-| `minAge`      | The youngest age a file can be                               | [*Duration*](#duration)                 |          |
-| `maxAge`      | The oldest age a file can be, often used to check for unprocessed files or files that have not been cleaned up | [*Duration*](#duration)                 |          |
-| `minSize`     | The minimum file size, can be used to detect backups that did not upload successfully | [Size](#size)                           |          |
-| `maxSize`     | The maximim file size                                        | [Size](#size)                           |          |
-| `test`        | Custom script to test the files against, the [FolderResult](#folderResult) object will be available | [*Template*](../concepts/templating.md) |          |
-| `icon`        | Icon for overwriting default icon on the dashboard           | *string*                                |          |
-| `description` | Description for the check                                    | *string*                                |          |
-| `display`     | Custom script to change the display value                    | [*Template*](../concepts/templating.md) |          |
+| Field      | Description                                                  | Scheme                          | Required |
+| ---------- | ------------------------------------------------------------ | ------------------------------- | -------- |
+| **`path`** | A local folder path or a remote folder ([SMB](../smb), [SFTP](../sftp), [S3](../s3-bucket), [GCS](../gcs-bucket)) | string                          | Yes      |
+| `filter`   | Filter objects out before checking if they are valid         | [*FolderFilter*](#folderfilter) |          |
+| `minCount` | The minimum number of files inside the `path`                | int                             |          |
+| `maxCount` | The maximum number of files inside the `path`, can be used in conjunction with `filter.regex` to detect error files | *int*                           |          |
+| `minAge`   | The youngest age a file can be                               | [*Duration*](#duration)         |          |
+| `maxAge`   | The oldest age a file can be, often used to check for unprocessed files or files that have not been cleaned up | [*Duration*](#duration)         |          |
+| `minSize`  | The minimum file size, can be used to detect backups that did not upload successfully | [Size](#size)                   |          |
+| `maxSize`  | The maximim file size                                        | [Size](#size)                   |          |
+| `*`        | All other commons field                                      | [*Common*](../common)           |          |
 
 ## Duration
 
@@ -76,7 +72,11 @@ spec:
       minSize: 10mb # the backup should be at least 10mb
 ```
 
-## FolderResult
+
+
+## Result Variables
+
+The following fields are available in `test`, `display` and `transform` scripts. 
 
 | Field                 | Scheme                                             |
 | --------------------- | -------------------------------------------------- |

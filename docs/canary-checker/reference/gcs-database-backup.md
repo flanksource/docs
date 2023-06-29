@@ -18,15 +18,10 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **`name`** | Name of the check | *string* | Yes |
 | **`gcp`** | Connect to GCP project and instance | [*GCPDatabase*](#gcpdatabase) | Yes |
 | **`maxAge`** | Max age for backup allowed, eg. 5h30m | *Duration* |  |
-| `description` | Description for the check | *string* |  |
-| `display` | Template to display server response in text (overrides default bar format for UI) | [*Template*](../concepts/templating.md) |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
-| `labels` | Labels for the check | *Labels* |  |
-| `test` | Template to test the result against | [*Template*](../concepts/templating.md) |  |
-| `transform` | Template to transform results to | [*Template*](../concepts/templating.md) |  |
+| `*` | All other common fields | [*Common*](../common) | |
+|  |  |  | |
 
 ## Duration
 
@@ -38,6 +33,9 @@ Durations are strings with an optional fraction and unit e.g.  `300ms`, `1.5h` o
 | ----- | ----------- | ------ | -------- |
 | `project` | GCP project name | *string* | Yes |
 | `instance` | Google CloudSQL instance name | *string* | Yes |
+| **Connection** |  |  |  |
+| `connection` | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` | [Connection](../../concepts/connections) |  |
+| `credentials` | GCP Access Token File. Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
 
 ### Connecting to GCP
 
@@ -58,10 +56,10 @@ spec:
       gcp:
         project: google-project-name
         instance: cloudsql-instance-name
-      	connection: connection://gcp/internal
+       connection: connection://gcp/internal
 ```
 
-3.  `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret.
+3. `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret.
 
 ```yaml title="aws.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -82,8 +80,3 @@ spec:
               key: AUTH_ACCESS_TOKEN
 
 ```
-
-| Field         | Description                                                  | Scheme                                         | Required |
-| ------------- | ------------------------------------------------------------ | ---------------------------------------------- | -------- |
-| `connection`  | Path of an  existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` | [Connection](../concepts/connections)          |          |
-| `credentials` | GCP Access Token File. Mutually exclusive with `connection`  | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |

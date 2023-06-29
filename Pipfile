@@ -13,7 +13,7 @@ mkdocs-material-extensions = "*"
 mkdocs-markdownextradata-plugin = "*"
 mkdocs-nav-enhancements = "*"
 mkdocs-spellcheck = "*"
-
+mkdocs-same-dir = "*"
 [dev-packages]
 
 [requires]

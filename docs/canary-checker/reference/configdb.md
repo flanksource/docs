@@ -18,9 +18,4 @@ spec:
 | ----- | ----------- | ------ | -------- |
 | **`name`** | Name of the check | *string* | Yes |
 | **`query`** | Query that needs to be executed on the server | *string* | Yes |
-| `description` | Description for the check | *string* |  |
-| `display` | Template to display query results in text (overrides default bar format for UI) | [*Template*](../concepts/templating.md) |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
-| `labels` | Labels for the check | [*Labels*](#labels) |  |
-| `test` | Template to test the result against | [*Template*](../concepts/templating.md) |  |
-| `transform` | Template to transform results to | [*Template*](../concepts/templating.md) |  |
+| `*` | All other commons field | [*Common*](../common) |  |

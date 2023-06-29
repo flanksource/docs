@@ -1,0 +1,131 @@
+repo_url: https://github.com/flanksource/canary-checker/
+repo_name: Canary Checker
+site_name: Canary Checker
+docs_dir: ./
+extra:
+        generator: false
+extra_css:
+        - style.css
+theme:
+        logo: ./images/flanksource-icon-white.svg
+        favicon: ./images/flanksource-icon.png
+        name: material
+        palette:
+                - media: "(prefers-color-scheme: light)"
+                  scheme: default
+                  primary: indigo
+                  accent: light-blue
+                  toggle:
+                          icon: material/lightbulb
+                          name: Switch to light mode
+                - media: "(prefers-color-scheme: dark)"
+                  scheme: slate
+                  primary: indigo
+                  accent: light-blue
+                  toggle:
+                          icon: material/lightbulb-outline
+                          name: Switch to dark mode
+        features:
+                - content.tabs.link
+                - search.suggest
+                - search.highlight
+                - header.autohide
+                # - navigation.indexes
+                - navigation.instant
+                - navigation.sections
+                - navigation.tabs
+                # - toc.integrate
+                # - navigation.tracking
+                # - navigation.expand
+                # - navigation.top
+plugins:
+        - same-dir
+markdown_extensions:
+        - admonition
+        - fenced_code
+        - def_list
+        - pymdownx.smartsymbols
+        - toc:
+                  permalink: False
+                  anchorlink: True
+        - pymdownx.superfences
+        - pymdownx.snippets
+        - pymdownx.details
+        - pymdownx.tabbed:
+                  alternate_style: true
+        - pymdownx.highlight:
+                  use_pygments: true
+        - pymdownx.emoji:
+                  emoji_index: !!python/name:materialx.emoji.twemoji
+                  emoji_generator: !!python/name:materialx.emoji.to_svg
+                          # - codehilite:
+                          #   linenums: true
+
+
+nav:
+        - Getting Started:
+                  - Overview: ./overview.md
+                  - CLI: ./tutorials/run.md
+                  - Helm: ./tutorials/helm.md
+        - Concepts:
+                  - Gitops: ./concepts/gitops.md
+                  - Authentication: ./concepts/authentication.md
+                  - Metrics: ./concepts/metrics.md
+                  - Templating: ./concepts/templating.md
+                  - Transforms: ./concepts/transforms.md
+        - Check Types:
+                  - Common: ./reference/common.md
+
+                  - Alerts:
+                            - Alert Manager (Prometheus): ./reference/alert-manager.md
+                            - AWS Cloud Watch: ./reference/cloudwatch.md
+                            - AWS Config Rule: ./reference/aws-config-rule.md
+                            - Dynatrace: ./reference/dynatrace.md
+
+                  - Backup Checks:
+                            - GCS Database Backup: ./reference/gcs-database-backup.md
+                            - Restic: ./reference/restic.md
+
+                  - Configuration:
+                            - AWS Config: ./reference/aws-config.md
+                            - Config DB: ./reference/configdb.md
+                            - Kubernetes Resources: ./reference/kubernetes.md
+                  - Data Sources:
+                            - Elasticsearch: ./reference/elasticsearch.md
+                            - LDAP: ./reference/ldap.md
+                            - Mongo: ./reference/mongo.md
+                            - MS SQL Server: ./reference/mssql.md
+                            - MySQL: ./reference/mysql.md
+                            - Postgres: ./reference/postgres.md
+                            - Redis: ./reference/redis.md
+
+                  - DevOps:
+                            - Azure Devops: ./reference/azure-devops.md
+                            - GitHub: ./reference/github.md
+
+                  - Folders:
+                            - Folder: ./reference/folder.md
+                            - GCS Bucket: ./reference/gcs-bucket.md
+                            - S3: ./reference/s3-bucket.md
+                            - SFTP: ./reference/sftp.md
+                            - SMB / CIFS: ./reference/smb.md
+
+                  - Integration Testing:
+                            - JMeter: ./reference/jmeter.md
+                            - JUnit: ./reference/junit.md
+
+                  - Metrics:
+                            - Prometheus: ./reference/prometheus.md
+
+                  - Network:
+                            - TCP: ./reference/tcp.md
+                            - DNS: ./reference/dns.md
+                            - HTTP: ./reference/http.md
+                            - ICMP: ./reference/icmp.md
+
+                  - Infrastructure:
+                            - Containerd / Docker: ./reference/containerd.md
+                            - Helm: ./reference/helm.md
+                            - EC2: ./reference/ec2.md
+                            - Kubernetes Ingress: ./reference/pod.md
+                            - S3 Protocol: ./reference/s3.md

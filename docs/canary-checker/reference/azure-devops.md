@@ -21,20 +21,15 @@ spec:
       thresholdMillis: 60000 # 60 seconds
 ```
 
-| Field                 | Description                                                                  | Scheme                                                                        | Required |
-| --------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | -------- |
-| `name`                | Name of the check                                                            | `string`                                                                      |          |
-| `description`         | Description for the check                                                    | `string`                                                                      |          |
-| `icon`                | Icon for overwriting default icon on the dashboard                           | `string`                                                                      |          |
-| `labels`              | Labels for check                                                             | `map[string]string`                                                           |          |
-| `test`                | Template to test the result against                                          | [`Template`](../concepts/templating.md)                                       |          |
-| `display`             | Template to display the result in                                            | [`Template`](../concepts/templating.md)                                       |          |
-| `transform`           | Template for transformation                                                  | [`Template`](../concepts/templating.md)                                       |          |
-| `connection`          | Name of the connection. It'll be used to populate the personal access token. | `string`                                                                      |          |
-| `organization`        | Name of the Azure Organization.                                              | `string`                                                                      | `true`   |
-| `personalAccessToken` | Azure personal access token.                                                 | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) | `true`   |
-| `project`             | The name or ID of the project.                                               | `string`                                                                      | `true`   |
-| `pipeline`            | Name/Regexp to select the interested pipeline.                               | `string`                                                                      | `true`   |
-| `variables`           | Only match those runs that match these variables                             | `map[string]string`                                                           | `false`  |
-| `branch`              | Only match those runs that are run on these branch.                          | `[]string`                                                                    | `false`  |
-| `thresholdMillis`     | Maximum duration of a run after which it's considered unhealthy.             | `int`                                                                         | `false`  |
+| Field                     | Description                                                  | Scheme                                            | Required |
+| ------------------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
+| **`organization`**        | Name of the Azure Organization.                              | `string`                                          | true     |
+| **`project`**             | The name or ID of the project.                               | `string`                                          | true     |
+| **`pipeline`**            | Name/Regexp to select the interested pipeline.               | `string`                                          | true     |
+| `variables`               | Only match those runs that match these variables             | `map[string]string`                               |          |
+| `branch`                  | Only match those runs that are run on these branch.          | `[]string`                                        |          |
+| `thresholdMillis`         | Maximum duration of a run after which it's considered unhealthy. | `int`                                             |          |
+| `*`                       | All other commons field                                      | [*Common*](../common)                             |          |
+| **Connection**            |                                                              |                                                   |          |
+| `connection`              | Connection Name e.g. `connection://azuredevops/org` Mutually exclusive with `personalAccessToken` | `string`                                          |          |
+| **`personalAccessToken`** | Mutually exclusive with `connection`, See [Creating ADO PAT's](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=Windows) | [*EnvVar*](../../concepts/authentication/#envvar) | true     |

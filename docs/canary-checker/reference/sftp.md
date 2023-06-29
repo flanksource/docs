@@ -33,8 +33,8 @@ spec:
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | **`name`**       | Name of the check                                          | *string*                          | Yes      |
-| **`path`**       | A path to a S3 bucket and folder e.g. `s3://bucket/folder` | string                            | Yes      |
-| `sftpConnection` | SFTP connection details                                    | [SFTPConnection](#sftp-connection) |          |
+| **`path`**       | A path to the remote folder | string                            | Yes      |
+| **`sftpConnection`** | SFTP connection details                                    | [SFTPConnection](#sftp-connection) | Yes |
 | `*`              | All other fields available in the folder check             | [*Folder*](../folder)             |          |
 
 ## SFTP Connection

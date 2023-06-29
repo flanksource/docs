@@ -80,16 +80,11 @@ There are 3 options when connecting to AWS:
                   name: aws-credentials
                   key: AWS_SECRET_ACCESS_KEY
          region: us-east-1AWS connection fields
- ```
-
-## AWS Connection
-
-| Field           | Description                                                  | Scheme                                            |
-| --------------- | ------------------------------------------------------------ | ------------------------------------------------- |
-| `connection`    | Path of existing connection e.g. `connection://aws/instance`/ Mutually exclusive with `accessKey` | [Connection](../../concepts/connections)          |
-| `accessKey`     | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
-| `secretKey`     | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
-| `endpoint`      | Custom AWS Cloudwatch endpoint                               | *string*                                          |
-| `region`        | AWS region                                                   | *string*                                          |
-| `skipTLSVerify` | Skip TLS verify when connecting to aws                       | *bool*                                            |
-| `usePathStyle`  | Use path style URL's `http://s3.amazonaws.com/BUCKET/KEY` instead of `http://BUCKET.s3.amazonaws.com/KEY`, needed for S3 compatible object stores without wildcard DNS support | bool                                              |
+| Field           | Description                                                  | Scheme                                            | Required |
+| --------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
+| `connection`    | Path of existing connection e.g. `connection://aws/instance`. Mutually exclusive with `accessKey` and `secretKey` | [Connection](../concepts/connections)             |          |
+| `accessKey`     | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+| `secretKey`     | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+| `endpoint`      | Custom AWS endpoint                                          | *string*                                          |          |
+| `region`        | AWS region                                                   | *string*                                          |          |
+| `skipTLSVerify` | Skip TLS verify when connecting to aws                       | *bool*                                            |          |

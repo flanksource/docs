@@ -21,10 +21,6 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `description` | Description for the check | string |  |
-| `display` | Template to display the result in | [Template](../concepts/templating.md) |  |
 | **`host`** | Address of the Prometheus server | string | Yes |
-| `icon` | Icon for overwriting default icon on the dashboard | string |  |
-| `name` | Name of the check | string |  |
 | **`query`** | PromQL query | string | Yes |
-| `test` | Template to test the result against | [Template](../concepts/templating.md) |  |
+| `*`         | All other common fields | [*Common*](../common) |  |

@@ -18,18 +18,19 @@ Check if any AWS resources are failing AWS config rule checks.
           - "s3-bucket-public-write-prohibited"
   ```
 
-| Field             | Description                                                  | Scheme                                  | Required |
-| ----------------- | ------------------------------------------------------------ | --------------------------------------- | -------- |
-| **`name`**        | Name of the check                                            | `string`                                | `true`   |
-| `rules`           | Specify one or more Config rule names to filter the results by rule. | `[]string`                              |          |
-| `ignoreRules`     | List of rules which would be omitted from the fetch result.  | `[]string`                              |          |
-| `complianceTypes` | Filters the results by compliance. The allowed values are `INSUFFICIENT_DATA`, `NON_COMPLIANT`, `NOT_APPLICABLE`, `COMPLIANT` | `[]string`                              |          |
-| `description`     | Description for the check                                    | `string`                                |          |
-| `icon`            | Icon for overwriting default icon on the dashboard           | `string`                                |          |
-| `labels`          | Labels for check                                             | `map[string]string`                     |          |
-| `test`            | Template to test the result against                          | [`Template`](../concepts/templating.md) |          |
-| `display`         | Template to display the result in                            | [`Template`](../concepts/templating.md) |          |
-| `transform`       | Template for transformation                                  | [`Template`](../concepts/templating.md) |          |
+| Field             | Description                                                  | Scheme                                            | Required |
+| ----------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
+| `rules`           | Specify one or more Config rule names to filter the results by rule. | `[]string`                                        |          |
+| `ignoreRules`     | List of rules which would be omitted from the fetch result.  | `[]string`                                        |          |
+| `complianceTypes` | Filters the results by compliance. The allowed values are `INSUFFICIENT_DATA`, `NON_COMPLIANT`, `NOT_APPLICABLE`, `COMPLIANT` | `[]string`                                        |          |
+| `*`               | All other commons field                                      | [*Common*](../common)                             |          |
+| **Connection**    |                                                              |                                                   |          |
+| `connection`      | Path of existing connection e.g. `connection://aws/instance`/ Mutuall exclusive with `accessKey` | [Connection](../concepts/connections)             |          |
+| `accessKey`       | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+| `secretKey`       | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+| `endpoint`        | Custom AWS Config endpoint                                   | *string*                                          |          |
+| `region`          | AWS region                                                   | *string*                                          |          |
+| `skipTLSVerify`   | Skip TLS verify when connecting to AWS                       | *bool*                                            |          |
 
 ### Connecting to AWS
 
@@ -77,12 +78,3 @@ There are 3 options when connecting to AWS:
           rules:
             - "s3-bucket-public-read-prohibited"
     ```
-
-| Field           | Description                                                  | Scheme                                         | Required |
-| --------------- | ------------------------------------------------------------ | ---------------------------------------------- | -------- |
-| `connection`    | Path of existing connection e.g. `connection://aws/instance`/ | [Connection](../concepts/connections)          |          |
-| `accessKey`     |                                                              | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
-| `secretKey`     |                                                              | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
-| `endpoint`      | Custom AWS Cloudwatch endpoint                               | *string*                                       |          |
-| `region`        | AWS region                                                   | *string*                                       |          |
-| `skipTLSVerify` | Skip TLS verify when connecting to aws                       | *bool*                                         |          |

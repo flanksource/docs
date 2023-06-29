@@ -25,12 +25,10 @@ spec:
 | Field            | Description                                                  | Scheme                                            | Required |
 | ---------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
 | `auth`           | Username and password value, configMapKeyRef or SecretKeyRef for registry | [_Authentication_](../concepts/authentication.md) |          |
-| `description`    | Description for the check                                    | string                                            |          |
 | `expectedDigest` | Expected digest of the pulled image                          | _string_                                          | Yes      |
 | `expectedSize`   | Expected size of the pulled image                            | _int64_                                           | Yes      |
-| `icon`           | Icon for overwriting default icon on the dashboard           | _string_                                          |          |
 | **`image`**      | Full path to image, including registry                       | _string_                                          | Yes      |
-| `name`           | Name of the check                                            | string                                            |          |
+| `*`              | All other commons field                                      | [*Common*](../common)                             |          |
 
 ---
 
@@ -52,12 +50,9 @@ spec:
       password: <insert-password>
 ```
 
-| Field          | Description                                        | Scheme              | Required |
-| -------------- | -------------------------------------------------- | ------------------- | -------- |
-| `description`  | Description for the check                          | `string`            |          |
-| `name`         | Name of the check                                  | `string`            |          |
-| `icon`         | Icon for overwriting default icon on the dashboard | `string`            |          |
-| `labels`       | Icon for overwriting default icon on the dashboard | `map[string]string` |          |
-| **`image`**    | Full path to image, including registry             | `string`            | Yes      |
-| **`password`** | Password to access Containerd                      | `string`            | Yes      |
-| **`username`** | Username to access Containerd                      | `string`            | Yes      |
+| Field          | Description                            | Scheme                | Required |
+| -------------- | -------------------------------------- | --------------------- | -------- |
+| **`image`**    | Full path to image, including registry | `string`              | Yes      |
+| **`password`** | Password to access Containerd          | `string`              | Yes      |
+| **`username`** | Username to access Containerd          | `string`              | Yes      |
+| `*`            | All other commons field                | [*Common*](../common) |          |

@@ -23,12 +23,10 @@ spec:
 
 ```
 
-| Field                 | Description                                                | Scheme   | Required |
-| --------------------- | ---------------------------------------------------------- | -------- | -------- |
-| **`name`**            | Name of the check                                          | _string_ |          |
-| **`endpoint`**        | Host to ping                    | _string_ | Yes      |
-| `packetCount`         | Total number of packets to send per check, defaults to `5` | _int_    |          |
-| `packetLossThreshold` | Percent of total packets that are allowed to be lost       | _int64_  |          |
-| `thresholdMillis`     | Expected response time threshold in ms                     | _int64_  |          |
-| `description` | Description for the check | _string_ | |
-| `icon` | Icon for overwriting default icon on the dashboard | _string_ | |
+| Field                 | Description                                                | Scheme                | Required |
+| --------------------- | ---------------------------------------------------------- | --------------------- | -------- |
+| **`endpoint`**        | Host to ping                                               | _string_              | Yes      |
+| `packetCount`         | Total number of packets to send per check, defaults to `5` | _int_                 |          |
+| `packetLossThreshold` | Percent of total packets that are allowed to be lost       | _int64_               |          |
+| `thresholdMillis`     | Expected response time threshold in ms                     | _int64_               |          |
+| `*`                   | All other common fields                                     | [_Common_](../common) |          |

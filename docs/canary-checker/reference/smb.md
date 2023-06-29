@@ -39,7 +39,7 @@ spec:
 
 | Field        | Description                                                  | Scheme                                            |
 | ------------ | ------------------------------------------------------------ | ------------------------------------------------- |
-| `connection` | Path of existing connection e.g. `connection://windows/svc-account`/ Mutually exclusive with `username` | [Connection](../concepts/connections)             |
+| `connection` | Path of existing connection e.g. `connection://windows/svc-account. Mutually exclusive with `username` | [Connection](../concepts/connections)             |
 | `username`   | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
 | `password`   | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
 | `domain`     | Windows domain name                                          | *string*                                          |

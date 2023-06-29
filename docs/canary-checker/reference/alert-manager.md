@@ -34,16 +34,13 @@ spec:
 
 | Field         | Description                                                  | Scheme                                             | Required |
 | ------------- | ------------------------------------------------------------ | -------------------------------------------------- | -------- |
-| **`name`**    | Name of the check                                            | `string`                                           | Yes      |
-| `description` | Description for the check                                    | `string`                                           |          |
-| `connection`    | The path of a connection e.g. `connection://alertmanager/internal` mutually exclusive with `auth` and `endpoint` |                                                    |        |
-| `auth`        | Credentials for AlertManager, mutually exclusive with `connection` | [`Authentication`](#../concepts/authentication.md) |          |
-| `host` | Host endpoint mutually exclusive with `connection` | `string` |          |
 | `alerts` | A list of alert prefix names to include | `[]string` |          |
 | `ignore` | A list of alert prefix names to exclude | `[]string` | |
 | `filters` | A map of label to value prefixes to find alerts on | `map[string]string` | |
-| `icon`        | Icon for overwriting default icon on the dashboard           | `string`                                           |          |
-| `labels`      | Labels for check                                             | `map[string]string`                                |          |
-| `test`        | Template to test the result against                          | [`Template`](../concepts/templating.md)            |          |
-| `display`     | Template to display the result in                            | [`Template`](../concepts/templating.md)            |          |
-| `transform`   | Template for transformation                                  | [`Template`](../concepts/templating.md)            |          |
+| `*` | All other commons field | [*Common*](../common) | |
+| **Connection** |  |  | |
+| `connection` | Path of existing connection e.g. `connection://alertmanager/instance`/ Mutually exclusive with `username`, `password`, `host` | [Connection](../../concepts/connections) | |
+| `host` | Host endpoint mutually exclusive with `connection` | `string` | |
+| `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
+| `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
+

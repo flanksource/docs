@@ -24,8 +24,10 @@ spec:
 | **`path`** | A path to a GCS bucket and folder e.g. `gcs://bucket/folder` | string                | Yes      |
 | `gcpConnection` | Connection details for GCP | [GCPConnection](#gcp-connection) |  |
 | `*`        | All other fields available in the folder check               | [*Folder*](../folder) |          |
-
----
+| `*` | All other common fields | [*Common*](../common) | |
+| **Connection** |  |  | |
+| `connection` | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` | [Connection](../../concepts/connections) | |
+| `credentials` | GCP Access Token File. Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
 
 ### Connecting to GCP
 
@@ -45,10 +47,10 @@ spec:
       - name: gcs auth test
         path: gcs://somegcsbucket
         gcpConnection:
-      		connection: connection://gcp/internal
+        connection: connection://gcp/internal
 ```
 
-3.  `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret.
+3. `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret.
 
 ```yaml title="aws.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -68,11 +70,3 @@ spec:
                 key: AUTH_ACCESS_TOKEN
 
 ```
-
-## GCP Connection
-
-| Field         | Description                                                  | Scheme                                            | Required |
-| ------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
-| `connection`  | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` | [Connection](../../concepts/connections)          |          |
-| `credentials` | GCP Access Token File. Mutually exclusive with `connection`  | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
-

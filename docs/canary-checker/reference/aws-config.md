@@ -15,20 +15,18 @@ spec:
       query: "SELECT * FROM aws_config_rule"
 ```
 
-| Field            | Description                                        | Scheme                                  | Required |
-| ---------------- | -------------------------------------------------- | --------------------------------------- | -------- |
-| **`name`**       | Name of the check                                  | `string`                                |          |
-| `description`    | Description for the check                          | `string`                                |          |
-| `icon`           | Icon for overwriting default icon on the dashboard | `string`                                |          |
-| `labels`         | Labels for check                                   | `map[string]string`                     |          |
-| `test`           | Template to test the result against                | [`Template`](../concepts/templating.md) |          |
-| `display`        | Template to display the result in                  | [`Template`](../concepts/templating.md) |          |
-| `transform`      | Template for transformation                        | [`Template`](../concepts/templating.md) |          |
-| **`query`**      | The SQL query SELECT command                       | `string`                                | `true`   |
-| `awsConnection`  | AWS connection details.                            | [`AWSConnection`](#awsconnection)       |          |
-| `aggregatorName` | Specify the name of the configuration aggregator   | `string`                                |          |
-
----
+| Field            | Description                                                  | Scheme                                            | Required |
+| ---------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
+| **`query`**      | The SQL query SELECT command                                 | `string`                                          | `true`   |
+| `aggregatorName` | Specify the name of the configuration aggregator             | `string`                                          |          |
+| `*`              | All other commons fields                                     | [*Common*](../common)                             |          |
+| **Connection**   |                                                              |                                                   |          |
+| `connection`     | Path of existing connection e.g. `connection://aws/instance` Mutuall exclusive with `accessKey`, `secretKey` | [Connection](../concepts/connections)             |          |
+| `accessKey`      | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+| `secretKey`      | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+| `endpoint`       | Custom AWS endpoint                                          | *string*                                          |          |
+| `region`         | AWS region                                                   | *string*                                          |          |
+| `skipTLSVerify`  | Skip TLS verify when connecting to AWS                       | *bool*                                            |          |
 
 ### Connecting to AWS
 
@@ -87,12 +85,3 @@ There are 3 options when connecting to AWS:
          name: AWS Config check
          query: "SELECT * FROM aws_config_rule"
     ```
-
-| Field           | Description                                                  | Scheme                                         | Required |
-| --------------- | ------------------------------------------------------------ | ---------------------------------------------- | -------- |
-| `connection`    | Path of existing connection e.g. `connection://aws/instance`/ Mutuall exclusive with `accessKey` | [Connection](../concepts/connections)          |          |
-| `accessKey`     | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
-| `secretKey`     | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
-| `endpoint`      | Custom AWS Config endpoint                                   | *string*                                       |          |
-| `region`        | AWS region                                                   | *string*                                       |          |
-| `skipTLSVerify` | Skip TLS verify when connecting to AWS                       | *bool*                                         |          |

@@ -35,37 +35,11 @@ spec:
       expectedContent: bar
       expectedHttpStatuses: [200, 201, 202]
       priorityClass: canary-checker-priority
-    - name: ruby
-      spec: |
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          name: hello-world-ruby
-          namespace: default
-          labels:
-            app: hello-world-ruby
-        spec:
-          containers:
-            - name: hello
-              image: quay.io/toni0/hello-webserver-ruby:latest
-              imagePullPolicy: Always
-      port: 8080
-      path: /foo/bar
-      scheduleTimeout: 30000
-      readyTimeout: 12000
-      httpTimeout: 7000
-      deleteTimeout: 12000
-      ingressTimeout: 10000
-      deadline: 29000
-      httpRetryInterval: 200
-      expectedContent: hello, you've hit /foo/bar
-      expectedHttpStatuses: [200, 201, 202]
+
 ```
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `description` | Description of the check | *string* |  |
-| `name` | Name of the pod to be created | *string* | Yes |
 | **`namespace`** | Namespace to create the pod in | *string* | Yes |
 | **`spec`** | [*Spec*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) of pod to be created | string | Yes |
 | `scheduleTimeout` | Maximum time between pod created and pod running | *int64* |  |
@@ -78,7 +52,8 @@ spec:
 | `port` | Port on which the created pod will serve traffic | *int64* |  |
 | `path` | Path on which the created pod will respond to requests | *string* |  |
 | **`ingressName`** | Name to use for the ingress object that will expose the created pod | *string* | Yes |
-| **`ingressHost`** | URL to be used by the ingress to expose the created pod | *string* | Yes |
+| **`ingressHost`** | URL to be used by the ingress to expose the created pod | *string* |  |
 | `expectedContent` | Expected content of an HTTP response from the created pod | *string* |  |
 | `expectedHttpStatuses` | Expected HTTP status code of the response from the created pod  | *\[\]int64* |  |
 | `priorityClass` | Pod priority class | *string* |  |
+| `*` | All other common fields | [*Common*](../common) | |

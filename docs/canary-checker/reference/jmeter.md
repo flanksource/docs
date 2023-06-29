@@ -22,12 +22,10 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `description` | Description for the check | *string* |  |
-| `host` | Host is the server against which test plan needs to be executed | *string* |  |
-| `icon` | Icon for overwriting default icon on the dashboard | string |  |
-| **`jmx`** | Jmx defines the ConfigMap or Secret reference to get the JMX test plan | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| `name` | Name of the check | *string* |  |
-| `port` | Port on which the server is running | *int32* |  |
+| **`jmx`** | Jmx defines the ConfigMap or Secret reference to get the JMX test plan | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
 | `properties` | Properties defines the local JMeter properties | *\[\]string* |  |
-| `responseDuration` | duration  under which the all the test should pass | *string* |  |
+| `responseDuration` | duration  under which the all the test should pass | *int* |  |
 | `systemProperties` | SystemProperties defines the Java system property | *\[\]string* |  |
+| `host` | Host is the server against which test plan needs to be executed | *string* | |
+| `port` | Port on which the server is running | *int32* | |
+| `*` | All other common fields | [*Common*](../common) | |

@@ -4,9 +4,7 @@ hide:
 ---
 # Health Checks
 
-![](/Users/moshe/go/src/github.com/flanksource/docs/docs/images/health-checks.png)
-
-Health Checks in Mission Control are built on top of the **flank**source open-source [canary-checker](https://github.com/flanksource/canary-checker) tool.
+![](../images/health-checks.png)
 
 Canary Checker can collect health about systems in few different ways:
 
@@ -27,7 +25,6 @@ Canary checker runs health checks on a pre-defined CRON schedule and provides a 
 
 ## Check Types
 
-
 | Protocol                            | Status             | Checks |
 | ----------------------------------- | ------------------ | ---- |
 | [HTTP(s)](../reference/http)                             | GA                 | Response body, headers and duration |
@@ -38,7 +35,7 @@ Canary checker runs health checks on a pre-defined CRON schedule and provides a 
 | SQL ([MySQL](../reference/mysql), [Postgres](../reference/postgres), [SQL Server](../reference/mssql)) | GA | Ability to login, results, duration, health exposed via stored procedures |
 | [LDAP](../reference/ldap)                                | GA | Ability to login, response time |
 | [ElasticSearch / Opensearch](../reference/elasticsearch)           | GA | Ability to login, response time, size of search results |
-| [Mongo](../reference/mongo)                               | GA | Ability to login, results, duration, |
+| [Mongo](../reference/mongo)                               | Beta | Ability to login, results, duration, |
 | [Redis](../reference/redis)                               | GA | Ability to login, results, duration, |
 | [Prometheus](../reference/prometheus) | GA | Ability to login, results, duration, |
 | **Alerts**                 |                    | Prometheus |
@@ -48,9 +45,8 @@ Canary checker runs health checks on a pre-defined CRON schedule and provides a 
 | [Git](../reference/git) | GA | Query Git and Github repositories via SQL |
 | [Azure Devops](../reference) |  |  |
 | **Integration Testing** |  |  |
-| [JMeter](../reference/jmeter) | GA | Runs and checks the result of a JMeter test |
-| [JUnit](../reference/junit) | GA | Run a pod that saves Junit test results |
-|  |  |  |
+| [JMeter](../reference/jmeter) | Beta | Runs and checks the result of a JMeter test |
+| [JUnit](../reference/junit) | Beta | Run a pod that saves Junit test results |
 | **File Systems / Batch** |                    |      |
 | [Local Disk / NFS](../reference/folder)                      | GA         | Check folders for files that are:  too few/many, too old/new, too small/large |
 | [S3](../reference/s3-bucket) | GA | Check contents of AWS S3 Buckets |
@@ -64,11 +60,10 @@ Canary checker runs health checks on a pre-defined CRON schedule and provides a 
 | [Kubernetes Resources](../reference/kubernetes)                | GA | Kubernetes resources that are missing or are in a non-ready state |
 | **Backups**                         |                    |      |
 | [GCP Databases](..refere)  | GA | Backup freshness |
-| [Restic](../reference/restic)                              | GA | Backup freshness and integrity |
+| [Restic](../reference/restic)                              | Beta | Backup freshness and integrity |
 | **Infrastructure** |  | |
 | [EC2](../reference/ec2) | GA | Ability to launch new EC2 instances |
 | [Kubernetes Ingress](../reference/pod) | GA | Ability to schedule and then route traffic via an ingress to a pod |
 | [Docker/Containerd](../reference/containerd) | Deprecated | Ability to push and pull containers via docker/containerd |
 | [Helm](../reference/helm) | Deprecated | Ability to push and pull helm charts |
 | [S3 Protocol](../reference/s3-protocol) | GA | Ability to read/write/list objects on an S3 compatible object store |
-

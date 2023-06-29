@@ -27,12 +27,18 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `name` | Name of the check | *string* |  |
-| `filter` | Used to filter the objects | [`CloudWatchFilter`](#cloudwatchfilter) |  |
-| `description` | Description for the check | *string* |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* | |
-| `display` | Template to display the result in | [*Template*](../concepts/templating.md) |  |
-| `test` | Template to test the result against | [*Template*](../concepts/templating.md) |  |
+| `actionPrefix` | Use to filter the results of the operation to only those alarms that use a certain alarm action. For example, you could specify the ARN of an SNS topic to find all alarms that send notifications to that topic. | *string* | |
+| `alarmPrefix` | Specify to receive information about all alarms that have names that start with this prefix. | *string* | |
+| `alarms` | Set field to retrieve information about alarm | *\[\]string* | |
+| `state` | Specify to retrieve state value of alarm | *string* | |
+| `*` | All other commons field | [*Common*](../common) | |
+| **Connection** |  |  | |
+| `connection` | Path of existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `accessKey` and `secretKey` | [Connection](../concepts/connections) | |
+| `accessKey` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) |  |
+| `secretKey` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) |  |
+| `endpoint` | Custom AWS endpoint | *string* | |
+| `region` | AWS region | *string* | |
+| `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* | |
 
 ### Connecting to AWS
 
@@ -75,21 +81,3 @@ There are 3 options when connecting to AWS:
                 key: AWS_SECRET_ACCESS_KEY
           region: us-east-1
     ```
-
-| Field           | Description                                                  | Scheme                                         | Required |
-| --------------- | ------------------------------------------------------------ | ---------------------------------------------- | -------- |
-| `connection`    | Path of existing connection e.g. `connection://aws/instance`/ | [Connection](../concepts/connections)          |          |
-| `accessKey`     |                                                              | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
-| `secretKey`     |                                                              | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
-| `endpoint`      | Custom AWS Cloudwatch endpoint                               | *string*                                       |          |
-| `region`        | AWS region                                                   | *string*                                       |          |
-| `skipTLSVerify` | Skip TLS verify when connecting to aws                       | *bool*                                         |          |
-
-## CloudWatchFilter
-
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `actionPrefix` | Use to filter the results of the operation to only those alarms that use a certain alarm action. For example, you could specify the ARN of an SNS topic to find all alarms that send notifications to that topic. | *string* |  |
-| `alarmPrefix` | Specify to receive information about all alarms that have names that start with this prefix. | *string* |  |
-| `alarms` | Set field to retrieve information about alarm | *\[\]string* |  |
-| `state` | Specify to retrieve state value of alarm | *string* |  |

@@ -26,7 +26,6 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **`name`** | Name of the check | *string* | Yes |
 | **`server`** | Address of DNS server to query e.g. `8.8.8.8` | *string* | Yes |
 | **`port`** | Port to query DNS server on, e.g. `53` | *int* | Yes |
 | **`query`** | Domain name to lookup | *string* | Yes |
@@ -35,5 +34,4 @@ spec:
 | `minrecords` | Minimum records | *int* |  |
 | `thresholdMillis` | Threshold response time from DNS server | *int* |  |
 | `timeout` | Timeout in seconds | *int* |  |
-| `description` | Description for the check | *string* |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
+| `*` | All other commons field | [*Common*](../common) | |

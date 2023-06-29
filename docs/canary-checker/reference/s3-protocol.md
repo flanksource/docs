@@ -1,6 +1,5 @@
 # <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/aws-s3.svg' style='height: 32px'/> S3 Protocol
 
-
 !!! note
 
     This check if S3 compatible endpoints are functioning correctly, to check the contents of
@@ -16,52 +15,24 @@ The S3 check:
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
-  name: s3-check
-  annotations:
-    trace: "false"
+  name: s3-protocol-check
 spec:
   interval: 30
   s3:
-    # Check for any backup not older than 7 days and min size 25 bytes
     - name: s3-check
       bucketName: flanksource-public
-      region: eu-central-1
-      minSize: 50M
-      maxAge: 10d
-      filter:
-        regex: .*.ova
-        minSize: 100M
-        # maxAge: 18760h
-      display:
-        template: |
-          {{-  range $f := .results.Files   }}
-          {{- if gt $f.Size 0 }}
-            Name: {{$f.Name}} {{$f.ModTime | humanizeTime }} {{ $f.Size | humanizeBytes}}
-          {{- end}}
-          {{- end  }}
-
+      objectPath: dummy
 ```
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **`accessKey`** | AWS access key | *string* | Yes |
-| **`secretKey`** | AWS secret keu | *string* | Yes |
-| **`bucket`** | Array of [Bucket](#bucket) objects to be checked | [*Bucket*](#bucket) | Yes |
-| `description` | Description for the check | *string* |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
-| `name` | Name of the check | *string* |  |
-| **`objectPath`** | Path of object in bucket to | *string* | Yes |
-|                  |                                                    |                     |          |
-| `skipTLSVerify` | Skip TLS verify when connecting to s3 | *bool* |  |
-
----
-
-# Scheme Reference
-
-## Bucket
-
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`endpoint`** | Set bucket HTTP endpoint | *string* | Yes |
-| **`name`** | Specify name for bucket | *string* | Yes |
-| **`region`** | Specify region for bucket | *string* | Yes |
+| **`bucket`** | Bucket name to test against | [*Bucket*](#bucket) | Yes |
+| **`objectPath`** | Path to create a test object e.g. `s3-dummy/` | *string* | Yes |
+| `*` | All other common fields | [*Common*](../common) |  |
+| **Connection** |  |  |  |
+| `connection` | Path of existing connection e.g. `connection://aws/instance`. Mutually exclusive with `accessKey` and `secretKey` | [Connection](../concepts/connections) | |
+| `accessKey` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
+| `secretKey` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
+| `endpoint` | Custom AWS endpoint | *string* | |
+| `region` | AWS region | *string* | |
+| `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* |  |

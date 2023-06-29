@@ -12,28 +12,22 @@ spec:
   mongodb:
     - name: mongo password
       connection: mongodb://$(username):$(password)@mongo.default.svc:27017/?authSource=admin
-      description: mongo ping
-      auth:
-        username:
-          valueFrom:
-            secretKeyRef:
-              name: mongo-credentials
-              key: USERNAME
-        password:
-          valueFrom:
-            secretKeyRef:
-              name: mongo-credentials
-              key: PASSWORD
-      dns:
-        - query: mongo.default.svc
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: mongo-credentials
+            key: USERNAME
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: mongo-credentials
+            key: PASSWORD
 
 ```
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **name** | Name of the check | *string* |  |
-| **auth.username** | Username | [*Authentication*](../concepts/authentication.md) | Yes |
-| **auth.password** | Password | [*Authentication*](../concepts/authentication.md) | Yes |
-| **connection** | Connection string to connect to the Mongo server, can use `$(username)` and `$(password)` to replace values | *string* | Yes |
-| description | Description for the check | *string* |  |
-| icon | Icon for overwriting default icon on the dashboard | *string* |  |
+| `connection` | Path of existing connection e.g. `connection://mongo/instance` or connection url | [Connection](../../concepts/connections) | |
+| `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
+| `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
+| `*` | All other common fields | [*Common*](../common) | |

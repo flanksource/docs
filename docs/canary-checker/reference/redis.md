@@ -10,39 +10,31 @@ metadata:
 spec:
   interval: 30
   redis:
-    - addr: "redis.default.svc:6379"
-      name: redis-check
-      auth:
-        username:
-          valueFrom:
-            secretKeyRef:
-              name: redis-credentials
-              key: USERNAME
-        password:
-          valueFrom:
-            secretKeyRef:
-              name: redis-credentials
-              key: PASSWORD
+    - name: redis-check
+      addr: "redis.default.svc:6379"
       db: 0
-      description: "The redis check"
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: redis-credentials
+            key: USERNAME
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: redis-credentials
+            key: PASSWORD
 ```
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **`addr`** | host:port address | string | Yes |
-| `auth` | username and password value, configMapKeyRef or SecretKeyRef for Redis server | [*Authentication*](../concepts/authentication.md) |  |
+| **`addr`** | `host:port` address of redis | string | Yes |
 | **`db`** | Database to be selected after connecting to the server | *int* | Yes |
-| `description` | Description for the check | *string* |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
-| `name` | Name of the check | *string* |  |
+| `*` | All other common fields | [*Common*](../common) |  |
 
----
+## Redis Connection
 
-# Scheme Reference
-
-## Authentication
-
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| Field        | Description                                                  | Scheme                                            |
+| ------------ | ------------------------------------------------------------ | ------------------------------------------------- |
+| `connection` | Path of existing connection e.g. `connection://redis/instance`/ Mutually exclusive with `accessKey` | [Connection](../../concepts/connections)          |
+| `username`   | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
+| `password`   | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |

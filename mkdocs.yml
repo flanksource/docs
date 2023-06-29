@@ -2,220 +2,223 @@ repo_url: https://github.com/flanksource/docs/
 repo_name: Flanksource Mission Control
 site_name: Flanksource Mission Control
 extra:
-      generator: false
+        generator: false
 extra_css:
-      - style.css
+        - style.css
 theme:
-      logo: ./images/flanksource-icon-white.svg
-      favicon: ./images/flanksource-icon.png
-      name: material
-      palette:
-            - media: "(prefers-color-scheme: light)"
-              scheme: default
-              primary: indigo
-              accent: light-blue
-              toggle:
-                    icon: material/lightbulb
-                    name: Switch to light mode
-            - media: "(prefers-color-scheme: dark)"
-              scheme: slate
-              primary: indigo
-              accent: light-blue
-              toggle:
-                    icon: material/lightbulb-outline
-                    name: Switch to dark mode
-      features:
-            - content.tabs.link
-            - search.suggest
-            - search.highlight
-            - header.autohide
-            # - navigation.indexes
-            - navigation.instant
-            - navigation.sections
-            - navigation.tabs
-            # - toc.integrate
-            # - navigation.tracking
-            # - navigation.expand
-            # - navigation.top
+        logo: ./images/flanksource-icon-white.svg
+        favicon: ./images/flanksource-icon.png
+        name: material
+        palette:
+                - media: "(prefers-color-scheme: light)"
+                  scheme: default
+                  primary: indigo
+                  accent: light-blue
+                  toggle:
+                          icon: material/lightbulb
+                          name: Switch to light mode
+                - media: "(prefers-color-scheme: dark)"
+                  scheme: slate
+                  primary: indigo
+                  accent: light-blue
+                  toggle:
+                          icon: material/lightbulb-outline
+                          name: Switch to dark mode
+        features:
+                - content.tabs.link
+                - search.suggest
+                - search.highlight
+                - header.autohide
+                # - navigation.indexes
+                - navigation.instant
+                - navigation.sections
+                - navigation.tabs
+                # - toc.integrate
+                # - navigation.tracking
+                # - navigation.expand
+                # - navigation.top
 markdown_extensions:
-      - admonition
-      - fenced_code
-      - def_list
-      - pymdownx.smartsymbols
-      - toc:
-              permalink: False
-              anchorlink: True
-      - pymdownx.superfences
-      - pymdownx.snippets
-      - pymdownx.details
-      - pymdownx.tabbed:
-              alternate_style: true
-      - pymdownx.highlight:
-              use_pygments: true
-      - pymdownx.emoji:
-              emoji_index: !!python/name:materialx.emoji.twemoji
-              emoji_generator: !!python/name:materialx.emoji.to_svg
-      # - codehilite:
-      #   linenums: true
+        - admonition
+        - fenced_code
+        - def_list
+        - pymdownx.smartsymbols
+        - toc:
+                  permalink: False
+                  anchorlink: True
+        - pymdownx.superfences
+        - pymdownx.snippets
+        - pymdownx.details
+        - pymdownx.tabbed:
+                  alternate_style: true
+        - pymdownx.highlight:
+                  use_pygments: true
+        - pymdownx.emoji:
+                  emoji_index: !!python/name:materialx.emoji.twemoji
+                  emoji_generator: !!python/name:materialx.emoji.to_svg
+                          # - codehilite:
+                          #   linenums: true
+
+
 nav:
-      - Home:
-              - Overview: ./index.md
-              - Installation: ./install.md
-              - Configuration Management: ./config-db/overview.md
-              - Health Checks: ./canary-checker/overview.md
-              - Logging: ./apm-hub/overview.md
-              - Topology: ./topology/overview.md
-      - Configuration Management:
-              - Installation: ./config-db/tutorials/install-helm.md
-              - Getting Started:
-                      - Overview: ./config-db/overview.md
-                      - Quick Start: ./config-db/tutorials/example-git-file.md
-              - Concepts:
-                      - Configuration: ./config-db/tutorials/configuration.md
-                      - Secret Management: ./config-db/concepts/secret-management.md
-                      - Extraction: ./config-db/concepts/extraction.md
-                      - Templating: ./config-db/concepts/templating.md
-                      - Maping custom creation/deletion time: ./config-db/concepts/custom-creation-deletion-time.md
-                      - Transform: ./config-db/concepts/transform.md
-                      - Mask: ./config-db/concepts/mask.md
-                      - Exclude: ./config-db/concepts/exclude.md
-              - Scrapers:
-                      - AWS: ./config-db/scrapers/aws.md
-                      - Azure DevOps: ./config-db/scrapers/azure-devops.md
-                      - Files (Local/HTTP/Git): ./config-db/scrapers/file.md
-                      - Files (Kubernetes): ./config-db/scrapers/kubernetes-file.md
-                      - Kubernetes: ./config-db/scrapers/kubernetes.md
-                      - SQL: ./config-db/scrapers/sql.md
-                      - Trivy: ./config-db/scrapers/trivy.md
-                      - Custom: ./config-db/scrapers/custom.md
-              - Local Development:
-                      - Installation: ./config-db/tutorials/install-standalone.md
-                      - CLI: ./config-db/tutorials/cli.md
+        - Home:
+                  - Overview: ./index.md
+                  - Installation: ./install.md
+                  - Config DB: ./config-db/overview.md
+                  - Canary Checker: ./canary-checker/overview.md
+                  - Logging: ./apm-hub/overview.md
+                  - Topology: ./topology/overview.md
+        Installation:
+                - Installation: ./install.md
+                - Architecture: ./architecture.md
+                - Security: ./security.md
+        - Config DB:
+                  - Installation: ./config-db/tutorials/install-helm.md
+                  - Getting Started:
+                            - Overview: ./config-db/overview.md
+                            - Quick Start: ./config-db/tutorials/example-git-file.md
+                  - Concepts:
+                            - Configuration: ./config-db/tutorials/configuration.md
+                            - Secret Management: ./config-db/concepts/secret-management.md
+                            - Extraction: ./config-db/concepts/extraction.md
+                            - Templating: ./config-db/concepts/templating.md
+                            - Maping custom creation/deletion time: ./config-db/concepts/custom-creation-deletion-time.md
+                            - Transform: ./config-db/concepts/transform.md
+                            - Mask: ./config-db/concepts/mask.md
+                            - Exclude: ./config-db/concepts/exclude.md
+                  - Scrapers:
+                            - AWS: ./config-db/scrapers/aws.md
+                            - Azure DevOps: ./config-db/scrapers/azure-devops.md
+                            - Files (Local/HTTP/Git): ./config-db/scrapers/file.md
+                            - Files (Kubernetes): ./config-db/scrapers/kubernetes-file.md
+                            - Kubernetes: ./config-db/scrapers/kubernetes.md
+                            - SQL: ./config-db/scrapers/sql.md
+                            - Trivy: ./config-db/scrapers/trivy.md
+                            - Custom: ./config-db/scrapers/custom.md
+                  - Local Development:
+                            - Installation: ./config-db/tutorials/install-standalone.md
+                            - CLI: ./config-db/tutorials/cli.md
 
-      - Health Checks:
-              - Overview: ./canary-checker/overview.md
-              - Getting Started: ./canary-checker/tutorials/getting-started.md
-              - Concepts:
-                      - Gitops: ./canary-checker/concepts/gitops.md
-                      - Authentication: ./canary-checker/concepts/authentication.md
-                      - Templating: ./canary-checker/concepts/templating.md
-                      - Transforms: ./canary-checker/concepts/transforms.md
+        - Canary Checker:
+                  - Overview: ./canary-checker/overview.md
+                  - Getting Started: ./canary-checker/tutorials/getting-started.md
+                  - Concepts:
+                            - Gitops: ./canary-checker/concepts/gitops.md
+                            - Authentication: ./canary-checker/concepts/authentication.md
+                            - Templating: ./canary-checker/concepts/templating.md
+                            - Transforms: ./canary-checker/concepts/transforms.md
 
-              - Check Types:
-                      - CanarySpec: ./canary-checker/reference/canary-spec.md
+                  - Check Types:
+                            - Common: ./canary-checker/reference/common.md
 
-                      - Alerts:
-                              - Prometheus (Alert Manager): ./canary-checker/reference/alert-manager.md
-                              - AWS Cloud Watch: ./canary-checker/reference/cloudwatch.md
-                              - AWS Config Rule: ./canary-checker/reference/aws-config-rule.md
+                            - Alerts:
+                                      - Alert Manager (Prometheus): ./canary-checker/reference/alert-manager.md
+                                      - AWS Cloud Watch: ./canary-checker/reference/cloudwatch.md
+                                      - AWS Config Rule: ./canary-checker/reference/aws-config-rule.md
+                                      - Dynatrace: ./canary-checker/reference/dynatrace.md
 
-                      - Backup Checks:
-                              - GCS Database Backup: ./canary-checker/reference/gcs-database-backup.md
-                              - Restic: ./canary-checker/reference/restic.md
+                            - Backup Checks:
+                                      - GCS Database Backup: ./canary-checker/reference/gcs-database-backup.md
+                                      - Restic: ./canary-checker/reference/restic.md
 
-                      - Configuration:
-                              - AWS Config: ./canary-checker/reference/aws-config.md
-                              - Mission Control Config: ./canary-checker/reference/configdb.md
-                              - Kubernetes: ./canary-checker/reference/kubernetes.md
-                      - Data Sources:
-                              - Elasticsearch: ./canary-checker/reference/elasticsearch.md
-                              - LDAP: ./canary-checker/reference/ldap.md
-                              - Mongo: ./canary-checker/reference/mongo.md
-                              - MS SQL Server: ./canary-checker/reference/mssql.md
-                              - MySQL: ./canary-checker/reference/mysql.md
-                              - Postgres: ./canary-checker/reference/postgres.md
-                              - Redis: ./canary-checker/reference/redis.md
+                            - Configuration:
+                                      - AWS Config: ./canary-checker/reference/aws-config.md
+                                      - Config DB: ./canary-checker/reference/configdb.md
+                                      - Kubernetes Resources: ./canary-checker/reference/kubernetes.md
+                            - Data Sources:
+                                      - Elasticsearch: ./canary-checker/reference/elasticsearch.md
+                                      - LDAP: ./canary-checker/reference/ldap.md
+                                      - Mongo: ./canary-checker/reference/mongo.md
+                                      - MS SQL Server: ./canary-checker/reference/mssql.md
+                                      - MySQL: ./canary-checker/reference/mysql.md
+                                      - Postgres: ./canary-checker/reference/postgres.md
+                                      - Redis: ./canary-checker/reference/redis.md
 
-                      - DevOps:
-                              - GitHub: ./canary-checker/reference/github.md
-                              - Azure Devops: ./canary-checker/reference/azure-devops.md
+                            - DevOps:
+                                      - Azure Devops: ./canary-checker/reference/azure-devops.md
+                                      - GitHub: ./canary-checker/reference/github.md
 
-                      - Folders:
-                              - Folder: ./canary-checker/reference/folder.md
-                              - GCS Bucket: ./canary-checker/reference/gcs-bucket.md
-                              - S3: ./canary-checker/reference/s3-bucket.md
-                              - SFTP: ./canary-checker/reference/sftp.md
-                              - SMB / CIFS: ./canary-checker/reference/smb.md
+                            - Folders:
+                                      - Folder: ./canary-checker/reference/folder.md
+                                      - GCS Bucket: ./canary-checker/reference/gcs-bucket.md
+                                      - S3: ./canary-checker/reference/s3-bucket.md
+                                      - SFTP: ./canary-checker/reference/sftp.md
+                                      - SMB / CIFS: ./canary-checker/reference/smb.md
 
-                      - Integration Testing:
-                              - JMeter: ./canary-checker/reference/jmeter.md
-                              - JUnit: ./canary-checker/reference/junit.md
+                            - Integration Testing:
+                                      - JMeter: ./canary-checker/reference/jmeter.md
+                                      - JUnit: ./canary-checker/reference/junit.md
 
-                      - Metrics:
-                              - Prometheus: ./canary-checker/reference/prometheus.md
+                            - Metrics:
+                                      - Prometheus: ./canary-checker/reference/prometheus.md
 
-                      - Network:
-                              - TCP: ./canary-checker/reference/tcp.md
-                              - DNS: ./canary-checker/reference/dns.md
-                              - HTTP: ./canary-checker/reference/http.md
-                              - ICMP: ./canary-checker/reference/icmp.md
+                            - Network:
+                                      - TCP: ./canary-checker/reference/tcp.md
+                                      - DNS: ./canary-checker/reference/dns.md
+                                      - HTTP: ./canary-checker/reference/http.md
+                                      - ICMP: ./canary-checker/reference/icmp.md
 
-                      - Advanced Checks:
-                              - Containerd / Docker: ./canary-checker/reference/containerd.md
-                              - Helm: ./canary-checker/reference/helm.md
-                              - EC2: ./canary-checker/reference/ec2.md
-                              - Exec: ./canary-checker/reference/exec.md
-                              - Namespace: ./canary-checker/reference/namespace.md
-                              - Pod: ./canary-checker/reference/pod.md
-                              - S3 Protocol: ./canary-checker/reference/s3.md
-              - Local Development:
-                      - CLI: ./canary-checker/tutorials/run.md
-                      - Helm: ./canary-checker/tutorials/helm.md
-              - Tutorials:
-                      - Postgres: ./canary-checker/tutorials/postgres.md
-      - Logging:
-              - Overview: ./apm-hub/overview.md
-              - Quick Start: ./apm-hub/quick-start.md
-              - Concepts:
-                      - Configuration: ./apm-hub/concepts/configuration.md
-                      - Authentication: ./apm-hub/concepts/authentication.md
-                      - API: ./apm-hub/concepts/api.md
-                      - Routing: ./apm-hub/concepts/routing.md
-                      - Templating: ./apm-hub/concepts/templating.md
-              - Backends:
-                      - File: ./apm-hub/backends/file.md
-                      - Kubernetes: ./apm-hub/backends/kubernetes.md
-                      - Elasticsearch: ./apm-hub/backends/elasticsearch.md
-                      - OpenSearch: ./apm-hub/backends/opensearch.md
-              - Local Development:
-                      - Installation: ./apm-hub/tutorials/install.md
-                      - CLI: ./apm-hub/tutorials/cli.md
+                            - Infrastructure:
+                                      - Containerd / Docker: ./canary-checker/reference/containerd.md
+                                      - Helm: ./canary-checker/reference/helm.md
+                                      - EC2: ./canary-checker/reference/ec2.md
+                                      - Kubernetes Ingress: ./canary-checker/reference/pod.md
+                                      - S3 Protocol: ./canary-checker/reference/s3.md
+                  - Local Development:
+                            - CLI: ./canary-checker/tutorials/run.md
+                            - Helm: ./canary-checker/tutorials/helm.md
+        - Logging:
+                  - Overview: ./apm-hub/overview.md
+                  - Quick Start: ./apm-hub/quick-start.md
+                  - Concepts:
+                            - Configuration: ./apm-hub/concepts/configuration.md
+                            - Authentication: ./apm-hub/concepts/authentication.md
+                            - API: ./apm-hub/concepts/api.md
+                            - Routing: ./apm-hub/concepts/routing.md
+                            - Templating: ./apm-hub/concepts/templating.md
+                  - Backends:
+                            - File: ./apm-hub/backends/file.md
+                            - Kubernetes: ./apm-hub/backends/kubernetes.md
+                            - Elasticsearch: ./apm-hub/backends/elasticsearch.md
+                            - OpenSearch: ./apm-hub/backends/opensearch.md
+                  - Local Development:
+                            - Installation: ./apm-hub/tutorials/install.md
+                            - CLI: ./apm-hub/tutorials/cli.md
 
-      - Topology:
-              - Overview: ./topology/overview.md
-              - Concepts:
-                      - Topology: ./topology/concepts/topology.md
-                      - Components: ./topology/concepts/components.md
-                      - Properties: ./topology/concepts/properties.md
-                      - Lookup: ./topology/concepts/lookup.md
-                      - For Each: ./topology/concepts/for-each.md
-                      - Relationships:
-                              - Components: ./topology/concepts/linking-components.md
-                              - Configuration Items: ./topology/concepts/config.md
-                              - Health Checks: ./topology/concepts/health-checks.md
-              - Examples:
-                      Kubernetes: ./topology/examples/kubernetes.md
-                      Kubernetes (Workload): ./topology/examples/kubernetes-workload.md
-              - Reference:
-                      - Components: ./topology/references/components.md
-                      - Properties: ./topology/references/properties.md
-                      - Component Lookups:
-                              - ConfigDB: ./topology/references/configdb.md
-                              - Exec: ./topology/references/exec.md
-                              - HTTP: ./topology/references/http.md
-                              - Kubernetes: ./topology/references/kubernetes.md
-                              - Mongo: ./topology/references/mongo.md
-                              - MS SQL Server: ./topology/references/mssql.md
-                              - MySQL: ./topology/references/mysql.md
-                              - Postgres: ./topology/references/postgres.md
-                              - Prometheus: ./topology/references/prometheus.md
-                              - Redis: ./topology/references/redis.md
-      - Incidents:
-            - Overview: ./incidents/overview.md
-            - Concepts:
-                  - Evidence: ./incidents/concepts/evidence.md
-                  - Hypothesis: ./incidents/concepts/hypothesis.md
-                  - Rules: ./incidents/concepts/rules.md
-                  - Responders: ./incidents/concepts/responders.md
-                  - Notifications: ./incidents/concepts/notifications.md
-                  - Done definition: ./incidents/concepts/done-definition.md
+        - Topology:
+                  - Overview: ./topology/overview.md
+                  - Concepts:
+                            - Topology: ./topology/concepts/topology.md
+                            - Components: ./topology/concepts/components.md
+                            - Properties: ./topology/concepts/properties.md
+                            - Lookup: ./topology/concepts/lookup.md
+                            - For Each: ./topology/concepts/for-each.md
+                            - Relationships:
+                                      - Components: ./topology/concepts/linking-components.md
+                                      - Configuration Items: ./topology/concepts/config.md
+                                      - Health Checks: ./topology/concepts/health-checks.md
+                  - Examples:
+                            Kubernetes: ./topology/examples/kubernetes.md
+                            Kubernetes (Workload): ./topology/examples/kubernetes-workload.md
+                  - Reference:
+                            - Components: ./topology/references/components.md
+                            - Properties: ./topology/references/properties.md
+                            - Component Lookups:
+                                      - Config DB: ./topology/references/configdb.md
+                                      - Exec: ./topology/references/exec.md
+                                      - HTTP: ./topology/references/http.md
+                                      - Kubernetes: ./topology/references/kubernetes.md
+                                      - Mongo: ./topology/references/mongo.md
+                                      - MS SQL Server: ./topology/references/mssql.md
+                                      - MySQL: ./topology/references/mysql.md
+                                      - Postgres: ./topology/references/postgres.md
+                                      - Prometheus: ./topology/references/prometheus.md
+                                      - Redis: ./topology/references/redis.md
+        - Incidents:
+                  - Overview: ./incidents/overview.md
+                  - Concepts:
+                            - Evidence: ./incidents/concepts/evidence.md
+                            - Hypothesis: ./incidents/concepts/hypothesis.md
+                            - Rules: ./incidents/concepts/rules.md
+                            - Responders: ./incidents/concepts/responders.md
+                            - Notifications: ./incidents/concepts/notifications.md
+                            - Definition of Done: ./incidents/concepts/done-definition.md
