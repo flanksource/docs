@@ -67,7 +67,7 @@ nav:
                   - Canary Checker: ./canary-checker/overview.md
                   - Logging: ./apm-hub/overview.md
                   - Topology: ./topology/overview.md
-        Installation:
+        - Installation:
                 - Installation: ./install.md
                 - Architecture: ./architecture.md
                 - Security: ./security.md
