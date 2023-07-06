@@ -1,6 +1,17 @@
-# Templating
+# Scripting
+
+Canary check is a fully scriptable platforms, scripts can be used in multiple places including:
+
+
+
+1. To `test` the result of a check to see if it is healthy 
+2. To `display` info / error messages based on the result of a check
+3. To `transform` responses into multiple individual checks
+
+
 
 **Templating is:**
+
 > Simply a way to represent data in different forms.
 
 Templating comes in handy when you want the results of your operation displayed in your desired configuration and order. [Canary-checker](/canary-checker/overview/) and [Config DB](/config-db/tutorials/getting-started-configdb) supports this feature for rendering results. They can be specified in `display`, `test`, `transform` fields for the `Canary` object, `id`, `test`, `transform`, `display` for `SystemTemplate` object. The template can be configured In the next section, you'll see the different supported templates.

@@ -5,21 +5,95 @@ hide:
 
 ![](../images/canary-checker.svg)
 
-Canary Checker can collect health about systems in few different ways:
+Canary checker is a kubernetes-native platform for monitoring health across application and infrastructure using both passive and active (synthetic) mechanisms.
 
-* **Active** **Application** health checks involve sending periodic requests to the service or application and checking the response to ensure that it is working correctly,  Active health checks are proactive and can detect issues quickly, but they can also introduce some load on the system being monitored.
-* **Active Infrastructure** health checks are similar to application health checks, but instead of sending a request to the application it sends a request to the infrastructure to deploy a new application or infrastructure component e.g. a new Kubernetes pod or EC2 instance.
-* **Passive** health checks rely on monitoring the activity in the system, analysing it, and detecting anomalies or errors. Passive health checks are less intrusive than active health checks, but they may not detect issues as quickly.
+## Features
 
-Health checks can be defined in 3 different ways:
+* **Batteries Included** - 35+ built-in check types
+* **Kubernetes Native** - Health checks (or canaries) are CRD's that reflect health via the `status` field, making them compatible with GitOps, [Flux Health Checks](https://fluxcd.io/flux/components/kustomize/kustomization/#health-checks), Argo, Helm, etc..
+* **Secret Management** - Leverage K8S secrets and configmaps for authentication and connection details
+* **Prometheus** - Prometheus compatible metrics are exposed at `/metrics`.  A Grafana Dashboard is also available.
+* **Dependency Free** - Runs an embedded postgres instance by default,  can also be configured to use an external database.
+* **JUnit Export (CI/CD)**  - Export health check results to JUnit format for integration into CI/CD pipelines
+* **JUnit Import (k6/newman/puppeter/etc)** - Use any container that creates JUnit test results
+* **Scriptable** - Go templates, Javascript and [Expr](https://github.com/antonmedv/expr) can be used to:
+  * Evaluate whether a check is passing and severity to use when failing
+  * Extract a user friendly error message
+  * Transform and filter check responses into individual check results
+* **Multi-Modal** - While designed as a Kubernetes Operator, canary checker can also run as a CLI and a server without K8s
 
-1. **[GitOps](./concepts/gitops.md)** canary-checker is fully Gitops enabled using Kubernetes Custom Resource Definitions (CRD)
-1. **[CLI](./tutorials/run.md)** For rapid development and feedback, canary-checker can be run as a normal CLI application by specifying the health check definition in a config file.
+## Use Cases
 
-Canary checker runs health checks on a pre-defined CRON schedule and provides a fully customizable platform that:
+* **Synthetic Monitoring**
 
-1. Securely references [authentication](./concepts/authentication.md) credentials from Kubernetes secrets and configmaps.
-1. Parses and  [transforms](./concepts/transforms.md) the response using JSONPath, Go templates or Javascript to validate, extrapolate or aggregate results.
+* **Unified Alerting**
+
+## Getting Started
+
+1. Install canary checker:
+
+  ```shell
+  helm repo add flanksource https://flanksource.github.io/charts
+  helm repo update
+  helm install canary-checker
+  ```
+
+2. Create a new check:
+
+  ```yaml title="canary.yaml"
+  apiVersion: canaries.flanksource.com/v1
+  kind: Canary
+  metadata:
+    name: http-check
+  spec:
+    interval: 30
+    http:
+      - name: basic-check
+        url: https://httpbin.demo.aws.flanksource.com/status/200
+      - name: failing-check
+        url: https://httpbin.demo.aws.flanksource.com/status/500
+  ```
+
+2a. Run the check locally (Optional)
+
+```shell
+canary-checker run canary.yaml
+```
+
+[![asciicast](https://asciinema.org/a/cYS6hlmX516JQeECHH7za3IDG.svg)](https://asciinema.org/a/cYS6hlmX516JQeECHH7za3IDG)
+
+```shell
+kubectl apply -f canary.yaml
+```
+
+3. Check the status of the health check:
+
+```shell
+kubectl get canary
+```
+
+[![asciicast](https://asciinema.org/a/tXluDS5sH68gVdko4qctIZEC1.svg)](https://asciinema.org/a/tXluDS5sH68gVdko4qctIZEC1)
+
+4. Check the Dashboard
+
+![](./images/http-checks.png)
+
+## Getting Help
+
+If you have any questions about canary checker:
+
+* Read the  [docs](https://canarychecker.io)
+* Invite yourself to the [CNCF community slack](https://slack.cncf.io/)and join the [#canary-checker](https://cloud-native.slack.com/messages/canary-checker/) channel.
+* Check out the [Youtube Playlist](https://www.youtube.com/playlist?list=PLz4F_KggvA58D6krlw433TNr8qMbu1aIU).
+* File an [issue](https://github.com/flanksource/canary-checker/issues/new) - (We do provide user support via Github Issues, so don't worry  if your issue a real bug or not)
+
+Your feedback is always welcome!
+
+## License
+
+Canary Checker core (the code in this repository) is licensed under [Apache 2.0](https://raw.githubusercontent.com/flanksource/canary-checker/main/LICENSE) and accepts contributions via GitHub pull requests after signing a CLA.
+
+The UI (Dashboard) is free to use with canary checker under a license exception of [Flanksource UI](https://github.com/flanksource/flanksource-ui/blob/main/LICENSE#L7)
 
 ## Check Types
 
@@ -38,13 +112,14 @@ Canary checker runs health checks on a pre-defined CRON schedule and provides a 
 | [Prometheus](../reference/prometheus) | GA | Ability to login, results, duration, |
 | **Alerts**                 |                    | Prometheus |
 | [Prometheus Alert Manager](../reference/alert-manager) | GA | Pending and firing alerts |
-| [AWS Cloudwatch Alarms](../reference/cloudwatch) | GA | Pending and firing alerts |
+| [AWS Cloudwatch Alarms](../reference/cloudwatch) | GA | Pending and firing alarms |
+| [Dynatrace Problems](./reference/dynatrace.md) | Beta | Problems deteced |
 | **DevOps** |  |  |
 | [Git](../reference/git) | GA | Query Git and Github repositories via SQL |
 | [Azure Devops](../reference) |  |  |
 | **Integration Testing** |  |  |
 | [JMeter](../reference/jmeter) | Beta | Runs and checks the result of a JMeter test |
-| [JUnit](../reference/junit) | Beta | Run a pod that saves Junit test results |
+| [JUnit / BYO](../reference/junit) | Beta | Run a pod that saves Junit test results |
 | **File Systems / Batch** |                    |      |
 | [Local Disk / NFS](../reference/folder)                      | GA         | Check folders for files that are:  too few/many, too old/new, too small/large |
 | [S3](../reference/s3-bucket) | GA | Check contents of AWS S3 Buckets |

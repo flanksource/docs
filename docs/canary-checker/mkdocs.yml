@@ -27,6 +27,7 @@ theme:
                           name: Switch to dark mode
         features:
                 - content.tabs.link
+                - content.code.copy
                 - search.suggest
                 - search.highlight
                 - header.autohide
@@ -65,9 +66,9 @@ markdown_extensions:
 nav:
         - Getting Started:
                   - Overview: ./index.md
-                  - CLI: ./tutorials/run.md
+                  - CLI: ./cli.md
                   - Database: ./database.md
-                  - Helm: ./tutorials/helm.md
+                  - Helm: ./helm.md
         - Concepts:
                   - Gitops: ./concepts/gitops.md
                   - Authentication: ./concepts/authentication.md

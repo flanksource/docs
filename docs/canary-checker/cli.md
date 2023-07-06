@@ -11,16 +11,33 @@ hide:
     wget  https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_linux_amd64   \
       -O /usr/bin/canary-checker && \
       chmod +x /usr/bin/canary-checker
-
     ```
 
+=== "Linux (arm64)"
+    ```bash
+    wget  https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_linux_arm64  \
+      -O /usr/bin/canary-checker && \
+      chmod +x /usr/bin/canary-checker
+    ```
+
+
 === "MacOSX (amd64)"
+
     ```bash
     wget https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_darwin_amd64  \
       -O /usr/local/bin/canary-checker && \
       chmod +x /usr/local/bin/canary-checker
-
     ```
+
+
+=== "MacOSX (arm64)"
+
+    ```bash
+    wget https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_darwin_arm64  \
+      -O /usr/local/bin/canary-checker && \
+      chmod +x /usr/local/bin/canary-checker
+    ```
+
 
 === "Makefile"
     ```Makefile
@@ -29,7 +46,6 @@ hide:
     wget -nv -nc https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_$(OS)_$(ARCH)  \
       -O /usr/local/bin/canary-checker && \
       chmod +x /usr/local/bin/canary-checker
-
     ```
 
 === "Windows"

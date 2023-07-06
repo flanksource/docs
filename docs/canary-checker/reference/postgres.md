@@ -11,18 +11,17 @@ spec:
   interval: 30
   postgres:
     - name: postgres schemas check
-      connection: "postgres://$(username):$(password)@postgres.default.svc:5432/postgres?sslmode=disable"
-      auth:
-        username:
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: USERNAME
-        password:
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: PASSWORD
+      url: "postgres://$(username):$(password)@postgres.default.svc:5432/postgres?sslmode=disable"
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: postgres-credentials
+            key: USERNAME
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: postgres-credentials
+            key: PASSWORD
       query: SELECT current_schemas(true)
       display:
         template: |
@@ -39,3 +38,10 @@ spec:
 | **`query`** | query that needs to be executed on the server | *string* | Yes |
 | **`results`** | Number rows to check for | *int* | Yes |
 | `*` | All other common fields | [*Common*](../common) |  |
+
+## Result Variables
+
+| Name    | Description             | Scheme                     |
+| ------- | ----------------------- | -------------------------- |
+| `rows`  |                         | *[]map[string]interface{}* |
+| `count` | Number of rows returned | *int*                      |

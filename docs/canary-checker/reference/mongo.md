@@ -11,7 +11,7 @@ spec:
   interval: 30
   mongodb:
     - name: mongo password
-      connection: mongodb://$(username):$(password)@mongo.default.svc:27017/?authSource=admin
+      url: mongodb://$(username):$(password)@mongo.default.svc:27017/?authSource=admin
       username:
         valueFrom:
           secretKeyRef:
@@ -28,6 +28,7 @@ spec:
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | `connection` | Path of existing connection e.g. `connection://mongo/instance` or connection url | [Connection](../../concepts/connections) | |
+| url | mongodb://:27017/?authSource=admin, See [connection-string](https://docs.mongodb.com/manual/reference/connection-string/) |  | |
 | `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | `*` | All other common fields | [*Common*](../common) | |
