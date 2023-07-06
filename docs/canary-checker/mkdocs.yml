@@ -65,9 +65,9 @@ markdown_extensions:
 nav:
         - Getting Started:
                   - Overview: ./index.md
-                  - CLI: ./tutorials/run.md
+                  - CLI: ./cli.md
                   - Database: ./database.md
-                  - Helm: ./tutorials/helm.md
+                  - Helm: ./helm.md
         - Concepts:
                   - Gitops: ./concepts/gitops.md
                   - Authentication: ./concepts/authentication.md

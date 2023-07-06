@@ -57,3 +57,13 @@ spec:
 | `expectedHttpStatuses` | Expected HTTP status code of the response from the created pod  | *\[\]int64* |  |
 | `priorityClass` | Pod priority class | *string* |  |
 | `*` | All other common fields | [*Common*](../common) | |
+
+## Metrics
+
+| **Metric**                                     |           |                                             |
+| ---------------------------------------------- | --------- | ------------------------------------------- |
+| canary_check_histogram{metric="creation_time"} | Histogram | Time for pod to be `Pending`                |
+| canary_check_histogram{metric="delete_time"}   | Histogram | Time to delete pod                          |
+| canary_check_histogram{metric="ingress_time"}  | Histogram | Time until ingress is returning requests    |
+| canary_check_histogram{metric="request_time"}  | Histogram | Duration of http request once ingress is up |
+| canary_check_histogram{metric="schedule_time"} | Histogram | Time for pod to be `Running`                |

@@ -24,3 +24,11 @@ spec:
 | **`host`** | Address of the Prometheus server | string | Yes |
 | **`query`** | PromQL query | string | Yes |
 | `*`         | All other common fields | [*Common*](../common) |  |
+
+## Result Variables
+
+| Name         | Description             | Scheme                     |
+| ------------ | ----------------------- | -------------------------- |
+| `value`      |                         | *float*                    |
+| `firstValue` | Number of rows returned | *int*                      |
+| `results`    | A list of results       | *[]map[string]interface{}* |
