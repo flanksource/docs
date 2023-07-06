@@ -14,23 +14,19 @@ Canary checker is a kubernetes-native platform for monitoring health across appl
 * **Secret Management** - Leverage K8S secrets and configmaps for authentication and connection details
 * **Prometheus** - Prometheus compatible metrics are exposed at `/metrics`.  A Grafana Dashboard is also available.
 * **Dependency Free** - Runs an embedded postgres instance by default,  can also be configured to use an external database.
-* **JUnit Export (CI/CD) **  - Export health check results to JUnit format for integration into CI/CD pipelines
+* **JUnit Export (CI/CD)**  - Export health check results to JUnit format for integration into CI/CD pipelines
 * **JUnit Import (k6/newman/puppeter/etc)** - Use any container that creates JUnit test results
 * **Scriptable** - Go templates, Javascript and [Expr](https://github.com/antonmedv/expr) can be used to:
-    * Evaluate whether a check is passing and severity to use when failing
-    * Extract a user friendly error message
-    * Transform and filter check responses into individual check results
+  * Evaluate whether a check is passing and severity to use when failing
+  * Extract a user friendly error message
+  * Transform and filter check responses into individual check results
 * **Multi-Modal** - While designed as a Kubernetes Operator, canary checker can also run as a CLI and a server without K8s
-
-
 
 ## Use Cases
 
 * **Synthetic Monitoring**
 
 * **Unified Alerting**
-
-  
 
 ## Getting Started
 
@@ -58,7 +54,7 @@ Canary checker is a kubernetes-native platform for monitoring health across appl
         url: https://httpbin.demo.aws.flanksource.com/status/500
   ```
 
-2a. Run the check locally (Optional) 
+2a. Run the check locally (Optional)
 
 ```shell
 canary-checker run canary.yaml
@@ -66,17 +62,21 @@ canary-checker run canary.yaml
 
 [![asciicast](https://asciinema.org/a/cYS6hlmX516JQeECHH7za3IDG.svg)](https://asciinema.org/a/cYS6hlmX516JQeECHH7za3IDG)
 
-  ```shell
- kubectl apply -f canary.yaml
-  ```
+```shell
+kubectl apply -f canary.yaml
+```
 
 3. Check the status of the health check:
 
-  ```shell
-  kubectl get canary
-  ```
+```shell
+kubectl get canary
+```
 
-![](./images/canary-run-output.png)
+[![asciicast](https://asciinema.org/a/tXluDS5sH68gVdko4qctIZEC1.svg)](https://asciinema.org/a/tXluDS5sH68gVdko4qctIZEC1)
+
+4. Check the Dashboard
+
+![](./images/http-checks.png)
 
 ## Getting Help
 
@@ -94,8 +94,6 @@ Your feedback is always welcome!
 Canary Checker core (the code in this repository) is licensed under [Apache 2.0](https://raw.githubusercontent.com/flanksource/canary-checker/main/LICENSE) and accepts contributions via GitHub pull requests after signing a CLA.
 
 The UI (Dashboard) is free to use with canary checker under a license exception of [Flanksource UI](https://github.com/flanksource/flanksource-ui/blob/main/LICENSE#L7)
-
-
 
 ## Check Types
 
