@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@docusaurus/core": "^2.4.1",
+    "@docusaurus/plugin-content-docs": "^2.4.1",
+    "@docusaurus/plugin-debug": "^2.4.1",
+    "@docusaurus/plugin-ideal-image": "^2.4.1",
+    "@docusaurus/preset-classic": "^2.4.1",
+    "react-markdown": "^8.0.7"
+  }
+}
