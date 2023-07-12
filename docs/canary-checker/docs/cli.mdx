@@ -1,0 +1,86 @@
+---
+hide:
+- toc
+title: CLI
+---
+
+# Installation
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ReactMarkdown from 'react-markdown';
+
+<Tabs>
+  <TabItem value="linux-amd64" label="Linux (amd64)" default>
+    <ReactMarkdown>
+    {`
+    wget  https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_linux_amd64   \
+      -O /usr/bin/canary-checker && \
+      chmod +x /usr/bin/canary-checker
+    `}
+    </ReactMarkdown>
+  </TabItem>
+  <TabItem value="linux-arm64" label="Linux (arm64)">
+    <ReactMarkdown>
+    {`
+    wget  https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_linux_arm64  \
+      -O /usr/bin/canary-checker && \
+      chmod +x /usr/bin/canary-checker
+    `}
+    </ReactMarkdown>
+  </TabItem>
+  <TabItem value="macosx-amd64" label="MacOSX (amd64)">
+  <ReactMarkdown>
+    {`
+    wget https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_darwin_amd64  \
+      -O /usr/local/bin/canary-checker && \
+      chmod +x /usr/local/bin/canary-checker
+    `}
+    </ReactMarkdown>
+  </TabItem>
+   <TabItem value="macosx-ard64" label="MacOSX (arm64)">
+   <ReactMarkdown>
+    {`
+    wget https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_darwin_arm64  \
+      -O /usr/local/bin/canary-checker && \
+      chmod +x /usr/local/bin/canary-checker
+    `}
+    </ReactMarkdown>
+  </TabItem>
+  <TabItem value="makefile" label="Makefile">
+  <ReactMarkdown>
+    {`
+    OS = $(shell uname -s | tr '[:upper:]' '[:lower:]')
+    ARCH = $(shell uname -m | sed 's/x86_64/amd64/')
+    wget -nv -nc https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_$(OS)_$(ARCH)  \\
+      -O /usr/local/bin/canary-checker && \\
+      chmod +x /usr/local/bin/canary-checker
+    `}
+  </ReactMarkdown>
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+  <ReactMarkdown>
+    {`
+    wget -nv -nc -O https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker.exe
+    `}
+  </ReactMarkdown>
+  </TabItem>
+</Tabs>
+
+# Run
+
+```yaml title="canary.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-check
+spec:
+  interval: 30
+  http:
+    - endpoint: http://status.savanttools.com/?code=200
+      responseCodes: [200]
+```
+
+```bash
+canary-checker run canary.yaml
+```
