@@ -9,6 +9,15 @@ module.exports = {
     organizationName: 'flanksource',
     projectName: 'canary-checker',
     themeConfig: {
+      algolia: {
+        // The application ID provided by Algolia
+        appId: 'UBMLWJ0MA2',
+
+        // Public API key: it is safe to commit it
+        apiKey: '6f7d25ae5d5b3b677c1039246031e049',
+
+        indexName: 'canarychecker',
+      },
       docs: {
           sidebar: {
               hideable: true,
@@ -24,7 +33,7 @@ module.exports = {
                 href: 'https://github.com/flanksource/canary-checker',
                 label: 'GitHub',
                 position: 'right',
-            }
+            },
         ],
       },
       colorMode: {
