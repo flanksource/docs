@@ -18,6 +18,7 @@ module.exports = {
         logo: {
           alt: 'Canary Checker Logo',
           src: 'img/canary-checker.svg',
+          srcDark: 'img/canary-checker-white.svg',
         },
         items: [
             {
@@ -60,4 +61,3 @@ module.exports = {
       ],
     ],
   };
-  
