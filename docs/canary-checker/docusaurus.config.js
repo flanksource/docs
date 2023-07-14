@@ -5,7 +5,7 @@ module.exports = {
     baseUrl: '/',
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
-    favicon: 'img/canary-checker.svg',
+    favicon: 'img/canary-checker-icon.svg',
     organizationName: 'flanksource',
     projectName: 'canary-checker',
     themeConfig: {
