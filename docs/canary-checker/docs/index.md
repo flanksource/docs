@@ -5,7 +5,8 @@ hide:
   - toc
 ---
 
-# ![](images/canary-checker.svg)
+![Canary Checker](../images/canary-checker.svg#gh-light-mode-only)
+![Canary Checker](../images/canary-checker-white.svg#gh-dark-mode-only)
 
 Canary checker is a kubernetes-native platform for monitoring health across application and infrastructure using both passive and active (synthetic) mechanisms.
 

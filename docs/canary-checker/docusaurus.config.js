@@ -5,7 +5,7 @@ module.exports = {
     baseUrl: '/',
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
-    favicon: 'img/canary-checker.svg',
+    favicon: 'img/canary-checker-icon.svg',
     organizationName: 'flanksource',
     projectName: 'canary-checker',
     themeConfig: {
@@ -56,6 +56,9 @@ module.exports = {
       [
         '@docusaurus/preset-classic',
         {
+          theme: {
+            customCss: require.resolve('./src/css/custom.css'),
+          },
           docs: {
             routeBasePath: '/',
             breadcrumbs: true,
