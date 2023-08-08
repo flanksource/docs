@@ -218,6 +218,21 @@ module.exports = {
               id: 'reference/junit',
               label: 'JUnit',
             },
+            {
+              type: 'doc',
+              id: 'reference/k6',
+              label: 'K6',
+            },
+            {
+              type: 'doc',
+              id: 'reference/newman',
+              label: 'Newman (Postman Collection)',
+            },
+            {
+              type: 'doc',
+              id: 'reference/playwright',
+              label: 'Playwright',
+            },
           ],
         },
         {
