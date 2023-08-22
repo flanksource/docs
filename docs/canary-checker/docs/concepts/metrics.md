@@ -15,26 +15,28 @@ Canary checker comes with a built-in dashboard for displaying canary results, it
 
 Export custom prometheus metrics from your check results
 
-| Field  | Description                                            | Scheme            | Required |
-|--------|--------------------------------------------------------|-------------------|----------|
-| name   | Name of the metric                                     | string            | Yes      |
-| value  | Templatable float value of the metric                  | string            | Yes      |
-| type   | Prometheus Metric Type (counter, guage or histogram)   | string            | Yes      |
-| labels | Labels for prometheus metric (values can be templated) | map[string]string |          |
+| Field    | Description                                            | Scheme            | Required |
+|----------|--------------------------------------------------------|-------------------|----------|
+| `name`   | Name of the metric                                     | string            | Yes      |
+| `value`  | Templatable float value of the metric                  | string            | Yes      |
+| `type`   | Prometheus Metric Type (counter, guage or histogram)   | string            | Yes      |
+| `labels` | Labels for prometheus metric (values can be templated) | map[string]string |          |
 
-Template input fields:
-| Fields            | Description              | Scheme            |
-|-------------------|--------------------------|-------------------|
-| **check**         |                          | string            |
-| check.name        | Name                     | string            |
-| check.description | Description              | string            |
-| check.labels      | Labels                   | map[string]string |
-| check.endpoint    | Endpoint                 | string            |
-| check.duration    | Duration in milliseconds | int64             |
-| **result**        | Check Result             | Object            |
+
+**Template input fields**:
+
+| Fields              | Description              | Scheme            |
+|---------------------|--------------------------|-------------------|
+| **`check`**         |                          | string            |
+| `check.name`        | Name                     | string            |
+| `check.description` | Description              | string            |
+| `check.labels`      | Labels                   | map[string]string |
+| `check.endpoint`    | Endpoint                 | string            |
+| `check.duration`    | Duration in milliseconds | int64             |
+| **`result`**        | Check Result             | Object            |
 
 Sample check with metrics:
-```
+```yaml
 # http.yml
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
