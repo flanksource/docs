@@ -228,6 +228,7 @@ nav:
                 - Concepts:
                         - Playbook: 
                                 - Overview: ./playbooks/concepts/playbook/index.md
+                                - Examples: ./playbooks/concepts/playbook/examples.md
                                 - Listing Playbooks: ./playbooks/concepts/playbook/list-playbooks.md
                         - Runs: 
                                 - Overview: ./playbooks/concepts/run/index.md
@@ -236,6 +237,6 @@ nav:
                                 - Overview: ./playbooks/concepts/action/index.md
                         - Approvals: 
                                 - Overview: ./playbooks/concepts/approval/index.md
-                                - Approving Playbook Runs: ./playbooks/concepts/approval/approve-run.md
+                                - Approving Runs: ./playbooks/concepts/approval/approve-run.md
                 - Actions:
                         - Exec: ./playbooks/actions/exec.md
