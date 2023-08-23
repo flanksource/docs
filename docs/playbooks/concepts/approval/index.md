@@ -1,6 +1,6 @@
 # Approval
 
-Playbook runs can be protected behind an authorization so that it can only run if certain people or teams approve it.
+Authorization safeguards can be applied to playbook runs, ensuring their execution is limited to specific individuals or teams who grant approval.
 
 ## Approval
 
@@ -22,17 +22,3 @@ Playbook runs can be protected behind an authorization so that it can only run i
 | -------- | ------------------------- | ---------- | -------- |
 | `people` | Specify ids of the people | `[]string` | `false`  |
 | `teams`  | Specify ids of the teams  | `[]string` | `false`  |
-
-## Approving a run
-
-```bash
-curl -sL -X POST -u 'admin@local:admin' \
-  'localhost:8080/playbook/run/approve/<playbook_id/<run_id>'
-```
-
-### Path Parameters
-
-| Parameter     | Type     | Description             |
-| ------------- | -------- | ----------------------- |
-| `playbook_id` | `string` | The ID of the playbook. |
-| `run_id`      | `string` | The ID of the run.      |

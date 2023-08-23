@@ -2,7 +2,7 @@
 
 Playbooks can be used to define actions for a component or a config item.
 
-## Playbook
+## PlaybookSpec
 
 | Field         | Description                                                            | Scheme                                 | Required |
 | ------------- | ---------------------------------------------------------------------- | -------------------------------------- | -------- |

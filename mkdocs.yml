@@ -197,8 +197,8 @@ nav:
                                       - Configuration Items: ./topology/concepts/config.md
                                       - Health Checks: ./topology/concepts/health-checks.md
                   - Examples:
-                            Kubernetes: ./topology/examples/kubernetes.md
-                            Kubernetes (Workload): ./topology/examples/kubernetes-workload.md
+                            - Kubernetes: ./topology/examples/kubernetes.md
+                            - Kubernetes (Workload): ./topology/examples/kubernetes-workload.md
                   - Reference:
                             - Components: ./topology/references/components.md
                             - Properties: ./topology/references/properties.md
@@ -224,10 +224,18 @@ nav:
                             - Definition of Done: ./incidents/concepts/done-definition.md
         - Playbooks:
                 - Overview: ./playbooks/overview.md
+                - Quick Start: ./playbooks/quick-start.md
                 - Concepts:
-                        - Playbook: ./playbooks/concepts/playbook.md
-                        - Runs: ./playbooks/concepts/run.md
-                        - Actions: ./playbooks/concepts/action.md
-                        - Approvals: ./playbooks/concepts/approval.md
+                        - Playbook: 
+                                - Overview: ./playbooks/concepts/playbook/index.md
+                                - Listing Playbooks: ./playbooks/concepts/playbook/list-playbooks.md
+                        - Runs: 
+                                - Overview: ./playbooks/concepts/run/index.md
+                                - Manually Triggering Runs: ./playbooks/concepts/run/manual-trigger.md
+                        - Actions: 
+                                - Overview: ./playbooks/concepts/action/index.md
+                        - Approvals: 
+                                - Overview: ./playbooks/concepts/approval/index.md
+                                - Approving Playbook Runs: ./playbooks/concepts/approval/approve-run.md
                 - Actions:
                         - Exec: ./playbooks/actions/exec.md
