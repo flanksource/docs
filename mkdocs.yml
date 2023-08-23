@@ -222,3 +222,10 @@ nav:
                             - Responders: ./incidents/concepts/responders.md
                             - Notifications: ./incidents/concepts/notifications.md
                             - Definition of Done: ./incidents/concepts/done-definition.md
+        - Playbooks:
+                - Overview: ./playbooks/overview.md
+                - Concepts:
+                        - Playbook: ./playbooks/concepts/playbook.md
+                        - Runs: ./playbooks/concepts/run.md
+                        - Actions: ./playbooks/concepts/action.md
+                        - Approvals: ./playbooks/concepts/approval.md
