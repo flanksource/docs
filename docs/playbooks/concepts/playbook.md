@@ -31,23 +31,3 @@ Playbook parameter defines a parameter that a playbook needs to run.
 | `name`  | Specify name of parameter.  | `string` | `true`   |
 | `label` | Specify label of parameter. | `string` | `true`   |
 
-## Approval
-
-| Field       | Description                    | Scheme       | Required |
-| ----------- | ------------------------------ | ------------ | -------- |
-| `type`      | Specify type of approval.      | `string`     | `false`  |
-| `approvers` | Specify approvers of approval. | `[]Approver` | `false`  |
-
-### Approval Type
-
-| Type  | Description                           |
-| ----- | ------------------------------------- |
-| `any` | A single approval can suffice.        |
-| `all` | All approvals are required. (default) |
-
-### Approvers
-
-| Field    | Description               | Scheme     | Required |
-| -------- | ------------------------- | ---------- | -------- |
-| `people` | Specify ids of the people | `[]string` | `false`  |
-| `teams`  | Specify ids of the teams  | `[]string` | `false`  |
