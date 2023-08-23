@@ -229,3 +229,5 @@ nav:
                         - Runs: ./playbooks/concepts/run.md
                         - Actions: ./playbooks/concepts/action.md
                         - Approvals: ./playbooks/concepts/approval.md
+                - Actions:
+                        - Exec: ./playbooks/actions/exec.md
