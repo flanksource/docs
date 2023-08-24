@@ -45,7 +45,7 @@ spec:
 
 | Field        | Description                                                  | Scheme                                            |
 | ------------ | ------------------------------------------------------------ | ------------------------------------------------- |
-| `connection` | Path of existing connection e.g. `connection://sftp/instance`<br/> Mutually exclusive with `username ` <br/><Commercial/> | [Connection](../../concepts/connections)          |
+| `connection` | Path of existing connection e.g. `connection://sftp/instance`<br/> Mutually exclusive with `username` <br/><Commercial/> | [Connection](../../concepts/connections)          |
 | `username`   | utually exclusive with `connection`                          | [*EnvVar*](../../concepts/authentication/#envvar) |
 | `password`   | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
 | `host`       | Custom AWS Cloudwatch endpoint                               | *string*                                          |

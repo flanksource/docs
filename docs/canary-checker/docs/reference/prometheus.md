@@ -34,10 +34,6 @@ spec:
 | `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 
-
-
-
-
 ## Result Variables
 
 | Name         | Description             | Scheme                     |
