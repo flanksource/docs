@@ -4,6 +4,8 @@ title: JUnit
 
 # <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/junit.svg' style={{height: '32px'}}/> JUnit
 
+<Standard/>
+
 JUnit check performs a Unit test, parses the JUnit test reports in a container at a specified path as defined in `testResults`.
 
 ```yaml

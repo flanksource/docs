@@ -2,7 +2,9 @@
 title: Jmeter
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/jmeter.svg' style={{height: '32px'}}/> JMeter
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/jmeter.svg>' style={{height: '32px'}}/> JMeter
+
+<Standard/>
 
 This check will execute the JMeter CLI to execute the JMX test plan on the specified host.
 
@@ -15,7 +17,7 @@ spec:
   interval: 30
   jmeter:
     - name: jmeter check
-      host: 192.168.1.5
+      url: 192.168.1.5
       jmx:
         valueFrom:
           configMapKeyRef:

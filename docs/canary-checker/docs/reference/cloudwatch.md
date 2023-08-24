@@ -2,7 +2,7 @@
 title: AWS Cloud Watch
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/cloudwatch.svg' style={{height: '32px'}}/> CloudWatch
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/cloudwatch.svg>' style={{height: '32px'}}/> CloudWatch
 
 Cloudwatch checks  for all active alarms
 
@@ -37,7 +37,7 @@ spec:
 | `state` | Specify to retrieve state value of alarm | *string* | |
 | `*` | All other commons field | [*Common*](common) | |
 | **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `accessKey` and `secretKey` | [Connection](../concepts/connections) | |
+| `connection` | Path of existing connection e.g. `connection://aws/instance` Mutually exclusive with `accessKey` and `secretKey`  <br/><Commercial/> | [Connection](../concepts/connections) | |
 | `accessKey` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) |  |
 | `secretKey` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) |  |
 | `endpoint` | Custom AWS endpoint | *string* | |

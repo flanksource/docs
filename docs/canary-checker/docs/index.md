@@ -31,6 +31,15 @@ Canary checker is a kubernetes-native platform for monitoring health across appl
 
 * **Unified Alerting**
 
+
+
+### When not to use
+
+* Browser based testing
+* 
+
+
+
 ## Getting Started
 
 1. Install canary checker:

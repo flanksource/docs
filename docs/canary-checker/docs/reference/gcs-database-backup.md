@@ -2,7 +2,7 @@
 title: GCS Database Backup
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/database2.svg' style={{height: '32px'}}/> GCP CloudSQL Backups
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/database2.svg>' style={{height: '32px'}}/> GCP CloudSQL Backups
 
 Checks if a GCP CloudSQL instance has been successfully backed up recently.
 
@@ -38,7 +38,7 @@ Durations are strings with an optional fraction and unit e.g.  `300ms`, `1.5h` o
 | `project` | GCP project\ name | *string* | Yes |
 | `instance` | Google CloudSQL instance name | *string* | Yes |
 | **Connection** |  |  |  |
-| `connection` | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` | [Connection](../../concepts/connections) |  |
+| `connection` | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` <br/> <Commercial/> | [Connection](../../concepts/connections) |  |
 | `credentials` | GCP Access Token File. Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
 
 ### Connecting to GCP

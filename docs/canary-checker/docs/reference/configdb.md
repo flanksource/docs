@@ -4,7 +4,7 @@ title: Config DB
 
 # Config DB Query
 
-ConfigDB check connects to the specified database host, run a specified query for your configuration data, and return the result.
+Runs a [config-db](https://github.com/flanksource/config-db) query.
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1

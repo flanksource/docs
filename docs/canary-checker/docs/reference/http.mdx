@@ -2,7 +2,7 @@
 title: HTTP
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/http.svg' style={{height: '32px'}}/> HTTP
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/http.svg>' style={{height: '32px'}}/> HTTP
 
 This check performs queries on HTTP endpoints, and HTTP Namespaces to monitor their activity.
 
@@ -37,7 +37,7 @@ spec:
 | `maxSSLExpiry` | Maximum number of days until the SSL Certificate expires. | *int* | |
 | `*` | All other common fields | [*Common*](common) | |
 | **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://sftp/instance`/ Mutually exclusive with `username`, `password` | [Connection](../../concepts/connections) | |
+| `connection` | Path of existing connection e.g. `connection://http/instance` <br/> Mutually exclusive with `username`, `password` <br/> <Commercial/> | [Connection](../../concepts/connections) | |
 | `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | **`url`** | HTTP  URL, if a URL is specified on both the connection and check, the url on the check takes precedence. | *string* | Yes |

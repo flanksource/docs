@@ -1,8 +1,7 @@
 ---
 title: S3 Bucket
 ---
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/s3Bucket.svg' style={{height: '32px'}}/> S3 Bucket
-
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/s3Bucket.svg>' style={{height: '32px'}}/> S3 Bucket
 
 Checks the contents of a S3 bucket for size, age and count.
 
@@ -84,9 +83,10 @@ There are 3 options when connecting to AWS:
                   name: aws-credentials
                   key: AWS_SECRET_ACCESS_KEY
          region: us-east-1AWS connection fields
+
 | Field           | Description                                                  | Scheme                                            | Required |
 | --------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
-| `connection`    | Path of existing connection e.g. `connection://aws/instance`. Mutually exclusive with `accessKey` and `secretKey` | [Connection](../concepts/connections)             |          |
+| `connection`    | Path of existing connection e.g. `connection://aws/instance` <br/>Mutually exclusive with `accessKey` and `secretKey` <br/> <Commercial/> | [Connection](../concepts/connections)             |          |
 | `accessKey`     | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
 | `secretKey`     | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
 | `endpoint`      | Custom AWS endpoint                                          | *string*                                          |          |

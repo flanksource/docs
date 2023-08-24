@@ -1,5 +1,7 @@
 # <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/namespace.svg' style={{height: '32px'}}/> Namespace
 
+<Enterprise/>
+
 The Namespace check:
 
 * Creates a new namespace using the labels/annotations provided

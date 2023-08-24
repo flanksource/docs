@@ -37,11 +37,14 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `auth` | username and password value, configMapKeyRef or SecretKeyRef for Postgres server | [*Authentication*](../concepts/authentication.md) |  |
-| **`connection`** | connection string to connect to the server | *string* | Yes |
 | **`query`** | query that needs to be executed on the server | *string* | Yes |
 | **`results`** | Number rows to check for | *int* | Yes |
 | `*` | All other common fields | [*Common*](common) |  |
+| **Connection** |  |  | |
+| `connection` | Path of existing connection e.g. `connection://postgres/instance` Mutually exclusive with `username`, `password` <br/> <Commercial/> | [Connection](../../concepts/connections) | |
+| `url` | If the url is specifed in both the `connection` and in the `url` field, the `url` field takes precedence |  | |
+| `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
+| `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 
 ## Result Variables
 

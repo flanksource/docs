@@ -61,7 +61,33 @@ module.exports = {
       type: 'category',
       label: 'Check Types',
       items: [
-        'reference/common',
+        { type: 'doc', id: 'reference/common', label: 'Overview' },
+        {
+          type: 'doc',
+          id: 'reference/http',
+          label: 'HTTP',
+        },
+        {
+          type: 'category',
+          label: 'Network',
+          items: [
+            {
+              type: 'doc',
+              id: 'reference/tcp',
+              label: 'TCP',
+            },
+            {
+              type: 'doc',
+              id: 'reference/dns',
+              label: 'DNS',
+            },
+            {
+              type: 'doc',
+              id: 'reference/icmp',
+              label: 'ICMP',
+            },
+          ],
+        },
         {
           type: 'category',
           label: 'Alerts',
@@ -246,32 +272,7 @@ module.exports = {
             },
           ],
         },
-        {
-          type: 'category',
-          label: 'Network',
-          items: [
-            {
-              type: 'doc',
-              id: 'reference/tcp',
-              label: 'TCP',
-            },
-            {
-              type: 'doc',
-              id: 'reference/dns',
-              label: 'DNS',
-            },
-            {
-              type: 'doc',
-              id: 'reference/http',
-              label: 'HTTP',
-            },
-            {
-              type: 'doc',
-              id: 'reference/icmp',
-              label: 'ICMP',
-            },
-          ],
-        },
+
         {
           type: 'category',
           label: 'Infrastructure',
@@ -302,6 +303,37 @@ module.exports = {
               label: 'S3 Protocol',
             },
           ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Scripting',
+      items: [
+        {
+          type: 'doc',
+          id: 'scripting/overview',
+          label: 'Overview',
+        },
+        {
+          type: 'doc',
+          id: 'scripting/gotemplate',
+          label: 'Go Templates',
+        },
+        {
+          type: 'doc',
+          id: 'scripting/expr',
+          label: 'Expressions',
+        },
+        {
+          type: 'doc',
+          id: 'scripting/javascript',
+          label: 'Javascript',
+        },
+        {
+          type: 'doc',
+          id: 'scripting/functions',
+          label: 'Functions',
         },
       ],
     },
