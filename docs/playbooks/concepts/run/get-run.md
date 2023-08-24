@@ -16,22 +16,6 @@ GET /playbook/run/{id}
 
 ### Response
 
-```go
-type PlaybookRun struct {
-	ID          uuid.UUID           `gorm:"default:generate_ulid()"`
-	PlaybookID  uuid.UUID           `json:"playbook_id"`
-	Status      PlaybookRunStatus   `json:"status,omitempty"`
-	CreatedAt   time.Time           `json:"created_at,omitempty" time_format:"postgres_timestamp" gorm:"<-:false"`
-	StartTime   time.Time           `json:"start_time,omitempty" time_format:"postgres_timestamp" gorm:"default:NOW(), not null"`
-	EndTime     *time.Time          `json:"end_time,omitempty" time_format:"postgres_timestamp"`
-	CreatedBy   *uuid.UUID          `json:"created_by,omitempty"`
-	ComponentID *uuid.UUID          `json:"component_id,omitempty"`
-	ConfigID    *uuid.UUID          `json:"config_id,omitempty"`
-	Parameters  types.JSONStringMap `json:"parameters,omitempty" gorm:"default:null"`
-	AgentID     *uuid.UUID          `json:"agent_id,omitempty"`
-}
-```
-
 | Field          | Type                | Description                                           |
 | -------------- | ------------------- | ----------------------------------------------------- |
 | `id`           | `string`            | The ID of the run.                                    |
@@ -45,4 +29,3 @@ type PlaybookRun struct {
 | `config_id`    | `string`            | The ID of the config item that ran the playbook.      |
 | `parameters`   | `map[string]string` | The parameters to pass to the playbook.               |
 | `agent_id`     | `string`            | The ID of the agent that ran the playbook.            |
-
