@@ -42,5 +42,3 @@ spec:
 | `ignore` | A list of alert prefix names to exclude | `[]string` | |
 | `filters` | A map of label to value prefixes to find alerts on | `map[string]string` | |
 | `*` | All other commons field | [*Common*](common) | |
-
-<Connection example="alertmanager"/>
