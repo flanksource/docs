@@ -239,4 +239,5 @@ nav:
                                 - Overview: ./playbooks/concepts/approval/index.md
                                 - Approving Runs: ./playbooks/concepts/approval/approve-run.md
                 - Actions:
+                        - Common: ./playbooks/actions/common.md
                         - Exec: ./playbooks/actions/exec.md

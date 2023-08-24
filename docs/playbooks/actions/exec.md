@@ -9,7 +9,6 @@ Exec Check executes a command or script file on the target host. The type of scr
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | -------- |
 | **`script`**      | Script can be a inline script or a path to a script that needs to be executed. On windows executed via Powershell and in darwin and linux executed using bash. | _string_              | Yes      |
 | **`connections`** | Connections for some CLIs                                                                                                                                      | `map[string]string`   |          |
-| `*`               | All other commons field                                                                                                                                        | [_Common_](../common) |          |
 
 ## ExecConnection
 
@@ -48,3 +47,13 @@ Exec Check executes a command or script file on the target host. The type of scr
 | `clientID`       | Client ID       | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) |          |
 | `clientSecret`   | Client Secret   | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) |          |
 | `tenantID`       | Tenant ID       | `string`                                                                      |          |
+
+## Templating
+
+The scripts you provide will be templated using the following variables:
+
+| Field       | Description        | Type                                                                                   |
+| ----------- | ------------------ | -------------------------------------------------------------------------------------- |
+| `config`    | Config item        | [`ConfigItem`](https://github.com/flanksource/duty/blob/main/models/config.go#L68-L90) |
+| `component` | Component          | [`Component`](https://github.com/flanksource/duty/blob/main/models/config.go#L68-L90)  |
+| `params`    | The run parameters | `map[string]string`                                                                    |

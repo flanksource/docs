@@ -1,6 +1,6 @@
 # Playbook Action
 
-Actions are the actual task performed by a playbook. A playbook can consist of multiple actions that are executed in sequence. If any action fails, the execution is stopped.
+Actions are the fundamental tasks executed by a playbook. A playbook can comprise multiple actions, which are executed sequentially. If any action encounters an error and fails, the execution of the playbook is halted.
 
 ## Action
 
