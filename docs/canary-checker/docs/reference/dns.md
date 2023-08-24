@@ -33,7 +33,7 @@ spec:
 | **`server`** | Address of DNS server to query e.g. `8.8.8.8` | *string* | Yes |
 | **`port`** | Port to query DNS server on, e.g. `53` | *int* | Yes |
 | **`query`** | Domain name to lookup | *string* | Yes |
-| **`querytype`** | Record type to query e.g. `A`, `CNAME` | *string* | Yes |
+| **`querytype`** | Record type to query e.g. `A`, `CNAME`, `TXT`, `SRV` | *string* | Yes |
 | `exactreply` | Expected exact match result(s) | *\[\]string* |  |
 | `minrecords` | Minimum records | *int* |  |
 | `thresholdMillis` | Threshold response time from DNS server | *int* |  |

@@ -2,7 +2,7 @@
 title: LDAP
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/ldap.svg' style={{height: '32px'}}/> LDAP
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/ldap.svg>' style={{height: '32px'}}/> LDAP
 
 The LDAP check:
 
@@ -18,7 +18,7 @@ spec:
   interval: 30
   ldap:
     - name: ldap-org
-      host: ldap://apacheds.ldap.svc:10389
+      url: ldap://apacheds.ldap.svc:10389
       username:
         # value: uid=admin,ou=system
         valueFrom:
@@ -41,8 +41,8 @@ spec:
 | **`userSearch`** | UserSearch to use in query | *string* | Yes |
 | `*` | All other common fields | [*Common*](common) |  |
 | **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://alertmanager/instance`/ Mutually exclusive with `username`, `password`, `host` | [Connection](../../concepts/connections) | |
-| `host` | Host endpoint mutually exclusive with `connection` | `string` | |
-| `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
-| `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
+| `connection` | Path of existing connection e.g. `connection://alertmanager/instance`/ Mutually exclusive with `username`, `password`, `url`  <br/> <Commercial/> | [Connection](../../concepts/connections) | |
+| `url` | e.g. `ldap://apacheds.ldap.svc:10389` <br/>*Mutually exclusive with `connection`* | `string` | |
+| `username` | *Mutually exclusive with `connection`* | [*EnvVar*](../../concepts/authentication/#envvar) | |
+| `password` | *Mutually exclusive with `connection`* | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | `skipTLSVerify` | Skip check of LDAP server TLS certificates | *bool* | |

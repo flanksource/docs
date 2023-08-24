@@ -2,7 +2,7 @@
 title: MSSQL
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/mssql.svg' style={{height: '32px'}}/> MSSQL
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/mssql.svg>' style={{height: '32px'}}/> MSSQL
 
 This check will try to connect to a specified SQL Server database, run a query against it and verify the results.
 
@@ -37,7 +37,7 @@ spec:
 | **`results`** | Number rows to check for | *int* | Yes |
 | `*` | All other common fields | [*Common*](common) |  |
 | **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://mssql/instance`/ Mutually exclusive with `username`, `password` | [Connection](../../concepts/connections) | |
+| `connection` | Path of existing connection e.g. `connection://mssql/instance`/ Mutually exclusive with `username`, `password` <br/> <Commercial/> | [Connection](../../concepts/connections) | |
 | `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
-| `url` | If the url is specifed in both the `connection` and in the `url`  field, the field takes precedence |  | |
+| `url` | If the url is specifed in both the `connection` and in the `url` field, the `url` field takes precedence |  | |

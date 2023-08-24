@@ -2,7 +2,7 @@
 title: S3 Protocol
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/aws-s3.svg' style={{height: '32px'}}/> S3 Protocol
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/s3.svg>' style={{height: '32px'}}/> S3 Protocol
 
 :::note
 
@@ -35,7 +35,7 @@ spec:
 | **`objectPath`** | Path to create a test object e.g. `s3-dummy/` | *string* | Yes |
 | `*` | All other common fields | [*Common*](common) |  |
 | **Connection** |  |  |  |
-| `connection` | Path of existing connection e.g. `connection://aws/instance`. Mutually exclusive with `accessKey` and `secretKey` | [Connection](../concepts/connections) | |
+| `connection` | Path of existing connection e.g. `connection://aws/instance`. Mutually exclusive with `accessKey` and `secretKey` <br/> <Commercial/> | [Connection](../concepts/connections) | |
 | `accessKey` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
 | `secretKey` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
 | `endpoint` | Custom AWS endpoint | *string* | |

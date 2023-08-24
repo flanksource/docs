@@ -2,7 +2,7 @@
 title: Elasticsearch
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/elasticsearch.svg' style={{height: '32px'}}/> ElasticSearch
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/elasticsearch.svg>' style={{height: '32px'}}/> ElasticSearch
 
 This check will try to connect to a specified ElasticSearch database, run a query against it and verify the results.
 
@@ -51,7 +51,7 @@ spec:
 | **`results`** | Number of expected hits | *int* | Yes |
 | `*` | All other commons field | [*Common*](common) |  |
 | **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://elastic/instance`/ Mutually exclusive with `username` and `password | [Connection](../../concepts/connections) | |
+| `connection` | Path of existing connection e.g. `connection://elastic/instance` <br/>Mutually exclusive with `username` and `password`  <br/> <Commercial/> | [Connection](../../concepts/connections) | |
+| `url` | URL of elastichsearch server | *string* | Yes |
 | `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
-| `url` | host:port address | *string* | Yes |

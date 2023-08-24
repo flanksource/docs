@@ -109,7 +109,6 @@ nav:
 
                   - Check Types:
                             - Common: ./canary-checker/reference/common.md
-
                             - Alerts:
                                       - Alert Manager (Prometheus): ./canary-checker/reference/alert-manager.md
                                       - AWS Cloud Watch: ./canary-checker/reference/cloudwatch.md

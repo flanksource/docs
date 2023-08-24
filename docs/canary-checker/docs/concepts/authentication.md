@@ -1,10 +1,8 @@
 # Authentication
 
-Mission Control uses the Kubernetes ValuesFrom pattern to retrieve sensitive values like usernames, password and access keys.
+Canary checker uses the Kubernetes ValuesFrom pattern to retrieve sensitive values like usernames, password and access keys.
 
 Whenever a field uses the `EnvVar` object type you have the option of specifying the value in 3 ways:
-
-
 
 ## EnvVar
 
@@ -23,7 +21,7 @@ metadata:
   name: http-basic-auth
 spec:
   http:
-    - endpoint: https://httpbin.org/basic-auth/hello/world
+    - url: https://httpbin.org/basic-auth/hello/world
       responseCodes: [200]
       authentication:
         username:
@@ -47,7 +45,7 @@ metadata:
   name: http-basic-auth-configmap
 spec:
   http:
-    - endpoint: https://httpbin.org/basic-auth/hello/world
+    - url: https://httpbin.org/basic-auth/hello/world
       responseCodes: [200]
       authentication:
         username:
@@ -77,7 +75,7 @@ metadata:
   name: http-basic-auth-configmap
 spec:
   http:
-    - endpoint: https://httpbin.org/basic-auth/hello/world
+    - url: https://httpbin.org/basic-auth/hello/world
       responseCodes: [200]
       authentication:
         username:
