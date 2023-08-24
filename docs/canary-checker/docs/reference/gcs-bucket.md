@@ -2,7 +2,7 @@
 title: GCS Bucket
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/gcsBucket.svg' style={{height: '32px'}}/> GCSBucket
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/gcsBucket.svg>' style={{height: '32px'}}/> GCSBucket
 
 Checks the contents of a GCP bucket for size, age and count.
 
@@ -30,7 +30,7 @@ spec:
 | `*`        | All other fields available in the folder check               | [*Folder*](folder) |          |
 | `*` | All other common fields | [*Common*](common) | |
 | **Connection** |  |  | |
-| `connection` | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` | [Connection](../../concepts/connections) | |
+| `connection` | Path of an existing connection e.g. `connection://aws/instance` <br/>Mutually exclusive with `credentials`  <br/> <Commercial/> | [Connection](../../concepts/connections) | |
 | `credentials` | GCP Access Token File. Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
 
 ### Connecting to GCP

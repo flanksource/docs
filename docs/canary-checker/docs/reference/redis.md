@@ -2,7 +2,7 @@
 title: Redis
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/redis.svg' style={{height: '32px'}}/> Redis
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/redis.svg>' style={{height: '32px'}}/> Redis
 
 The Redis check connects to a specified Redis database instance to check its availability.
 
@@ -31,7 +31,7 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **`addr`** | `host:port` address of redis | string | Yes |
+| **`addr`** | Deprecated, use `url` | string | Yes |
 | **`db`** | Database to be selected after connecting to the server | *int* | Yes |
 | `*` | All other common fields | [*Common*](common) |  |
 
@@ -39,6 +39,7 @@ spec:
 
 | Field        | Description                                                  | Scheme                                            |
 | ------------ | ------------------------------------------------------------ | ------------------------------------------------- |
-| `connection` | Path of existing connection e.g. `connection://redis/instance`/ Mutually exclusive with `accessKey` | [Connection](../../concepts/connections)          |
+| `connection` | Path of existing connection e.g. `connection://redis/instance` <br/>Mutually exclusive with `url` <br/><Commercial/> | [Connection](../../concepts/connections)          |
+| `url`        | Redis hostname and port                                      |                                                   |
 | `username`   | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
 | `password`   | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |

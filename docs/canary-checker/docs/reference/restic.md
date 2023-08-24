@@ -2,7 +2,7 @@
 title: Restic
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/restic.svg' style={{height: '32px'}}/> Restic
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/restic.svg>' style={{height: '32px'}}/> Restic
 
 The Restic check:
 
@@ -46,10 +46,10 @@ spec:
 | `checkIntegrity` | When enabled will check the Integrity and consistency of the restic repository | bool |  |
 | `*` | All other common fields | [*Common*](common) | |
 | **Encryption Connection** |  |  | |
-| `connection` | Path of existing connection to get encryption key e.g. `connection://restic/key`/ Mutuall exclusive with `password` | [Connection](../concepts/connections) | |
+| `connection` | Path of existing connection to get encryption key e.g. `connection://restic/key`<br/>Mutually exclusive with `password` <br/> <Commercial/> | [Connection](../concepts/connections) | |
 | `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
 | **AWS Connection** |  |  | |
-| `awsConnectionName` | Path of existing connection to connect to S3 e.g. `connection://aws/instance`/ Mutuall exclusive with `accessKey` | [Connection](../concepts/connections) | |
+| `awsConnectionName` | Path of existing connection to connect to S3 e.g. `connection://aws/instance` <br/>Mutually exclusive with `accessKey` <br/> <Commercial/> | [Connection](../concepts/connections) | |
 | `accessKey` | Mutually exclusive with `awsConnectionName` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
 | `secretKey` | Mutually exclusive with `awsConnectionName` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
 | `endpoint` | Custom AWS Config endpoint | *string* | |

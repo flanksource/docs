@@ -2,7 +2,7 @@
 title: AWS Config Rule
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/aws-config.svg' style={{height: '32px'}}/> AWS Config Rule
+# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/aws-config.svg>' style={{height: '32px'}}/> AWS Config Rule
 
 Check if any AWS resources are failing AWS config rule checks.
 
@@ -27,9 +27,9 @@ Check if any AWS resources are failing AWS config rule checks.
 | `rules`           | Specify one or more Config rule names to filter the results by rule. | `[]string`                                        |          |
 | `ignoreRules`     | List of rules which would be omitted from the fetch result.  | `[]string`                                        |          |
 | `complianceTypes` | Filters the results by compliance. The allowed values are `INSUFFICIENT_DATA`, `NON_COMPLIANT`, `NOT_APPLICABLE`, `COMPLIANT` | `[]string`                                        |          |
-| `*`               | All other commons field                                      | [*Common*](common)                             |          |
+| `*`               | All other commons field                                      | [*Common*](common)                                |          |
 | **Connection**    |                                                              |                                                   |          |
-| `connection`      | Path of existing connection e.g. `connection://aws/instance`/ Mutuall exclusive with `accessKey` | [Connection](../concepts/connections)             |          |
+| `connection`      | Path of existing connection e.g. `connection://aws/instance` <br/>Mutually exclusive with `accessKey` <br/> <Commercial/> | [Connection](../concepts/connections)             |          |
 | `accessKey`       | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
 | `secretKey`       | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
 | `endpoint`        | Custom AWS Config endpoint                                   | *string*                                          |          |
@@ -57,7 +57,7 @@ There are 3 options when connecting to AWS:
             - "s3-bucket-public-read-prohibited"
     ```
 
-3.  `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret.
+3. `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret.
 
     ```yaml title="aws.yaml"
     apiVersion: canaries.flanksource.com/v1

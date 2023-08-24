@@ -20,6 +20,7 @@
     "@docusaurus/plugin-ideal-image": "^2.4.1",
     "@docusaurus/preset-classic": "^2.4.1",
     "@docusaurus/theme-search-algolia": "^2.4.1",
+    "@jsdevtools/rehype-inline-svg": "^1.1.4",
     "react-markdown": "^8.0.7"
   }
 }
