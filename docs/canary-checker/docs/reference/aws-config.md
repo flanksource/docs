@@ -2,7 +2,7 @@
 title: Aws Config
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/aws-config.svg>' style={{height: '32px'}}/> AWS Config
+# <Icon name="aws-config"/> AWS Config
 
 AWS Config checks .
 

@@ -2,7 +2,7 @@
 title: DNS
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/dns.svg' style={{height: '32px'}}/> DNS
+# <Icon name="dns"/> DNS
 
 Performs queries to a DNS server, typical use cases include:
 

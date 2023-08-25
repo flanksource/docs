@@ -2,7 +2,7 @@
 title: SFTP Connection
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/sftp.svg>' style={{height: '32px'}}/> SFTPConnection
+# <Icon name="sftp"/> SFTPConnection
 
 Checks the contents of a folder over SFTP for size, age and count.
 

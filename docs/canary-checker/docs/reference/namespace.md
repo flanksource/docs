@@ -1,4 +1,4 @@
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/namespace.svg' style={{height: '32px'}}/> Namespace
+# <Icon name="namespace"/> Namespace
 
 <Enterprise/>
 

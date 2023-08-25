@@ -2,7 +2,7 @@
 title: GCS Bucket
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/gcsBucket.svg>' style={{height: '32px'}}/> GCSBucket
+# <Icon name="gcsBucket"/> GCSBucket
 
 Checks the contents of a GCP bucket for size, age and count.
 

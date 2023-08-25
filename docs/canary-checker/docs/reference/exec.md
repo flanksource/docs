@@ -1,4 +1,4 @@
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/console.svg' style={{height: '32px'}}/> Exec
+# <Icon name="cmd"/> Exec
 
 <Standard/>
 

@@ -2,7 +2,7 @@
 title: Pod
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/k8s-pod.svg' style={{height: '32px'}}/> Pod
+# <Icon name="k8s-pod"/> Pod
 
 <Enterprise/>
 

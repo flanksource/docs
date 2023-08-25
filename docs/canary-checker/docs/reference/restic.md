@@ -2,7 +2,7 @@
 title: Restic
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/restic.svg>' style={{height: '32px'}}/> Restic
+# <Icon name="restic"/> Restic
 
 The Restic check:
 

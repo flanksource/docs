@@ -2,7 +2,7 @@
 title: JUnit
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/junit.svg' style={{height: '32px'}}/> JUnit
+# <Icon name="junit"/> JUnit
 
 <Standard/>
 
@@ -43,8 +43,6 @@ spec:
 | **`testResults`** | Directory where the results will be published | *string* | Yes |
 | `timeout` | Timeout in minutes to wait for specified container to finish its job. Defaults to 5 minutes | *int* |  |
 | `*` | All other common fields | [*Common*](common) | |
-
-
 
 ## Test Result Variables
 

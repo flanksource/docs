@@ -1,4 +1,4 @@
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/git.svg>' style={{height: '32px'}}/> Git
+# <Icon name="git"/> Git
 
 <Standard/>
 
