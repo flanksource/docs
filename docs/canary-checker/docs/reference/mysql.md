@@ -2,7 +2,7 @@
 title: MySQL
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/mysql.svg' style={{height: '32px'}}/> MySQL
+# <Icon name="mysql"/> MySQL
 
 This check will try to connect to a specified MySQL database, run a query against it and verify the results.
 

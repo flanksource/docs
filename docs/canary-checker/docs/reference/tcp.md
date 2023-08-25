@@ -2,7 +2,7 @@
 title: TCP
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/alert.svg' style={{height: '32px'}}/> TCP
+# <Icon name="network"/> TCP
 
 This checks whether the given address is reachable within the specified timeout period.
 

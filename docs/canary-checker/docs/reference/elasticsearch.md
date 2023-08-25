@@ -2,12 +2,12 @@
 title: Elasticsearch
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/elasticsearch.svg>' style={{height: '32px'}}/> ElasticSearch
+# <Icon name="elasticsearch"/> ElasticSearch
 
 This check will try to connect to a specified ElasticSearch database, run a query against it and verify the results.
 
-:::note "Opensearch"
-    To connect to Opensearch use `opensearch` field instead of `elasticsearch`
+:::info Opensearch
+To connect to Opensearch use `opensearch` field instead of `elasticsearch`
 :::
 
 ```yaml

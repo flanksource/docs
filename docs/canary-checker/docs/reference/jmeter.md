@@ -2,7 +2,7 @@
 title: Jmeter
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/jmeter.svg>' style={{height: '32px'}}/> JMeter
+# <Icon name="jmeter"/> JMeter
 
 <Standard/>
 

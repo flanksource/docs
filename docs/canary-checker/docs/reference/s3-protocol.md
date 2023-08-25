@@ -2,11 +2,12 @@
 title: S3 Protocol
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/s3.svg>' style={{height: '32px'}}/> S3 Protocol
+# <Icon name="s3"/> S3 Protocol
 
-:::note
+<Enterprise/>
 
-This check if S3 compatible endpoints are functioning correctly, to check the contents of
+:::info
+This checks if S3 compatible endpoints (like Minio, EMC ECS) are functioning correctly, to check the contents of
 a S3 bucket use: [S3 Bucket](s3-bucket)
 :::
 

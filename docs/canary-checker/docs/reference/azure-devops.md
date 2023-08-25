@@ -2,7 +2,7 @@
 title: Azure DevOps
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/azure-devops.svg>' style={{height: '32px'}}/> Azure Devops
+# <Icon name="azure-devops"/> Azure Devops
 
 <Standard/>
 

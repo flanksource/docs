@@ -2,7 +2,7 @@
 title: ContainerD / Docker
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/containerdPull.svg' style={{height: '32px'}}/>  ContainerD / Docker
+# <Icon name="containerd"/>  ContainerD / Docker
 
 This check will try to pull a Docker image from specified registry using containerd and then verify its checksum and size.
 
@@ -31,7 +31,7 @@ spec:
 | `expectedDigest` | Expected digest of the pulled image                          | _string_                                          | Yes      |
 | `expectedSize`   | Expected size of the pulled image                            | _int64_                                           | Yes      |
 | **`image`**      | Full path to image, including registry                       | _string_                                          | Yes      |
-| `*`              | All other commons field                                      | [*Common*](common)                             |          |
+| `*`              | All other commons field                                      | [_Common_](common)                             |          |
 
 ---
 
@@ -58,4 +58,4 @@ spec:
 | **`image`**    | Full path to image, including registry | `string`              | Yes      |
 | **`password`** | Password to access Containerd          | `string`              | Yes      |
 | **`username`** | Username to access Containerd          | `string`              | Yes      |
-| `*`            | All other commons field                | [*Common*](common) |          |
+| `*`            | All other commons field                | [_Common_](common) |          |

@@ -2,7 +2,7 @@
 title: Alertmanager
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/prometheus.svg>' style={{height: '32px'}}/> Alertmanager
+# <Icon name="prometheus"/> Alertmanager
 
 Checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/) for any firing alerts.
 
