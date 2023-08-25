@@ -1,6 +1,12 @@
-const sectionPrefix = require('./src/remark/plugin.js');
-const inlineSVG = require("@jsdevtools/rehype-inline-svg");
-module.exports = {
+// @ts-check
+// Note: type annotations allow type checking and IDEs autocompletion
+
+const lightCodeTheme = require('prism-react-renderer/themes/github');
+const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+
+
+/** @type {import('@docusaurus/types').Config} */
+const config = {
   title: 'Canary Checker',
   tagline: '',
   url: 'https://canarychecker.io',
@@ -10,53 +16,13 @@ module.exports = {
   customFields: {
     oss: process.env.CANARY_CHECKER_OSS === 'true',
   },
+  markdown: {
+    mermaid: true,
+  },
   favicon: 'img/canary-checker-icon.svg',
   organizationName: 'flanksource',
   projectName: 'canary-checker',
-  themeConfig: {
-    algolia: {
-      // The application ID provided by Algolia
-      appId: 'UBMLWJ0MA2',
 
-      // Public API key: it is safe to commit it
-      apiKey: '6f7d25ae5d5b3b677c1039246031e049',
-
-      indexName: 'canarychecker',
-    },
-    docs: {
-      sidebar: {
-        hideable: true,
-      }
-    },
-    navbar: {
-      logo: {
-        alt: 'Canary Checker Logo',
-        src: 'img/canary-checker.svg',
-        srcDark: 'img/canary-checker-white.svg',
-      },
-      items: [
-        {
-          href: 'https://github.com/flanksource/canary-checker',
-          label: 'GitHub',
-          position: 'right',
-        },
-      ],
-    },
-    colorMode: {
-      defaultMode: 'light',
-      disableSwitch: false,
-      respectPrefersColorScheme: false,
-    },
-    footer: {
-      style: 'light',
-    },
-    header: {
-      hideOnScroll: true,
-    },
-    prism: {
-      theme: require('prism-react-renderer/themes/github'),
-    },
-  },
   presets: [
     [
       '@docusaurus/preset-classic',
@@ -67,16 +33,61 @@ module.exports = {
         docs: {
           // remarkPlugins: [sectionPrefix],
           // rehypePlugins: [[inlineSVG, { maxImageSize: 5000 }]],
-          routeBasePath: '/',
+          // routeBasePath: '/',
           breadcrumbs: true,
-          exclude: [
-            '**/_*/**',
-            '**/*.test.{js,jsx,ts,tsx}',
-            '**/__tests__/**',
-          ],
+          // exclude: [
+          //   '**/_*/**',
+          //   '**/*.test.{js,jsx,ts,tsx}',
+          //   '**/__tests__/**',
+          // ],
           sidebarPath: require.resolve('./sidebars.js'),
         },
       },
     ],
   ],
+  themeConfig:
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    ({
+      algolia: {
+        // The application ID provided by Algolia
+        appId: 'UBMLWJ0MA2',
+
+        // Public API key: it is safe to commit it
+        apiKey: '6f7d25ae5d5b3b677c1039246031e049',
+
+        indexName: 'canarychecker',
+      },
+      navbar: {
+        logo: {
+          alt: 'Canary Checker Logo',
+          src: 'img/canary-checker.svg',
+          srcDark: 'img/canary-checker-white.svg',
+        },
+        items: [
+          {
+            type: 'docSidebar',
+            sidebarId: 'docs',
+            position: 'left',
+            label: 'Canary Checker',
+          },
+          {
+            href: 'https://github.com/flanksource/canary-checker',
+            label: 'GitHub',
+            position: 'right',
+          },
+        ],
+      },
+      footer: {
+        style: 'light',
+        copyright: `Copyright © ${new Date().getFullYear()} Flanksource, Inc.`,
+      },
+      prism: {
+        additionalLanguages: ['powershell', 'bash'],
+        darkTheme: darkCodeTheme,
+        theme: lightCodeTheme
+        //'log',jq'promql', 'regex','shell-session','uri', 'mermaid'
+      },
+    }),
 };
+
+module.exports = config;

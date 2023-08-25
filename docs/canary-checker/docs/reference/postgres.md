@@ -2,7 +2,7 @@
 title: Postgres
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/postgres.svg' style={{height: '32px'}}/> Postgres
+# <Icon name="postgres"/> Postgres
 
 This check will try to connect to a specified Postgres database, run a query against it and verify the results.
 

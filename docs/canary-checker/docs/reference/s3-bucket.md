@@ -1,13 +1,13 @@
 ---
 title: S3 Bucket
 ---
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/s3Bucket.svg>' style={{height: '32px'}}/> S3 Bucket
+# <Icon name="s3"/> S3 Bucket
 
 Checks the contents of a S3 bucket for size, age and count.
 
 See [Folder](../reference/folder) for a full description.
 
-:::note
+:::info
   This check looks at the contents of an S3 bucket, to verify that an S3 compatible
   object storage endpoint is functioning correctly use: [S3 Protocol](s3-protocol)
 :::

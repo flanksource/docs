@@ -2,7 +2,7 @@
 title: SMB/CIFS
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/smb.svg>' style={{height: '32px'}}/> Windows File Share (SMB/CIFS)
+# <Icon name="smb"/> Windows File Share (SMB/CIFS)
 
 Checks the contents of a Windows / CIFS file share for size, age and count.
 

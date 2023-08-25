@@ -5,6 +5,103 @@ hide:
   - toc
 ---
 
+
+
+
+
+```log
+2023-01-01 [DEBUG] hello-world
+```
+
+```regex
+/\w+(.*)abc{1,2}
+```
+
+```shell-session
+cd 1
+echo "123"
+cat 123 | sort | uniq
+foo@bar:~/files$ exit
+```
+
+<pre class="command-line"
+     data-user="root"
+     data-host="localhost">
+     <code>
+cd abc
+cd "1"
+</code>
+     </pre>
+
+:::info
+
+Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+:::
+
+:::tip
+
+Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+:::
+
+:::info
+
+Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+:::
+
+:::caution
+
+Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+:::
+
+:::danger
+
+Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+:::
+
+```mermaid=
+flowchart LR
+    markdown["`This **is** _Markdown_`"]
+    newLines["`Line1
+    Line 2
+    Line 3`"]
+    markdown --> newLines
+```
+
+```jsx title="/src/components/HelloCodeTitle.js"
+function HelloCodeTitle(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+```
+
+```csharp
+public class Foo : IBar<int> {
+ public string Baz { get; set; } = "foo";
+}
+```
+
+The CSS code will be highlighted with this document because CSS has already been loaded.
+
+```css
+a:hover {
+ color: green !important;
+}
+```
+
+```css
+a:hover {
+ color: green !important;
+}
+```
+
+```log
+2023-01-01 [DEBUG] hello-world
+```
+
 ![Canary Checker](../images/canary-checker.svg#gh-light-mode-only)
 ![Canary Checker](../images/canary-checker-white.svg#gh-dark-mode-only)
 
@@ -25,26 +122,11 @@ Canary checker is a kubernetes-native platform for monitoring health across appl
   * Transform and filter check responses into individual check results
 * **Multi-Modal** - While designed as a Kubernetes Operator, canary checker can also run as a CLI and a server without K8s
 
-## Use Cases
-
-* **Synthetic Monitoring**
-
-* **Unified Alerting**
-
-
-
-### When not to use
-
-* Browser based testing
-* 
-
-
-
 ## Getting Started
 
 1. Install canary checker:
 
-  ```shell
+  ```bash
   helm repo add flanksource https://flanksource.github.io/charts
   helm repo update
   helm install canary-checker
@@ -68,7 +150,7 @@ Canary checker is a kubernetes-native platform for monitoring health across appl
 
 2a. Run the check locally (Optional)
 
-```shell
+```bash
 canary-checker run canary.yaml
 ```
 

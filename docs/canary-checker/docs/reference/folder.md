@@ -2,7 +2,7 @@
 title: Folder
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/folder.svg' style={{height: '32px'}}/> Folder
+# <Icon name="smb"/> Folder
 
 Checks the contents of a folder for size, age and count. Folder based checks are useful in a number of scenarios:
 
@@ -12,7 +12,6 @@ Checks the contents of a folder for size, age and count. Folder based checks are
   * Checking if files are being processed (and/or produced)
   * Checking the size of queue processing backlog
   * Checking if any error (`.err` or `.log`) files have been produced.
-  
 
 ```yaml title="folder-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -27,7 +26,6 @@ spec:
       description: Checks if there are at least 10 files in the folder
       minCount: 10
 ```
-
 
 | Field      | Description                                                  | Scheme                          | Required |
 | ---------- | ------------------------------------------------------------ | ------------------------------- | -------- |
@@ -76,11 +74,9 @@ spec:
       minSize: 10mb # the backup should be at least 10mb
 ```
 
-
-
 ## Result Variables
 
-The following fields are available in `test`, `display` and `transform` scripts. 
+The following fields are available in `test`, `display` and `transform` scripts.
 
 | Field                 | Scheme                                             |
 | --------------------- | -------------------------------------------------- |

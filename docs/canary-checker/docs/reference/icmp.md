@@ -2,7 +2,7 @@
 title: ICMP
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/icmp.svg' style={{height: '32px'}}/> ICMP
+# <Icon name="icmp"/> ICMP
 
 Performs ICMP (ping) requests for information on ICMP packet loss, duration and response.
 

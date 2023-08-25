@@ -2,7 +2,7 @@
 title: AWS Cloud Watch
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/cloudwatch.svg>' style={{height: '32px'}}/> CloudWatch
+# <Icon name="aws-cloudwatch"/> CloudWatch
 
 Cloudwatch checks  for all active alarms
 

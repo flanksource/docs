@@ -2,7 +2,7 @@
 title: GCS Database Backup
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/database2.svg>' style={{height: '32px'}}/> GCP CloudSQL Backups
+# <Icon name="database2"/> GCP CloudSQL Backups
 
 Checks if a GCP CloudSQL instance has been successfully backed up recently.
 

@@ -47,7 +47,7 @@ flanksource-ui:
         - canary-checker.127.0.0.1.nip.io
 ```
 
-:::note
+:::info
 Note the default installation of canary-checker uses an embedded postgres database and does not persist history, see: [Database](database)
 :::
 

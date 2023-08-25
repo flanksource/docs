@@ -2,7 +2,7 @@
 title: AWS Config Rule
 ---
 
-# <img src='<<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/aws-config.svg>' style={{height: '32px'}}/> AWS Config Rule
+# <Icon name="aws-config"/> AWS Config Rule
 
 Check if any AWS resources are failing AWS config rule checks.
 

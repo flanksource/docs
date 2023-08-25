@@ -3,7 +3,7 @@
 To persist history, canary-checker has 3 options:
 
 1. Mount a PVC/Hostpath volume for an embedded postgres database
-2. Deploying a postgres database as a statefulset
+2. Deploy a postgres database as a statefulset
 3. Connect to an external postgres database
 
 ### Mounting a persistent volume

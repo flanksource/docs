@@ -2,7 +2,7 @@
 title: MongoDB
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/mongodb.svg>' style={{height: '32px'}}/> MongoDB
+# <Icon name="mongo"/> MongoDB
 
 The Mongo check tries to connect to a specified Mongo Database to ensure connectivity.
 

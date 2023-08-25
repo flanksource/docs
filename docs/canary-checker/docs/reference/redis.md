@@ -2,7 +2,7 @@
 title: Redis
 ---
 
-# <img src='<https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/redis.svg>' style={{height: '32px'}}/> Redis
+# <Icon name="redis"/> Redis
 
 The Redis check connects to a specified Redis database instance to check its availability.
 
