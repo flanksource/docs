@@ -31,3 +31,31 @@ Playbook parameter defines a parameter that a playbook needs to run.
 | `name`  | Specify name of parameter.  | `string` | `true`   |
 | `label` | Specify label of parameter. | `string` | `true`   |
 
+
+## Example: Scaling EC2 instance
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: scale-deployment
+spec:
+  description: Scale deployment
+  configs:
+    - type: Kubernetes::Deployment
+      tags:
+        environment: staging
+  parameters:
+    - name: replicas
+      label: The new desired number of replicas.
+  approval:
+    type: any
+    approvers:
+      people:
+        - admin@local
+      teams:
+        - DevOps
+  actions:
+    - name: 'scale deployment'
+      exec:
+        script: kubectl scale --replicas={{.params.replicas}} --namespace={{.config.tags.namespace}} deployment {{.config.name}}
