@@ -8,7 +8,7 @@ The only prerequisites are
 
 ## 1. Create the playbook
 
-```yaml
+```yaml title="scale-deployment.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Playbook
 metadata:
@@ -29,7 +29,7 @@ spec:
         script: kubectl scale --replicas={{.params.replicas}} deployment {{.config.name}}
 ```
 
-This playbook is designed to run a configs of type `Kubernetes::Deployment` & having labels namespace: `default` & cluster: `local-kind-cluster`.
+This playbook is designed to run on a Kubernetes Depolyment (with a config type of `Kubernetes::Deployment`).
 If you need, you can adjust the tags to your needs.
 
 Save the above YAML to a file called `scale-deployment.yaml`. Then, to store the playbook, run:
