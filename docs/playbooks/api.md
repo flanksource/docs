@@ -51,7 +51,8 @@ POST `/playbook/list?component_id={component_id}`
 ### Query Parameters
 
 !!! info "Info"
-Either `config_id` or `component_id` is required.
+
+    Either `config_id` or `component_id` is required.
 
 | Parameter      | Description              | Type     |
 | -------------- | ------------------------ | -------- |

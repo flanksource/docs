@@ -1,13 +1,13 @@
 # Playbook Events
 
 Playbook events are triggers that cause a Playbook to run. Events are triggered when specific activity on Mission Control occurs.
+For example: you can trigger a Playbook to run when a component goes unhealthy.
+
+Multiple playbooks could be listening to the same event and likewise a playbook can be listening to multiple events. If a playbook is listening on multiple events then it is triggered when any of those events occur.
 
 ## Types
 
-Events are categorized into two classes:
-
-1. Canary events
-2. Component events
+At this point, there's only support for events on canaries and components.
 
 ### Canary events
 
@@ -66,7 +66,7 @@ spec:
 
 ## Filtering Events
 
-Events can be further filtered by the following fields:
+Filters can give you fine-grained control over the events that can trigger the playbook.
 
 | Field    | Description                                                                           | Scheme              | Required |
 | -------- | ------------------------------------------------------------------------------------- | ------------------- | -------- |
