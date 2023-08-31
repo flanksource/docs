@@ -234,5 +234,7 @@ nav:
                         - Actions:  ./playbooks/concepts/action.md
                         - Approvals: ./playbooks/concepts/approval.md
                         - Events: ./playbooks/concepts/events.md
+                        - Templating: ./playbooks/concepts/templating.md
+                        - Expression: ./playbooks/concepts/expression.md
                 - Actions:
                         - Exec: ./playbooks/actions/exec.md

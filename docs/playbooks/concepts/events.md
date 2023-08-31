@@ -71,5 +71,5 @@ Filters can give you fine-grained control over the events that can trigger the p
 | Field    | Description                                                                           | Scheme              | Required |
 | -------- | ------------------------------------------------------------------------------------- | ------------------- | -------- |
 | `event`  | Event to listen for.                                                                  | `string`            | `true`   |
-| `filter` | CEL expression for additional event filtering.                                        | `string`            | `true`   |
+| `filter` | CEL expression for additional event filtering. ([See Expressions](./expression.md))   | `string`            | `true`   |
 | `labels` | Labels specifies the key-value pairs that the associated event's resource must match. | `map[string]string` | `false`  |
