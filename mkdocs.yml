@@ -61,12 +61,14 @@ markdown_extensions:
 
 nav:
         - Home:
-                  - Overview: ./index.md
-                  - Installation: ./install.md
-                  - Config DB: ./config-db/overview.md
-                  - Canary Checker: ./canary-checker/overview.md
-                  - Logging: ./apm-hub/overview.md
-                  - Topology: ./topology/overview.md
+                - Overview: ./index.md
+                - Installation: ./install.md
+                - Config DB: ./config-db/overview.md
+                - Canary Checker: ./canary-checker/overview.md
+                - Logging: ./apm-hub/overview.md
+                - Topology: ./topology/overview.md
+                - Incidents: ./incidents/overview.md
+                - Playbooks: ./playbooks/overview.md
         - Installation:
                 - Installation: ./install.md
                 - Architecture: ./architecture.md
@@ -231,5 +233,6 @@ nav:
                         - Runs: ./playbooks/concepts/run.md
                         - Actions:  ./playbooks/concepts/action.md
                         - Approvals: ./playbooks/concepts/approval.md
+                        - Events: ./playbooks/concepts/events.md
                 - Actions:
                         - Exec: ./playbooks/actions/exec.md

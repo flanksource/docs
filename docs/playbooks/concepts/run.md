@@ -3,7 +3,7 @@
 A run is the execution of a Playbook consisting of a sequence of actions. A run can be trigger either
 
 - manually
-- on events (upcoming)
+- on events
 - on schedule (upcoming)
 
 For example, a playbook can be executed when a health check passes or fails.

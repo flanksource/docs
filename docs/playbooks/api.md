@@ -24,7 +24,7 @@ POST /playbook/run
 
 ### Example
 
-Considering the playbook spec in [playbooks/example](./concepts/playbook.md#example-scaling-ec2-instance), we can trigger a run as follows:
+Considering the playbook spec in [playbooks/example](./concepts/playbook.md#scaling-ec2-instance), we can trigger a run as follows:
 
 ```bash
 curl -sL -X POST -u 'admin@local:admin' \
