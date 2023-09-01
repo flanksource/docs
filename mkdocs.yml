@@ -61,12 +61,14 @@ markdown_extensions:
 
 nav:
         - Home:
-                  - Overview: ./index.md
-                  - Installation: ./install.md
-                  - Config DB: ./config-db/overview.md
-                  - Canary Checker: ./canary-checker/overview.md
-                  - Logging: ./apm-hub/overview.md
-                  - Topology: ./topology/overview.md
+                - Overview: ./index.md
+                - Installation: ./install.md
+                - Config DB: ./config-db/overview.md
+                - Canary Checker: ./canary-checker/overview.md
+                - Logging: ./apm-hub/overview.md
+                - Topology: ./topology/overview.md
+                - Incidents: ./incidents/overview.md
+                - Playbooks: ./playbooks/overview.md
         - Installation:
                 - Installation: ./install.md
                 - Architecture: ./architecture.md
@@ -197,8 +199,8 @@ nav:
                                       - Configuration Items: ./topology/concepts/config.md
                                       - Health Checks: ./topology/concepts/health-checks.md
                   - Examples:
-                            Kubernetes: ./topology/examples/kubernetes.md
-                            Kubernetes (Workload): ./topology/examples/kubernetes-workload.md
+                            - Kubernetes: ./topology/examples/kubernetes.md
+                            - Kubernetes (Workload): ./topology/examples/kubernetes-workload.md
                   - Reference:
                             - Components: ./topology/references/components.md
                             - Properties: ./topology/references/properties.md
@@ -222,3 +224,17 @@ nav:
                             - Responders: ./incidents/concepts/responders.md
                             - Notifications: ./incidents/concepts/notifications.md
                             - Definition of Done: ./incidents/concepts/done-definition.md
+        - Playbooks:
+                - Overview: ./playbooks/overview.md
+                - Quick Start: ./playbooks/quick-start.md
+                - API: ./playbooks/api.md
+                - Concepts:
+                        - Playbook: ./playbooks/concepts/playbook.md
+                        - Runs: ./playbooks/concepts/run.md
+                        - Actions:  ./playbooks/concepts/action.md
+                        - Approvals: ./playbooks/concepts/approval.md
+                        - Events: ./playbooks/concepts/events.md
+                        - Templating: ./playbooks/concepts/templating.md
+                        - Expression: ./playbooks/concepts/expression.md
+                - Actions:
+                        - Exec: ./playbooks/actions/exec.md
