@@ -8,12 +8,13 @@ POST /playbook/run
 
 ### Request Body Parameters
 
-| Parameter      | Type                | Description                             |
-| -------------- | ------------------- | --------------------------------------- |
-| `id`           | `string`            | The ID of the playbook to run.          |
-| `config_id`    | `string`            | The ID of the config item to run.       |
-| `component_id` | `string`            | The ID of the component to run.         |
-| `params`       | `map[string]string` | The parameters to pass to the playbook. |
+| Parameter      | Type                | Description                                            |
+| -------------- | ------------------- | ------------------------------------------------------ |
+| `id`           | `string`            | The ID of the playbook to run.                         |
+| `check_id`     | `string`            | The ID of the check to run the playbook against.       |
+| `config_id`    | `string`            | The ID of the config item to run the playbook against. |
+| `component_id` | `string`            | The ID of the component to run the playbook against.   |
+| `params`       | `map[string]string` | The parameters to pass to the playbook.                |
 
 ### Response
 
@@ -40,11 +41,12 @@ curl -sL -X POST -u 'admin@local:admin' \
 
 ## Listing playbooks
 
-As Playbooks are defined for component and config items, it is possible to list what playbooks are available them.
+As Playbooks are defined for components, checks and config items, it is possible to list what playbooks are available them.
 This filtering of playbooks is done by the [`ResourceFilter`](./concepts/playbook.md#resourcefilter) in the [`PlaybookSpec`](./concepts/playbook.md#playbookspec) object.
 
 ```
 POST `/playbook/list?config_id={config_id}`
+POST `/playbook/list?check_id={check_id}`
 POST `/playbook/list?component_id={component_id}`
 ```
 
@@ -52,11 +54,12 @@ POST `/playbook/list?component_id={component_id}`
 
 !!! info "Info"
 
-    Either `config_id` or `component_id` is required.
+    Should provide exactly one of the parameters.
 
 | Parameter      | Description              | Type     |
 | -------------- | ------------------------ | -------- |
 | `config_id`    | ID of the config item    | `string` |
+| `check_id`     | ID of the Check          | `string` |
 | `component_id` | ID of the component item | `string` |
 
 ### Response

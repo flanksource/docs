@@ -9,6 +9,7 @@ They are defined using a YAML configuration.
 | ------------- | ---------------------------------------------------------------------- | ------------------------------------------------------- | -------- |
 | `description` | A short description                                                    | `string`                                                | `true`   |
 | `on`          | Specify events to automatically trigger the Playbook. .                | [`[]PlaybookEventDetail`](./events.md#filtering-events) | `false`  |
+| `checks`      | Specify selectors for checks that can be run on the Playbook.          | [`[]ResourceFilter`](#resourcefilter)                   | `false`  |
 | `configs`     | Specify selectors for config items that can be run on the Playbook.    | [`[]ResourceFilter`](#resourcefilter)                   | `false`  |
 | `components`  | Specify selectors for component items that can be run on the Playbook. | [`[]ResourceFilter`](#resourcefilter)                   | `false`  |
 | `parameters`  | Define a set of labeled parameters for the Playbook.                   | [`Properties`](#parameter)                              | `false`  |
@@ -64,7 +65,7 @@ spec:
         script: kubectl scale --replicas={{.params.replicas}} --namespace={{.config.tags.namespace}} deployment {{.config.name}}
 ```
 
-### Restart unhealthy database (Triggers on event)
+### Restart unhealthy database
 
 ```yaml
 apiVersion: mission-control.flanksource.com/v1
@@ -83,4 +84,25 @@ spec:
     - name: 'Restart kubernetes deployment'
       exec:
         script: kubectl rollout restart deployment {{.component.name}}
+```
+
+### Restart pod when check fails for more than 10 times in the last hour
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: stop-pod-of-failing-check
+spec:
+  description: stop pod for failing checks
+  on:
+    canary:
+      - event: failed
+        filter: check_summary.failed > 10
+        labels:
+          alertname: KubePodCrashLoopingcontainer
+  actions:
+    - name: 'Stop pod'
+      exec:
+        script: kubectl delete pod {{index .check.labels "pod"}}
 ```
