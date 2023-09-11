@@ -226,6 +226,7 @@ nav:
         - Notifications:
                 - Overview: ./notifications/index.md
                 - Concepts:
+                        - Notification: ./notifications/concepts/notification.md
                         - Templating: ./notifications/concepts/templating.md
                         - Filtering: ./notifications/concepts/filtering.md
                         - Events: ./notifications/concepts/events.md
