@@ -229,7 +229,7 @@ nav:
                         - Templating: ./notifications/concepts/templating.md
                         - Filtering: ./notifications/concepts/filtering.md
                         - Events: ./notifications/concepts/events.md
-                        - Receivers: ./notifications/concepts/receivers.md
+                        - Recipients: ./notifications/concepts/recipients.md
                 - Events:
                         - Health Checks: ./notifications/events/health-checks.md
                         - Component: ./notifications/events/components.md
