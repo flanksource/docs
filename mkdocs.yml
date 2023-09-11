@@ -222,8 +222,18 @@ nav:
                             - Hypothesis: ./incidents/concepts/hypothesis.md
                             - Rules: ./incidents/concepts/rules.md
                             - Responders: ./incidents/concepts/responders.md
-                            - Notifications: ./incidents/concepts/notifications.md
                             - Definition of Done: ./incidents/concepts/done-definition.md
+        - Notifications:
+                - Overview: ./notifications/index.md
+                - Concepts:
+                        - Templating: ./notifications/concepts/templating.md
+                        - Filtering: ./notifications/concepts/filtering.md
+                        - Events: ./notifications/concepts/events.md
+                        - Receivers: ./notifications/concepts/receivers.md
+                - Events:
+                        - Health Checks: ./notifications/events/health-checks.md
+                        - Component: ./notifications/events/components.md
+                        - Incidents: ./notifications/events/incidents.md
         - Playbooks:
                 - Overview: ./playbooks/overview.md
                 - Quick Start: ./playbooks/quick-start.md
