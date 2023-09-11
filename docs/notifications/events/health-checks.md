@@ -1,0 +1,82 @@
+Health checks emit 2 events
+
+1. `check.passed`
+2. `check.failed`
+
+## Environment variables
+
+| Field       | Description                   | Schema                         | Optional |
+| ----------- | ----------------------------- | ------------------------------ | -------- |
+| `canary`    | The parent canary object      | [`Canary`](#canary)            |          |
+| `check`     | The check                     | [`Check`](#check)              |          |
+| `agent`     | Agent details (if applicable) | [`Agent`](#check)              | `true`   |
+| `status`    | Check status details          | [`CheckStatus`](#check-status) |          |
+| `permalink` | A link to the health check    | `string`                       |          |
+
+### Canary
+
+| Field        | Description                  | Schema              | Optional |
+| ------------ | ---------------------------- | ------------------- | -------- |
+| `id`         | The id of the canary         | `uuid`              |          |
+| `name`       | The name of the canary       | `string`            |          |
+| `namespace`  | The namespace of the canary  | `string`            |          |
+| `agent_id`   | The agent id of the canary   | `string`            |          |
+| `labels`     | The labels of the canary     | `map[string]string` | `true`   |
+| `source`     | The source of the canary     | `string`            |          |
+| `created_at` | The created at of the canary | `string`            |          |
+| `updated_at` | The updated at of the canary | `string`            |          |
+| `deleted_at` | The deleted at of the canary | `string`            | `true`   |
+
+### Check
+
+| Field                  | Description                             | Schema              | Optional |
+| ---------------------- | --------------------------------------- | ------------------- | -------- |
+| `id`                   | The id of the check                     | `uuid`              |          |
+| `canary_id`            | The id of the canary                    | `uuid`              |          |
+| `agent_id`             | ID of the agent that created this check | `string`            |          |
+| `type`                 | The type of the check                   | `string`            |          |
+| `name`                 | The name of the check                   | `string`            |          |
+| `labels`               | The labels of the check                 | `map[string]string` | `true`   |
+| `description`          | The description of the check            | `string`            |          |
+| `status`               | Check status details                    | `string`            |          |
+| `owner`                | Owner                                   | `string`            | `true`   |
+| `severity`             | The severity of the check               | `string`            | `true`   |
+| `icon`                 | The icon of the check                   | `string`            | `true`   |
+| `transformed`          | Whether the check has been transformed  | `bool`              |          |
+| `last_runtime`         | The last runtime of the check           | `time.Time`         | `true`   |
+| `next_runtime`         | The next runtime of the check           | `time.Time`         | `true`   |
+| `last_transition_time` | The last transition time of the check   | `time.Time`         | `true`   |
+| `created_at`           | The created at of the check             | `time.Time`         |          |
+| `updated_at`           | The updated at of the check             | `time.Time`         |          |
+| `deleted_at`           | The deleted at of the check             | `time.Time`         | `true`   |
+
+### Agent
+
+| Field         | Description                           | Schema              | Optional |
+| ------------- | ------------------------------------- | ------------------- | -------- |
+| `id`          | The id of the agent                   | `uuid`              |          |
+| `name`        | The name of the agent                 | `string`            |          |
+| `hostname`    | The hostname of the agent             | `string`            |          |
+| `description` | Short description of the agent        | `string`            |          |
+| `ip`          | The ip of the agent                   | `string`            |          |
+| `version`     | The version of the agent              | `string`            |          |
+| `username`    | The username of the agent             | `string`            |          |
+| `person_id`   | The person associated with this agent | `uuid`              | `true`   |
+| `properties`  | The properties of the agent           | `map[string]string` | `true`   |
+| `tls`         | The tls of the agent                  | `string`            |          |
+| `created_by`  | The created by of the agent           | `uuid`              |          |
+| `created_at`  | The created at of the agent           | `time.Time`         |          |
+| `updated_at`  | The updated at of the agent           | `time.Time`         |          |
+
+### Check Status
+
+| Field        | Description                                     | Schema      | Optional |
+| ------------ | ----------------------------------------------- | ----------- | -------- |
+| `check_id`   | The id of the check associated with this status | `uuid`      |          |
+| `status`     | The status of the check                         | `bool`      |          |
+| `invalid`    | Whether the check errored out                   | `bool`      |          |
+| `time`       | The time of the check                           | `string`    |          |
+| `duration`   | The duration of the check                       | `int`       |          |
+| `message`    | The success message of the check                | `string`    |          |
+| `error`      | The error of the check in case of failure       | `string`    |          |
+| `created_at` | The created at of the check                     | `time.Time` |          |
