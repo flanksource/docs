@@ -6,8 +6,6 @@ There are 3 types of receivers
 
 A notification must and can only have a single recipient.
 
-![Create notification form](../../images/notification-recipient.png)
-
 ## 1. Person
 
 When a person is chosen as a recipient, the notification will be delivered via email to the person's registered email address.

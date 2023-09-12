@@ -1,7 +1,5 @@
 Notification allows you to receive alerts on a preferred channel when a particular set of events occur.
 
-![Create notification form](../../images/create-notification-form.png)
-
 ## Notification Spec
 
 | Field             | Description                      | Scheme              | Required |
