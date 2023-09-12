@@ -29,26 +29,47 @@ Health checks emit 2 events
 
 ### Check
 
-| Field                  | Description                             | Schema              | Optional |
-| ---------------------- | --------------------------------------- | ------------------- | -------- |
-| `id`                   | The id of the check                     | `uuid`              |          |
-| `canary_id`            | The id of the canary                    | `uuid`              |          |
-| `agent_id`             | ID of the agent that created this check | `string`            |          |
-| `type`                 | The type of the check                   | `string`            |          |
-| `name`                 | The name of the check                   | `string`            |          |
-| `labels`               | The labels of the check                 | `map[string]string` | `true`   |
-| `description`          | The description of the check            | `string`            |          |
-| `status`               | Check status details                    | `string`            |          |
-| `owner`                | Owner                                   | `string`            | `true`   |
-| `severity`             | The severity of the check               | `string`            | `true`   |
-| `icon`                 | The icon of the check                   | `string`            | `true`   |
-| `transformed`          | Whether the check has been transformed  | `bool`              |          |
-| `last_runtime`         | The last runtime of the check           | `time.Time`         | `true`   |
-| `next_runtime`         | The next runtime of the check           | `time.Time`         | `true`   |
-| `last_transition_time` | The last transition time of the check   | `time.Time`         | `true`   |
-| `created_at`           | The created at of the check             | `time.Time`         |          |
-| `updated_at`           | The updated at of the check             | `time.Time`         |          |
-| `deleted_at`           | The deleted at of the check             | `time.Time`         | `true`   |
+| Field                  | Description                             | Schema                | Optional |
+| ---------------------- | --------------------------------------- | --------------------- | -------- |
+| `id`                   | The id of the check                     | `uuid`                |          |
+| `canary_id`            | The id of the canary                    | `uuid`                |          |
+| `agent_id`             | ID of the agent that created this check | `string`              |          |
+| `type`                 | The type of the check                   | `string`              |          |
+| `name`                 | The name of the check                   | `string`              |          |
+| `labels`               | The labels of the check                 | `map[string]string`   | `true`   |
+| `description`          | The description of the check            | `string`              |          |
+| `status`               | Check status details                    | `string`              |          |
+| `owner`                | Owner                                   | `string`              | `true`   |
+| `severity`             | The severity of the check               | `string`              | `true`   |
+| `icon`                 | The icon of the check                   | `string`              | `true`   |
+| `uptime`               | The past 1 hour uptime summary          | [`Uptime`](#uptime)   | `true`   |
+| `latency`              | The past 1 hour latency summary         | [`Latency`](#latency) | `true`   |
+| `transformed`          | Whether the check has been transformed  | `bool`                |          |
+| `last_runtime`         | The last runtime of the check           | `time.Time`           | `true`   |
+| `next_runtime`         | The next runtime of the check           | `time.Time`           | `true`   |
+| `last_transition_time` | The last transition time of the check   | `time.Time`           | `true`   |
+| `created_at`           | The created at of the check             | `time.Time`           |          |
+| `updated_at`           | The updated at of the check             | `time.Time`           |          |
+| `deleted_at`           | The deleted at of the check             | `time.Time`           | `true`   |
+
+#### Uptime
+
+| Field       | Description                          | Schema      | Optional |
+| ----------- | ------------------------------------ | ----------- | -------- |
+| `passed`    | The number of checks that passed     | `int`       |          |
+| `failed`    | The number of checks that failed     | `int`       |          |
+| `p100`      | The percentage of checks that passed | `float64`   |          |
+| `last_pass` | The last time a check passed         | `time.Time` | `true`   |
+| `last_fail` | The last time a check failed         | `time.Time` | `true`   |
+
+#### Latency
+
+| Field       | Description              | Schema    | Optional |
+| ----------- | ------------------------ | --------- | -------- |
+| `p99`       | The latency of the check | `float64` | `true`   |
+| `p97`       | The latency of the check | `float64` | `true`   |
+| `p95`       | The latency of the check | `float64` | `true`   |
+| `rolling1h` | The latency of the check | `float64` |          |
 
 ### Agent
 
