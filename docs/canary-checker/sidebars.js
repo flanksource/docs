@@ -1,18 +1,26 @@
 module.exports = {
   docs: [
     {
+      type: 'doc',
+      id: 'getting-started',
+      label: 'Getting Started'
+    },
+    {
       type: 'category',
-      label: 'Getting Started',
+      label: 'Installation',
+      link: {
+        type: 'generated-index',
+        title: 'Installation',
+        // description: 'Learn about the most important Docusaurus concepts!',
+        slug: '/installation',
+        keywords: ['guides'],
+      },
       items: [
+
         {
           type: 'doc',
-          id: 'index',
-          label: 'Overview',
-        },
-        {
-          type: 'doc',
-          id: 'cli',
-          label: 'CLI',
+          id: 'helm',
+          label: 'Helm',
         },
         {
           type: 'doc',
@@ -21,10 +29,12 @@ module.exports = {
         },
         {
           type: 'doc',
-          id: 'helm',
-          label: 'Helm',
+          id: 'cli',
+
+          label: 'CLI',
         },
-      ],
+
+      ]
     },
     {
       type: 'category',
@@ -55,17 +65,35 @@ module.exports = {
           id: 'concepts/connections',
           label: 'Connections',
         },
+        {
+          type: 'doc',
+          id: 'concepts/image-variants',
+          label: 'Image Variants',
+        }
       ],
     },
     {
       type: 'category',
       label: 'Check Types',
+      link: {
+        type: 'generated-index',
+        title: 'Check Types',
+        description: 'Learn about the most important Docusaurus concepts!',
+        slug: '/types',
+        keywords: ['guides'],
+        image: '/img/docusaurus.png',
+      },
       items: [
         { type: 'doc', id: 'reference/common', label: 'Overview' },
         {
           type: 'doc',
           id: 'reference/http',
           label: 'HTTP',
+        },
+        {
+          type: 'doc',
+          id: 'reference/exec',
+          label: 'Exec',
         },
         {
           type: 'category',
@@ -129,6 +157,7 @@ module.exports = {
         {
           type: 'category',
           label: 'Configuration',
+          description: "Check configuration sources like AWS Config, Config DB and Kubernetes",
           items: [
             {
               type: 'doc',
@@ -150,6 +179,7 @@ module.exports = {
         {
           type: 'category',
           label: 'Data Sources',
+          description: "Check datasources like SQL, NoSQL, LDAP, etc.",
           items: [
             {
               type: 'doc',
@@ -252,7 +282,7 @@ module.exports = {
             {
               type: 'doc',
               id: 'reference/newman',
-              label: 'Newman (Postman Collection)',
+              label: 'Newman / Postman',
             },
             {
               type: 'doc',

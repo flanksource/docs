@@ -101,7 +101,7 @@ spec:
 Default grafana dashboards are available, they can be installed with
 
 ```
---set grafanaDashboards=true
+--set grafanaDashboards=true --set serviceMonitor=true
 ```
 
 ### Prometheus

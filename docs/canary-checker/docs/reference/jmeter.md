@@ -4,7 +4,7 @@ title: Jmeter
 
 # <Icon name="jmeter"/> JMeter
 
-<Standard/>
+<Standard/><FullImage/>
 
 This check will execute the JMeter CLI to execute the JMX test plan on the specified host.
 

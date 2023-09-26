@@ -1,11 +1,12 @@
-# <Icon name="cmd"/> Exec
+---
+title: Exec
+---
 
-<Standard/>
+# <Icon name="console"/> Exec
 
-Exec Check executes a command or script file on the target host. The type of scripts executed include:
+<Standard/> 
 
-- Bash scripts
-- Powershell scripts
+Executes a bash (linux) or  powershell (windows) script. The check is considered passing if the script exits with `0`
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
@@ -27,3 +28,26 @@ spec:
 | ----- | ----------- | ------ | -------- |
 | **`script`** | Script can be a inline script or a path to a script that needs to be executed. On windows executed via Powershell and in darwin and linux executed using bash. | *string* | Yes |
 | `*` | All other commons field | [*Common*](common) |  |
+
+::: note Docker image variants
+Scripts can use in commands or application in the container image, There are 2 variants of this image to choose from:
+
+
+
+| [Full](https://github.com/flanksource/canary-checker/blob/master/build/full/Dockerfile) | [Minimal](https://github.com/flanksource/canary-checker/blob/master/build/minimal/Dockerfile) |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [arkade](https://github.com/alexellis/arkade)                | [arkade](https://github.com/alexellis/arkade)                |
+| kubectl                                                      | kubectl                                                      |
+| stern                                                        | stern                                                        |
+| jq                                                           | jq                                                           |
+| yq                                                           | yq                                                           |
+| [gcloud-cli](https://cloud.google.com/sdk/gcloud)            | [gcloud-cli](https://cloud.google.com/sdk/gcloud)            |
+| [aws-cli](https://aws.amazon.com/cli/)                       | [aws-cli](https://aws.amazon.com/cli/)                       |
+| [azure-cli](https://learn.microsoft.com/en-us/cli/azure/)    |                                                              |
+| [dsq](https://github.com/multiprocessio/dsq)                 |                                                              |
+| [k6](https://github.com/grafana/k6)                          |                                                              |
+| [jmeter](https://jmeter.apache.org/)                         |                                                              |
+| [benthos](benthos.dev)                                       |                                                              |
+
+
+

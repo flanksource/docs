@@ -46,7 +46,7 @@ spec:
 
 ## Test Result Variables
 
-| Name       | Description           | Scehme           |
+| Name       | Description           | Scheme           |
 | ---------- | --------------------- | ---------------- |
 | `suites`   |                       | [`[]JunitSuite`](#junit-suite) |
 | `passed`   | Number of passing tests | *int*            |

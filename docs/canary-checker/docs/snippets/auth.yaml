@@ -1,0 +1,19 @@
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: postgres-check
+spec:
+  interval: 30
+  postgres:
+    - name: postgres auth check
+      url: "postgres://$(username):$(password)@postgres:5432/postgres"
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: postgres-credentials
+            key: USERNAME
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: postgres-credentials
+            key: PASSWORD

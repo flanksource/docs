@@ -25,7 +25,7 @@ The examples shown below show the possible use cases
               schedule: "@every 1m"
               http:
                 - name: http-pass
-                  endpoint: http://status.savanttools.com/?code=202
+                  url: https://httpbin.demo.aws.flanksource.com/status/202
                   responseCodes:
                     - 202
           name: http-component-canary
@@ -34,7 +34,7 @@ The examples shown below show the possible use cases
               schedule: "@every 1m"
               http:
                 - name: http-202
-                  endpoint: http://status.savanttools.com/?code=201
+                  url: https://httpbin.demo.aws.flanksource.com/status/201
                   responseCodes:
                     - 202
           name: second-inline-canary
@@ -59,11 +59,12 @@ The examples shown below show the possible use cases
             - labelSelector: "canary=http-check"
             - inline:
                 - http:
-                    endpoint: "http://status.savanttools.com/?code=200"
+                    endpoint: "<http://status.savanttools.com/?code=200>"
                     test:
                       expr: 'code == 200'
           name: selector
           type: aggregator
+
 ```
 
 | Field | Description | Scheme | Required |

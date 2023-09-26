@@ -2,9 +2,9 @@
 title: Playwright
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/junit.svg' style={{height: '32px'}}/> Playwright
+# <Icon name="playwright"/> Playwright
 
-Playwright check runs the [playwright test suite](https://playwright.dev/) and ingests the junit exported result in a container at a specified path as defined in `testResults`.
+The JUnit check type runs a new kubernetes pod with the specified image, in this example we are running a [playwright](https://playwright.dev/) test suite
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
@@ -32,9 +32,15 @@ spec:
             command: ["/start.sh"]
 ```
 
-:::tip
-For a complete working example, take a look at **[canary-checker-examples/playwright](https://github.com/flanksource/canary-checker-examples/tree/main/playwright)**
-:::
+By configuring playwright to export JUnit to the `testResults` folder, canary-checker will pick up the results and make then available display formating and health evaluation.
+
+```bash title="start.sh"
+mkdir -p /tmp/junit-results
+PLAYWRIGHT_JUNIT_OUTPUT_NAME=/tmp/junit-results/results.xml npx playwright test --project=chromium --reporter=junit
+touch /tmp/junit-results/done
+```
+
+For a complete working example, see **[canary-checker-examples/playwright](https://github.com/flanksource/canary-checker-examples/tree/main/playwright)**
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
@@ -43,41 +49,6 @@ For a complete working example, take a look at **[canary-checker-examples/playwr
 | `timeout` | Timeout in minutes to wait for specified container to finish its job. Defaults to 5 minutes | *int* |  |
 | `*` | All other common fields | [*Common*](common) | |
 
-
-
 ## Test Result Variables
 
-| Name       | Description           | Scehme           |
-| ---------- | --------------------- | ---------------- |
-| `suites`   |                       | [`[]JunitSuite`](#junit-suite) |
-| `passed`   | Number of passing tests | *int*            |
-| `failed`   | Number of failed tests | *int*            |
-| `skipped`  | NUmber of tests that were skipped | *int*            |
-| `error`    | Number of errors produced when running the tests | *int*            |
-| `duration` | Total time in seconds | *float64*        |
-
-### Junit Suite
-
-| Name       | Description           | Scheme           |
-| ---------- | --------------------- | ---------------- |
-| `name`     |                       | *string* |
-| `tests`    |                       | [`[]JunitTest`](#junit-test) |
-| `passed`   | Number of passing tests                          | *int*                        |
-| `failed`   | Number of failed tests                           | *int*                        |
-| `skipped`  | NUmber of tests that were skipped                | *int*                        |
-| `error`    | Number of errors produced when running the tests | *int*                        |
-| `duration` | Total time in seconds | *float64*        |
-
-### Junit Test
-
-| Name         | Description                                             | Scheme              |
-| ------------ | ------------------------------------------------------- | ------------------- |
-| `name`       |                                                         | *string*            |
-| `classname`  | an additional descriptor for the hierarchy of the test. | *string*            |
-| `duration`   | Time in seconds                                         | *float64*           |
-| `status`     | One of `passed`, `skipped`, `failed` or `error`         | *string*            |
-| `message`    | Description optionally included with a skipped,         | *string*            |
-| `properties` | Additional info about the test                          | `map[string]string` |
-| `error`      | Any errors encountered when running atest               | *string*            |
-| `stdout`     | Standard output produced during test                    | *string*            |
-| `stderr`     | Standard error output produced during test              | *string*            |
+See [JUnit Test Results](./junit##test-result-variables) for the schema that is ingested and can be used for evaluating health or formatting the display.

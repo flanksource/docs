@@ -1,3 +1,6 @@
+---
+description: Alternative methods for connecting to the db used for persistence
+---
 # Database
 
 To persist history, canary-checker has 3 options:
@@ -16,12 +19,16 @@ db:
 # ...
 ```
 
-**To connect to the embedded database:**
+:::info Connecting
+
+If you ever need to connect to the embedded database, you can do so by forwarding the port:
 
 ```shell
 kubectl port-forward canary-checker-0 6432:6432
 psql -U postgres localhost -p 6432 canary with password postgres #password will be postgres
 ```
+
+:::
 
 ### Deploying a standalone db
 

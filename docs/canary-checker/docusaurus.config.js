@@ -1,9 +1,8 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
+const lightCodeTheme = require('prism-react-renderer/themes/palenight');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
-
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -22,7 +21,7 @@ const config = {
   favicon: 'img/canary-checker-icon.svg',
   organizationName: 'flanksource',
   projectName: 'canary-checker',
-
+  plugins: ['my-loaders', 'tailwind-loader'],
   presets: [
     [
       '@docusaurus/preset-classic',
@@ -33,7 +32,7 @@ const config = {
         docs: {
           // remarkPlugins: [sectionPrefix],
           // rehypePlugins: [[inlineSVG, { maxImageSize: 5000 }]],
-          // routeBasePath: '/',
+          routeBasePath: '/',
           breadcrumbs: true,
           // exclude: [
           //   '**/_*/**',
@@ -68,7 +67,7 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'docs',
             position: 'left',
-            label: 'Canary Checker',
+            label: 'Docs',
           },
           {
             href: 'https://github.com/flanksource/canary-checker',
@@ -77,12 +76,21 @@ const config = {
           },
         ],
       },
+      colorMode: {
+        defaultMode: 'light',
+        disableSwitch: false,
+        respectPrefersColorScheme: true,
+      },
+      announcementBar: {
+        content:
+          '⭐️ If you like Canary Checker, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/flanksource/canary-checker">GitHub</a>! ⭐️',
+      },
       footer: {
         style: 'light',
         copyright: `Copyright © ${new Date().getFullYear()} Flanksource, Inc.`,
       },
       prism: {
-        additionalLanguages: ['powershell', 'bash'],
+        additionalLanguages: ['powershell'],
         darkTheme: darkCodeTheme,
         theme: lightCodeTheme
         //'log',jq'promql', 'regex','shell-session','uri', 'mermaid'

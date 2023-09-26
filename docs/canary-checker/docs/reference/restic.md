@@ -4,6 +4,8 @@ title: Restic
 
 # <Icon name="restic"/> Restic
 
+<FullImage/>
+
 The Restic check:
 
 * Queries a Restic Repository for content

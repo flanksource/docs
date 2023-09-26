@@ -1,3 +1,6 @@
+---
+description: Overview of common fields applicable to all checks
+---
 # Common Fields
 
 All check types support the following fields:
@@ -51,9 +54,5 @@ spec:
       display:
         expr: "code in [200,201,301] and sslAge > Duration('7d')"
 ```
-
-
-
-
 
 ## Transform

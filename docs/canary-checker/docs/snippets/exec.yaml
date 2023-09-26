@@ -1,0 +1,8 @@
+#...
+exec:
+  - name: exec-pass-check
+    description: "exec dummy check"
+    script: | # Uses bash on linux and powershell on windows
+      echo "hello"
+    test:
+      expr: 'results.stdout == "hello"'

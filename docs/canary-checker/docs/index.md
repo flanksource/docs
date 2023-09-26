@@ -1,109 +1,14 @@
 ---
 slug: /
 title: Overview
-hide:
-  - toc
+hide_title: true
+hide_table_of_contents: true
+pagination_next: null
+pagination_prev: null
 ---
 
-
-
-
-
-```log
-2023-01-01 [DEBUG] hello-world
-```
-
-```regex
-/\w+(.*)abc{1,2}
-```
-
-```shell-session
-cd 1
-echo "123"
-cat 123 | sort | uniq
-foo@bar:~/files$ exit
-```
-
-<pre class="command-line"
-     data-user="root"
-     data-host="localhost">
-     <code>
-cd abc
-cd "1"
-</code>
-     </pre>
-
-:::info
-
-Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
-
-:::
-
-:::tip
-
-Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
-
-:::
-
-:::info
-
-Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
-
-:::
-
-:::caution
-
-Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
-
-:::
-
-:::danger
-
-Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
-
-:::
-
-```mermaid=
-flowchart LR
-    markdown["`This **is** _Markdown_`"]
-    newLines["`Line1
-    Line 2
-    Line 3`"]
-    markdown --> newLines
-```
-
-```jsx title="/src/components/HelloCodeTitle.js"
-function HelloCodeTitle(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
-```
-
-```csharp
-public class Foo : IBar<int> {
- public string Baz { get; set; } = "foo";
-}
-```
-
-The CSS code will be highlighted with this document because CSS has already been loaded.
-
-```css
-a:hover {
- color: green !important;
-}
-```
-
-```css
-a:hover {
- color: green !important;
-}
-```
-
-```log
-2023-01-01 [DEBUG] hello-world
-```
-
-![Canary Checker](../images/canary-checker.svg#gh-light-mode-only)
-![Canary Checker](../images/canary-checker-white.svg#gh-dark-mode-only)
+![Canary Checker](./images/canary-checker.svg#gh-light-mode-only)
+![Canary Checker](./images/canary-checker-white.svg#gh-dark-mode-only)
 
 Canary checker is a kubernetes-native platform for monitoring health across application and infrastructure using both passive and active (synthetic) mechanisms.
 
@@ -122,66 +27,17 @@ Canary checker is a kubernetes-native platform for monitoring health across appl
   * Transform and filter check responses into individual check results
 * **Multi-Modal** - While designed as a Kubernetes Operator, canary checker can also run as a CLI and a server without K8s
 
-## Getting Started
+Canary Checker can collect health about systems in few different ways:
 
-1. Install canary checker:
+* **Active** **Application** health checks involve sending periodic requests to the service or application and checking the response to ensure that it is working correctly,  Active health checks are proactive and can detect issues quickly, but they can also introduce some load on the system being monitored.
+* **Active Infrastructure** health checks are similar to application health checks, but instead of sending a request to the application it sends a request to the infrastructure to deploy a new application or infrastructure component e.g. a new Kubernetes pod or EC2 instance.
+* **Passive** health checks rely on monitoring the activity in the system, analysing it, and detecting anomalies or errors. Passive health checks are less intrusive than active health checks, but they may not detect issues as quickly.
 
-  ```bash
-  helm repo add flanksource https://flanksource.github.io/charts
-  helm repo update
-  helm install canary-checker
-  ```
+Health checks can be defined in 3 different ways:
 
-2. Create a new check:
-
-  ```yaml title="canary.yaml"
-  apiVersion: canaries.flanksource.com/v1
-  kind: Canary
-  metadata:
-    name: http-check
-  spec:
-    interval: 30
-    http:
-      - name: basic-check
-        url: https://httpbin.demo.aws.flanksource.com/status/200
-      - name: failing-check
-        url: https://httpbin.demo.aws.flanksource.com/status/500
-  ```
-
-2a. Run the check locally (Optional)
-
-```bash
-canary-checker run canary.yaml
-```
-
-[![asciicast](https://asciinema.org/a/cYS6hlmX516JQeECHH7za3IDG.svg)](https://asciinema.org/a/cYS6hlmX516JQeECHH7za3IDG)
-
-```shell
-kubectl apply -f canary.yaml
-```
-
-3. Check the status of the health check:
-
-```shell
-kubectl get canary
-```
-
-[![asciicast](https://asciinema.org/a/tXluDS5sH68gVdko4qctIZEC1.svg)](https://asciinema.org/a/tXluDS5sH68gVdko4qctIZEC1)
-
-4. Check the Dashboard
-
-![](./images/http-checks.png)
-
-## Getting Help
-
-If you have any questions about canary checker:
-
-* Read the  [docs](https://canarychecker.io)
-* Invite yourself to the [CNCF community slack](https://slack.cncf.io/)and join the [#canary-checker](https://cloud-native.slack.com/messages/canary-checker/) channel.
-* Check out the [Youtube Playlist](https://www.youtube.com/playlist?list=PLz4F_KggvA58D6krlw433TNr8qMbu1aIU).
-* File an [issue](https://github.com/flanksource/canary-checker/issues/new) - (We do provide user support via Github Issues, so don't worry  if your issue a real bug or not)
-
-Your feedback is always welcome!
+1. **UI**: Navigate to Settings --> Health --> Click on the :material-plus-circle: button
+1. **[GitOps](./concepts/gitops.md)** canary-checker is fully Gitops enabled using Kubernetes Custom Resource Definitions (CRD)
+1. **[CLI](./tutorials/run.md)** For rapid development and feedback, canary-checker can be run as a normal CLI application by specifying the health check definition in a config file.
 
 ## License
 
@@ -213,7 +69,10 @@ The UI (Dashboard) is free to use with canary checker under a license exception 
 | [Azure Devops](reference/azure-devops) |  |  |
 | **Integration Testing** |  |  |
 | [JMeter](reference/jmeter) | Beta | Runs and checks the result of a JMeter test |
-| [JUnit / BYO](reference/junit) | Beta | Run a pod that saves Junit test results |
+| [JUnit](reference/junit) | Beta | Run a container/pod that saves Junit test results |
+| [K6](reference/k6) | Beta | Runs K6 tests that export JUnit via a container |
+| [Newman](reference/newman) | Beta |  Runs Newman / Postman tests that export JUnit via a container  |
+| [Playwright](reference/Playwright) | Beta |  Runs Playwright tests that export JUnit via a container  |
 | **File Systems / Batch** |                    |      |
 | [Local Disk / NFS](reference/folder)                      | GA         | Check folders for files that are:  too few/many, too old/new, too small/large |
 | [S3](reference/s3-bucket) | GA | Check contents of AWS S3 Buckets |

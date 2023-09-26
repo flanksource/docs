@@ -19,6 +19,7 @@ export default function prismIncludeLanguages(PrismObject) {
   require('./prism-shell-session')
   require('./prism-command-line')
   require('./prism-yaml')
+  require('./prism-bash')
 
   additionalLanguages.forEach((lang) => {
     // eslint-disable-next-line global-require, import/no-dynamic-require
