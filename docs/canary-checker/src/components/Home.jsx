@@ -1,14 +1,11 @@
-import { Hero, Button, InlineLink } from '@algolia/ui-library';
 import { useColorMode } from '@docusaurus/theme-common';
 import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 import React from 'react';
-import Logo from '../../static/img/canary-checker.svg';
-import { ReactComponent as Kubernetes } from '../../static/img/icons/k8s.svg';
 import Icon from './Icon';
-import { LearnMore } from './LearnMore';
-import { FeatureBody } from './FeatureBody';
 import { Feature } from './Feature';
 import { Integrations } from './Integrations';
+
+
 
 function Home() {
   const { withBaseUrl } = useBaseUrlUtils();
@@ -314,7 +311,7 @@ function Home() {
           image="exec-check.png"
           url="https://canarychecker.io/concepts/scripting">
           Evaluate the health of checks using scripts in CEL, Javascript or Go Templating. Templates can also be used to format the output of checks.
-          <div>
+          <div >
             <Icon name="cel" />     <Icon name="javascript" /> <Icon name="go" />
           </div>
         </Feature>
@@ -335,7 +332,7 @@ function Home() {
           left={false}
           url="https://canarychecker.io/concepts/scripting">
           Evaluate the health of checks using scripts in CEL, Javascript or Go Templating. Templates can also be used to format the output of checks.
-          <div>
+          <div >
             <Icon name="cel" />     <Icon name="javascript" /> <Icon name="go" />
           </div>
         </Feature>
