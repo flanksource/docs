@@ -1000,19 +1000,2181 @@ Examples:
     'gums'.reverse() // returns 'smug'
     'John Smith'.reverse() // returns 'htimS nhoJ'
 ---
-## FuncName
+### base64.Encode
 
-Description
+The `base64.Encode` function in CEL is used to encode input data into a Base64 string. The function can accept various types of input, including strings, byte slices, and types that can be converted to a byte slice.
 
-Syntax
+Syntax:
 
-```
-FuncName(str, index)
-```
+    base64.Encode(data)
 
+Where:
+- `data` is the input you're encoding. It can be a string, byte slice, or any type that can be converted to a byte slice.
 
 Examples:
 
-    
+    Encoding a simple string:
+    base64.Encode("hello")  // Expected Output: "aGVsbG8="
 
-```
+    Encoding a number (which will first be converted to a string):
+    base64.Encode(12345)  // Expected Output: "MTIzNDU="
+
+    Encoding a byte slice representation of a string:
+    base64.Encode([104, 101, 108, 108, 111])  // Expected Output: "aGVsbG8="
+
+---
+
+### base64.Decode
+
+The `base64.Decode` function in CEL is used to decode a Base64 encoded string back to its original form. The function returns the decoded string.
+
+Syntax:
+
+    base64.Decode(encodedData)
+
+Where:
+- `encodedData` is the Base64 encoded string you're decoding.
+
+Examples:
+
+    Decoding a Base64 encoded string:
+    base64.Decode("aGVsbG8=")  // Expected Output: "hello"
+
+    Decoding another example:
+    base64.Decode("MTIzNDU=")  // Expected Output: "12345"
+
+    Decoding an encoded special character:
+    base64.Decode("4pyT")  // Expected Output: "✓"
+
+---
+
+### base64.DecodeBytes
+
+The `base64.DecodeBytes` function in CEL is similar to `base64.Decode`, but it returns the decoded data as a byte slice instead of a string.
+
+Syntax:
+
+    base64.DecodeBytes(encodedData)
+
+Where:
+- `encodedData` is the Base64 encoded string you're decoding.
+
+Examples:
+
+    Decoding a Base64 encoded string to byte slice:
+    base64.DecodeBytes("aGVsbG8=")  // Expected Output: [104, 101, 108, 108, 111]
+
+    Decoding another example to byte slice:
+    base64.DecodeBytes("MTIzNDU=")  // Expected Output: [49, 50, 51, 52, 53]
+
+    Decoding an encoded special character to byte slice:
+    base64.DecodeBytes("4pyT")  // Expected Output: [226, 147, 147]
+
+---
+### Slice 
+
+The `Slice` function in CEL is used to create a slice from the provided arguments.
+
+Syntax:
+    
+    Slice(data)
+
+Where:
+- `data` is the data you're converting into a slice.
+
+Examples:
+
+    Creating a slice from multiple values:
+    Slice(1, 2, 3)  // Evaluates to [1, 2, 3]
+
+    Creating a slice from strings:
+    Slice("a", "b", "c")  // Evaluates to ["a", "b", "c"]
+
+    Creating an empty slice:
+    Slice()  // Evaluates to []
+
+---
+
+### Has 
+
+The `Has` function in CEL checks if a given key exists in the provided data structure.
+
+Syntax:
+    
+    Has(data, key)
+
+Where:
+- `data` is the data structure you're checking.
+- `key` is the key you're looking for.
+
+Examples:
+
+    Checking if a key exists in a map:
+    Has({"apple": 1, "banana": 2}, "apple")  // Evaluates to true
+
+    Checking for a non-existent key:
+    Has({"apple": 1, "banana": 2}, "orange")  // Evaluates to false
+
+    Checking in a complex structure:
+    Has({"fruits": {"apple": 1, "banana": 2}}, "fruits")  // Evaluates to true
+
+---
+
+### Dict 
+
+The `Dict` function in CEL is used to create a dictionary (map) from the provided key-value pairs.
+
+Syntax:
+    
+    Dict(key1, value1, key2, value2, ...)
+
+Where:
+- `keyN` is the Nth key for the dictionary.
+- `valueN` is the value associated with the Nth key.
+
+Examples:
+
+    Creating a simple dictionary:
+    Dict("apple", 1, "banana", 2)  // Evaluates to {"apple": 1, "banana": 2}
+
+    Creating a dictionary with mixed types:
+    Dict("name", "John", "age", 30)  // Evaluates to {"name": "John", "age": 30}
+
+    Creating an empty dictionary:
+    Dict()  // Evaluates to {}
+
+---
+
+### Keys 
+
+The `Keys` function in CEL retrieves all the keys from the provided dictionary.
+
+Syntax:
+    
+    Keys(dict)
+
+Where:
+- `dict` is the dictionary you're extracting keys from.
+
+Examples:
+
+    Getting keys from a dictionary:
+    Keys({"apple": 1, "banana": 2})  // Evaluates to ["apple", "banana"]
+
+    Getting keys from an empty dictionary:
+    Keys({})  // Evaluates to []
+
+    Getting keys from a nested dictionary:
+    Keys({"fruits": {"apple": 1, "banana": 2}, "vegetables": {"carrot": 3}})  // Evaluates to ["fruits", "vegetables"]
+
+---
+
+### Values 
+
+The `Values` function in CEL retrieves all the values from the provided dictionary.
+
+Syntax:
+    
+    Values(dict)
+
+Where:
+- `dict` is the dictionary you're extracting values from.
+
+Examples:
+
+    Getting values from a dictionary:
+    Values({"apple": 1, "banana": 2})  // Evaluates to [1, 2]
+
+    Getting values from an empty dictionary:
+    Values({})  // Evaluates to []
+
+    Getting values from a nested dictionary:
+    Values({"fruits": {"apple": 1, "banana": 2}, "vegetables": {"carrot": 3}})  // Evaluates to [{"apple": 1, "banana": 2}, {"carrot": 3}]
+
+---
+
+### Append 
+
+The `Append` function in CEL appends a value to the end of a list.
+
+Syntax:
+    
+    Append(value, list)
+
+Where:
+- `value` is the value you're appending.
+- `list` is the list you're appending to.
+
+Examples:
+
+    Appending to a list:
+    Append(3, [1, 2])  // Evaluates to [1, 2, 3]
+
+    Appending a string to a list:
+    Append("c", ["a", "b"])  // Evaluates to ["a", "b", "c"]
+
+    Appending to an empty list:
+    Append(1, [])  // Evaluates to [1]
+
+---
+
+### Prepend 
+
+The `Prepend` function in CEL adds a value to the beginning of a list.
+
+Syntax:
+    
+    Prepend(value, list)
+
+Where:
+- `value` is the value you're prepending.
+- `list` is the list you're adding to.
+
+Examples:
+
+    Prepending to a list:
+    Prepend(0, [1, 2, 3])  // Evaluates to [0, 1, 2, 3]
+
+    Prepending a string to a list:
+    Prepend("a", ["b", "c"])  // Evaluates to ["a", "b", "c"]
+
+    Prepending to an empty list:
+    Prepend(1, [])  // Evaluates to [1]
+
+---
+
+### Uniq 
+
+The `Uniq` function in CEL removes duplicate values from a list.
+
+Syntax:
+    
+    Uniq(list)
+
+Where:
+- `list` is the list you're removing duplicates from.
+
+Examples:
+
+    Removing duplicates from a list:
+    Uniq([1, 2, 2, 3, 3, 3])  // Evaluates to [1, 2, 3]
+
+    Removing duplicates from a string list:
+    Uniq(["a", "b", "a", "c", "b"])  // Evaluates to ["a", "b", "c"]
+
+    Using a list without duplicates:
+    Uniq([1, 2, 3])  // Evaluates to [1, 2, 3]
+
+---
+
+### Reverse 
+
+The `Reverse` function in CEL reverses the order of elements in a list.
+
+Syntax:
+    
+    Reverse(list)
+
+Where:
+- `list` is the list you're reversing.
+
+Examples:
+
+    Reversing a list:
+    Reverse([1, 2, 3])  // Evaluates to [3, 2, 1]
+
+    Reversing a string list:
+    Reverse(["a", "b", "c"])  // Evaluates to ["c", "b", "a"]
+
+    Reversing an empty list:
+    Reverse([])  // Evaluates to []
+
+---
+
+### Merge 
+
+The `Merge` function in CEL merges two or more dictionaries into one.
+
+Syntax:
+    
+    Merge(dict1, dict2, ...)
+
+Where:
+- `dictN` is the Nth dictionary you're merging.
+
+Examples:
+
+    Merging two dictionaries:
+    Merge({"apple": 1}, {"banana": 2})  // Evaluates to {"apple": 1, "banana": 2}
+
+    Merging with overlapping keys:
+    Merge({"apple": 1, "banana": 2}, {"banana": 3, "cherry": 4})  // Evaluates to {"apple": 1, "banana": 3, "cherry": 4}
+
+    Merging multiple dictionaries:
+    Merge({"apple": 1}, {"banana": 2}, {"cherry": 3})  // Evaluates to {"apple": 1, "banana": 2, "cherry": 3}
+
+---
+
+### Sort  
+
+The `Sort` function in CEL sorts a list. If provided with a key, it sorts based on that key.
+
+Syntax:
+    
+    Sort(list)
+    Sort(key, list)
+
+Where:
+- `key` is the key to sort by (optional).
+- `list` is the list you're sorting.
+
+Examples:
+
+    Sorting a list of numbers:
+    Sort([3, 1, 2])  // Evaluates to [1, 2, 3]
+
+    Sorting a list of strings:
+    Sort(["banana", "apple", "cherry"])  // Evaluates to ["apple", "banana", "cherry"]
+
+    Sorting a list of dictionaries by a key:
+    Sort("age", [{"name": "John", "age": 30}, {"name": "Jane", "age": 25}])  // Evaluates to [{"name": "Jane", "age": 25}, {"name": "John", "age": 30}]
+
+---
+
+### JQ  
+
+The `JQ` function in CEL applies a jq expression to filter or transform data.
+
+Syntax:
+    
+    JQ(jqExpr, data)
+
+Where:
+- `jqExpr` is the jq expression you're applying.
+- `data` is the data you're filtering or transforming.
+
+Examples:
+
+    Filtering data with a jq expression:
+    JQ(".name", {"name": "John", "age": 30})  // Evaluates to "John"
+
+    Transforming data with a jq expression:
+    JQ("{name, age}", {"name": "John", "age": 30, "city": "NY"})  // Evaluates to {"name": "John", "age": 30}
+
+    Using a complex jq expression:
+    JQ(".[] | select(.age > 25)", [{"name": "John", "age": 30}, {"name": "Jane", "age": 25}])  // Evaluates to [{"name": "John", "age": 30}]
+
+---
+
+### Flatten  
+
+The `Flatten` function in CEL flattens a nested list structure.
+
+Syntax:
+    
+    Flatten(list)
+    Flatten(depth, list)
+
+Where:
+- `depth` is the depth to which the list should be flattened (optional).
+- `list` is the list you're flattening.
+
+Examples:
+
+    Flattening a nested list:
+    Flatten([1, [2, 3], [4, [5, 6]]])  // Evaluates to [1, 2, 3, 4, 5, 6]
+
+    Flattening to a specific depth:
+    Flatten(1, [1, [2, 3], [4, [5, 6]]])  // Evaluates to [1, 2, 3, 4, [5, 6]]
+
+    Flattening an already flat list:
+    Flatten([1, 2, 3])  // Evaluates to [1, 2, 3]
+
+---
+
+### Pick  
+
+The `Pick` function in CEL creates a new dictionary by picking specific keys from the provided dictionary.
+
+Syntax:
+    
+    Pick(key1, key2, ..., dict)
+
+Where:
+- `keyN` is the Nth key you're picking.
+- `dict` is the dictionary you're picking from.
+
+Examples:
+
+    Picking specific keys from a dictionary:
+    Pick("apple", "cherry", {"apple": 1, "banana": 2, "cherry": 3})  // Evaluates to {"apple": 1, "cherry": 3}
+
+    Picking a non-existent key:
+    Pick("apple", "orange", {"apple": 1, "banana": 2})  // Evaluates to {"apple": 1}
+
+    Picking from an empty dictionary:
+    Pick("apple", {})  // Evaluates to {}
+
+---
+
+### Omit
+
+The `Omit` function in CEL creates a new dictionary by omitting specific keys from the provided dictionary.
+
+Syntax:
+    
+    Omit(key1, key2, ..., dict)
+
+Where:
+- `keyN` is the Nth key you're omitting.
+- `dict` is the dictionary you're omitting from.
+
+Examples:
+
+    Omitting specific keys from a dictionary:
+    Omit("banana", {"apple": 1, "banana": 2, "cherry": 3})  // Evaluates to {"apple": 1, "cherry": 3}
+
+    Omitting a non-existent key:
+    Omit("orange", {"apple": 1, "banana": 2})  // Evaluates to {"apple": 1, "banana": 2}
+
+    Omitting from an empty dictionary:
+    Omit("apple", {})  // Evaluates to {}
+
+---
+### conv.Bool
+
+The `conv.Bool` function in CEL is used to convert a given input to a boolean value. It internally converts the input to a string and then determines its boolean representation.
+
+Syntax:
+
+    conv.Bool(input)
+
+Where:
+- `input` is the value you're converting to a boolean.
+
+Examples:
+
+    Converting a truthy string to boolean:
+    conv.Bool("true")  // Evaluates to true
+
+    Converting a falsy string to boolean:
+    conv.Bool("false")  // Evaluates to false
+
+---
+
+### conv.ToBool
+
+The `conv.ToBool` function in CEL is similar to `conv.Bool` and is used to convert a given input to a boolean value.
+
+Syntax:
+
+    conv.ToBool(input)
+
+Examples:
+
+    Converting a truthy string to boolean:
+    conv.ToBool("true")  // Evaluates to true
+
+---
+
+### conv.ToBools
+
+The `conv.ToBools` function in CEL converts a list of inputs to their respective boolean values.
+
+Syntax:
+
+    conv.ToBools(input1, input2, ...)
+
+Examples:
+
+    Converting multiple values to booleans:
+    conv.ToBools("true", "false")  // Evaluates to [true, false]
+
+---
+
+### conv.Slice
+
+The `conv.Slice` function in CEL is used to create a slice from the provided arguments.
+
+Syntax:
+
+    conv.Slice(item1, item2, ...)
+
+Examples:
+
+    Creating a slice of strings:
+    conv.Slice("apple", "banana", "cherry")  // Evaluates to ["apple", "banana", "cherry"]
+
+    Creating a mixed slice:
+    conv.Slice("apple", 1, true)  // Evaluates to ["apple", 1, true]
+
+    Creating a slice of numbers:
+    conv.Slice(1, 2, 3, 4)  // Evaluates to [1, 2, 3, 4]
+
+---
+
+### conv.Join
+
+The `conv.Join` function in CEL is used to join a list or slice of items with a specified separator.
+
+Syntax:
+
+    conv.Join(list, separator)
+
+Where:
+- `list` is the list or slice of items you're joining.
+- `separator` is the string used to separate the items.
+
+Examples:
+
+    Joining a list of strings:
+    conv.Join(["apple", "banana", "cherry"], ", ")  // Evaluates to "apple, banana, cherry"
+
+    Joining a list with a different separator:
+    conv.Join(["apple", "banana", "cherry"], "-")  // Evaluates to "apple-banana-cherry"
+
+---
+
+### conv.Has
+
+The `conv.Has` function in CEL checks if a given key exists in the provided input, which can be a map or other collection.
+
+Syntax:
+
+    conv.Has(collection, key)
+
+Where:
+- `collection` is the map or collection you're checking.
+- `key` is the key or item you're looking for.
+
+Examples:
+
+    Checking for a key in a map:
+    conv.Has({"apple": 1, "banana": 2}, "apple")  // Evaluates to true
+
+    Checking for a missing key:
+    conv.Has({"apple": 1, "banana": 2}, "cherry")  // Evaluates to false
+
+---
+
+### conv.ParseInt
+
+The `conv.ParseInt` function in CEL is used to parse a string representation of an integer with a specified base and bit size.
+
+Syntax:
+
+    conv.ParseInt(input, base, bitSize)
+
+Where:
+- `input` is the string representation of the integer.
+- `base` is the base (e.g., 10 for decimal, 2 for binary).
+- `bitSize` specifies the integer type (e.g., 32 for `int32`).
+
+Examples:
+
+    Parsing a decimal string:
+    conv.ParseInt("12345", 10, 32)  // Evaluates to 12345
+
+    Parsing a binary string:
+    conv.ParseInt("1101", 2, 32)  // Evaluates to 13
+
+    Parsing a hexadecimal string:
+    conv.ParseInt("1a3f", 16, 32)  // Evaluates to 6719
+
+---
+
+### conv.ParseFloat
+
+The `conv.ParseFloat` function in CEL is used to parse a string representation of a floating-point number with a specified bit size.
+
+Syntax:
+
+    conv.ParseFloat(input, bitSize)
+
+Where:
+- `input` is the string representation of the floating-point number.
+- `bitSize` specifies the float type (e.g., 32 for `float32`).
+
+Examples:
+
+    Parsing a float string:
+    conv.ParseFloat("123.45", 32)  // Evaluates to 123.45
+
+    Parsing another float string:
+    conv.ParseFloat("0.001", 64)  // Evaluates to 0.001
+
+    Parsing a scientific notation string:
+    conv.ParseFloat("1.23e4", 64)  // Evaluates to 12300
+
+---
+
+### conv.ParseUint
+
+The `conv.ParseUint` function in CEL is used to parse a string representation of an unsigned integer with a specified base and bit size.
+
+Syntax:
+
+    conv.ParseUint(input, base, bitSize)
+
+Examples:
+
+    Parsing a decimal string:
+    conv.ParseUint("12345", 10, 32)  // Evaluates to 12345
+
+    Parsing a binary string:
+    conv.ParseUint("1101", 2, 32)  // Evaluates to 13
+
+    Parsing a hexadecimal string:
+    conv.ParseUint("1a3f", 16, 32)  // Evaluates to 6719
+
+---
+
+### conv.Atoi
+
+The `conv.Atoi` function in CEL is used to convert a string to an integer. It is a simpler version of `conv.ParseInt` with base 10 and bit size dependent on the platform.
+
+Syntax:
+
+    conv.Atoi(input)
+
+Examples:
+
+    Converting a decimal string:
+    conv.Atoi("12345")  // Evaluates to 12345
+
+    Converting a negative integer string:
+    conv.Atoi("-12345")  // Evaluates to -12345
+
+---
+
+### conv.URL
+
+The `conv.URL` function in CEL is used to parse a string into a URL. It returns a URL object and an error if the parsing fails.
+
+Syntax:
+
+    conv.URL(input)
+
+Where:
+- `input` is the string representation of the URL.
+
+Examples:
+
+    Parsing a valid URL:
+    conv.URL("https://www.example.com")  // Evaluates to a URL object
+
+    Parsing an invalid URL:
+    conv.URL("invalid-url")  // Evaluates to an error
+
+    Parsing a URL with query parameters:
+    conv.URL("https://www.example.com?page=1&sort=asc")  // Evaluates to a URL object with query parameters
+
+---
+
+### conv.ToInt64
+
+The `conv.ToInt64` function in CEL is used to convert a given input to a 64-bit integer.
+
+Syntax:
+
+    conv.ToInt64(input)
+
+Examples:
+
+    Converting a number to int64:
+    conv.ToInt64(12345)  // Evaluates to 12345
+
+    Converting a float to int64:
+    conv.ToInt64(123.45)  // Evaluates to 123
+
+    Converting a string to int64:
+    conv.ToInt64("12345")  // Evaluates to 12345
+
+---
+
+### conv.ToInt
+
+The `conv.ToInt` function in CEL is used to convert a given input to an integer. The bit size of the integer is dependent on the platform.
+
+Syntax:
+
+    conv.ToInt(input)
+
+Examples:
+
+    Converting a number to int:
+    conv.ToInt(12345)  // Evaluates to 12345
+
+    Converting a float to int:
+    conv.ToInt(123.45)  // Evaluates to 123
+
+    Converting a string to int:
+    conv.ToInt("12345")  // Evaluates to 12345
+
+---
+
+### conv.ToInt64s
+
+The `conv.ToInt64s` function in CEL converts a list of inputs to their respective 64-bit integer values.
+
+Syntax:
+
+    conv.ToInt64s(input1, input2, ...)
+
+Examples:
+
+    Converting multiple values to int64s:
+    conv.ToInt64s(123, "456", 789.0)  // Evaluates to [123, 456, 789]
+
+    Converting a list of strings to int64s:
+    conv.ToInt64s("123", "456", "789")  // Evaluates to [123, 456, 789]
+
+---
+
+### conv.ToInts
+
+The `conv.ToInts` function in CEL converts a list of inputs to their respective integer values. The bit size of the integers is dependent on the platform.
+
+Syntax:
+
+    conv.ToInts(input1, input2, ...)
+
+Examples:
+
+    Converting multiple values to ints:
+    conv.ToInts(123, "456", 789.0)  // Evaluates to [123, 456, 789]
+
+    Converting a list of strings to ints:
+    conv.ToInts("123", "456", "789")  // Evaluates to [123, 456, 789]
+
+---
+
+### conv.ToFloat64
+
+The `conv.ToFloat64` function in CEL is used to convert a given input to a 64-bit floating-point number.
+
+Syntax:
+
+    conv.ToFloat64(input)
+
+Examples:
+
+    Converting a number to float64:
+    conv.ToFloat64(123)  // Evaluates to 123.0
+
+    Converting a string to float64:
+    conv.ToFloat64("123.45")  // Evaluates to 123.45
+
+---
+
+### conv.ToFloat64s
+
+The `conv.ToFloat64s` function in CEL converts a list of inputs to their respective 64-bit floating-point values.
+
+Syntax:
+
+    conv.ToFloat64s(input1, input2, ...)
+
+Examples:
+
+    Converting a list of strings to float64s:
+    conv.ToFloat64s("123.45", "678.90", "0.001")  // Evaluates to [123.45, 678.90, 0.001]
+
+---
+
+### conv.ToString
+
+The `conv.ToString` function in CEL is used to convert a given input to a string.
+
+Syntax:
+
+    conv.ToString(input)
+
+Examples:
+
+    Converting a number to string:
+    conv.ToString(12345)  // Evaluates to "12345"
+
+    Converting a float to string:
+    conv.ToString(123.45)  // Evaluates to "123.45"
+
+    Converting a boolean to string:
+    conv.ToString(true)  // Evaluates to "true"
+
+---
+
+### conv.ToStrings
+
+The `conv.ToStrings` function in CEL converts a list of inputs to their respective string values.
+
+Syntax:
+
+    conv.ToStrings(input1, input2, ...)
+
+Examples:
+
+    Converting multiple values to strings:
+    conv.ToStrings(123, 456.78, true)  // Evaluates to ["123", "456.78", "true"]
+
+    Converting a list of mixed values to strings:
+    conv.ToStrings("apple", 123, true)  // Evaluates to ["apple", "123", "true"]
+
+    Converting a list of booleans to strings:
+    conv.ToStrings(true, false, true)  // Evaluates to ["true", "false", "true"]
+
+---
+
+### conv.Default
+
+The `conv.Default` function in CEL is used to return the input value if it is true; otherwise, it returns the default value.
+
+Syntax:
+
+    conv.Default(default, input)
+
+Examples:
+
+    Using a truthy input value:
+    conv.Default("default", "input")  // Evaluates to "input"
+
+    Using a falsy input value:
+    conv.Default("default", "")  // Evaluates to "default"
+
+    Using a non-string input value:
+    conv.Default("default", 123)  // Evaluates to 123
+
+---
+
+### conv.Dict
+
+The `conv.Dict` function in CEL is used to create a dictionary or map from the provided key-value pairs.
+
+Syntax:
+
+    conv.Dict(key1, value1, key2, value2, ...)
+
+Examples:
+
+    Creating a dictionary with string keys and values:
+    conv.Dict("apple", "fruit", "carrot", "vegetable")  // Evaluates to {"apple": "fruit", "carrot": "vegetable"}
+
+    Creating a mixed dictionary:
+    conv.Dict("name", "Alice", "age", 30)  // Evaluates to {"name": "Alice", "age": 30}
+
+    Creating a dictionary with nested values:
+    conv.Dict("user", conv.Dict("name", "Alice", "age", 30), "active", true)  // Evaluates to {"user": {"name": "Alice", "age": 30}, "active": true}
+---
+### crypto.SHA1
+
+The `crypto.SHA1` function in CEL is used to compute the SHA-1 hash of the input data. Note that SHA-1 is considered insecure for cryptographic purposes.
+
+Syntax:
+
+    crypto.SHA1(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA1("hello")  // Might evaluate to "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c"
+
+    Hashing a number represented as a string:
+    crypto.SHA1("12345")  // Might evaluate to "8cb2237d0679ca88db6464eac60da96345513964"
+
+    Hashing special characters:
+    crypto.SHA1("!@#")  // Might evaluate to "8f9b6cb1cf7d70f23c16c9b9d4894d7f3b8fe15d"
+---
+### crypto.SHA224
+
+The `crypto.SHA224` function in CEL calculates the SHA-224 hash of the given input data, returning a string representation of the hash.
+
+Syntax:
+
+    crypto.SHA224(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA224("hello")  // Might evaluate to "ea09ae9cc6768c50fcee903ed054556e5bfc8347907f12598aa24193"
+
+    Hashing a number represented as a string:
+    crypto.SHA224("12345")  // Might evaluate to "b7a875fc1ea228b9061041b7cec4bd3c52ab3ce3e4fdfb2478313b5d"
+
+    Hashing special characters:
+    crypto.SHA224("!@#")  // Might evaluate to "b2a4b9a1d4a63ad7b2db380a370a8b3b2cfa7278b2d1c9632fb8a5c9"
+---
+### crypto.SHA256
+
+The `crypto.SHA256` function in CEL calculates the SHA-256 hash of the provided input data, offering a balance between security and performance.
+
+Syntax:
+
+    crypto.SHA256(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA256("hello")  // Might evaluate to "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+
+    Hashing a number represented as a string:
+    crypto.SHA256("12345")  // Might evaluate to "d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2"
+
+    Hashing special characters:
+    crypto.SHA256("!@#")  // Might evaluate to "d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8"
+---
+### crypto.SHA384
+
+The `crypto.SHA384` function in CEL is used for computing the SHA-384 hash of the input data, which is a truncated version of SHA-512 and provides enhanced security.
+
+Syntax:
+
+    crypto.SHA384(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA384("hello")  // Might evaluate to a long hash string
+
+    Hashing a number represented as a string:
+    crypto.SHA384("12345")  // Might evaluate to another long hash string
+
+    Hashing special characters:
+    crypto.SHA384("!@#")  // Might evaluate to yet another long hash string
+---
+### crypto.SHA512
+
+The `crypto.SHA512` function in CEL calculates the SHA-512 hash of the given input data. It's commonly used for data integrity verification and password storage.
+
+Syntax:
+
+    crypto.SHA512(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA512("hello")  // Might evaluate to a very long hash string
+
+    Hashing a number represented as a string:
+    crypto.SHA512("12345")  // Might evaluate to another very long hash string
+
+    Hashing special characters:
+    crypto.SHA512("!@#")  // Might evaluate to yet another very long hash string
+---
+### crypto.SHA512_224
+
+The `crypto.SHA512_224` function in CEL calculates the SHA-512/224 hash of the input data. It's a truncated version of SHA-512, providing higher security levels.
+
+Syntax:
+
+    crypto.SHA512_224(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA512_224("hello")  // Might evaluate to "4634270d395b88fa6b8842be8a2fe5e6bf5e6220bcd7a52c51d4c4e8"
+
+    Hashing a number represented as a string:
+    crypto.SHA512_224("12345")  // Might evaluate to "4634270d395b88fa6b8842be8a2fe5e6bf5e6220bcd7a52c51d4c4e8"
+
+    Hashing special characters:
+    crypto.SHA512_224("!@#")  // Might evaluate to "4634270d395b88fa6b8842be8a2fe5e6bf5e6220bcd7a52c51d4c4e8"
+---
+### crypto.SHA512_256
+
+The `crypto.SHA512_256` function in CEL calculates the SHA-512/256 hash of the input data, a truncated version of SHA-512, offering enhanced security and performance.
+
+Syntax:
+
+    crypto.SHA512_256(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA512_256("hello")  // Might evaluate to a long hash string
+
+    Hashing a number represented as a string:
+    crypto.SHA512_256("12345")  // Might evaluate to another long hash string
+
+    Hashing special characters:
+    crypto.SHA512_256("!@#")  // Might evaluate to yet another long hash string
+---
+### crypto.SHA1Bytes
+
+The `crypto.SHA1Bytes` function in CEL computes the SHA-1 hash of the input data and returns it as a byte array. It's generally not recommended for cryptographic security.
+
+Syntax:
+
+    crypto.SHA1Bytes(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA1Bytes("hello")  // Might evaluate to a byte array representation of the hash
+
+    Hashing a number represented as a string:
+    crypto.SHA1Bytes("12345")  // Might evaluate to another byte array representation of the hash
+
+    Hashing special characters:
+    crypto.SHA1Bytes("!@#")  // Might evaluate to yet another byte array representation of the hash
+---
+### crypto.SHA224Bytes
+
+The `crypto.SHA224Bytes` function in CEL calculates the SHA-224 hash of the given input data and returns the hash as a byte array.
+
+Syntax:
+
+    crypto.SHA224Bytes(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA224Bytes("hello")  // Might evaluate to a byte array representation of the hash
+
+    Hashing a number represented as a string:
+    crypto.SHA224Bytes("12345")  // Might evaluate to another byte array representation of the hash
+
+    Hashing special characters:
+    crypto.SHA224Bytes("!@#")  // Might evaluate to yet another byte array representation of the hash
+---
+### crypto.SHA256Bytes
+
+The `crypto.SHA256Bytes` function in CEL calculates the SHA-256 hash of the provided input data and returns it as a byte array.
+
+Syntax:
+
+    crypto.SHA256Bytes(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA256Bytes("hello")  // Might evaluate to a byte array representation of the hash
+
+    Hashing a number represented as a string:
+    crypto.SHA256Bytes("12345")  // Might evaluate to another byte array representation of the hash
+
+    Hashing special characters:
+    crypto.SHA256Bytes("!@#")  // Might evaluate to yet another byte array representation of the hash
+---
+### crypto.SHA384Bytes
+
+The `crypto.SHA384Bytes` function in CEL computes the SHA-384 hash of the input data and returns it as a byte array.
+
+Syntax:
+
+    crypto.SHA384Bytes(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA384Bytes("hello")  // Might evaluate to a byte array representation of the hash
+
+    Hashing a number represented as a string:
+    crypto.SHA384Bytes("12345")  // Might evaluate to another byte array representation of the hash
+
+    Hashing special characters:
+    crypto.SHA384Bytes("!@#")  // Might evaluate to yet another byte array representation of the hash
+---
+### crypto.SHA512Bytes
+
+The `crypto.SHA512Bytes` function in CEL calculates the SHA-512 hash of the given input data and returns the hash as a byte array.
+
+Syntax:
+
+    crypto.SHA512Bytes(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA512Bytes("hello")  // Might evaluate to a byte array representation of the hash
+
+    Hashing a number represented as a string:
+    crypto.SHA512Bytes("12345")  // Might evaluate to another byte array representation of the hash
+
+    Hashing special characters:
+    crypto.SHA512Bytes("!@#")  // Might evaluate to yet another byte array representation of the hash
+---
+### crypto.SHA512_224Bytes
+
+The `crypto.SHA512_224Bytes` function in CEL calculates the SHA-512/224 hash of the input data and returns it as a byte array.
+
+Syntax:
+
+    crypto.SHA512_224Bytes(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA512_224Bytes("hello")  // Might evaluate to a byte array representation of the hash
+
+    Hashing a number represented as a string:
+    crypto.SHA512_224Bytes("12345")  // Might evaluate to another byte array representation of the hash
+
+    Hashing special characters:
+    crypto.SHA512_224Bytes("!@#")  // Might evaluate to yet another byte array representation of the hash
+---
+### crypto.SHA512_256Bytes
+
+The `crypto.SHA512_256Bytes` function in CEL calculates the SHA-512/256 hash of the input data and returns the hash as a byte array.
+
+Syntax:
+
+    crypto.SHA512_256Bytes(data)
+
+Where:
+- `data` is the input data to be hashed.
+
+Examples:
+
+    Hashing a simple string:
+    crypto.SHA512_256Bytes("hello")  // Might evaluate to a byte array representation of the hash
+
+    Hashing a number represented as a string:
+    crypto.SHA512_256Bytes("12345")  // Might evaluate to another byte array representation of the hash
+
+    Hashing special characters:
+    crypto.SHA512_256Bytes("!@#")  // Might evaluate to yet another byte array representation of the hash
+---
+### data.JSON
+
+The `data.JSON` function in CEL is used to convert a JSON formatted string into a map. It returns a map containing the JSON data.
+
+Syntax:
+
+    data.JSON(jsonString)
+
+Where:
+- `jsonString` is the JSON formatted string.
+
+Examples:
+
+    Converting a JSON string to a map:
+    data.JSON("{\"name\": \"Alice\", \"age\": 30}")  // Evaluates to a map with keys "name" and "age"
+
+    Handling an array in JSON:
+    data.JSON("{\"numbers\": [1, 2, 3]}")  // Evaluates to a map with a key "numbers" containing an array
+
+    Nested JSON string conversion:
+    data.JSON("{\"person\": {\"name\": \"Bob\", \"age\": 35}}")  // Evaluates to a nested map
+---
+### data.JSONArray
+
+The `data.JSONArray` function converts a JSON formatted string into an array. It is particularly useful for handling JSON arrays.
+
+Syntax:
+
+    data.JSONArray(jsonArrayString)
+
+Where:
+- `jsonArrayString` is the JSON formatted string representing an array.
+
+Examples:
+
+    Converting a JSON array string to an array:
+    data.JSONArray("[1, 2, 3]")  // Evaluates to an array [1, 2, 3]
+
+    Handling complex objects in a JSON array:
+    data.JSONArray("[{\"name\": \"Alice\"}, {\"name\": \"Bob\"}]")  // Evaluates to an array of maps
+
+    An empty JSON array string:
+    data.JSONArray("[]")  // Evaluates to an empty array
+---
+### data.YAML
+
+The `data.YAML` function in CEL converts a YAML formatted string into a map. It provides an easy way to handle YAML data.
+
+Syntax:
+
+    data.YAML(yamlString)
+
+Where:
+- `yamlString` is the YAML formatted string.
+
+Examples:
+
+    Converting a simple YAML string to a map:
+    data.YAML("name: Alice\nage: 30")  // Evaluates to a map with keys "name" and "age"
+
+    Handling a YAML sequence:
+    data.YAML("numbers:\n- 1\n- 2\n- 3")  // Evaluates to a map with a key "numbers" containing an array
+
+    Nested YAML data conversion:
+    data.YAML("person:\n  name: Bob\n  age: 35")  // Evaluates to a nested map
+---
+### data.YAMLArray
+
+The `data.YAMLArray` function converts a YAML formatted string representing a sequence into an array.
+
+Syntax:
+
+    data.YAMLArray(yamlArrayString)
+
+Where:
+- `yamlArrayString` is the YAML formatted string representing a sequence.
+
+Examples:
+
+    Converting a YAML sequence to an array:
+    data.YAMLArray("- 1\n- 2\n- 3")  // Evaluates to an array [1, 2, 3]
+
+    Handling complex objects in a YAML sequence:
+    data.YAMLArray("- name: Alice\n- name: Bob")  // Evaluates to an array of maps
+
+    An empty YAML sequence:
+    data.YAMLArray("")  // Evaluates to an empty array
+---
+### data.TOML
+
+The `data.TOML` function converts a TOML formatted string into a map, making it easy to work with TOML data.
+
+Syntax:
+
+    data.TOML(tomlString)
+
+Where:
+- `tomlString` is the TOML formatted string.
+
+Examples:
+
+    Converting a TOML string to a map:
+    data.TOML("name = \"Alice\"\nage = 30")  // Evaluates to a map with keys "name" and "age"
+
+    Handling an array in TOML:
+    data.TOML("numbers = [1, 2, 3]")  // Evaluates to a map with a key "numbers" containing an array
+
+    Nested TOML data conversion:
+    data.TOML("[person]\nname = \"Bob\"\nage = 35")  // Evaluates to a nested map
+---
+### data.CSV
+
+The `data.CSV` function converts a CSV formatted string into a two-dimensional array, where each element is a row represented as an array.
+
+Syntax:
+
+    data.CSV(csvString)
+
+Where:
+- `csvString` is the CSV formatted string.
+
+Examples:
+
+    Converting a CSV string to a 2D array:
+    data.CSV("Alice,30\nBob,35")  // Evaluates to [["Alice", "30"], ["Bob", "35"]]
+
+    Handling a CSV with headers:
+    data.CSV("name,age\nAlice,30\nBob,35")  // Evaluates to [["name", "age"], ["Alice", "30"], ["Bob", "35"]]
+
+    An empty CSV string:
+    data.CSV("")  // Evaluates to an empty 2D array
+---
+### data.CSVByRow
+
+The `data.CSVByRow` function converts a CSV formatted string into an array of maps, where each map represents a row with column names as keys.
+
+Syntax:
+
+    data.CSVByRow(csvString)
+
+Where:
+- `csvString` is the CSV formatted string.
+
+Examples:
+
+    Converting a CSV string with headers to an array of maps:
+    data.CSVByRow("name,age\nAlice,30\nBob,35")  // Evaluates to [{"name": "Alice", "age": "30"}, {"name": "Bob", "age": "35"}]
+
+    Handling a single row CSV:
+    data.CSVByRow("name,age\nAlice,30")  // Evaluates to [{"name": "Alice", "age": "30"}]
+
+    An empty CSV string:
+    data.CSVByRow("")  // Evaluates to an empty array
+---
+### data.CSVByColumn
+
+The `data.CSVByColumn` function converts a CSV formatted string into a map of arrays, where keys are column names and values are arrays of column values.
+
+Syntax:
+
+    data.CSVByColumn(csvString)
+
+Where:
+- `csvString` is the CSV formatted string.
+
+Examples:
+
+    Converting a CSV string with headers to a map of arrays:
+    data.CSVByColumn("name,age\nAlice,30\nBob,35")  // Evaluates to {"name": ["Alice", "Bob"], "age": ["30", "35"]}
+
+    Handling a single column CSV:
+    data.CSVByColumn("name\nAlice\nBob")  // Evaluates to {"name": ["Alice", "Bob"]}
+
+    An empty CSV string:
+    data.CSVByColumn("")  // Evaluates to an empty map
+---
+### data.ToCSV
+
+The `data.ToCSV` function converts an array of arrays or an array of maps into a CSV formatted string.
+
+Syntax:
+
+    data.ToCSV(data)
+
+Where:
+- `data` is the array of arrays or array of maps to be converted.
+
+Examples:
+
+    Converting an array of arrays to a CSV string:
+    data.ToCSV([["Alice", 30], ["Bob", 35]])  // Evaluates to "Alice,30\nBob,35"
+
+    Handling an array of maps:
+    data.ToCSV([{"name": "Alice", "age": 30}, {"name": "Bob", "age": 35}])  // Evaluates to "name,age\nAlice,30\nBob,35"
+
+    An empty array:
+    data.ToCSV([])  // Evaluates to an empty string
+---
+### data.ToJSON
+
+The `data.ToJSON` function converts a map or an array into a JSON formatted string.
+
+Syntax:
+
+    data.ToJSON(data)
+
+Where:
+- `data` is the map or array to be converted.
+
+Examples:
+
+    Converting a map to a JSON string:
+    data.ToJSON({"name": "Alice", "age": 30})  // Evaluates to "{\"name\":\"Alice\",\"age\":30}"
+
+    Handling an array:
+    data.ToJSON(["Alice", 30])  // Evaluates to "[\"Alice\",30]"
+
+    An empty map:
+    data.ToJSON({})  // Evaluates to "{}"
+---
+### data.ToJSONPretty
+
+The `data.ToJSONPretty` function converts a map or an array into a pretty-formatted JSON string with indents.
+
+Syntax:
+
+    data.ToJSONPretty(indent, data)
+
+Where:
+- `indent` is the string used for indentation.
+- `data` is the map or array to be converted.
+
+Examples:
+
+    Pretty formatting a JSON string with two spaces indent:
+    data.ToJSONPretty("  ", {"name": "Alice", "age": 30})  // Evaluates to a pretty-formatted JSON string
+
+    Using tab for indentation:
+    data.ToJSONPretty("\t", ["Alice", 30])  // Evaluates to a pretty-formatted JSON string with tabs
+
+    An empty map with four spaces indent:
+    data.ToJSONPretty("    ", {})  // Evaluates to "{}" with no indents as the map is empty
+---
+### data.ToYAML
+
+The `data.ToYAML` function converts a map or an array into a YAML formatted string.
+
+Syntax:
+
+    data.ToYAML(data)
+
+Where:
+- `data` is the map or array to be converted.
+
+Examples:
+
+    Converting a map to a YAML string:
+    data.ToYAML({"name": "Alice", "age": 30})  // Evaluates to "name: Alice\nage: 30"
+
+    Handling an array:
+    data.ToYAML(["Alice", 30])  // Evaluates to "- Alice\n- 30"
+
+    An empty map:
+    data.ToYAML({})  // Evaluates to an empty string
+---
+### data.ToTOML
+
+The `data.ToTOML` function converts a map or an array into a TOML formatted string.
+
+Syntax:
+
+    data.ToTOML(data)
+
+Where:
+- `data` is the map or array to be converted.
+
+Examples:
+
+    Converting a map to a TOML string:
+    data.ToTOML({"name": "Alice", "age": 30})  // Evaluates to "name = \"Alice\"\nage = 30"
+
+    Handling an array (TOML arrays must be of the same type):
+    data.ToTOML({"people": ["Alice", "Bob"]})  // Evaluates to "people = [\"Alice\", \"Bob\"]"
+
+    An empty map:
+    data.ToTOML({})  // Evaluates to an empty string
+---
+### filepath.Base
+
+The `filepath.Base` function in CEL returns the last element of a file path. It effectively extracts the file name from the provided path.
+
+Syntax:
+
+    filepath.Base(path)
+
+Where:
+- `path` is the file path string.
+
+Examples:
+
+    Extracting the file name from a full path:
+    filepath.Base("/path/to/file.txt")  // Evaluates to "file.txt"
+
+    Working with a relative path:
+    filepath.Base("folder/file.txt")  // Evaluates to "file.txt"
+
+    When the path is a directory:
+    filepath.Base("/path/to/directory/")  // Evaluates to "directory"
+---
+### filepath.Clean
+
+The `filepath.Clean` function in CEL returns the shortest path name equivalent to the provided path by purely lexical processing.
+
+Syntax:
+
+    filepath.Clean(path)
+
+Where:
+- `path` is the file path string.
+
+Examples:
+
+    Cleaning a path with redundant elements:
+    filepath.Clean("/path/./to/file.txt")  // Evaluates to "/path/to/file.txt"
+
+    Resolving parent directory references:
+    filepath.Clean("folder/../file.txt")  // Evaluates to "file.txt"
+
+    Handling multiple slashes:
+    filepath.Clean("//path/to//file.txt")  // Evaluates to "/path/to/file.txt"
+---
+### filepath.Dir
+
+The `filepath.Dir` function in CEL returns all but the last element of a file path, typically the path's directory.
+
+Syntax:
+
+    filepath.Dir(path)
+
+Where:
+- `path` is the file path string.
+
+Examples:
+
+    Getting the directory of a file path:
+    filepath.Dir("/path/to/file.txt")  // Evaluates to "/path/to"
+
+    Working with a relative file path:
+    filepath.Dir("folder/file.txt")  // Evaluates to "folder"
+
+    When the path is a directory:
+    filepath.Dir("/path/to/directory/")  // Evaluates to "/path/to"
+---
+### filepath.Ext
+
+The `filepath.Ext` function in CEL returns the file name extension used by a file path.
+
+Syntax:
+
+    filepath.Ext(path)
+
+Where:
+- `path` is the file path string.
+
+Examples:
+
+    Extracting the extension from a file path:
+    filepath.Ext("/path/to/file.txt")  // Evaluates to ".txt"
+
+    Working with a file without an extension:
+    filepath.Ext("/path/to/file")  // Evaluates to ""
+
+    When the path is a directory:
+    filepath.Ext("/path/to/directory/")  // Evaluates to ""
+---
+### filepath.FromSlash
+
+The `filepath.FromSlash` function in CEL returns the result of replacing each slash ('/') character in the path with a separator character.
+
+Syntax:
+
+    filepath.FromSlash(path)
+
+Where:
+- `path` is the file path string.
+
+Examples:
+
+    Converting slashes on a UNIX system:
+    filepath.FromSlash("/path/to/file.txt")  // Evaluates to "/path/to/file.txt"
+
+    Converting slashes on a Windows system:
+    filepath.FromSlash("/path/to/file.txt")  // Evaluates to "\\path\\to\\file.txt"
+
+    Working with a relative path:
+    filepath.FromSlash("folder/file.txt")  // System-dependent
+---
+### filepath.IsAbs
+
+The `filepath.IsAbs` function in CEL reports whether the file path is absolute.
+
+Syntax:
+
+    filepath.IsAbs(path)
+
+Where:
+- `path` is the file path string.
+
+Examples:
+
+    Checking an absolute path:
+    filepath.IsAbs("/path/to/file.txt")  // Evaluates to true
+
+    Checking a relative path:
+    filepath.IsAbs("folder/file.txt")  // Evaluates to false
+
+    Working with a Windows-style absolute path:
+    filepath.IsAbs("C:\\path\\to\\file.txt")  // Evaluates to true
+---
+### filepath.Join
+
+The `filepath.Join` function in CEL concatenates multiple string elements to create a single file path.
+
+Syntax:
+
+    filepath.Join(element1, element2, ...)
+
+Where:
+- `element1, element2, ...` are the path elements to concatenate.
+
+Examples:
+
+    Joining path elements:
+    filepath.Join("/path", "to", "file.txt")  // Evaluates to "/path/to/file.txt"
+
+    Handling trailing and leading slashes:
+    filepath.Join("/path/", "/to/", "file.txt")  // Evaluates to "/path/to/file.txt"
+
+    Working with relative paths:
+    filepath.Join("folder", "subfolder", "file.txt")  // Evaluates to "folder/subfolder/file.txt"
+---
+### filepath.Match
+
+The `filepath.Match` function in CEL reports whether the file name matches the shell file pattern.
+
+Syntax:
+
+    filepath.Match(pattern, name)
+
+Where:
+- `pattern` is the shell file pattern.
+- `name` is the file name string.
+
+Examples:
+
+    Matching a file name with a pattern:
+    filepath.Match("*.txt", "file.txt")  // Evaluates to true
+
+    A non-matching pattern:
+    filepath.Match("*.jpg", "file.txt")  // Evaluates to false
+
+    Using character ranges in patterns:
+    filepath.Match("[0-9].txt", "5.txt")  // Evaluates to true
+---
+### filepath.Rel
+
+The `filepath.Rel` function in CEL returns a relative path that is lexically equivalent to the target path when joined to the base path with an intervening separator.
+
+Syntax:
+
+    filepath.Rel(basepath, targpath)
+
+Where:
+- `basepath` is the base file path string.
+- `targpath` is the target file path string.
+
+Examples:
+
+    Getting a relative path:
+    filepath.Rel("/path/to", "/path/to/file.txt")  // Evaluates to "file.txt"
+
+    When the target is a subdirectory:
+    filepath.Rel("/path", "/path/to/directory")  // Evaluates to "to/directory"
+
+    Handling different directory levels:
+    filepath.Rel("/path/to", "/path/from/file.txt")  // Evaluates to "../from/file.txt"
+---
+### filepath.Split
+
+The `filepath.Split` function in CEL splits a file path into a directory and file name.
+
+Syntax:
+
+    filepath.Split(path)
+
+Where:
+- `path` is the file path string.
+
+Examples:
+
+    Splitting a standard file path:
+    filepath.Split("/path/to/file.txt")  // Evaluates to ["/path/to/", "file.txt"]
+
+    Working with a file in the root directory:
+    filepath.Split("/file.txt")  // Evaluates to ["/", "file.txt"]
+
+    When the path is a directory:
+    filepath.Split("/path/to/directory/")  // Evaluates to ["/path/to/directory/", ""]
+---
+### filepath.ToSlash
+
+The `filepath.ToSlash` function in CEL returns the result of replacing each separator character in the path with a slash ('/') character.
+
+Syntax:
+
+    filepath.ToSlash(path)
+
+Where:
+- `path` is the file path string.
+
+Examples:
+
+    Converting backslashes to slashes:
+    filepath.ToSlash("\\path\\to\\file.txt")  // Evaluates to "/path/to/file.txt"
+
+    Working with an already slash-separated path:
+    filepath.ToSlash("/path/to/file.txt")  // Evaluates to "/path/to/file.txt"
+
+    Handling mixed separators:
+    filepath.ToSlash("\\path/to\\file.txt")  // Evaluates to "/path/to/file.txt"
+
+---
+
+### filepath.VolumeName
+
+The `filepath.VolumeName` function in CEL returns the volume name of the file path.
+
+Syntax:
+
+    filepath.VolumeName(path)
+
+Where:
+- `path` is the file path string.
+
+Examples:
+
+    Extracting the volume name on a Windows system:
+    filepath.VolumeName("C:\\path\\to\\file.txt")  // Evaluates to "C:"
+
+    Working with a UNIX file path:
+    filepath.VolumeName("/path/to/file.txt")  // Evaluates to ""
+
+    Handling a Windows UNC path:
+    filepath.VolumeName("\\\\server\\share\\file.txt")  // Evaluates to "\\\\server\\share"
+---
+### IsHealthy
+
+The `IsHealthy` function in CEL is used to determine if a Kubernetes resource is healthy. It returns a boolean value indicating the health status of the resource.
+
+Syntax:
+    
+    IsHealthy(resource)
+
+Where:
+- `resource` is the Kubernetes resource you're checking.
+
+Examples:
+
+    Checking if a pod is healthy:
+    IsHealthy(pod)  // Evaluates to true if the pod is healthy
+
+    Verifying the health of a service:
+    IsHealthy(service)  // Evaluates to false if the service is not healthy
+
+    Assessing the health of a deployment:
+    IsHealthy(deployment)  // Evaluates to true if the deployment is healthy
+---
+### GetStatus
+
+The `GetStatus` function in CEL retrieves the status of a Kubernetes resource as a string. It provides detailed information about the current state of the resource.
+
+Syntax:
+    
+    GetStatus(resource)
+
+Where:
+- `resource` is the Kubernetes resource whose status you're retrieving.
+
+Examples:
+
+    Retrieving the status of a pod:
+    GetStatus(pod)  // Evaluates to "Running" if the pod is running
+
+    Getting the status of a service:
+    GetStatus(service)  // Evaluates to "Active" if the service is active
+
+    Checking the status of a deployment:
+    GetStatus(deployment)  // Evaluates to "Deployed" if the deployment is successful
+
+---
+
+### GetHealth
+
+The `GetHealth` function in CEL retrieves the health status of a Kubernetes resource as a map. The map contains key-value pairs providing detailed information about the resource's health.
+
+Syntax:
+    
+    GetHealth(resource)
+
+Where:
+- `resource` is the Kubernetes resource whose health information you're retrieving.
+
+Examples:
+
+    Retrieving the health information of a pod:
+    GetHealth(pod)  // Evaluates to a map with keys and values indicating the pod's health
+
+    Getting the health information of a service:
+    GetHealth(service)  // Evaluates to a map with keys and values indicating the service's health
+
+    Checking the health information of a deployment:
+    GetHealth(deployment)  // Evaluates to a map with keys and values indicating the deployment's health
+---
+### math.IsInt
+
+The `math.IsInt` function in CEL checks if the given input is an integer. It returns a boolean value indicating whether the input is an integer or not.
+
+Syntax:
+
+    math.IsInt(value)
+
+Where:
+- `value` is the input value you're checking.
+
+Examples:
+
+    Checking if a number is an integer:
+    math.IsInt(5)  // Evaluates to true
+
+    Checking a float value:
+    math.IsInt(5.5)  // Evaluates to false
+
+    Checking a string that represents an integer:
+    math.IsInt("5")  // Evaluates to true
+---
+### math.IsFloat
+
+The `math.IsFloat` function determines if the provided value is a floating-point number. It returns a boolean indicating the result.
+
+Syntax:
+
+    math.IsFloat(value)
+
+Where:
+- `value` is the input being evaluated.
+
+Examples:
+
+    Evaluating a floating-point number:
+    math.IsFloat(3.14)  // Evaluates to true
+
+    Evaluating an integer:
+    math.IsFloat(7)  // Evaluates to false
+
+    Evaluating a string representing a float:
+    math.IsFloat("3.14")  // Evaluates to true
+---
+### math.containsFloat
+
+The `math.containsFloat` function checks if any element within the provided list is a float. It returns a boolean value.
+
+Syntax:
+
+    math.containsFloat(list)
+
+Where:
+- `list` is the array of values to check.
+
+Examples:
+
+    Checking a list with a float:
+    math.containsFloat([1, 2, 3.5])  // Evaluates to true
+
+    Checking a list without a float:
+    math.containsFloat([1, 2, 3])  // Evaluates to false
+
+    Checking a mixed-type list:
+    math.containsFloat([1, "2", 3.5])  // Evaluates to true
+---
+### math.IsNum
+
+The `math.IsNum` function checks if the provided value is a number (either integer or float). It returns a boolean value.
+
+Syntax:
+
+    math.IsNum(value)
+
+Where:
+- `value` is the input to check.
+
+Examples:
+
+    Checking an integer:
+    math.IsNum(42)  // Evaluates to true
+
+    Checking a float:
+    math.IsNum(3.14)  // Evaluates to true
+
+    Checking a non-number string:
+    math.IsNum("hello")  // Evaluates to false
+---
+### math.Abs
+
+The `math.Abs` function returns the absolute value of the given number. It supports both integers and floats.
+
+Syntax:
+
+    math.Abs(number)
+
+Where:
+- `number` is the input value.
+
+Examples:
+
+    Getting the absolute value of a negative integer:
+    math.Abs(-5)  // Evaluates to 5
+
+    Getting the absolute value of a float:
+    math.Abs(-3.14)  // Evaluates to 3.14
+
+    Using a positive integer:
+    math.Abs(7)  // Evaluates to 7
+---
+### math.Add
+
+The `math.Add` function sums up all the numbers in the provided list. It supports integers and floats.
+
+Syntax:
+
+    math.Add(values)
+
+Where:
+- `values` is the list of numbers to add.
+
+Examples:
+
+    Adding integers:
+    math.Add([1, 2, 3])  // Evaluates to 6
+
+    Adding floats:
+    math.Add([1.1, 2.2, 3.3])  // Evaluates to 6.6
+
+    Adding a mix of integers and floats:
+    math.Add([1, 2.5, 3])  // Evaluates to 6.5
+---
+### math.Mul
+
+The `math.Mul` function multiplies all the numbers in the provided list. It supports both integers and floats.
+
+Syntax:
+
+    math.Mul(values)
+
+Where:
+- `values` is the list of numbers to multiply.
+
+Examples:
+
+    Multiplying integers:
+    math.Mul([2, 3, 4])  // Evaluates to 24
+
+    Multiplying floats:
+    math.Mul([1.5, 2.5, 3.5])  // Evaluates to 13.125
+
+    Multiplying a mix of integers and floats:
+    math.Mul([2, 3.5, 4])  // Evaluates to 28
+---
+### math.Sub
+
+The `math.Sub` function subtracts the second number from the first one. It supports both integers and floats.
+
+Syntax:
+
+    math.Sub(a, b)
+
+Where:
+- `a` is the minuend.
+- `b` is the subtrahend.
+
+Examples:
+
+    Subtracting integers:
+    math.Sub(10, 3)  // Evaluates to 7
+
+    Subtracting floats:
+    math.Sub(10.5, 3.2)  // Evaluates to 7.3
+
+    Subtracting an integer from a float:
+    math.Sub(10.5, 3)  // Evaluates to 7.5
+---
+### math.Div
+
+The `math.Div` function divides the first number by the second one. It returns the quotient and an error if the divisor is zero.
+
+Syntax:
+
+    math.Div(a, b)
+
+Where:
+- `a` is the dividend.
+- `b` is the divisor.
+
+Examples:
+
+    Dividing integers:
+    math.Div(10, 2)  // Evaluates to 5
+
+    Dividing floats:
+    math.Div(10.5, 3.5)  // Evaluates to 3
+
+    Dividing by zero:
+    math.Div(10, 0)  // Returns an error
+---
+### math.Rem
+
+The `math.Rem` function calculates the remainder of the division of two integers.
+
+Syntax:
+
+    math.Rem(a, b)
+
+Where:
+- `a` is the dividend.
+- `b` is the divisor.
+
+Examples:
+
+    Getting the remainder of two integers:
+    math.Rem(10, 3)  // Evaluates to 1
+
+    Getting the remainder with a negative dividend:
+    math.Rem(-10, 3)  // Evaluates to -1
+
+    Getting the remainder with zero:
+    math.Rem(0, 3)  // Evaluates to 0
+---
+### math.Pow
+
+The `math.Pow` function calculates the power of the first number raised to the second number. It supports both integers and floats.
+
+Syntax:
+
+    math.Pow(base, exponent)
+
+Where:
+- `base` is the base number.
+- `exponent` is the exponent to which the base is raised.
+
+Examples:
+
+    Calculating the power of integers:
+    math.Pow(2, 3)  // Evaluates to 8
+
+    Calculating the power of floats:
+    math.Pow(2.5, 3.5)  // Evaluates to approximately 24.705
+
+    Using a negative exponent:
+    math.Pow(2, -3)  // Evaluates to 0.125
+---
+### math.Seq
+
+The `math.Seq` function generates a sequence of integers from the start value to the end value, incrementing by the step value.
+
+Syntax:
+
+    math.Seq(start, end, step)
+
+Where:
+- `start` is the starting value of the sequence.
+- `end` is the ending value of the sequence.
+- `step` is the increment step.
+
+Examples:
+
+    Generating a sequence from 1 to 5:
+    math.Seq(1, 5, 1)  // Evaluates to [1, 2, 3, 4, 5]
+
+    Generating a sequence with a step of 2:
+    math.Seq(1, 5, 2)  // Evaluates to [1, 3, 5]
+
+    Generating a descending sequence:
+    math.Seq(5, 1, -1)  // Evaluates to [5, 4, 3, 2, 1]
+---
+### math.Max
+
+The `math.Max` function returns the maximum value among the provided numbers. It supports both integers and floats.
+
+Syntax:
+
+    math.Max(a, b, ...)
+
+Where:
+- `a` is the first number.
+- `b` is the second number.
+- `...` represents additional numbers.
+
+Examples:
+
+    Finding the maximum of integers:
+    math.Max(1, 2, 3)  // Evaluates to 3
+
+    Finding the maximum of floats:
+    math.Max(1.2, 2.3, 3.1)  // Evaluates to 3.1
+
+    Finding the maximum in a mixed list:
+    math.Max(1, 2.5, 3)  // Evaluates to 3
+---
+### math.Min
+
+The `math.Min` function returns the minimum value among the provided numbers. It supports both integers and floats.
+
+Syntax:
+
+    math.Min(a, b, ...)
+
+Where:
+- `a` is the first number.
+- `b` is the second number.
+- `...` represents additional numbers.
+
+Examples:
+
+    Finding the minimum of integers:
+    math.Min(1, 2, 3)  // Evaluates to 1
+
+    Finding the minimum of floats:
+    math.Min(1.2, 2.3, 0.1)  // Evaluates to 0.1
+
+    Finding the minimum in a mixed list:
+    math.Min(1, 2.5, 0)  // Evaluates to 0
+---
+### math.Ceil
+
+The `math.Ceil` function returns the smallest integer greater than or equal to the provided float.
+
+Syntax:
+
+    math.Ceil(value)
+
+Where:
+- `value` is the floating-point number.
+
+Examples:
+
+    Rounding up a positive float:
+    math.Ceil(2.3)  // Evaluates to 3
+
+    Rounding up a negative float:
+    math.Ceil(-2.3)  // Evaluates to -2
+
+    Using an integer:
+    math.Ceil(5)  // Evaluates to 5
+---
+### math.Floor
+
+The `math.Floor` function returns the largest integer less than or equal to the provided float.
+
+Syntax:
+
+    math.Floor(value)
+
+Where:
+- `value` is the floating-point number.
+
+Examples:
+
+    Rounding down a positive float:
+    math.Floor(2.7)  // Evaluates to 2
+
+    Rounding down a negative float:
+    math.Floor(-2.7)  // Evaluates to -3
+
+    Using an integer:
+    math.Floor(5)  // Evaluates to 5
+---
+### math.Round
+
+The `math.Round` function rounds the provided float to the nearest integer.
+
+Syntax:
+
+    math.Round(value)
+
+Where:
+- `value` is the floating-point number.
+
+Examples:
+
+    Rounding a positive float:
+    math.Round(2.5)  // Evaluates to 3
+
+    Rounding a negative float:
+    math.Round(-2.5)  // Evaluates to -3
+
+    Using an integer:
+    math.Round(5)  // Evaluates to 5
