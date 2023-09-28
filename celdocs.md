@@ -3178,3 +3178,505 @@ Examples:
 
     Using an integer:
     math.Round(5)  // Evaluates to 5
+---
+### path.Base
+
+The `path.Base` function in CEL is used to extract the last element of a path. It returns the base name of the provided path.
+
+Syntax:
+
+    path.Base(path)
+
+Where:
+- `path` is the file or directory path string.
+
+Examples:
+
+    Extracting the file name from a path:
+    path.Base("/tmp/myfile.txt")  // Evaluates to "myfile.txt"
+
+    Getting the last directory in a path:
+    path.Base("/home/user/docs")  // Evaluates to "docs"
+
+    When provided with an empty path:
+    path.Base("")  // Evaluates to "."
+
+---
+
+### path.Clean
+
+The `path.Clean` function in CEL returns the shortest path name equivalent to the provided path by purely lexical processing.
+
+Syntax:
+
+    path.Clean(path)
+
+Where:
+- `path` is the file or directory path string.
+
+Examples:
+
+    Cleaning a path with dot segments:
+    path.Clean("/home/../usr/bin")  // Evaluates to "/usr/bin"
+
+    Cleaning a path with multiple slashes:
+    path.Clean("/tmp//myfile.txt")  // Evaluates to "/tmp/myfile.txt"
+
+    Cleaning a relative path:
+    path.Clean("./docs")  // Evaluates to "docs"
+---
+### path.Dir
+
+The `path.Dir` function in CEL returns all but the last element of a path, typically the path's directory.
+
+Syntax:
+
+    path.Dir(path)
+
+Where:
+- `path` is the file or directory path string.
+
+Examples:
+
+    Getting the directory for a file path:
+    path.Dir("/tmp/myfile.txt")  // Evaluates to "/tmp"
+
+    Getting the parent directory:
+    path.Dir("/home/user/docs")  // Evaluates to "/home/user"
+
+    When provided with a root path:
+    path.Dir("/")  // Evaluates to "/"
+---
+### path.Ext
+
+The `path.Ext` function in CEL returns the file name extension used by the provided path.
+
+Syntax:
+
+    path.Ext(path)
+
+Where:
+- `path` is the file or directory path string.
+
+Examples:
+
+    Extracting the extension from a file path:
+    path.Ext("/tmp/myfile.txt")  // Evaluates to ".txt"
+
+    When the file has no extension:
+    path.Ext("/tmp/myfile")  // Evaluates to ""
+
+    Extracting extension from a hidden file:
+    path.Ext("/tmp/.myfile")  // Evaluates to ""
+---
+### path.IsAbs
+
+The `path.IsAbs` function in CEL checks if the provided path is an absolute path.
+
+Syntax:
+
+    path.IsAbs(path)
+
+Where:
+- `path` is the file or directory path string.
+
+Examples:
+
+    Checking an absolute path:
+    path.IsAbs("/tmp/myfile.txt")  // Evaluates to true
+
+    Checking a relative path:
+    path.IsAbs("tmp/myfile.txt")  // Evaluates to false
+
+    Checking an empty path:
+    path.IsAbs("")  // Evaluates to false
+---
+### path.Join
+
+The `path.Join` function in CEL concatenates multiple string elements to create a single, joined path.
+
+Syntax:
+
+    path.Join(element1, element2, ...)
+
+Where:
+- `element1, element2, ...` are the path elements to join.
+
+Examples:
+
+    Joining path elements:
+    path.Join("/home", "user", "docs")  // Evaluates to "/home/user/docs"
+
+    Joining elements with a relative path:
+    path.Join("home", "user", "docs")  // Evaluates to "home/user/docs"
+
+    Joining elements with extra slashes:
+    path.Join("/tmp/", "/myfile.txt")  // Evaluates to "/tmp/myfile.txt"
+---
+### path.Match
+
+The `path.Match` function in CEL checks if the provided string matches the pattern.
+
+Syntax:
+
+    path.Match(pattern, name)
+
+Where:
+- `pattern` is the pattern to match.
+- `name` is the string to check.
+
+Examples:
+
+    Matching a simple pattern:
+    path.Match("*.txt", "myfile.txt")  // Evaluates to true
+
+    Pattern not matching:
+    path.Match("*.txt", "myfile.doc")  // Evaluates to false
+
+    Matching with wildcard:
+    path.Match("*file.txt", "myfile.txt")  // Evaluates to true
+---
+### path.Split
+
+The `path.Split` function in CEL splits the path into a directory and file name.
+
+Syntax:
+
+    path.Split(path)
+
+Where:
+- `path` is the file or directory path string.
+
+Examples:
+
+    Splitting a standard file path:
+    path.Split("/tmp/myfile.txt")  // Evaluates to ["/tmp/", "myfile.txt"]
+
+    Splitting a path ending with a slash:
+    path.Split("/home/user/docs/")  // Evaluates to ["/home/user/docs", ""]
+
+    Splitting a relative path:
+    path.Split("docs/myfile.txt")  // Evaluates to ["docs/", "myfile.txt"]
+---
+### random.ASCII
+
+The `random.ASCII` function in CEL generates a random ASCII string of a given length. The characters in the string are within the ASCII printable character range.
+
+Syntax:
+
+    random.ASCII(count)
+
+Where:
+- `count` is the length of the random ASCII string to be generated.
+
+Examples:
+
+    Generating a 5-character random ASCII string:
+    random.ASCII(5)  // Might evaluate to "A7!2k"
+
+    Creating a 10-character random ASCII string:
+    random.ASCII(10)  // Might evaluate to "3e$7^2Go1"
+
+    Producing a 15-character random ASCII string:
+    random.ASCII(15)  // Might evaluate to "7g$!3H8^2Kl0p9"
+---
+### random.Alpha
+
+The `random.Alpha` function in CEL generates a random alphabetic string containing uppercase and lowercase letters, with a specified length.
+
+Syntax:
+
+    random.Alpha(count)
+
+Where:
+- `count` is the length of the random alphabetic string to be generated.
+
+Examples:
+
+    Generating a 5-character random alphabetic string:
+    random.Alpha(5)  // Might evaluate to "aBcDe"
+
+    Creating a 10-character random alphabetic string:
+    random.Alpha(10)  // Might evaluate to "FgHiJkLmNo"
+
+    Producing a 15-character random alphabetic string:
+    random.Alpha(15)  // Might evaluate to "pQrStUvWxYzAbCdEf"
+---
+### random.AlphaNum
+
+The `random.AlphaNum` function in CEL generates a random alphanumeric string containing both letters and digits, with a specified length.
+
+Syntax:
+
+    random.AlphaNum(count)
+
+Where:
+- `count` is the length of the random alphanumeric string to be generated.
+
+Examples:
+
+    Generating a 5-character random alphanumeric string:
+    random.AlphaNum(5)  // Might evaluate to "a1B2c"
+
+    Creating a 10-character random alphanumeric string:
+    random.AlphaNum(10)  // Might evaluate to "3D4e5F6g7H"
+
+    Producing a 15-character random alphanumeric string:
+    random.AlphaNum(15)  // Might evaluate to "8i9J0k1L2m3N4o5"
+---
+### random.String
+
+The `random.String` function in CEL generates a random string based on provided character sets or bounds, with a specified length.
+
+Syntax:
+
+    random.String(count, characterSetOrBounds)
+
+Where:
+- `count` is the length of the random string to be generated.
+- `characterSetOrBounds` can be a character set string or lower and upper bounds for character codes.
+
+Examples:
+
+    Generating a 5-character random string from a character set:
+    random.String(5, "abc123")  // Might evaluate to "1a2b3"
+
+    Creating a 10-character random string within character code bounds:
+    random.String(10, 65, 90)  // Might evaluate to random uppercase letters
+
+    Producing a 15-character random string from a regex character class:
+    random.String(15, "[[:alnum:]]")  // Might evaluate to a mix of letters and digits
+---
+### random.Item
+
+The `random.Item` function in CEL selects a random item from a given list of items.
+
+Syntax:
+
+    random.Item(list)
+
+Where:
+- `list` is an array or list from which a random item is selected.
+
+Examples:
+
+    Selecting a random item from a list of fruits:
+    random.Item(["apple", "banana", "cherry"])  // Might evaluate to "banana"
+
+    Choosing a random number from a list:
+    random.Item([1, 2, 3, 4, 5])  // Might evaluate to 3
+
+    Picking a random word from a list:
+    random.Item(["hello", "world", "foo", "bar"])  // Might evaluate to "foo"
+---
+### random.Number
+
+The `random.Number` function in CEL generates a random integer within a specified range.
+
+Syntax:
+
+    random.Number(min, max)
+
+Where:
+- `min` is the minimum value of the range (inclusive).
+- `max` is the maximum value of the range (inclusive).
+
+Examples:
+
+    Generating a random number between 1 and 10:
+    random.Number(1, 10)  // Might evaluate to 7
+
+    Creating a random number between 50 and 100:
+    random.Number(50, 100)  // Might evaluate to 89
+
+    Producing a random number between 0 and 1000:
+    random.Number(0, 1000)  // Might evaluate to 456
+---
+### random.Float
+
+The `random.Float` function in CEL generates a random floating-point number within a specified range.
+
+Syntax:
+
+    random.Float(min, max)
+
+Where:
+- `min` is the minimum value of the range (inclusive).
+- `max` is the maximum value of the range (inclusive).
+
+Examples:
+
+    Generating a random float between 0 and 1:
+    random.Float(0, 1)  // Might evaluate to 0.572
+
+    Creating a random float between 5 and 10:
+    random.Float(5, 10)  // Might evaluate to 7.283
+
+    Producing a random float between -1 and 1:
+    random.Float(-1, 1)  // Might evaluate to -0.456
+---
+### regexp.Find
+
+The `regexp.Find` function in CEL is used to find the first occurrence of a pattern within a string. It returns the matched substring or an error if the pattern is invalid.
+
+Syntax:
+
+    regexp.Find(pattern, input)
+
+Where:
+- `pattern` is the regular expression pattern you're looking for.
+- `input` is the string you're searching within.
+
+Examples:
+
+    Finding a pattern within a string:
+    regexp.Find("llo", "hello")  // Evaluates to "llo"
+
+    Searching for digits within a string:
+    regexp.Find("\\d+", "abc123def")  // Evaluates to "123"
+
+    Pattern not found in the string:
+    regexp.Find("xyz", "hello")  // Evaluates to ""
+---
+### regexp.FindAll
+
+The `regexp.FindAll` function in CEL retrieves all occurrences of a pattern within a string, up to a specified count. It returns a list of matched substrings or an error if the pattern is invalid.
+
+Syntax:
+
+    regexp.FindAll(pattern, count, input)
+
+Where:
+- `pattern` is the regular expression pattern to find.
+- `count` is the maximum number of occurrences to return.
+- `input` is the string to search within.
+
+Examples:
+
+    Finding all occurrences of a pattern:
+    regexp.FindAll("a.", -1, "banana")  // Evaluates to ["ba", "na", "na"]
+
+    Limiting the number of matches:
+    regexp.FindAll("\\d", 2, "12345")  // Evaluates to ["1", "2"]
+
+    Pattern not found:
+    regexp.FindAll("z", -1, "hello")  // Evaluates to []
+---
+### regexp.Match
+
+The `regexp.Match` function in CEL checks if a string matches a given regular expression pattern. It returns a boolean value indicating the match status.
+
+Syntax:
+
+    regexp.Match(pattern, input)
+
+Where:
+- `pattern` is the regular expression pattern to match.
+- `input` is the string to check.
+
+Examples:
+
+    Checking if a string matches a pattern:
+    regexp.Match("^h.llo", "hello")  // Evaluates to true
+
+    Pattern does not match the string:
+    regexp.Match("^b", "apple")  // Evaluates to false
+
+    Matching digits in a string:
+    regexp.Match("\\d+", "abc123")  // Evaluates to true
+---
+### regexp.QuoteMeta
+
+The `regexp.QuoteMeta` function in CEL quotes all regular expression metacharacters inside a string. It returns the quoted string.
+
+Syntax:
+
+    regexp.QuoteMeta(input)
+
+Where:
+- `input` is the string containing metacharacters to be quoted.
+
+Examples:
+
+    Quoting metacharacters in a string:
+    regexp.QuoteMeta("a.b")  // Evaluates to "a\\.b"
+
+    String without metacharacters:
+    regexp.QuoteMeta("abc")  // Evaluates to "abc"
+
+    Quoting a complex pattern:
+    regexp.QuoteMeta("[a-z].*")  // Evaluates to "\\[a\\-z\\]\\.\\*"
+---
+### regexp.Replace
+
+The `regexp.Replace` function in CEL replaces occurrences of a pattern within a string with a specified replacement string. It returns the modified string.
+
+Syntax:
+
+    regexp.Replace(pattern, replacement, input)
+
+Where:
+- `pattern` is the regular expression pattern to replace.
+- `replacement` is the string to replace the pattern with.
+- `input` is the original string.
+
+Examples:
+
+    Replacing a pattern in a string:
+    regexp.Replace("a.", "x", "banana")  // Evaluates to "bxnxna"
+
+    Pattern not found:
+    regexp.Replace("z", "x", "apple")  // Evaluates to "apple"
+
+    Replacing digits:
+    regexp.Replace("\\d+", "num", "abc123")  // Evaluates to "abcnum"
+---
+### regexp.ReplaceLiteral
+
+The `regexp.ReplaceLiteral` function in CEL replaces occurrences of a pattern within a string with a specified replacement string, without interpreting the pattern as a regular expression. It returns the modified string or an error if the pattern is invalid.
+
+Syntax:
+
+    regexp.ReplaceLiteral(pattern, replacement, input)
+
+Where:
+- `pattern` is the substring to replace.
+- `replacement` is the string to replace the pattern with.
+- `input` is the original string.
+
+Examples:
+
+    Replacing a substring:
+    regexp.ReplaceLiteral("apple", "orange", "apple pie")  // Evaluates to "orange pie"
+
+    Substring not found:
+    regexp.ReplaceLiteral("z", "x", "apple")  // Evaluates to "apple"
+
+    Replacing a pattern without regex interpretation:
+    regexp.ReplaceLiteral("a.", "x", "a.b c.d")  // Evaluates to "x.b c.d"
+
+---
+
+### regexp.Split
+
+The `regexp.Split` function in CEL splits a string into a slice of substrings separated by a pattern. It returns the slice of strings or an error if the pattern is invalid.
+
+Syntax:
+
+    regexp.Split(pattern, count, input)
+
+Where:
+- `pattern` is the regular expression pattern that separates the substrings.
+- `count` is the maximum number of splits. Use -1 for no limit.
+- `input` is the string to split.
+
+Examples:
+
+    Splitting a string by a pattern:
+    regexp.Split("a.", -1, "banana")  // Evaluates to ["", "n", "n"]
+
+    Limiting the number of splits:
+    regexp.Split("\\s", 2, "apple pie is delicious")  // Evaluates to ["apple", "pie is delicious"]
+
+    Pattern not found:
+    regexp.Split("z", -1, "hello")  // Evaluates to ["hello"]
