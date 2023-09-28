@@ -4,7 +4,7 @@ title: Exec
 
 # <Icon name="console"/> Exec
 
-<Standard/> 
+<Standard/>
 
 Executes a bash (linux) or  powershell (windows) script. The check is considered passing if the script exits with `0`
 
@@ -30,24 +30,5 @@ spec:
 | `*` | All other commons field | [*Common*](common) |  |
 
 ::: note Docker image variants
-Scripts can use in commands or application in the container image, There are 2 variants of this image to choose from:
-
-
-
-| [Full](https://github.com/flanksource/canary-checker/blob/master/build/full/Dockerfile) | [Minimal](https://github.com/flanksource/canary-checker/blob/master/build/minimal/Dockerfile) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [arkade](https://github.com/alexellis/arkade)                | [arkade](https://github.com/alexellis/arkade)                |
-| kubectl                                                      | kubectl                                                      |
-| stern                                                        | stern                                                        |
-| jq                                                           | jq                                                           |
-| yq                                                           | yq                                                           |
-| [gcloud-cli](https://cloud.google.com/sdk/gcloud)            | [gcloud-cli](https://cloud.google.com/sdk/gcloud)            |
-| [aws-cli](https://aws.amazon.com/cli/)                       | [aws-cli](https://aws.amazon.com/cli/)                       |
-| [azure-cli](https://learn.microsoft.com/en-us/cli/azure/)    |                                                              |
-| [dsq](https://github.com/multiprocessio/dsq)                 |                                                              |
-| [k6](https://github.com/grafana/k6)                          |                                                              |
-| [jmeter](https://jmeter.apache.org/)                         |                                                              |
-| [benthos](benthos.dev)                                       |                                                              |
-
-
+See [image-variants](/image-variants)
 

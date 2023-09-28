@@ -2,7 +2,7 @@
 title: Image Variants
 ---
 
-Canary checker comes with 2 image variants: 
+Canary checker comes with 2 image variants:
 
 | [Full](https://github.com/flanksource/canary-checker/blob/master/build/full/Dockerfile) | [Minimal](https://github.com/flanksource/canary-checker/blob/master/build/minimal/Dockerfile) |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -18,7 +18,7 @@ Canary checker comes with 2 image variants:
 | [k6](https://github.com/grafana/k6)                          |                                                              |
 | java-11                                                      |                                                              |
 | [jmeter](https://jmeter.apache.org/)                         |                                                              |
-| [benthos](benthos.dev)                                       |                                                              |
+| [benthos](https://benthos.dev)                                       |                                                              |
 
 
 
