@@ -36,7 +36,14 @@ spec:
 | `responseContent` | Exact response content expected to be returned by the endpoint. | *string* |  |
 | `thresholdMillis` | Maximum duration in milliseconds for the HTTP request. It will fail the check if it takes longer. | *int* |  |
 | `maxSSLExpiry` | Maximum number of days until the SSL Certificate expires. | *int* | |
-| `*` | All other common fields | [*Common*](common) | |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes  |
+| `description` | Description for the check                                   | `string`                                     |      |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |      |
+| `labels`      | Labels for check                                            | `map[string]string`                          |      |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |      |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |      |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |      |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |      |
 | **Connection** |  |  | |
 | `connection` | Path of existing connection e.g. `connection://http/instance` <br/> Mutually exclusive with `username`, `password` <br/> <Commercial/> | [Connection](../../concepts/connections) | |
 | `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
@@ -47,7 +54,7 @@ spec:
 
 ### Result Variables
 
-Result variables can be used in `test`, `display` and `transform` [scripts](../concepts/scripting)
+Result variables can be used in `test`, `display` and `transform` [expressions](/concepts/expressions)
 
 | Name      | Description                                                  | Scheme              |
 | --------- | ------------------------------------------------------------ | ------------------- |
@@ -56,7 +63,8 @@ Result variables can be used in `test`, `display` and `transform` [scripts](../c
 | `elapsed` | HTTP Request duration                                        | *time.Duration*     |
 | `sslAge`  | Time until SSL certificate expires                           | *time.Duration*     |
 | `content` | HTTP Response body                                           | string              |
-| `json`    | If `Content-Type=application/json response body converted into JSON object | `JSON`              |
+| `json`    | If `Content-Type=application/json` response body converted into JSON object | `JSON`              |
+
 
 The above canary (`http-check.yaml`) is functionally equivalent to `http-check-expr.yaml` below
 

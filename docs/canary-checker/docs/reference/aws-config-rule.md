@@ -27,7 +27,14 @@ Check if any AWS resources are failing AWS config rule checks.
 | `rules`           | Specify one or more Config rule names to filter the results by rule. | `[]string`                                        |          |
 | `ignoreRules`     | List of rules which would be omitted from the fetch result.  | `[]string`                                        |          |
 | `complianceTypes` | Filters the results by compliance. The allowed values are `INSUFFICIENT_DATA`, `NON_COMPLIANT`, `NOT_APPLICABLE`, `COMPLIANT` | `[]string`                                        |          |
-| `*`               | All other commons field                                      | [*Common*](common)                                |          |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 | **Connection**    |                                                              |                                                   |          |
 | `connection`      | Path of existing connection e.g. `connection://aws/instance` <br/>Mutually exclusive with `accessKey` <br/> <Commercial/> | [Connection](../concepts/connections)             |          |
 | `accessKey`       | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |

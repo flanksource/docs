@@ -6,6 +6,7 @@ import Home from '../components/Home';
 function HomePage() {
   return (
     <Layout
+      noFooter={true}
       title="Canary Checker"
       description="Kubernetes Native Synthetic Monitoring Platform"
     >

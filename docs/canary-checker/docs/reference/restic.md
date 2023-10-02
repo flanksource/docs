@@ -46,7 +46,14 @@ spec:
 | **`repository`** | The restic repository path eg: rest:<https://user:pass@host:8000/> or rest:<https://host:8000/> or s3:s3.amazonaws.com/bucket_name | string | Yes |
 | `caCert` | CaCert path to the root cert. In case of self-signed certificates | string |  |
 | `checkIntegrity` | When enabled will check the Integrity and consistency of the restic repository | bool |  |
-| `*` | All other common fields | [*Common*](common) | |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 | **Encryption Connection** |  |  | |
 | `connection` | Path of existing connection to get encryption key e.g. `connection://restic/key`<br/>Mutually exclusive with `password` <br/> <Commercial/> | [Connection](../concepts/connections) | |
 | `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |

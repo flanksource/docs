@@ -204,7 +204,7 @@
   --ifm-table-head-font-weight: var(--ifm-font-weight-bold);
   --ifm-table-cell-color: inherit;
   /* Links. */
-  --ifm-link-color: var(--ifm-color-primary);
+  --ifm-link-color: #3578e5;
   --ifm-link-decoration: none;
   --ifm-link-hover-color: var(--ifm-link-color);
   --ifm-link-hover-decoration: underline;
@@ -281,7 +281,7 @@
   --ifm-dropdown-font-weight: var(--ifm-font-weight-semibold);
   --ifm-dropdown-link-color: var(--ifm-font-color-base);
   --ifm-dropdown-hover-background-color: var(--ifm-hover-overlay);
-  --ifm-footer-background-color: var(--ifm-color-emphasis-100);
+  --ifm-footer-background-color: #f7f9ff;
   --ifm-footer-color: inherit;
   --ifm-footer-link-color: var(--ifm-color-emphasis-700);
   --ifm-footer-link-hover-color: var(--ifm-color-primary);
@@ -2147,7 +2147,7 @@ hr {
 }
 
 .footer--dark {
-  --ifm-footer-background-color: #303846;
+  --ifm-footer-background-color: #ebf1fe;
   --ifm-footer-color: var(--ifm-footer-link-color);
   --ifm-footer-link-color: var(--ifm-color-secondary);
   --ifm-footer-title-color: var(--ifm-color-white);

@@ -17,18 +17,6 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 ```
 
-```shell-session
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
-```
-
-```command-line
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
-```
-
 ### 2. Add the Flanksource helm repository
 
 ```bash

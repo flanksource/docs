@@ -49,7 +49,14 @@ For a complete working example, see **[canary-checker-examples/newman](https://g
 | **`spec`** | Pod specification | [*v1.PodSpec*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) | Yes |
 | **`testResults`** | Directory where the results will be published | *string* | Yes |
 | `timeout` | Timeout in minutes to wait for specified container to finish its job. Defaults to 5 minutes | *int* |  |
-| `*` | All other common fields | [*Common*](common) | |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 
 ## Test Result Variables
 

@@ -1,14 +1,18 @@
+# Go Templates
 
-The [Go template](https://pkg.go.dev/text/template) comes supported with the Canary checker to customize your output however you want it.
-Below is an example for the `display` field.
+`template` expressions use the [Go Text Template](https://pkg.go.dev/text/template) library with some additional functions provided by the [gomplate](https://docs.gomplate.ca/) library.
+In this example we get the current exchange rate:
 
-```yaml
-prometheus:
-    - url: https://prometheus.canary.lab.flanksource.com/
-      name: prometheus-check
-      query: kubernetes_build_info{job!~"kube-dns|coredns"}
+```yaml title="display-with-gotemplate.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-check
+spec:
+  http:
+    - name: USD
+      url: https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,ILS,ZAR
       display:
-        template: "{{ (index .results 0).git_version }}"
+        template: "$1 = €{{.json.rates.EUR}}, £{{.json.rates.GBP}}, ₪{{.json.rates.ILS}}"
 ```
 
-A Go template is specified in `template` under `display`. The template extracts the `git_version` field from the initial field in `.results` output.

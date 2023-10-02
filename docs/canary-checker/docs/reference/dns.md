@@ -38,4 +38,11 @@ spec:
 | `minrecords` | Minimum records | *int* |  |
 | `thresholdMillis` | Threshold response time from DNS server | *int* |  |
 | `timeout` | Timeout in seconds | *int* |  |
-| `*` | All other commons field | [*Common*](common) | |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
