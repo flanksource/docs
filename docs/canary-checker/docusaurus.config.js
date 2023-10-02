@@ -26,6 +26,10 @@ const config = {
     [
       '@docusaurus/preset-classic',
       {
+        googleTagManager: {
+          containerId: 'GTM-5H2R2N48',
+        },
+
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -47,9 +51,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      googleTagManager: {
-        containerId: 'GTM-5H2R2N48',
-      },
+
       algolia: {
         // The application ID provided by Algolia
         appId: 'UBMLWJ0MA2',
