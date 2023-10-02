@@ -1,0 +1,12 @@
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: cel-test
+spec:
+  interval: 30
+  exec:
+    - name: cel-test
+      command: "echo 'Hello World'"
+      display:
+        expr: |
+          '3 in [1, 2, 4]' + 3 in [1, 2, 4]

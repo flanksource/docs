@@ -2,7 +2,7 @@
 title: MSSQL
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/mssql.svg' style={{height: '32px'}}/> MSSQL
+# <Icon name="mssql"/> MSSQL
 
 This check will try to connect to a specified SQL Server database, run a query against it and verify the results.
 
@@ -35,9 +35,24 @@ spec:
 | **`url`** | Connection string to connect to the SQL Server server | *string* | Yes |
 | **`query`** | query that needs to be executed on the server | *string* | Yes |
 | **`results`** | Number rows to check for | *int* | Yes |
-| `*` | All other common fields | [*Common*](common) |  |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 | **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://mssql/instance`/ Mutually exclusive with `username`, `password` | [Connection](../../concepts/connections) | |
+| `connection` | Path of existing connection e.g. `connection://mssql/instance`/ Mutually exclusive with `username`, `password` <br/> <Commercial/> | [Connection](../../concepts/connections) | |
 | `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
-| `url` | If the url is specifed in both the `connection` and in the `url`  field, the field takes precedence |  | |
+| `url` | If the url is specifed in both the `connection` and in the `url` field, the `url` field takes precedence |  | |
+
+
+## Result Variables
+
+| Name    | Description             | Scheme                     |
+| ------- | ----------------------- | -------------------------- |
+| `rows`  |                         | *[]map[string]interface{}* |
+| `count` | Number of rows returned | *int*                      |

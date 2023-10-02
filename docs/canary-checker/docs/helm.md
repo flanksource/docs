@@ -1,5 +1,7 @@
 ---
 title: Helm
+description: Recommended method for installing canary-checker
+image: /static/img/icons/helm.svg
 ---
 # Quick Start
 
@@ -47,7 +49,7 @@ flanksource-ui:
         - canary-checker.127.0.0.1.nip.io
 ```
 
-:::note
+:::info
 Note the default installation of canary-checker uses an embedded postgres database and does not persist history, see: [Database](database)
 :::
 
@@ -63,7 +65,7 @@ spec:
   interval: 30
   http:
     - name: http pass response 200 status code
-      endpoint: http://status.savanttools.com/?code=200
+      url: https://httpbin.demo.aws.flanksource.com/status/200
 EOF
 ```
 
@@ -73,12 +75,13 @@ EOF
 kubectl get canary
 ```
 
-``` title="sample output"
+```shell-session
+$ kubectl get canary
 NAME               INTERVAL   STATUS   LAST CHECK   UPTIME 1H        LATENCY 1H   LAST TRANSITIONED
 http-check.        30         Passed   13s          18/18 (100.0%)   480ms        13s
 ```
 
-## Flanksource UI
+## 6. Flanksource UI
 
 The canary checker itself only presents an API.  To view the data graphically, the Flanksource UI is required, and is installed by default. The UI should be configured to allow external access to via ingress
 
@@ -89,3 +92,8 @@ The canary checker itself only presents an API.  To view the data graphically, t
 | flanksource-ui.ingress.tls         | Map of configuration options for TLS                         |
 
 More details regarding ingress configuration can be found in the [kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+
+
+
+
+

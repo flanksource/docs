@@ -1,8 +1,7 @@
-
+---
+---
 
 # Topology
-
-
 
 ![](../images/topology-overview.svg)
 

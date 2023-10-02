@@ -14,7 +14,7 @@ metadata:
 spec:
   schedule: "*/5 * * * *"
   alertmanager:
-    - host: alertmanager.example.com
+    - url: alertmanager.example.com
       alerts:
         - .*
       ignore:

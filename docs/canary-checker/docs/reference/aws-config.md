@@ -2,7 +2,7 @@
 title: Aws Config
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/aws-config.svg' style={{height: '32px'}}/> AWS Config
+# <Icon name="aws-config"/> AWS Config
 
 AWS Config checks .
 
@@ -23,9 +23,16 @@ spec:
 | ---------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
 | **`query`**      | The SQL query SELECT command                                 | `string`                                          | `true`   |
 | `aggregatorName` | Specify the name of the configuration aggregator             | `string`                                          |          |
-| `*`              | All other commons fields                                     | [*Common*](common)                             |          |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 | **Connection**   |                                                              |                                                   |          |
-| `connection`     | Path of existing connection e.g. `connection://aws/instance` Mutuall exclusive with `accessKey`, `secretKey` | [Connection](../concepts/connections)             |          |
+| `connection`     | Path of existing connection e.g. `connection://aws/instance` Mutually exclusive with `accessKey`, `secretKey` | [Connection](../concepts/connections)             |          |
 | `accessKey`      | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
 | `secretKey`      | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
 | `endpoint`       | Custom AWS endpoint                                          | *string*                                          |          |
@@ -65,7 +72,7 @@ There are 3 options when connecting to AWS:
           query: "SELECT * FROM aws_config_rule"
     ```
 
-3.  `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret
+3. `accessKey` and `secretKey` [*EnvVar*](../../concepts/authentication/#envvar) with the credentials stored in a secret
 
     ```yaml title="aws-static.yaml"
     apiVersion: canaries.flanksource.com/v1

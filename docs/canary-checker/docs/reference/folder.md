@@ -2,17 +2,16 @@
 title: Folder
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/folder.svg' style={{height: '32px'}}/> Folder
+# <Icon name="smb"/> Folder
 
 Checks the contents of a folder for size, age and count. Folder based checks are useful in a number of scenarios:
 
-* Verifying that backups have been uploaded and are the appropiate size
+* Verifying that backups have been uploaded and are the appropriate size
 * Checking that logs or other temporary files are being cleaned up
 * For batch processes:
   * Checking if files are being processed (and/or produced)
   * Checking the size of queue processing backlog
   * Checking if any error (`.err` or `.log`) files have been produced.
-  
 
 ```yaml title="folder-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -28,7 +27,6 @@ spec:
       minCount: 10
 ```
 
-
 | Field      | Description                                                  | Scheme                          | Required |
 | ---------- | ------------------------------------------------------------ | ------------------------------- | -------- |
 | **`path`** | A local folder path or a remote folder ([SMB](smb), [SFTP](sftp), [S3](s3-bucket), [GCS](gcs-bucket)) | string                          | Yes      |
@@ -39,7 +37,14 @@ spec:
 | `maxAge`   | The oldest age a file can be, often used to check for unprocessed files or files that have not been cleaned up | [*Duration*](#duration)         |          |
 | `minSize`  | The minimum file size, can be used to detect backups that did not upload successfully | [Size](#size)                   |          |
 | `maxSize`  | The maximim file size                                        | [Size](#size)                   |          |
-| `*`        | All other commons field                                      | [*Common*](common)           |          |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 
 ## Duration
 
@@ -76,11 +81,9 @@ spec:
       minSize: 10mb # the backup should be at least 10mb
 ```
 
-
-
 ## Result Variables
 
-The following fields are available in `test`, `display` and `transform` scripts. 
+The following fields are available in `test`, `display` and `transform` [expressions](/concepts/expressions)
 
 | Field                 | Scheme                                             |
 | --------------------- | -------------------------------------------------- |

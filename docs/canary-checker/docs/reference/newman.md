@@ -2,9 +2,9 @@
 title: Newman
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/junit.svg' style={{height: '32px'}}/> Newman
+# <Icon name="postman"/> Newman
 
-Newman check runs [Postman collections via newman cli](https://github.com/postmanlabs/newman) and ingests the junit exported result in a container at a specified path as defined in `testResults`.
+The JUnit check type runs a new kubernetes pod with the specified image, in this example we are running a postman collection test suite using the [newman](https://github.com/postmanlabs/newman) cli.
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
@@ -32,52 +32,32 @@ spec:
             command: ["/start.sh"]
 ```
 
-:::tip
-For a complete working example, take a look at **[canary-checker-examples/newman](https://github.com/flanksource/canary-checker-examples/tree/main/newman)**
-:::
+By configuring newman to export JUnit to the `testResults` folder, canary-checker will pick up the results and make then available display formating and health evaluation.
+
+```bash title="start.sh"
+set -x
+mkdir -p /tmp/junit-results
+newman run newman.json --reporters junit --reporter-export /tmp/junit.xml
+cp /tmp/*.xml /tmp/junit-results/
+touch /tmp/junit-results/done
+```
+
+For a complete working example, see **[canary-checker-examples/newman](https://github.com/flanksource/canary-checker-examples/tree/main/newman)**
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | **`spec`** | Pod specification | [*v1.PodSpec*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) | Yes |
 | **`testResults`** | Directory where the results will be published | *string* | Yes |
 | `timeout` | Timeout in minutes to wait for specified container to finish its job. Defaults to 5 minutes | *int* |  |
-| `*` | All other common fields | [*Common*](common) | |
-
-
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 
 ## Test Result Variables
 
-| Name       | Description           | Scehme           |
-| ---------- | --------------------- | ---------------- |
-| `suites`   |                       | [`[]JunitSuite`](#junit-suite) |
-| `passed`   | Number of passing tests | *int*            |
-| `failed`   | Number of failed tests | *int*            |
-| `skipped`  | NUmber of tests that were skipped | *int*            |
-| `error`    | Number of errors produced when running the tests | *int*            |
-| `duration` | Total time in seconds | *float64*        |
-
-### Junit Suite
-
-| Name       | Description           | Scheme           |
-| ---------- | --------------------- | ---------------- |
-| `name`     |                       | *string* |
-| `tests`    |                       | [`[]JunitTest`](#junit-test) |
-| `passed`   | Number of passing tests                          | *int*                        |
-| `failed`   | Number of failed tests                           | *int*                        |
-| `skipped`  | NUmber of tests that were skipped                | *int*                        |
-| `error`    | Number of errors produced when running the tests | *int*                        |
-| `duration` | Total time in seconds | *float64*        |
-
-### Junit Test
-
-| Name         | Description                                             | Scheme              |
-| ------------ | ------------------------------------------------------- | ------------------- |
-| `name`       |                                                         | *string*            |
-| `classname`  | an additional descriptor for the hierarchy of the test. | *string*            |
-| `duration`   | Time in seconds                                         | *float64*           |
-| `status`     | One of `passed`, `skipped`, `failed` or `error`         | *string*            |
-| `message`    | Description optionally included with a skipped,         | *string*            |
-| `properties` | Additional info about the test                          | `map[string]string` |
-| `error`      | Any errors encountered when running atest               | *string*            |
-| `stdout`     | Standard output produced during test                    | *string*            |
-| `stderr`     | Standard error output produced during test              | *string*            |
+See [JUnit Test Results](./junit##test-result-variables) for the schema that is ingested and can be used for evaluating health or formatting the display.

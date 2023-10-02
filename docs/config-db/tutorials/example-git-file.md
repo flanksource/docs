@@ -20,7 +20,7 @@ metadata:
 spec:
   interval: 40
   http:
-    - endpoint: http://status.savanttools.com/?code=200
+    - url: https://httpbin.demo.aws.flanksource.com/status/200
       name: sample-check
       thresholdMillis: 3000
       responseCodes: [201, 200, 301]

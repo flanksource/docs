@@ -2,7 +2,8 @@
 title: Alertmanager
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/prometheus.svg' style={{height: '32px'}}/> Alertmanager
+# <Icon name="prometheus"/> Alertmanager
+
 Checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/) for any firing alerts.
 
 The following example [transforms](../concepts/transforms.md) the list of alerts so that each alert becomes a single check result. Without the transform the health check will fail if any alerts are firing.
@@ -15,7 +16,7 @@ metadata:
 spec:
   schedule: "*/5 * * * *"
   alertmanager:
-    - host: alertmanager.example.com
+    - url: alertmanager.monitoring.svc
       alerts:
         - .*
       ignore:
@@ -40,10 +41,11 @@ spec:
 | `alerts` | A list of alert prefix names to include | `[]string` |          |
 | `ignore` | A list of alert prefix names to exclude | `[]string` | |
 | `filters` | A map of label to value prefixes to find alerts on | `map[string]string` | |
-| `*` | All other commons field | [*Common*](common) | |
-| **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://alertmanager/instance`/ Mutually exclusive with `username`, `password`, `host` | [Connection](../../concepts/connections) | |
-| `host` | Host endpoint mutually exclusive with `connection` | `string` | |
-| `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
-| `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
-
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |

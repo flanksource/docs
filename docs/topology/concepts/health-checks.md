@@ -14,8 +14,6 @@ Health checks can be associated in 2 ways:
 
 ### Selector
 
-
-
 ```yaml
 apiVersion: canaries.flanksource.com/v1
 kind: SystemTemplate
@@ -40,7 +38,7 @@ metadata:
 spec:
   interval: 30
   - name: inline-check
-    endpoint: http://status.savanttools.com/?code=202
+    url: https://httpbin.demo.aws.flanksource.com/status/202
     responseCodes:
       - 202
 ```
@@ -71,7 +69,7 @@ spec:
         - inline:
             http:
               - name: inline-check
-                endpoint: http://status.savanttools.com/?code=202
+                url: https://httpbin.demo.aws.flanksource.com/status/202
                 responseCodes:
                   - 202
       name: inline-canary

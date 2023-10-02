@@ -2,7 +2,7 @@
 title: Postgres
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/postgres.svg' style={{height: '32px'}}/> Postgres
+# <Icon name="postgres"/> Postgres
 
 This check will try to connect to a specified Postgres database, run a query against it and verify the results.
 
@@ -37,11 +37,21 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `auth` | username and password value, configMapKeyRef or SecretKeyRef for Postgres server | [*Authentication*](../concepts/authentication.md) |  |
-| **`connection`** | connection string to connect to the server | *string* | Yes |
 | **`query`** | query that needs to be executed on the server | *string* | Yes |
 | **`results`** | Number rows to check for | *int* | Yes |
-| `*` | All other common fields | [*Common*](common) |  |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
+| **Connection** |  |  | |
+| `connection` | Path of existing connection e.g. `connection://postgres/instance` Mutually exclusive with `username`, `password` <br/> <Commercial/> | [Connection](../../concepts/connections) | |
+| `url` | If the url is specifed in both the `connection` and in the `url` field, the `url` field takes precedence |  | |
+| `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
+| `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 
 ## Result Variables
 

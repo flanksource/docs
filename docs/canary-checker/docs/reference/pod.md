@@ -2,7 +2,9 @@
 title: Pod
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/k8s-pod.svg' style={{height: '32px'}}/> Pod
+# <Icon name="k8s-pod"/> Pod
+
+<Enterprise/>
 
 The Pod check creates a new pod and verifies its reachability.
 
@@ -60,7 +62,14 @@ spec:
 | `expectedContent` | Expected content of an HTTP response from the created pod | *string* |  |
 | `expectedHttpStatuses` | Expected HTTP status code of the response from the created pod  | *\[\]int64* |  |
 | `priorityClass` | Pod priority class | *string* |  |
-| `*` | All other common fields | [*Common*](common) | |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 
 ## Metrics
 

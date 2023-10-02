@@ -2,7 +2,7 @@
 title: LDAP
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/ldap.svg' style={{height: '32px'}}/> LDAP
+# <Icon name="ldap"/> LDAP
 
 The LDAP check:
 
@@ -18,7 +18,7 @@ spec:
   interval: 30
   ldap:
     - name: ldap-org
-      host: ldap://apacheds.ldap.svc:10389
+      url: ldap://apacheds.ldap.svc:10389
       username:
         # value: uid=admin,ou=system
         valueFrom:
@@ -39,10 +39,17 @@ spec:
 | **`name`** | Name of the check | *string* | Yes |
 | **`bindDN`** | BindDN to use in query | *string* | Yes |
 | **`userSearch`** | UserSearch to use in query | *string* | Yes |
-| `*` | All other common fields | [*Common*](common) |  |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 | **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://alertmanager/instance`/ Mutually exclusive with `username`, `password`, `host` | [Connection](../../concepts/connections) | |
-| `host` | Host endpoint mutually exclusive with `connection` | `string` | |
-| `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
-| `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
+| `connection` | Path of existing connection e.g. `connection://alertmanager/instance`/ Mutually exclusive with `username`, `password`, `url`  <br/> <Commercial/> | [Connection](../../concepts/connections) | |
+| `url` | e.g. `ldap://apacheds.ldap.svc:10389` <br/>*Mutually exclusive with `connection`* | `string` | |
+| `username` | *Mutually exclusive with `connection`* | [*EnvVar*](../../concepts/authentication/#envvar) | |
+| `password` | *Mutually exclusive with `connection`* | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | `skipTLSVerify` | Skip check of LDAP server TLS certificates | *bool* | |

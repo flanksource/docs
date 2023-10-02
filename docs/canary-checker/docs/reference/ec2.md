@@ -2,7 +2,9 @@
 title: EC2
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/ec2.svg' style={{height: '32px'}}/> EC2
+# <Icon name="aws-ec2-instance"/> EC2
+
+<Enterprise/>
 
 This check connects to an AWS account with the specified credentials, launch an EC2 instance with an option for `userData`.
 This test can be used to check the availability of an ami, account service limits, run backup & restore operations, etc.
@@ -39,7 +41,7 @@ spec:
         chmod 2775 /var/www
         find /var/www -type d -exec chmod 2775 {} \;
         find /var/www -type f -exec chmod 0664 {} \;
-      securityGroup: WebAccess 
+      securityGroup: WebAccess
 ```
 
 | Field | Description | Scheme | Required |
@@ -51,9 +53,16 @@ spec:
 | `timeout` | Set keep-alive timeout | *int* |  |
 | `userData` | Configure EC2 instance with user data | *string* |  |
 | `waitTime` | Set wait-time for EC2 instance launch | *int* |  |
-| `*` | All other commons field | [*Common*](common) | |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 | **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `accessKey` and `secretKey` | [Connection](../concepts/connections) | |
+| `connection` | Path of existing connection e.g. `connection://aws/instance`<br/>*Mutually exclusive with `accessKey` and `secretKey`* <br/> <Commercial/> | [Connection](../concepts/connections) | |
 | `accessKey` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | `secretKey` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
 | `endpoint` | Custom AWS endpoint | *string* | |

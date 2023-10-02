@@ -2,7 +2,7 @@
 title: Helm
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/helm.svg' style={{height: '32px'}}/> Helm
+# <Icon name="helm"/> Helm
 
 Builds and pushes your helm chart to a helm repository.
 

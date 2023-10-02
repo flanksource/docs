@@ -2,7 +2,7 @@
 title: Kubernetes
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/kubernetes.svg' style={{height: '32px'}}/> Kubernetes
+# <Icon name="k8s"/> Kubernetes
 
 The Kubernetes check performs requests on Kubernetes resources such as Pods to get the desired information.
 
@@ -37,7 +37,14 @@ spec:
 | `namespace` | Specifies namespace for Kubernetes object                    | [*ResourceSelector*](#resourceselector) |          |
 | `ignore`    | Ignore the specified resources from the fetched resources. Can be a glob pattern. | *\[\]string*                            |  |
 | `ready` | Boolean value of true or false to query and display resources based on availability | *bool* |  |
-| `*` | All other common fields | [*Common*](common) |  |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 
 ## ResourceSelector
 

@@ -2,7 +2,7 @@
 title: SMB/CIFS
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/smb.svg' style={{height: '32px'}}/> Windows File Share (SMB/CIFS)
+# <Icon name="smb"/> Windows File Share (SMB/CIFS)
 
 Checks the contents of a Windows / CIFS file share for size, age and count.
 
@@ -18,7 +18,7 @@ spec:
   folder:
     - path: smb://192.168.1.9/Some Public Folder/somedir
       name: sample smb check
-      smbConnection:     
+      smbConnection:
         username:
           valueFrom:
             secretKeyRef:
@@ -43,7 +43,7 @@ spec:
 
 | Field        | Description                                                  | Scheme                                            |
 | ------------ | ------------------------------------------------------------ | ------------------------------------------------- |
-| `connection` | Path of existing connection e.g. `connection://windows/svc-account. Mutually exclusive with `username` | [Connection](../concepts/connections)             |
+| `connection` | Path of existing connection e.g. `connection://windows/svc-account` <br/>Mutually exclusive with`username` and `password` <br/> <Commercial/> | [Connection](../concepts/connections)             |
 | `username`   | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
 | `password`   | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
 | `domain`     | Windows domain name                                          | *string*                                          |

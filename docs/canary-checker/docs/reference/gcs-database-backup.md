@@ -2,7 +2,7 @@
 title: GCS Database Backup
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/database2.svg' style={{height: '32px'}}/> GCP CloudSQL Backups
+# <Icon name="database2"/> GCP CloudSQL Backups
 
 Checks if a GCP CloudSQL instance has been successfully backed up recently.
 
@@ -24,7 +24,14 @@ spec:
 | ----- | ----------- | ------ | -------- |
 | **`gcp`** | Connect to GCP project and instance | [*GCPDatabase*](#gcpdatabase) | Yes |
 | **`maxAge`** | Max age for backup allowed, eg. 5h30m | *Duration* |  |
-| `*` | All other common fields | [*Common*](common) | |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 |  |  |  | |
 
 ## Duration
@@ -38,7 +45,7 @@ Durations are strings with an optional fraction and unit e.g.  `300ms`, `1.5h` o
 | `project` | GCP project\ name | *string* | Yes |
 | `instance` | Google CloudSQL instance name | *string* | Yes |
 | **Connection** |  |  |  |
-| `connection` | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` | [Connection](../../concepts/connections) |  |
+| `connection` | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` <br/> <Commercial/> | [Connection](../../concepts/connections) |  |
 | `credentials` | GCP Access Token File. Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | Yes |
 
 ### Connecting to GCP

@@ -2,12 +2,13 @@
 title: ContainerD / Docker
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/containerdPull.svg' style={{height: '32px'}}/>  ContainerD / Docker
+# <Icon name="containerd"/>  ContainerD / Docker
 
 This check will try to pull a Docker image from specified registry using containerd and then verify its checksum and size.
 
-!!! danger "Root Privileges Required"
-    The containerd and docker health checks require access to a working socket that is mounted at runtime
+:::note Root Privileges Required
+The containerd and docker health checks require access to a working socket that is mounted at runtime
+:::
 
 ## Pulling images
 
@@ -31,7 +32,14 @@ spec:
 | `expectedDigest` | Expected digest of the pulled image                          | _string_                                          | Yes      |
 | `expectedSize`   | Expected size of the pulled image                            | _int64_                                           | Yes      |
 | **`image`**      | Full path to image, including registry                       | _string_                                          | Yes      |
-| `*`              | All other commons field                                      | [*Common*](common)                             |          |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
 
 ---
 
@@ -58,4 +66,11 @@ spec:
 | **`image`**    | Full path to image, including registry | `string`              | Yes      |
 | **`password`** | Password to access Containerd          | `string`              | Yes      |
 | **`username`** | Username to access Containerd          | `string`              | Yes      |
-| `*`            | All other commons field                | [*Common*](common) |          |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |

@@ -2,9 +2,9 @@
 title: SFTP Connection
 ---
 
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/sftp.svg' style={{height: '32px'}}/> SFTPConnection
+# <Icon name="sftp"/> SFTPConnection
 
-Checks the contents of a folder over SFTP for size, age and count. 
+Checks the contents of a folder over SFTP for size, age and count.
 
 See [Folder](folder) for a full description.
 
@@ -45,8 +45,8 @@ spec:
 
 | Field        | Description                                                  | Scheme                                            |
 | ------------ | ------------------------------------------------------------ | ------------------------------------------------- |
-| `connection` | Path of existing connection e.g. `connection://sftp/instance`/ Mutually exclusive with `accessKey` | [Connection](../../concepts/connections)          |
-| `username`   | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
+| `connection` | Path of existing connection e.g. `connection://sftp/instance`<br/> Mutually exclusive with `username` <br/><Commercial/> | [Connection](../../concepts/connections)          |
+| `username`   | utually exclusive with `connection`                          | [*EnvVar*](../../concepts/authentication/#envvar) |
 | `password`   | Mutually exclusive with `connection`                         | [*EnvVar*](../../concepts/authentication/#envvar) |
 | `host`       | Custom AWS Cloudwatch endpoint                               | *string*                                          |
 | `port`       | Default to `22`                                              | int                                               |

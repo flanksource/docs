@@ -40,7 +40,7 @@ Below is an example for the `display` field.
 
 ```yaml
 prometheus:
-    - host: https://prometheus.canary.lab.flanksource.com/
+    - url: https://prometheus.canary.lab.flanksource.com/
       name: prometheus-check
       query: kubernetes_build_info{job!~"kube-dns|coredns"}
       display:

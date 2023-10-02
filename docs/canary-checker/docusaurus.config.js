@@ -1,14 +1,52 @@
-module.exports = {
-    title: 'Canary Checker',
-    tagline: '',
-    url: 'https://canarychecker.io',
-    baseUrl: '/',
-    onBrokenLinks: 'throw',
-    onBrokenMarkdownLinks: 'warn',
-    favicon: 'img/canary-checker-icon.svg',
-    organizationName: 'flanksource',
-    projectName: 'canary-checker',
-    themeConfig: {
+// @ts-check
+// Note: type annotations allow type checking and IDEs autocompletion
+
+const lightCodeTheme = require('prism-react-renderer/themes/palenight');
+const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+
+/** @type {import('@docusaurus/types').Config} */
+const config = {
+  title: 'Canary Checker',
+  tagline: '',
+  url: 'https://canarychecker.io',
+  baseUrl: '/',
+  onBrokenLinks: 'warn',
+  onBrokenMarkdownLinks: 'warn',
+  customFields: {
+    oss: process.env.CANARY_CHECKER_OSS === 'true',
+  },
+  markdown: {
+    mermaid: true,
+  },
+  favicon: 'img/canary-checker-icon.svg',
+  organizationName: 'flanksource',
+  projectName: 'canary-checker',
+  plugins: ['my-loaders', 'tailwind-loader'],
+  presets: [
+    [
+      '@docusaurus/preset-classic',
+      {
+        theme: {
+          customCss: require.resolve('./src/css/custom.css'),
+        },
+        docs: {
+          // remarkPlugins: [sectionPrefix],
+          // rehypePlugins: [[inlineSVG, { maxImageSize: 5000 }]],
+          routeBasePath: '/',
+          breadcrumbs: true,
+          // exclude: [
+          //   '**/_*/**',
+          //   '**/*.test.{js,jsx,ts,tsx}',
+          //   '**/__tests__/**',
+          // ],
+          sidebarPath: require.resolve('./sidebars.js'),
+        },
+      },
+    ],
+  ],
+  themeConfig:
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    ({
       algolia: {
         // The application ID provided by Algolia
         appId: 'UBMLWJ0MA2',
@@ -18,11 +56,6 @@ module.exports = {
 
         indexName: 'canarychecker',
       },
-      docs: {
-          sidebar: {
-              hideable: true,
-          }
-      },
       navbar: {
         logo: {
           alt: 'Canary Checker Logo',
@@ -30,46 +63,39 @@ module.exports = {
           srcDark: 'img/canary-checker-white.svg',
         },
         items: [
-            {
-                href: 'https://github.com/flanksource/canary-checker',
-                label: 'GitHub',
-                position: 'right',
-            },
+          {
+            type: 'docSidebar',
+            sidebarId: 'docs',
+            position: 'left',
+            label: 'Docs',
+          },
+          {
+            href: 'https://github.com/flanksource/canary-checker',
+            label: 'GitHub',
+            position: 'right',
+          },
         ],
       },
       colorMode: {
         defaultMode: 'light',
         disableSwitch: false,
-        respectPrefersColorScheme: false,
+        respectPrefersColorScheme: true,
+      },
+      announcementBar: {
+        content:
+          '⭐️ If you like Canary Checker, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/flanksource/canary-checker">GitHub</a>! ⭐️',
       },
       footer: {
         style: 'light',
-      },
-      header: {
-        hideOnScroll: true,
+        copyright: `Copyright © ${new Date().getFullYear()} Flanksource, Inc.`,
       },
       prism: {
-        theme: require('prism-react-renderer/themes/github'),
+        additionalLanguages: ['powershell'],
+        darkTheme: darkCodeTheme,
+        theme: lightCodeTheme
+        //'log',jq'promql', 'regex','shell-session','uri', 'mermaid'
       },
-    },
-    presets: [
-      [
-        '@docusaurus/preset-classic',
-        {
-          theme: {
-            customCss: require.resolve('./src/css/custom.css'),
-          },
-          docs: {
-            routeBasePath: '/',
-            breadcrumbs: true,
-            exclude: [
-                '**/_*/**',
-                '**/*.test.{js,jsx,ts,tsx}',
-                '**/__tests__/**',
-              ],
-            sidebarPath: require.resolve('./sidebars.js'),
-          },
-        },
-      ],
-    ],
-  };
+    }),
+};
+
+module.exports = config;

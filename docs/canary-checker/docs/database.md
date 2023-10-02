@@ -1,9 +1,12 @@
+---
+description: Alternative methods for connecting to the db used for persistence
+---
 # Database
 
 To persist history, canary-checker has 3 options:
 
 1. Mount a PVC/Hostpath volume for an embedded postgres database
-2. Deploying a postgres database as a statefulset
+2. Deploy a postgres database as a statefulset
 3. Connect to an external postgres database
 
 ### Mounting a persistent volume
@@ -16,12 +19,16 @@ db:
 # ...
 ```
 
-**To connect to the embedded database:**
+:::info Connecting
+
+If you ever need to connect to the embedded database, you can do so by forwarding the port:
 
 ```shell
 kubectl port-forward canary-checker-0 6432:6432
 psql -U postgres localhost -p 6432 canary with password postgres #password will be postgres
 ```
+
+:::
 
 ### Deploying a standalone db
 
