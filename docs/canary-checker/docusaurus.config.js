@@ -47,6 +47,9 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      googleTagManager: {
+        containerId: 'GTM-5H2R2N48',
+      },
       algolia: {
         // The application ID provided by Algolia
         appId: 'UBMLWJ0MA2',
