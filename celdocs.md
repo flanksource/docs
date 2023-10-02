@@ -73,7 +73,7 @@ Examples:
     `string(123)` evaluates to `"123"`
     `int("123")` evaluates to `123`
 ---
-### Membership Test Operator `in`
+### in
 The membership test operator checks whether an element is a member of a collection, such as a list or a map. It's worth noting that the `in` operator doesn't check for value membership in maps, only key membership.
 
 Syntax:
@@ -3680,3 +3680,1220 @@ Examples:
 
     Pattern not found:
     regexp.Split("z", -1, "hello")  // Evaluates to ["hello"]
+---
+### HumanDuration
+
+The `HumanDuration` function in CEL converts a duration into a human-readable format.
+
+Syntax:
+
+    HumanDuration(duration)
+
+Where:
+- `duration` is the duration you want to convert.
+
+Examples:
+
+    Converting a duration into a human-readable format:
+    HumanDuration(3600)  // Evaluates to "1 hour"
+
+    Converting another duration:
+    HumanDuration(600)  // Evaluates to "10 minutes"
+
+    Converting a longer duration:
+    HumanDuration(86400)  // Evaluates to "1 day"
+---
+### HumanSize
+
+The `HumanSize` function in CEL converts a size in bytes into a human-readable format.
+
+Syntax:
+
+    HumanSize(size)
+
+Where:
+- `size` is the size in bytes you want to convert.
+
+Examples:
+
+    Converting a size into a human-readable format:
+    HumanSize(1024)  // Evaluates to "1 KiB"
+
+    Converting another size:
+    HumanSize(1048576)  // Evaluates to "1 MiB"
+
+    Converting a larger size:
+    HumanSize(1073741824)  // Evaluates to "1 GiB"
+---
+### Semver
+
+The `Semver` function in CEL parses a version string and returns a map containing the major, minor, patch, prerelease, metadata, and original version.
+
+Syntax:
+
+    Semver(version)
+
+Where:
+- `version` is the version string to parse.
+
+Examples:
+
+    Parsing a semantic version:
+    Semver("1.2.3-alpha+meta")  // Evaluates to a map with major: "1", minor: "2", patch: "3", prerelease: "alpha", metadata: "meta", original: "1.2.3-alpha+meta"
+
+    Parsing another semantic version:
+    Semver("2.3.4-beta+meta2")  // Evaluates to a map with major: "2", minor: "3", patch: "4", prerelease: "beta", metadata: "meta2", original: "2.3.4-beta+meta2"
+
+    Parsing a simple semantic version:
+    Semver("3.4.5")  // Evaluates to a map with major: "3", minor: "4", patch: "5", prerelease: "", metadata: "", original: "3.4.5"
+---
+### SemverCompare
+
+The `SemverCompare` function in CEL compares two semantic version strings.
+
+Syntax:
+
+    SemverCompare(version1, version2)
+
+Where:
+- `version1` is the first version string to compare.
+- `version2` is the second version string to compare.
+
+Examples:
+
+    Comparing two semantic versions:
+    SemverCompare("1.2.3", "1.2.4")  // Evaluates to false
+
+    Comparing two identical versions:
+    SemverCompare("2.3.4", "2.3.4")  // Evaluates to true
+
+    Comparing with a prerelease version:
+    SemverCompare("3.4.5", "3.4.5-alpha")  // Evaluates to false
+---
+### ReplaceAll
+
+The `ReplaceAll` function in CEL replaces all occurrences of a substring within a string with another substring.
+
+Syntax:
+
+    ReplaceAll(old, new, string)
+
+Where:
+- `old` is the substring to be replaced.
+- `new` is the substring to replace with.
+- `string` is the original string.
+
+Examples:
+
+    Replacing a substring:
+    ReplaceAll("apple", "orange", "I have an apple")  // Evaluates to "I have an orange"
+
+    Replacing another substring:
+    ReplaceAll("cat", "dog", "The cat sat on the mat")  // Evaluates to "The dog sat on the mat"
+
+    Replacing a substring with a number:
+    ReplaceAll("one", "1", "I have one apple")  // Evaluates to "I have 1 apple"
+---
+### Contains
+
+The `Contains` function in CEL checks if a string contains a given substring.
+
+Syntax:
+
+    Contains(substr, string)
+
+Where:
+- `substr` is the substring to check for.
+- `string` is the string to check within.
+
+Examples:
+
+    Checking if a string contains a substring:
+    Contains("apple", "I have an apple")  // Evaluates to true
+
+    Checking another string:
+    Contains("cat", "The dog sat on the mat")  // Evaluates to false
+
+    Checking a number within a string:
+    Contains("123", "My number is 12345")  // Evaluates to true
+---
+### HasPrefix
+
+The `HasPrefix` function in CEL checks if a string starts with a given prefix.
+
+Syntax:
+
+    HasPrefix(prefix, string)
+
+Where:
+- `prefix` is the starting substring to check for.
+- `string` is the string to check within.
+
+Examples:
+
+    Checking if a string starts with a prefix:
+    HasPrefix("apple", "apple pie")  // Evaluates to true
+
+    Checking another string:
+    HasPrefix("cat", "catalogue")  // Evaluates to true
+
+    Checking a number prefix within a string:
+    HasPrefix("123", "12345 is my number")  // Evaluates to true
+---
+### HasSuffix
+
+The `HasSuffix` function in CEL checks if a string ends with a given suffix.
+
+Syntax:
+
+    HasSuffix(suffix, string)
+
+Where:
+- `suffix` is the ending substring to check for.
+- `string` is the string to check within.
+
+Examples:
+
+    Checking if a string ends with a suffix:
+    HasSuffix("pie", "apple pie")  // Evaluates to true
+
+    Checking another string:
+    HasSuffix("log", "catalogue")  // Evaluates to false
+
+    Checking a number suffix within a string:
+    HasSuffix("45", "12345 is my number")  // Evaluates to true
+---
+### Repeat
+
+The `Repeat` function in CEL repeats a string for a given number of times.
+
+Syntax:
+
+    Repeat(count, string)
+
+Where:
+- `count` is the number of times the string should be repeated.
+- `string` is the string to repeat.
+
+Examples:
+
+    Repeating a string:
+    Repeat(3, "apple")  // Evaluates to "appleappleapple"
+
+    Repeating another string:
+    Repeat(2, "cat")  // Evaluates to "catcat"
+
+    Repeating a number string:
+    Repeat(4, "123")  // Evaluates to "123123123123"
+---
+### Sort
+
+The `Sort` function in CEL sorts a list of strings.
+
+Syntax:
+
+    Sort(list)
+
+Where:
+- `list` is the list of strings to sort.
+
+Examples:
+
+    Sorting a list of strings:
+    Sort(["banana", "apple", "cherry"])  // Evaluates to ["apple", "banana", "cherry"]
+
+    Sorting another list:
+    Sort(["dog", "cat", "bird"])  // Evaluates to ["bird", "cat", "dog"]
+
+    Sorting a list with numbers:
+    Sort(["3", "1", "2"])  // Evaluates to ["1", "2", "3"]
+---
+### Split
+
+The `Split` function in CEL splits a string by a given separator.
+
+Syntax:
+
+    Split(separator, string)
+
+Where:
+- `separator` is the string by which to split.
+- `string` is the string to split.
+
+Examples:
+
+    Splitting a string:
+    Split(",", "apple,banana,cherry")  // Evaluates to ["apple", "banana", "cherry"]
+
+    Splitting another string:
+    Split(" ", "The cat sat")  // Evaluates to ["The", "cat", "sat"]
+
+    Splitting a number string:
+    Split("-", "123-456-789")  // Evaluates to ["123", "456", "789"]
+---
+### Trim
+
+The `Trim` function in CEL removes all leading and trailing instances of a set of characters from a string.
+
+Syntax:
+
+    Trim(cutset, string)
+
+Where:
+- `cutset` is the set of characters to remove.
+- `string` is the string to trim.
+
+Examples:
+
+    Trimming a string:
+    Trim("a", "apple")  // Evaluates to "pple"
+
+    Trimming another string:
+    Trim("t", "tattletale")  // Evaluates to "attletale"
+
+    Trimming a number string:
+    Trim("1", "11231")  // Evaluates to "123"
+---
+### TrimPrefix
+
+The `TrimPrefix` function in CEL removes a given prefix from a string if the string starts with that prefix.
+
+Syntax:
+
+    TrimPrefix(prefix, string)
+
+Where:
+- `prefix` is the starting substring to remove.
+- `string` is the string from which the prefix will be removed.
+
+Examples:
+
+    Removing a prefix from a string:
+    TrimPrefix("Mr.", "Mr. Smith")  // Evaluates to "Smith"
+
+    Another example:
+    TrimPrefix("Astro", "Astronaut")  // Evaluates to "naut"
+
+    If the prefix is not present:
+    TrimPrefix("Dr.", "Mr. Smith")  // Evaluates to "Mr. Smith"
+---
+### TrimSuffix
+
+The `TrimSuffix` function in CEL removes a given suffix from a string if the string ends with that suffix.
+
+Syntax:
+
+    TrimSuffix(suffix, string)
+
+Where:
+- `suffix` is the ending substring to remove.
+- `string` is the string from which the suffix will be removed.
+
+Examples:
+
+    Removing a suffix from a string:
+    TrimSuffix(".jpg", "image.jpg")  // Evaluates to "image"
+
+    Another example:
+    TrimSuffix("berry", "blueberry")  // Evaluates to "blue"
+
+    If the suffix is not present:
+    TrimSuffix(".png", "image.jpg")  // Evaluates to "image.jpg"
+---
+### Title
+
+The `Title` function in CEL converts the first character of each word in a string to uppercase.
+
+Syntax:
+
+    Title(string)
+
+Where:
+- `string` is the string to convert.
+
+Examples:
+
+    Converting a string:
+    Title("hello world")  // Evaluates to "Hello World"
+
+    Another example:
+    Title("make this title")  // Evaluates to "Make This Title"
+
+    Working with mixed case:
+    Title("mIxEd CaSe")  // Evaluates to "MIxED CASe"
+---
+### ToUpper
+
+The `ToUpper` function in CEL converts all characters in a string to uppercase.
+
+Syntax:
+
+    ToUpper(string)
+
+Where:
+- `string` is the string to convert.
+
+Examples:
+
+    Converting a string:
+    ToUpper("hello")  // Evaluates to "HELLO"
+
+    Another example:
+    ToUpper("MixedCase")  // Evaluates to "MIXEDCASE"
+
+    Working with numbers and symbols:
+    ToUpper("low3r#case")  // Evaluates to "LOW3R#CASE"
+---
+### ToLower
+
+The `ToLower` function in CEL converts all characters in a string to lowercase.
+
+Syntax:
+
+    ToLower(string)
+
+Where:
+- `string` is the string to convert.
+
+Examples:
+
+    Converting a string:
+    ToLower("HELLO")  // Evaluates to "hello"
+
+    Another example:
+    ToLower("MixedCase")  // Evaluates to "mixedcase"
+
+    Working with numbers and symbols:
+    ToLower("UPP3R#CASE")  // Evaluates to "upp3r#case"
+---
+### TrimSpace
+
+The `TrimSpace` function in CEL removes all leading and trailing white spaces from a string.
+
+Syntax:
+
+    TrimSpace(string)
+
+Where:
+- `string` is the string to trim.
+
+Examples:
+
+    Trimming a string:
+    TrimSpace("  extra spaces  ")  // Evaluates to "extra spaces"
+
+    Another example:
+    TrimSpace(" \t\n  Mixed spaces and tabs \n\t ")  // Evaluates to "Mixed spaces and tabs"
+
+    If there are no spaces:
+    TrimSpace("NoSpaces")  // Evaluates to "NoSpaces"
+---
+### Trunc
+
+The `Trunc` function in CEL truncates a string to a specified length.
+
+Syntax:
+
+    Trunc(length, string)
+
+Where:
+- `length` is the number of characters to keep.
+- `string` is the string to truncate.
+
+Examples:
+
+    Truncating a string:
+    Trunc(3, "hello")  // Evaluates to "hel"
+
+    Another example:
+    Trunc(5, "This is a long sentence.")  // Evaluates to "This "
+
+    If the length is longer than the string:
+    Trunc(50, "short")  // Evaluates to "short"
+---
+### Indent
+
+The `Indent` function in CEL indents each line of a string by a specified number of spaces or a specified prefix.
+
+Syntax:
+
+    Indent(width or prefix, string)
+
+Where:
+- `width or prefix` is the number of spaces or the prefix string to add before each line.
+- `string` is the string to indent.
+
+Examples:
+
+    Indenting with spaces:
+    Indent(4, "Line1\nLine2")  // Evaluates to "    Line1\n    Line2"
+
+    Indenting with a prefix:
+    Indent("> ", "Line1\nLine2")  // Evaluates to "> Line1\n> Line2"
+
+    Indenting with a mixed prefix:
+    Indent("==", "Line1\nLine2")  // Evaluates to "==Line1\n==Line2"
+---
+### Slug
+
+The `Slug` function in CEL converts a given string into a URL-friendly slug format.
+
+Syntax:
+
+    Slug(string)
+
+Where:
+- `string` is the input string to be converted.
+
+Examples:
+
+    Converting a string to a slug:
+    Slug("Hello World!")  // Evaluates to "hello-world"
+
+    Converting a string with special characters:
+    Slug("Hello, World!")  // Evaluates to "hello-world"
+
+    Converting a multi-word string:
+    Slug("Hello Beautiful World")  // Evaluates to "hello-beautiful-world"
+---
+### Quote
+
+The `Quote` function in CEL adds double quotes around a given string.
+
+Syntax:
+
+    Quote(string)
+
+Where:
+- `string` is the input string to be quoted.
+
+Examples:
+
+    Quoting a simple string:
+    Quote("Hello World")  // Evaluates to "\"Hello World\""
+
+    Quoting a string with a number:
+    Quote("12345")  // Evaluates to "\"12345\""
+
+    Quoting an already quoted string:
+    Quote("\"Hello World\"")  // Evaluates to "\"\"Hello World\"\""
+---
+### ShellQuote
+
+The `ShellQuote` function in CEL quotes a string such that it can be safely used as a token in a shell command.
+
+Syntax:
+
+    ShellQuote(string)
+
+Where:
+- `string` is the input string to be shell quoted.
+
+Examples:
+
+    Shell quoting a string:
+    ShellQuote("Hello World")  // Evaluates to "'Hello World'"
+
+    Shell quoting a string with special characters:
+    ShellQuote("Hello$World")  // Evaluates to "'Hello$World'"
+
+    Shell quoting a string with spaces and special characters:
+    ShellQuote("Hello World$123")  // Evaluates to "'Hello World$123'"
+---
+### Squote
+
+The `Squote` function in CEL adds single quotes around a given string.
+
+Syntax:
+
+    Squote(string)
+
+Where:
+- `string` is the input string to be single quoted.
+
+Examples:
+
+    Single quoting a simple string:
+    Squote("Hello World")  // Evaluates to "'Hello World'"
+
+    Single quoting a string with a number:
+    Squote("12345")  // Evaluates to "'12345'"
+
+    Single quoting an already single quoted string:
+    Squote("'Hello World'")  // Evaluates to "'''Hello World'''"
+---
+### SnakeCase
+
+The `SnakeCase` function in CEL converts a given string into snake_case format.
+
+Syntax:
+
+    SnakeCase(string)
+
+Where:
+- `string` is the input string to be converted.
+
+Examples:
+
+    Converting a string to snake_case:
+    SnakeCase("Hello World")  // Evaluates to "hello_world"
+
+    Converting a CamelCase string:
+    SnakeCase("HelloWorld")  // Evaluates to "hello_world"
+
+    Converting a string with spaces and special characters:
+    SnakeCase("Hello Beautiful World!")  // Evaluates to "hello_beautiful_world"
+---
+### CamelCase
+
+The `CamelCase` function in CEL converts a given string into CamelCase format.
+
+Syntax:
+
+    CamelCase(string)
+
+Where:
+- `string` is the input string to be converted.
+
+Examples:
+
+    Converting a string to CamelCase:
+    CamelCase("hello world")  // Evaluates to "HelloWorld"
+
+    Converting a snake_case string:
+    CamelCase("hello_world")  // Evaluates to "HelloWorld"
+
+    Converting a string with spaces and special characters:
+    CamelCase("hello beautiful world!")  // Evaluates to "HelloBeautifulWorld"
+---
+### KebabCase
+
+The `KebabCase` function in CEL converts a given string into kebab-case format.
+
+Syntax:
+
+    KebabCase(string)
+
+Where:
+- `string` is the input string to be converted.
+
+Examples:
+
+    Converting a string to kebab-case:
+    KebabCase("Hello World")  // Evaluates to "hello-world"
+
+    Converting a CamelCase string:
+    KebabCase("HelloWorld")  // Evaluates to "hello-world"
+
+    Converting a string with spaces and special characters:
+    KebabCase("Hello Beautiful World!")  // Evaluates to "hello-beautiful-world"
+---
+### WordWrap
+
+The `WordWrap` function in CEL wraps the input string at the specified width.
+
+Syntax:
+
+    WordWrap(width, string)
+
+Where:
+- `width` is the number of characters at which to wrap the string.
+- `string` is the input string to be wrapped.
+
+Examples:
+
+    Wrapping a string at a specified width:
+    WordWrap(5, "Hello World")  // Evaluates to "Hello\nWorld"
+
+    Wrapping a longer string:
+    WordWrap(10, "Hello Beautiful World")  // Evaluates to "Hello\nBeautiful\nWorld"
+
+    Wrapping a string with special characters:
+    WordWrap(5, "Hello$World")  // Evaluates to "Hello\n$World"
+---
+### RuneCount
+
+The `RuneCount` function in CEL counts the number of runes in a given string.
+
+Syntax:
+
+    RuneCount(string)
+
+Where:
+- `string` is the input string whose runes are to be counted.
+
+Examples:
+
+    Counting runes in a string:
+    RuneCount("Hello World")  // Evaluates to 11
+
+    Counting runes in a string with special characters:
+    RuneCount("Hello$World")  // Evaluates to 11
+
+    Counting runes in an empty string:
+    RuneCount("")  // Evaluates to 0
+---
+### test.Assert
+
+The `test.Assert` function in CEL is used to assert that a given condition is true. It can optionally accept a custom error message to be returned if the assertion fails.
+
+Syntax:
+
+    test.Assert(condition, [message])
+
+Where:
+- `condition` is the boolean condition to assert.
+- `message` is an optional custom error message.
+
+Examples:
+
+    Asserting a true condition:
+    test.Assert(true)  // No error, as the condition is true
+
+    Asserting a false condition with a custom error message:
+    test.Assert(false, "Assertion failed!")  // Error: "Assertion failed!"
+
+    Asserting a false condition without a custom error message:
+    test.Assert(false)  // Error with a default assertion failed message
+---
+### test.Fail
+
+The `test.Fail` function in CEL is used to intentionally cause a test to fail, optionally with a custom failure message.
+
+Syntax:
+
+    test.Fail([message])
+
+Where:
+- `message` is an optional custom failure message.
+
+Examples:
+
+    Failing a test without a custom message:
+    test.Fail()  // Test fails with a default failure message
+
+    Failing a test with a custom message:
+    test.Fail("This is a failure message")  // Test fails with the provided message
+---
+### test.Required
+
+The `test.Required` function in CEL ensures that a given value is not nil or empty, optionally returning a custom error message if the value is nil or empty.
+
+Syntax:
+
+    test.Required(value, [message])
+
+Where:
+- `value` is the value to check.
+- `message` is an optional custom error message.
+
+Examples:
+
+    Checking a non-empty value:
+    test.Required("not empty")  // No error, as the value is not empty
+
+    Checking an empty value with a custom error message:
+    test.Required("", "Value cannot be empty!")  // Error: "Value cannot be empty!"
+
+    Checking a nil value:
+    test.Required(nil)  // Error with a default non-empty required message
+---
+### test.Ternary
+
+The `test.Ternary` function in CEL is a conditional operator that returns one of two values depending on whether a given boolean condition is true or false.
+
+Syntax:
+
+    test.Ternary(trueValue, falseValue, condition)
+
+Where:
+- `trueValue` is the value returned if the condition is true.
+- `falseValue` is the value returned if the condition is false.
+- `condition` is the boolean condition to evaluate.
+
+Examples:
+
+    Using ternary with a true condition:
+    test.Ternary("yes", "no", true)  // Returns "yes"
+
+    Using ternary with a false condition:
+    test.Ternary("yes", "no", false)  // Returns "no"
+
+    Using ternary with a dynamic condition:
+    test.Ternary("yes", "no", 5 > 3)  // Returns "yes" because 5 is greater than 3
+---
+### test.Kind
+
+The `test.Kind` function in CEL returns the kind of the given argument as a string.
+
+Syntax:
+
+    test.Kind(value)
+
+Where:
+- `value` is the value whose kind is to be determined.
+
+Examples:
+
+    Getting the kind of a string:
+    test.Kind("hello")  // Returns "string"
+
+    Getting the kind of an integer:
+    test.Kind(42)  // Returns "int"
+
+    Getting the kind of a boolean:
+    test.Kind(true)  // Returns "bool"
+---
+### test.IsKind
+
+The `test.IsKind` function in CEL checks if the given value is of the specified kind.
+
+Syntax:
+
+    test.IsKind(kind, value)
+
+Where:
+- `kind` is the string representing the kind to check for.
+- `value` is the value to check.
+
+Examples:
+
+    Checking if a value is a string:
+    test.IsKind("string", "hello")  // Returns true
+
+    Checking if a value is an integer:
+    test.IsKind("int", 42)  // Returns true
+
+    Checking if a value is a boolean:
+    test.IsKind("bool", "hello")  // Returns false, because "hello" is a string
+---
+### time.ZoneName
+
+The `time.ZoneName` function in CEL returns the name of the local system's time zone. It doesn't require any parameters and is useful for retrieving the time zone information.
+
+Syntax:
+
+    time.ZoneName()
+
+Examples:
+
+    Retrieving the local time zone name:
+    time.ZoneName()  // Might evaluate to "PST" if the local time zone is Pacific Standard Time
+
+    Another example of retrieving the time zone:
+    time.ZoneName()  // Could evaluate to "EST" for Eastern Standard Time
+
+    Yet another example:
+    time.ZoneName()  // Might evaluate to "UTC" for Coordinated Universal Time
+---
+### time.ZoneOffset
+
+The `time.ZoneOffset` function in CEL returns the offset of the local system's time zone in minutes. It helps in understanding the time difference between the local time zone and UTC.
+
+Syntax:
+
+    time.ZoneOffset()
+
+Examples:
+
+    Getting the time zone offset:
+    time.ZoneOffset()  // Could evaluate to -480 for PST
+
+    Another example of getting the offset:
+    time.ZoneOffset()  // Might evaluate to 0 for UTC
+
+    Yet another example:
+    time.ZoneOffset()  // Could evaluate to 330 for IST (Indian Standard Time)
+---
+### time.Parse
+
+The `time.Parse` function in CEL is used to parse a given string into a time object based on a specified layout. It's handy for converting string representations of time into actual time objects.
+
+Syntax:
+
+    time.Parse(layout, value)
+
+Where:
+- `layout` is the time layout string.
+- `value` is the string representation of the time to be parsed.
+
+Examples:
+
+    Parsing a time string with a specific format:
+    time.Parse("2006-01-02", "2023-09-26")  // Evaluates to a time object representing September 26, 2023
+
+    Another example with a different format:
+    time.Parse("02-01-2006", "26-09-2023")  // Evaluates to the same time object as above
+
+    Parsing a time with hour and minute information:
+    time.Parse("15:04 02-01-2006", "14:30 26-09-2023")  // Includes time of day information
+---
+### time.ParseLocal
+
+The `time.ParseLocal` function in CEL parses a given string into a time object according to a specified layout and the local time zone. It's useful for working with local times.
+
+Syntax:
+
+    time.ParseLocal(layout, value)
+
+Where:
+- `layout` is the time layout string.
+- `value` is the string representation of the time to be parsed.
+
+Examples:
+
+    Parsing a local time string:
+    time.ParseLocal("2006-01-02 15:04", "2023-09-26 14:30")  // Evaluates to a local time object for 14:30 on September 26, 2023
+
+    Another example:
+    time.ParseLocal("02-01-2006", "26-09-2023")  // Evaluates to a local time object for September 26, 2023
+
+    Parsing with a different time format:
+    time.ParseLocal("15:04 02-01-2006", "14:30 26-09-2023")  // Includes time of day information in local time zone
+---
+### time.ParseInLocation
+
+The `time.ParseInLocation` function in CEL parses a string into a time object according to a specified layout and time zone. It provides more control over the time zone compared to `time.ParseLocal`.
+
+Syntax:
+
+    time.ParseInLocation(layout, location, value)
+
+Where:
+- `layout` is the time layout string.
+- `location` is the string name of the time zone.
+- `value` is the string representation of the time to be parsed.
+
+Examples:
+
+    Parsing a time string for a specific time zone:
+    time.ParseInLocation("2006-01-02", "America/New_York", "2023-09-26")  // Evaluates to a time object for EST/EDT
+
+    Another example for a different time zone:
+    time.ParseInLocation("02-01-2006", "Europe/London", "26-09-2023")  // Evaluates to a time object for GMT/BST
+
+    Parsing with hour and minute for a specific zone:
+    time.ParseInLocation("15:04 02-01-2006", "Asia/Tokyo", "14:30 26-09-2023")  // Evaluates to a time object for JST
+---
+### time.Now
+
+The `time.Now` function in CEL returns the current time. It's a straightforward way to retrieve the current date and time according to the system's local time zone.
+
+Syntax:
+
+    time.Now()
+
+Examples:
+
+    Getting the current time:
+    time.Now()  // Evaluates to the current date and time
+
+    Another example of retrieving the current time:
+    time.Now()  // Will always return the current moment's date and time
+
+    Yet another example:
+    time.Now()  // Useful for timestamping or time-stamping events in real-time
+---
+### time.Unix
+
+The `time.Unix` function in CEL converts a UNIX time (seconds since the UNIX epoch) into a `time.Time` object for further processing. It accepts a string or number (int or float).
+
+Syntax:
+
+    time.Unix(time)
+
+Where:
+- `time` is the UNIX time to be converted.
+
+Examples:
+
+    Converting a UNIX timestamp to a time object:
+    time.Unix(1601269200)  // Evaluates to a time object representing September 28, 2020, 2:00 AM UTC
+
+    Another example with a different timestamp:
+    time.Unix(1613861200)  // Evaluates to February 20, 2021, 2:00 PM UTC
+
+    Using a string to represent the UNIX time:
+    time.Unix("1626453200")  // Evaluates to July 17, 2021, 2:00 AM UTC
+---
+### time.Nanosecond
+
+The `time.Nanosecond` function in CEL converts an integer value into a duration representing that many nanoseconds. It's useful for operations requiring high precision.
+
+Syntax:
+
+    time.Nanosecond(n)
+
+Where:
+- `n` is the number of nanoseconds.
+
+Examples:
+
+    Converting an integer to a nanosecond duration:
+    time.Nanosecond(1000)  // Evaluates to a duration of 1000 nanoseconds
+
+    Another example with a larger number:
+    time.Nanosecond(1000000)  // Evaluates to a duration of 1 millisecond
+
+    Using a string to represent the number of nanoseconds:
+    time.Nanosecond("1000000000")  // Evaluates to a duration of 1 second
+---
+### time.Microsecond
+
+The `time.Microsecond` function in CEL converts an integer value into a duration representing that many microseconds. It's a middle ground between millisecond and nanosecond precision.
+
+Syntax:
+
+    time.Microsecond(n)
+
+Where:
+- `n` is the number of microseconds.
+
+Examples:
+
+    Converting an integer to a microsecond duration:
+    time.Microsecond(1000)  // Evaluates to a duration of 1 millisecond
+
+    Another example with a larger number:
+    time.Microsecond(1000000)  // Evaluates to a duration of 1 second
+
+    Using a string to represent the number of microseconds:
+    time.Microsecond("1000000000")  // Evaluates to a duration of about 16 minutes and 40 seconds
+---
+### time.Millisecond
+
+The `time.Millisecond` function in CEL converts an integer value into a duration representing that many milliseconds. It's commonly used for operations that don't require extreme precision.
+
+Syntax:
+
+    time.Millisecond(n)
+
+Where:
+- `n` is the number of milliseconds.
+
+Examples:
+
+    Converting an integer to a millisecond duration:
+    time.Millisecond(1000)  // Evaluates to a duration of 1 second
+
+    Another example with a larger number:
+    time.Millisecond(60000)  // Evaluates to a duration of 1 minute
+
+    Using a string to represent the number of milliseconds:
+    time.Millisecond("3600000")  // Evaluates to a duration of 1 hour
+---
+### time.Second
+
+The `time.Second` function in CEL converts an integer value into a duration representing that many seconds. It's a standard unit for many time-related operations.
+
+Syntax:
+
+    time.Second(n)
+
+Where:
+- `n` is the number of seconds.
+
+Examples:
+
+    Converting an integer to a second duration:
+    time.Second(60)  // Evaluates to a duration of 1 minute
+
+    Another example with a larger number:
+    time.Second(3600)  // Evaluates to a duration of 1 hour
+
+    Using a string to represent the number of seconds:
+    time.Second("86400")  // Evaluates to a duration of 1 day
+---
+### time.Minute
+
+The `time.Minute` function in CEL converts an integer value into a duration representing that many minutes. It's useful for operations that involve human-readable time intervals.
+
+Syntax:
+
+    time.Minute(n)
+
+Where:
+- `n` is the number of minutes.
+
+Examples:
+
+    Converting an integer to a minute duration:
+    time.Minute(60)  // Evaluates to a duration of 1 hour
+
+    Another example with a larger number:
+    time.Minute(1440)  // Evaluates to a duration of 1 day
+
+    Using a string to represent the number of minutes:
+    time.Minute("10080")  // Evaluates to a duration of 1 week
+---
+### time.Hour
+
+The `time.Hour` function in CEL converts an integer value into a duration representing that many hours. It's useful for operations that involve larger, human-readable time intervals.
+
+Syntax:
+
+    time.Hour(n)
+
+Where:
+- `n` is the number of hours.
+
+Examples:
+
+    Converting an integer to an hour duration:
+    time.Hour(24)  // Evaluates to a duration of 1 day
+
+    Another example with a larger number:
+    time.Hour(168)  // Evaluates to a duration of 1 week
+
+    Using a string to represent the number of hours:
+    time.Hour("8760")  // Evaluates to a duration of 1 year (ignoring leap years)
+---
+### time.ParseDuration
+
+The `time.ParseDuration` function in CEL parses a string into a duration. It supports various units like "s" for seconds, "m" for minutes, "h" for hours, etc.
+
+Syntax:
+
+    time.ParseDuration(duration)
+
+Where:
+- `duration` is the string representation of the duration.
+
+Examples:
+
+    Parsing a duration string:
+    time.ParseDuration("1h30m")  // Evaluates to a duration of 1 hour and 30 minutes
+
+    Another example with a different format:
+    time.ParseDuration("15m30s")  // Evaluates to a duration of 15 minutes and 30 seconds
+
+    Parsing a negative duration:
+    time.ParseDuration("-2h45m")  // Evaluates to a duration of -2 hours and -45 minutes
+---
+### time.Since
+
+The `time.Since` function in CEL calculates the duration that has elapsed since a given time. It is commonly used to measure the time difference between a specified time and the current moment.
+
+Syntax:
+
+    time.Since(pastTime)
+
+Where:
+- `pastTime` is a `time.Time` object representing a past point in time.
+
+Examples:
+
+    Calculating the time elapsed since a specific past time:
+    time.Since(time.Parse("2006-01-02", "2023-09-26"))  // Evaluates to the duration since September 26, 2023
+
+    Another example with a different past time:
+    time.Since(time.Parse("15:04 02-01-2006", "14:30 26-09-2023"))  // Evaluates to the duration since 14:30 on September 26, 2023
+
+    Using the `time.Now` function for a real-time duration:
+    time.Since(time.Now())  // Always evaluates to a very small duration, as it's the time since "now"
+---
+### time.Until
+
+The `time.Until` function in CEL calculates the duration remaining until a specified future time. It helps in determining the time left for an event or deadline.
+
+Syntax:
+
+    time.Until(futureTime)
+
+Where:
+- `futureTime` is a `time.Time` object representing a future point in time.
+
+Examples:
+
+    Calculating the time remaining until a specific future time:
+    time.Until(time.Parse("2006-01-02", "2023-10-01"))  // Evaluates to the duration until October 1, 2023
+
+    Another example with a different future time:
+    time.Until(time.Parse("15:04 02-01-2006", "16:00 30-09-2023"))  // Evaluates to the duration until 16:00 on September 30, 2023
+
+    Using the `time.Now` function for a real-time duration:
+    time.Until(time.Now())  // Always evaluates to zero, as it's the time until "now"
+---
+### uuid.V1
+
+The `uuid.V1` function in CEL generates a version 1 UUID, which is based on the current MAC address and date/time. It returns a string representation of the generated UUID.
+
+Syntax:
+
+    uuid.V1()
+
+Examples:
+
+    Generating a version 1 UUID:
+    uuid.V1()  // Evaluates to a string like "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+---
+
+### uuid.V4
+
+The `uuid.V4` function in CEL generates a version 4 UUID, which is random. It returns a string representation of the generated UUID.
+
+Syntax:
+
+    uuid.V4()
+
+Examples:
+
+    Generating a random UUID:
+    uuid.V4()  // Evaluates to a string like "550e8400-e29b-41d4-a716-446655440000"
+
+---
+
+### uuid.Nil
+
+The `uuid.Nil` function in CEL returns a nil UUID, which is a UUID with all bits set to zero.
+
+Syntax:
+
+    uuid.Nil()
+
+Examples:
+
+    Retrieving a nil UUID:
+    uuid.Nil()  // Evaluates to "00000000-0000-0000-0000-000000000000"
+
+---
+
+### uuid.IsValid
+
+The `uuid.IsValid` function in CEL checks if the given string is in the correct UUID format. It returns a boolean value indicating the validity.
+
+Syntax:
+
+    uuid.IsValid(uuidString)
+
+Where:
+- `uuidString` is the UUID string you're validating.
+
+Examples:
+
+    Validating a correct UUID format:
+    uuid.IsValid("550e8400-e29b-41d4-a716-446655440000")  // Evaluates to true
+
+    Checking an incorrect UUID format:
+    uuid.IsValid("invalid-uuid")  // Evaluates to false
+
+    Validating a nil UUID:
+    uuid.IsValid("00000000-0000-0000-0000-000000000000")  // Evaluates to true
+
+---
+
+### uuid.Parse
+
+The `uuid.Parse` function in CEL parses a given UUID string for further manipulation or inspection. It returns the parsed UUID.
+
+Syntax:
+
+    uuid.Parse(uuidString)
+
+Where:
+- `uuidString` is the UUID string you're parsing.
+
+Examples:
+
+    Parsing a valid UUID:
+    uuid.Parse("550e8400-e29b-41d4-a716-446655440000")  // Evaluates to the same UUID if valid
