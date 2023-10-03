@@ -5,7 +5,7 @@
   ```bash
   helm repo add flanksource https://flanksource.github.io/charts
   helm repo update
-  helm install canary-checker
+  helm install canary-checker flanksource/canary-checker -n "canary-checker"
   ```
 
 2. Create a new check
