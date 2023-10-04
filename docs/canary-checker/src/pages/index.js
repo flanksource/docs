@@ -7,8 +7,8 @@ function HomePage() {
   return (
     <Layout
       noFooter={true}
-      title="Canary Checker"
-      description="Kubernetes Native Synthetic Monitoring Platform"
+      title="Kubernetes Native Health Check Platform"
+      description="Kubernetes Native Health Check Platform"
     >
       <Home />
     </Layout>

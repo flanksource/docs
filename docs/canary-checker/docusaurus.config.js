@@ -51,6 +51,9 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      metadata: [
+        { name: 'keywords', content: 'health check, synthetic test, continuous testing, kubernetes operator' }
+      ],
 
       algolia: {
         // The application ID provided by Algolia

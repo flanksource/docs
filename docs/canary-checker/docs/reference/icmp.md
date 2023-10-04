@@ -6,8 +6,10 @@ title: ICMP
 
 Performs ICMP (ping) requests for information on ICMP packet loss, duration and response.
 
-:::danger Root Privileges Required
-ICMP requires either root privileges or the following setting applied:
+:::info
+Canary checker supports both `privileged` and `unprivileged` ping modes using the `PING_MODE` environment variable or `pingMode` helm value.
+
+When using `unprivileged` you need to run:
 ```shell
 sudo sysctl -w net.ipv4.ping_group_range="0 2147483647"
 ```
@@ -21,7 +23,8 @@ metadata:
 spec:
   interval: 30
   icmp:
-    - endpoint: api.github.com
+    - name: github
+      endpoint: api.github.com
       thresholdMillis: 600
       packetLossThreshold: 10
       packetCount: 2

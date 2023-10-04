@@ -353,5 +353,17 @@ module.exports = {
         },
       ],
     },
+
+    {
+      type: 'category',
+      label: 'Comparisons',
+      items: [
+        {
+          type: 'doc',
+          id: 'comparisons/blackbox-exporter',
+          label: 'Blackbox Exporter',
+        },
+      ],
+    },
   ],
 };

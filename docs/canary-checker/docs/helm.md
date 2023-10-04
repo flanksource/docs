@@ -7,32 +7,24 @@ image: /static/img/icons/helm.svg
 
 The recommended method for installing Canary Checker is using [helm](https://helm.sh/)
 
-### 1. Install Helm
-
-The following steps will install the latest version of helm
-
-```bash
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
-```
-
-### 2. Add the Flanksource helm repository
+### 1. Add the Flanksource helm repository
 
 ```bash
 helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
 ```
 
-### 3. Deploy Canary Checker using Helm
+### 2. Deploy Canary Checker using Helm
 
 To install into a new `canary-checker` namespace, run
 
 ```bash
-helm install canary-checker \
- --wait \
+helm install \
+  canary-checker \
+  flanksource/canary-checker \
  -n canary-checker \
- --create-namespace flanksource/canary-checker \
+ --create-namespace \
+ --wait \
  -f values.yaml
 ```
 
@@ -53,7 +45,7 @@ flanksource-ui:
 Note the default installation of canary-checker uses an embedded postgres database and does not persist history, see: [Database](database)
 :::
 
-## 4. Create a canary
+## 3. Create a canary
 
 ```bash
 cat <<EOF | kubectl apply -f -
@@ -69,7 +61,7 @@ spec:
 EOF
 ```
 
-## 5. Check the results via the CLI
+## 4. Check the results via the CLI
 
 ```bash
 kubectl get canary
@@ -81,19 +73,21 @@ NAME               INTERVAL   STATUS   LAST CHECK   UPTIME 1H        LATENCY 1H 
 http-check.        30         Passed   13s          18/18 (100.0%)   480ms        13s
 ```
 
-## 6. Flanksource UI
+## 5. Access the dashboard
+
+You can access the web dashboard by forwarding the port:
+
+```bash
+kubectl port-forward  svc/canary-checker-ui 8080:80
+```
+
+[http://localhost:8080](http://localhost:8080)
 
 The canary checker itself only presents an API.  To view the data graphically, the Flanksource UI is required, and is installed by default. The UI should be configured to allow external access to via ingress
 
-|                                    |                                                              |
 | ---------------------------------- | ------------------------------------------------------------ |
 | flanksource-ui.ingress.host        | URL at which the UI will be accessed                         |
 | flanksource-ui.ingress.annotations | Map of annotations required by the ingress controller or certificate issuer |
 | flanksource-ui.ingress.tls         | Map of configuration options for TLS                         |
 
 More details regarding ingress configuration can be found in the [kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/)
-
-
-
-
-
