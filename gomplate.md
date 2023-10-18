@@ -1,6 +1,7 @@
 
+# Encoding
 
-## `base64.Encode`
+## `Encode`
 
 Encode data as a Base64 string. Specifically, this uses the standard Base64 encoding as defined in [RFC4648 &sect;4](https://tools.ietf.org/html/rfc4648#section-4) (and _not_ the URL-safe encoding).
 
@@ -22,29 +23,25 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ base64.Encode "hello world" }}'
+$ '{{ base64.Encode "hello world" }}'
 aGVsbG8gd29ybGQ=
 ```
 ```console
-$ gomplate -i '{{ "hello world" | base64.Encode }}'
+$ '{{ "hello world" | base64.Encode }}'
 aGVsbG8gd29ybGQ=
 ```
 
-## `base64.Decode`
+## `Decode`
 
 Decode a Base64 string. This supports both standard ([RFC4648 &sect;4](https://tools.ietf.org/html/rfc4648#section-4)) and URL-safe ([RFC4648 &sect;5](https://tools.ietf.org/html/rfc4648#section-5)) encodings.
 
-This function outputs the data as a string, so it may not be appropriate
-for decoding binary data. Use [`base64.DecodeBytes`](#base64.DecodeBytes)
+This function outputs the data as a string, so it may not be appropriate for decoding binary data. Use [`base64.DecodeBytes`](#base64.DecodeBytes)
 for binary data.
 
 Usage
 
 ```go
 base64.Decode input
-```
-```go
-input | base64.Decode
 ```
 
 Arguments
@@ -56,21 +53,19 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ base64.Decode "aGVsbG8gd29ybGQ=" }}'
+$ '{{ base64.Decode "aGVsbG8gd29ybGQ=" }}'
 hello world
 ```
 ```console
-$ gomplate -i '{{ "aGVsbG8gd29ybGQ=" | base64.Decode }}'
+$ '{{ "aGVsbG8gd29ybGQ=" | base64.Decode }}'
 hello world
 ```
 
-## `base64.DecodeBytes`
+## `DecodeBytes`
 
 Decode a Base64 string. This supports both standard ([RFC4648 &sect;4](https://tools.ietf.org/html/rfc4648#section-4)) and URL-safe ([RFC4648 &sect;5](https://tools.ietf.org/html/rfc4648#section-5)) encodings.
 
-This function outputs the data as a byte array, so it's most useful for
-outputting binary data that will be processed further.
-Use [`base64.Decode`](#base64.Decode) to output a plain string.
+This function outputs the data as a byte array, so it's most useful for outputting binary data that will be processed further. Use [`base64.Decode`](#base64.Decode) to output a plain string.
 
 Usage
 
@@ -87,11 +82,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ base64.DecodeBytes "aGVsbG8gd29ybGQ=" }}'
+$ '{{ base64.DecodeBytes "aGVsbG8gd29ybGQ=" }}'
 [104 101 108 108 111 32 119 111 114 108 100]
 ```
 ```console
-$ gomplate -i '{{ "aGVsbG8gd29ybGQ=" | base64.DecodeBytes | conv.ToString }}'
+$ '{{ "aGVsbG8gd29ybGQ=" | base64.DecodeBytes | conv.ToString }}'
 hello world
 ```
 ---
@@ -99,22 +94,17 @@ hello world
 These functions help manipulate and query collections of data, like lists (slices, or arrays) and maps (dictionaries).
 
 #### Implementation Note
-For the functions that return an array, a Go `[]interface{}` is returned, regardless of whether or not the
-input was a different type.
+For the functions that return an array, a Go `[]interface{}` is returned, regardless of whether or not the input was a different type.
 
-## `coll.Dict`
+# `Collection`
 
-**Alias:** `dict`
+## `dict`
 
-Dict is a convenience function that creates a map with string keys.
-Provide arguments as key/value pairs. If an odd number of arguments
-is provided, the last is used as the key, and an empty string is
-set as the value.
+Dict is a convenience function that creates a map with string keys. Provide arguments as key/value pairs. If an odd number of arguments is provided, the last is used as the key, and an empty string is set as the value.
 
 All keys are converted to strings.
 
-This function is equivalent to [Sprig's `dict`](http://masterminds.github.io/sprig/dicts.html#dict)
-function, as used in [Helm templates](https://docs.helm.sh/chart_template_guide#template-functions-and-pipelines).
+This function is equivalent to [Sprig's `dict`](http://masterminds.github.io/sprig/dicts.html#dict) function, as used in [Helm templates](https://docs.helm.sh/chart_template_guide#template-functions-and-pipelines).
 
 For creating more complex maps, see [`data.JSON`](../data/#data-json) or [`data.YAML`](../data/#data-yaml).
 
@@ -135,10 +125,10 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ coll.Dict "name" "Frank" "age" 42 | data.ToYAML }}'
+$ '{{ coll.Dict "name" "Frank" "age" 42 | data.ToYAML }}'
 age: 42
 name: Frank
-$ gomplate -i '{{ dict 1 2 3 | toJSON }}'
+$ '{{ dict 1 2 3 | toJSON }}'
 {"1":2,"3":""}
 ```
 ```console
@@ -151,9 +141,7 @@ Hello world!
 Hello everybody!
 ```
 
-## `coll.Slice`
-
-**Alias:** `slice`
+## `slice`
 
 Creates a slice (like an array or list). Useful when needing to `range` over a bunch of variables.
 
@@ -172,15 +160,14 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }}'
+$ '{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }}'
 Hello, Bart
 Hello, Lisa
 Hello, Maggie
 ```
 
-## `coll.Has`
 
-**Alias:** `has`
+## `has`
 
 Reports whether a given object has a property with the given key, or whether a given array/slice contains the given value. Can be used with `if` to prevent the template from trying to access a non-existent property in an object.
 
@@ -200,25 +187,24 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $l := slice "foo" "bar" "baz" }}there is {{ if has $l "bar" }}a{{else}}no{{end}} bar'
+$ '{{ $l := slice "foo" "bar" "baz" }}there is {{ if has $l "bar" }}a{{else}}no{{end}} bar'
 there is a bar
 ```
 ```console
 $ export DATA='{"foo": "bar"}'
-$ gomplate -i '{{ $o := data.JSON (getenv "DATA") -}}
+$ '{{ $o := data.JSON (getenv "DATA") -}}
 {{ if (has $o "foo") }}{{ $o.foo }}{{ else }}THERE IS NO FOO{{ end }}'
 bar
 ```
 ```console
 $ export DATA='{"baz": "qux"}'
-$ gomplate -i '{{ $o := data.JSON (getenv "DATA") -}}
+$ '{{ $o := data.JSON (getenv "DATA") -}}
 {{ if (has $o "foo") }}{{ $o.foo }}{{ else }}THERE IS NO FOO{{ end }}'
 THERE IS NO FOO
 ```
 
-## `coll.JSONPath`
 
-**Alias:** `jsonpath`
+## `jsonpath`
 
 Extracts portions of an input object or list using a [JSONPath][] expression.
 
@@ -247,19 +233,16 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ .books | jsonpath `$..works[?( @.edition_count > 400 )].title` }}' -c books=https://openlibrary.org/subjects/fantasy.json
+$ '{{ .books | jsonpath `$..works[?( @.edition_count > 400 )].title` }}' -c books=https://openlibrary.org/subjects/fantasy.json
 [Alice's Adventures in Wonderland Gulliver's Travels]
 ```
 
-## `coll.JQ`
 
-**Alias:** `jq`
+## `jq`
 
 Filters an input object or list using the [jq](https://stedolan.github.io/jq/) language, as implemented by [gojq](https://github.com/itchyny/gojq).
 
-Any JSON datatype may be used as input (NOTE: strings are not JSON-parsed but passed in as is).
-If the expression results in multiple items (no matter if streamed or as an array) they are wrapped in an array.
-Otherwise a single item is returned (even if resulting in an array with a single contained element).
+Any JSON datatype may be used as input (NOTE: strings are not JSON-parsed but passed in as is). If the expression results in multiple items (no matter if streamed or as an array) they are wrapped in an array. Otherwise a single item is returned (even if resulting in an array with a single contained element).
 
 JQ filter expressions can be tested at https://jqplay.org/
 
@@ -293,14 +276,12 @@ $ gomplate \
 map[authors:[Lewis Carroll] published:1865 title:Alice's Adventures in Wonderland]
 ```
 
-## `coll.Keys`
 
-**Alias:** `keys`
+## `keys`
 
 Return a list of keys in one or more maps.
 
-The keys will be ordered first by map position (if multiple maps are given),
-then alphabetically.
+The keys will be ordered first by map position (if multiple maps are given), then alphabetically.
 
 See also [`coll.Values`](#coll-values).
 
@@ -322,20 +303,18 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ coll.Keys (dict "foo" 1 "bar" 2) }}'
+$ '{{ coll.Keys (dict "foo" 1 "bar" 2) }}'
 [bar foo]
-$ gomplate -i '{{ $map1 := dict "foo" 1 "bar" 2 -}}{{ $map2 := dict "baz" 3 "qux" 4 -}}{{ coll.Keys $map1 $map2 }}'
+$ '{{ $map1 := dict "foo" 1 "bar" 2 -}}{{ $map2 := dict "baz" 3 "qux" 4 -}}{{ coll.Keys $map1 $map2 }}'
 [bar foo baz qux]
 ```
 
-## `coll.Values`
 
-**Alias:** `values`
+## `values`
 
 Return a list of values in one or more maps.
 
-The values will be ordered first by map position (if multiple maps are given),
-then alphabetically by key.
+The values will be ordered first by map position (if multiple maps are given), then alphabetically by key.
 
 See also [`coll.Keys`](#coll-keys).
 
@@ -357,15 +336,14 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ coll.Values (dict "foo" 1 "bar" 2) }}'
+$ '{{ coll.Values (dict "foo" 1 "bar" 2) }}'
 [2 1]
-$ gomplate -i '{{ $map1 := dict "foo" 1 "bar" 2 -}}{{ $map2 := dict "baz" 3 "qux" 4 -}}{{ coll.Values $map1 $map2 }}'
+$ '{{ $map1 := dict "foo" 1 "bar" 2 -}}{{ $map2 := dict "baz" 3 "qux" 4 -}}{{ coll.Values $map1 $map2 }}'
 [2 1 3 4]
 ```
 
-## `coll.Append`
 
-**Alias:** `append`
+## `append`
 
 Append a value to the end of a list.
 
@@ -392,13 +370,12 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ slice 1 1 2 3 | append 5 }}'
+$ '{{ slice 1 1 2 3 | append 5 }}'
 [1 1 2 3 5]
 ```
 
-## `coll.Prepend`
 
-**Alias:** `prepend`
+## `prepend`
 
 Prepend a value to the beginning of a list.
 
@@ -425,13 +402,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ slice 4 3 2 1 | prepend 5 }}'
+$ '{{ slice 4 3 2 1 | prepend 5 }}'
 [5 4 3 2 1]
 ```
 
-## `coll.Uniq`
-
-**Alias:** `uniq`
+## `uniq`
 
 Remove any duplicate values from the list, without changing order.
 
@@ -455,16 +430,14 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ slice 1 2 3 2 3 4 1 5 | uniq }}'
+$ '{{ slice 1 2 3 2 3 4 1 5 | uniq }}'
 [1 2 3 4 5]
 ```
 
-## `coll.Flatten`
 
-**Alias:** `flatten`
+## `flatten`
 
-Flatten a nested list. Defaults to completely flattening all nested lists,
-but can be limited with `depth`.
+Flatten a nested list. Defaults to completely flattening all nested lists, but can be limited with `depth`.
 
 _Note that this function does not change the given list; it always produces a new one._
 
@@ -487,17 +460,16 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "[[1,2],[],[[3,4],[[[5],6],7]]]" | jsonArray | flatten }}'
+$ '{{ "[[1,2],[],[[3,4],[[[5],6],7]]]" | jsonArray | flatten }}'
 [1 2 3 4 5 6 7]
 ```
 ```console
-$ gomplate -i '{{ coll.Flatten 2 ("[[1,2],[],[[3,4],[[[5],6],7]]]" | jsonArray) }}'
+$ '{{ coll.Flatten 2 ("[[1,2],[],[[3,4],[[[5],6],7]]]" | jsonArray) }}'
 [1 2 3 4 [[5] 6] 7]
 ```
 
-## `coll.Reverse`
 
-**Alias:** `reverse`
+## `reverse`
 
 Reverse a list.
 
@@ -521,17 +493,14 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ slice 4 3 2 1 | reverse }}'
+$ '{{ slice 4 3 2 1 | reverse }}'
 [1 2 3 4]
 ```
 
-## `coll.Sort`
 
-**Alias:** `sort`
+## `sort`
 
-Sort a given list. Uses the natural sort order if possible. For inputs
-that are not sortable (either because the elements are of different types,
-or of an un-sortable type), the input will simply be returned, unmodified.
+Sort a given list. Uses the natural sort order if possible. For inputs that are not sortable (either because the elements are of different types, or of an un-sortable type), the input will simply be returned, unmodified.
 
 Maps and structs can be sorted by a named key.
 
@@ -556,11 +525,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ slice "foo" "bar" "baz" | coll.Sort }}'
+$ '{{ slice "foo" "bar" "baz" | coll.Sort }}'
 [bar baz foo]
 ```
 ```console
-$ gomplate -i '{{ sort (slice 3 4 1 2 5) }}'
+$ '{{ sort (slice 3 4 1 2 5) }}'
 [1 2 3 4 5]
 ```
 ```console
@@ -573,16 +542,11 @@ baz
 bar
 ```
 
-## `coll.Merge`
 
-**Alias:** `merge`
+## `merge`
 
-Merge maps together by overriding src with dst.
-
-In other words, the src map can be configured the "default" map, whereas the dst
-map can be configured the "overrides".
-
-Many source maps can be provided. Precedence is in left-to-right order.
+Merge maps together by overriding src with dst. In other words, the src map can be configured the "default" map, whereas the dst
+map can be configured the "overrides". Many source maps can be provided. Precedence is in left-to-right order.
 
 _Note that this function does not modify the input._
 
@@ -605,20 +569,19 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $default := dict "foo" 1 "bar" 2}}
+$ '{{ $default := dict "foo" 1 "bar" 2}}
 {{ $config := dict "foo" 8 }}
 {{ merge $config $default }}'
 map[bar:2 foo:8]
 ```
 ```console
-$ gomplate -i '{{ $dst := dict "foo" 1 "bar" 2 }}
+$ '{{ $dst := dict "foo" 1 "bar" 2 }}
 {{ $src1 := dict "foo" 8 "baz" 4 }}
 {{ $src2 := dict "foo" 3 "bar" 5 }}
 {{ coll.Merge $dst $src1 $src2 }}'
 map[foo:1 bar:5 baz:4]
 ```
 
-## `coll.Pick`
 
 Given a map, returns a new map with any entries that have the given keys.
 
@@ -647,12 +610,10 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
+$ '{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
 {{ coll.Pick "foo" "baz" $data }}'
 map[baz:3 foo:1]
 ```
-
-## `coll.Omit`
 
 Given a map, returns a new map without any entries that have the given keys.
 
@@ -681,15 +642,14 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
+$ '{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
 {{ coll.Omit "foo" "baz" $data }}'
 map[bar:2]
 ```
 
+# Convert
 
-## `conv.Bool`
-
-**Alias:** `bool`
+## `bool`
 
 **Note:** See also [`conv.ToBool`](#conv-tobool) for a more flexible variant.
 
@@ -724,16 +684,11 @@ $ FOO=true gomplate < input.tmpl
 foo
 ```
 
-## `conv.Default`
+## `default`
 
-**Alias:** `default`
+Provides a default value given an empty input. Empty inputs are `0` for numeric types, `""` for strings, `false` for booleans, empty arrays/maps, and `nil`.
 
-Provides a default value given an empty input. Empty inputs are `0` for numeric
-types, `""` for strings, `false` for booleans, empty arrays/maps, and `nil`.
-
-Note that this will not provide a default for the case where the input is undefined
-(i.e. referencing things like `.foo` where there is no `foo` field of `.`), but
-[`conv.Has`](#conv-has) can be used for that.
+Note that this will not provide a default for the case where the input is undefined (i.e. referencing things like `.foo` where there is no `foo` field of `.`), but [`conv.Has`](#conv-has) can be used for that.
 
 Usage
 
@@ -754,24 +709,18 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "" | default "foo" }} {{ "bar" | default "baz" }}'
+$ '{{ "" | default "foo" }} {{ "bar" | default "baz" }}'
 foo bar
 ```
 
-## `conv.Dict` _(deprecated)_
-**Deprecation Notice:** Renamed to [`coll.Dict`](#coll-dict)
+## `dict`
 
-**Alias:** `dict`
-
-Dict is a convenience function that creates a map with string keys.
-Provide arguments as key/value pairs. If an odd number of arguments
-is provided, the last is used as the key, and an empty string is
-set as the value.
+Dict is a convenience function that creates a map with string keys. Provide arguments as key/value pairs. If an odd number of arguments
+is provided, the last is used as the key, and an empty string is set as the value.
 
 All keys are converted to strings.
 
-This function is equivalent to [Sprig's `dict`](http://masterminds.github.io/sprig/dicts.html#dict)
-function, as used in [Helm templates](https://docs.helm.sh/chart_template_guide#template-functions-and-pipelines).
+This function is equivalent to [Sprig's `dict`](http://masterminds.github.io/sprig/dicts.html#dict) function, as used in [Helm templates](https://docs.helm.sh/chart_template_guide#template-functions-and-pipelines).
 
 For creating more complex maps, see [`data.JSON`](../data/#data-json) or [`data.YAML`](../data/#data-yaml).
 
@@ -792,10 +741,10 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ conv.Dict "name" "Frank" "age" 42 | data.ToYAML }}'
+$ '{{ conv.Dict "name" "Frank" "age" 42 | data.ToYAML }}'
 age: 42
 name: Frank
-$ gomplate -i '{{ dict 1 2 3 | toJSON }}'
+$ '{{ dict 1 2 3 | toJSON }}'
 {"1":2,"3":""}
 ```
 ```console
@@ -808,10 +757,7 @@ Hello world!
 Hello everybody!
 ```
 
-## `conv.Slice` _(deprecated)_
-**Deprecation Notice:** Renamed to [`coll.Slice`](#coll-slice)
-
-**Alias:** `slice`
+## `slice`
 
 Creates a slice (like an array or list). Useful when needing to `range` over a bunch of variables.
 
@@ -830,16 +776,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }}'
+$ '{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }}'
 Hello, Bart
 Hello, Lisa
 Hello, Maggie
 ```
 
-## `conv.Has` _(deprecated)_
-**Deprecation Notice:** Renamed to [`coll.Has`](#coll-has)
-
-**Alias:** `has`
+## `has`
 
 Reports whether a given object has a property with the given key, or whether a given array/slice contains the given value. Can be used with `if` to prevent the template from trying to access a non-existent property in an object.
 
@@ -859,25 +802,24 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $l := slice "foo" "bar" "baz" }}there is {{ if has $l "bar" }}a{{else}}no{{end}} bar'
+$ '{{ $l := slice "foo" "bar" "baz" }}there is {{ if has $l "bar" }}a{{else}}no{{end}} bar'
 there is a bar
 ```
 ```console
 $ export DATA='{"foo": "bar"}'
-$ gomplate -i '{{ $o := data.JSON (getenv "DATA") -}}
+$ '{{ $o := data.JSON (getenv "DATA") -}}
 {{ if (has $o "foo") }}{{ $o.foo }}{{ else }}THERE IS NO FOO{{ end }}'
 bar
 ```
 ```console
 $ export DATA='{"baz": "qux"}'
-$ gomplate -i '{{ $o := data.JSON (getenv "DATA") -}}
+$ '{{ $o := data.JSON (getenv "DATA") -}}
 {{ if (has $o "foo") }}{{ $o.foo }}{{ else }}THERE IS NO FOO{{ end }}'
 THERE IS NO FOO
 ```
 
-## `conv.Join`
 
-**Alias:** `join`
+## `join`
 
 Concatenates the elements of an array to create a string. The separator string `sep` is placed between elements in the resulting string.
 
@@ -897,13 +839,12 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $a := slice 1 2 3 }}{{ join $a "-" }}'
+$ '{{ $a := slice 1 2 3 }}{{ join $a "-" }}'
 1-2-3
 ```
 
-## `conv.URL`
 
-**Alias:** `urlParse`
+## `urlParse`
 
 Parses a string as a URL for later use. Equivalent to [url.Parse](https://golang.org/pkg/net/url/#Parse)
 
@@ -939,11 +880,11 @@ The path is /foo/bar
 ```
 _Call `Redacted` to hide the password in the output:_
 ```
-$ gomplate -i '{{ (conv.URL "https://user:supersecret@example.com").Redacted }}'
+$ '{{ (conv.URL "https://user:supersecret@example.com").Redacted }}'
 https://user:xxxxx@example.com
 ```
 
-## `conv.ParseInt`
+## `ParseInt`
 
 _**Note:**_ See [`conv.ToInt64`](#conv-toint64) instead for a simpler and more flexible variant of this function.
 
@@ -970,7 +911,7 @@ $ HEXVAL=7C0 gomplate < input.tmpl
 The value in decimal is 1984
 ```
 
-## `conv.ParseFloat`
+## `ParseFloat`
 
 _**Note:**_ See [`conv.ToFloat`](#conv-tofloat) instead for a simpler and more flexible variant of this function.
 
@@ -998,7 +939,7 @@ $ PI=3.14159265359 gomplate < input.tmpl
 pi is greater than 3
 ```
 
-## `conv.ParseUint`
+## `ParseUint`
 
 Parses a string as an uint64 for later use. Equivalent to [strconv.ParseUint](https://golang.org/pkg/strconv/#ParseUint)
 
@@ -1023,7 +964,7 @@ $ BIG=FFFFFFFFFFFFFFFF gomplate < input.tmpl
 18446744073709551615 is max uint64
 ```
 
-## `conv.Atoi`
+## `.Atoi`
 
 _**Note:**_ See [`conv.ToInt`](#conv-toint) and [`conv.ToInt64`](#conv-toint64) instead for simpler and more flexible variants of this function.
 
@@ -1053,11 +994,9 @@ $ NUMBER=21 gomplate < input.tmpl
 The number is greater than 5
 ```
 
-## `conv.ToBool`
+## `ToBool`
 
-Converts the input to a boolean value.
-Possible `true` values are: `1` or the strings `"t"`, `"true"`, or `"yes"`
-(any capitalizations). All other values are considered `false`.
+Converts the input to a boolean value. Possible `true` values are: `1` or the strings `"t"`, `"true"`, or `"yes"` (any capitalizations). All other values are considered `false`.
 
 Usage
 
@@ -1077,17 +1016,15 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ conv.ToBool "yes" }} {{ conv.ToBool true }} {{ conv.ToBool "0x01" }}'
+$ '{{ conv.ToBool "yes" }} {{ conv.ToBool true }} {{ conv.ToBool "0x01" }}'
 true true true
-$ gomplate -i '{{ conv.ToBool false }} {{ conv.ToBool "blah" }} {{ conv.ToBool 0 }}'
+$ '{{ conv.ToBool false }} {{ conv.ToBool "blah" }} {{ conv.ToBool 0 }}'
 false false false
 ```
 
-## `conv.ToBools`
+## `ToBools`
 
-Converts a list of inputs to an array of boolean values.
-Possible `true` values are: `1` or the strings `"t"`, `"true"`, or `"yes"`
-(any capitalizations). All other values are considered `false`.
+Converts a list of inputs to an array of boolean values. Possible `true` values are: `1` or the strings `"t"`, `"true"`, or `"yes"` (any capitalizations). All other values are considered `false`.
 
 Usage
 
@@ -1107,20 +1044,17 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ conv.ToBools "yes" true "0x01" }}'
+$ '{{ conv.ToBools "yes" true "0x01" }}'
 [true true true]
-$ gomplate -i '{{ conv.ToBools false "blah" 0 }}'
+$ '{{ conv.ToBools false "blah" 0 }}'
 [false false false]
 ```
 
-## `conv.ToInt64`
+## `ToInt64`
 
 Converts the input to an `int64` (64-bit signed integer).
 
-This function attempts to convert most types of input (strings, numbers,
-and booleans), but behaviour when the input can not be converted is
-undefined and subject to change. Unconvertable inputs may result in
-errors, or `0` or `-1`.
+This function attempts to convert most types of input (strings, numbers, and booleans), but behaviour when the input can not be converted is undefined and subject to change. Unconvertable inputs may result in errors, or `0` or `-1`.
 
 Floating-point numbers (with decimal points) are truncated.
 
@@ -1139,29 +1073,24 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{conv.ToInt64 "9223372036854775807"}}'
+$ '{{conv.ToInt64 "9223372036854775807"}}'
 9223372036854775807
 ```
 ```console
-$ gomplate -i '{{conv.ToInt64 "0x42"}}'
+$ '{{conv.ToInt64 "0x42"}}'
 66
 ```
 ```console
-$ gomplate -i '{{conv.ToInt64 true }}'
+$ '{{conv.ToInt64 true }}'
 1
 ```
 
-## `conv.ToInt`
+## `ToInt`
 
-Converts the input to an `int` (signed integer, 32- or 64-bit depending
-on platform). This is similar to [`conv.ToInt64`](#conv-toint64) on 64-bit
-platforms, but is useful when input to another function must be provided
-as an `int`.
+Converts the input to an `int` (signed integer, 32- or 64-bit depending on platform). This is similar to [`conv.ToInt64`](#conv-toint64) on 64-bit platforms, but is useful when input to another function must be provided as an `int`.
 
-On 32-bit systems, given a number that is too large to fit in an `int`,
-the result is `-1`. This is done to protect against
-[CWE-190](https://cwe.mitre.org/data/definitions/190.html) and
-[CWE-681](https://cwe.mitre.org/data/definitions/681.html).
+On 32-bit systems, given a number that is too large to fit in an `int`, the result is `-1`. This is done to protect against
+[CWE-190](https://cwe.mitre.org/data/definitions/190.html) and [CWE-681](https://cwe.mitre.org/data/definitions/681.html).
 
 See also [`conv.ToInt64`](#conv-toint64).
 
@@ -1180,19 +1109,19 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{conv.ToInt "9223372036854775807"}}'
+$ '{{conv.ToInt "9223372036854775807"}}'
 9223372036854775807
 ```
 ```console
-$ gomplate -i '{{conv.ToInt "0x42"}}'
+$ '{{conv.ToInt "0x42"}}'
 66
 ```
 ```console
-$ gomplate -i '{{conv.ToInt true }}'
+$ '{{conv.ToInt true }}'
 1
 ```
 
-## `conv.ToInt64s`
+## `ToInt64s`
 
 Converts the inputs to an array of `int64`s.
 
@@ -1217,7 +1146,7 @@ gomplate -i '{{ conv.ToInt64s true 0x42 "123,456.99" "1.2345e+3"}}'
 [1 66 123456 1234]
 ```
 
-## `conv.ToInts`
+## `ToInts`
 
 Converts the inputs to an array of `int`s.
 
@@ -1242,14 +1171,11 @@ gomplate -i '{{ conv.ToInts true 0x42 "123,456.99" "1.2345e+3"}}'
 [1 66 123456 1234]
 ```
 
-## `conv.ToFloat64`
+## `ToFloat64`
 
 Converts the input to a `float64`.
 
-This function attempts to convert most types of input (strings, numbers,
-and booleans), but behaviour when the input can not be converted is
-undefined and subject to change. Unconvertable inputs may result in
-errors, or `0` or `-1`.
+This function attempts to convert most types of input (strings, numbers, and booleans), but behaviour when the input can not be converted is undefined and subject to change. Unconvertable inputs may result in errors, or `0` or `-1`.
 
 Usage
 
@@ -1266,13 +1192,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ conv.ToFloat64 "8.233e-1"}}'
+$ '{{ conv.ToFloat64 "8.233e-1"}}'
 0.8233
-$ gomplate -i '{{ conv.ToFloat64 "9,000.09"}}'
+$ '{{ conv.ToFloat64 "9,000.09"}}'
 9000.09
 ```
 
-## `conv.ToFloat64s`
+## `ToFloat64s`
 
 Converts the inputs to an array of `float64`s.
 
@@ -1293,11 +1219,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ conv.ToFloat64s true 0x42 "123,456.99" "1.2345e+3"}}'
+$ '{{ conv.ToFloat64s true 0x42 "123,456.99" "1.2345e+3"}}'
 [1 66 123456.99 1234.5]
 ```
 
-## `conv.ToString`
+## `ToString`
 
 Converts the input (of any type) to a `string`.
 
@@ -1318,15 +1244,15 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ conv.ToString 0xFF }}'
+$ '{{ conv.ToString 0xFF }}'
 255
-$ gomplate -i '{{ dict "foo" "bar" | conv.ToString}}'
+$ '{{ dict "foo" "bar" | conv.ToString}}'
 map[foo:bar]
-$ gomplate -i '{{ conv.ToString nil }}'
+$ '{{ conv.ToString nil }}'
 nil
 ```
 
-## `conv.ToStrings`
+## `ToStrings`
 
 Converts the inputs (of any type) to an array of `string`s
 
@@ -1347,505 +1273,12 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ conv.ToStrings nil 42 true 0xF (slice 1 2 3) }}'
+$ '{{ conv.ToStrings nil 42 true 0xF (slice 1 2 3) }}'
 [nil 42 true 15 [1 2 3]]
 ```
 
 
-
-## `crypto.Bcrypt`
-
-Uses the [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) password hashing algorithm to generate the hash of a given string. Wraps the [`golang.org/x/crypto/brypt`](https://godoc.org/golang.org/x/crypto/bcrypt) package.
-
-Usage
-
-```go
-crypto.Bcrypt [cost] input
-```
-```go
-input | crypto.Bcrypt [cost]
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `cost` | _(optional)_ the cost, as a number from `4` to `31` - defaults to `10` |
-| `input` | _(required)_ the input to hash, usually a password |
-
-Examples
-
-```console
-$ gomplate -i '{{ "foo" | crypto.Bcrypt }}'
-$2a$10$jO8nKZ1etGkKK7I3.vPti.fYDAiBqwazQZLUhaFoMN7MaLhTP0SLy
-```
-```console
-$ gomplate -i '{{ crypto.Bcrypt 4 "foo" }}
-$2a$04$zjba3N38sjyYsw0Y7IRCme1H4gD0MJxH8Ixai0/sgsrf7s1MFUK1C
-```
-
-## `crypto.DecryptAES` _(experimental)_
-**Experimental:** This function is [_experimental_][experimental] and may be enabled with the [`--experimental`][experimental] flag.
-
-[experimental]: ../config/#experimental
-
-Decrypts the given input using the given key. By default,
-uses AES-256-CBC, but supports 128- and 192-bit keys as well.
-
-This function prints the output as a string. Note that this may result in
-unreadable text if the decrypted payload is binary. See
-[`crypto.DecryptAESBytes`](#crypto.DecryptAESBytes) for another method.
-
-This function is suitable for decrypting data that was encrypted by
-Helm's `encryptAES` function, when the input is base64-decoded, and when
-using 256-bit keys.
-
-Usage
-
-```go
-crypto.DecryptAES key [keyBits] input
-```
-```go
-input | crypto.DecryptAES key [keyBits]
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `key` | _(required)_ the key to use for decryption |
-| `keyBits` | _(optional)_ the key length to use - defaults to `256` |
-| `input` | _(required)_ the input to decrypt |
-
-Examples
-
-```console
-$ gomplate -i '{{ base64.Decode "Gp2WG/fKOUsVlhcpr3oqgR+fRUNBcO1eZJ9CW+gDI18=" | crypto.DecryptAES "swordfish" 128 }}'
-hello world
-```
-
-## `crypto.DecryptAESBytes` _(experimental)_
-**Experimental:** This function is [_experimental_][experimental] and may be enabled with the [`--experimental`][experimental] flag.
-
-[experimental]: ../config/#experimental
-
-Decrypts the given input using the given key. By default,
-uses AES-256-CBC, but supports 128- and 192-bit keys as well.
-
-This function outputs the raw byte array, which may be sent as input to
-other functions.
-
-This function is suitable for decrypting data that was encrypted by
-Helm's `encryptAES` function, when the input is base64-decoded, and when
-using 256-bit keys.
-
-Usage
-
-```go
-crypto.DecryptAESBytes key [keyBits] input
-```
-```go
-input | crypto.DecryptAESBytes key [keyBits]
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `key` | _(required)_ the key to use for decryption |
-| `keyBits` | _(optional)_ the key length to use - defaults to `256` |
-| `input` | _(required)_ the input to decrypt |
-
-Examples
-
-```console
-$ gomplate -i '{{ base64.Decode "Gp2WG/fKOUsVlhcpr3oqgR+fRUNBcO1eZJ9CW+gDI18=" | crypto.DecryptAES "swordfish" 128 }}'
-hello world
-```
-
-## `crypto.EncryptAES` _(experimental)_
-**Experimental:** This function is [_experimental_][experimental] and may be enabled with the [`--experimental`][experimental] flag.
-
-[experimental]: ../config/#experimental
-
-Encrypts the given input using the given key. By default,
-uses AES-256-CBC, but supports 128- and 192-bit keys as well.
-
-This function is suitable for encrypting data that will be decrypted by
-Helm's `decryptAES` function, when the output is base64-encoded, and when
-using 256-bit keys.
-
-Usage
-
-```go
-crypto.EncryptAES key [keyBits] input
-```
-```go
-input | crypto.EncryptAES key [keyBits]
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `key` | _(required)_ the key to use for encryption |
-| `keyBits` | _(optional)_ the key length to use - defaults to `256` |
-| `input` | _(required)_ the input to encrypt |
-
-Examples
-
-```console
-$ gomplate -i '{{ "hello world" | crypto.EncryptAES "swordfish" 128 | base64.Encode }}'
-MnRutHovsh/9JN3YrJtBVjZtI6xXZh33bCQS2iZ4SDI=
-```
-
-## `crypto.ECDSAGenerateKey` _(experimental)_
-**Experimental:** This function is [_experimental_][experimental] and may be enabled with the [`--experimental`][experimental] flag.
-
-[experimental]: ../config/#experimental
-
-Generate a new Elliptic Curve Private Key and output in
-PEM-encoded PKCS#1 ASN.1 DER form.
-
-Go's standard NIST P-224, P-256, P-384, and P-521 elliptic curves are all
-supported.
-
-Default curve is P-256 and can be overridden with the optional `curve`
-parameter.
-
-Usage
-
-```go
-crypto.ECDSAGenerateKey [curve]
-```
-```go
-curve | crypto.ECDSAGenerateKey
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `curve` | _(optional)_ One of Go's standard NIST curves, P-224, P-256, P-384, or P-521 -
-defaults to P-256.
- |
-
-Examples
-
-```console
-$ gomplate -i '{{ crypto.ECDSAGenerateKey }}'
------BEGIN EC PRIVATE KEY-----
-...
-```
-
-## `crypto.ECDSADerivePublicKey` _(experimental)_
-**Experimental:** This function is [_experimental_][experimental] and may be enabled with the [`--experimental`][experimental] flag.
-
-[experimental]: ../config/#experimental
-
-Derive a public key from an elliptic curve private key and output in PKIX
-ASN.1 DER form.
-
-Usage
-
-```go
-crypto.ECDSADerivePublicKey key
-```
-```go
-key | crypto.ECDSADerivePublicKey
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `key` | _(required)_ the private key to derive a public key from |
-
-Examples
-
-```console
-$ gomplate -i '{{ crypto.ECDSAGenerateKey | crypto.ECDSADerivePublicKey }}'
------BEGIN PUBLIC KEY-----
-...
-```
-```console
-$ gomplate -d key=priv.pem -i '{{ crypto.ECDSADerivePublicKey (include "key") }}'
------BEGIN PUBLIC KEY-----
-MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBZvTS1wcCJSsGYQUVoSVctynkuhke
-kikB38iNwx/80jzdm+Z8OmRGlwH6OE9NX1MyxjvYMimhcj6zkaOKh1/HhMABrfuY
-+hIz6+EUt/Db51awO7iCuRly5L4TZ+CnMAsIbtUOqsqwSQDtv0AclAuogmCst75o
-aztsmrD79OXXnhUlURI=
------END PUBLIC KEY-----
-```
-
-## `crypto.PBKDF2`
-
-Run the Password-Based Key Derivation Function &num;2 as defined in
-[RFC 8018 (PKCS &num;5 v2.1)](https://tools.ietf.org/html/rfc8018#section-5.2).
-
-This function outputs the binary result as a hexadecimal string.
-
-Usage
-
-```go
-crypto.PBKDF2 password salt iter keylen [hashfunc]
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `password` | _(required)_ the password to use to derive the key |
-| `salt` | _(required)_ the salt |
-| `iter` | _(required)_ iteration count |
-| `keylen` | _(required)_ desired length of derived key |
-| `hashfunc` | _(optional)_ the hash function to use - must be one of the allowed functions (either in the SHA-1 or SHA-2 sets). Defaults to `SHA-1` |
-
-Examples
-
-```console
-$ gomplate -i '{{ crypto.PBKDF2 "foo" "bar" 1024 8 }}'
-32c4907c3c80792b
-```
-
-## `crypto.RSADecrypt` _(experimental)_
-**Experimental:** This function is [_experimental_][experimental] and may be enabled with the [`--experimental`][experimental] flag.
-
-[experimental]: ../config/#experimental
-
-Decrypt an RSA-encrypted input and print the output as a string. Note that
-this may result in unreadable text if the decrypted payload is binary. See
-[`crypto.RSADecryptBytes`](#crypto.RSADecryptBytes) for a safer method.
-
-The private key must be a PEM-encoded RSA private key in PKCS#1, ASN.1 DER
-form, which typically begins with `-----BEGIN RSA PRIVATE KEY-----`.
-
-The input text must be plain ciphertext, as a byte array, or safely
-convertible to a byte array. To decrypt base64-encoded input, you must
-first decode with the [`base64.DecodeBytes`](../base64/#base64.DecodeBytes)
-function.
-
-Usage
-
-```go
-crypto.RSADecrypt key input
-```
-```go
-input | crypto.RSADecrypt key
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `key` | _(required)_ the private key to decrypt the input with |
-| `input` | _(required)_ the encrypted input |
-
-Examples
-
-```console
-$ gomplate -c pubKey=./testPubKey -c privKey=./testPrivKey \
-  -i '{{ $enc := "hello" | crypto.RSAEncrypt .pubKey -}}
-  {{ crypto.RSADecrypt .privKey $enc }}'
-hello
-```
-```console
-$ export ENCRYPTED="ScTcX1NZ6p/EeDIf6R7FKLcDFjvP98YgiBhyhPE4jtehajIyTKP1GL8C72qbAWrgdQ6A2cSVjoyo3viqf/PZxpcBDUUMDJuemTaJqUUjMWaDuPG37mQbmRtcvFTuUhw1qSbKyHorDOgTX5d4DvWV4otycGtBT6dXhnmmb5V72J/w3z68vtTJ21m9wREFD7LrYVHdFFtRZiIyMBAF0ngQ+hcujrxilnmgzPkEAg6E7Ccctn28Ie2c4CojrwRbNNxXNlIWCCkC/8Vq8qlDfZ70a+BsTmJDuScE6BZbTyteo9uGYrLn+bTIHNDj90AeLCKUTyWLUJ5Edi9LhlKVBoJUNQ=="
-$ gomplate -c ciphertext=env:///ENCRYPTED -c privKey=./testPrivKey \
-  -i '{{ base64.DecodeBytes .ciphertext | crypto.RSADecrypt .privKey }}'
-hello
-```
-
-## `crypto.RSADecryptBytes` _(experimental)_
-**Experimental:** This function is [_experimental_][experimental] and may be enabled with the [`--experimental`][experimental] flag.
-
-[experimental]: ../config/#experimental
-
-Decrypt an RSA-encrypted input and output the decrypted byte array.
-
-The private key must be a PEM-encoded RSA private key in PKCS#1, ASN.1 DER
-form, which typically begins with `-----BEGIN RSA PRIVATE KEY-----`.
-
-The input text must be plain ciphertext, as a byte array, or safely
-convertible to a byte array. To decrypt base64-encoded input, you must
-first decode with the [`base64.DecodeBytes`](../base64/#base64.DecodeBytes)
-function.
-
-See [`crypto.RSADecrypt`](#crypto.RSADecrypt) for a function that outputs
-a string.
-
-Usage
-
-```go
-crypto.RSADecryptBytes key input
-```
-```go
-input | crypto.RSADecryptBytes key
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `key` | _(required)_ the private key to decrypt the input with |
-| `input` | _(required)_ the encrypted input |
-
-Examples
-
-```console
-$ gomplate -c pubKey=./testPubKey -c privKey=./testPrivKey \
-  -i '{{ $enc := "hello" | crypto.RSAEncrypt .pubKey -}}
-  {{ crypto.RSADecryptBytes .privKey $enc }}'
-[104 101 108 108 111]
-```
-```console
-$ gomplate -c pubKey=./testPubKey -c privKey=./testPrivKey \
-  -i '{{ $enc := "hello" | crypto.RSAEncrypt .pubKey -}}
-  {{ crypto.RSADecryptBytes .privKey $enc | conv.ToString }}'
-hello
-```
-
-## `crypto.RSAEncrypt` _(experimental)_
-**Experimental:** This function is [_experimental_][experimental] and may be enabled with the [`--experimental`][experimental] flag.
-
-[experimental]: ../config/#experimental
-
-Encrypt the input with RSA and the padding scheme from PKCS#1 v1.5.
-
-This function is suitable for encrypting data that will be decrypted by
-[Terraform's `rsadecrypt` function](https://www.terraform.io/docs/configuration/functions/rsadecrypt.html).
-
-The key should be a PEM-encoded RSA public key in PKIX ASN.1 DER form,
-which typically begins with `BEGIN PUBLIC KEY`. RSA public keys in PKCS#1
-ASN.1 DER form are also supported (beginning with `RSA PUBLIC KEY`).
-
-The output will not be encoded, so consider
-[base64-encoding](../base64/#base64.Encode) it for display.
-
-_Note:_ Output encrypted with this function will _not_ be deterministic,
-so encrypting the same input twice will not result in the same ciphertext.
-
-_Warning:_ Using this function may not be safe. See the warning on Go's
-[`rsa.EncryptPKCS1v15`](https://golang.org/pkg/crypto/rsa/#EncryptPKCS1v15)
-documentation.
-
-Usage
-
-```go
-crypto.RSAEncrypt key input
-```
-```go
-input | crypto.RSAEncrypt key
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `key` | _(required)_ the public key to encrypt the input with |
-| `input` | _(required)_ the encrypted input |
-
-Examples
-
-```console
-$ gomplate -c pubKey=./testPubKey \
-  -i '{{ "hello" | crypto.RSAEncrypt .pubKey | base64.Encode }}'
-ScTcX1NZ6p/EeDIf6R7FKLcDFjvP98YgiBhyhPE4jtehajIyTKP1GL8C72qbAWrgdQ6A2cSVjoyo3viqf/PZxpcBDUUMDJuemTaJqUUjMWaDuPG37mQbmRtcvFTuUhw1qSbKyHorDOgTX5d4DvWV4otycGtBT6dXhnmmb5V72J/w3z68vtTJ21m9wREFD7LrYVHdFFtRZiIyMBAF0ngQ+hcujrxilnmgzPkEAg6E7Ccctn28Ie2c4CojrwRbNNxXNlIWCCkC/8Vq8qlDfZ70a+BsTmJDuScE6BZbTyteo9uGYrLn+bTIHNDj90AeLCKUTyWLUJ5Edi9LhlKVBoJUNQ==
-```
-```console
-$ gomplate -c pubKey=./testPubKey \
-  -i '{{ $enc := "hello" | crypto.RSAEncrypt .pubKey -}}
-  Ciphertext in hex: {{ printf "%x" $enc }}'
-71729b87cccabb248b9e0e5173f0b12c01d9d2a0565bad18aef9d332ce984bde06acb8bb69334a01446f7f6430077f269e6fbf2ccacd972fe5856dd4719252ebddf599948d937d96ea41540dad291b868f6c0cf647dffdb5acb22cd33557f9a1ddd0ee6c1ad2bbafc910ba8f817b66ea0569afc06e5c7858fd9dc2638861fe7c97391b2f190e4c682b4aa2c9b0050081efe18b10aa8c2b2b5f5b68a42dcc06c9da35b37fca9b1509fddc940eb99f516a2e0195405bcb3993f0fa31bc038d53d2e7231dff08cc39448105ed2d0ac52d375cb543ca8a399f807cc5d007e2c44c69876d189667eee66361a393c4916826af77479382838cd4e004b8baa05636805a
-```
-
-## `crypto.RSAGenerateKey` _(experimental)_
-**Experimental:** This function is [_experimental_][experimental] and may be enabled with the [`--experimental`][experimental] flag.
-
-[experimental]: ../config/#experimental
-
-Generate a new RSA Private Key and output in PEM-encoded PKCS#1 ASN.1 DER
-form.
-
-Default key length is 4096 bits, which should be safe enough for most
-uses, but can be overridden with the optional `bits` parameter.
-
-In order to protect against [CWE-326](https://cwe.mitre.org/data/definitions/326.html),
-keys shorter than `2048` bits may not be generated.
-
-The output is a string, suitable for use with the other `crypto.RSA*`
-functions.
-
-Usage
-
-```go
-crypto.RSAGenerateKey [bits]
-```
-```go
-bits | crypto.RSAGenerateKey
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `bits` | _(optional)_ Length in bits of the generated key. Must be at least `2048`. Defaults to `4096` |
-
-Examples
-
-```console
-$ gomplate -i '{{ crypto.RSAGenerateKey }}'
------BEGIN RSA PRIVATE KEY-----
-...
-```
-```console
-$ gomplate -i '{{ $key := crypto.RSAGenerateKey 2048 -}}
-  {{ $pub := crypto.RSADerivePublicKey $key -}}
-  {{ $enc := "hello" | crypto.RSAEncrypt $pub -}}
-  {{ crypto.RSADecrypt $key $enc }}'
-hello
-```
-
-## `crypto.RSADerivePublicKey` _(experimental)_
-**Experimental:** This function is [_experimental_][experimental] and may be enabled with the [`--experimental`][experimental] flag.
-
-[experimental]: ../config/#experimental
-
-Derive a public key from an RSA private key and output in PKIX ASN.1 DER
-form.
-
-The output is a string, suitable for use with other `crypto.RSA*`
-functions.
-
-Usage
-
-```go
-crypto.RSADerivePublicKey key
-```
-```go
-key | crypto.RSADerivePublicKey
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `key` | _(required)_ the private key to derive a public key from |
-
-Examples
-
-```console
-$ gomplate -i '{{ crypto.RSAGenerateKey | crypto.RSADerivePublicKey }}'
------BEGIN PUBLIC KEY-----
-...
-```
-```console
-$ gomplate -c privKey=./privKey.pem \
-  -i '{{ $pub := crypto.RSADerivePublicKey .privKey -}}
-  {{ $enc := "hello" | crypto.RSAEncrypt $pub -}}
-  {{ crypto.RSADecrypt .privKey $enc }}'
-hello
-```
+# `Cryptography`
 
 ## `crypto.SHA1`, `crypto.SHA224`, `crypto.SHA256`, `crypto.SHA384`, `crypto.SHA512`, `crypto.SHA512_224`, `crypto.SHA512_256`
 
@@ -1875,11 +1308,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ crypto.SHA1 "foo" }}'
+$ '{{ crypto.SHA1 "foo" }}'
 f1d2d2f924e986ac86fdf7b36c94bcdf32beec15
 ```
 ```console
-$ gomplate -i '{{ crypto.SHA512 "bar" }}'
+$ '{{ crypto.SHA512 "bar" }}'
 cc06808cbbee0510331aa97974132e8dc296aeb795be229d064bae784b0a87a5cf4281d82e8c99271b75db2148f08a026c1a60ed9cabdb8cac6d24242dac4063
 ```
 
@@ -1911,182 +1344,8 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ crypto.SHA256Bytes "foo" | base64.Encode }}'
+$ '{{ crypto.SHA256Bytes "foo" | base64.Encode }}'
 LCa0a2j/xo/5m0U8HTBBNBNCLXBkg7+g+YpeiGJm564=
-```
-
-## `crypto.WPAPSK`
-
-This is really an alias to [`crypto.PBKDF2`](#crypto.PBKDF2) with the
-values necessary to convert ASCII passphrases to the WPA pre-shared keys for use with WiFi networks.
-
-This can be used, for example, to help generate a configuration for [wpa_supplicant](http://w1.fi/wpa_supplicant/).
-
-Usage
-
-```go
-crypto.WPAPSK ssid password
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `ssid` | _(required)_ the WiFi SSID (network name) - must be less than 32 characters |
-| `password` | _(required)_ the password - must be between 8 and 63 characters |
-
-Examples
-
-```console
-$ PW=abcd1234 gomplate -i '{{ crypto.WPAPSK "mynet" (getenv "PW") }}'
-2c201d66f01237d17d4a7788051191f31706844ac3ffe7547a66c902f2900d34
-```
-
-
-
-## `datasource`
-
-**Alias:** `ds`
-
-Parses a given datasource (provided by the [`--datasource/-d`](../../usage/#datasource-d) argument or [`defineDatasource`](#definedatasource)).
-
-If the `alias` is undefined, but is a valid URL, `datasource` will dynamically read from that URL.
-
-See [Datasources](../../datasources) for (much!) more information.
-
-Usage
-
-```go
-datasource alias [subpath]
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `alias` | _(required)_ the datasource alias (or a URL for dynamic use) |
-| `subpath` | _(optional)_ the subpath to use, if supported by the datasource |
-
-Examples
-
-_`person.json`:_
-```json
-{ "name": "Dave" }
-```
-
-```console
-$ gomplate -d person.json -i 'Hello {{ (datasource "person").name }}'
-Hello Dave
-```
-
-## `datasourceExists`
-
-Tests whether or not a given datasource was defined on the commandline (with the
-[`--datasource/-d`](../../usage/#datasource-d) argument). This is intended mainly to allow
-a template to be rendered differently whether or not a given datasource was
-defined.
-
-Note: this does _not_ verify if the datasource is reachable.
-
-Useful when used in an `if`/`else` block.
-
-Usage
-
-```go
-datasourceExists alias
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `alias` | _(required)_ the datasource alias |
-
-Examples
-
-```console
-$ echo '{{if (datasourceExists "test")}}{{datasource "test"}}{{else}}no worries{{end}}' | gomplate
-no worries
-```
-
-## `datasourceReachable`
-
-Tests whether or not a given datasource is defined and reachable, where the definition of "reachable" differs by datasource, but generally means the data is able to be read successfully.
-
-Useful when used in an `if`/`else` block.
-
-Usage
-
-```go
-datasourceReachable alias
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `alias` | _(required)_ the datasource alias |
-
-Examples
-
-```console
-$ gomplate -i '{{if (datasourceReachable "test")}}{{datasource "test"}}{{else}}no worries{{end}}' -d test=https://bogus.example.com/wontwork.json
-no worries
-```
-
-## `listDatasources`
-
-Lists all the datasources defined, list returned will be sorted in ascending order.
-
-Usage
-
-```go
-listDatasources
-```
-
-Examples
-
-```console
-$ gomplate -d person=env:///FOO -d bar=env:///BAR -i '{{range (listDatasources)}} Datasource-{{.}} {{end}}'
-Datasource-bar
-Datasource-person
-```
-
-## `defineDatasource`
-
-Define a datasource alias with target URL inside the template. Overridden by the [`--datasource/-d`](../../usage/#datasource-d) flag.
-
-Note: once a datasource is defined, it can not be redefined (i.e. if this function is called twice with the same alias, only the first applies).
-
-This function can provide a good way to set a default datasource when sharing templates.
-
-See [Datasources](../../datasources) for (much!) more information.
-
-Usage
-
-```go
-defineDatasource alias url
-```
-
-Arguments
-
-| name | description |
-|------|-------------|
-| `alias` | _(required)_ the datasource alias |
-| `url` | _(required)_ the datasource's URL |
-
-Examples
-
-_`person.json`:_
-```json
-{ "name": "Dave" }
-```
-
-```console
-$ gomplate -i '{{ defineDatasource "person" "person.json" }}Hello {{ (ds "person").name }}'
-Hello Dave
-$ FOO='{"name": "Daisy"}' gomplate -d person=env:///FOO -i '{{ defineDatasource "person" "person.json" }}Hello {{ (ds "person").name }}'
-Hello Daisy
 ```
 
 ## `include`
@@ -2133,12 +1392,11 @@ $ gomplate -d person.json -f input.tmpl
 }
 ```
 
-## `data.JSON`
+# `Data`
 
-**Alias:** `json`
+## `json`
 
-Converts a JSON string into an object. Works for JSON Objects, but will
-also parse JSON Arrays. Will not parse other valid JSON types.
+Converts a JSON string into an object. Works for JSON Objects, but will also parse JSON Arrays. Will not parse other valid JSON types.
 
 For more explict JSON Array support, see [`data.JSONArray`](#data-jsonarray).
 
@@ -2178,9 +1436,8 @@ $ gomplate < input.tmpl
 Hello world
 ```
 
-## `data.JSONArray`
 
-**Alias:** `jsonArray`
+## `jsonArray`
 
 Converts a JSON string into a slice. Only works for JSON Arrays.
 
@@ -2212,12 +1469,10 @@ $ gomplate < input.tmpl
 Hello world
 ```
 
-## `data.YAML`
 
-**Alias:** `yaml`
+## `yaml`
 
-Converts a YAML string into an object. Works for YAML Objects but will
-also parse YAML Arrays. This can be used to access properties of YAML objects.
+Converts a YAML string into an object. Works for YAML Objects but will also parse YAML Arrays. This can be used to access properties of YAML objects.
 
 For more explict YAML Array support, see [`data.JSONArray`](#data-yamlarray).
 
@@ -2249,9 +1504,8 @@ $ gomplate < input.tmpl
 Hello world
 ```
 
-## `data.YAMLArray`
 
-**Alias:** `yamlArray`
+## `yamlArray`
 
 Converts a YAML string into a slice. Only works for YAML Arrays.
 
@@ -2283,12 +1537,10 @@ $ gomplate < input.tmpl
 Hello world
 ```
 
-## `data.TOML`
 
-**Alias:** `toml`
+## `toml`
 
-Converts a [TOML](https://github.com/toml-lang/toml) document into an object.
-This can be used to access properties of TOML documents.
+Converts a [TOML](https://github.com/toml-lang/toml) document into an object. This can be used to access properties of TOML documents.
 
 Compatible with [TOML v0.4.0](https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.4.0.md).
 
@@ -2321,14 +1573,12 @@ $ gomplate -f input.tmpl
 Hello world
 ```
 
-## `data.CSV`
 
-**Alias:** `csv`
+## `csv`
 
 Converts a CSV-format string into a 2-dimensional string array.
 
-By default, the [RFC 4180](https://tools.ietf.org/html/rfc4180) format is
-supported, but any single-character delimiter can be specified.
+By default, the [RFC 4180](https://tools.ietf.org/html/rfc4180) format is supported, but any single-character delimiter can be specified.
 
 Usage
 
@@ -2365,18 +1615,13 @@ Go has 25 keywords.
 COBOL has 357 keywords.
 ```
 
-## `data.CSVByRow`
-
-**Alias:** `csvByRow`
+## `csvByRow`
 
 Converts a CSV-format string into a slice of maps.
 
-By default, the [RFC 4180](https://tools.ietf.org/html/rfc4180) format is
-supported, but any single-character delimiter can be specified.
+By default, the [RFC 4180](https://tools.ietf.org/html/rfc4180) format is supported, but any single-character delimiter can be specified.
 
-Also by default, the first line of the string will be assumed to be the header,
-but this can be overridden by providing an explicit header, or auto-indexing
-can be used.
+Also by default, the first line of the string will be assumed to be the header, but this can be overridden by providing an explicit header, or auto-indexing can be used.
 
 Usage
 
@@ -2415,12 +1660,10 @@ Go has 25 keywords.
 COBOL has 357 keywords.
 ```
 
-## `data.CSVByColumn`
 
-**Alias:** `csvByColumn`
+## `csvByColumn`
 
-Like [`csvByRow`](#csvByRow), except that the data is presented as a columnar
-(column-oriented) map.
+Like [`csvByRow`](#csvByRow), except that the data is presented as a columnar (column-oriented) map.
 
 Usage
 
@@ -2458,9 +1701,8 @@ Go
 COBOL
 ```
 
-## `data.ToJSON`
 
-**Alias:** `toJSON`
+## `toJSON`
 
 Converts an object to a JSON document. Input objects may be the result of `json`, `yaml`, `jsonArray`, or `yamlArray` functions, or they could be provided by a `datasource`.
 
@@ -2493,14 +1735,9 @@ $ gomplate < input.tmpl
 {"hello":"world"}
 ```
 
-## `data.ToJSONPretty`
+## `toJSONPretty`
 
-**Alias:** `toJSONPretty`
-
-Converts an object to a pretty-printed (or _indented_) JSON document.
-Input objects may be the result of functions like `data.JSON`, `data.YAML`,
-`data.JSONArray`, or `data.YAMLArray` functions, or they could be provided
-by a [`datasource`](../general/datasource).
+Converts an object to a pretty-printed (or _indented_) JSON document. Input objects may be the result of functions like `data.JSON`, `data.YAML`, `data.JSONArray`, or `data.YAMLArray` functions, or they could be provided by a [`datasource`](../general/datasource).
 
 The indent string must be provided as an argument.
 
@@ -2534,13 +1771,9 @@ $ gomplate < input.tmpl
 }
 ```
 
-## `data.ToYAML`
+## `toYAML`
 
-**Alias:** `toYAML`
-
-Converts an object to a YAML document. Input objects may be the result of
-`data.JSON`, `data.YAML`, `data.JSONArray`, or `data.YAMLArray` functions,
-or they could be provided by a [`datasource`](../general/datasource).
+Converts an object to a YAML document. Input objects may be the result of `data.JSON`, `data.YAML`, `data.JSONArray`, or `data.YAMLArray` functions, or they could be provided by a [`datasource`](../general/datasource).
 
 Usage
 
@@ -2571,9 +1804,7 @@ $ gomplate < input.tmpl
 hello: world
 ```
 
-## `data.ToTOML`
-
-**Alias:** `toTOML`
+## `toTOML`
 
 Converts an object to a [TOML](https://github.com/toml-lang/toml) document.
 
@@ -2595,23 +1826,16 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ `{"foo":"bar"}` | data.JSON | data.ToTOML }}'
+$ '{{ `{"foo":"bar"}` | data.JSON | data.ToTOML }}'
 foo = "bar"
 ```
 
-## `data.ToCSV`
 
-**Alias:** `toCSV`
+## `toCSV`
 
-Converts an object to a CSV document. The input object must be a 2-dimensional
-array of strings (a `[][]string`). Objects produced by [`data.CSVByRow`](#conv-csvbyrow)
-and [`data.CSVByColumn`](#conv-csvbycolumn) cannot yet be converted back to CSV documents.
+Converts an object to a CSV document. The input object must be a 2-dimensional array of strings (a `[][]string`). Objects produced by [`data.CSVByRow`](#conv-csvbyrow) and [`data.CSVByColumn`](#conv-csvbycolumn) cannot yet be converted back to CSV documents.
 
-**Note:** With the exception that a custom delimiter can be used, `data.ToCSV`
-outputs according to the [RFC 4180](https://tools.ietf.org/html/rfc4180) format,
-which means that line terminators are `CRLF` (Windows format, or `\r\n`). If
-you require `LF` (UNIX format, or `\n`), the output can be piped through
-[`strings.ReplaceAll`](../strings/#strings-replaceall) to replace `"\r\n"` with `"\n"`.
+**Note:** With the exception that a custom delimiter can be used, `data.ToCSV` outputs according to the [RFC 4180](https://tools.ietf.org/html/rfc4180) format, which means that line terminators are `CRLF` (Windows format, or `\r\n`). If you require `LF` (UNIX format, or `\n`), the output can be piped through [`strings.ReplaceAll`](../strings/#strings-replaceall) to replace `"\r\n"` with `"\n"`.
 
 Usage
 
@@ -2646,7 +1870,9 @@ first,second
 
 
 
-## `filepath.Base`
+# `filepath`
+
+## `Base`
 
 Returns the last element of path. Trailing path separators are removed before extracting the last element. If the path is empty, Base returns `.`. If the path consists entirely of separators, Base returns a single separator.
 
@@ -2670,11 +1896,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ filepath.Base "/tmp/foo" }}'
+$ '{{ filepath.Base "/tmp/foo" }}'
 foo
 ```
 
-## `filepath.Clean`
+## `Clean`
 
 Clean returns the shortest path name equivalent to path by purely lexical processing.
 
@@ -2698,11 +1924,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ filepath.Clean "/tmp//foo/../" }}'
+$ '{{ filepath.Clean "/tmp//foo/../" }}'
 /tmp
 ```
 
-## `filepath.Dir`
+## `Dir`
 
 Returns all but the last element of path, typically the path's directory.
 
@@ -2726,11 +1952,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ filepath.Dir "/tmp/foo" }}'
+$ '{{ filepath.Dir "/tmp/foo" }}'
 /tmp
 ```
 
-## `filepath.Ext`
+## `Ext`
 
 Returns the file name extension used by path.
 
@@ -2754,11 +1980,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ filepath.Ext "/tmp/foo.csv" }}'
+$ '{{ filepath.Ext "/tmp/foo.csv" }}'
 .csv
 ```
 
-## `filepath.FromSlash`
+## `FromSlash`
 
 Returns the result of replacing each slash (`/`) character in the path with the platform's separator character.
 
@@ -2782,13 +2008,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ filepath.FromSlash "/foo/bar" }}'
+$ '{{ filepath.FromSlash "/foo/bar" }}'
 /foo/bar
 C:\> gomplate.exe -i '{{ filepath.FromSlash "/foo/bar" }}'
 C:\foo\bar
 ```
 
-## `filepath.IsAbs`
+## `IsAbs`
 
 Reports whether the path is absolute.
 
@@ -2812,13 +2038,14 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i 'the path is {{ if (filepath.IsAbs "/tmp/foo.csv") }}absolute{{else}}relative{{end}}'
+$ the path is {{ if (filepath.IsAbs "/tmp/foo.csv") }}absolute{{else}}relative{{end}} 
 the path is absolute
-$ gomplate -i 'the path is {{ if (filepath.IsAbs "../foo.csv") }}absolute{{else}}relative{{end}}'
+
+$ the path is {{ if (filepath.IsAbs "../foo.csv") }}absolute{{else}}relative{{end}} 
 the path is relative
 ```
 
-## `filepath.Join`
+## `Join`
 
 Joins any number of path elements into a single path, adding a separator if necessary.
 
@@ -2839,13 +2066,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ filepath.Join "/tmp" "foo" "bar" }}'
+$ '{{ filepath.Join "/tmp" "foo" "bar" }}'
 /tmp/foo/bar
 C:\> gomplate.exe -i '{{ filepath.Join "C:\tmp" "foo" "bar" }}'
 C:\tmp\foo\bar
 ```
 
-## `filepath.Match`
+## `Match`
 
 Reports whether name matches the shell file name pattern.
 
@@ -2867,11 +2094,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ filepath.Match "*.csv" "foo.csv" }}'
+$ '{{ filepath.Match "*.csv" "foo.csv" }}'
 true
 ```
 
-## `filepath.Rel`
+## `Rel`
 
 Returns a relative path that is lexically equivalent to targetpath when joined to basepath with an intervening separator.
 
@@ -2893,11 +2120,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ filepath.Rel "/a" "/a/b/c" }}'
+$ '{{ filepath.Rel "/a" "/a/b/c" }}'
 b/c
 ```
 
-## `filepath.Split`
+## `Split`
 
 Splits path immediately following the final path separator, separating it into a directory and file name component.
 
@@ -2923,13 +2150,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $p := filepath.Split "/tmp/foo" }}{{ $dir := index $p 0 }}{{ $file := index $p 1 }}dir is {{$dir}}, file is {{$file}}'
+$ '{{ $p := filepath.Split "/tmp/foo" }}{{ $dir := index $p 0 }}{{ $file := index $p 1 }}dir is {{$dir}}, file is {{$file}}'
 dir is /tmp/, file is foo
 C:\> gomplate.exe -i '{{ $p := filepath.Split `C:\tmp\foo` }}{{ $dir := index $p 0 }}{{ $file := index $p 1 }}dir is {{$dir}}, file is {{$file}}'
 dir is C:\tmp\, file is foo
 ```
 
-## `filepath.ToSlash`
+## `ToSlash`
 
 Returns the result of replacing each separator character in path with a slash (`/`) character.
 
@@ -2953,13 +2180,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ filepath.ToSlash "/foo/bar" }}'
+$ '{{ filepath.ToSlash "/foo/bar" }}'
 /foo/bar
 C:\> gomplate.exe -i '{{ filepath.ToSlash `foo\bar\baz` }}'
 foo/bar/baz
 ```
 
-## `filepath.VolumeName`
+## `VolumeName`
 
 Returns the leading volume name. Given `C:\foo\bar` it returns `C:` on Windows. Given a UNC like `\\host\share\foo` it returns `\\host\share`. On other platforms it returns an empty string.
 
@@ -2985,13 +2212,13 @@ Examples
 ```console
 C:\> gomplate.exe -i 'volume is {{ filepath.VolumeName "C:/foo/bar" }}'
 volume is C:
-$ gomplate -i 'volume is {{ filepath.VolumeName "/foo/bar" }}'
+$ 'volume is {{ filepath.VolumeName "/foo/bar" }}'
 volume is
 ```
 
 
 
-## `math.Abs`
+# `math`
 
 Returns the absolute value of a given number. When the input is an integer, the result will be an `int64`, otherwise it will be a `float64`.
 
@@ -3010,13 +2237,12 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ math.Abs -3.5 }} {{ math.Abs 3.5 }} {{ math.Abs -42 }}'
+$ '{{ math.Abs -3.5 }} {{ math.Abs 3.5 }} {{ math.Abs -42 }}'
 3.5 3.5 42
 ```
 
-## `math.Add`
 
-**Alias:** `add`
+## `add`
 
 Adds all given operators. When one of the inputs is a floating-point number, the result will be a `float64`, otherwise it will be an `int64`.
 
@@ -3035,11 +2261,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ math.Add 1 2 3 4 }} {{ math.Add 1.5 2 3 }}'
+$ '{{ math.Add 1 2 3 4 }} {{ math.Add 1.5 2 3 }}'
 10 6.5
 ```
 
-## `math.Ceil`
+## `Ceil`
 
 Returns the least integer value greater than or equal to a given floating-point number. This wraps Go's [`math.Ceil`](https://golang.org/pkg/math/#Ceil).
 
@@ -3060,7 +2286,7 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}ceil {{ printf "%#v" . }} = {{ math.Ceil . }}{{"\n"}}{{ end }}'
+$ '{{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}ceil {{ printf "%#v" . }} = {{ math.Ceil . }}{{"\n"}}{{ end }}'
 ceil 5.1 = 6
 ceil 42 = 42
 ceil "3.14" = 4
@@ -3070,9 +2296,8 @@ ceil "Inf" = +Inf
 ceil "-0" = 0
 ```
 
-## `math.Div`
 
-**Alias:** `div`
+## `div`
 
 Divide the first number by the second. Division by zero is disallowed. The result will be a `float64`.
 
@@ -3095,11 +2320,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ math.Div 8 2 }} {{ math.Div 3 2 }}'
+$ '{{ math.Div 8 2 }} {{ math.Div 3 2 }}'
 4 1.5
 ```
 
-## `math.Floor`
+## `Floor`
 
 Returns the greatest integer value less than or equal to a given floating-point number. This wraps Go's [`math.Floor`](https://golang.org/pkg/math/#Floor).
 
@@ -3120,7 +2345,7 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}floor {{ printf "%#v" . }} = {{ math.Floor . }}{{"\n"}}{{ end }}'
+$ '{{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}floor {{ printf "%#v" . }} = {{ math.Floor . }}{{"\n"}}{{ end }}'
 floor 5.1 = 4
 floor 42 = 42
 floor "3.14" = 3
@@ -3130,7 +2355,7 @@ floor "Inf" = +Inf
 floor "-0" = 0
 ```
 
-## `math.IsFloat`
+## `IsFloat`
 
 Returns whether or not the given number can be interpreted as a floating-point literal, as defined by the [Go language reference](https://golang.org/ref/spec#Floating-point_literals).
 
@@ -3151,7 +2376,7 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsFloat .) }}{{.}} is a float{{"\n"}}{{ end }}{{end}}'
+$ '{{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsFloat .) }}{{.}} is a float{{"\n"}}{{ end }}{{end}}'
 1 is a float
 -1.0 is a float
 5.1 is a float
@@ -3160,7 +2385,7 @@ NaN is a float
 Inf is a float
 ```
 
-## `math.IsInt`
+## `IsInt`
 
 Returns whether or not the given number is an integer.
 
@@ -3179,13 +2404,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsInt .) }}{{.}} is an integer{{"\n"}}{{ end }}{{end}}'
+$ '{{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsInt .) }}{{.}} is an integer{{"\n"}}{{ end }}{{end}}'
 42 is an integer
 0xFF is an integer
 -0 is an integer
 ```
 
-## `math.IsNum`
+## `IsNum`
 
 Returns whether the given input is a number. Useful for `if` conditions.
 
@@ -3204,11 +2429,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ math.IsNum "foo" }} {{ math.IsNum 0xDeadBeef }}'
+$ '{{ math.IsNum "foo" }} {{ math.IsNum 0xDeadBeef }}'
 false true
 ```
 
-## `math.Max`
+## `Max`
 
 Returns the largest number provided. If any values are floating-point numbers, a `float64` is returned, otherwise an `int64` is returned. The same special-cases as Go's [`math.Max`](https://golang.org/pkg/math/#Max) are followed.
 
@@ -3227,11 +2452,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ math.Max 0 8.0 4.5 "-1.5e-11" }}'
+$ '{{ math.Max 0 8.0 4.5 "-1.5e-11" }}'
 8
 ```
 
-## `math.Min`
+## `Min`
 
 Returns the smallest number provided. If any values are floating-point numbers, a `float64` is returned, otherwise an `int64` is returned. The same special-cases as Go's [`math.Min`](https://golang.org/pkg/math/#Min) are followed.
 
@@ -3250,13 +2475,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ math.Min 0 8 4.5 "-1.5e-11" }}'
+$ '{{ math.Min 0 8 4.5 "-1.5e-11" }}'
 -1.5e-11
 ```
 
-## `math.Mul`
+## `Mul`
 
-**Alias:** `mul`
+## `mul`
 
 Multiply all given operators together.
 
@@ -3275,13 +2500,12 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ math.Mul 8 8 2 }}'
+$ '{{ math.Mul 8 8 2 }}'
 128
 ```
 
-## `math.Pow`
 
-**Alias:** `pow`
+## `pow`
 
 Calculate an exponent - _b<sup>n</sup>_. This wraps Go's [`math.Pow`](https://golang.org/pkg/math/#Pow). If any values are floating-point numbers, a `float64` is returned, otherwise an `int64` is returned.
 
@@ -3301,17 +2525,16 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ math.Pow 10 2 }}'
+$ '{{ math.Pow 10 2 }}'
 100
-$ gomplate -i '{{ math.Pow 2 32 }}'
+$ '{{ math.Pow 2 32 }}'
 4294967296
-$ gomplate -i '{{ math.Pow 1.5 2 }}'
+$ '{{ math.Pow 1.5 2 }}'
 2.2
 ```
 
-## `math.Rem`
 
-**Alias:** `rem`
+## `rem`
 
 Return the remainder from an integer division operation.
 
@@ -3334,13 +2557,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ math.Rem 5 3 }}'
+$ '{{ math.Rem 5 3 }}'
 2
-$ gomplate -i '{{ math.Rem -5 3 }}'
+$ '{{ math.Rem -5 3 }}'
 -2
 ```
 
-## `math.Round`
+## `Round`
 
 Returns the nearest integer, rounding half away from zero.
 
@@ -3361,7 +2584,7 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ range (slice -6.5 5.1 42.9 "3.5" 6.5) }}round {{ printf "%#v" . }} = {{ math.Round . }}{{"\n"}}{{ end }}'
+$ '{{ range (slice -6.5 5.1 42.9 "3.5" 6.5) }}round {{ printf "%#v" . }} = {{ math.Round . }}{{"\n"}}{{ end }}'
 round -6.5 = -7
 round 5.1 = 5
 round 42.9 = 43
@@ -3369,13 +2592,9 @@ round "3.5" = 4
 round 6.5 = 7
 ```
 
-## `math.Seq`
+## `seq`
 
-**Alias:** `seq`
-
-Return a sequence from `start` to `end`, in steps of `step`. Can handle counting
-down as well as up, including with negative numbers.
-
+Return a sequence from `start` to `end`, in steps of `step`. Can handle counting down as well as up, including with negative numbers.
 Note that the sequence _may_ not end at `end`, if `end` is not divisible by `step`.
 
 Usage
@@ -3395,17 +2614,15 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ range (math.Seq 5) }}{{.}} {{end}}'
+$ '{{ range (math.Seq 5) }}{{.}} {{end}}'
 1 2 3 4 5
 ```
 ```console
-$ gomplate -i '{{ conv.Join (math.Seq 10 -3 2) ", " }}'
+$ '{{ conv.Join (math.Seq 10 -3 2) ", " }}'
 10, 8, 6, 4, 2, 0, -2
 ```
 
-## `math.Sub`
-
-**Alias:** `sub`
+## `sub`
 
 Subtract the second from the first of the given operators.  When one of the inputs is a floating-point number, the result will be a `float64`, otherwise it will be an `int64`.
 
@@ -3428,12 +2645,12 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ math.Sub 3 1 }}'
+$ '{{ math.Sub 3 1 }}'
 2
 ```
 
-
-## `path.Base`
+# `Path`
+## `Base`
 
 Returns the last element of path. Trailing slashes are removed before extracting the last element. If the path is empty, Base returns `.`. If the path consists entirely of slashes, Base returns `/`.
 
@@ -3457,11 +2674,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ path.Base "/tmp/foo" }}'
+$ '{{ path.Base "/tmp/foo" }}'
 foo
 ```
 
-## `path.Clean`
+## `Clean`
 
 Clean returns the shortest path name equivalent to path by purely lexical processing.
 
@@ -3485,11 +2702,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ path.Clean "/tmp//foo/../" }}'
+$ '{{ path.Clean "/tmp//foo/../" }}'
 /tmp
 ```
 
-## `path.Dir`
+## `Dir`
 
 Returns all but the last element of path, typically the path's directory.
 
@@ -3513,11 +2730,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ path.Dir "/tmp/foo" }}'
+$ '{{ path.Dir "/tmp/foo" }}'
 /tmp
 ```
 
-## `path.Ext`
+## `Ext`
 
 Returns the file name extension used by path.
 
@@ -3541,11 +2758,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ path.Ext "/tmp/foo.csv" }}'
+$ '{{ path.Ext "/tmp/foo.csv" }}'
 .csv
 ```
 
-## `path.IsAbs`
+## `IsAbs`
 
 Reports whether the path is absolute.
 
@@ -3569,13 +2786,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i 'the path is {{ if (path.IsAbs "/tmp/foo.csv") }}absolute{{else}}relative{{end}}'
+$ 'the path is {{ if (path.IsAbs "/tmp/foo.csv") }}absolute{{else}}relative{{end}}'
 the path is absolute
-$ gomplate -i 'the path is {{ if (path.IsAbs "../foo.csv") }}absolute{{else}}relative{{end}}'
+$ 'the path is {{ if (path.IsAbs "../foo.csv") }}absolute{{else}}relative{{end}}'
 the path is relative
 ```
 
-## `path.Join`
+## `Join`
 
 Joins any number of path elements into a single path, adding a separating slash if necessary.
 
@@ -3596,11 +2813,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ path.Join "/tmp" "foo" "bar" }}'
+$ '{{ path.Join "/tmp" "foo" "bar" }}'
 /tmp/foo/bar
 ```
 
-## `path.Match`
+## `Match`
 
 Reports whether name matches the shell file name pattern.
 
@@ -3622,11 +2839,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ path.Match "*.csv" "foo.csv" }}'
+$ '{{ path.Match "*.csv" "foo.csv" }}'
 true
 ```
 
-## `path.Split`
+## `Split`
 
 Splits path immediately following the final slash, separating it into a directory and file name component.
 
@@ -3652,16 +2869,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $p := path.Split "/tmp/foo" }}{{ $dir := index $p 0 }}{{ $file := index $p 1 }}dir is {{$dir}}, file is {{$file}}'
-dir is /tmp/, file is foo
+$ '{{ $p := path.Split "/tmp/foo" }}{{ $dir := index $p 0 }}{{ $file := index $p 1 }}dir is {{$dir}}, file is {{$file}}' dir is /tmp/, file is foo
 ```
 
+# `Random`
+## `ASCII`
 
-## `random.ASCII`
-
-Generates a random string of a desired length, containing the set of
-printable characters from the 7-bit [ASCII](https://en.wikipedia.org/wiki/ASCII)
-set. This includes _space_ (' '), but no other whitespace characters.
+Generates a random string of a desired length, containing the set of printable characters from the 7-bit [ASCII](https://en.wikipedia.org/wiki/ASCII) set. This includes _space_ (' '), but no other whitespace characters.
 
 Usage
 
@@ -3678,11 +2892,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ random.ASCII 8 }}'
+$ '{{ random.ASCII 8 }}'
 _woJ%D&K
 ```
 
-## `random.Alpha`
+## `Alpha`
 
 Generates a random alphabetical (`A-Z`, `a-z`) string of a desired length.
 
@@ -3701,11 +2915,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ random.Alpha 42 }}'
+$ '{{ random.Alpha 42 }}'
 oAqHKxHiytYicMxTMGHnUnAfltPVZDhFkVkgDvatJK
 ```
 
-## `random.AlphaNum`
+## `AlphaNum`
 
 Generates a random alphanumeric (`0-9`, `A-Z`, `a-z`) string of a desired length.
 
@@ -3724,28 +2938,19 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ random.AlphaNum 16 }}'
+$ '{{ random.AlphaNum 16 }}'
 4olRl9mRmVp1nqSm
 ```
 
-## `random.String`
+## `String`
 
 Generates a random string of a desired length.
 
-By default, the possible characters are those represented by the
-regular expression `[a-zA-Z0-9_.-]` (alphanumeric, plus `_`, `.`, and `-`).
+By default, the possible characters are those represented by the regular expression `[a-zA-Z0-9_.-]` (alphanumeric, plus `_`, `.`, and `-`).
 
-A different set of characters can be specified with a regular expression,
-or by giving a range of possible characters by specifying the lower and
-upper bounds. Lower/upper bounds can be specified as characters (e.g.
-`"q"`, or escape sequences such as `"\U0001f0AF"`), or numeric Unicode
-code-points (e.g. `48` or `0x30` for the character `0`).
+A different set of characters can be specified with a regular expression, or by giving a range of possible characters by specifying the lower and upper bounds. Lower/upper bounds can be specified as characters (e.g. `"q"`, or escape sequences such as `"\U0001f0AF"`), or numeric Unicode code-points (e.g. `48` or `0x30` for the character `0`).
 
-When given a range of Unicode code-points, `random.String` will discard
-non-printable characters from the selection. This may result in a much
-smaller set of possible characters than intended, so check
-the [Unicode character code charts](http://www.unicode.org/charts/) to
-verify the correct code-points.
+When given a range of Unicode code-points, `random.String` will discard non-printable characters from the selection. This may result in a much smaller set of possible characters than intended, so check the [Unicode character code charts](http://www.unicode.org/charts/) to verify the correct code-points.
 
 Usage
 
@@ -3765,31 +2970,31 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ random.String 8 }}'
+$ '{{ random.String 8 }}'
 FODZ01u_
 ```
 ```console
-$ gomplate -i '{{ random.String 16 `[[:xdigit:]]` }}'
+$ '{{ random.String 16 `[[:xdigit:]]` }}'
 B9e0527C3e45E1f3
 ```
 ```console
-$ gomplate -i '{{ random.String 20 `[\p{Canadian_Aboriginal}]` }}'
+$ '{{ random.String 20 `[\p{Canadian_Aboriginal}]` }}'
 ᗄᖖᣡᕔᕫᗝᖴᒙᗌᘔᓰᖫᗵᐕᗵᙔᗠᓅᕎᔹ
 ```
 ```console
-$ gomplate -i '{{ random.String 8 "c" "m" }}'
+$ '{{ random.String 8 "c" "m" }}'
 ffmidgjc
 ```
 ```console
-$ gomplate -i 'You rolled... {{ random.String 3 "⚀" "⚅" }}'
+$ 'You rolled... {{ random.String 3 "⚀" "⚅" }}'
 You rolled... ⚅⚂⚁
 ```
 ```console
-$ gomplate -i 'Poker time! {{ random.String 5 "\U0001f0a1" "\U0001f0de" }}'
+$ 'Poker time! {{ random.String 5 "\U0001f0a1" "\U0001f0de" }}'
 Poker time! 🂼🂺🂳🃅🂪
 ```
 
-## `random.Item`
+## `Item`
 
 Pick an element at a random from a given slice or array.
 
@@ -3811,23 +3016,20 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ random.Item (seq 0 5) }}'
+$ '{{ random.Item (seq 0 5) }}'
 4
 ```
 ```console
 $ export SLICE='["red", "green", "blue"]'
-$ gomplate -i '{{ getenv "SLICE" | jsonArray | random.Item }}'
+$ '{{ getenv "SLICE" | jsonArray | random.Item }}'
 blue
 ```
 
-## `random.Number`
+## `Number`
 
-Pick a random integer. By default, a number between `0` and `100`
-(inclusive) is chosen, but this range can be overridden.
+Pick a random integer. By default, a number between `0` and `100` (inclusive) is chosen, but this range can be overridden.
 
-Note that the difference between `min` and `max` can not be larger than a
-63-bit integer (i.e. the unsigned portion of a 64-bit signed integer).
-The result is given as an `int64`.
+Note that the difference between `min` and `max` can not be larger than a 63-bit integer (i.e. the unsigned portion of a 64-bit signed integer). The result is given as an `int64`.
 
 Usage
 
@@ -3845,23 +3047,21 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ random.Number }}'
+$ '{{ random.Number }}'
 55
 ```
 ```console
-$ gomplate -i '{{ random.Number -10 10 }}'
+$ '{{ random.Number -10 10 }}'
 -3
 ```
 ```console
-$ gomplate -i '{{ random.Number 5 }}'
+$ '{{ random.Number 5 }}'
 2
 ```
 
-## `random.Float`
+## `Float`
 
-Pick a random decimal floating-point number. By default, a number between
-`0.0` and `1.0` (_exclusive_, i.e. `[0.0,1.0)`) is chosen, but this range
-can be overridden.
+Pick a random decimal floating-point number. By default, a number between `0.0` and `1.0` (_exclusive_, i.e. `[0.0,1.0)`) is chosen, but this range can be overridden.
 
 The result is given as a `float64`.
 
@@ -3881,23 +3081,22 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ random.Float }}'
+$ '{{ random.Float }}'
 0.2029946480303966
 ```
 ```console
-$ gomplate -i '{{ random.Float 100 }}'  
+$ '{{ random.Float 100 }}'  
 71.28595374161743
 ```
 ```console
-$ gomplate -i '{{ random.Float -100 200 }}'
+$ '{{ random.Float -100 200 }}'
 105.59119437834909
 ```
 
+# `regexp`
+## `Find`
 
-## `regexp.Find`
-
-Returns a string holding the text of the leftmost match in `input`
-of the regular expression `expression`.
+Returns a string holding the text of the leftmost match in `input` of the regular expression `expression`.
 
 This function provides the same behaviour as Go's
 [`regexp.FindString`](https://golang.org/pkg/regexp/#Regexp.FindString) function.
@@ -3921,21 +3120,19 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ regexp.Find "[a-z]{3}" "foobar"}}'
+$ '{{ regexp.Find "[a-z]{3}" "foobar"}}'
 foo
 ```
 ```console
-$ gomplate -i 'no {{ "will not match" | regexp.Find "[0-9]" }}numbers'
+$ 'no {{ "will not match" | regexp.Find "[0-9]" }}numbers'
 no numbers
 ```
 
-## `regexp.FindAll`
+## `FindAll`
 
 Returns a list of all successive matches of the regular expression.
 
-This can be called with 2 or 3 arguments. When called with 2 arguments, the
-`n` argument (number of matches) will be set to `-1`, causing all matches
-to be returned.
+This can be called with 2 or 3 arguments. When called with 2 arguments, the `n` argument (number of matches) will be set to `-1`, causing all matches to be returned.
 
 This function provides the same behaviour as Go's
 [`regexp.FindAllString`](https://golang.org/pkg/regexp/#Regexp.FindAllString) function.
@@ -3960,15 +3157,15 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ regexp.FindAll "[a-z]{3}" "foobar" | toJSON}}'
+$ '{{ regexp.FindAll "[a-z]{3}" "foobar" | toJSON}}'
 ["foo", "bar"]
 ```
 ```console
-$ gomplate -i '{{ "foo bar baz qux" | regexp.FindAll "[a-z]{3}" 3 | toJSON}}'
+$ '{{ "foo bar baz qux" | regexp.FindAll "[a-z]{3}" 3 | toJSON}}'
 ["foo", "bar", "baz"]
 ```
 
-## `regexp.Match`
+## `Match`
 
 Returns `true` if a given regular expression matches a given input.
 
@@ -3993,11 +3190,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ if (.Env.USER | regexp.Match `^h`) }}username ({{.Env.USER}}) starts with h!{{end}}'
+$ '{{ if (.Env.USER | regexp.Match `^h`) }}username ({{.Env.USER}}) starts with h!{{end}}'
 username (hairyhenderson) starts with h!
 ```
 
-## `regexp.QuoteMeta`
+## `QuoteMeta`
 
 Escapes all regular expression metacharacters in the input. The returned string is a regular expression matching the literal text.
 
@@ -4022,18 +3219,17 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ `{hello}` | regexp.QuoteMeta }}'
+$ '{{ `{hello}` | regexp.QuoteMeta }}'
 \{hello\}
 ```
 
-## `regexp.Replace`
+## `Replace`
 
 Replaces matches of a regular expression with the replacement string.
 
 The replacement is substituted after expanding variables beginning with `$`.
 
-This function provides the same behaviour as Go's
-[`regexp.ReplaceAllString`](https://golang.org/pkg/regexp/#Regexp.ReplaceAllString) function.
+This function provides the same behaviour as Go's [`regexp.ReplaceAllString`](https://golang.org/pkg/regexp/#Regexp.ReplaceAllString) function.
 
 Usage
 
@@ -4055,23 +3251,22 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ regexp.Replace "(foo)bar" "$1" "foobar"}}'
+$ '{{ regexp.Replace "(foo)bar" "$1" "foobar"}}'
 foo
 ```
 ```console
-$ gomplate -i '{{ regexp.Replace "(?P<first>[a-zA-Z]+) (?P<last>[a-zA-Z]+)" "${last}, ${first}" "Alan Turing"}}'
+$ '{{ regexp.Replace "(?P<first>[a-zA-Z]+) (?P<last>[a-zA-Z]+)" "${last}, ${first}" "Alan Turing"}}'
 Turing, Alan
 ```
 
-## `regexp.ReplaceLiteral`
+## `ReplaceLiteral`
 
 Replaces matches of a regular expression with the replacement string.
 
 The replacement is substituted directly, without expanding variables
 beginning with `$`.
 
-This function provides the same behaviour as Go's
-[`regexp.ReplaceAllLiteralString`](https://golang.org/pkg/regexp/#Regexp.ReplaceAllLiteralString) function.
+This function provides the same behaviour as Go's [`regexp.ReplaceAllLiteralString`](https://golang.org/pkg/regexp/#Regexp.ReplaceAllLiteralString) function.
 
 Usage
 
@@ -4093,27 +3288,24 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ regexp.ReplaceLiteral "(foo)bar" "$1" "foobar"}}'
+$ '{{ regexp.ReplaceLiteral "(foo)bar" "$1" "foobar"}}'
 $1
 ```
 ```console
-$ gomplate -i '{{ `foo.bar,baz` | regexp.ReplaceLiteral `\W` `$` }}'
+$ '{{ `foo.bar,baz` | regexp.ReplaceLiteral `\W` `$` }}'
 foo$bar$baz
 ```
 
-## `regexp.Split`
+# `Strings`
+## `Split`
 
 Splits `input` into sub-strings, separated by the expression.
 
-This can be called with 2 or 3 arguments. When called with 2 arguments, the
-`n` argument (number of matches) will be set to `-1`, causing all sub-strings
-to be returned.
+This can be called with 2 or 3 arguments. When called with 2 arguments, the `n` argument (number of matches) will be set to `-1`, causing all sub-strings to be returned.
 
-This is equivalent to [`strings.SplitN`](../strings/#strings-splitn),
-except that regular expressions are supported.
+This is equivalent to [`strings.SplitN`](../strings/#strings-splitn), except that regular expressions are supported.
 
-This function provides the same behaviour as Go's
-[`regexp.Split`](https://golang.org/pkg/regexp/#Regexp.Split) function.
+This function provides the same behaviour as Go's [`regexp.Split`](https://golang.org/pkg/regexp/#Regexp.Split) function.
 
 Usage
 
@@ -4135,16 +3327,16 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ regexp.Split `[\s,.]` "foo bar,baz.qux" | toJSON}}'
+$ '{{ regexp.Split `[\s,.]` "foo bar,baz.qux" | toJSON}}'
 ["foo","bar","baz","qux"]
 ```
 ```console
-$ gomplate -i '{{ "foo bar.baz,qux" | regexp.Split `[\s,.]` 3 | toJSON}}'
+$ '{{ "foo bar.baz,qux" | regexp.Split `[\s,.]` 3 | toJSON}}'
 ["foo","bar","baz"]
 ```
 
 
-## `strings.Abbrev`
+## `Abbrev`
 
 Abbreviates a string using `...` (ellipses). Takes an optional offset from the beginning of the string, and a maximum final width (including added ellipses).
 
@@ -4170,13 +3362,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "foobarbazquxquux" | strings.Abbrev 9 }}'
+$ '{{ "foobarbazquxquux" | strings.Abbrev 9 }}'
 foobar...
-$ gomplate -i '{{ "foobarbazquxquux" | strings.Abbrev 6 9 }}'
+$ '{{ "foobarbazquxquux" | strings.Abbrev 6 9 }}'
 ...baz...
 ```
 
-## `strings.Contains`
+## `Contains`
 
 Reports whether a substring is contained within a string.
 
@@ -4210,7 +3402,7 @@ $ FOO=bar gomplate < input.tmpl
 no
 ```
 
-## `strings.HasPrefix`
+## `HasPrefix`
 
 Tests whether a string begins with a certain prefix.
 
@@ -4239,7 +3431,7 @@ $ URL=https://example.com gomplate -i '{{if .Env.URL | strings.HasPrefix "https"
 foo
 ```
 
-## `strings.HasSuffix`
+## `HasSuffix`
 
 Tests whether a string ends with a certain suffix.
 
@@ -4271,9 +3463,9 @@ $ URL=http://example.com gomplate < input.tmpl
 http://example.com:80
 ```
 
-## `strings.Indent`
+## `Indent`
 
-**Alias:** `indent`
+## `indent`
 
 Indents a string. If the input string has multiple lines, each line will be indented.
 
@@ -4318,7 +3510,7 @@ foo:
     quuz: 42
 ```
 
-## `strings.Sort` _(deprecated)_
+## `Sort` _(deprecated)_
 **Deprecation Notice:** Use [`coll.Sort`](../coll/#coll-sort) instead
 
 Returns an alphanumerically-sorted copy of a given string list.
@@ -4341,11 +3533,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ (slice "foo" "bar" "baz") | strings.Sort }}'
+$ '{{ (slice "foo" "bar" "baz") | strings.Sort }}'
 [bar baz foo]
 ```
 
-## `strings.Split`
+## `Split`
 
 Creates a slice by splitting a string on a given delimiter.
 
@@ -4369,13 +3561,13 @@ Examples
 
 Use on its own to produce an array:
 ```console
-$ gomplate -i '{{ "Bart,Lisa,Maggie" | strings.Split "," }}'
+$ '{{ "Bart,Lisa,Maggie" | strings.Split "," }}'
 [Bart Lisa Maggie]
 ```
 
 Use in combination with `range` to iterate over all items:
 ```console
-$ gomplate -i '{{range ("Bart,Lisa,Maggie" | strings.Split ",") }}Hello, {{.}}
+$ '{{range ("Bart,Lisa,Maggie" | strings.Split ",") }}Hello, {{.}}
 {{end}}'
 Hello, Bart
 Hello, Lisa
@@ -4384,15 +3576,14 @@ Hello, Maggie
 
 Use in combination with `index` function to pick a specific value from the resulting array
 ```console
-$ gomplate -i '{{index ("Bart,Lisa,Maggie" | strings.Split ",") 0 }}'
+$ '{{index ("Bart,Lisa,Maggie" | strings.Split ",") 0 }}'
 Bart
 ```
 
 
-## `strings.SplitN`
+## `SplitN`
 
-Creates a slice by splitting a string on a given delimiter. The count determines
-the number of substrings to return.
+Creates a slice by splitting a string on a given delimiter. The count determines the number of substrings to return.
 
 Usage
 
@@ -4414,15 +3605,14 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ range ("foo:bar:baz" | strings.SplitN ":" 2) }}{{.}}
+$ '{{ range ("foo:bar:baz" | strings.SplitN ":" 2) }}{{.}}
 {{end}}'
 foo
 bar:baz
 ```
 
-## `strings.Quote`
 
-**Alias:** `quote`
+## `quote`
 
 Surrounds an input string with double-quote characters (`"`). If the input is not a string, converts first.
 
@@ -4452,13 +3642,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "in" | quote }}'
+$ '{{ "in" | quote }}'
 "in"
-$ gomplate -i '{{ strings.Quote 500 }}'
+$ '{{ strings.Quote 500 }}'
 "500"
 ```
 
-## `strings.Repeat`
+## `Repeat`
 
 Returns a new string consisting of `count` copies of the input string.
 
@@ -4485,13 +3675,12 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "hello " | strings.Repeat 5 }}'
+$ '{{ "hello " | strings.Repeat 5 }}'
 hello hello hello hello hello
 ```
 
-## `strings.ReplaceAll`
 
-**Alias:** `replaceAll`
+## `replaceAll`
 
 Replaces all occurrences of a given string with another.
 
@@ -4515,13 +3704,13 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ strings.ReplaceAll "." "-" "172.21.1.42" }}'
+$ '{{ strings.ReplaceAll "." "-" "172.21.1.42" }}'
 172-21-1-42
-$ gomplate -i '{{ "172.21.1.42" | strings.ReplaceAll "." "-" }}'
+$ '{{ "172.21.1.42" | strings.ReplaceAll "." "-" }}'
 172-21-1-42
 ```
 
-## `strings.Slug`
+## `Slug`
 
 Creates a a "slug" from a given string - supports Unicode correctly. This wraps the [github.com/gosimple/slug](https://github.com/gosimple/slug) package. See [the github.com/gosimple/slug docs](https://godoc.org/github.com/gosimple/slug) for more information.
 
@@ -4543,7 +3732,7 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "Hello, world!" | strings.Slug }}'
+$ '{{ "Hello, world!" | strings.Slug }}'
 hello-world
 ```
 ```console
@@ -4551,12 +3740,10 @@ $ echo 'Rock & Roll @ Cafe Wha?' | gomplate -d in=stdin: -i '{{ strings.Slug (in
 rock-and-roll-at-cafe-wha
 ```
 
-## `strings.ShellQuote`
 
-**Alias:** `shellQuote`
+## `shellQuote`
 
 Given a string, emits a version of that string that will evaluate to its literal data when expanded by any POSIX-compliant shell.
-
 Given an array or slice, emit a single string which will evaluate to a series of shell words, one per item in that array or slice.
 
 Usage
@@ -4577,17 +3764,16 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i "{{ slice \"one word\" \"foo='bar baz'\" | shellQuote }}"
+$ "{{ slice \"one word\" \"foo='bar baz'\" | shellQuote }}"
 'one word' 'foo='"'"'bar baz'"'"''
 ```
 ```console
-$ gomplate -i "{{ strings.ShellQuote \"it's a banana\" }}"
+$ "{{ strings.ShellQuote \"it's a banana\" }}"
 'it'"'"'s a banana'
 ```
 
-## `strings.Squote`
 
-**Alias:** `squote`
+## `squote`
 
 Surrounds an input string with a single-quote (apostrophe) character (`'`). If the input is not a string, converts first.
 
@@ -4611,17 +3797,16 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "in" | squote }}'
+$ '{{ "in" | squote }}'
 'in'
 ```
 ```console
-$ gomplate -i "{{ strings.Squote \"it's a banana\" }}"
+$ "{{ strings.Squote \"it's a banana\" }}"
 'it''s a banana'
 ```
 
-## `strings.Title`
 
-**Alias:** `title`
+## `title`
 
 Convert to title-case.
 
@@ -4643,13 +3828,12 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{strings.Title "hello, world!"}}'
+$ '{{strings.Title "hello, world!"}}'
 Hello, World!
 ```
 
-## `strings.ToLower`
 
-**Alias:** `toLower`
+## `toLower`
 
 Convert to lower-case.
 
@@ -4675,9 +3859,8 @@ $ echo '{{strings.ToLower "HELLO, WORLD!"}}' | gomplate
 hello, world!
 ```
 
-## `strings.ToUpper`
 
-**Alias:** `toUpper`
+## `toUpper`
 
 Convert to upper-case.
 
@@ -4699,11 +3882,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{strings.ToUpper "hello, world!"}}'
+$ '{{strings.ToUpper "hello, world!"}}'
 HELLO, WORLD!
 ```
 
-## `strings.Trim`
+## `Trim`
 
 Trims a string by removing the given characters from the beginning and end of
 the string.
@@ -4727,11 +3910,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "_-foo-_" | strings.Trim "_-" }}
+$ '{{ "_-foo-_" | strings.Trim "_-" }}
 foo
 ```
 
-## `strings.TrimPrefix`
+## `TrimPrefix`
 
 Returns a string without the provided leading prefix string, if the prefix is present.
 
@@ -4756,13 +3939,12 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "hello, world" | strings.TrimPrefix "hello, " }}'
+$ '{{ "hello, world" | strings.TrimPrefix "hello, " }}'
 world
 ```
 
-## `strings.TrimSpace`
 
-**Alias:** `trimSpace`
+## `trimSpace`
 
 Trims a string by removing whitespace from the beginning and end of
 the string.
@@ -4785,11 +3967,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "  \n\t foo" | strings.TrimSpace }}'
+$ '{{ "  \n\t foo" | strings.TrimSpace }}'
 foo
 ```
 
-## `strings.TrimSuffix`
+## `TrimSuffix`
 
 Returns a string without the provided trailing suffix string, if the suffix is present.
 
@@ -4814,11 +3996,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "hello, world" | strings.TrimSuffix "world" }}jello'
+$ '{{ "hello, world" | strings.TrimSuffix "world" }}jello'
 hello, jello
 ```
 
-## `strings.Trunc`
+## `Trunc`
 
 Returns a string truncated to the given length.
 
@@ -4843,11 +4025,11 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "hello, world" | strings.Trunc 5 }}'
+$ '{{ "hello, world" | strings.Trunc 5 }}'
 hello
 ```
 
-## `strings.CamelCase`
+## `CamelCase`
 
 Converts a sentence to CamelCase, i.e. `The quick brown fox` becomes `TheQuickBrownFox`.
 
@@ -4873,15 +4055,15 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "Hello, World!" | strings.CamelCase }}'
+$ '{{ "Hello, World!" | strings.CamelCase }}'
 HelloWorld
 ```
 ```console
-$ gomplate -i '{{ "hello jello" | strings.CamelCase }}'
+$ '{{ "hello jello" | strings.CamelCase }}'
 helloJello
 ```
 
-## `strings.SnakeCase`
+## `SnakeCase`
 
 Converts a sentence to snake_case, i.e. `The quick brown fox` becomes `The_quick_brown_fox`.
 
@@ -4907,20 +4089,17 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "Hello, World!" | strings.SnakeCase }}'
+$ '{{ "Hello, World!" | strings.SnakeCase }}'
 Hello_world
 ```
 ```console
-$ gomplate -i '{{ "hello jello" | strings.SnakeCase }}'
+$ '{{ "hello jello" | strings.SnakeCase }}'
 hello_jello
 ```
 
-## `strings.KebabCase`
+## `KebabCase`
 
-Converts a sentence to kebab-case, i.e. `The quick brown fox` becomes `The-quick-brown-fox`.
-
-All non-alphanumeric characters are stripped, and spaces are replaced with a hyphen (`-`). If the input begins with a lower-case letter, the result will also begin with a lower-case letter.
-
+Converts a sentence to kebab-case, i.e. `The quick brown fox` becomes `The-quick-brown-fox`. All non-alphanumeric characters are stripped, and spaces are replaced with a hyphen (`-`). If the input begins with a lower-case letter, the result will also begin with a lower-case letter.
 See [Kebab Case on Wikipedia](https://en.wikipedia.org/wiki/Kebab_case) for more details.
 
 Usage
@@ -4941,21 +4120,17 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "Hello, World!" | strings.KebabCase }}'
+$ '{{ "Hello, World!" | strings.KebabCase }}'
 Hello-world
 ```
 ```console
-$ gomplate -i '{{ "hello jello" | strings.KebabCase }}'
+$ '{{ "hello jello" | strings.KebabCase }}'
 hello-jello
 ```
 
-## `strings.WordWrap`
+## `WordWrap`
 
-Inserts new line breaks into the input string so it ends up with lines that are at most `width` characters wide.
-
-The line-breaking algorithm is _naïve_ and _greedy_: lines are only broken between words (i.e. on whitespace characters), and no effort is made to "smooth" the line endings.
-
-When words that are longer than the desired width are encountered (e.g. long URLs), they are not broken up. Correctness is valued above line length.
+Inserts new line breaks into the input string so it ends up with lines that are at most `width` characters wide. The line-breaking algorithm is _naïve_ and _greedy_: lines are only broken between words (i.e. on whitespace characters), and no effort is made to "smooth" the line endings. When words that are longer than the desired width are encountered (e.g. long URLs), they are not broken up. Correctness is valued above line length.
 
 The line-break sequence defaults to `\n` (i.e. the LF/Line Feed character), regardless of OS.
 
@@ -4979,12 +4154,12 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ "Hello, World!" | strings.WordWrap 7 }}'
+$ '{{ "Hello, World!" | strings.WordWrap 7 }}'
 Hello,
 World!
 ```
 ```console
-$ gomplate -i '{{ strings.WordWrap 20 "\\\n" "a string with a long url http://example.com/a/very/long/url which should not be broken" }}'
+$ '{{ strings.WordWrap 20 "\\\n" "a string with a long url http://example.com/a/very/long/url which should not be broken" }}'
 a string with a long
 url
 http://example.com/a/very/long/url
@@ -4992,18 +4167,13 @@ which should not be
 broken
 ```
 
-## `strings.RuneCount`
+## `RuneCount`
 
-Return the number of _runes_ (Unicode code-points) contained within the
-input. This is similar to the built-in `len` function, but `len` counts
-the length in _bytes_. The length of an input containing multi-byte
-code-points should therefore be measured with `strings.RuneCount`.
+Return the number of _runes_ (Unicode code-points) contained within the input. This is similar to the built-in `len` function, but `len` counts the length in _bytes_. The length of an input containing multi-byte code-points should therefore be measured with `strings.RuneCount`.
 
-Inputs will first be converted to strings, and multiple inputs are
-concatenated.
+Inputs will first be converted to strings, and multiple inputs are concatenated.
 
-This wraps Go's [`utf8.RuneCountInString`](https://golang.org/pkg/unicode/utf8/#RuneCountInString)
-function.
+This wraps Go's [`utf8.RuneCountInString`](https://golang.org/pkg/unicode/utf8/#RuneCountInString) function.
 
 Usage
 
@@ -5023,7 +4193,7 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ range (slice "\u03a9" "\u0030" "\u1430") }}{{ printf "%s is %d bytes and %d runes\n" . (len .) (strings.RuneCount .) }}{{ end }}'
+$ '{{ range (slice "\u03a9" "\u0030" "\u1430") }}{{ printf "%s is %d bytes and %d runes\n" . (len .) (strings.RuneCount .) }}{{ end }}'
 Ω is 2 bytes and 1 runes
 0 is 1 bytes and 1 runes
 ᐰ is 3 bytes and 1 runes
@@ -5033,8 +4203,7 @@ $ gomplate -i '{{ range (slice "\u03a9" "\u0030" "\u1430") }}{{ printf "%s is %d
 
 **See [`strings.Contains`](#strings-contains) for a pipeline-compatible version**
 
-Contains reports whether the second string is contained within the first. Equivalent to
-[strings.Contains](https://golang.org/pkg/strings#Contains)
+Contains reports whether the second string is contained within the first. Equivalent to [strings.Contains](https://golang.org/pkg/strings#Contains)
 
 Usage
 
@@ -5067,8 +4236,7 @@ no
 
 **See [`strings.HasPrefix`](#strings-hasprefix) for a pipeline-compatible version**
 
-Tests whether the string begins with a certain substring. Equivalent to
-[strings.HasPrefix](https://golang.org/pkg/strings#HasPrefix)
+Tests whether the string begins with a certain substring. Equivalent to [strings.HasPrefix](https://golang.org/pkg/strings#HasPrefix)
 
 Usage
 
@@ -5101,8 +4269,7 @@ foo
 
 **See [`strings.HasSuffix`](#strings-hassuffix) for a pipeline-compatible version**
 
-Tests whether the string ends with a certain substring. Equivalent to
-[strings.HasSuffix](https://golang.org/pkg/strings#HasSuffix)
+Tests whether the string ends with a certain substring. Equivalent to [strings.HasSuffix](https://golang.org/pkg/strings#HasSuffix)
 
 Usage
 
@@ -5133,8 +4300,7 @@ http://example.com:80
 
 **See [`strings.Split`](#strings-split) for a pipeline-compatible version**
 
-Creates a slice by splitting a string on a given delimiter. Equivalent to
-[strings.Split](https://golang.org/pkg/strings#Split)
+Creates a slice by splitting a string on a given delimiter. Equivalent to [strings.Split](https://golang.org/pkg/strings#Split)
 
 Usage
 
@@ -5152,7 +4318,7 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{range split "Bart,Lisa,Maggie" ","}}Hello, {{.}}
+$ '{{range split "Bart,Lisa,Maggie" ","}}Hello, {{.}}
 {{end}}'
 Hello, Bart
 Hello, Lisa
@@ -5163,8 +4329,7 @@ Hello, Maggie
 
 **See [`strings.SplitN`](#strings-splitn) for a pipeline-compatible version**
 
-Creates a slice by splitting a string on a given delimiter. The count determines
-the number of substrings to return. Equivalent to [strings.SplitN](https://golang.org/pkg/strings#SplitN)
+Creates a slice by splitting a string on a given delimiter. The count determines the number of substrings to return. Equivalent to [strings.SplitN](https://golang.org/pkg/strings#SplitN)
 
 Usage
 
@@ -5183,7 +4348,7 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ range splitN "foo:bar:baz" ":" 2 }}{{.}}
+$ '{{ range splitN "foo:bar:baz" ":" 2 }}{{.}}
 {{end}}'
 foo
 bar:baz
@@ -5193,8 +4358,7 @@ bar:baz
 
 **See [`strings.Trim`](#strings-trim) for a pipeline-compatible version**
 
-Trims a string by removing the given characters from the beginning and end of
-the string. Equivalent to [strings.Trim](https://golang.org/pkg/strings/#Trim)
+Trims a string by removing the given characters from the beginning and end of the string. Equivalent to [strings.Trim](https://golang.org/pkg/strings/#Trim)
 
 Usage
 
@@ -5222,12 +4386,11 @@ Hello, world!
 ```
 
 
-## `test.Assert`
+# `test`
 
-**Alias:** `assert`
+## `assert`
 
-Asserts that the given expression or value is `true`. If it is not, causes
-template generation to fail immediately with an optional message.
+Asserts that the given expression or value is `true`. If it is not, causes template generation to fail immediately with an optional message.
 
 Usage
 
@@ -5248,15 +4411,14 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ assert (eq "foo" "bar") }}'
+$ '{{ assert (eq "foo" "bar") }}'
 template: <arg>:1:3: executing "<arg>" at <assert (eq "foo" "ba...>: error calling assert: assertion failed
-$ gomplate -i '{{ assert "something horrible happened" false }}'
+$ '{{ assert "something horrible happened" false }}'
 template: <arg>:1:3: executing "<arg>" at <assert "something ho...>: error calling assert: assertion failed: something horrible happened
 ```
 
-## `test.Fail`
 
-**Alias:** `fail`
+## `fail`
 
 Cause template generation to fail immediately, with an optional message.
 
@@ -5278,21 +4440,17 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ fail }}'
+$ '{{ fail }}'
 template: <arg>:1:3: executing "<arg>" at <fail>: error calling fail: template generation failed
-$ gomplate -i '{{ test.Fail "something is wrong!" }}'
+$ '{{ test.Fail "something is wrong!" }}'
 template: <arg>:1:7: executing "<arg>" at <test.Fail>: error calling Fail: template generation failed: something is wrong!
 ```
 
-## `test.IsKind`
+## `isKind`
 
-**Alias:** `isKind`
+Report whether the argument is of the given Kind. Can be used to render different templates depending on the kind of data.
 
-Report whether the argument is of the given Kind. Can be used to render
-different templates depending on the kind of data.
-
-See [the Go `reflect` source code](https://github.com/golang/go/blob/36fcde1676a0d3863cb5f295eed6938cd782fcbb/src/reflect/type.go#L595..L622)
-for the complete list, but these are some common values:
+See [the Go `reflect` source code](https://github.com/golang/go/blob/36fcde1676a0d3863cb5f295eed6938cd782fcbb/src/reflect/type.go#L595..L622) for the complete list, but these are some common values:
 
 - `string`
 - `bool`
@@ -5302,9 +4460,7 @@ for the complete list, but these are some common values:
 - `map`
 - `invalid` (a catch-all, usually just `nil` values)
 
-In addition, the special kind `number` is accepted by this function, to
-represent _any_ numeric kind (whether `float32`, `uint8`, or whatever).
-This is useful when the specific numeric type is unknown.
+In addition, the special kind `number` is accepted by this function, to represent _any_ numeric kind (whether `float32`, `uint8`, or whatever). This is useful when the specific numeric type is unknown.
 
 See also [`test.Kind`](test-kind).
 
@@ -5327,12 +4483,12 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $data := "hello world" }}
+$ '{{ $data := "hello world" }}
 {{- if isKind "string" $data }}{{ $data }} is a string{{ end }}'
 hello world is a string
 ```
 ```console
-$ gomplate -i '{{ $object := dict "key1" true "key2" "foobar" }}
+$ '{{ $object := dict "key1" true "key2" "foobar" }}
 {{- if test.IsKind "map" $object }}
 Got a map:
 {{ range $key, $value := $object -}}
@@ -5347,14 +4503,9 @@ Got a map:
 - "key2": foobar
 ```
 
-## `test.Kind`
+## `kind`
 
-**Alias:** `kind`
-
-Report the _kind_ of the given argument. This differs from the _type_ of
-the argument in specificity; for example, while a slice of strings may
-have a type of `[]string`, the _kind_ of that slice will simply be `slice`.
-
+Report the _kind_ of the given argument. This differs from the _type_ of the argument in specificity; for example, while a slice of strings may have a type of `[]string`, the _kind_ of that slice will simply be `slice`.
 If you need to know the precise type of a value, use `printf "%T" $value`.
 
 See also [`test.IsKind`](test-iskind).
@@ -5377,29 +4528,20 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ kind "hello world" }}'
+$ '{{ kind "hello world" }}'
 string
 ```
 ```console
-$ gomplate -i '{{ dict "key1" true "key2" "foobar" | test.Kind }}'
+$ '{{ dict "key1" true "key2" "foobar" | test.Kind }}'
 map
 ```
 
-## `test.Required`
 
-**Alias:** `required`
+## `required`
 
-Passes through the given value, if it's non-empty, and non-`nil`. Otherwise,
-exits and prints a given error message so the user can adjust as necessary.
+Passes through the given value, if it's non-empty, and non-`nil`. Otherwise, exits and prints a given error message so the user can adjust as necessary. This is particularly useful for cases where templates require user-provided data (such as datasources or environment variables), and rendering can not continue correctly.
 
-This is particularly useful for cases where templates require user-provided
-data (such as datasources or environment variables), and rendering can not
-continue correctly.
-
-This was inspired by [Helm's `required` function](https://github.com/kubernetes/helm/blob/master/docs/charts_tips_and_tricks.md#know-your-template-functions),
-but has slightly different behaviour. Notably, gomplate will always fail in
-cases where a referenced _key_ is missing, and this function will have no
-effect.
+This was inspired by [Helm's `required` function](https://github.com/kubernetes/helm/blob/master/docs/charts_tips_and_tricks.md#know-your-template-functions), but has slightly different behaviour. Notably, gomplate will always fail in cases where a referenced _key_ is missing, and this function will have no effect.
 
 Usage
 
@@ -5438,9 +4580,8 @@ $ gomplate -d config=config.yaml -i '{{ (ds "config").bogus | required "The `con
 template: <arg>:1:7: executing "<arg>" at <"config">: map has no entry for key "bogus"
 ```
 
-## `test.Ternary`
 
-**Alias:** `ternary`
+## `ternary`
 
 Returns one of two values depending on whether the third is true. Note that the third value does not have to be a boolean - it is converted first by the [`conv.ToBool`](../conv/#conv-tobool) function (values like `true`, `1`, `"true"`, `"Yes"`, etc... are considered true).
 
@@ -5472,14 +4613,14 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ ternary "FOO" "BAR" false }}'
+$ '{{ ternary "FOO" "BAR" false }}'
 BAR
-$ gomplate -i '{{ ternary "FOO" "BAR" "yes" }}'
+$ '{{ ternary "FOO" "BAR" "yes" }}'
 FOO
 ```
 
-
-## `time.Now`
+# `Time`
+## `Now`
 
 Returns the current local time, as a `time.Time`. This wraps [`time.Now`](https://golang.org/pkg/time/#Now).
 
@@ -5496,21 +4637,21 @@ Examples
 
 Usage with [`UTC`](https://golang.org/pkg/time/#Time.UTC) and [`Format`](https://golang.org/pkg/time/#Time.Format):
 ```console
-$ gomplate -i '{{ (time.Now).UTC.Format "Day 2 of month 1 in year 2006 (timezone MST)" }}'
+$ '{{ (time.Now).UTC.Format "Day 2 of month 1 in year 2006 (timezone MST)" }}'
 Day 14 of month 10 in year 2017 (timezone UTC)
 ```
 Usage with [`AddDate`](https://golang.org/pkg/time/#Time.AddDate):
 ```console
 $ date
 Sat Oct 14 09:57:02 EDT 2017
-$ gomplate -i '{{ ((time.Now).AddDate 0 1 0).Format "Mon Jan 2 15:04:05 MST 2006" }}'
+$ '{{ ((time.Now).AddDate 0 1 0).Format "Mon Jan 2 15:04:05 MST 2006" }}'
 Tue Nov 14 09:57:02 EST 2017
 ```
 
 _(notice how the TZ adjusted for daylight savings!)_
 Usage with [`IsDST`](https://golang.org/pkg/time/#Time.IsDST):
 ```console
-$ gomplate -i '{{ $t := time.Now }}At the tone, the time will be {{ ($t.Round (time.Minute 1)).Add (time.Minute 1) }}.
+$ '{{ $t := time.Now }}At the tone, the time will be {{ ($t.Round (time.Minute 1)).Add (time.Minute 1) }}.
   It is{{ if not $t.IsDST }} not{{ end }} daylight savings time.
   ... ... BEEP'
 At the tone, the time will be 2022-02-10 09:01:00 -0500 EST.
@@ -5518,15 +4659,14 @@ It is not daylight savings time.
 ... ... BEEP
 ```
 
-## `time.Parse`
+## `Parse`
 
 Parses a timestamp defined by the given layout. This wraps [`time.Parse`](https://golang.org/pkg/time/#Parse).
 
 A number of pre-defined layouts are provided as constants, defined
 [here](https://golang.org/pkg/time/#pkg-constants).
 
-Just like [`time.Now`](#time-now), this is usually used in conjunction with
-other functions.
+Just like [`time.Now`](#time-now), this is usually used in conjunction with other functions.
 
 _Note: In the absence of a time zone indicator, `time.Parse` returns a time in UTC._
 
@@ -5550,11 +4690,11 @@ Examples
 
 Usage with [`Format`](https://golang.org/pkg/time/#Time.Format):
 ```console
-$ gomplate -i '{{ (time.Parse "2006-01-02" "1993-10-23").Format "Monday January 2, 2006 MST" }}'
+$ '{{ (time.Parse "2006-01-02" "1993-10-23").Format "Monday January 2, 2006 MST" }}'
 Saturday October 23, 1993 UTC
 ```
 
-## `time.ParseDuration`
+## `ParseDuration`
 
 Parses a duration string. This wraps [`time.ParseDuration`](https://golang.org/pkg/time/#ParseDuration).
 
@@ -5580,16 +4720,15 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ (time.Now).Format time.Kitchen }}
+$ '{{ (time.Now).Format time.Kitchen }}
 {{ ((time.Now).Add (time.ParseDuration "2h30m")).Format time.Kitchen }}'
 12:43AM
 3:13AM
 ```
 
-## `time.ParseLocal`
+## `ParseLocal`
 
-Same as [`time.Parse`](#time-parse), except that in the absence of a time zone
-indicator, the timestamp wil be parsed in the local timezone.
+Same as [`time.Parse`](#time-parse), except that in the absence of a time zone indicator, the timestamp wil be parsed in the local timezone.
 
 Usage
 
@@ -5615,7 +4754,7 @@ $ bin/gomplate -i '{{ (time.ParseLocal time.Kitchen "6:00AM").Format "15:04 MST"
 06:00 EST
 ```
 
-## `time.ParseInLocation`
+## `ParseInLocation`
 
 Same as [`time.Parse`](#time-parse), except that the time is parsed in the given location's time zone.
 
@@ -5642,11 +4781,11 @@ Examples
 
 Usage with [`Format`](https://golang.org/pkg/time/#Time.Format):
 ```console
-$ gomplate -i '{{ (time.ParseInLocation time.Kitchen "Africa/Luanda" "6:00AM").Format "15:04 MST" }}'
+$ '{{ (time.ParseInLocation time.Kitchen "Africa/Luanda" "6:00AM").Format "15:04 MST" }}'
 06:00 LMT
 ```
 
-## `time.Since`
+## `Since`
 
 Returns the time elapsed since a given time. This wraps [`time.Since`](https://golang.org/pkg/time/#Since).
 
@@ -5670,15 +4809,14 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $t := time.Parse time.RFC3339 "1970-01-01T00:00:00Z" }}time since the epoch:{{ time.Since $t }}'
+$ '{{ $t := time.Parse time.RFC3339 "1970-01-01T00:00:00Z" }}time since the epoch:{{ time.Since $t }}'
+
 time since the epoch:423365h0m24.353828924s
 ```
 
-## `time.Unix`
+## `Unix`
 
-Returns the local `Time` corresponding to the given Unix time, in seconds since
-January 1, 1970 UTC. Note that fractional seconds can be used to denote
-milliseconds, but must be specified as a string, not a floating point number.
+Returns the local `Time` corresponding to the given Unix time, in seconds since January 1, 1970 UTC. Note that fractional seconds can be used to denote milliseconds, but must be specified as a string, not a floating point number.
 
 Usage
 
@@ -5699,17 +4837,17 @@ Examples
 
 _with whole seconds:_
 ```console
-$ gomplate -i '{{ (time.Unix 42).UTC.Format time.Stamp}}'
+$ '{{ (time.Unix 42).UTC.Format time.Stamp}}'
 Jan  1, 00:00:42
 ```
 
 _with fractional seconds:_
 ```console
-$ gomplate -i '{{ (time.Unix "123456.789").UTC.Format time.StampMilli}}'
+$ '{{ (time.Unix "123456.789").UTC.Format time.StampMilli}}'
 Jan  2 10:17:36.789
 ```
 
-## `time.Until`
+## `Until`
 
 Returns the duration until a given time. This wraps [`time.Until`](https://golang.org/pkg/time/#Until).
 
@@ -5733,7 +4871,7 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $t := time.Parse time.RFC3339 "2020-01-01T00:00:00Z" }}only {{ time.Until $t }} to go...'
+$ '{{ $t := time.Parse time.RFC3339 "2020-01-01T00:00:00Z" }}only {{ time.Until $t }} to go...'
 only 14922h56m46.578625891s to go...
 ```
 
@@ -5743,7 +4881,7 @@ $ bin/gomplate -i '{{ $t := time.Parse time.RFC3339 "2020-01-01T00:00:00Z" }}onl
 only 14923h0m0s to go...
 ```
 
-## `time.ZoneName`
+## `ZoneName`
 
 Return the local system's time zone's name.
 
@@ -5757,11 +4895,11 @@ time.ZoneName
 Examples
 
 ```console
-$ gomplate -i '{{time.ZoneName}}'
+$ '{{time.ZoneName}}'
 EDT
 ```
 
-## `time.ZoneOffset`
+## `ZoneOffset`
 
 Return the local system's time zone offset, in seconds east of UTC.
 
@@ -5775,12 +4913,12 @@ time.ZoneOffset
 Examples
 
 ```console
-$ gomplate -i '{{time.ZoneOffset}}'
+$ '{{time.ZoneOffset}}'
 -14400
 ```
 
-
-## `uuid.V1`
+# `UUID`
+## `V1`
 
 Create a version 1 UUID (based on the current MAC address and the current date/time).
 
@@ -5796,11 +4934,11 @@ uuid.V1
 Examples
 
 ```console
-$ gomplate -i '{{ uuid.V1 }}'
+$ '{{ uuid.V1 }}'
 4d757e54-446d-11e9-a8fa-72000877c7b0
 ```
 
-## `uuid.V4`
+## `V4`
 
 Create a version 4 UUID (randomly generated).
 
@@ -5816,11 +4954,11 @@ uuid.V4
 Examples
 
 ```console
-$ gomplate -i '{{ uuid.V4 }}'
+$ '{{ uuid.V4 }}'
 40b3c2d2-e491-4b19-94cd-461e6fa35a60
 ```
 
-## `uuid.Nil`
+## `Nil`
 
 Returns the _nil_ UUID, that is, `00000000-0000-0000-0000-000000000000`,
 mostly for testing scenarios.
@@ -5835,14 +4973,13 @@ uuid.Nil
 Examples
 
 ```console
-$ gomplate -i '{{ uuid.Nil }}'
+$ '{{ uuid.Nil }}'
 00000000-0000-0000-0000-000000000000
 ```
 
-## `uuid.IsValid`
+## `IsValid`
 
-Checks that the given UUID is in the correct format. It does not validate
-whether the version or variant are correct.
+Checks that the given UUID is in the correct format. It does not validate whether the version or variant are correct.
 
 Usage
 
@@ -5862,24 +4999,21 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ if uuid.IsValid "totally invalid" }}valid{{ else }}invalid{{ end }}'
+$ '{{ if uuid.IsValid "totally invalid" }}valid{{ else }}invalid{{ end }}'
 invalid
 ```
 ```console
-$ gomplate -i '{{ uuid.IsValid "urn:uuid:12345678-90ab-cdef-fedc-ba9876543210" }}'
+$ '{{ uuid.IsValid "urn:uuid:12345678-90ab-cdef-fedc-ba9876543210" }}'
 true
 ```
 
-## `uuid.Parse`
+## `Parse`
 
 Parse a UUID for further manipulation or inspection.
 
 This function returns a `UUID` struct, as defined in the [github.com/google/uuid](https://godoc.org/github.com/google/uuid#UUID) package. See the docs for examples of functions or fields you can call.
 
-Both the standard UUID forms of `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` and
-`urn:uuid:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` are decoded as well as the
-Microsoft encoding `{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}` and the raw hex
-encoding (`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`).
+Both the standard UUID forms of `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` and `urn:uuid:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` are decoded as well as the Microsoft encoding `{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}` and the raw hex encoding (`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`).
 
 Usage
 
@@ -5899,10 +5033,10 @@ Arguments
 Examples
 
 ```console
-$ gomplate -i '{{ $u := uuid.Parse uuid.V4 }}{{ $u.Version }}, {{ $u.Variant}}'
+$ '{{ $u := uuid.Parse uuid.V4 }}{{ $u.Version }}, {{ $u.Variant}}'
 VERSION_4, RFC4122
 ```
 ```console
-$ gomplate -i '{{ (uuid.Parse "000001f5-4470-21e9-9b00-72000877c7b0").Domain }}'
+$ '{{ (uuid.Parse "000001f5-4470-21e9-9b00-72000877c7b0").Domain }}'
 Person
 ```
