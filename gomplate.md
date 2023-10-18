@@ -23,11 +23,11 @@ Arguments
 Examples
 
 ```console
-$ '{{ base64.Encode "hello world" }}'
+'{{ base64.Encode "hello world" }}'
 aGVsbG8gd29ybGQ=
 ```
 ```console
-$ '{{ "hello world" | base64.Encode }}'
+'{{ "hello world" | base64.Encode }}'
 aGVsbG8gd29ybGQ=
 ```
 
@@ -53,11 +53,11 @@ Arguments
 Examples
 
 ```console
-$ '{{ base64.Decode "aGVsbG8gd29ybGQ=" }}'
+'{{ base64.Decode "aGVsbG8gd29ybGQ=" }}'
 hello world
 ```
 ```console
-$ '{{ "aGVsbG8gd29ybGQ=" | base64.Decode }}'
+'{{ "aGVsbG8gd29ybGQ=" | base64.Decode }}'
 hello world
 ```
 
@@ -82,11 +82,11 @@ Arguments
 Examples
 
 ```console
-$ '{{ base64.DecodeBytes "aGVsbG8gd29ybGQ=" }}'
+'{{ base64.DecodeBytes "aGVsbG8gd29ybGQ=" }}'
 [104 101 108 108 111 32 119 111 114 108 100]
 ```
 ```console
-$ '{{ "aGVsbG8gd29ybGQ=" | base64.DecodeBytes | conv.ToString }}'
+'{{ "aGVsbG8gd29ybGQ=" | base64.DecodeBytes | conv.ToString }}'
 hello world
 ```
 ---
@@ -125,10 +125,10 @@ Arguments
 Examples
 
 ```console
-$ '{{ coll.Dict "name" "Frank" "age" 42 | data.ToYAML }}'
+'{{ coll.Dict "name" "Frank" "age" 42 | data.ToYAML }}'
 age: 42
 name: Frank
-$ '{{ dict 1 2 3 | toJSON }}'
+'{{ dict 1 2 3 | toJSON }}'
 {"1":2,"3":""}
 ```
 ```console
@@ -160,7 +160,7 @@ Arguments
 Examples
 
 ```console
-$ '{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }}'
+'{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }}'
 Hello, Bart
 Hello, Lisa
 Hello, Maggie
@@ -187,7 +187,7 @@ Arguments
 Examples
 
 ```console
-$ '{{ $l := slice "foo" "bar" "baz" }}there is {{ if has $l "bar" }}a{{else}}no{{end}} bar'
+'{{ $l := slice "foo" "bar" "baz" }}there is {{ if has $l "bar" }}a{{else}}no{{end}} bar'
 there is a bar
 ```
 ```console
@@ -270,9 +270,8 @@ Arguments
 Examples
 
 ```console
-$ gomplate \
-   -i '{{ .books | jq `[.works[]|{"title":.title,"authors":[.authors[].name],"published":.first_publish_year}][0]` }}' \
-   -c books=https://openlibrary.org/subjects/fantasy.json
+$ '{{ .books | jq `[.works[]|{"title":.title,"authors":[.authors[].name],"published":.first_publish_year}][0]` }}' -c books=https://openlibrary.org/subjects/fantasy.json
+
 map[authors:[Lewis Carroll] published:1865 title:Alice's Adventures in Wonderland]
 ```
 
@@ -532,15 +531,6 @@ $ '{{ slice "foo" "bar" "baz" | coll.Sort }}'
 $ '{{ sort (slice 3 4 1 2 5) }}'
 [1 2 3 4 5]
 ```
-```console
-$ cat <<EOF > in.json
-[{"a": "foo", "b": 1}, {"a": "bar", "b": 8}, {"a": "baz", "b": 3}]
-EOF
-$ gomplate -d in.json -i '{{ range (include "in" | jsonArray | coll.Sort "b") }}{{ print .a "\n" }}{{ end }}'
-foo
-baz
-bar
-```
 
 
 ## `merge`
@@ -672,15 +662,9 @@ Arguments
 
 Examples
 
-_`input.tmpl`:_
-```
-{{if bool (getenv "FOO")}}foo{{else}}bar{{end}}
-```
-
 ```console
-$ gomplate < input.tmpl
-bar
-$ FOO=true gomplate < input.tmpl
+$ FOO=true 
+$ {{if bool (getenv "FOO")}}foo{{else}}bar{{end}}
 foo
 ```
 
@@ -746,15 +730,6 @@ age: 42
 name: Frank
 $ '{{ dict 1 2 3 | toJSON }}'
 {"1":2,"3":""}
-```
-```console
-$ cat <<EOF| gomplate
-{{ define "T1" }}Hello {{ .thing }}!{{ end -}}
-{{ template "T1" (dict "thing" "world")}}
-{{ template "T1" (dict "thing" "everybody")}}
-EOF
-Hello world!
-Hello everybody!
 ```
 
 ## `slice`
@@ -899,14 +874,10 @@ conv.ParseInt
 
 Examples
 
-_`input.tmpl`:_
-```
-{{ $val := conv.ParseInt (getenv "HEXVAL") 16 32 }}
-The value in decimal is {{ $val }}
-```
-
 ```console
-$ HEXVAL=7C0 gomplate < input.tmpl
+$ HEXVAL=7C0 
+$ {{ $val := conv.ParseInt (getenv "HEXVAL") 16 32 }}
+$ The value in decimal is {{ $val }}
 
 The value in decimal is 1984
 ```
@@ -935,7 +906,12 @@ pi is greater than 3
 ```
 
 ```console
-$ PI=3.14159265359 gomplate < input.tmpl
+{{ $pi := conv.ParseFloat (getenv "PI") 64 }}
+{{- if (gt $pi 3.0) -}}
+pi is greater than 3
+{{- end }}
+PI=3.14159265359
+
 pi is greater than 3
 ```
 
@@ -952,14 +928,11 @@ conv.ParseUint
 
 Examples
 
-_`input.tmpl`:_
-```
+```console
 {{ conv.ParseInt (getenv "BIG") 16 64 }} is max int64
 {{ conv.ParseUint (getenv "BIG") 16 64 }} is max uint64
-```
+$ BIG=FFFFFFFFFFFFFFFF
 
-```console
-$ BIG=FFFFFFFFFFFFFFFF gomplate < input.tmpl
 9223372036854775807 is max int64
 18446744073709551615 is max uint64
 ```
@@ -979,18 +952,15 @@ conv.Atoi
 
 Examples
 
-_`input.tmpl`:_
-```
+```console
+$ NUMBER=21
 {{ $number := conv.Atoi (getenv "NUMBER") }}
 {{- if (gt $number 5) -}}
 The number is greater than 5
 {{- else -}}
 The number is less than 5
 {{- end }}
-```
 
-```console
-$ NUMBER=21 gomplate < input.tmpl
 The number is greater than 5
 ```
 
@@ -1142,7 +1112,7 @@ Arguments
 Examples
 
 ```console
-gomplate -i '{{ conv.ToInt64s true 0x42 "123,456.99" "1.2345e+3"}}'
+'{{ conv.ToInt64s true 0x42 "123,456.99" "1.2345e+3"}}'
 [1 66 123456 1234]
 ```
 
@@ -1167,7 +1137,7 @@ Arguments
 Examples
 
 ```console
-gomplate -i '{{ conv.ToInts true 0x42 "123,456.99" "1.2345e+3"}}'
+'{{ conv.ToInts true 0x42 "123,456.99" "1.2345e+3"}}'
 [1 66 123456 1234]
 ```
 
@@ -1382,9 +1352,7 @@ _`input.tmpl`:_
   ]
 }
 ```
-
-```console
-$ gomplate -d person.json -f input.tmpl
+```
 {
   "people": [
     { "name": "Dave" }
@@ -1425,14 +1393,9 @@ Arguments
 
 Examples
 
-_`input.tmpl`:_
-```
-Hello {{ (getenv "FOO" | json).hello }}
-```
-
 ```console
 $ export FOO='{"hello":"world"}'
-$ gomplate < input.tmpl
+$ Hello {{ (getenv "FOO" | json).hello }}
 Hello world
 ```
 
@@ -1458,14 +1421,9 @@ Arguments
 
 Examples
 
-_`input.tmpl`:_
-```
-Hello {{ index (getenv "FOO" | jsonArray) 1 }}
-```
-
 ```console
 $ export FOO='[ "you", "world" ]'
-$ gomplate < input.tmpl
+Hello {{ index (getenv "FOO" | jsonArray) 1 }}
 Hello world
 ```
 
@@ -1493,14 +1451,11 @@ Arguments
 
 Examples
 
-_`input.tmpl`:_
-```
-Hello {{ (getenv "FOO" | yaml).hello }}
-```
 
 ```console
 $ export FOO='hello: world'
-$ gomplate < input.tmpl
+$ Hello {{ (getenv "FOO" | yaml).hello }}
+
 Hello world
 ```
 
@@ -1526,14 +1481,9 @@ Arguments
 
 Examples
 
-_`input.tmpl`:_
-```
-Hello {{ index (getenv "FOO" | yamlArray) 1 }}
-```
-
 ```console
 $ export FOO='[ "you", "world" ]'
-$ gomplate < input.tmpl
+$ Hello {{ index (getenv "FOO" | yamlArray) 1 }}
 Hello world
 ```
 
@@ -1561,15 +1511,11 @@ Arguments
 
 Examples
 
-_`input.tmpl`:_
-```
+```console
 {{ $t := `[data]
 hello = "world"` -}}
 Hello {{ (toml $t).hello }}
-```
 
-```console
-$ gomplate -f input.tmpl
 Hello world
 ```
 
@@ -1609,7 +1555,6 @@ COBOL,357` -}}
 ```
 
 ```console
-$ gomplate < input.tmpl
 C has 32 keywords.
 Go has 25 keywords.
 COBOL has 357 keywords.
@@ -1654,7 +1599,6 @@ COBOL,357` -}}
 ```
 
 ```console
-$ gomplate < input.tmpl
 C has 32 keywords.
 Go has 25 keywords.
 COBOL has 357 keywords.
@@ -1695,7 +1639,6 @@ COBOL;357` -}}
 ```
 
 ```console
-$ gomplate < input.tmpl
 C
 Go
 COBOL
@@ -1731,7 +1674,6 @@ _`input.tmpl`:_
 ```
 
 ```console
-$ gomplate < input.tmpl
 {"hello":"world"}
 ```
 
@@ -1765,7 +1707,6 @@ _`input.tmpl`:_
 ```
 
 ```console
-$ gomplate < input.tmpl
 {
   "hello": "world"
 }
@@ -1800,7 +1741,6 @@ _`input.tmpl`:_
 ```
 
 ```console
-$ gomplate < input.tmpl
 hello: world
 ```
 
@@ -1862,7 +1802,6 @@ _`input.tmpl`:_
 ```
 
 ```console
-$ gomplate -f input.tmpl
 first,second
 1,2
 3,4
@@ -2010,8 +1949,6 @@ Examples
 ```console
 $ '{{ filepath.FromSlash "/foo/bar" }}'
 /foo/bar
-C:\> gomplate.exe -i '{{ filepath.FromSlash "/foo/bar" }}'
-C:\foo\bar
 ```
 
 ## `IsAbs`
@@ -2068,8 +2005,6 @@ Examples
 ```console
 $ '{{ filepath.Join "/tmp" "foo" "bar" }}'
 /tmp/foo/bar
-C:\> gomplate.exe -i '{{ filepath.Join "C:\tmp" "foo" "bar" }}'
-C:\tmp\foo\bar
 ```
 
 ## `Match`
@@ -2152,8 +2087,6 @@ Examples
 ```console
 $ '{{ $p := filepath.Split "/tmp/foo" }}{{ $dir := index $p 0 }}{{ $file := index $p 1 }}dir is {{$dir}}, file is {{$file}}'
 dir is /tmp/, file is foo
-C:\> gomplate.exe -i '{{ $p := filepath.Split `C:\tmp\foo` }}{{ $dir := index $p 0 }}{{ $file := index $p 1 }}dir is {{$dir}}, file is {{$file}}'
-dir is C:\tmp\, file is foo
 ```
 
 ## `ToSlash`
@@ -2182,8 +2115,6 @@ Examples
 ```console
 $ '{{ filepath.ToSlash "/foo/bar" }}'
 /foo/bar
-C:\> gomplate.exe -i '{{ filepath.ToSlash `foo\bar\baz` }}'
-foo/bar/baz
 ```
 
 ## `VolumeName`
@@ -2210,7 +2141,7 @@ Arguments
 Examples
 
 ```console
-C:\> gomplate.exe -i 'volume is {{ filepath.VolumeName "C:/foo/bar" }}'
+$ 'volume is {{ filepath.VolumeName "C:/foo/bar" }}'
 volume is C:
 $ 'volume is {{ filepath.VolumeName "/foo/bar" }}'
 volume is
@@ -3392,14 +3323,12 @@ Examples
 
 _`input.tmpl`:_
 ```
+FOO=foo 
 {{ if (.Env.FOO | strings.Contains "f") }}yes{{else}}no{{end}}
 ```
 
 ```console
-$ FOO=foo gomplate < input.tmpl
 yes
-$ FOO=bar gomplate < input.tmpl
-no
 ```
 
 ## `HasPrefix`
@@ -3425,9 +3354,11 @@ Arguments
 Examples
 
 ```console
-$ URL=http://example.com gomplate -i '{{if .Env.URL | strings.HasPrefix "https"}}foo{{else}}bar{{end}}'
+$ URL=http://example.com 
+'{{if .Env.URL | strings.HasPrefix "https"}}foo{{else}}bar{{end}}'
 bar
-$ URL=https://example.com gomplate -i '{{if .Env.URL | strings.HasPrefix "https"}}foo{{else}}bar{{end}}'
+$ URL=https://example.com
+'{{if .Env.URL | strings.HasPrefix "https"}}foo{{else}}bar{{end}}'
 foo
 ```
 
@@ -3455,11 +3386,11 @@ Examples
 
 _`input.tmpl`:_
 ```
+URL=http://example.com
 {{.Env.URL}}{{if not (.Env.URL | strings.HasSuffix ":80")}}:80{{end}}
 ```
 
 ```console
-$ URL=http://example.com gomplate < input.tmpl
 http://example.com:80
 ```
 
@@ -3500,7 +3431,6 @@ foo:
 ```
 
 ```console
-$ gomplate -f input.tmpl
 foo:
   bar:
     baz: 2
@@ -3735,11 +3665,6 @@ Examples
 $ '{{ "Hello, world!" | strings.Slug }}'
 hello-world
 ```
-```console
-$ echo 'Rock & Roll @ Cafe Wha?' | gomplate -d in=stdin: -i '{{ strings.Slug (include "in") }}'
-rock-and-roll-at-cafe-wha
-```
-
 
 ## `shellQuote`
 
@@ -3855,7 +3780,7 @@ Arguments
 Examples
 
 ```console
-$ echo '{{strings.ToLower "HELLO, WORLD!"}}' | gomplate
+$ echo '{{strings.ToLower "HELLO, WORLD!"}}'
 hello, world!
 ```
 
@@ -4222,14 +4147,12 @@ Examples
 
 _`input.tmpl`:_
 ```
+FOO=foo
 {{if contains .Env.FOO "f"}}yes{{else}}no{{end}}
 ```
 
 ```console
-$ FOO=foo gomplate < input.tmpl
 yes
-$ FOO=bar gomplate < input.tmpl
-no
 ```
 
 ## `hasPrefix`
@@ -4255,14 +4178,12 @@ Examples
 
 _`input.tmpl`:_
 ```
+URL=http://example.com
 {{if hasPrefix .Env.URL "https"}}foo{{else}}bar{{end}}
 ```
 
 ```console
-$ URL=http://example.com gomplate < input.tmpl
 bar
-$ URL=https://example.com gomplate < input.tmpl
-foo
 ```
 
 ## `hasSuffix`
@@ -4288,11 +4209,11 @@ Examples
 
 _`input.tmpl`:_
 ```
+URL=http://example.com
 {{.Env.URL}}{{if not (hasSuffix .Env.URL ":80")}}:80{{end}}
 ```
 
 ```console
-$ URL=http://example.com gomplate < input.tmpl
 http://example.com:80
 ```
 
@@ -4377,11 +4298,11 @@ Examples
 
 _`input.tmpl`:_
 ```
+FOO="  world "
 Hello, {{trim .Env.FOO " "}}!
 ```
 
 ```console
-$ FOO="  world " | gomplate < input.tmpl
 Hello, world!
 ```
 
@@ -4541,7 +4462,7 @@ map
 
 Passes through the given value, if it's non-empty, and non-`nil`. Otherwise, exits and prints a given error message so the user can adjust as necessary. This is particularly useful for cases where templates require user-provided data (such as datasources or environment variables), and rendering can not continue correctly.
 
-This was inspired by [Helm's `required` function](https://github.com/kubernetes/helm/blob/master/docs/charts_tips_and_tricks.md#know-your-template-functions), but has slightly different behaviour. Notably, gomplate will always fail in cases where a referenced _key_ is missing, and this function will have no effect.
+This was inspired by [Helm's `required` function](https://github.com/kubernetes/helm/blob/master/docs/charts_tips_and_tricks.md#know-your-template-functions), but has slightly different behaviour. 
 
 Usage
 
@@ -4562,24 +4483,13 @@ Arguments
 Examples
 
 ```console
-$ FOO=foobar gomplate -i '{{ getenv "FOO" | required "Missing FOO environment variable!" }}'
+$ FOO=foobar 
+'{{ getenv "FOO" | required "Missing FOO environment variable!" }}'
 foobar
-$ FOO= gomplate -i '{{ getenv "FOO" | required "Missing FOO environment variable!" }}'
+$ FOO= 
+'{{ getenv "FOO" | required "Missing FOO environment variable!" }}'
 error: Missing FOO environment variable!
 ```
-```console
-$ cat <<EOF> config.yaml
-defined: a value
-empty: ""
-EOF
-$ gomplate -d config=config.yaml -i '{{ (ds "config").defined | required "The `config` datasource must have a value defined for `defined`" }}'
-a value
-$ gomplate -d config=config.yaml -i '{{ (ds "config").empty | required "The `config` datasource must have a value defined for `empty`" }}'
-template: <arg>:1:25: executing "<arg>" at <required "The `confi...>: error calling required: The `config` datasource must have a value defined for `empty`
-$ gomplate -d config=config.yaml -i '{{ (ds "config").bogus | required "The `config` datasource must have a value defined for `bogus`" }}'
-template: <arg>:1:7: executing "<arg>" at <"config">: map has no entry for key "bogus"
-```
-
 
 ## `ternary`
 
@@ -4750,7 +4660,7 @@ Examples
 
 Usage with [`Format`](https://golang.org/pkg/time/#Time.Format):
 ```console
-$ bin/gomplate -i '{{ (time.ParseLocal time.Kitchen "6:00AM").Format "15:04 MST" }}'
+$ '{{ (time.ParseLocal time.Kitchen "6:00AM").Format "15:04 MST" }}'
 06:00 EST
 ```
 
@@ -4877,7 +4787,7 @@ only 14922h56m46.578625891s to go...
 
 Or, less precise:
 ```console
-$ bin/gomplate -i '{{ $t := time.Parse time.RFC3339 "2020-01-01T00:00:00Z" }}only {{ (time.Until $t).Round (time.Hour 1) }} to go...'
+$ '{{ $t := time.Parse time.RFC3339 "2020-01-01T00:00:00Z" }}only {{ (time.Until $t).Round (time.Hour 1) }} to go...'
 only 14923h0m0s to go...
 ```
 
