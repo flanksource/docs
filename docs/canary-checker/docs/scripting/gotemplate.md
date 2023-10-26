@@ -126,16 +126,6 @@ JSONPath expressions can be validated at https://jsonpath.com
 
 [JSONPath]: https://goessner.net/articles/JsonPath
 
-Usage
-
-```go
-coll.JSONPath expression in
-```
-```go
-in | coll.JSONPath expression
-```
-
-Examples
 
 ```go
 $ '{{ .books | jsonpath `$..works[?( @.edition_count > 400 )].title` }}' -c books=https://openlibrary.org/subjects/fantasy.json
@@ -272,16 +262,6 @@ Maps and structs can be sorted by a named key.
 
 _Note that this function does not modify the input._
 
-Usage
-
-```go
-coll.Sort [key] list
-```
-```go
-list | coll.Sort [key]
-```
-
-Examples
 
 ```go
 {{ slice "foo" "bar" "baz" | coll.Sort }} // [bar baz foo]
@@ -298,16 +278,6 @@ map can be configured the "overrides". Many source maps can be provided. Precede
 
 _Note that this function does not modify the input._
 
-Usage
-
-```go
-coll.Merge dst srcs...
-```
-```go
-srcs... | coll.Merge dst
-```
-
-Examples
 
 ```go
 $ '{{ $default := dict "foo" 1 "bar" 2}}
@@ -332,16 +302,6 @@ This is the inverse of [`coll.Omit`](#coll-omit).
 
 _Note that this function does not modify the input._
 
-Usage
-
-```go
-coll.Pick keys... map
-```
-```go
-map | coll.Pick keys...
-```
-
-Examples
 
 ```go
 $ '{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
@@ -357,16 +317,6 @@ This is the inverse of [`coll.Pic`](#coll-pick).
 
 _Note that this function does not modify the input._
 
-Usage
-
-```go
-coll.Omit keys... map
-```
-```go
-map | coll.Omit keys...
-```
-
-Examples
 
 ```go
 $ '{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
@@ -680,17 +630,6 @@ These functions output the binary result as a hexadecimal string.
 
 _Warning: SHA-1 is cryptographically broken and should not be used for secure applications._
 
-Usage
-```
-crypto.SHA1 input
-crypto.SHA256 input
-crypto.SHA384 input
-crypto.SHA512 input
-```
-
-
-
-Examples
 
 ```go
 {{ crypto.SHA1 "foo" }} // f1d2d2f924e986ac86fdf7b36c94bcdf32beec15
@@ -706,18 +645,6 @@ Converts a JSON string into an object. Works for JSON Objects, but will also par
 
 For more explict JSON Array support, see [`data.JSONArray`](#data-jsonarray).
 
-Usage
-
-```go
-data.JSON in
-```
-```go
-in | data.JSON
-```
-
-
-
-Examples
 
 ```go
 {{  ('{"hello":"world"}' | json).hello }} // world
@@ -728,18 +655,6 @@ Examples
 
 Converts a JSON string into a slice. Only works for JSON Arrays.
 
-Usage
-
-```go
-data.JSONArray in
-```
-```go
-in | data.JSONArray
-```
-
-
-
-Examples
 
 ```go {{ ('[ "you", "world" ]' | jsonArray) 1 }} // world
 ```
@@ -750,19 +665,6 @@ Examples
 Converts a YAML string into an object. Works for YAML Objects but will also parse YAML Arrays. This can be used to access properties of YAML objects.
 
 For more explict YAML Array support, see [`data.JSONArray`](#data-yamlarray).
-
-Usage
-
-```go
-data.YAML in
-```
-```go
-in | data.YAML
-```
-
-
-
-Examples
 
 
 ```go
@@ -777,19 +679,6 @@ Hello world
 
 Converts a YAML string into a slice. Only works for YAML Arrays.
 
-Usage
-
-```go
-data.YAMLArray in
-```
-```go
-in | data.YAMLArray
-```
-
-
-
-Examples
-
 ```go
 $ export FOO='[ "you", "world" ]'
 $ Hello {{ index (getenv "FOO" | yamlArray) 1 }}
@@ -803,16 +692,6 @@ Converts a [TOML](https://github.com/toml-lang/toml) document into an object. Th
 
 Compatible with [TOML v0.4.0](https://github.com/toml-lang/toml/blob/master/versions/en/toml-v0.4.0.md).
 
-Usage
-
-```go
-data.TOML input
-```
-```go
-input | data.TOML
-```
-
-Examples
 
 ```go
 {{ $t := `[data]
@@ -828,17 +707,6 @@ Hello world
 Converts a CSV-format string into a 2-dimensional string array.
 
 By default, the [RFC 4180](https://tools.ietf.org/html/rfc4180) format is supported, but any single-character delimiter can be specified.
-
-Usage
-
-```go
-data.CSV [delim] input
-```
-```go
-input | data.CSV [delim]
-```
-
-Examples
 
 
 ```
@@ -864,20 +732,6 @@ By default, the [RFC 4180](https://tools.ietf.org/html/rfc4180) format is suppor
 
 Also by default, the first line of the string will be assumed to be the header, but this can be overridden by providing an explicit header, or auto-indexing can be used.
 
-Usage
-
-```go
-data.CSVByRow [delim] [header] input
-```
-```go
-input | data.CSVByRow [delim] [header]
-```
-
-
-
-Examples
-
-
 ```
 {{ $c := `lang,keywords
 C,32
@@ -898,18 +752,6 @@ COBOL has 357 keywords.
 ### csvByColumn
 
 Like [`csvByRow`](#csvByRow), except that the data is presented as a columnar (column-oriented) map.
-
-Usage
-
-```go
-data.CSVByColumn [delim] [header] input
-```
-```go
-input | data.CSVByColumn [delim] [header]
-```
-
-
-Examples
 
 
 ```
@@ -946,8 +788,6 @@ Converts an object to a JSON document. Input objects may be the result of `json`
 Converts an object to a pretty-printed (or _indented_) JSON document. Input objects may be the result of functions like `data.JSON`, `data.YAML`, `data.JSONArray`, or `data.YAMLArray` functions, or they could be provided by a [`datasource`](../general/datasource).
 
 The indent string must be provided as an argument.
-
-
 
 ```
 {{ `{"hello":"world"}` | data.JSON | data.ToJSONPretty "  " }}
@@ -990,17 +830,6 @@ Converts an object to a [TOML](https://github.com/toml-lang/toml) document.
 Converts an object to a CSV document. The input object must be a 2-dimensional array of strings (a `[][]string`). Objects produced by [`data.CSVByRow`](#conv-csvbyrow) and [`data.CSVByColumn`](#conv-csvbycolumn) cannot yet be converted back to CSV documents.
 
 **Note:** With the exception that a custom delimiter can be used, `data.ToCSV` outputs according to the [RFC 4180](https://tools.ietf.org/html/rfc4180) format, which means that line terminators are `CRLF` (Windows format, or `\r\n`). If you require `LF` (UNIX format, or `\n`), the output can be piped through [`strings.ReplaceAll`](../strings/#strings-replaceall) to replace `"\r\n"` with `"\n"`.
-
-Usage
-
-```go
-data.ToCSV [delim] input
-```
-```go
-input | data.ToCSV [delim]
-```
-
-Examples
 
 
 ```go
@@ -1707,18 +1536,6 @@ http://example.com:80
 
 Indents a string. If the input string has multiple lines, each line will be indented.
 
-Usage
-
-```go
-strings.Indent [width] [indent] input
-```
-```go
-input | strings.Indent [width] [indent]
-```
-
-
-
-Examples
 
 This function can be especially useful when adding YAML snippets into other YAML documents, where indentation is important:
 
@@ -1780,14 +1597,6 @@ Use in combination with `index` function to pick a specific value from the resul
 
 Creates a slice by splitting a string on a given delimiter. The count determines the number of substrings to return.
 
-Usage
-
-```go
-strings.SplitN separator count input
-```
-
-
-
 ```go
 {{ range ("foo:bar:baz" | strings.SplitN ":" 2) }}{{.}}{{end}}
 // foo
@@ -1832,13 +1641,6 @@ This wraps Go's [`strings.Repeat`](https://golang.org/pkg/strings/#Repeat).
 ### replaceAll
 
 Replaces all occurrences of a given string with another.
-
-Usage
-
-```go
-strings.ReplaceAll old new input
-```
-
 
 ```go
 {{ strings.ReplaceAll "." "-" "172.21.1.42" }} // 172-21-1-42
@@ -2015,12 +1817,6 @@ Inserts new line breaks into the input string so it ends up with lines that are 
 
 The line-break sequence defaults to `\n` (i.e. the LF/Line Feed character), regardless of OS.
 
-Usage
-
-```go
-strings.WordWrap [width] [lbseq] in
-```
-
 
 ```go
 {{ "Hello, World!" | strings.WordWrap 7 }} // Hello,
@@ -2179,16 +1975,6 @@ In addition, the special kind `number` is accepted by this function, to represen
 
 See also [`test.Kind`](test-kind).
 
-Usage
-
-```go
-test.IsKind kind value
-```
-```go
-value | test.IsKind kind
-```
-
-Examples
 
 ```go
 $ '{{ $data := "hello world" }}
