@@ -1,4 +1,3 @@
-
 ## Quick Start
 
 How to Install Mission control with helm
@@ -83,54 +82,95 @@ helm show values flanksource/mission-control
 
 We use [kratos](https://www.ory.sh/kratos/) for identity management. Login via email/password is the default flow but we can integrate any OIDC provider with in.
 
-Steps:
+**Steps:**
 
-1. Update helm values file to add the provider data
+**1. Update helm values file to add the provider data**
 
-    ```yaml
+```yaml
+kratos:
+  kratos:
+    config:
+      selfservice:
+        oidc:
+          enabled: true
+          providers:
+            - id: <provider-id> # Used in Authorization callback URL. DO NOT CHANGE IT ONCE SET!
+              provider: <provider-type> # Can be google, github, microsoft, gitlab, slack etc
+              client_id: ...
+              client_secret: ...
+              mapper_url: "base64://{YOUR_BASE64_ENCODED_JSONNET_HERE}"
+              <Provider specific metdata>
+```
+
+The provider metadata varies per provider and the relevant documentation can be found at [https://www.ory.sh/docs/kratos/social-signin/overview](https://www.ory.sh/docs/kratos/social-signin/overview)
+
+??? note "Example:"
+
+    ```yaml title="Values.yaml"
     kratos:
       kratos:
         config:
           selfservice:
-            methods:
-              oidc:
-                enabled: true
+            oidc:
+              enabled: true
+              config:
                 providers:
-                  - id: <provider-id> # Used in Authorization callback URL. DO NOT CHANGE IT ONCE SET!
-                    provider: <provider-type> # Can be google, github, microsoft, gitlab, slack etc
+                  - id: microsoft
+                    provider: microsoft
+                    microsoft_tenant: ...
                     client_id: ...
                     client_secret: ...
-                    mapper_url: "base64://{YOUR_BASE64_ENCODED_JSONNET_HERE}"
-                    <Provider specific metdata>
+                    mapper_url: base64://{{ (.Files.Get "files/microsoft.jsonnet") | b64enc }}
+                    scope:
+                      - email
+                      - openid
+                      - profile
+                      - Group.Read.All
     ```
 
-    The provider metadata varies per provider and the relevant documentation can be found on [https://www.ory.sh/docs/kratos/social-signin/overview](https://www.ory.sh/docs/kratos/social-signin/overview)
+**2. Generate mapper URL**
 
-2. Generate mapper url
+We need to map user data from provider to our kratos instance. We do this by creating a jsonnet file to map the data
 
-    We need to map user data from provider to our kratos instance. We do this by creating a jsonnet file to map the data
+```jsonnet
+// claims contains all the data sent by the upstream.
+local claims = std.extVar('claims');
 
-    ```jsonnet
-    // claims contains all the data sent by the upstream.
+{
+  identity: {
+    traits: {
+      email: claims.email,
+      name: {
+        first: claims.<mapping>,
+        last: claims.<mapping>,
+    },
+  },
+}
+```
+
+In our case, `traits.email`, `traits.name.first` and `traits.name.last` are used. If the provider only provides name, `traits.name.last` can be left blank.
+
+??? note "Example:"
+
+    ```jsonnet title="microsoft.jsonnet"
     local claims = std.extVar('claims');
+    // Reference: https://learn.microsoft.com/en-us/entra/identity-platform/id-token-claims-reference
 
     {
       identity: {
         traits: {
-          email: claims.email,
           name: {
-            first: claims.<mapping>,
-            last: claims.<mapping>,
+            [if 'given_name' in claims then 'first' else null]: claims.given_name,
+            [if 'family_name' in claims then 'last' else null]: claims.family_name,
+          },
+
+          [if 'raw_claims' in claims && 'groups' in claims.raw_claims then 'groups' else null]: claims.raw_claims.groups,
+
+          // Preferred username has the email for org accounts. Although it's also not reliable as it can container phone number
+          [if 'preferred_username' in claims then 'email' else null]: claims.preferred_username,
         },
       },
     }
     ```
 
-    In our case, `traits.email`, `traits.name.first` and `traits.name.last` are used. If the provider only provides name, `traits.name.last` can be left blank.
-
-    We then encode the file via base64 and use that output as the mapper url
-    ```console
-    cat mapping.jsonnet | base64
-    ```
-
-3. Update the provider URL and callback URL, follow [the guide](https://www.ory.sh/docs/kratos/social-signin/generic) for provider specific steps
+**3. Update the provider URL and callback URL, follow [the guide](https://www.ory.sh/docs/kratos/social-signin/generic) for provider specific steps**
