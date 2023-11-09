@@ -62,20 +62,24 @@ For creating arrays, see [`coll.Slice`](#coll-slice).
 
 
 ```go
-'{{ coll.Dict "name" "Frank" "age" 42 | data.ToYAML }}'
-age: 42
-name: Frank
-'{{ dict 1 2 3 | toJSON }}'
-{"1":2,"3":""}
+{{ coll.Dict "name" "Frank" "age" 42 | data.ToYAML }}
+// Output:
+// age: 42
+// name: Frank
+
+{{ dict 1 2 3 | toJSON }}
+// Output:
+// {"1":2,"3":""}
+
 ```
 ```go
-$ cat <<EOF| gomplate
-{{ define "T1" }}Hello {{ .thing }}!{{ end -}}
+{{ define "T1" }}Hello {{ .thing }}!{{ end -}} 
 {{ template "T1" (dict "thing" "world")}}
 {{ template "T1" (dict "thing" "everybody")}}
-EOF
-Hello world!
-Hello everybody!
+// Output:
+// Hello world!
+// Hello everybody!
+
 ```
 
 ### slice
@@ -85,10 +89,11 @@ Creates a slice (like an array or list). Useful when needing to `range` over a b
 
 
 ```go
-'{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }}'
-Hello, Bart
-Hello, Lisa
-Hello, Maggie
+{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }}
+// Output:
+// Hello, Bart
+// Hello, Lisa
+// Hello, Maggie
 ```
 
 
@@ -99,20 +104,17 @@ Reports whether a given object has a property with the given key, or whether a g
 
 
 ```go
-'{{ $l := slice "foo" "bar" "baz" }}there is {{ if has $l "bar" }}a{{else}}no{{end}} bar'
-there is a bar
+{{ $l := slice "foo" "bar" "baz" }}there is {{ if has $l "bar" }}a{{else}}no{{end}} bar
+// Output:
+// there is a bar
+
 ```
 ```go
-$ export DATA='{"foo": "bar"}'
-$ '{{ $o := data.JSON (getenv "DATA") -}}
-{{ if (has $o "foo") }}{{ $o.foo }}{{ else }}THERE IS NO FOO{{ end }}'
-bar
-```
-```go
-$ export DATA='{"baz": "qux"}'
-$ '{{ $o := data.JSON (getenv "DATA") -}}
-{{ if (has $o "foo") }}{{ $o.foo }}{{ else }}THERE IS NO FOO{{ end }}'
-THERE IS NO FOO
+{{ $o := data.JSON (getenv "DATA") -}}
+{{ if (has $o "foo") }}{{ $o.foo }}{{ else }}THERE IS NO FOO{{ end }}
+// Output:
+// bar
+
 ```
 
 
@@ -128,8 +130,10 @@ JSONPath expressions can be validated at https://jsonpath.com
 
 
 ```go
-$ '{{ .books | jsonpath `$..works[?( @.edition_count > 400 )].title` }}' -c books=https://openlibrary.org/subjects/fantasy.json
-[Alice's Adventures in Wonderland Gulliver's Travels]
+{{ .books | jsonpath `$..works[?( @.edition_count > 400 )].title` }}
+// Output:
+// [Alice's Adventures in Wonderland Gulliver's Travels]
+
 ```
 
 
@@ -150,7 +154,9 @@ See also:
 Where books is from https://openlibrary.org/subjects/fantasy.json
 ```go
 {{ .books | jq `[.works[]|{"title":.title,"authors":[.authors[].name],"published":.first_publish_year}][0]` }}
+// Output:
 // map[authors:[Lewis Carroll] published:1865 title:Alice's Adventures in Wonderland]
+
 ```
 
 
@@ -164,8 +170,10 @@ See also [`coll.Values`](#coll-values).
 
 
 ```go
-{{ coll.Keys (dict "foo" 1 "bar" 2) }} // [bar foo]
-{{ $map1 := dict "foo" 1 "bar" 2 -}}{{ $map2 := dict "baz" 3 "qux" 4 -}}{{ coll.Keys $map1 $map2 }} // [bar foo baz qux]
+{{ coll.Keys (dict "foo" 1 "bar" 2) }}
+// Output:
+// [bar foo]
+
 ```
 
 
@@ -181,8 +189,10 @@ See also [`coll.Keys`](#coll-keys).
 
 
 ```go
-{{ coll.Values (dict "foo" 1 "bar" 2) }} // [2 1]
-{{ $map1 := dict "foo" 1 "bar" 2 -}}{{ $map2 := dict "baz" 3 "qux" 4 -}}{{ coll.Values $map1 $map2 }} // [2 1 3 4]
+{{ coll.Values (dict "foo" 1 "bar" 2) }}
+// Output:
+// [2 1]
+
 ```
 
 
@@ -280,16 +290,18 @@ _Note that this function does not modify the input._
 
 
 ```go
-$ '{{ $default := dict "foo" 1 "bar" 2}}
+{{ $default := dict "foo" 1 "bar" 2}}
 {{ $config := dict "foo" 8 }}
-{{ merge $config $default }}'
+{{ merge $config $default }}
+
 map[bar:2 foo:8]
 ```
 ```go
-$ '{{ $dst := dict "foo" 1 "bar" 2 }}
+{{ $dst := dict "foo" 1 "bar" 2 }}
 {{ $src1 := dict "foo" 8 "baz" 4 }}
 {{ $src2 := dict "foo" 3 "bar" 5 }}
-{{ coll.Merge $dst $src1 $src2 }}'
+{{ coll.Merge $dst $src1 $src2 }}
+
 map[foo:1 bar:5 baz:4]
 ```
 
@@ -304,8 +316,11 @@ _Note that this function does not modify the input._
 
 
 ```go
-$ '{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
-{{ coll.Pick "foo" "baz" $data }}'
+{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
+{{ $pickedData := coll.Pick "foo" "baz" $data }}
+{{ $pickedData }}
+
+
 map[baz:3 foo:1]
 ```
 
@@ -319,8 +334,10 @@ _Note that this function does not modify the input._
 
 
 ```go
-$ '{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
-{{ coll.Omit "foo" "baz" $data }}'
+{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
+{{ $newData := coll.Omit "foo" "baz" $data }}
+{{ $newData }}
+
 map[bar:2]
 ```
 
@@ -334,9 +351,8 @@ Converts a true-ish string to a boolean. Can be used to simplify conditional sta
 
 
 ```go
-$ FOO=true 
-$ {{if bool (getenv "FOO")}}foo{{else}}bar{{end}}
-foo
+FOO=true 
+{{if bool (getenv "FOO")}}foo{{else}}bar{{end}} // foo
 ```
 
 ### default
@@ -368,8 +384,14 @@ For creating arrays, see [`conv.Slice`](#conv-slice).
 
 
 ```go
-{{ conv.Dict "name" "Frank" "age" 42 | data.ToYAML }} // age: 42
-name: Frank
+{{/* Assuming conv.Dict creates a map from the arguments and data.ToYAML converts the map to YAML format. */}}
+{{ $dict := conv.Dict "name" "Frank" "age" 42 }}
+{{ $yaml := data.ToYAML $dict }}
+{{ $yaml }}
+
+// age: 42
+// name: Frank
+
 {{ dict 1 2 3 | toJSON }} // {"1":2,"3":""}
 ```
 
@@ -380,9 +402,10 @@ Creates a slice (like an array or list). Useful when needing to `range` over a b
 
 
 ```go
-{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }} // Hello, Bart
-Hello, Lisa
-Hello, Maggie
+{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }} 
+// Hello, Bart
+// Hello, Lisa
+// Hello, Maggie
 ```
 
 ### has
@@ -395,16 +418,18 @@ Reports whether a given object has a property with the given key, or whether a g
 {{ $l := slice "foo" "bar" "baz" }}there is {{ if has $l "bar" }}a{{else}}no{{end}} bar // there is a bar
 ```
 ```go
-$ export DATA='{"foo": "bar"}'
-$ '{{ $o := data.JSON (getenv "DATA") -}}
-{{ if (has $o "foo") }}{{ $o.foo }}{{ else }}THERE IS NO FOO{{ end }}'
-bar
+{{/* Assuming DATA is an environment variable that has been set to '{"foo": "bar"}' */}}
+{{ $o := data.JSON (getenv "DATA") }}
+{{ if has $o "foo" }}{{ $o.foo }}{{ else }}THERE IS NO FOO{{ end }}
+
+// bar
 ```
 ```go
-$ export DATA='{"baz": "qux"}'
-$ '{{ $o := data.JSON (getenv "DATA") -}}
-{{ if (has $o "foo") }}{{ $o.foo }}{{ else }}THERE IS NO FOO{{ end }}'
-THERE IS NO FOO
+{{/* Assuming DATA is an environment variable that has been set to '{"baz": "qux"}' */}}
+{{ $o := data.JSON (getenv "DATA") }}
+{{ if has $o "foo" }}{{ $o.foo }}{{ else }}THERE IS NO FOO{{ end }}
+
+//THERE IS NO FOO
 ```
 
 
@@ -442,11 +467,12 @@ Parses a string as an int64. Equivalent to [strconv.ParseInt](https://golang.org
 
 
 ```go
-$ HEXVAL=7C0 
-$ {{ $val := conv.ParseInt (getenv "7C0 ") 16 32 }} //  1984
-$ The value in decimal is {{ $val }}
+{{/* Assuming HEXVAL is set in the environment outside of the Go template */}}
+{{ $hexVal := getenv "HEXVAL" }}
+{{ $val := conv.ParseInt $hexVal 16 32 }}
+The value in decimal is {{ $val }}
 
-The value in decimal is
+// The value in decimal is 1984
 ```
 
 ### ParseFloat
@@ -457,14 +483,6 @@ Parses a string as an float64 for later use. Equivalent to [strconv.ParseFloat](
 
 
 
-
-```
-{{ $pi := conv.ParseFloat (getenv "PI") 64 }}
-{{- if (gt $pi 3.0) -}}
-pi is greater than 3
-{{- end }}
-```
-
 ```go
 {{ $pi := conv.ParseFloat (getenv "PI") 64 }}
 {{- if (gt $pi 3.0) -}}
@@ -472,7 +490,7 @@ pi is greater than 3
 {{- end }}
 PI=3.14159265359
 
-pi is greater than 3
+// pi is greater than 3
 ```
 
 ### ParseUint
@@ -486,9 +504,8 @@ Parses a string as an uint64 for later use. Equivalent to [strconv.ParseUint](ht
 {{ conv.ParseUint (getenv "BIG") 16 64 }} is max uint64
 $ BIG=FFFFFFFFFFFFFFFF
 
-9223372036854775807 is max int64
-18446744073709551615 is max uint64
-```
+// 9223372036854775807 is max int64
+// 18446744073709551615 is max uint64
 ```
 
 ### ToBool
@@ -656,7 +673,8 @@ For more explict JSON Array support, see [`data.JSONArray`](#data-jsonarray).
 Converts a JSON string into a slice. Only works for JSON Arrays.
 
 
-```go {{ ('[ "you", "world" ]' | jsonArray) 1 }} // world
+```go 
+{{ ('[ "you", "world" ]' | jsonArray) 1 }} // world
 ```
 
 
@@ -671,7 +689,7 @@ For more explict YAML Array support, see [`data.JSONArray`](#data-yamlarray).
 $ export FOO='hello: world'
 $ Hello {{ (getenv "FOO" | yaml).hello }}
 
-Hello world
+// Hello world
 ```
 
 
@@ -680,9 +698,10 @@ Hello world
 Converts a YAML string into a slice. Only works for YAML Arrays.
 
 ```go
-$ export FOO='[ "you", "world" ]'
-$ Hello {{ index (getenv "FOO" | yamlArray) 1 }}
-Hello world
+{{/* Assuming FOO is an environment variable that has been set to 'hello: world' */}}
+Hello {{ (getenv "FOO" | yaml).hello }}
+
+// Hello world
 ```
 
 
@@ -695,10 +714,10 @@ Compatible with [TOML v0.4.0](https://github.com/toml-lang/toml/blob/master/vers
 
 ```go
 {{ $t := `[data]
-hello = "world"` -}}
-Hello {{ (toml $t).hello }}
+hello = "world"` }}
+Hello {{ (toml $t).data.hello }}
 
-Hello world
+//Hello world
 ```
 
 
@@ -712,8 +731,8 @@ By default, the [RFC 4180](https://tools.ietf.org/html/rfc4180) format is suppor
 ```
 {{ $c := `C,32
 Go,25
-COBOL,357` -}}
-{{ range ($c | csv) -}}
+COBOL,357` }}
+{{ range ($c | csv) }}
 {{ index . 0 }} has {{ index . 1 }} keywords.
 {{ end }}
 ```
@@ -736,8 +755,8 @@ Also by default, the first line of the string will be assumed to be the header, 
 {{ $c := `lang,keywords
 C,32
 Go,25
-COBOL,357` -}}
-{{ range ($c | csvByRow) -}}
+COBOL,357` }}
+{{ range ($c | csvByRow) }}
 {{ .lang }} has {{ .keywords }} keywords.
 {{ end }}
 ```
@@ -757,10 +776,12 @@ Like [`csvByRow`](#csvByRow), except that the data is presented as a columnar (c
 ```
 {{ $c := `C;32
 Go;25
-COBOL;357` -}}
-{{ $langs := ($c | csvByColumn ";" "lang,keywords").lang -}}
-{{ range $langs }}{{ . }}
-{{ end -}}
+COBOL;357` }}
+{{ $langs := ($c | csvByColumn ";" "lang,keywords").lang }}
+{{ range $langs }}
+{{ . }}
+{{ end }}
+
 ```
 
 ```go
@@ -789,7 +810,7 @@ Converts an object to a pretty-printed (or _indented_) JSON document. Input obje
 
 The indent string must be provided as an argument.
 
-```
+```go
 {{ `{"hello":"world"}` | data.JSON | data.ToJSONPretty "  " }}
 ```
 
@@ -1122,7 +1143,6 @@ Returns the smallest number provided. If any values are floating-point numbers, 
 {{ math.Min 0 8 4.5 "-1.5e-11" }} // -1.5e-11
 ```
 
-### Mul
 
 ### mul
 
@@ -1467,7 +1487,6 @@ This function provides the same behaviour as Go's [`regexp.ReplaceAllLiteralStri
 {{ `foo.bar,baz` | regexp.ReplaceLiteral `\W` `$` }} // foo$bar$baz
 ```
 
-##  Strings
 ### Split
 
 Splits `input` into sub-strings, separated by the expression.
@@ -1482,6 +1501,9 @@ This function provides the same behaviour as Go's [`regexp.Split`](https://golan
 {{ regexp.Split `[\s,.]` "foo bar,baz.qux" | toJSON}} // ["foo","bar","baz","qux"]
 {{ "foo bar.baz,qux" | regexp.Split `[\s,.]` 3 | toJSON}} // ["foo","bar","baz"]
 ```
+
+
+##  Strings
 
 
 ### Abbrev
@@ -1548,7 +1570,8 @@ foo:
 {{ `{"quuz": 42}` | json | toYAML | strings.Indent 2 "  " -}}
 ```
 
-```go
+```
+//output
 foo:
   bar:
     baz: 2
@@ -1855,8 +1878,8 @@ Contains reports whether the second string is contained within the first. Equiva
 
 
 
-```
-FOO=foo
+```go
+// FOO=foo
 {{if contains .Env.FOO "f"}}yes{{else}}no{{end}}
 ```
 
@@ -1873,8 +1896,8 @@ Tests whether the string begins with a certain substring. Equivalent to [strings
 
 
 
-```
-URL=http://example.com
+```go
+//URL=http://example.com
 {{if hasPrefix .Env.URL "https"}}foo{{else}}bar{{end}}
 ```
 
@@ -1891,8 +1914,8 @@ Tests whether the string ends with a certain substring. Equivalent to [strings.H
 
 
 
-```
-URL=http://example.com
+```go
+//URL=http://example.com
 {{.Env.URL}}{{if not (hasSuffix .Env.URL ":80")}}:80{{end}}
 ```
 
@@ -1909,11 +1932,13 @@ Creates a slice by splitting a string on a given delimiter. Equivalent to [strin
 
 
 ```go
-$ '{{range split "Bart,Lisa,Maggie" ","}}Hello, {{.}}
-{{end}}'
-Hello, Bart
-Hello, Lisa
-Hello, Maggie
+{{ range split "Bart,Lisa,Maggie" "," }}
+Hello, {{ . }}
+{{ end }}
+
+// Hello, Bart
+// Hello, Lisa
+// Hello, Maggie
 ```
 
 ### splitN
@@ -1923,12 +1948,12 @@ Hello, Maggie
 Creates a slice by splitting a string on a given delimiter. The count determines the number of substrings to return. Equivalent to [strings.SplitN](https://golang.org/pkg/strings#SplitN)
 
 
-
 ```go
-$ '{{ range splitN "foo:bar:baz" ":" 2 }}{{.}}
-{{end}}'
-foo
-bar:baz
+{{ range splitN "foo:bar:baz" ":" 2 }}
+{{ . }}
+{{ end }}
+// foo
+// bar:baz
 ```
 
 ### trim
@@ -1937,16 +1962,11 @@ bar:baz
 
 Trims a string by removing the given characters from the beginning and end of the string. Equivalent to [strings.Trim](https://golang.org/pkg/strings/#Trim)
 
-
-
-
 ```go
 {{trim "  world " " "}} // world
 ```
 
-
 ##  test
-
 
 ### fail
 
@@ -1977,24 +1997,25 @@ See also [`test.Kind`](test-kind).
 
 
 ```go
-$ '{{ $data := "hello world" }}
-{{- if isKind "string" $data }}{{ $data }} is a string{{ end }}'
-hello world is a string
+{{ $data := "hello world" }}
+{{ if isKind "string" $data }}{{ $data }} is a string{{ end }}
+
+// hello world is a string
 ```
 ```go
-$ '{{ $object := dict "key1" true "key2" "foobar" }}
-{{- if test.IsKind "map" $object }}
+{{ $object := dict "key1" true "key2" "foobar" }}
+{{ if test.IsKind "map" $object }}
 Got a map:
-{{ range $key, $value := $object -}}
+{{ range $key, $value := $object }}
   - "{{ $key }}": {{ $value }}
 {{ end }}
 {{ else if test.IsKind "number" $object }}
 Got a number: {{ $object }}
-{{ end }}'
+{{ end }}
 
-Got a map:
-- "key1": true
-- "key2": foobar
+// Got a map:
+// - "key1": true
+// - "key2": foobar
 ```
 
 ### kind
@@ -2055,12 +2076,13 @@ Sat Oct 14 09:57:02 EDT 2017
 _(notice how the TZ adjusted for daylight savings!)_
 Usage with [`IsDST`](https://golang.org/pkg/time/#Time.IsDST):
 ```go
-$ '{{ $t := time.Now }}At the tone, the time will be {{ ($t.Round (time.Minute 1)).Add (time.Minute 1) }}.
-  It is{{ if not $t.IsDST }} not{{ end }} daylight savings time.
-  ... ... BEEP'
-At the tone, the time will be 2022-02-10 09:01:00 -0500 EST.
-It is not daylight savings time.
+{{ $t := time.Now }}At the tone, the time will be {{ ($t.Round (time.Minute 1)).Add (time.Minute 1) }}.
+It is{{ if not $t.IsDST }} not{{ end }} daylight savings time.
 ... ... BEEP
+
+// At the tone, the time will be 2022-02-10 09:01:00 -0500 EST.
+// It is not daylight savings time.
+// ... ... BEEP
 ```
 
 ### Parse
