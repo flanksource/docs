@@ -1,0 +1,49 @@
+---
+title: Azure DevOps
+---
+
+# <Icon name="azure-devops"/> Azure Devops
+
+<Standard/>
+
+Azure Devops checks for healthy pipeline runs.
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: azure-devops
+spec:
+  interval: 300
+  azureDevops:
+    - project: Demo1
+      pipeline: ^windows-
+      personalAccessToken:
+       value: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      organization: flanksource
+      variable:
+        env: prod
+      branch:
+        - main
+      thresholdMillis: 60000 # 60 seconds
+```
+
+| Field                     | Description                                                  | Scheme                                            | Required |
+| ------------------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
+| **`organization`**        | Name of the Azure Organization.                              | `string`                                          | true     |
+| **`project`**             | The name or ID of the project.                               | `string`                                          | true     |
+| **`pipeline`**            | Name/Regexp to select the interested pipeline.               | `string`                                          | true     |
+| `variables`               | Only match those runs that match these variables             | `map[string]string`                               |          |
+| `branch`                  | Only match those runs that are run on these branch.          | `[]string`                                        |          |
+| `thresholdMillis`         | Maximum duration of a run after which it's considered unhealthy. | `int`                                             |          |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |          |
+| **Connection**            |                                                              |                                                   |          |
+| `connection`              | Connection Name e.g. `connection://azuredevops/org` <br/>Mutually exclusive with `personalAccessToken` <br/><Commercial/> | `string`                                          |          |
+| **`personalAccessToken`** | Mutually exclusive with `connection`, See [Creating ADO PAT's](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=Windows) | [*EnvVar*](../../concepts/authentication/#envvar) | true     |

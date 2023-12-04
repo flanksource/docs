@@ -1,0 +1,75 @@
+---
+title: Restic
+---
+
+# <Icon name="restic"/> Restic
+
+<FullImage/>
+
+The Restic check:
+
+* Queries a Restic Repository for content
+* Checks the integrity and consistency of the repository and data-blobs
+* Checks for backup freshness.
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: restic-check
+spec:
+  interval: 30
+  restic:
+    - repository: s3:http://minio.minio:9000/restic-canary-checker
+      name: restic check
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: restic-credentials
+            key: PASSWORD
+      maxAge: 1h
+      accessKey:
+        valueFrom:
+          secretKeyRef:
+            name: restic-credentials
+            key: ACCESS_KEY_ID
+      secretKey:
+        valueFrom:
+          secretKeyRef:
+            name: restic-credentials
+            key: SECRET_ACCESS_KEY
+```
+### Restic Canary Configuration Fields
+
+| Field            | Description                                           | Scheme                        | Required |
+| ---------------- | ----------------------------------------------------- | ----------------------------- | -------- |
+| **`maxAge`**      | MaxAge for backup freshness                          | *string*                      | Yes      |
+| **`repository`**  | The Restic repository path (e.g., `s3:http://minio.minio:9000/restic-canary-checker`) | *string*                      | Yes      |
+| `caCert`          | CaCert path to the root cert. In case of self-signed certificates | *string*                      |          |
+| `checkIntegrity`  | When enabled, checks the Integrity and consistency of the Restic repository | *bool*                        |          |
+| **`name`**        | Name of the check, must be unique within the canary   | *string*                      | Yes      |
+| `description`     | Description for the check                             | *string*                      |          |
+| `icon`            | Icon for overwriting the default icon on the dashboard | *string*                      |          |
+| `labels`          | Labels for the check                                   | *map[string]string*           |          |
+| `test`            | Evaluate whether a check is healthy                   | [*Expression*](/concepts/health-evaluation)  |          |
+| `display`         | Expression to change the formatting of the display    | [*Expression*](/concepts/display-formatting) |          |
+| `transform`       | Transform data from a check into multiple individual checks | [*Expression*](/concepts/transforms)          |          |
+| `metrics`         | Metrics to export from                                | [*[]Metrics*](/concepts/metrics-exporter)    |          |
+
+### Encryption Connection
+
+| Field           | Description                                                                                                       | Scheme                                 | Required |
+| --------------- | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------- | -------- |
+| `connection`    | Path of an existing connection to get the encryption key (e.g., `connection://restic/key`). Mutually exclusive with `password`. | [*Connection*](../concepts/connections) |          |
+| `password`      | Mutually exclusive with `connection`.                                                                             | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+
+### AWS Connection
+
+| Field               | Description                                                                                          | Scheme                                 | Required |
+| ------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------- | -------- |
+| `awsConnectionName` | Path of an existing connection to connect to S3 (e.g., `connection://aws/instance`). Mutually exclusive with `accessKey`. | [*Connection*](../concepts/connections) |          |
+| `accessKey`         | Mutually exclusive with `awsConnectionName`.                                                          | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+| `secretKey`         | Mutually exclusive with `awsConnectionName`.                                                          | [*EnvVar*](../../concepts/authentication/#envvar) | Yes      |
+| `endpoint`          | Custom AWS Config endpoint                                                                           | *string*                               |          |
+| `region`            | AWS region                                                                                          | *string*                               |          |
+| `skipTLSVerify`     | Skip TLS verify when connecting to AWS                                                               | *bool*                                 |          |
