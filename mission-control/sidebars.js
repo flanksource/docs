@@ -20,7 +20,7 @@ const sidebars = {
   canaryCheckerSidebar: [
     {
       type: 'doc',
-      id: 'canary-checker/overview',
+      id: 'canary-checker/index',
       label: 'Overview'
     },
     {

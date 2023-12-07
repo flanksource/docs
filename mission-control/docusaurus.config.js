@@ -65,7 +65,7 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/flanksource-icon.png',
-      home: 'docs/intro.md',
+      home: 'docs/index.md',
       navbar: {
         title: 'Flanksource Mission Control',
         logo: {
