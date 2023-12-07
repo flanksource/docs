@@ -1,4 +1,4 @@
-## <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/kubernetes.svg' style='height: 32px'/> Kubernetes
+## <Icon name="k8s" /> Kubernetes
 
 ??? Kube-dns Example
     ```yaml

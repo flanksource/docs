@@ -35,7 +35,7 @@ spec:
 | **`kind`** | Specifies the kind of Kubernetes object for interaction | *string* | Yes |
 | `resource` | Queries resources related to specified Kubernetes object | [*ResourceSelector*](#resourceselector) | |
 | `namespace` | Specifies namespace for Kubernetes object                    | [*ResourceSelector*](#resourceselector) |          |
-| `ignore`    | Ignore the specified resources from the fetched resources. Can be a glob pattern. | *\[\]string*                            |  |
+| `ignore`    | Ignore the specified resources from the fetched resources. Can be a glob pattern. | *[]string*                            |  |
 | `ready` | Boolean value of true or false to query and display resources based on availability | *bool* |  |
 | **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
 | `description` | Description for the check                                   | `string`                                     |          |

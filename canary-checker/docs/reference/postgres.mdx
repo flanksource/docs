@@ -48,7 +48,7 @@ spec:
 | `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |          |
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
 | **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://postgres/instance` Mutually exclusive with `username`, `password` <br /> <Commercial /> | [Connection](../../concepts/connections) | |
+| `connection` | Path of existing connection e.g. `connection://postgres/instance` Mutually exclusive with `username`, `password` <br /> <Commercial /> | <CommonLink to="connection" >*Connection*</CommonLink> | |
 | `url` | If the url is specifed in both the `connection` and in the `url` field, the `url` field takes precedence |  | |
 | `username` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
 | `password` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |

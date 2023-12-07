@@ -1,4 +1,4 @@
-#  Kubernetes ![ Kubernetes Icon](https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/kubernetes.svg)
+# <Icon name="k8s" /> Kubernetes
 
 The Kubernetes check performs requests on Kubernetes resources such as Pods to get the desired information.
 
@@ -31,7 +31,7 @@ spec:
 | `description` | Description for the check | string |  |
 | `display` | Template to display query results in text (overrides default bar format for UI) | [*Template*](../concepts/templating.md) |  |
 | `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
-| `ignore` | Ignore the specified resources from the fetched resources. Can be a glob pattern. | *\[\]string* |  |
+| `ignore` | Ignore the specified resources from the fetched resources. Can be a glob pattern. | *[]string* |  |
 | **`kind`** | Specifies the kind of Kubernetes object for interaction | *string* | Yes |
 | `labels` | Labels for the check | *string* |  |
 | **`name`** | Name of the check | *string* | Yes |
@@ -43,7 +43,6 @@ spec:
 
 ---
 
-# Scheme Reference
 
 ## ResourceSelector
 

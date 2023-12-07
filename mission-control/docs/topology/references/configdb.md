@@ -1,10 +1,10 @@
-# Config DB ![ConfigDB](https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/config.svg)
+# <Icon name="config-db"/> Config DB
 
 ConfigDB check connects to the specified database host, run a specified query for your configuration data, and return the result.
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
-kind: SystemTemplate
+kind: Topology
 metadata:
   name: cluster
 labels:

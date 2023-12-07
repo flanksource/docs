@@ -1,4 +1,4 @@
-# HTTP ![HTTP Icon](https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/http.svg)
+# <Icon name="http" /> HTTP
 
 This check performs queries on HTTP endpoints and HTTP Namespaces to monitor their activity.
 
@@ -6,7 +6,7 @@ This check performs queries on HTTP endpoints and HTTP Namespaces to monitor the
 
 | **Connection** | | | |
 | --------------- | ---------------------------------------------- | --------------------------------- | --- |
-| `connection`    | Path of existing connection e.g. `connection://sftp/instance`/ Mutually exclusive with `username`, `password` | [Connection](../../concepts/connections) |   |
+| `connection`    | Path of existing connection e.g. `connection://sftp/instance`/ Mutually exclusive with `username`, `password` | <CommonLink to="connection" >*Connection*</CommonLink> |   |
 | `username`      | Mutually exclusive with `connection`             | [_EnvVar_](../../concepts/authentication/#envvar) |   |
 | `password`      | Mutually exclusive with `connection`             | [_EnvVar_](../../concepts/authentication/#envvar) |   |
 | **`url`**       | HTTP URL, if a URL is specified on both the connection and check, the URL on the check takes precedence. | _string_ | Yes |

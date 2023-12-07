@@ -1,4 +1,4 @@
-#  MongoDB ![ MongoDB Icon](https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/mongodb.svg)
+#  <Icon name="mongodb" /> MongoDB
 
 The Mongo check tries to connect to a specified Mongo Database to ensure connectivity.
 

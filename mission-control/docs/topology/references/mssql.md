@@ -1,4 +1,4 @@
-# <img src='https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/mssql.svg' style='height: 32px'/> MSSQL
+# <Icon name="mssql" /> MSSQL
 
 This check will try to connect to a specified SQL Server database, run a query against it and verify the results.
 

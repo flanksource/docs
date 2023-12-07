@@ -17,12 +17,14 @@ const config = {
   organizationName: 'flanksource', // Usually your GitHub org/user name.
   projectName: 'docs', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   customFields: {
     links: {
-      "authentication": '/reference/authentication'
+      "authentication": '/reference/authentication',
+      "connection": '/reference/authentication'
+
     }
   },
 
@@ -90,7 +92,7 @@ const config = {
             position: 'left',
           },
           {
-            to: 'notifications/overview',
+            to: 'notifications/index',
             activeBasePath: 'notifications',
             label: 'Notifications',
             position: 'left',

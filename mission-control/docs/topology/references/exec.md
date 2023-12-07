@@ -1,4 +1,4 @@
-# Exec  ![Exec Icon](https://raw.githubusercontent.com/flanksource/flanksource-ui/main/src/icons/console.svg)
+# <Icon name="console" /> Exec
 
 Exec Check executes a command or script file on the target host. The type of scripts executed include:
 
