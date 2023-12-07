@@ -1,0 +1,50 @@
+---
+title: SMB/CIFS
+---
+
+# <Icon name="smb" /> Windows File Share (SMB/CIFS)
+
+Checks the contents of a Windows / CIFS file share for size, age and count.
+
+See [Folder](folder) for a full description.
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: smb-check
+spec:
+  interval: 30
+  folder:
+    - path: smb://192.168.1.9/Some Public Folder/somedir
+      name: sample smb check
+      smbConnection:
+        username:
+          valueFrom:
+            secretKeyRef:
+              name: smb-credentials
+              key: USERNAME
+        password:
+          valueFrom:
+            secretKeyRef:
+              name: smb-credentials
+              key: PASSWORD
+        minAge: 10h
+```
+
+| Field | Description | Scheme | Required |
+| ----- | ----------- | ------ | -------- |
+| **`name`** | Name of the check | *string* | Yes |
+| **`path`** | A path to a shared windows folder e.g. `smb://host/folder` | string | Yes |
+| `smbConnection` | SMB connection details | [SMBConnection](#smb-connection) |  |
+| `*` | All other fields available in the folder check | [*Folder*](folder) | |
+
+## SMB Connection
+
+| Field        | Description                                                  | Scheme                                            |
+| ------------ | ------------------------------------------------------------ | ------------------------------------------------- |
+| `connection` | Path of existing connection e.g. `connection://windows/svc-account` <br />Mutually exclusive with`username` and `password` <br /> <Commercial /> | [Connection](../concepts/connections)             |
+| `username`   | Mutually exclusive with `connection`                         | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> |
+| `password`   | Mutually exclusive with `connection`                         | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> |
+| `domain`     | Windows domain name                                          | *string*                                          |
+| `port`       | Default to `445`                                             | *int*                                             |
