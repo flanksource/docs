@@ -2,3 +2,4 @@
   base = "mission-control"
   command = "make sync && npm run build"
   publish = "build"
+  environment = { NODE_VERSION = "18" }
