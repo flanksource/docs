@@ -43,9 +43,9 @@ Examples:
 The `size` function in CEL is used to determine the number of elements in a collection or the number of Unicode characters in a string.
 
 Syntax:
-
+```
     collection.size() or string.size()
-
+```
 Examples:
 
 ```javascript
@@ -459,9 +459,9 @@ Examples:
 
 Returns the character at the given position. If the position is negative, or
 greater than the length of the string, the function will produce an error:
-
+```
     <string>.charAt(<int>) -> <string>
-
+```
 Examples:
 
 ```javascript
@@ -480,10 +480,10 @@ search string is not found the function returns -1.
 The function also accepts an optional position from which to begin the
 substring search. If the substring is the empty string, the index where the
 search starts is returned (zero or custom).
-
+```
     <string>.indexOf(<string>) -> <int>
     <string>.indexOf(<string>, <int>) -> <int>
-
+```
 Examples:
 
 ```javascript
@@ -506,10 +506,10 @@ The function also accepts an optional position which represents the last index
 to be considered as the beginning of the substring match. If the substring is
 the empty string, the index where the search starts is returned (string length
 or custom).
-
+```
     <string>.lastIndexOf(<string>) -> <int>
     <string>.lastIndexOf(<string>, <int>) -> <int>
-
+```
 Examples:
 
 ```javascript
@@ -528,10 +528,10 @@ Returns a new string where the elements of string list are concatenated.
 
 The function also accepts an optional separator which is placed between
 elements in the resulting string.
-
+```
     <list<string>>.join() -> <string>
     <list<string>>.join(<string>) -> <string>
-
+```
 Examples:
 
 ```javascript
@@ -547,9 +547,9 @@ Examples:
 
 Takes the given string and makes it safe to print (without any formatting due to escape sequences).
 If any invalid UTF-8 characters are encountered, they are replaced with \uFFFD.
-
+```
     strings.quote(<string>)
-
+```
 Examples:
 
 ```javascript
@@ -593,10 +593,10 @@ substrings produced by the split.
 When the split limit is 0, the result is an empty list. When the limit is 1,
 the result is the target string to split. When the limit is a negative
 number, the function behaves the same as split all.
-
+```
     <string>.split(<string>) -> <list<string>>
     <string>.split(<string>, <int>) -> <list<string>>
-
+```
 Examples:
 
 ```javascript
@@ -619,10 +619,10 @@ Character offsets are 0-based with an inclusive start range and exclusive end
 range. It is an error to specify an end range that is lower than the start
 range, or for either the start or end index to be negative or exceed the string
 length.
-
+```
     <string>.substring(<int>) -> <string>
     <string>.substring(<int>, <int>) -> <string>
-
+```
 Examples:
 
 ```javascript
@@ -640,9 +640,9 @@ Returns a new string which removes the leading and trailing whitespace in the
 target string. The trim function uses the Unicode definition of whitespace
 which does not include the zero-width spaces. See:
 https://en.wikipedia.org/wiki/Whitespace_character#Unicode
-
+```
     <string>.trim() -> <string>
-
+```
 Examples:
 
     '  \ttrim\n    '.trim() // returns 'trim'
@@ -707,9 +707,9 @@ Returns a new string where all ASCII characters are lower-cased.
 
 This function does not perform Unicode case-mapping for characters outside the
 ASCII range.
-
+```
      <string>.lowerAscii() -> <string>
-
+```
 Examples:
 
 ```javascript
@@ -727,9 +727,9 @@ Returns a new string where all ASCII characters are upper-cased.
 
 This function does not perform Unicode case-mapping for characters outside the
 ASCII range.
-
+```
     <string>.upperAscii() -> <string>
-
+```
 Examples:
 
 ```javascript
@@ -745,9 +745,9 @@ Returns a new string whose characters are the same as the target string, only fo
 reverse order.
 This function relies on converting strings to rune arrays in order to reverse.
 It can be located in Version 3 of strings.
-
+```
     <string>.reverse() -> <string>
-
+```
 Examples:
 
 ```javascript
@@ -2201,17 +2201,16 @@ Syntax:
     conv.Dict(key1, value1, key2, value2, ...)
 
 Examples:
-
-    Creating a dictionary with string keys and values:
+```
+    //Creating a dictionary with string keys and values:
     conv.Dict("apple", "fruit", "carrot", "vegetable")  // Evaluates to {"apple": "fruit", "carrot": "vegetable"}
 
-    Creating a mixed dictionary:
+    //Creating a mixed dictionary:
     conv.Dict("name", "Alice", "age", 30)  // Evaluates to {"name": "Alice", "age": 30}
 
-    Creating a dictionary with nested values:
+    //Creating a dictionary with nested values:
     conv.Dict("user", conv.Dict("name", "Alice", "age", 30), "active", true)  // Evaluates to {"user": {"name": "Alice", "age": 30}, "active": true}
---- -->
-
+```
 ## crypto
 
 ### SHA1
@@ -2799,9 +2798,9 @@ expansion. If the argument expression does not resolve to a numeric or
 list(numeric) type during type-checking, or during runtime then an error
 will be produced. If a list argument is empty, this too will produce an
 error.
-
+```
     math.greatest(<arg>, ...) -> <double|int|uint>
-
+```
 Examples:
 
 ```javascript
@@ -2828,9 +2827,9 @@ types; however, other literals will be flagged as errors during macro
 expansion. If the argument expression does not resolve to a numeric or
 list(numeric) type during type-checking, or during runtime then an error
 will be produced. If a list argument is empty, this too will produce an error.
-
+```
     math.least(<arg>, ...) -> <double|int|uint>
-
+```
 Examples:
 
     math.least(1)      // 1
