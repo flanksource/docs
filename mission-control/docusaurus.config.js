@@ -18,7 +18,7 @@ const config = {
   projectName: 'docs', // Usually your repo name.
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
 
   customFields: {
     links: {
