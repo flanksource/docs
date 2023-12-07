@@ -4,7 +4,7 @@
 
 > Simply a way to represent data in different forms.
 
-Templating is essential for crafting customized notifications. It involves using templates for both the notification title and body. In Mission Control, these templates are rendered using Go templates. To determine which variables you can use in a specific event's template, refer to the corresponding event details in the [events](../concepts/events.md) section.
+Templating is essential for crafting customized notifications. It involves using templates for both the notification title and body. In Mission Control, these templates are rendered using Go templates. To determine which variables you can use in a specific event's template, refer to the corresponding event details in the [events](../events) section.
 
 ## Go Template
 

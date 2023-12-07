@@ -66,7 +66,7 @@ sql:
       select * from @mytable
 ```
 
-### SQL
+## SQL
 
 | Field             | Description                                                                                                                                                             | Scheme                                  | Required |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------- |
@@ -74,7 +74,7 @@ sql:
 | `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                                | `false`  |
 | `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                                | `false`  |
 | `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                                | `true`   |
-| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](../concepts/transform.md) | `false`  |
+| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](../concepts/transform) | `false`  |
 | `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                | `false`  |
 | `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                | `false`  |
 | `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                              | `false`  |
@@ -82,17 +82,3 @@ sql:
 | -                 | Specify connection details to the database                                                                                                                              | [Connection](#connection)               |          |
 | `driver`          | Specify the name of the driver to use for connecting to the database                                                                                                    | `string`                                | `false`  |
 | `query`           | Specify the SQL query to execute                                                                                                                                        | `string`                                | `true`   |
-
-### Connection
-
-| Field      | Description                                                       | Scheme                              | Required |
-| ---------- | ----------------------------------------------------------------- | ----------------------------------- | -------- |
-| connection | Specify the connection string for the database                    | string                              | `true`   |
-| auth       | Specify the authentication details for connecting to the database | [`Authentication`](../concepts/authentication.md) | `false`  |
-
-### Authentication
-
-| Field    | Description          | Scheme                                                                       | Required |
-| -------- | -------------------- | ---------------------------------------------------------------------------- | -------- |
-| username | Specify the username | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | `true`   |
-| password | Specify the password | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | `true`   |

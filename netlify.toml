@@ -1,4 +1,4 @@
 [build]
-  command = " mkdocs build -d build"
+  base = "mission-control"
+  command = "make sync && npm run build"
   publish = "build"
-  environment = { PYTHON_VERSION = "3.8" }

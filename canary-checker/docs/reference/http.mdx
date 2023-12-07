@@ -40,21 +40,21 @@ spec:
 | `description` | Description for the check                                   | `string`                                     |      |
 | `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |      |
 | `labels`      | Labels for check                                            | `map[string]string`                          |      |
-| `test`        | Evaluate whether a check is healthy                         | [`Expression`](/concepts/health-evaluation)  |      |
-| `display`     | Expression to change the formatting of the display          | [`Expression`](/concepts/display-formatting) |      |
-| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](/concepts/transforms)          |      |
-| `metrics`     | Metrics to export from                                      | [`[]Metrics`](/concepts/metrics-exporter)    |      |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](../concepts/health-evaluation)  |      |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/display-formatting) |      |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |      |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |      |
 | **Connection** |  |  | |
 | `connection` | Path of existing connection e.g. `connection://http/instance` <br/> Mutually exclusive with `username`, `password` <br/> <Commercial/> | [Connection](../../concepts/connections) | |
-| `username` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
-| `password` | Mutually exclusive with `connection` | [*EnvVar*](../../concepts/authentication/#envvar) | |
+| `username` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
+| `password` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
 | **`url`** | HTTP  URL, if a URL is specified on both the connection and check, the url on the check takes precedence. | *string* | Yes |
 | `ntlm` | When true will do authentication using NTLM v1 protocol | *bool* | |
 | `ntlmv2` | When true will do authentication using NTLM v2 protocol | *bool* | |
 
 ### Result Variables
 
-Result variables can be used in `test`, `display` and `transform` [expressions](/concepts/expressions)
+Result variables can be used in `test`, `display` and `transform` [expressions](../concepts/expressions)
 
 | Name      | Description                                                  | Scheme              |
 | --------- | ------------------------------------------------------------ | ------------------- |

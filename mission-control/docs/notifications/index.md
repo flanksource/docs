@@ -1,9 +1,63 @@
-# Overview
-Notifications keep you updated on any new activites in Mission Control. Example: You can receive an email notification when any HTTP health check fails, or a Slack notification whenever a high severity incident is created, etc.
+# Notifications
 
-Notifications are highly configurable. You can specify where you want to receive them, how you want to receive them, and when to receive them.
+Notification allows you to receive alerts on a preferred channel when a particular set of events occur.
 
-For more information, see the list of [supported event types](./concepts/events.md).
+| Category                                                                 | event                        | Description                                                                                |
+| ------------------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------ |
+| [Health Check](events/health-checks)                               | `check.passed`               | when a previously failing check passes                                                     |
+|                                                                          | `check.failed`               | when a previously passing check fails                                                      |
+| [Component](events/components)                                     | `component.status.<status>`  | When a component's status changes                                                          |
+
+<!-- | [Incident](../events/incidents.md#incidents)                             | `incident.created`           | when an incident is created                                                                |
+| [Incident Statuses](../events/incidents.md#status)                       | `incident.status.<status>`   | When an incident's status changes. See the [list of statuses](./incident/overview/#status) |
+| [Incident Comment](../events/incidents.md#comments)                      | `incident.comment.added`     | When a new comment is added to an incident.                                                |
+| [Incident Responder](../events/incidents.md#responders)                  | `incident.responder.created` | when a responder is added to an incident                                                   |
+|                                                                          | `incident.responder.removed` | when a responder is removed from an incident                                               |
+| [Incident Definition of Done](../events/incidents.md#definition-of-done) | `incident.dod.added`         | when a dod is added                                                                        |
+|                                                                          | `incident.dod.removed`       | when an existing dod is removed                                                            |
+|                                                                          | `incident.dod.passed`        | when a previously failing dod passes                                                       |
+|                                                                          | `incident.dod.regressed`     | when a previously passing dod fails                                                        | -->
+
+
+
+## Examples
+
+```yaml title="http-check-passed.yaml"
+events:
+  - check.passed
+title: Check as {{.check.status}}
+template: 'Canary: {{.canary.name}} Message: {{.status.message}} '
+filter: "check.type == 'http'"
+person_id: d87243c9-3183-4ab9-9df9-c77c8278df11
+```
+
+```yaml title="check-failure.yaml"
+events:
+  - check.failed
+title: Check as {{.check.status}}
+template: 'Canary: {{.canary.name}} Error: {{.status.error}}'
+filter: "check.type == 'http'"
+custom_services:
+  - connection: connection://slack://<api-token>@health-check-notifications
+    name: Slack-health-checks
+```
+
+## Spec
+
+| Field             | Description                      | Scheme              | Required |
+| ----------------- | -------------------------------- | ------------------- | -------- |
+| `events`          | Events of notification.          | `[]string`          | `true`   |
+| `title`           | Title of notification.           | `string`            | `false`  |
+| `template`        | Template of notification.        | `string`            | `false`  |
+| `filter`          | Filter of notification.          | `string`            | `false`  |
+| `person_id`       | Person ID of notification.       | `uuid`              | `false`  |
+| `team_id`         | Team ID of notification.         | `uuid`              | `false`  |
+| `properties`      | Properties of notification.      | `map[string]string` | `false`  |
+| `custom_services` | Custom services of notification. | `JSON`              | `false`  |
+
+:::info
+    One of `person_id`, `team_id` or `custom_services` is required.
+:::
 
 ## Supported Channels
 

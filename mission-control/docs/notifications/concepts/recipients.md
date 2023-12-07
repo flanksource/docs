@@ -1,5 +1,6 @@
 # Recipient
-There are 3 types of receivers
+
+There are 3 types of recipients
 
 1. Person
 2. Team
@@ -35,7 +36,7 @@ To define the notification channel for team or a custom service, we use the stru
 
     One of either the `connection` or the `url` is required.
 
-### Example:
+### Example
 
 ```yaml title="backend-team.yaml"
 notifications:

@@ -11,13 +11,14 @@ import Admonition from '@theme/Admonition';
 import Mermaid from '@theme/Mermaid';
 import Icon from '@site/src/components/Icon';
 import { Asciinema } from '@site/src/components/Asciinema';
-
 import { Commercial, Standard, Enterprise } from '@site/src/components/Badges';
 import Highlight from '@site/src/components/Highlight';
 import { FullImage } from '@site/src/components/Badges';
+import { CommonLink } from '@site/src/components/Link';
 
 const MDXComponents = {
   Icon: Icon,
+  CommonLink: CommonLink,
   Asciinema: Asciinema,
   Commercial: Commercial,
   FullImage: FullImage,

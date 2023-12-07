@@ -14,6 +14,9 @@ const config = {
   onBrokenMarkdownLinks: 'warn',
   customFields: {
     oss: process.env.CANARY_CHECKER_OSS === 'true',
+    links: {
+      "authentication": '/concepts/authentication'
+    }
   },
   markdown: {
     mermaid: true,

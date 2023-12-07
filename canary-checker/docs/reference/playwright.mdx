@@ -1,0 +1,61 @@
+---
+title: Playwright
+---
+
+# <Icon name="playwright" /> Playwright
+
+The JUnit check type runs a new kubernetes pod with the specified image, in this example we are running a [playwright](https://playwright.dev/) test suite
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: playwright-junit
+spec:
+  interval: 120
+  severity: high
+  junit:
+    - testResults: "/tmp/"
+      name: playwright-junit
+      display:
+        template: |
+          ✅ {{.results.passed}} ❌ {{.results.failed}} in 🕑 {{.results.duration}}
+          {{  range $r := .results.suites}}
+          {{- if gt (conv.ToInt $r.failed)  0 }}
+            {{$r.name}} ✅ {{$r.passed}} ❌ {{$r.failed}} in 🕑 {{$r.duration}}
+          {{- end }}
+          {{- end }}
+      spec:
+        containers:
+          - name: playwright
+            image: ghcr.io/flanksource/canary-playwright:latest
+            command: ["/start.sh"]
+```
+
+By configuring playwright to export JUnit to the `testResults` folder, canary-checker will pick up the results and make then available display formating and health evaluation.
+
+```bash title="start.sh"
+mkdir -p /tmp/junit-results
+PLAYWRIGHT_JUNIT_OUTPUT_NAME=/tmp/junit-results/results.xml npx playwright test --project=chromium --reporter=junit
+touch /tmp/junit-results/done
+```
+
+For a complete working example, see **[canary-checker-examples/playwright](https://github.com/flanksource/canary-checker-examples/tree/main/playwright)**
+
+| Field | Description | Scheme | Required |
+| ----- | ----------- | ------ | -------- |
+| **`spec`** | Pod specification | [*v1.PodSpec*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) | Yes |
+| **`testResults`** | Directory where the results will be published | *string* | Yes |
+| `timeout` | Timeout in minutes to wait for specified container to finish its job. Defaults to 5 minutes | *int* |  |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
+| `description` | Description for the check                                   | `string`                                     |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
+| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](../concepts/health-evaluation)  |          |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/display-formatting) |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |          |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
+
+## Test Result Variables
+
+See [JUnit Test Results](./junit##test-result-variables) for the schema that is ingested and can be used for evaluating health or formatting the display.

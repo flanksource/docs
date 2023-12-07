@@ -1,0 +1,3 @@
+[build]
+  command = "make sync && npm run build"
+  publish = "build"

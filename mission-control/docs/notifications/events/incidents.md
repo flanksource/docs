@@ -2,8 +2,6 @@
 
 There are various subcategories for incident related evens
 
-## Incidents
-
 - `incident.created`
 
 **Environment variables:**

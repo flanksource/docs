@@ -1,10 +1,10 @@
 # Troubleshooting
 
-1. Run the check from the CLI
+## Run the check from the CLI
 
    The easiest way of troubleshooting is to run the `canary-checker run` command with a copy of the canary CRD locally, this enables rapid feedback loops.
 
-1. Enable trace and debug
+## Enable trace and debug
 
   To increase the amount of logs for a particular trace add a `trace: true` annotation:
 
@@ -26,12 +26,25 @@
   Trace level logging will return the HTTP response body which may contain sensitive data (The authorization headers will be sanitized)
   :::
 
-
-
 ### Trace Levels
 
 | Level   | Logs                                                         |
 | ------- | ------------------------------------------------------------ |
 | `debug` | - HTTP Request and Response Header                           |
 | `trace` | - HTTP Request and Response Header <br/>- HTTP Response Body <br />- Custom Metrics |
+
+
+## Run checks immediately using `next-runtime`
+
+To run a canary outside of its normall schedule add the annotation:
+
+```bash
+ kubectl annotate canary <canary> next-runtime=$(date -Iseconds) -n
+ ```
+
+## Temporarily pause a canary using `suspend`
+
+```bash
+ kubectl annotate canary <canary> supend=true
+ ```
 

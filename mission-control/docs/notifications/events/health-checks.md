@@ -1,4 +1,5 @@
 # Health Checks
+
 Health checks emit 2 events
 
 1. `check.passed`

@@ -1,4 +1,5 @@
 # Components
+
 Component status updates emit the following events
 
 1. `component.status.healthy`

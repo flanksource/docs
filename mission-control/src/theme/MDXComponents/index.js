@@ -15,6 +15,7 @@ import { Asciinema } from '@site/src/components/Asciinema';
 import { Commercial, Standard, Enterprise } from '@site/src/components/Badges';
 import Highlight from '@site/src/components/Highlight';
 import { FullImage } from '@site/src/components/Badges';
+import { CommonLink } from '@site/src/components/Link'
 
 const MDXComponents = {
   Icon: Icon,
@@ -23,6 +24,7 @@ const MDXComponents = {
   FullImage: FullImage,
   Standard: Standard,
   Enterprise: Enterprise,
+  CommonLink: CommonLink,
   Highlight: Highlight,
   head: MDXHead,
   code: MDXCode,

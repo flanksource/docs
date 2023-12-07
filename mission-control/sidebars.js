@@ -20,7 +20,7 @@ const sidebars = {
   canaryCheckerSidebar: [
     {
       type: 'doc',
-      id: 'canary-checker/index',
+      id: 'canary-checker/overview',
       label: 'Overview'
     },
     {
@@ -34,9 +34,7 @@ const sidebars = {
       link: {
         type: 'generated-index',
         title: 'Installation',
-        // description: 'Learn about the most important Docusaurus concepts!',
         slug: '/installation',
-        keywords: ['guides'],
       },
       items: [
 
@@ -106,11 +104,7 @@ const sidebars = {
 
           ]
         },
-        {
-          type: 'doc',
-          id: 'canary-checker/concepts/authentication',
-          label: 'Authentication',
-        },
+
         {
           type: 'doc',
           id: 'canary-checker/concepts/troubleshooting',
@@ -351,27 +345,7 @@ const sidebars = {
         },
       ],
     },
-    {
-      type: 'category',
-      label: 'Scripting',
-      items: [
-        {
-          type: 'doc',
-          id: 'canary-checker/scripting/gotemplate',
-          label: 'Go Templates',
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/scripting/cel',
-          label: 'Expressions',
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/scripting/javascript',
-          label: 'Javascript',
-        },
-      ],
-    },
+
 
     {
       type: 'category',
@@ -397,33 +371,8 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'config-db/concepts/custom-creation-deletion-time',
-          label: 'Custom Creation Deletion Time'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/concepts/exclude',
-          label: 'Exclude'
-        },
-        {
-          type: 'doc',
           id: 'config-db/concepts/extraction',
           label: 'Extraction'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/concepts/mask',
-          label: 'Mask'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/concepts/secret-management',
-          label: 'Secret Management'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/concepts/templating',
-          label: 'Templating'
         },
         {
           type: 'doc',
@@ -580,223 +529,252 @@ const sidebars = {
     }
   ],
   topologySidebar: [
+    {
+      type: 'doc',
+      id: 'topology/overview',
+      label: 'Overview',
+    },
+    {
+      type: 'category',
+      label: 'Concepts',
+      items: [
         {
           type: 'doc',
-          id: 'topology/overview',
-          label: 'Overview',
+          id: 'topology/concepts/topology',
+          label: 'Topology',
+        },
+        {
+          type: 'doc',
+          id: 'topology/concepts/linking-components',
+          label: 'Components',
+        },
+        {
+          type: 'doc',
+          id: 'topology/concepts/properties',
+          label: 'Properties',
+        },
+        {
+          type: 'doc',
+          id: 'topology/concepts/lookup',
+          label: 'Lookup',
+        },
+        {
+          type: 'doc',
+          id: 'topology/concepts/for-each',
+          label: 'For Each',
+        },
+        {
+          type: 'doc',
+          id: 'topology/concepts/authentication',
+          label: 'Authentication',
+        },
+        {
+          type: 'doc',
+          id: 'topology/concepts/config',
+          label: 'Configuration',
+        },
+        {
+          type: 'doc',
+          id: 'topology/concepts/health-checks',
+          label: 'Health Checks',
+        },
+        {
+          type: 'doc',
+          id: 'topology/concepts/templating',
+          label: 'Templating',
+        }
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Examples',
+      items: [
+        {
+          type: 'doc',
+          id: 'topology/examples/aws',
+          label: 'AWS',
+        },
+        {
+          type: 'doc',
+          id: 'topology/examples/git',
+          label: 'Git',
+        },
+        {
+          type: 'doc',
+          id: 'topology/examples/kubernetes',
+          label: 'Kubernetes',
+        },
+        {
+          type: 'doc',
+          id: 'topology/examples/kubernetes-workload',
+          label: 'Kubernetes-workload',
+        },
+      ]
+    },
+    {
+      type: 'category',
+      label: 'References',
+      items: [
+        {
+          type: 'doc',
+          id: 'topology/references/components',
+          label: 'Components',
+        },
+        {
+          type: 'doc',
+          id: 'topology/references/properties',
+          label: 'Properties',
         },
         {
           type: 'category',
-          label: 'Concepts',
+          label: 'Component Lookups',
           items: [
             {
               type: 'doc',
-              id: 'topology/concepts/topology',
-              label: 'Topology',
+              id: 'topology/references/configdb',
+              label: 'Config DB',
             },
             {
               type: 'doc',
-              id: 'topology/concepts/linking-components',
-              label: 'Components',
+              id: 'topology/references/exec',
+              label: 'Exec',
             },
             {
               type: 'doc',
-              id: 'topology/concepts/properties',
-              label: 'Properties',
+              id: 'topology/references/http',
+              label: 'HTTP',
             },
             {
               type: 'doc',
-              id: 'topology/concepts/lookup',
-              label: 'Lookup',
-            },
-            {
-              type: 'doc',
-              id: 'topology/concepts/for-each',
-              label: 'For Each',
-            },
-            {
-              type: 'doc',
-              id: 'topology/concepts/authentication',
-              label: 'Authentication',
-            },
-            {
-              type: 'doc',
-              id: 'topology/concepts/config',
-              label: 'Configuration',
-            },
-            {
-              type: 'doc',
-              id: 'topology/concepts/health-checks',
-              label: 'Health Checks',
-            },
-            {
-              type: 'doc',
-              id: 'topology/concepts/templating',
-              label: 'Templating',
-            }
-          ]
-        },
-        {
-          type: 'category',
-          label: 'Examples',
-          items: [
-            {
-              type: 'doc',
-              id: 'topology/examples/aws',
-              label: 'AWS',
-            },
-            {
-              type: 'doc',
-              id: 'topology/examples/git',
-              label: 'Git',
-            },
-            {
-              type: 'doc',
-              id: 'topology/examples/kubernetes',
+              id: 'topology/references/kubernetes',
               label: 'Kubernetes',
             },
             {
               type: 'doc',
-              id: 'topology/examples/kubernetes-workload',
-              label: 'Kubernetes-workload',
-            },
-          ]
-        },
-        {
-          type: 'category',
-          label: 'References',
-          items: [
-            {
-              type: 'doc',
-              id: 'topology/references/components',
-              label: 'Components',
+              id: 'topology/references/mongo',
+              label: 'Mongo',
             },
             {
               type: 'doc',
-              id: 'topology/references/properties',
-              label: 'Properties',
+              id: 'topology/references/mssql',
+              label: 'MS SQL Server',
             },
             {
-              type: 'category',
-              label: 'Component Lookups',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'topology/references/configdb',
-                  label: 'Config DB',
-                },
-                {
-                  type: 'doc',
-                  id: 'topology/references/exec',
-                  label: 'Exec',
-                },
-                {
-                  type: 'doc',
-                  id: 'topology/references/http',
-                  label: 'HTTP',
-                },
-                {
-                  type: 'doc',
-                  id: 'topology/references/kubernetes',
-                  label: 'Kubernetes',
-                },
-                {
-                  type: 'doc',
-                  id: 'topology/references/mongo',
-                  label: 'Mongo',
-                },
-                {
-                  type: 'doc',
-                  id: 'topology/references/mssql',
-                  label: 'MS SQL Server',
-                },
-                {
-                  type: 'doc',
-                  id: 'topology/references/mysql',
-                  label: 'MySQL',
-                },
-                // There are errors while compiling this file
-                // {
-                //   type: 'doc',
-                //   id: 'topology/references/postgres',
-                //   label: 'Postgres',
-                // },
-                {
-                  type: 'doc',
-                  id: 'topology/references/prometheus',
-                  label: 'Prometheus',
-                },
-                {
-                  type: 'doc',
-                  id: 'topology/references/redis',
-                  label: 'Redis',
-                }
-              ]
+              type: 'doc',
+              id: 'topology/references/mysql',
+              label: 'MySQL',
             },
+            // There are errors while compiling this file
+            // {
+            //   type: 'doc',
+            //   id: 'topology/references/postgres',
+            //   label: 'Postgres',
+            // },
+            {
+              type: 'doc',
+              id: 'topology/references/prometheus',
+              label: 'Prometheus',
+            },
+            {
+              type: 'doc',
+              id: 'topology/references/redis',
+              label: 'Redis',
+            }
           ]
         },
-      ],
+      ]
+    },
+  ],
   notificationsSidebar: [
+    {
+      type: 'doc',
+      id: 'notifications/index',
+      label: 'Overview'
+    },
+    {
+      type: 'category',
+      label: 'Concepts',
+      items: [
         {
           type: 'doc',
-          id: 'notifications/index',
-          label: 'Overview'
+          id: 'notifications/concepts/filtering',
+          label: 'Filtering'
         },
         {
-          type: 'category',
-          label: 'Concepts',
-          items: [
-            {
-              type: 'doc',
-              id: 'notifications/concepts/events',
-              label: 'Events'
-            },
-            {
-              type: 'doc',
-              id: 'notifications/concepts/filtering',
-              label: 'Filtering'
-            },
-            {
-              type: 'doc',
-              id: 'notifications/concepts/notification',
-              label: 'Notification'
-            },
-            {
-              type: 'doc',
-              id: 'notifications/concepts/recipients',
-              label: 'Recipients'
-            },
-            {
-              type: 'doc',
-              id: 'notifications/concepts/templating',
-              label: 'Templating'
-            }
-          ]
+          type: 'doc',
+          id: 'notifications/concepts/recipients',
+          label: 'Recipients'
         },
         {
-          type: 'category',
-          label: 'Events',
-          items: [
-            {
-              type: 'doc',
-              id: 'notifications/events/components',
-              label: 'Components'
-            },
-            {
-              type: 'doc',
-              id: 'notifications/events/health-checks',
-              label: 'Health Checks'
-            },
-            {
-              type: 'doc',
-              id: 'notifications/events/incidents',
-              label: 'Incidents'
-            }
-          ]
+          type: 'doc',
+          id: 'notifications/concepts/templating',
+          label: 'Templating'
         }
-      ],
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Events',
+      link: {
+        type: 'generated-index',
+        title: 'Scripting',
+        slug: '/notifications/events',
+      },
+      items: [
+        {
+          type: 'doc',
+          id: 'notifications/events/components',
+          label: 'Components'
+        },
+        {
+          type: 'doc',
+          id: 'notifications/events/health-checks',
+          label: 'Health Checks'
+        }
+      ]
+    }
+  ],
 
-  tutorialSidebar: [
+
+  reference: [
+    {
+      type: 'doc',
+      id: 'reference/authentication',
+      label: 'Authentication',
+    },
+    {
+      type: 'doc',
+      id: 'reference/connections',
+      label: 'Connections',
+    },
+    {
+      type: 'category',
+      label: 'Scripting',
+      link: {
+        type: 'generated-index',
+        title: 'Scripting',
+        slug: '/reference/scripting',
+      },
+      items: [
+        {
+          type: 'doc',
+          id: 'reference/scripting/gotemplate',
+          label: 'Go Templates',
+        },
+        {
+          type: 'doc',
+          id: 'reference/scripting/cel',
+          label: 'CEL Expressions',
+        },
+        {
+          type: 'doc',
+          id: 'reference/scripting/javascript',
+          label: 'Javascript',
+        },
+      ],
+    },
+  ],
+  overview: [
     {
       type: 'doc',
       id: 'index',
@@ -810,20 +788,20 @@ const sidebars = {
     {
       type: 'doc',
       id: 'install',
-      label: 'Quick Start'
+      label: 'Install'
     },
     {
       type: 'doc',
       id: 'security',
       label: 'Security'
-    }, 
+    },
     {
       type: 'doc',
       id: 'connections',
       label: 'Connections'
     },
   ],
-   
+
 };
 
 export default sidebars;
