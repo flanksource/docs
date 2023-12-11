@@ -92,7 +92,7 @@ const config = {
             position: 'left',
           },
           {
-            to: 'notifications/index',
+            to: 'notifications/overview',
             activeBasePath: 'notifications',
             label: 'Notifications',
             position: 'left',

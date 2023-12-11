@@ -481,8 +481,8 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'playbooks/concepts/action',
-          label: 'Action'
+          id: 'playbooks/concepts/playbook',
+          label: 'Playbook'
         },
         {
           type: 'doc',
@@ -491,8 +491,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'playbooks/concepts/events',
-          label: 'Events'
+          id: 'playbooks/concepts/artifacts',
+          label: 'Artifacts'
         },
         {
           type: 'doc',
@@ -501,20 +501,31 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'playbooks/concepts/playbook',
-          label: 'Playbook'
-        },
-        {
-          type: 'doc',
-          id: 'playbooks/concepts/run',
-          label: 'Run'
-        },
-        {
-          type: 'doc',
           id: 'playbooks/concepts/templating',
           label: 'Templating'
-        }
+        },
       ]
+    },
+    {
+      type: 'category',
+      label: 'Triggers',
+      items: [
+        {
+          type: 'doc',
+          id: 'playbooks/triggers/events',
+          label: 'Events'
+        },
+         {
+          type: 'doc',
+          id: 'playbooks/triggers/self-service',
+          label: 'Self-Service'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/triggers/webhook',
+          label: 'Webhook'
+        },
+      ],
     },
     {
       type: 'category',
@@ -524,7 +535,74 @@ const sidebars = {
           type: 'doc',
           id: 'playbooks/actions/exec',
           label: 'Exec'
+        },
+         {
+          type: 'doc',
+          id: 'playbooks/actions/gitops',
+          label: 'GitOps'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/actions/http',
+          label: 'HTTP'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/actions/notification',
+          label: 'Notification'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/actions/pod',
+          label: 'Pod'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/actions/sql',
+          label: 'SQL'
         }
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Examples',
+      items: [
+        {
+          type: 'doc',
+          id: 'playbooks/examples/restart-pod-on-check-failure',
+          label: 'Hey'
+        }
+      ],
+    },
+    {
+      type: 'category',
+      label: 'References',
+      items: [
+        {
+          type: 'doc',
+          id: 'playbooks/references/connections',
+          label: 'Connections',
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/references/component',
+          label: 'Component',
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/references/check',
+          label: 'Check',
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/references/config_item',
+          label: 'ConfigItem',
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/references/envvar',
+          label: 'EnvVar',
+        },
       ]
     }
   ],
@@ -688,7 +766,7 @@ const sidebars = {
   notificationsSidebar: [
     {
       type: 'doc',
-      id: 'notifications/index',
+      id: 'notifications/overview',
       label: 'Overview'
     },
     {
@@ -734,8 +812,6 @@ const sidebars = {
       ]
     }
   ],
-
-
   reference: [
     {
       type: 'doc',
