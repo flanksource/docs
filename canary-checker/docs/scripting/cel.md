@@ -21,14 +21,16 @@ spec:
 
 ## aws
 
-### arnToMap
+### aws.arnToMap
 
 Takes in an AWS arn and parses it and returns a map.
 
 Snytax
 
 ```
-    arnToMap(string): map[string]string
+    aws.arnToMap(string): map[string]string
+
+    arnToMap(string): map[string]string // Deprecated
 
     Where
         - arg: string
@@ -43,23 +45,25 @@ Snytax
 Examples:
 
 ```javascript
-arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic").region; // evaluates to 'eu-west-1'
+aws.arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic").region; // evaluates to 'eu-west-1'
 ```
 
-### fromAWSMap
+### aws.fromAWSMap
 
-`fromAWSMap` takes a list of `map[string]string` and merges them into a single map. The input map is expected to have the field "Name".
+`aws.fromAWSMap` takes a list of `map[string]string` and merges them into a single map. The input map is expected to have the field "Name".
 
 Syntax
 
 ```
-    fromAWSMap([]map[string]string{}): map[string]string{}
+    aws.fromAWSMap([]map[string]string{}): map[string]string{}
+
+    fromAWSMap([]map[string]string{}): map[string]string{} // Deprecated
 ```
 
 Examples:
 
 ```javascript
-`fromAWSMap(x).hello" == "world"`; // evaluates to `true`
+`aws.fromAWSMap(x).hello" == "world"`; // evaluates to `true`
 // Where
 // x = [
 //   { Name: 'hello', Value: 'world' },
@@ -83,6 +87,9 @@ Examples:
 
 ```javascript
 base64.decode("aGVsbG8="); // return b'hello'
+```
+
+```javascript
 base64.decode("aGVsbG8"); // error
 ```
 
@@ -98,6 +105,9 @@ Examples:
 
 ```javascript
 base64.decode("aGVsbG8="); // return b'hello'
+```
+
+```javascript
 base64.decode("aGVsbG8"); // error
 ```
 
@@ -135,11 +145,13 @@ Syntax:
 Examples:
 
 ```javascript
-Getting the size of a list:
-["apple", "banana", "cherry"].size()  // Evaluates to 3
+// Getting the size of a list:
+["apple", "banana", "cherry"].size(); // Evaluates to 3
+```
 
-Determining the number of characters in a string:
-"hello".size()  // Evaluates to 5
+```javascript
+// Determining the number of characters in a string:
+"hello".size(); // Evaluates to 5
 ```
 
 ### has
@@ -160,7 +172,9 @@ If you have a message `person` with a potential field `name`, you can check for 
 
 ```javascript
 person.has(name); // Evaluates to true if 'name' is present, false otherwise
+```
 
+```javascript
 addressBook.has(person.email); // Evaluates to true if 'email' field is present in 'person' within 'addressBook'
 ```
 
@@ -173,8 +187,10 @@ Syntax:
 ```javascript
 //For lists
 list.map(e, <function>)
+```
 
-//For maps:
+```javascript
+// For maps:
 map.map(k, v, <function>)
 ```
 
@@ -213,7 +229,9 @@ Syntax:
 ```javascript
 //For lists:
 list.filter(e, <condition>)
+```
 
+```javascript
 //For maps:
 map.filter(k, v, <condition>)
 ```
@@ -231,8 +249,10 @@ Examples:
 
 ```javascript
 // Filtering a list to include only numbers greater than 2:
-[1, 2, 3, 4].filter(e, e > 2)  // Evaluates to [3, 4]
+[1, 2, 3, 4].filter(e, e > 2); // Evaluates to [3, 4]
+```
 
+```javascript
 // Filtering a map to include only entries with values greater than 1:
 {"a": 1, "b": 2, "c": 3}.filter(k, v, v > 1)  // Evaluates to {"b": 2, "c": 3}
 ```
@@ -246,7 +266,9 @@ Syntax:
 ```javascript
 //For lists:
 list.all(e, <condition>)
+```
 
+```javascript
 //For maps:
 map.all(k, v, <condition>)
 ```
@@ -264,11 +286,15 @@ Examples:
 
 ```javascript
 // Checking if all elements of a list are greater than 0:
-[1, 2, 3].all(e, e > 0)  // Evaluates to true
+[1, 2, 3].all(e, e > 0); // Evaluates to true
+```
 
+```javascript
 // Checking if all values of a map are non-empty strings:
 {"a": "apple", "b": "banana", "c": ""}.all(k, v, v != "")  // Evaluates to false
+```
 
+```javascript
 // Using both key and value for condition in a map:
 {"a": 1, "b": 2, "c": 3}.all(k, v, k != "a" || v > 1)  // Evaluates to true
 ```
@@ -282,7 +308,9 @@ Syntax:
 ```javascript
 // For lists
 list.exists(e, <condition>)
+```
 
+```javascript
 // For maps
 map.exists(k, v, <condition>)
 ```
@@ -300,11 +328,15 @@ Examples:
 
 ```javascript
 //Checking if any element of a list is equal to 2:
-[1, 2, 3].exists(e, e == 2)  // Evaluates to true
+[1, 2, 3].exists(e, e == 2); // Evaluates to true
+```
 
+```javascript
 //Checking if any value of a map is an empty string:
 {"a": "apple", "b": "banana", "c": ""}.exists(k, v, v == "")  // Evaluates to true
+```
 
+```javascript
 /Using both key and value for condition in a map:
 {"a": 1, "b": 2, "c": 3}.exists(k, v, k == "a" && v == 1)  // Evaluates to true
 ```
@@ -318,7 +350,9 @@ Syntax:
 ```javascript
 //For lists:
 list.fold(e, acc, <binary_function>)
+```
 
+```javascript
 //For maps:
 map.fold(k, v, acc, <binary_function>)
 ```
@@ -337,8 +371,10 @@ Examples:
 
 ```javascript
 // Computing the sum of all elements of a list:
-[1, 2, 3].fold(e, acc, acc + e)  // Evaluates to 6
+[1, 2, 3].fold(e, acc, acc + e); // Evaluates to 6
+```
 
+```javascript
 // Concatenating all values of a map:
 {"a": "apple", "b": "banana"}.fold(k, v, acc, acc + v)  // Evaluates to "applebanana"
 ```
@@ -377,9 +413,18 @@ sets.contains(list(T), list(T)) -> bool
 Examples:
 
 ```javascript
-sets.contains([], []) // true
-sets.contains([], [1]) // false
-sets.contains([1, 2, 3, 4], [2, 3]) // true
+sets.contains([], []); // true
+```
+
+```javascript
+sets.contains([], [1]); // false
+```
+
+```javascript
+sets.contains([1, 2, 3, 4], [2, 3]); // true
+```
+
+```javascript
 sets.contains([1, 2.0, 3u], [1.0, 2u, 3]) // true
 ```
 
@@ -396,9 +441,18 @@ the computation.
 Examples:
 
 ```javascript
-sets.equivalent([], []) // true
-sets.equivalent([1], [1, 1]) // true
+sets.equivalent([], []); // true
+```
+
+```javascript
+sets.equivalent([1], [1, 1]); // true
+```
+
+```javascript
 sets.equivalent([1], [1u, 1.0]) // true
+```
+
+```javascript
 sets.equivalent([1, 2, 3], [3u, 2.0, 1]) // true
 ```
 
@@ -414,7 +468,13 @@ Examples:
 
 ```javascript
 sets.intersects([1], []); // false
+```
+
+```javascript
 sets.intersects([1], [1, 2]); // true
+```
+
+```javascript
 sets.intersects(
   [[1], [2, 3]],
   [
@@ -546,14 +606,18 @@ Where:
 Examples:
 
 ```javascript
-Hashing a simple string:
-crypto.SHA1("hello")  // Might evaluate to "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c"
+// Hashing a simple string:
+crypto.SHA1("hello"); // Might evaluate to "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c"
+```
 
-Hashing a number represented as a string:
-crypto.SHA1("12345")  // Might evaluate to "8cb2237d0679ca88db6464eac60da96345513964"
+```javascript
+// Hashing a number represented as a string:
+crypto.SHA1("12345"); // Might evaluate to "8cb2237d0679ca88db6464eac60da96345513964"
+```
 
-Hashing special characters:
-crypto.SHA1("!@#")  // Might evaluate to "8f9b6cb1cf7d70f23c16c9b9d4894d7f3b8fe15d"
+```javascript
+// Hashing special characters:
+crypto.SHA1("!@#"); // Might evaluate to "8f9b6cb1cf7d70f23c16c9b9d4894d7f3b8fe15d"
 ```
 
 ### crypto.SHA224
@@ -571,11 +635,13 @@ Where:
 Examples:
 
 ```javascript
-Hashing a simple string:
-crypto.SHA224("hello")  // Might evaluate to "ea09ae9cc6768c50fcee903ed054556e5bfc8347907f12598aa24193"
+// Hashing a simple string:
+crypto.SHA224("hello"); // Might evaluate to "ea09ae9cc6768c50fcee903ed054556e5bfc8347907f12598aa24193"
+```
 
-Hashing a number represented as a string:
-crypto.SHA224("12345")  // Might evaluate to "a7470858e79c282bc2f6adfd831b132672dfd1224c1e78cbf5bcd057"
+```javascript
+// Hashing a number represented as a string:
+crypto.SHA224("12345"); // Might evaluate to "a7470858e79c282bc2f6adfd831b132672dfd1224c1e78cbf5bcd057"
 ```
 
 ### crypto.SHA256
@@ -593,14 +659,18 @@ Where:
 Examples:
 
 ```javascript
-Hashing a simple string:
-crypto.SHA256("hello")  // Might evaluate to "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+// Hashing a simple string:
+crypto.SHA256("hello"); // Might evaluate to "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+```
 
-Hashing a number represented as a string:
-crypto.SHA256("12345")  // Might evaluate to "d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2"
+```javascript
+// Hashing a number represented as a string:
+crypto.SHA256("12345"); // Might evaluate to "d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2"
+```
 
-Hashing special characters:
-crypto.SHA256("!@#")  // Might evaluate to "d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8"
+```javascript
+// Hashing special characters:
+crypto.SHA256("!@#"); // Might evaluate to "d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8"
 ```
 
 ### crypto.SHA384
@@ -618,14 +688,18 @@ Where:
 Examples:
 
 ```javascript
-Hashing a simple string:
-crypto.SHA384("hello")  // Might evaluate to a long hash string
+// Hashing a simple string:
+crypto.SHA384("hello"); // Might evaluate to a long hash string
+```
 
-Hashing a number represented as a string:
-crypto.SHA384("12345")  // Might evaluate to another long hash string
+```javascript
+// Hashing a number represented as a string:
+crypto.SHA384("12345"); // Might evaluate to another long hash string
+```
 
-Hashing special characters:
-crypto.SHA384("!@#")  // Might evaluate to yet another long hash string
+```javascript
+// Hashing special characters:
+crypto.SHA384("!@#"); // Might evaluate to yet another long hash string
 ```
 
 ### crypto.SHA512
@@ -643,14 +717,18 @@ Where:
 Examples:
 
 ```javascript
-Hashing a simple string:
-crypto.SHA512("hello")  // Might evaluate to a very long hash string
+// Hashing a simple string:
+crypto.SHA512("hello"); // Might evaluate to a very long hash string
+```
 
-Hashing a number represented as a string:
-crypto.SHA512("12345")  // Might evaluate to another very long hash string
+```javascript
+// Hashing a number represented as a string:
+crypto.SHA512("12345"); // Might evaluate to another very long hash string
+```
 
-Hashing special characters:
-crypto.SHA512("!@#")  // Might evaluate to yet another very long hash string
+```javascript
+// Hashing special characters:
+crypto.SHA512("!@#"); // Might evaluate to yet another very long hash string
 ```
 
 ---
@@ -672,11 +750,13 @@ Where:
 Examples:
 
 ```javascript
-Creating a timestamp for January 1st, 2023:
-timestamp("2023-01-01T00:00:00Z")
+// Creating a timestamp for January 1st, 2023:
+timestamp("2023-01-01T00:00:00Z");
+```
 
-Creating another timestamp:
-timestamp("2023-07-04T12:00:00Z")
+```javascript
+// Creating another timestamp:
+timestamp("2023-07-04T12:00:00Z");
 ```
 
 ### getDate
@@ -694,11 +774,13 @@ Where:
 Examples:
 
 ```javascript
-Extracting the date from a timestamp:
-"2023-01-01T12:34:56Z".getDate()  // Evaluates to "2023-01-01"
+// Extracting the date from a timestamp:
+"2023-01-01T12:34:56Z".getDate(); // Evaluates to "2023-01-01"
+```
 
-Getting the date from another timestamp:
-"2023-07-04T00:00:00Z".getDate()  // Evaluates to "2023-07-04"
+```javascript
+// Getting the date from another timestamp:
+"2023-07-04T00:00:00Z".getDate(); // Evaluates to "2023-07-04"
 ```
 
 ### get[DatePart]
@@ -727,11 +809,13 @@ Syntax:
 Examples:
 
 ```javascript
-Creating a duration of 5 hours:
-duration("5h")  // Represents a duration of 5 hours
+// Creating a duration of 5 hours:
+duration("5h"); // Represents a duration of 5 hours
+```
 
-Creating a duration of 30 minutes:
-duration("30m")  // Represents a duration of 30 minutes
+```javascript
+// Creating a duration of 30 minutes:
+duration("30m"); // Represents a duration of 30 minutes
 ```
 
 Durations can also be crated using arithmetic:
@@ -757,14 +841,18 @@ Syntax:
 Examples:
 
 ```javascript
-Retrieving the local time zone name:
-time.ZoneName()  // Might evaluate to "PST" if the local time zone is Pacific Standard Time
+// Retrieving the local time zone name:
+time.ZoneName(); // Might evaluate to "PST" if the local time zone is Pacific Standard Time
+```
 
-Another example of retrieving the time zone:
-time.ZoneName()  // Could evaluate to "EST" for Eastern Standard Time
+```javascript
+// Another example of retrieving the time zone:
+time.ZoneName(); // Could evaluate to "EST" for Eastern Standard Time
+```
 
-Yet another example:
-time.ZoneName()  // Might evaluate to "UTC" for Coordinated Universal Time
+```javascript
+// Yet another example:
+time.ZoneName(); // Might evaluate to "UTC" for Coordinated Universal Time
 ```
 
 ### time.ZoneOffset
@@ -778,14 +866,18 @@ Syntax:
 Examples:
 
 ```javascript
-Getting the time zone offset:
-time.ZoneOffset()  // Could evaluate to -480 for PST
+// Getting the time zone offset:
+time.ZoneOffset(); // Could evaluate to -480 for PST
+```
 
-Another example of getting the offset:
-time.ZoneOffset()  // Might evaluate to 0 for UTC
+```javascript
+// Another example of getting the offset:
+time.ZoneOffset(); // Might evaluate to 0 for UTC
+```
 
-Yet another example:
-time.ZoneOffset()  // Could evaluate to 330 for IST (Indian Standard Time)
+```javascript
+// Yet another example:
+time.ZoneOffset(); // Could evaluate to 330 for IST (Indian Standard Time)
 ```
 
 ### time.Parse
@@ -804,14 +896,18 @@ Where:
 Examples:
 
 ```javascript
-Parsing a time string with a specific format:
-time.Parse("2006-01-02", "2023-09-26")  // Evaluates to a time object representing September 26, 2023
+// Parsing a time string with a specific format:
+time.Parse("2006-01-02", "2023-09-26"); // Evaluates to a time object representing September 26, 2023
+```
 
-Another example with a different format:
-time.Parse("02-01-2006", "26-09-2023")  // Evaluates to the same time object as above
+```javascript
+// Another example with a different format:
+time.Parse("02-01-2006", "26-09-2023"); // Evaluates to the same time object as above
+```
 
-Parsing a time with hour and minute information:
-time.Parse("15:04 02-01-2006", "14:30 26-09-2023")  // Includes time of day information
+```javascript
+// Parsing a time with hour and minute information:
+time.Parse("15:04 02-01-2006", "14:30 26-09-2023"); // Includes time of day information
 ```
 
 ### time.ParseLocal
@@ -830,14 +926,18 @@ Where:
 Examples:
 
 ```javascript
-Parsing a local time string:
-time.ParseLocal("2006-01-02 15:04", "2023-09-26 14:30")  // Evaluates to a local time object for 14:30 on September 26, 2023
+// Parsing a local time string:
+time.ParseLocal("2006-01-02 15:04", "2023-09-26 14:30"); // Evaluates to a local time object for 14:30 on September 26, 2023
+```
 
-Another example:
-time.ParseLocal("02-01-2006", "26-09-2023")  // Evaluates to a local time object for September 26, 2023
+```javascript
+// Another example:
+time.ParseLocal("02-01-2006", "26-09-2023"); // Evaluates to a local time object for September 26, 2023
+```
 
-Parsing with a different time format:
-time.ParseLocal("15:04 02-01-2006", "14:30 26-09-2023")  // Includes time of day information in local time zone
+```javascript
+// Parsing with a different time format:
+time.ParseLocal("15:04 02-01-2006", "14:30 26-09-2023"); // Includes time of day information in local time zone
 ```
 
 ### time.ParseInLocation
@@ -857,14 +957,18 @@ Where:
 Examples:
 
 ```javascript
-Parsing a time string for a specific time zone:
-time.ParseInLocation("2006-01-02", "America/New_York", "2023-09-26")  // Evaluates to a time object for EST/EDT
+// Parsing a time string for a specific time zone:
+time.ParseInLocation("2006-01-02", "America/New_York", "2023-09-26"); // Evaluates to a time object for EST/EDT
+```
 
-Another example for a different time zone:
-time.ParseInLocation("02-01-2006", "Europe/London", "26-09-2023")  // Evaluates to a time object for GMT/BST
+```javascript
+// Another example for a different time zone:
+time.ParseInLocation("02-01-2006", "Europe/London", "26-09-2023"); // Evaluates to a time object for GMT/BST
+```
 
-Parsing with hour and minute for a specific zone:
-time.ParseInLocation("15:04 02-01-2006", "Asia/Tokyo", "14:30 26-09-2023")  // Evaluates to a time object for JST
+```javascript
+// Parsing with hour and minute for a specific zone:
+time.ParseInLocation("15:04 02-01-2006", "Asia/Tokyo", "14:30 26-09-2023"); // Evaluates to a time object for JST
 ```
 
 ### time.Now
@@ -878,14 +982,18 @@ Syntax:
 Examples:
 
 ```javascript
-Getting the current time:
-time.Now()  // Evaluates to the current date and time
+// Getting the current time:
+time.Now(); // Evaluates to the current date and time
+```
 
-Another example of retrieving the current time:
-time.Now()  // Will always return the current moment's date and time
+```javascript
+// Another example of retrieving the current time:
+time.Now(); // Will always return the current moment's date and time
+```
 
-Yet another example:
-time.Now()  // Useful for timestamping or time-stamping events in real-time
+```javascript
+// Yet another example:
+time.Now(); // Useful for timestamping or time-stamping events in real-time
 ```
 
 ### time.ParseDuration
@@ -903,14 +1011,18 @@ Where:
 Examples:
 
 ```javascript
-Parsing a duration string:
-time.ParseDuration("1h30m")  // Evaluates to a duration of 1 hour and 30 minutes
+// Parsing a duration string:
+time.ParseDuration("1h30m"); // Evaluates to a duration of 1 hour and 30 minutes
+```
 
-Another example with a different format:
-time.ParseDuration("15m30s")  // Evaluates to a duration of 15 minutes and 30 seconds
+```javascript
+// Another example with a different format:
+time.ParseDuration("15m30s"); // Evaluates to a duration of 15 minutes and 30 seconds
+```
 
-Parsing a negative duration:
-time.ParseDuration("-2h45m")  // Evaluates to a duration of -2 hours and -45 minutes
+```javascript
+// Parsing a negative duration:
+time.ParseDuration("-2h45m"); // Evaluates to a duration of -2 hours and -45 minutes
 ```
 
 ### time.Since
@@ -928,14 +1040,18 @@ Where:
 Examples:
 
 ```javascript
-Calculating the time elapsed since a specific past time:
-time.Since(time.Parse("2006-01-02", "2023-09-26"))  // Evaluates to the duration since September 26, 2023
+// Calculating the time elapsed since a specific past time:
+time.Since(time.Parse("2006-01-02", "2023-09-26")); // Evaluates to the duration since September 26, 2023
+```
 
-Another example with a different past time:
-time.Since(time.Parse("15:04 02-01-2006", "14:30 26-09-2023"))  // Evaluates to the duration since 14:30 on September 26, 2023
+```javascript
+// Another example with a different past time:
+time.Since(time.Parse("15:04 02-01-2006", "14:30 26-09-2023")); // Evaluates to the duration since 14:30 on September 26, 2023
+```
 
-Using the `time.Now` function for a real-time duration:
-time.Since(time.Now())  // Always evaluates to a very small duration, as it's the time since "now"
+```javascript
+// Using the `time.Now` function for a real-time duration:
+time.Since(time.Now()); // Always evaluates to a very small duration, as it's the time since "now"
 ```
 
 ### time.Until
@@ -953,14 +1069,18 @@ Where:
 Examples:
 
 ```javascript
-Calculating the time remaining until a specific future time:
-time.Until(time.Parse("2006-01-02", "2023-10-01"))  // Evaluates to the duration until October 1, 2023
+// Calculating the time remaining until a specific future time:
+time.Until(time.Parse("2006-01-02", "2023-10-01")); // Evaluates to the duration until October 1, 2023
+```
 
-Another example with a different future time:
-time.Until(time.Parse("15:04 02-01-2006", "16:00 30-09-2023"))  // Evaluates to the duration until 16:00 on September 30, 2023
+```javascript
+// Another example with a different future time:
+time.Until(time.Parse("15:04 02-01-2006", "16:00 30-09-2023")); // Evaluates to the duration until 16:00 on September 30, 2023
+```
 
-Using the `time.Now` function for a real-time duration:
-time.Until(time.Now())  // Always evaluates to zero, as it's the time until "now"
+```javascript
+// Using the `time.Now` function for a real-time duration:
+time.Until(time.Now()); // Always evaluates to zero, as it's the time until "now"
 ```
 
 ---
@@ -1077,6 +1197,9 @@ Examples:
 
 ```javascript
 filepath.Base("/home/flanksource/projects/gencel"); // Evaluates to true
+```
+
+```javascript
 filepath.Base("projects/gencel"); // Evaluates to false
 ```
 
@@ -1112,6 +1235,9 @@ Examples:
 
 ```javascript
 filepath.Match("*.txt", "foo.json"); // Evaluates to false
+```
+
+```javascript
 filepath.Match("*.txt", "foo.txt"); // Evaluates to true
 ```
 
@@ -1158,6 +1284,98 @@ filepath.Split("/foo/bar/baz"); // Evaluates to [/foo/bar/ baz]
 
 ## JSON
 
+### .JSON
+
+The `JSON` method in CEL is used to convert a JSON formatted string into a map.
+
+Syntax:
+
+    jsonObjectString.JSON()
+
+Where:
+
+- `jsonObjectString` is the JSON formatted string representing a JSON object.
+
+Examples:
+
+```javascript
+'{"name": "Alice", "age": 30}'.JSON();
+```
+
+### .JSONArray
+
+The `JSONArray` method converts a JSON formatted string into an array. It is particularly useful for handling JSON arrays.
+
+Syntax:
+
+    jsonArrayString.JSONArray()
+
+Where:
+
+- `jsonArrayString` is the JSON formatted string representing an array.
+
+Examples:
+
+```javascript
+'[{"name": "Alice"}, {"name": "Bob"}]'.JSONArray();
+```
+
+### .toJSON
+
+The `toJSON` method converts any data type into a JSON formatted string.
+
+Syntax:
+
+```
+    any.toJSON()
+```
+
+Examples:
+
+```javascript
+[{ name: "John" }].toJSON(); // [{"name":"John"}]
+```
+
+```javascript
+{'name': 'John'}.toJSON() // {"name":"John"}
+```
+
+```javascript
+1.toJSON() // 1
+```
+
+### .toJSONPretty
+
+The `toJSONPretty` method converts any data type into a JSON formatted string with proper indentation.
+
+Syntax:
+
+    any.toJSONPretty(indent)
+
+Where:
+
+- `indent` is the string used for indentation.
+
+Examples:
+
+```javascript
+{'name': 'aditya'}.toJSONPretty('\t')
+// Evaluates to
+// {
+// 	"name": "aditya"
+// }
+```
+
+```javascript
+// Using tab for indentation:
+["Alice", 30].toJSONPretty("\t");
+```
+
+```javascript
+// An empty map with four spaces indent:
+{}.toJSONPretty("    ", );
+```
+
 ### jq
 
 The `jq` function in CEL applies a jq expression to filter or transform data.
@@ -1174,172 +1392,173 @@ Where:
 Examples:
 
 ```javascript
-Filtering data with a jq expression:
-jq(".name", {"name": "John", "age": 30})  // Evaluates to "John"
-
-Transforming data with a jq expression:
-jq("{name, age}", {"name": "John", "age": 30, "city": "NY"})  // Evaluates to {"name": "John", "age": 30}
-
-Using a complex jq expression:
-jq(".[] | select(.age > 25)", [{"name": "John", "age": 30}, {"name": "Jane", "age": 25}])  // Evaluates to [{"name": "John", "age": 30}]
+// Filtering data with a jq expression:
+jq(".name", { name: "John", age: 30 }); // Evaluates to "John"
 ```
 
-### JSON
-
-The `JSON` function in CEL is used to convert a JSON formatted string into a map. It returns a map containing the JSON data.
-
-Syntax:
-
-    JSON(jsonString)
-
-Where:
-
-- `jsonString` is the JSON formatted string.
-
-Examples:
-
 ```javascript
-Converting a JSON string to a map:
-JSON("{\"name\": \"Alice\", \"age\": 30}")  // Evaluates to a map with keys "name" and "age"
-
-Handling an array in JSON:
-JSON("{\"numbers\": [1, 2, 3]}")  // Evaluates to a map with a key "numbers" containing an array
-
-Nested JSON string conversion:
-JSON("{\"person\": {\"name\": \"Bob\", \"age\": 35}}")  // Evaluates to a nested map
+// Transforming data with a jq expression:
+jq("{name, age}", { name: "John", age: 30, city: "NY" }); // Evaluates to {"name": "John", "age": 30}
 ```
 
-### JSONArray
-
-The `JSONArray` function converts a JSON formatted string into an array. It is particularly useful for handling JSON arrays.
-
-Syntax:
-
-    JSONArray(jsonArrayString)
-
-Where:
-
-- `jsonArrayString` is the JSON formatted string representing an array.
-
-Examples:
-
 ```javascript
-Converting a JSON array string to an array:
-JSONArray('["1", "2"]')[0] // Evaluates to "1"
-
-Handling complex objects in a JSON array:
-JSONArray("[{\"name\": \"Alice\"}, {\"name\": \"Bob\"}]")  // Evaluates to an array of maps
-
-An empty JSON array string:
-JSONArray("[]")  // Evaluates to an empty array
-```
-
-### toJSONPretty
-
-The `toJSONPretty` function converts JSON object into a pretty-formatted JSON string with indents.
-
-Syntax:
-
-    toJSONPretty(indent, data)
-
-Where:
-
-- `indent` is the string used for indentation.
-- `data` is the map or array to be converted.
-
-Examples:
-
-```javascript
-toJSONPretty('\t', {'name': 'aditya'}
-// Evaluates to
-{
-	"name": "aditya"
-}
-
-Using tab for indentation:
-toJSONPretty("\t", ["Alice", 30])  // Evaluates to a pretty-formatted JSON string with tabs
-
-An empty map with four spaces indent:
-toJSONPretty("    ", {})  // Evaluates to "{}" with no indents as the map is empty
+// Using a complex jq expression:
+jq(".[] | select(.age > 25)", [
+  { name: "John", age: 30 },
+  { name: "Jane", age: 25 },
+]); // Evaluates to [{"name": "John", "age": 30}]
 ```
 
 ---
 
 ## kubernetes
 
-### IsHealthy
+### k8s.cpuAsMillicores
 
-The `IsHealthy` function in CEL is used to determine if a Kubernetes resource is healthy. It returns a boolean value indicating the health status of the resource.
+The `k8s.cpuAsMillicores` function returns the millicores of a Kubernetes resource.
 
 Syntax:
 
-    IsHealthy(resource)
+    k8s.cpuAsMillicores(resource): int
 
 Where:
 
-- `resource` is the Kubernetes resource you're checking.
+    resource: memory representation string
 
 Examples:
 
 ```javascript
-Checking if a pod is healthy:
-IsHealthy(pod)  // Evaluates to true if the pod is healthy
-
-Verifying the health of a service:
-IsHealthy(service)  // Evaluates to false if the service is not healthy
-
-Assessing the health of a deployment:
-IsHealthy(deployment)  // Evaluates to true if the deployment is healthy
+k8s.cpuAsMillicores("10m"); // 10
 ```
 
-### GetStatus
-
-The `GetStatus` function in CEL retrieves the status of a Kubernetes resource as a string. It provides detailed information about the current state of the resource.
-
-Syntax:
-
-    GetStatus(resource)
-
-Where:
-
-- `resource` is the Kubernetes resource whose status you're retrieving.
-
-Examples:
-
 ```javascript
-Retrieving the status of a pod:
-GetStatus(pod)  // Evaluates to "Running" if the pod is running
-
-Getting the status of a service:
-GetStatus(service)  // Evaluates to "Active" if the service is active
-
-Checking the status of a deployment:
-GetStatus(deployment)  // Evaluates to "Deployed" if the deployment is successful
+k8s.cpuAsMillicores("0.5"); // 500
 ```
 
-### GetHealth
+```javascript
+k8s.cpuAsMillicores("1.234"); // 1234
+```
 
-The `GetHealth` function in CEL retrieves the health status of a Kubernetes resource as a map. The map contains key-value pairs providing detailed information about the resource's health.
+### k8s.getHealth
+
+The `k8s.getHealth` function in CEL retrieves the health status of a Kubernetes resource as a map. The map contains key-value pairs providing detailed information about the resource's health.
 
 Syntax:
 
-    GetHealth(resource)
+```
+k8s.getHealth(resource)
+
+GetHealth(resource) // Deprecated
 
 Where:
 
-- `resource` is the Kubernetes resource whose health information you're retrieving.
+    - `resource` is the Kubernetes resource whose health information you're retrieving.
+```
 
 Examples:
 
 ```javascript
-Retrieving the health information of a pod:
-GetHealth(pod)  // Evaluates to a map with keys and values indicating the pod's health
+// Retrieving the health information of a pod:
+k8s.getHealth(pod); // Evaluates to a map with keys and values indicating the pod's health
+```
 
-Getting the health information of a service:
-GetHealth(service)  // Evaluates to a map with keys and values indicating the service's health
+```javascript
+// Getting the health information of a service:
+k8s.getHealth(service); // Evaluates to a map with keys and values indicating the service's health
+```
 
-Checking the health information of a deployment:
-GetHealth(deployment)  // Evaluates to a map with keys and values indicating the deployment's health
+```javascript
+// Checking the health information of a deployment:
+k8s.getHealth(deployment); // Evaluates to a map with keys and values indicating the deployment's health
+```
+
+### k8s.getStatus
+
+The `k8s.getStatus` function in CEL retrieves the status of a Kubernetes resource as a string. It provides detailed information about the current state of the resource.
+
+Syntax:
+
+```
+k8s.getStatus(resource)
+
+GetStatus(resource) // Deprecated
+
+Where:
+
+    - `resource` is the Kubernetes resource whose status you're retrieving.
+```
+
+Examples:
+
+```javascript
+// Retrieving the status of a pod:
+k8s.getStatus(pod); // Evaluates to "Running" if the pod is running
+```
+
+```javascript
+// Getting the status of a service:
+k8s.getStatus(service); // Evaluates to "Active" if the service is active
+```
+
+```javascript
+// Checking the status of a deployment:
+k8s.getStatus(deployment); // Evaluates to "Deployed" if the deployment is successful
+```
+
+### k8s.isHealthy
+
+The `k8s.isHealthy` function in CEL is used to determine if a Kubernetes resource is healthy. It returns a boolean value indicating the health status of the resource.
+
+Syntax:
+
+```
+k8s.isHealthy(resource)
+
+k8s.is_healthy(resource) // Deprecated
+IsHealth(resource) // Deprecated
+
+Where:
+
+    - `resource` is the Kubernetes resource you're checking.
+```
+
+Examples:
+
+```javascript
+// Checking if a pod is healthy:
+k8s.isHealthy(pod); // Evaluates to true if the pod is healthy
+```
+
+```javascript
+// Verifying the health of a service:
+k8s.isHealthy(service); // Evaluates to false if the service is not healthy
+```
+
+```javascript
+// Assessing the health of a deployment:
+k8s.isHealthy(deployment); // Evaluates to true if the deployment is healthy
+```
+
+### k8s.memoryAsBytes
+
+The `k8s.memoryAsBytes` function converts the memory string to bytes.
+
+Syntax:
+
+    k8s.memoryAsBytes(resource): int
+
+Where:
+
+    resource: memory representation string
+
+Examples:
+
+```javascript
+k8s.memoryAsBytes("10Ki"); // 10240
+```
+
+```javascript
+k8s.memoryAsBytes("1.234gi"); // 1324997410
 ```
 
 ---
@@ -1448,6 +1667,9 @@ Examples:
 
 ```javascript
 math.Seq([1, 5]); // Evaluates to [1, 2, 3, 4, 5]
+```
+
+```javascript
 math.Seq([1, 6, 2]); // Evaluates to [1, 3, 5]
 ```
 
@@ -1537,18 +1759,6 @@ math.Round(2.3); // Evaluates to 2
 
 ---
 
-<!-- func TestRandom(t *testing.T) {
-	runTests(t, []Test{
-		// {nil, `random.ASCII(12)`, "A"},
-		// {nil, `random.Alpha(25)`, "aa"},
-		// {nil, `random.AlphaNum(32)`, "aaa"},
-		{nil, `random.String(4, ['a', 'd'])`, "aa"},
-		// {nil, `random.Item(['a', 'b', 'c'])`, "a"},
-		{nil, `random.Number(['12', '12'])`, "12"},
-		// {nil, `random.Float([1, 2])`, "1.03"},
-	})
-} -->
-
 ## random
 
 ### random.ASCII
@@ -1605,6 +1815,9 @@ Examples:
 
 ```javascript
 random.String(5, ["a", "d"]);
+```
+
+```javascript
 random.String(5, []);
 ```
 
@@ -1679,14 +1892,20 @@ Where:
 
 Examples:
 
-    Finding a pattern within a string:
-    regexp.Find("llo", "hello")  // Evaluates to "llo"
+```javascript
+// Finding a pattern within a string:
+regexp.Find("llo", "hello"); // Evaluates to "llo"
+```
 
-    Searching for digits within a string:
-    regexp.Find("\\d+", "abc123def")  // Evaluates to "123"
+```javascript
+// Searching for digits within a string:
+regexp.Find("\\d+", "abc123def"); // Evaluates to "123"
+```
 
-    Pattern not found in the string:
-    regexp.Find("xyz", "hello")  // Evaluates to ""
+```javascript
+// Pattern not found in the string:
+regexp.Find("xyz", "hello"); // Evaluates to ""
+```
 
 ---
 
@@ -1706,14 +1925,20 @@ Where:
 
 Examples:
 
-    Finding all occurrences of a pattern:
-    regexp.FindAll("a.", -1, "banana")  // Evaluates to ["ba", "na", "na"]
+```javascript
+// Finding all occurrences of a pattern:
+regexp.FindAll("a.", -1, "banana"); // Evaluates to ["ba", "na", "na"]
+```
 
-    Limiting the number of matches:
-    regexp.FindAll("\\d", 2, "12345")  // Evaluates to ["1", "2"]
+```javascript
+// Limiting the number of matches:
+regexp.FindAll("\\d", 2, "12345"); // Evaluates to ["1", "2"]
+```
 
-    Pattern not found:
-    regexp.FindAll("z", -1, "hello")  // Evaluates to []
+```javascript
+// Pattern not found:
+regexp.FindAll("z", -1, "hello"); // Evaluates to []
+```
 
 ---
 
@@ -1732,14 +1957,20 @@ Where:
 
 Examples:
 
-    Checking if a string matches a pattern:
-    regexp.Match("^h.llo", "hello")  // Evaluates to true
+```javascript
+// Checking if a string matches a pattern:
+regexp.Match("^h.llo", "hello"); // Evaluates to true
+```
 
-    Pattern does not match the string:
-    regexp.Match("^b", "apple")  // Evaluates to false
+```javascript
+// Pattern does not match the string:
+regexp.Match("^b", "apple"); // Evaluates to false
+```
 
-    Matching digits in a string:
-    regexp.Match("\\d+", "abc123")  // Evaluates to true
+```javascript
+// Matching digits in a string:
+regexp.Match("\\d+", "abc123"); // Evaluates to true
+```
 
 ---
 
@@ -1757,14 +1988,20 @@ Where:
 
 Examples:
 
-    Quoting metacharacters in a string:
-    regexp.QuoteMeta("a.b")  // Evaluates to "a\\.b"
+```javascript
+// Quoting metacharacters in a string:
+regexp.QuoteMeta("a.b"); // Evaluates to "a\\.b"
+```
 
-    String without metacharacters:
-    regexp.QuoteMeta("abc")  // Evaluates to "abc"
+```javascript
+// String without metacharacters:
+regexp.QuoteMeta("abc"); // Evaluates to "abc"
+```
 
-    Quoting a complex pattern:
-    regexp.QuoteMeta("[a-z].*")  // Evaluates to "\\[a\\-z\\]\\.\\*"
+```javascript
+// Quoting a complex pattern:
+regexp.QuoteMeta("[a-z].*"); // Evaluates to "\\[a\\-z\\]\\.\\*"
+```
 
 ---
 
@@ -1784,14 +2021,20 @@ Where:
 
 Examples:
 
-    Replacing a pattern in a string:
-    regexp.Replace("a.", "x", "banana")  // Evaluates to "bxnxna"
+```javascript
+// Replacing a pattern in a string:
+regexp.Replace("a.", "x", "banana"); // Evaluates to "bxnxna"
+```
 
-    Pattern not found:
-    regexp.Replace("z", "x", "apple")  // Evaluates to "apple"
+```javascript
+// Pattern not found:
+regexp.Replace("z", "x", "apple"); // Evaluates to "apple"
+```
 
-    Replacing digits:
-    regexp.Replace("\\d+", "num", "abc123")  // Evaluates to "abcnum"
+```javascript
+// Replacing digits:
+regexp.Replace("\\d+", "num", "abc123"); // Evaluates to "abcnum"
+```
 
 ---
 
@@ -1811,14 +2054,20 @@ Where:
 
 Examples:
 
-    Replacing a substring:
-    regexp.ReplaceLiteral("apple", "orange", "apple pie")  // Evaluates to "orange pie"
+```javascript
+// Replacing a substring:
+regexp.ReplaceLiteral("apple", "orange", "apple pie"); // Evaluates to "orange pie"
+```
 
-    Substring not found:
-    regexp.ReplaceLiteral("z", "x", "apple")  // Evaluates to "apple"
+```javascript
+// Substring not found:
+regexp.ReplaceLiteral("z", "x", "apple"); // Evaluates to "apple"
+```
 
-    Replacing a pattern without regex interpretation:
-    regexp.ReplaceLiteral("a.", "x", "a.b c.d")  // Evaluates to "x.b c.d"
+```javascript
+// Replacing a pattern without regex interpretation:
+regexp.ReplaceLiteral("a.", "x", "a.b c.d"); // Evaluates to "x.b c.d"
+```
 
 ---
 
@@ -1838,18 +2087,58 @@ Where:
 
 Examples:
 
-    Splitting a string by a pattern:
-    regexp.Split("a.", -1, "banana")  // Evaluates to ["", "n", "n"]
+```javascript
+// Splitting a string by a pattern:
+regexp.Split("a.", -1, "banana"); // Evaluates to ["", "n", "n"]
+```
 
-    Limiting the number of splits:
-    regexp.Split("\\s", 2, "apple pie is delicious")  // Evaluates to ["apple", "pie is delicious"]
+```javascript
+// Limiting the number of splits:
+regexp.Split("\\s", 2, "apple pie is delicious"); // Evaluates to ["apple", "pie is delicious"]
+```
 
-    Pattern not found:
-    regexp.Split("z", -1, "hello")  // Evaluates to ["hello"]
+```javascript
+// Pattern not found:
+regexp.Split("z", -1, "hello"); // Evaluates to ["hello"]
+```
 
 ---
 
 ## strings
+
+### .abbrev
+
+The `abbrev` method on a string abbreviates the string using ellipses. This will turn the string "Now is the time for all good men" into "...s the time for..."
+This function works like `Abbreviate(string, int)`, but allows you to specify a "left edge" offset. Note that this left edge is not
+necessarily going to be the leftmost character in the result, or the first character following the ellipses, but it will appear
+somewhere in the result.
+In no case will it return a string of length greater than maxWidth.
+
+```
+Syntax:
+    'string'.abbrev(maxWidth)
+    'string'.abbrev(offset, maxWidth)
+
+Where:
+
+    - str - the string to check
+    - offset - left edge of source string
+    - maxWidth - maximum length of result string, must be at least 4
+```
+
+Examples:
+
+```javascript
+"Now is the time for all good men".abbrev(5, 20); // "...s the time for..."
+```
+
+```javascript
+"KubernetesPod".abbrev(1, 5); // "Ku..."
+```
+
+```javascript
+"KubernetesPod".abbrev(6); // "Kub..."
+```
 
 ### .camelCase
 
@@ -1866,14 +2155,18 @@ Where:
 Examples:
 
 ```javascript
-Converting a string to camelCase:
-"hello world".camelCase()  // Evaluates to "HelloWorld"
+// Converting a string to camelCase:
+"hello world".camelCase(); // Evaluates to "HelloWorld"
+```
 
-Converting a snake_case string:
-"hello_world".camelCase()  // Evaluates to "HelloWorld"
+```javascript
+// Converting a snake_case string:
+"hello_world".camelCase(); // Evaluates to "HelloWorld"
+```
 
-Converting a string with spaces and special characters:
-"hello beautiful world!".camelCase()  // Evaluates to "HelloBeautifulWorld"
+```javascript
+// Converting a string with spaces and special characters:
+"hello beautiful world!".camelCase(); // Evaluates to "HelloBeautifulWorld"
 ```
 
 ### .charAt
@@ -1889,7 +2182,13 @@ Examples:
 
 ```javascript
 "hello".charAt(4); // return 'o'
+```
+
+```javascript
 "hello".charAt(5); // return ''
+```
+
+```javascript
 "hello".charAt(-1); // error
 ```
 
@@ -1923,6 +2222,26 @@ Examples:
 "hello".endsWith("lo"); // Evaluates to true
 ```
 
+### .indent
+
+The `indent` method on a string indents each line of a string by the specified prefix. Additionally, a width paramater can also be specified
+which repeats the prefix that many times.
+
+Syntax:
+
+    'string'.indent(prefix)
+    'string'.indent(width, prefix)
+
+Examples:
+
+```javascript
+"hello world".indent("=="); // ==hello world
+```
+
+```javascript
+"hello world".indent(4, "-"); // ----hello world
+```
+
 ### .indexOf
 
 Returns the integer index of the first occurrence of the search string. If the
@@ -1941,10 +2260,21 @@ Examples:
 
 ```javascript
 "hello mellow".indexOf(""); // returns 0
+```
+
+```javascript
 "hello mellow".indexOf("ello"); // returns 1
+```
+
+```javascript
 "hello mellow".indexOf("jello"); // returns -1
+```
+
+```javascript
 "hello mellow".indexOf("", 2); // returns 2
-"hello mellow".indexOf("ello", 2); // returns 7
+```
+
+```javascript
 "hello mellow".indexOf("ello", 20); // error
 ```
 
@@ -1963,19 +2293,28 @@ elements in the resulting string.
 Examples:
 
 ```javascript
-['hello', 'mellow'].join() // returns 'hellomellow'
-['hello', 'mellow'].join(' ') // returns 'hello mellow'
-[].join() // returns ''
-[].join('/') // returns ''
+["hello", "mellow"].join(); // returns 'hellomellow'
 ```
 
-### .KebabCase
+```javascript
+["hello", "mellow"].join(" "); // returns 'hello mellow'
+```
 
-The `KebabCase` function in CEL converts a given string into kebab-case format.
+```javascript
+[].join(); // returns ''
+```
+
+```javascript
+[].join("/"); // returns ''
+```
+
+### .kebabCase
+
+The `kebabCase` function in CEL converts a given string into kebab-case format.
 
 Syntax:
 
-    KebabCase(string)
+    kebabCase(string)
 
 Where:
 
@@ -1984,14 +2323,18 @@ Where:
 Examples:
 
 ```javascript
-Converting a string to kebab-case:
-KebabCase("Hello World")  // Evaluates to "hello-world"
+// Converting a string to kebab-case:
+"Hello World".kebabCase(); // Evaluates to "hello-world"
+```
 
-Converting a CamelCase string:
-KebabCase("HelloWorld")  // Evaluates to "hello-world"
+```javascript
+// Converting a CamelCase string:
+"HelloWorld".kebabCase(); // Evaluates to "hello-world"
+```
 
-Converting a string with spaces and special characters:
-KebabCase("Hello Beautiful World!")  // Evaluates to "hello-beautiful-world"
+```javascript
+// Converting a string with spaces and special characters:
+"Hello Beautiful World!".kebabCase(); // Evaluates to "hello-beautiful-world"
 ```
 
 ### .lastIndexOf
@@ -2013,9 +2356,21 @@ Examples:
 
 ```javascript
 "hello mellow".lastIndexOf(""); // returns 12
+```
+
+```javascript
 "hello mellow".lastIndexOf("ello"); // returns 7
+```
+
+```javascript
 "hello mellow".lastIndexOf("jello"); // returns -1
+```
+
+```javascript
 "hello mellow".lastIndexOf("ello", 6); // returns 1
+```
+
+```javascript
 "hello mellow".lastIndexOf("ello", -1); // error
 ```
 
@@ -2057,12 +2412,16 @@ Examples:
 ```javascript
 // Checking if a string matches a simple pattern:
 "apple".matches("^a.*e$"); // Evaluates to true
+```
 
+```javascript
 // Validating an email format:
 "example@email.com".matches(
   "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
 ); // Evaluates to true
+```
 
+```javascript
 // Checking for a pattern of digits:
 "12345".matches("^\\d+$"); // Evaluates to true
 ```
@@ -2080,6 +2439,9 @@ Examples:
 
 ```javascript
 strings.quote('single-quote with "double quote"'); // returns '"single-quote with \"double quote\""'
+```
+
+```javascript
 strings.quote("two escape sequences a\n"); // returns '"two escape sequences \\a\\n"'
 ```
 
@@ -2120,8 +2482,17 @@ Examples:
 
 ```javascript
 "hello hello".replace("he", "we"); // returns 'wello wello'
+```
+
+```javascript
 "hello hello".replace("he", "we", -1); // returns 'wello wello'
+```
+
+```javascript
 "hello hello".replace("he", "we", 1); // returns 'wello hello'
+```
+
+```javascript
 "hello hello".replace("he", "we", 0); // returns 'hello hello'
 ```
 
@@ -2160,6 +2531,9 @@ Examples:
 
 ```javascript
 "gums".reverse(); // returns 'smug'
+```
+
+```javascript
 "John Smith".reverse(); // returns 'htimS nhoJ'
 ```
 
@@ -2179,6 +2553,9 @@ Examples:
 
 ```javascript
 "Hello World".runeCount(); // Evaluates to 11
+```
+
+```javascript
 "Hello$World".runeCount(); // Evaluates to 11
 ```
 
@@ -2194,10 +2571,14 @@ Examples:
 
 ```javascript
 "Hello World".shellQuote(); // Evaluates to "'Hello World'"
+```
 
+```javascript
 // Shell quoting a string with special characters:
 "Hello$World".shellQuote(); // Evaluates to "'Hello$World'"
+```
 
+```javascript
 // Shell quoting a string with spaces and special characters:
 "Hello World$123".shellQuote(); // Evaluates to "'Hello World$123'"
 ```
@@ -2215,7 +2596,9 @@ Examples:
 ```javascript
 // Getting the size of a list:
 ["apple", "banana", "cherry"].size(); // Evaluates to 3
+```
 
+```javascript
 // Determining the number of characters in a string:
 "hello".size(); // Evaluates to 5
 ```
@@ -2237,10 +2620,14 @@ Examples:
 ```javascript
 // Converting a string to a slug:
 "Hello World!".slug(); // Evaluates to "hello-world"
+```
 
+```javascript
 // Converting a string with special characters:
 "Hello, World!".slug(); // Evaluates to "hello-world"
+```
 
+```javascript
 // Converting a multi-word string:
 "Hello Beautiful World".slug(); // Evaluates to "hello-beautiful-world"
 ```
@@ -2260,14 +2647,32 @@ Where:
 Examples:
 
 ```javascript
-Converting a string to snake_case:
-"Hello World".snakeCase()  // Evaluates to "hello_world"
+// Converting a string to snake_case:
+"Hello World".snakeCase(); // Evaluates to "hello_world"
+```
 
-Converting a CamelCase string:
-"HelloWorld".snakeCase()  // Evaluates to "hello_world"
+```javascript
+// Converting a CamelCase string:
+"HelloWorld".snakeCase(); // Evaluates to "hello_world"
+```
 
-Converting a string with spaces and special characters:
-"Hello Beautiful World!".snakeCase()  // Evaluates to "hello_beautiful_world"
+```javascript
+// Converting a string with spaces and special characters:
+"Hello Beautiful World!".snakeCase(); // Evaluates to "hello_beautiful_world"
+```
+
+### .sort
+
+The `sort` method on a string sorts the string alphabetically.
+
+Syntax:
+
+    'string'.sort()
+
+Examples:
+
+```javascript
+"hello".sort(); // ehllo
 ```
 
 ### .split
@@ -2289,9 +2694,21 @@ Examples:
 
 ```javascript
 "hello hello hello".split(" "); // returns ['hello', 'hello', 'hello']
+```
+
+```javascript
 "hello hello hello".split(" ", 0); // returns []
+```
+
+```javascript
 "hello hello hello".split(" ", 1); // returns ['hello hello hello']
+```
+
+```javascript
 "hello hello hello".split(" ", 2); // returns ['hello', 'hello hello']
+```
+
+```javascript
 "hello hello hello".split(" ", -1); // returns ['hello', 'hello', 'hello']
 ```
 
@@ -2306,14 +2723,18 @@ Syntax:
 Examples:
 
 ```javascript
-Single quoting a simple string:
-"Hello World".squote()  // Evaluates to "'Hello World'"
+// Single quoting a simple string:
+"Hello World".squote(); // Evaluates to "'Hello World'"
+```
 
-Single quoting a string with a number:
-"12345".squote()  // Evaluates to "'12345'"
+```javascript
+// Single quoting a string with a number:
+"12345".squote(); // Evaluates to "'12345'"
+```
 
-Single quoting an already single quoted string:
-"'Hello World'".squote()  // Evaluates to "'''Hello World'''"
+```javascript
+// Single quoting an already single quoted string:
+"'Hello World'".squote(); // Evaluates to "'''Hello World'''"
 ```
 
 ### .startsWith
@@ -2351,8 +2772,17 @@ Examples:
 
 ```javascript
 "tacocat".substring(4); // returns 'cat'
+```
+
+```javascript
 "tacocat".substring(0, 4); // returns 'taco'
+```
+
+```javascript
 "tacocat".substring(-1); // error
+```
+
+```javascript
 "tacocat".substring(2, 1); // error
 ```
 
@@ -2373,7 +2803,9 @@ Examples:
 ```javascript
 // Converting a string:
 "hello world".title(); // Evaluates to "Hello World"
+```
 
+```javascript
 // Working with mixed case:
 "mIxEd CaSe".title(); // Evaluates to "MIxED CASe"
 ```
@@ -2411,10 +2843,14 @@ Examples:
 ```javascript
 // Removing a prefix from a string:
 "Mr. Smith".trimPrefix("Mr."); // Evaluates to "Smith"
+```
 
+```javascript
 // Another example:
 "Astronaut".trimPrefix("Astro"); // Evaluates to "naut"
+```
 
+```javascript
 // If the prefix is not present:
 "Mr. Smith".trimPrefix("Dr."); // Evaluates to "Mr. Smith"
 ```
@@ -2439,7 +2875,9 @@ Examples:
 ```javascript
 // Removing a suffix from a string:
 "image.jpg".trimSuffix(".jpg"); // Evaluates to "image"
+```
 
+```javascript
 // If the suffix is not present:
 "image.jpg".trimSuffix(".png"); // Evaluates to "image.jpg"
 ```
@@ -2459,35 +2897,34 @@ Examples:
 
 ```javascript
 "TacoCat".upperAscii(); // returns 'TACOCAT'
+```
+
+```javascript
 "TacoCÆt Xii".upperAscii(); // returns 'TACOCÆT XII'
 ```
 
-### Abbrev
+### .wordWrap
 
-The `Abbrev` abbreviates a string using ellipses. This will turn the string "Now is the time for all good men" into "...s the time for..."
-This function works like `Abbreviate(string, int)`, but allows you to specify a "left edge" offset. Note that this left edge is not
-necessarily going to be the leftmost character in the result, or the first character following the ellipses, but it will appear
-somewhere in the result.
-In no case will it return a string of length greater than maxWidth.
+The `wordWrap` method on a string inserts line-breaks into the string, before it reaches the given max width
 
-```
 Syntax:
-    Abbrev([maxWidth, string])
-    Abbrev([offset, maxWidth, string])
+
+    'string'.wordWrap(maxWidth)
+    'string'.wordWrap(maxWidth, lineBreakSequence)
 
 Where:
 
-    - str - the string to check
-    - offset - left edge of source string
-    - maxWidth - maximum length of result string, must be at least 4
-```
+- `maxWidth` is the desired maximum line length in characters
+- `lineBreakSequence` is the Line-break sequence to insert (defaults to "\n")
 
 Examples:
 
 ```javascript
-Abbrev([5, 20, "Now is the time for all good men"]); // "...s the time for..."
-Abbrev([1, 5, "KubernetesPod"]); // "Ku..."
-Abbrev([6, "KubernetesPod"]); // "Kub..."
+"testing this line from here".wordWrap(10); // testing\nthis line\nfrom here
+```
+
+```javascript
+"Hello Beautiful World".wordWrap(16, "==="); // Hello Beautiful===World
 ```
 
 ### HumanDuration
@@ -2507,10 +2944,14 @@ Examples:
 ```javascript
 // Converting a duration into a human-readable format:
 HumanDuration(3600); // Evaluates to "1 hour"
+```
 
+```javascript
 // Converting another duration:
 HumanDuration(600); // Evaluates to "10 minutes"
+```
 
+```javascript
 // Converting a longer duration:
 HumanDuration(86400); // Evaluates to "1 day"
 ```
@@ -2532,38 +2973,16 @@ Examples:
 ```javascript
 // Converting a size into a human-readable format:
 HumanSize(1024); // Evaluates to "1 KiB"
-
-// Converting another size:
-HumanSize(1048576); // Evaluates to "1 MiB"
-
-// Converting a larger size:
-HumanSize(1073741824); // Evaluates to "1 GiB"
 ```
 
-### Indent
-
-The `Indent` function in CEL indents each line of a string by a specified number of spaces or a specified prefix.
-
-Syntax:
-
-    Indent(width or prefix, string)
-
-Where:
-
-- `width or prefix` is the number of spaces or the prefix string to add before each line.
-- `string` is the string to indent.
-
-Examples:
+```javascript
+// Converting another size:
+HumanSize(1048576); // Evaluates to "1 MiB"
+```
 
 ```javascript
-// Indenting with spaces:
-Indent(4, "Line1\nLine2"); // Evaluates to "    Line1\n    Line2"
-
-//Indenting with a prefix:
-Indent("> ", "Line1\nLine2"); // Evaluates to "> Line1\n> Line2"
-
-// Indenting with a mixed prefix:
-Indent("==", "Line1\nLine2"); // Evaluates to "==Line1\n==Line2"
+// Converting a larger size:
+HumanSize(1073741824); // Evaluates to "1 GiB"
 ```
 
 ### Semver
@@ -2583,9 +3002,13 @@ Examples:
 ```javascript
 // Parsing a semantic version:
 Semver("1.2.3-alpha+meta"); // Evaluates to a map with major: "1", minor: "2", patch: "3", prerelease: "alpha", metadata: "meta", original: "1.2.3-alpha+meta"
+```
 
+```javascript
 Semver("2.3.4-beta+meta2"); // Evaluates to a map with major: "2", minor: "3", patch: "4", prerelease: "beta", metadata: "meta2", original: "2.3.4-beta+meta2"
+```
 
+```javascript
 // Parsing a simple semantic version:
 Semver("3.4.5"); // Evaluates to a map with major: "3", minor: "4", patch: "5", prerelease: "", metadata: "", original: "3.4.5"
 ```
@@ -2608,63 +3031,16 @@ Examples:
 ```javascript
 // Comparing two semantic versions:
 SemverCompare("1.2.3", "1.2.4"); // Evaluates to false
+```
 
+```javascript
 // Comparing two identical versions:
 SemverCompare("2.3.4", "2.3.4"); // Evaluates to true
+```
 
+```javascript
 // Comparing with a prerelease version:
 SemverCompare("3.4.5", "3.4.5-alpha"); // Evaluates to false
-```
-
-### Sort
-
-The `Sort` function in CEL sorts a list of strings.
-
-Syntax:
-
-    Sort(list)
-
-Where:
-
-- `list` is the list of strings to sort.
-
-Examples:
-
-```javascript
-Sorting a list of strings:
-Sort(["banana", "apple", "cherry"])  // Evaluates to ["apple", "banana", "cherry"]
-
-Sorting another list:
-Sort(["dog", "cat", "bird"])  // Evaluates to ["bird", "cat", "dog"]
-
-Sorting a list with numbers:
-Sort(["3", "1", "2"])  // Evaluates to ["1", "2", "3"]
-```
-
-### WordWrap
-
-The `WordWrap` function inserts line-breaks into the string, before it reaches the given width
-
-Syntax:
-
-    WordWrap(width, string)
-
-Where:
-
-- `width` is the number of characters at which to wrap the string.
-- `string` is the input string to be wrapped.
-
-Examples:
-
-```javascript
-Wrapping a string at a specified width:
-WordWrap([5, "Hello World"])  // Evaluates to "Hello\nWorld"
-
-Wrapping a longer string:
-WordWrap([10, "Hello Beautiful World"])  // Evaluates to "Hello\nBeautiful\nWorld"
-
-Wrapping a string with special characters:
-WordWrap([5, "Hello$World"])  // Evaluates to "Hello\n$World"
 ```
 
 ## YAML
@@ -2684,14 +3060,18 @@ Where:
 Examples:
 
 ```javascript
-Converting a simple YAML string to a map:
-YAML("name: Alice\nage: 30")  // Evaluates to a map with keys "name" and "age"
+// Converting a simple YAML string to a map:
+YAML("name: Alice\nage: 30"); // Evaluates to a map with keys "name" and "age"
+```
 
-Handling a YAML sequence:
-YAML("numbers:\n- 1\n- 2\n- 3")  // Evaluates to a map with a key "numbers" containing an array
+```javascript
+// Handling a YAML sequence:
+YAML("numbers:\n- 1\n- 2\n- 3"); // Evaluates to a map with a key "numbers" containing an array
+```
 
-Nested YAML data conversion:
-YAML("person:\n  name: Bob\n  age: 35")  // Evaluates to a nested map
+```javascript
+// Nested YAML data conversion:
+YAML("person:\n  name: Bob\n  age: 35"); // Evaluates to a nested map
 ```
 
 ### toYAML
@@ -2724,14 +3104,18 @@ Where:
 Examples:
 
 ```javascript
-Converting a YAML sequence to an array:
-YAMLArray("- 1\n- 2\n- 3")  // Evaluates to an array [1, 2, 3]
+// Converting a YAML sequence to an array:
+YAMLArray("- 1\n- 2\n- 3"); // Evaluates to an array [1, 2, 3]
+```
 
-Handling complex objects in a YAML sequence:
-YAMLArray("- name: Alice\n- name: Bob")  // Evaluates to an array of maps
+```javascript
+// Handling complex objects in a YAML sequence:
+YAMLArray("- name: Alice\n- name: Bob"); // Evaluates to an array of maps
+```
 
-An empty YAML sequence:
-YAMLArray("")  // Evaluates to an empty array
+```javascript
+// An empty YAML sequence:
+YAMLArray(""); // Evaluates to an empty array
 ```
 
 ---
@@ -2753,14 +3137,18 @@ Where:
 Examples:
 
 ```javascript
-Converting a TOML string to a map:
-TOML("name = \"Alice\"\nage = 30")  // Evaluates to a map with keys "name" and "age"
+// Converting a TOML string to a map:
+TOML('name = "Alice"\nage = 30'); // Evaluates to a map with keys "name" and "age"
+```
 
-Handling an array in TOML:
-TOML("numbers = [1, 2, 3]")  // Evaluates to a map with a key "numbers" containing an array
+```javascript
+// Handling an array in TOML:
+TOML("numbers = [1, 2, 3]"); // Evaluates to a map with a key "numbers" containing an array
+```
 
-Nested TOML data conversion:
-TOML("[person]\nname = \"Bob\"\nage = 35")  // Evaluates to a nested map
+```javascript
+// Nested TOML data conversion:
+TOML('[person]\nname = "Bob"\nage = 35'); // Evaluates to a nested map
 ```
 
 ### toTOML
@@ -2778,14 +3166,18 @@ Where:
 Examples:
 
 ```javascript
-Converting a map to a TOML string:
-toTOML({"name": "Alice", "age": 30})  // Evaluates to "name = \"Alice\"\nage = 30"
+// Converting a map to a TOML string:
+toTOML({ name: "Alice", age: 30 }); // Evaluates to "name = \"Alice\"\nage = 30"
+```
 
-Handling an array (TOML arrays must be of the same type):
-toTOML({"people": ["Alice", "Bob"]})  // Evaluates to "people = [\"Alice\", \"Bob\"]"
+```javascript
+// Handling an array (TOML arrays must be of the same type):
+toTOML({ people: ["Alice", "Bob"] }); // Evaluates to "people = [\"Alice\", \"Bob\"]"
+```
 
-An empty map:
-toTOML({})  // Evaluates to an empty string
+```javascript
+// An empty map:
+toTOML({}); // Evaluates to an empty string
 ```
 
 ---
