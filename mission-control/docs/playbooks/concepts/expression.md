@@ -16,6 +16,6 @@ filter: check.type == 'http' && summary.failed >  3
 
 | Field       | Description                            | Schema                                                                                                                       |
 | ----------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `check`     | Check referenced by the event          | [`models.Check`](https://github.com/flanksource/duty/blob/d7ce9d3062eb656f955679b6d6ea2599ccede63a/models/checks.go#L24-L54) |
+| `check`     | Check referenced by the event          | [`Check`](https://github.com/flanksource/duty/blob/d7ce9d3062eb656f955679b6d6ea2599ccede63a/models/checks.go#L24-L54) |
 | `summary`   | Check 1h summary of pass/faill/latency |                                                                                                                              |
-| `component` | Component referenced by the event      | [`models.Component`](https://github.com/flanksource/duty/blob/main/models/components.go#L20-L69)                             |
+| `component` | Component referenced by the event      | [`Component`](../references/component.md)                             |

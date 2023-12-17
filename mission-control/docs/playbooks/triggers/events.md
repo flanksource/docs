@@ -1,9 +1,19 @@
-# Playbook Events
+# Event Triggers
 
 Playbook events are triggers that cause a Playbook to run. Events are triggered when specific activity on Mission Control occurs.
 For example: you can trigger a Playbook to run when a component goes unhealthy.
 
 Multiple playbooks could be listening to the same event and likewise a playbook can be listening to multiple events. If a playbook is listening on multiple events then it is triggered when any of those events occur.
+
+## Event Spec
+
+Filters can give you fine-grained control over the events that can trigger the playbook.
+
+| Field    | Description                                                                                   | Scheme              | Required |
+| -------- | --------------------------------------------------------------------------------------------- | ------------------- | -------- |
+| `event`  | Event to listen for.                                                                          | `string`            | `true`   |
+| `filter` | CEL expression for additional event filtering. ([See Expressions](../concepts/expression.md)) | `string`            | `true`   |
+| `labels` | Labels specifies the key-value pairs that the associated event's resource must match.         | `map[string]string` | `false`  |
 
 ## Types
 
@@ -63,13 +73,3 @@ spec:
           industry: e-commerce
   actions: ...
 ```
-
-## Filtering Events
-
-Filters can give you fine-grained control over the events that can trigger the playbook.
-
-| Field    | Description                                                                           | Scheme              | Required |
-| -------- | ------------------------------------------------------------------------------------- | ------------------- | -------- |
-| `event`  | Event to listen for.                                                                  | `string`            | `true`   |
-| `filter` | CEL expression for additional event filtering. ([See Expressions](./expression.md))   | `string`            | `true`   |
-| `labels` | Labels specifies the key-value pairs that the associated event's resource must match. | `map[string]string` | `false`  |
