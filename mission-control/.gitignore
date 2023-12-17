@@ -21,4 +21,5 @@ yarn-error.log*
 
 # copied from canary-checker
 docs/canary-checker
+docs/reference
 static/img/icons
