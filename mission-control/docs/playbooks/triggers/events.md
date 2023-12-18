@@ -30,7 +30,7 @@ Canary events relate to activities on health checks.
 
 #### Example
 
-```yaml
+```yaml title="notify-passing-http-checks.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Playbook
 metadata:
@@ -41,7 +41,12 @@ spec:
     canary:
       - event: passed
         filter: check.type == 'http'
-  actions: ...
+  actions:
+    - name: Send notification
+      notification:
+        connection: connection://telegram/playbook-alerts
+        title: 'Check {{.check.name}} has passed'
+        message: 'Description: {{.check.description}}'
 ```
 
 ### Component events
@@ -58,7 +63,7 @@ Component events relate to activities on Topology components.
 
 #### Example
 
-```yaml
+```yaml title="notify-unhealthy-database-component.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Playbook
 metadata:
@@ -70,6 +75,11 @@ spec:
       - event: unhealthy
         filter: component.type == 'database'
         labels:
-          industry: e-commerce
-  actions: ...
+          env: production
+  actions:
+    - name: Send notification
+      notification:
+        connection: connection://telegram/playbook-alerts
+        title: 'Database {{.component.name}} has become unhealthy'
+        message: 'Description: {{.component.description}}'
 ```

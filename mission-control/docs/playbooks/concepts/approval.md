@@ -2,6 +2,33 @@
 
 Authorization safeguards can be applied to playbook runs, ensuring their execution is limited to specific individuals or teams who grant approval.
 
+```yaml title="approve-kubernetes-scaling.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: scale-deployment
+spec:
+  description: Scale deployment
+  configs:
+    - type: Kubernetes::Deployment
+      tags:
+        environment: staging
+  parameters:
+    - name: replicas
+      label: The new desired number of replicas.
+  approval:
+    type: any
+    approvers:
+      people:
+        - admin@local
+      teams:
+        - DevOps
+  actions:
+    - name: 'scale deployment'
+      exec:
+        script: kubectl scale --replicas={{.params.replicas}} --namespace={{.config.tags.namespace}} deployment {{.config.name}}
+```
+
 ## Approval
 
 | Field       | Description                    | Scheme       | Required |

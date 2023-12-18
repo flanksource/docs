@@ -7,6 +7,33 @@ By default, the webhook calls are not protected via authentication. However, the
 /webhook/<webhook-path>
 ```
 
+```yaml title="webhook-trigger.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: create-file-on-webhook
+spec:
+  description: Create a file specified by the webhook
+  components:
+    - type: KubernetesCluster
+  'on':
+    webhook:
+      path: my-webhook
+      authentication:
+        basic:
+          username:
+            value: my-username
+          password:
+            value: my-password
+  parameters:
+    - name: path
+      label: Absolute path of the file to create
+  actions:
+    - name: Create the file
+      exec:
+        script: touch {{.params.path}}
+```
+
 ## Spec
 
 A webhook can simply be defined by a path - which must be unique.

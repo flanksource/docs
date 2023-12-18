@@ -19,9 +19,9 @@ actions:
 
 Templates receive a context variable that contain details about the config or component it is running for. In addition, it also contains the optional `params` variable which contains the parameters passed to the playbook.
 
-| Field       | Description                              | Schema                                                                                           |
-| ----------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `config`    | Config passed to the playbook            | [`ConfigItem`](../references/config_item.md)    |
-| `component` | Component passed to the playbook         | [`Component`](../references/component.md) |
-| `check`     | Canary Check passed to the playbook      | [`Check`](../references/check.md)         |
-| `params`    | User provided parameters to the playbook | `map[string]string`                                                                              |
+| Field       | Description                              | Schema                                       |
+| ----------- | ---------------------------------------- | -------------------------------------------- |
+| `config`    | Config passed to the playbook            | [`ConfigItem`](../references/config_item.md) |
+| `component` | Component passed to the playbook         | [`Component`](../references/component.md)    |
+| `check`     | Canary Check passed to the playbook      | [`Check`](../references/check.md)            |
+| `params`    | User provided parameters to the playbook | `map[string]string`                          |

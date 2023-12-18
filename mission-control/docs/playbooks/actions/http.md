@@ -36,8 +36,8 @@ spec:
             value: secret123
 ```
 
-| Field          | Description                                                                                                     | Scheme                                                                          | Required |
-| -------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | -------- |
+| Field          | Description                                                                                                     | Scheme                                                                          | Required | Templatable |
+| -------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | -------- | ----------- |
 | `connection`   | Connection name. e.g. connection://http/google                                                                  | `string`                                                                        |          |
 | `url`          | Url to make the request to                                                                                      | `string`                                                                        |          |
 | `username`     | Username to authenticate with                                                                                   | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar)   |          |
@@ -46,7 +46,7 @@ spec:
 | `ntlm`         | NTLM when set to true will perform authentication using NTLM v1 protocol                                        | `bool`                                                                          |          |
 | `ntlmv2`       | NTLM when set to true will perform authentication using NTLM v2 protocol                                        | `bool`                                                                          |          |
 | `headers`      | Header fields to be used in the request                                                                         | [`[]types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) |          |
-| `body`         | Request Body Contents                                                                                           | `string`                                                                        |          |
+| `body`         | Request Body Contents                                                                                           | `string`                                                                        |          | `true`      |
 | `templateBody` | When set to true the request body is templated _(default: `false`)_. [Read more ...](../concepts/templating.md) | `bool`                                                                          |          |
 
 :::note
@@ -57,9 +57,9 @@ Either the `connection` or the `url` is required.
 
 The body of the HTTP request is templatable. The script template receives a environment variable that contain details about the corresponding config, check or component and the parameter(if applicable).
 
-| Field       | Description                              | Schema                                                                                           |
-| ----------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `config`    | Config passed to the playbook            | [`ConfigItem`](../references/config_item.md)    |
-| `component` | Component passed to the playbook         | [`Component`](../references/component.md) |
-| `check`     | Canary Check passed to the playbook      | [`Check`](../references/check.md)         |
-| `params`    | User provided parameters to the playbook | `map[string]string`                                                                              |
+| Field       | Description                              | Schema                                       |
+| ----------- | ---------------------------------------- | -------------------------------------------- |
+| `config`    | Config passed to the playbook            | [`ConfigItem`](../references/config_item.md) |
+| `component` | Component passed to the playbook         | [`Component`](../references/component.md)    |
+| `check`     | Canary Check passed to the playbook      | [`Check`](../references/check.md)            |
+| `params`    | User provided parameters to the playbook | `map[string]string`                          |

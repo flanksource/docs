@@ -41,17 +41,22 @@ curl -sL 'https://flanksource.com' > /tmp/results/flanksource.com
 
 one can provide the artifact paths as follows
 
-```yaml
-actions:
-  exec:
+```yaml title="archive-websites.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: archive-websites
+spec:
+  actions:
     - name: Download example.com and flanksource.com
-      script: |
-        mkdir -p /tmp/results
-        curl -sL 'https://example.com' > /tmp/results/example.com
-        curl -sL 'https://flanksource.com' > /tmp/results/flanksource.com
-      artifacts
-        - path: /tmp/results/example.com
-        - path: /tmp/results/flanksource.com
+      exec:
+        script: |
+          mkdir -p /tmp/results
+          curl -sL 'https://example.com' > /tmp/results/example.com
+          curl -sL 'https://flanksource.com' > /tmp/results/flanksource.com
+        artifacts:
+          - path: /tmp/results/example.com
+          - path: /tmp/results/flanksource.com
 ```
 
 or, use a glob as
@@ -68,13 +73,18 @@ The path field accepts two special paths
 - `/dev/stdout`
 - `/dev/stderr`
 
-```yaml
-actions:
-  exec:
+```yaml title="archive-website.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: archive-website
+spec:
+  actions:
     - name: Archive response of example.com
-      script: |
-        curl -sL 'https://example.com'
-      artifacts
-        - path: /dev/stdout
-        - path: /dev/stderr
+      exec:
+        script: |
+          curl -sL 'https://example.com'
+        artifacts:
+          - path: /dev/stdout
+          - path: /dev/stderr
 ```

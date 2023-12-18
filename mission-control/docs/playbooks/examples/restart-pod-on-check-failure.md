@@ -1,6 +1,4 @@
----
-title: Restart pod when check fails for more than 10 times in the last hour
----
+# Restart pod when check fails for more than 10 times in the last hour
 
 ```yaml title="stop-pod-of-failing-check.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -20,3 +18,5 @@ spec:
       exec:
         script: kubectl delete pod {{index .check.labels "pod"}}
 ```
+
+This playbook will trigger automatically whenever a check, with the label `alertname: KubePodCrashLoopingcontainer`, fails more than 10 times in the last hour.

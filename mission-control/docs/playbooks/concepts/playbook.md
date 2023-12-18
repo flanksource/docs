@@ -22,6 +22,9 @@ spec:
         script: kubectl rollout restart deployment {{.component.name}}
 ```
 
+![Playbooks List](../../images/playbooks-list.png)
+_Fig: Playbooks Page_
+
 ## Spec
 
 | Field         | Description                                                            | Scheme                                | Required |
@@ -32,7 +35,7 @@ spec:
 | `checks`      | Specify selectors for checks that can be run on the Playbook.          | [`[]ResourceFilter`](#resourcefilter) |          |
 | `configs`     | Specify selectors for config items that can be run on the Playbook.    | [`[]ResourceFilter`](#resourcefilter) |          |
 | `components`  | Specify selectors for component items that can be run on the Playbook. | [`[]ResourceFilter`](#resourcefilter) |          |
-| `parameters`  | Define a set of labeled parameters for the Playbook.                   | [`[]Parameter`](#parameter)            |          |
+| `parameters`  | Define a set of labeled parameters for the Playbook.                   | [`[]Parameter`](#parameter)           |          |
 | `actions`     | Specify the set of actions to run.                                     | [`[]Action`](#action)                 | `true`   |
 | `approval`    | Specify who can approve runs on this playbook.                         | [`Approval`](./approval#approval)     |          |
 
@@ -72,6 +75,9 @@ A run is the execution of a Playbook consisting of a sequence of actions. A run 
 
 For example, a playbook can be executed when a health check passes or fails.
 
+![Playbook Runs](../../images/playbook-runs.png)
+_Fig: Playbooks Runs_
+
 ### Start Time
 
 Every run must have a start time which is the time the run is scheduled to start. By default, the it is set to the current time.
@@ -97,6 +103,9 @@ Actions are the fundamental tasks executed by a playbook. A playbook can compris
 :::note
 Specify one or more actions; but at least one.
 :::
+
+![Playbook Action Logs](../../images/playbook-action-logs.png)
+_Fig: Playbooks Action Logs_
 
 ### Duration String
 
