@@ -570,7 +570,22 @@ const sidebars = {
         {
           type: 'doc',
           id: 'playbooks/examples/restart-pod-on-check-failure',
-          label: 'Hey'
+          label: 'Restart Kubernetes Deployment'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/examples/approval',
+          label: 'Approval'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/examples/access-control',
+          label: 'Access Control'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/examples/delay-iam-request',
+          label: 'Delay IAM Request'
         }
       ],
     },
