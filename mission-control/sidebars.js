@@ -568,6 +568,21 @@ const sidebars = {
       label: 'Examples',
       items: [
         {
+          type:'doc',
+          id: 'playbooks/examples/kubectl-logs-artifacts',
+          label: 'Artifacts from kubectl logs',
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/examples/kubectl-cluster-role-binding',
+          label: 'Cluster Role Binding with delayed cleanup'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/examples/gitops-k8s-cluster-role-binding',
+          label: 'Cluster Role Binding with Gitops'
+        },
+        {
           type: 'doc',
           id: 'playbooks/examples/restart-pod-on-check-failure',
           label: 'Restart Kubernetes Deployment'
@@ -577,16 +592,6 @@ const sidebars = {
           id: 'playbooks/examples/approval',
           label: 'Approval'
         },
-        {
-          type: 'doc',
-          id: 'playbooks/examples/access-control',
-          label: 'Access Control'
-        },
-        {
-          type: 'doc',
-          id: 'playbooks/examples/delay-iam-request',
-          label: 'Delay IAM Request'
-        }
       ],
     },
     {
