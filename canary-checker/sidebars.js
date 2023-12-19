@@ -49,10 +49,12 @@ module.exports = {
           id: 'concepts/metrics-exporter',
           label: 'Metrics Exporter',
         },
+
+
         {
           type: 'doc',
-          id: 'concepts/grafana',
-          label: 'Grafana',
+          id: 'concepts/secret-management',
+          label: 'Secret Management',
         },
 
         {
@@ -83,11 +85,13 @@ module.exports = {
 
           ]
         },
+
         {
           type: 'doc',
-          id: 'concepts/authentication',
-          label: 'Authentication',
+          id: 'concepts/grafana',
+          label: 'Grafana',
         },
+
         {
           type: 'doc',
           id: 'concepts/troubleshooting',
@@ -268,31 +272,13 @@ module.exports = {
           id: 'reference/exec',
           label: 'Exec',
         },
-        {
-          type: 'doc',
-          id: 'reference/jmeter',
-          label: 'JMeter',
-        },
+
         {
           type: 'doc',
           id: 'reference/junit',
           label: 'JUnit',
         },
-        {
-          type: 'doc',
-          id: 'reference/k6',
-          label: 'K6',
-        },
-        {
-          type: 'doc',
-          id: 'reference/newman',
-          label: 'Newman / Postman',
-        },
-        {
-          type: 'doc',
-          id: 'reference/playwright',
-          label: 'Playwright',
-        },
+
         {
           type: 'doc',
           id: 'reference/azure-devops',
@@ -331,6 +317,32 @@ module.exports = {
           label: 'S3 Protocol',
         },
       ],
+    },
+    {
+      type: 'category',
+      label: "Examples",
+      items: [
+        {
+          type: 'doc',
+          id: 'reference/k6',
+          label: 'K6',
+        },
+        {
+          type: 'doc',
+          id: 'reference/newman',
+          label: 'Newman / Postman',
+        },
+        {
+          type: 'doc',
+          id: 'reference/playwright',
+          label: 'Playwright',
+        },
+        {
+          type: 'doc',
+          id: 'reference/jmeter',
+          label: 'JMeter',
+        },
+      ]
     },
     {
       type: 'category',

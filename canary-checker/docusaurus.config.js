@@ -15,7 +15,8 @@ const config = {
   customFields: {
     oss: process.env.CANARY_CHECKER_OSS === 'true',
     links: {
-      "authentication": '/concepts/authentication'
+      "authentication": '/concepts/secret-management',
+      "connection": '/concepts/authentication'
     }
   },
   markdown: {

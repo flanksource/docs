@@ -22,7 +22,7 @@ const config = {
 
   customFields: {
     links: {
-      "authentication": '/reference/authentication',
+      "authentication": '/reference/secret-management',
       "connection": '/reference/authentication'
 
     }

@@ -2,13 +2,13 @@
 
 How to Install Mission control with helm
 
-### Prerequisite
+## Prerequisites
 
-To properly install and run the Mission Control chart on your Kubernetes Cluster, you need to have the following prerequisites;
+To install and run the Mission Control chart on your Kubernetes Cluster, you need to have the following prerequisites;
 
-- A Kubernetes installation of version 1.21 or higher.
+- A Kubernetes installation of version 1.26 or higher.
 
-### Install Chart
+## Install Chart
 
 ```console
 helm install [RELEASE_NAME] flanksource/mission-control
@@ -52,7 +52,7 @@ _See [configuration](#configuration) below._
 
 _See [helm install](https://helm.sh/docs/helm/helm_install/) for command documentation._
 
-### Uninstall Chart
+## Uninstall Chart
 
 ```console
 helm uninstall [RELEASE_NAME]
@@ -62,7 +62,7 @@ This removes all the Kubernetes components associated with the chart and deletes
 
 _See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command documentation._
 
-### Upgrading Chart
+## Upgrading Chart
 
 ```console
 helm upgrade [RELEASE_NAME] [CHART] --install
@@ -70,7 +70,7 @@ helm upgrade [RELEASE_NAME] [CHART] --install
 
 _See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
 
-### Configuration
+## Configuration
 
 See [Customizing the Chart Before Installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing). To see all configurable options with detailed comments, visit the chart's [values.yaml](https://github.com/flanksource/config-db/blob/main/chart/values.yaml), or run these configuration commands:
 
