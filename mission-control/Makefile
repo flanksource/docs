@@ -7,5 +7,5 @@ sync:
 	cp -r docs/canary-checker/scripting docs/reference
 	rm -rf  static/img/icons
 	cp -r  ../canary-checker/static/img/icons static/img
-	cp docs/canary-checker/concepts/authentication.md docs/reference/
+	cp docs/canary-checker/concepts/secret-management.md docs/reference/
 	cp docs/canary-checker/concepts/connections.md docs/reference/
