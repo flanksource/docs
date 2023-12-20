@@ -48,7 +48,7 @@ To specify a username and password for the chart-managed Postgres server, create
 
 ### Connecting to an external db
 
-In order to connect to an existing Postgres server, a database must be created on the server, along with a user that has administrator permissions for the database.git
+In order to connect to an existing Postgres server, a database must be created on the server, along with a user that has administrator permissions for the database.
 
 ```yaml title="values.yaml"
 db:
@@ -57,6 +57,6 @@ db:
   create: false
   secretKeyRef:
    name: postgres-connection # name of secret that contains a key containging the postgres connection URI
-   key: POSTGRES_URL   # name of the key in the secret that contains the postgres connection URI
+   key: POSTGRES_URL   # name of the key in the secret that contains the postgres connection URI. The URI must be in the format 'postgresql://"$user":"$password"@"$host"/"$database"'
 # ...
 ```

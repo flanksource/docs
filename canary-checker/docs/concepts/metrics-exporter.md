@@ -4,7 +4,7 @@ title: Metrics Exporter
 
 
 
-Canary checker can export custom metrics from any check type, replacing and/or consolidating multiple standaline Prometheus Exporters into a single exporter.
+Canary checker can export custom metrics from any check type, replacing and/or consolidating multiple standalone Prometheus Exporters into a single exporter.
 
 In the example below, exchange rates against the USD are exported by first calling an HTTP api and then using the values from the JSON response to create the metrics:
 
