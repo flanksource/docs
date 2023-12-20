@@ -51,12 +51,14 @@ module.exports = {
         },
         {
           type: 'doc',
-
           id: 'concepts/artifacts',
           label: 'Artifacts',
         },
-
-
+        {
+          type: 'doc',
+          id: 'concepts/scaling',
+          label: 'Scaling Canaries',
+        },
         {
           type: 'doc',
           id: 'concepts/secret-management',
