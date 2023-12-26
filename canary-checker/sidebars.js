@@ -49,8 +49,16 @@ module.exports = {
           id: 'concepts/metrics-exporter',
           label: 'Metrics Exporter',
         },
-
-
+        {
+          type: 'doc',
+          id: 'concepts/artifacts',
+          label: 'Artifacts',
+        },
+        {
+          type: 'doc',
+          id: 'concepts/scaling',
+          label: 'Scaling Canaries',
+        },
         {
           type: 'doc',
           id: 'concepts/secret-management',
@@ -105,7 +113,6 @@ module.exports = {
       link: {
         type: 'generated-index',
         title: 'Probes / Alerts',
-        // description: 'Learn about the most important Docusaurus concepts!',
         slug: '/types',
         keywords: ['guides'],
         image: '/img/docusaurus.png',
@@ -116,7 +123,6 @@ module.exports = {
           id: 'reference/http',
           label: 'HTTP',
         },
-
         {
           type: 'doc',
           id: 'reference/tcp',
@@ -132,7 +138,6 @@ module.exports = {
           id: 'reference/icmp',
           label: 'ICMP',
         },
-
         {
           type: 'doc',
           id: 'reference/alert-manager',
@@ -148,11 +153,8 @@ module.exports = {
           id: 'reference/aws-config-rule',
           label: 'AWS Config Rule',
         },
-
-
       ],
     },
-
     {
       type: 'category',
       label: 'Folder / Backups',
@@ -260,31 +262,25 @@ module.exports = {
       ],
 
     },
-
-
     {
       type: 'category',
       label: 'Active / Integration',
       items: [
-
         {
           type: 'doc',
           id: 'reference/exec',
           label: 'Exec',
         },
-
         {
           type: 'doc',
           id: 'reference/junit',
           label: 'JUnit',
         },
-
         {
           type: 'doc',
           id: 'reference/azure-devops',
           label: 'Azure DevOps',
         },
-
       ],
     },
     {
@@ -377,5 +373,16 @@ module.exports = {
         },
       ],
     },
+    {
+      type: 'category',
+      label: 'References',
+      items: [
+        {
+          type: 'doc',
+          id: 'reference/connections',
+          label: 'Connections',
+        },
+      ],
+    }
   ],
 };
