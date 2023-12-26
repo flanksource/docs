@@ -6,7 +6,7 @@
 
 ## Enable trace and debug
 
-  To increase the amount of logs for a particular trace add a `trace: true` annotation:
+  To increase the amount of logs for a particular trace add a `debug: true` or `trace: true` annotation:
 
   ```yaml trace.yaml
   apiVersion: canaries.flanksource.com/v1
@@ -36,10 +36,10 @@
 
 ## Run checks immediately using `next-runtime`
 
-To run a canary outside of its normall schedule add the annotation:
+To run a canary outside of its normal schedule add the annotation:
 
 ```bash
- kubectl annotate canary <canary> next-runtime=$(date -Iseconds) -n
+ kubectl annotate canary <canary> next-runtime=$(date -Iseconds)
  ```
 
 ## Temporarily pause a canary using `suspend`

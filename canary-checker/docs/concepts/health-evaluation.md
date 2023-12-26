@@ -16,7 +16,7 @@ spec:
     - name: http pass response 200 status code
       endpoint: https://httpbin.demo.aws.flanksource.com/status/200
       test:
-        expr: "code in [200,201,301] and sslAge < Duration('7d')"
+        expr: "code in [200,201,301] && sslAge < Duration('7d')"
 ```
 
 :::info Boolean

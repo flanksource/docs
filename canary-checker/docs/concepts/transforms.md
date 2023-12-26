@@ -15,6 +15,7 @@ spec:
   schedule: "*/5 * * * *"
   alertmanager:
     - url: alertmanager.example.com
+      name: alert-manager-transform
       alerts:
         - .*
       ignore:

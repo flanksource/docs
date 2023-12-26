@@ -1,6 +1,6 @@
 # Getting Started
 
-1. Install canary checker:
+## Install canary checker
 
   ```bash
   helm repo add flanksource https://flanksource.github.io/charts
@@ -8,7 +8,7 @@
   helm install canary-checker flanksource/canary-checker -n "canary-checker"  --create-namespace
   ```
 
-2. Create a new check
+## Create a new check
 
   ```yaml title="canary.yaml"
   apiVersion: canaries.flanksource.com/v1
@@ -24,7 +24,7 @@
         url: https://httpbin.demo.aws.flanksource.com/status/500
   ```
 
-  And then apply it to the cluster:
+And then apply it to the cluster:
 
   ```shell
   kubectl apply -f canary.yaml
@@ -50,7 +50,26 @@
 
 4. Check the Dashboard
 
+You can access the web dashboard by forwarding the port:
+
+```bash
+kubectl  -n canary-checker port-forward svc/canary-checker-ui 8080:80
+```
+
 ![](./images/http-checks.png)
+
+[http://localhost:8080](http://localhost:8080)
+
+The canary checker itself only presents an API. To view the data graphically, the Flanksource UI is required, and is installed by default. The UI should be configured in [values.yaml](https://github.com/flanksource/canary-checker/blob/699f31a2326034f761ba1b30d966436d6318dd06/chart/values.yaml#L105) to allow external access via ingress
+
+| Parameter                          | Description                                                   |
+|------------------------------------|---------------------------------------------------------------|
+| `flanksource-ui.ingress.host`      | URL at which the UI will be accessed                          |
+| `flanksource-ui.ingress.annotations` | Map of annotations required by the ingress controller or certificate issuer |
+| `flanksource-ui.ingress.tls`       | Map of configuration options for TLS                          |
+
+More details regarding ingress configuration can be found in the [kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+
 
 ## Getting Help
 
