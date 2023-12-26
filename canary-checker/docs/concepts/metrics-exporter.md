@@ -47,7 +47,7 @@ spec:
               value: ILS
         - name: exchange_rate_api
           type: histogram
-          valueExpr: result.elapsed.getMilliseconds()
+          value: result.elapsed.getMilliseconds()
 ```
 
 Which would output:

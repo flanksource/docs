@@ -1,6 +1,6 @@
 # Grafana
 
-Default grafana dashboards are available, they can be installed with
+Default grafana dashboards are available. After you deploy Grafana, these dashboards can be installed with
 
 ```
 --set grafanaDashboards=true --set serviceMonitor=true

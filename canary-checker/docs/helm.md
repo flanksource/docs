@@ -7,14 +7,16 @@ image: /static/img/icons/helm.svg
 
 The recommended method for installing Canary Checker is using [helm](https://helm.sh/)
 
-## 1. Add the Flanksource helm repository
+## 1. Deploy Canary Checker
+
+### Using Helm
+
+Add the Flanksource helm repository
 
 ```bash
 helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
 ```
-
-## 2. Deploy Canary Checker using Helm
 
 To install into a new `canary-checker` namespace, run
 
@@ -39,6 +41,70 @@ flanksource-ui:
       - secretName: canary-checker-tls
         hosts:
         - canary-checker.127.0.0.1.nip.io
+```
+
+### Using Flux CD
+
+```yaml title=helmrelease.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: canary-checker
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: flanksource
+  namespace: canary-checker
+spec:
+  interval: 5m
+  url: https://flanksource.github.io/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: canary-checker
+  namespace: canary-checker
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: canary-checker
+      sourceRef:
+        kind: HelmRepository
+        name: flanksource
+      interval: 1m
+  values:
+    flanksource-ui:
+      ingress:
+        host: canary-checker.127.0.0.1.nip.io
+        annotations:
+          kubernetes.io/ingress.class: nginx
+          kubernetes.io/tls-acme: "true"
+        tls:
+          - secretName: canary-checker-tls
+            hosts:
+            - canary-checker.127.0.0.1.nip.io
+```
+
+```yaml title=canary-checker-kustomization.yaml
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: canary-checker
+  namespace: flux-system
+spec:
+  interval: 5m
+  sourceRef:
+    kind: GitRepository
+    name: <Flux Gitrepo Name>
+  path: path/to/canary-checker/helmrelease/folder
+  prune: true
+  healthChecks: # wait for the HelmRelease to be reconciled with
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      name: canary-checker
+      namespace: canary-checker
 ```
 
 :::info

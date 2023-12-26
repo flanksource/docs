@@ -50,6 +50,12 @@ And then apply it to the cluster:
 
 4. Check the Dashboard
 
+You can access the web dashboard by forwarding the port:
+
+```bash
+kubectl  -n canary-checker port-forward svc/canary-checker-ui 8080:80
+```
+
 ![](./images/http-checks.png)
 
 [http://localhost:8080](http://localhost:8080)
