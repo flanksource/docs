@@ -58,10 +58,10 @@ spec:
       - name: gcs auth test
         path: gcs://somegcsbucket
         gcpConnection:
-        connection: connection://gcp/internal
+          connection: connection://gcp/internal
 ```
 
-3. `accessKey` and `secretKey` <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> with the credentials stored in a secret.
+3. `credentials` <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> with the service account json key stored in a secret.
 
 ```yaml title="aws.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -80,4 +80,8 @@ spec:
                 name: gcp-credentials
                 key: AUTH_ACCESS_TOKEN
 
+```
+To create the secret
+```bash
+kubectl create secret generic gcp-credentials --from-file=AUTH_ACCESS_TOKEN=path/to/your/SA_Key.json
 ```

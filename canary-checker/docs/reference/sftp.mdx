@@ -18,6 +18,7 @@ spec:
   folder:
     - path: /tmp
       name: sample sftp check
+      maxCount: 10
       sftpConnection:
         host: 192.168.1.5
         auth:
@@ -31,7 +32,6 @@ spec:
               secretKeyRef:
                 name: sftp-credentials
                 key: PASSWORD
-      maxCount: 10
 ```
 
 | Field | Description | Scheme | Required |

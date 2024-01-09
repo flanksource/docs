@@ -373,16 +373,5 @@ module.exports = {
         },
       ],
     },
-    {
-      type: 'category',
-      label: 'References',
-      items: [
-        {
-          type: 'doc',
-          id: 'reference/connections',
-          label: 'Connections',
-        },
-      ],
-    }
   ],
 };

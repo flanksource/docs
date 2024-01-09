@@ -13,21 +13,20 @@ metadata:
   name: kube-check
 spec:
   interval: 30
-  spec:
-    kubernetes:
-      - namespace:
-          name: default
-        name: k8s-ready pods
-        kind: Pod
-        resource:
-          labelSelector: app=k8s-ready
-      - namespace:
-          name: default
-        kind: Pod
-        name: k8s-not-ready pods
-        ready: false
-        resource:
-          labelSelector: app=k8s-not-ready
+  kubernetes:
+    - namespace:
+        name: default
+      name: k8s-ready pods
+      kind: Pod
+      resource:
+        labelSelector: app=k8s-ready
+    - namespace:
+        name: default
+      kind: Pod
+      name: k8s-not-ready pods
+      ready: false
+      resource:
+        labelSelector: app=k8s-not-ready
 ```
 
 | Field | Description | Scheme | Required |
