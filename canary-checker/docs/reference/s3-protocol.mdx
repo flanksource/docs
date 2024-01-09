@@ -28,6 +28,17 @@ spec:
     - name: s3-check
       bucketName: flanksource-public
       objectPath: dummy
+      region: us-east-1
+      accessKey:
+        valueFrom:
+          secretKeyRef:
+            name: aws-credentials
+            key: AWS_ACCESS_KEY_ID
+      secretKey:
+        valueFrom:
+          secretKeyRef:
+            name: aws-credentials
+            key: AWS_SECRET_ACCESS_KEY      
 ```
 
 | Field | Description | Scheme | Required |
@@ -47,5 +58,5 @@ spec:
 | `accessKey` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes |
 | `secretKey` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes |
 | `endpoint` | Custom AWS endpoint | *string* | |
-| `region` | AWS region | *string* | |
+| `region` | AWS region | *string* | Yes |
 | `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* |  |
