@@ -1,12 +1,18 @@
 # Overview
 
-![config db](../images/config-db.svg)
+**Catalog** enhances configuration management by providing a clear view and search function for tracking changes across various dimensions such as nodes, zones, environments, applications, and technologies. This utility is enabled by a JSON-based database that regularly collects configuration data from multiple sources. The data is organized into a searchable JSON tree, facilitating efficient comparison and analysis across different environments.
 
-`Config DB` is a JSON-based configuration management database. It enables you to scrape configuration from several sources on an ongoing basis and navigate that configuration in an easy-to-navigate and search JSON tree.
+A configuration summary is shown below:
 
-By doing this, `Config DB` enables you to view and search the change history of your configuration across multiple dimensions _(node, zone, environment, application, technology, etc...)_ as well as compare and view the differences between configurations across environments.
+![](../images/config-db.png)
 
-It is able to scan multiple configuration sources including
+Each configuration has:
+
+- **Configuration** - Normally JSON, but XML and properties files are also available
+- **Insights** - Security, cost, performance, and other recommendations from scanners including AWS Trusted Advisor, AWS Config rules, etc.
+- **Changes** - Either change directly on the config _(recorded as diff change type)_ or changes identified via AWS Cloudtrail, etc.
+
+You can scan multiple configuration sources including:
 
 - [AWS Cloud Resources](./scrapers/aws.md)
 - [Azure Devops](./scrapers/azure-devops.md) - Azure Devops Pipeline runs
@@ -16,14 +22,7 @@ It is able to scan multiple configuration sources including
 - [SQL](./scrapers/sql.md) - Data available via queries on MySQL, SQL Server, and Postgres databases
 - [Trivy](./scrapers/trivy.md) - Security scanning of Kubernetes clusters
 
-Each configuration has:
-
-- **Configuration** - Normally JSON, but XML and properties files are also available
-- **Insights** - Security, cost, performance, and other recommendations from scanners including AWS Trusted Advisor, AWS Config rules, etc...
-- **Changes** - Either change directly on the config _(recorded as diff change type)_ or changes identified via AWS Cloudtrail, etc...
+![config db](../images/config-db.svg)
 
 
 
-A configuration summary is shown below:
-
-![](../images/config-db.png)
