@@ -60,10 +60,16 @@ Filters can define what resources (checks, configs or components) are permitted 
 
 Playbook parameter defines a parameter that a playbook needs to run.
 
-| Field   | Description                 | Scheme   | Required |
-| ------- | --------------------------- | -------- | -------- |
-| `name`  | Specify name of parameter.  | `string` | `true`   |
-| `label` | Specify label of parameter. | `string` | `true`   |
+| Field         | Description                                                                                       | Scheme              | Required |
+| ------------- | ------------------------------------------------------------------------------------------------- | ------------------- | -------- |
+| `name`        | Name of parameter.                                                                                | `string`            | `true`   |
+| `default`     | Default value of the parameter.                                                                   | `string`            |          |
+| `label`       | Label of the parameter.                                                                           | `string`            | `true`   |
+| `required`    | Specify if the parameter is required                                                              | `bool`              |          |
+| `icon`        | Icon of parameter. See [icons](https://github.com/flanksource/flanksource-ui/tree/main/src/icons) | `string`            |          |
+| `description` | Description of the parameter.                                                                     | `string`            |          |
+| `type`        | Type of parameter.                                                                                | `string`            |          |
+| `properties`  | Properties of parameter.                                                                          | `map[string]string` |          |
 
 ## Run
 
