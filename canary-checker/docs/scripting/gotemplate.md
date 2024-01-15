@@ -17,6 +17,21 @@ spec:
 ```
 
 
+## Escaping
+
+In case you might need to pass in a template variable without templating it, then you can put the template inside a string.
+Example:
+
+```
+{{ .secret }}
+```
+
+To send `{{ .secret }}` as it is do this
+
+```
+{{`{{ .secret }}`}}
+```
+
 ##  Encoding
 
 ### Encode
