@@ -131,3 +131,25 @@ Valid time units are "s", "m", "h", "d", "w", "y". Eg:
 - `1d8h`
 - `1w6d8h`
 - `19w0d8h`
+
+### Conditionally running actions
+
+Playbook actions can be conditionally run using a CEL Expression. The expressions should either return
+
+- a boolean value _(`true` indicating run the action & skip the action otherwise)_
+- or a special function among the ones listed below
+
+#### Functions
+
+| Function    | Description                                                 |
+| ----------- | ----------------------------------------------------------- |
+| `always()`  | run no matter what; even if the playbook is cancelled/fails |
+| `failure()` | run if any of the previous actions failed                   |
+| `skip()`    | skip running this action                                    |
+| `success()` | run only if all previous actions succeeded (default)        |
+| `timeout()` | run only if any of the previous actions timed out           |
+
+#### Examples
+
+- `if: config.deleted_at ? true: false`
+- `if: always()`
