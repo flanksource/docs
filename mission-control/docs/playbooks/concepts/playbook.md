@@ -88,17 +88,17 @@ Start time can be in future or even in the past.
 
 Actions are the fundamental tasks executed by a playbook. A playbook can comprise multiple actions, which are executed sequentially. If any action encounters an error and fails, the execution of the playbook is halted.
 
-| Field          | Description                                                     | Scheme                                             | Required |
-| -------------- | --------------------------------------------------------------- | -------------------------------------------------- | -------- |
-| `name`         | Name of action.                                                 | `string`                                           | `true`   |
-| `delay`        | Delay the execution of the action. _(Sensitive to the minute.)_ | [`DurationString`](#duration-string)               |          |
-| `timeout`      | Timeout on this action.                                         | [`DurationString`](#duration-string)               |          |
-| `exec`         | Specify exec of action.                                         | [`ExecAction`](../actions/exec.md)                 |          |
-| `gitops`       | Specify gitops of action.                                       | [`GitopsAction`](../actions/gitops.md)             |          |
-| `http`         | Specify http of action.                                         | [`HttpAction`](../actions/http.md)                 |          |
-| `sql`          | Specify sql of action.                                          | [`SqlAction`](../actions/sql.md)                   |          |
-| `pod`          | Specify pod of action.                                          | [`PodAction`](../actions/pod.md)                   |          |
-| `notification` | Specify notification of action.                                 | [`NotificationAction`](../actions/notification.md) |          |
+| Field          | Description                                                                                                      | Scheme                                             | Required |
+| -------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `name`         | Name of action.                                                                                                  | `string`                                           | `true`   |
+| `delay`        | A CEL expression that evaluates to a duration to delay the execution of the action. _(Sensitive to the minute.)_ | `string`                                           |          |
+| `timeout`      | Timeout on this action.                                                                                          | [`DurationString`](#duration-string)               |          |
+| `exec`         | Specify exec of action.                                                                                          | [`ExecAction`](../actions/exec.md)                 |          |
+| `gitops`       | Specify gitops of action.                                                                                        | [`GitopsAction`](../actions/gitops.md)             |          |
+| `http`         | Specify http of action.                                                                                          | [`HttpAction`](../actions/http.md)                 |          |
+| `sql`          | Specify sql of action.                                                                                           | [`SqlAction`](../actions/sql.md)                   |          |
+| `pod`          | Specify pod of action.                                                                                           | [`PodAction`](../actions/pod.md)                   |          |
+| `notification` | Specify notification of action.                                                                                  | [`NotificationAction`](../actions/notification.md) |          |
 
 :::note
 Specify one or more actions; but at least one.
@@ -107,11 +107,23 @@ Specify one or more actions; but at least one.
 ![Playbook Action Logs](../../images/playbook-action-logs.png)
 _Fig: Playbooks Action Logs_
 
-### Duration String
+### Delaying actions
 
-Duration strings specify duration in a human readable format.
+Actions can be delayed by a fixed duration or conditionally by a CEL expression.
+It's only sensitive to the minute. i.e. if you delay by 20s it can take upto a minute to execute.
 
-**Examples:**
+#### Templating
+
+The CEL expression receives a environment variable that contain details about the corresponding config, check or component and the parameter (if applicable).
+
+| Field       | Description                              | Schema                                       |
+| ----------- | ---------------------------------------- | -------------------------------------------- |
+| `config`    | Config passed to the playbook            | [`ConfigItem`](../references/config_item.md) |
+| `component` | Component passed to the playbook         | [`Component`](../references/component.md)    |
+| `check`     | Canary Check passed to the playbook      | [`Check`](../references/check.md)            |
+| `params`    | User provided parameters to the playbook | `map[string]string`                          |
+
+Valid time units are "s", "m", "h", "d", "w", "y". Eg:
 
 - `1m15s`
 - `1h5m`
