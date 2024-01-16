@@ -23,29 +23,27 @@ spec:
         - KubeScheduler.*
         - Watchdog
       transform:
-        javascript: |
-          var out = _.map(results, function(r) {
-            return {
-              name: r.name,
-              labels: r.labels,
-              icon: 'alert',
-              message: r.message,
-              description: r.message,
-            }
-          })
-          JSON.stringify(out);
+        expr: |
+          results.alerts.map(r, {
+            'name': r.name + r.fingerprint,
+            'namespace': 'namespace' in r.labels ? r.labels.namespace : '',
+            'labels': r.labels,
+            'icon': 'alert',
+            'message': r.message,
+            'description': r.message,
+          }).toJSON()
 ```
 
-| Field         | Description                                                  | Scheme                                             | Required |
-| ------------- | ------------------------------------------------------------ | -------------------------------------------------- | -------- |
-| `alerts` | A list of alert prefix names to include | `[]string` |          |
-| `ignore` | A list of alert prefix names to exclude | `[]string` | |
-| `filters` | A map of label to value prefixes to find alerts on | `map[string]string` | |
-| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
-| `description` | Description for the check                                   | `string`                                     |          |
-| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
-| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| Field         | Description                                                 | Scheme                                         | Required |
+| ------------- | ----------------------------------------------------------- | ---------------------------------------------- | -------- |
+| `alerts`      | A list of alert prefix names to include                     | `[]string`                                     |          |
+| `ignore`      | A list of alert prefix names to exclude                     | `[]string`                                     |          |
+| `filters`     | A map of label to value prefixes to find alerts on          | `map[string]string`                            |          |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                       | Yes      |
+| `description` | Description for the check                                   | `string`                                       |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                       |          |
+| `labels`      | Labels for check                                            | `map[string]string`                            |          |
 | `test`        | Evaluate whether a check is healthy                         | [`Expression`](../concepts/health-evaluation)  |          |
 | `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/display-formatting) |          |
-| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)         |          |
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
