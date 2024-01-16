@@ -2,6 +2,66 @@
 
 The `kubernetes` config type scrapes the configurations of your Kubernetes resources as specified with the fields; `namespace`, `selector`, `fieldSelector` and more.
 
+Create a ScrapeConfig Custom Resource with the following manifest
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: kubernetes-scraper
+spec:
+  kubernetes:
+    - clusterName: local-kind-cluster
+      exclusions:
+        - Secret
+        - ReplicaSet
+        - APIService
+        - PodMetrics
+        - NodeMetrics
+        - endpoints.discovery.k8s.io
+        - endpointslices.discovery.k8s.io
+        - leases.coordination.k8s.io
+        - podmetrics.metrics.k8s.io
+        - nodemetrics.metrics.k8s.io
+        - customresourcedefinition
+        - controllerrevision
+        - certificaterequest
+        - orders.acme.cert-manager.io
+      relationships:
+        - kind:
+            expr: "has(spec.claimRef) ? spec.claimRef.kind : ''"
+          name:
+            expr: "has(spec.claimRef) ? spec.claimRef.name : ''"
+          namespace:
+            expr: "has(spec.claimRef) ? spec.claimRef.namespace : ''"
+        - kind:
+            value: Kustomization
+          name:
+            label: kustomize.toolkit.fluxcd.io/name
+          namespace:
+            label: kustomize.toolkit.fluxcd.io/namespace
+        - kind:
+            value: HelmRelease
+          name:
+            label: helm.toolkit.fluxcd.io/name
+          namespace:
+            label: helm.toolkit.fluxcd.io/namespace
+      event:
+        exclusions:
+          - SuccessfulCreate
+          - Created
+          - DNSConfigForming
+        severityKeywords:
+          error:
+            - failed
+            - error
+          warn:
+            - backoff
+            - nodeoutofmemory
+```
+
+Or from the UI add the spec:
+
 ```yaml
 kubernetes:
   - clusterName: local-kind-cluster
@@ -9,6 +69,8 @@ kubernetes:
       - Secret
       - ReplicaSet
       - APIService
+      - PodMetrics
+      - NodeMetrics
       - endpoints.discovery.k8s.io
       - endpointslices.discovery.k8s.io
       - leases.coordination.k8s.io
@@ -30,6 +92,25 @@ kubernetes:
         warn:
           - backoff
           - nodeoutofmemory
+    relationships:
+      - kind:
+          expr: "has(spec.claimRef) ? spec.claimRef.kind : ''"
+        name:
+          expr: "has(spec.claimRef) ? spec.claimRef.name : ''"
+        namespace:
+          expr: "has(spec.claimRef) ? spec.claimRef.namespace : ''"
+      - kind:
+          value: Kustomization
+        name:
+          label: kustomize.toolkit.fluxcd.io/name
+        namespace:
+          label: kustomize.toolkit.fluxcd.io/namespace
+      - kind:
+          value: HelmRelease
+        name:
+          label: helm.toolkit.fluxcd.io/name
+        namespace:
+          label: helm.toolkit.fluxcd.io/namespace
 ```
 
 ### Kubernetes
@@ -57,6 +138,18 @@ kubernetes:
 | `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                                                                                               | `[]string`                                                                   |          |
 | **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                                                                                                | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes      |
 | `event`           | Specify configuration to handle Kubernetes events. See [**KubernetesEvent**](#kubernetesevent)                                                                          | [`KubernetesEvent`](#kubernetesevent)                                        | yes      |
+| `relationships`   | Helps the user to understand relationships amongst components, configurations and health checks.                                                                       | [`Relationships`](#Relationships)                                        |    |
+
+
+### Relationships
+
+Checks if a kubernetes source has the labels specified in `name` and `namespace` fields. Then based on the labels it looks up the matching resource config specified in `kind` and adds a relationship to it.
+
+| Field              | Description                                                                                | Scheme                                  | Required |
+| ------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------- | -------- |
+| `name` | The label with the name of the relative | `string` | Yes  |
+| `namespace` | The label with the namespace of the relative | `string` | Yes  |
+| `kind`       | The resource type of the relative | `string`                              | Yes  |
 
 ### KubernetesEvent
 
