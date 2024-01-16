@@ -60,10 +60,16 @@ Filters can define what resources (checks, configs or components) are permitted 
 
 Playbook parameter defines a parameter that a playbook needs to run.
 
-| Field   | Description                 | Scheme   | Required |
-| ------- | --------------------------- | -------- | -------- |
-| `name`  | Specify name of parameter.  | `string` | `true`   |
-| `label` | Specify label of parameter. | `string` | `true`   |
+| Field         | Description                                                                                       | Scheme              | Required |
+| ------------- | ------------------------------------------------------------------------------------------------- | ------------------- | -------- |
+| `name`        | Name of parameter.                                                                                | `string`            | `true`   |
+| `default`     | Default value of the parameter.                                                                   | `string`            |          |
+| `label`       | Label of the parameter.                                                                           | `string`            | `true`   |
+| `required`    | Specify if the parameter is required                                                              | `bool`              |          |
+| `icon`        | Icon of parameter. See [icons](https://github.com/flanksource/flanksource-ui/tree/main/src/icons) | `string`            |          |
+| `description` | Description of the parameter.                                                                     | `string`            |          |
+| `type`        | Type of parameter.                                                                                | `string`            |          |
+| `properties`  | Properties of parameter.                                                                          | `map[string]string` |          |
 
 ## Run
 
@@ -88,17 +94,17 @@ Start time can be in future or even in the past.
 
 Actions are the fundamental tasks executed by a playbook. A playbook can comprise multiple actions, which are executed sequentially. If any action encounters an error and fails, the execution of the playbook is halted.
 
-| Field          | Description                                                     | Scheme                                             | Required |
-| -------------- | --------------------------------------------------------------- | -------------------------------------------------- | -------- |
-| `name`         | Name of action.                                                 | `string`                                           | `true`   |
-| `delay`        | Delay the execution of the action. _(Sensitive to the minute.)_ | [`DurationString`](#duration-string)               |          |
-| `timeout`      | Timeout on this action.                                         | [`DurationString`](#duration-string)               |          |
-| `exec`         | Specify exec of action.                                         | [`ExecAction`](../actions/exec.md)                 |          |
-| `gitops`       | Specify gitops of action.                                       | [`GitopsAction`](../actions/gitops.md)             |          |
-| `http`         | Specify http of action.                                         | [`HttpAction`](../actions/http.md)                 |          |
-| `sql`          | Specify sql of action.                                          | [`SqlAction`](../actions/sql.md)                   |          |
-| `pod`          | Specify pod of action.                                          | [`PodAction`](../actions/pod.md)                   |          |
-| `notification` | Specify notification of action.                                 | [`NotificationAction`](../actions/notification.md) |          |
+| Field          | Description                                                                                                      | Scheme                                             | Required |
+| -------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `name`         | Name of action.                                                                                                  | `string`                                           | `true`   |
+| `delay`        | A CEL expression that evaluates to a duration to delay the execution of the action. _(Sensitive to the minute.)_ | `string`                                           |          |
+| `timeout`      | Timeout on this action.                                                                                          | [`DurationString`](#duration-string)               |          |
+| `exec`         | Specify exec of action.                                                                                          | [`ExecAction`](../actions/exec.md)                 |          |
+| `gitops`       | Specify gitops of action.                                                                                        | [`GitopsAction`](../actions/gitops.md)             |          |
+| `http`         | Specify http of action.                                                                                          | [`HttpAction`](../actions/http.md)                 |          |
+| `sql`          | Specify sql of action.                                                                                           | [`SqlAction`](../actions/sql.md)                   |          |
+| `pod`          | Specify pod of action.                                                                                           | [`PodAction`](../actions/pod.md)                   |          |
+| `notification` | Specify notification of action.                                                                                  | [`NotificationAction`](../actions/notification.md) |          |
 
 :::note
 Specify one or more actions; but at least one.
@@ -107,11 +113,23 @@ Specify one or more actions; but at least one.
 ![Playbook Action Logs](../../images/playbook-action-logs.png)
 _Fig: Playbooks Action Logs_
 
-### Duration String
+### Delaying actions
 
-Duration strings specify duration in a human readable format.
+Actions can be delayed by a fixed duration or conditionally by a CEL expression.
+It's only sensitive to the minute. i.e. if you delay by 20s it can take upto a minute to execute.
 
-**Examples:**
+#### Templating
+
+The CEL expression receives a environment variable that contain details about the corresponding config, check or component and the parameter (if applicable).
+
+| Field       | Description                              | Schema                                       |
+| ----------- | ---------------------------------------- | -------------------------------------------- |
+| `config`    | Config passed to the playbook            | [`ConfigItem`](../references/config_item.md) |
+| `component` | Component passed to the playbook         | [`Component`](../references/component.md)    |
+| `check`     | Canary Check passed to the playbook      | [`Check`](../references/check.md)            |
+| `params`    | User provided parameters to the playbook | `map[string]string`                          |
+
+Valid time units are "s", "m", "h", "d", "w", "y". Eg:
 
 - `1m15s`
 - `1h5m`
@@ -119,3 +137,25 @@ Duration strings specify duration in a human readable format.
 - `1d8h`
 - `1w6d8h`
 - `19w0d8h`
+
+### Conditionally running actions
+
+Playbook actions can be conditionally run using a CEL Expression. The expressions should either return
+
+- a boolean value _(`true` indicating run the action & skip the action otherwise)_
+- or a special function among the ones listed below
+
+#### Functions
+
+| Function    | Description                                                 |
+| ----------- | ----------------------------------------------------------- |
+| `always()`  | run no matter what; even if the playbook is cancelled/fails |
+| `failure()` | run if any of the previous actions failed                   |
+| `skip()`    | skip running this action                                    |
+| `success()` | run only if all previous actions succeeded (default)        |
+| `timeout()` | run only if any of the previous actions timed out           |
+
+#### Examples
+
+- `if: config.deleted_at ? true: false`
+- `if: always()`

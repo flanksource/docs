@@ -17,8 +17,6 @@ Filters can give you fine-grained control over the events that can trigger the p
 
 ## Types
 
-At this point, there's only support for events on canaries and components.
-
 ### Canary events
 
 Canary events relate to activities on health checks.
@@ -82,4 +80,35 @@ spec:
         connection: connection://telegram/playbook-alerts
         title: 'Database {{.component.name}} has become unhealthy'
         message: 'Description: {{.component.description}}'
+```
+
+### Config events
+
+Config events relate to activities on config items.
+
+| Event     | Description                   |
+| --------- | ----------------------------- |
+| `created` | when a config item is created |
+| `updated` | when a config item is updated |
+| `deleted` | when a config item is deleted |
+
+#### Example
+
+```yaml title="notify-newly-scraped-pod.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: Notify on pod config creation
+spec:
+  description: Notify when a new pod is discovered
+  on:
+    component:
+      - event: config.created
+        filter: config.class == 'Pod'
+  actions:
+    - name: Send notification
+      notification:
+        connection: connection://telegram/playbook-alerts
+        title: 'A new kubernetes pod {{.config.name}} was scraped'
+        message: 'Namespace: {{.config.namespace}}'
 ```

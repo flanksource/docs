@@ -592,6 +592,16 @@ const sidebars = {
           id: 'playbooks/examples/approval',
           label: 'Approval'
         },
+        {
+          type: 'doc',
+          id: 'playbooks/examples/exec-delay',
+          label: 'Delaying actions'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/examples/action-filter',
+          label: 'Conditionally running actions'
+        },
       ],
     },
     {
