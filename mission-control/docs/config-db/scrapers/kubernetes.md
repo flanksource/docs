@@ -57,6 +57,7 @@ kubernetes:
 | `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                                                                                               | `[]string`                                                                   |          |
 | **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                                                                                                | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes      |
 | `event`           | Specify configuration to handle Kubernetes events. See [**KubernetesEvent**](#kubernetesevent)                                                                          | [`KubernetesEvent`](#kubernetesevent)                                        | yes      |
+| `relationships`   | Create relationships between kubernetes objects. See [**KubernetesRelationships**](#kubernetesrelationships)                                                          | [`[]KubernetesRelationships`](#kubernetesrelationships)                        | `false`  |
 
 ### KubernetesEvent
 
@@ -75,3 +76,57 @@ In addition, you can also specify keywords used to identify the severity of the 
 | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------- |
 | `warn`  | A list of keywords used to identify a warning severity from the reason. It could also be a match pattern: example "\*" to match all or "!badword" to exclude "badword" | `[]string` | `false`  |
 | `error` | Same as `warn` but used to map to error severity.                                                                                                                      | `[]string` | `false`  |
+
+### KubernetesRelationships
+
+You can create relationships between kubernetes objects on the basis of kind, name and labels. While relationships between node and pod, deployment and pod, namespace and deployment
+are created automatically, there are cases where we want to link objects on the basis of metadata (like linking resources created by a flux object to it).
+
+We support static values, expressions and label lookups to find the parent
+
+| Field       | Description                      | Scheme                                                          | Required |
+| ------------| ---------------------------------|-----------------------------------------------------------------| ---------|
+| `kind`      | `kind` of Kubernetes Object      | [`KubernetesRelationshipLookup`](#kubernetesrelationshiplookup) | `true`   |
+| `name`      | `name` of Kubernetes Object      | [`KubernetesRelationshipLookup`](#kubernetesrelationshiplookup) | `true`   |
+| `namespace` | `namespace` of Kubernetes Object | [`KubernetesRelationshipLookup`](#kubernetesrelationshiplookup) | `true`   |
+
+#### KubernetesRelationshipLookup
+
+| Field   | Description                                        | Scheme   | Required |
+| --------|----------------------------------------------------|----------| ---------|
+| `value` | Static string value of the resource                | `string` |          |
+| `expr`  | CEL Expression to evaluate                         | `string` |          |
+| `label` | Label key containing the value of the the resource | `string` |          |
+
+
+#### Kubernetes Relationship Example
+
+```yaml
+kubernetes:
+  - clusterName: 'eks'
+    ...
+  relationships:
+    # If object has spec.claimRef field, use its kind, name and namespace
+    - kind:
+        expr: "has(spec.claimRef) ? spec.claimRef.kind : ''"
+      name:
+        expr: "has(spec.claimRef) ? spec.claimRef.name : ''"
+      namespace:
+        expr: "has(spec.claimRef) ? spec.claimRef.namespace : ''"
+
+    # If object flux kustomize labels, link it to the parent Kustomization object
+    - kind:
+        value: Kustomization
+      name:
+        label: kustomize.toolkit.fluxcd.io/name
+      namespace:
+        label: kustomize.toolkit.fluxcd.io/namespace
+
+    # If object helm kustomize labels, link it to the parent HelmRelease object
+    - kind:
+        value: HelmRelease
+      name:
+        label: helm.toolkit.fluxcd.io/name
+      namespace:
+        label: helm.toolkit.fluxcd.io/namespace
+```
