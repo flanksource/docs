@@ -3,6 +3,13 @@
 This config type is used to scrape information about your AWS infrastructure.
 
 ```yaml
+logLevel: ""
+schedule: "@every 15m"
+retention:
+  changes:
+    - name: CreateRole
+      age: 30d # Any change older than 30 days is removed
+      count: 50 # Only 50 last changes will be retained
 aws:
   - region:
       - eu-west-2
@@ -31,6 +38,32 @@ transform:
     - jsonpath: mapCustomerOwnedIpOnLaunch
     - jsonpath: subnetArn
 ```
+
+### Scraper
+
+| Field       | Description                                                                        | Scheme                    | Required |
+| ----------- | ---------------------------------------------------------------------------------- | ------------------------- | -------- |
+| `logLevel`  | Specify the level of logging.                                                      | `string`                  | `false`  |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                  | `false`  |
+| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                    | `false`  |
+| `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](#retention) |          |
+| `aws`       | Specifies the list of AWS configurations to scrape.                                | [`[]AWS`](#aws-1)         | `false`  |
+
+#### Retention
+
+The retention rules are applied for each unique catalog item. If `changes` is specified with type `X` and count `20`, last 20 changes of `X` type would be kept for each catalog item
+
+| Field     | Description                         | Scheme                                    | Required |
+| --------- | ----------------------------------- | ----------------------------------------- | -------- |
+| `changes` | Specify retention rules for changes | [`[]RetentionChanges`](#retentionchanges) | `false`  |
+
+##### RetentionChanges
+
+| Field   | Description                                             | Scheme   | Required |
+| ------- | ------------------------------------------------------- | -------- | -------- |
+| `name`  | Name of the change type                                 | `string` | `true`   |
+| `age`   | Maximum age of the change type to retain (`12h`, `30d`) | `string` | `false`  |
+| `count` | Maximum count to retain the change type                 | `bool`   | `false`  |
 
 ### AWS
 
