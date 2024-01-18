@@ -3,6 +3,13 @@
 This config type is used to scrape information about your AWS infrastructure.
 
 ```yaml
+logLevel: ""
+schedule: "@every 15m"
+retention:
+  changes:
+    - name: CreateRole
+      age: 30d # Any change older than 30 days is removed
+      count: 50 # Only 50 last changes will be retained
 aws:
   - region:
       - eu-west-2
@@ -31,6 +38,16 @@ transform:
     - jsonpath: mapCustomerOwnedIpOnLaunch
     - jsonpath: subnetArn
 ```
+
+### Scraper
+
+| Field       | Description                                                                        | Scheme                                       | Required |
+| ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| `logLevel`  | Specify the level of logging.                                                      | `string`                                     | `false`  |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     | `false`  |
+| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       | `false`  |
+| `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
+| `aws`       | Specifies the list of AWS configurations to scrape.                                | [`[]AWS`](#aws-1)                            | `false`  |
 
 ### AWS
 

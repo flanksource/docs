@@ -19,6 +19,16 @@ azureDevops:
     type: Release # the change type the pipeline produces
 ```
 
+## Scraper
+
+| Field         | Description                                                                        | Scheme                                       | Required |
+| ------------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| `logLevel`    | Specify the level of logging.                                                      | `string`                                     | `false`  |
+| `schedule`    | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     | `false`  |
+| `full`        | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       | `false`  |
+| `retention`   | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
+| `azureDevops` | Specifies the list of Azure DevOps configurations to scrape.                       | [`[]AzureDevops`](#azuredevops-1)            | `false`  |
+
 ### AzureDevops
 
 | Field                 | Description                                                                                                                                                             | Scheme                                                                       | Required |

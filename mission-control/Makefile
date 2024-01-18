@@ -9,3 +9,6 @@ sync:
 	cp -r  ../canary-checker/static/img/icons static/img
 	cp docs/canary-checker/concepts/secret-management.md docs/reference/
 	cp docs/canary-checker/concepts/connections.md docs/reference/
+
+watch: sync
+	npm exec -c 'docusaurus start'

@@ -32,6 +32,16 @@ kubernetes:
           - nodeoutofmemory
 ```
 
+## Scraper
+
+| Field        | Description                                                                        | Scheme                                       | Required |
+| ------------ | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| `logLevel`   | Specify the level of logging.                                                      | `string`                                     | `false`  |
+| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     | `false`  |
+| `full`       | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       | `false`  |
+| `retention`  | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
+| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                         | [`[]Kubernetes`](#kubernetes-1)              | `false`  |
+
 ### Kubernetes
 
 | Field             | Description                                                                                                                                                             | Scheme                                                                       | Required |
@@ -57,7 +67,7 @@ kubernetes:
 | `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                                                                                               | `[]string`                                                                   |          |
 | **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                                                                                                | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes      |
 | `event`           | Specify configuration to handle Kubernetes events. See [**KubernetesEvent**](#kubernetesevent)                                                                          | [`KubernetesEvent`](#kubernetesevent)                                        | yes      |
-| `relationships`   | Create relationships between kubernetes objects. See [**KubernetesRelationships**](#kubernetesrelationships)                                                          | [`[]KubernetesRelationships`](#kubernetesrelationships)                        | `false`  |
+| `relationships`   | Create relationships between kubernetes objects. See [**KubernetesRelationships**](#kubernetesrelationships)                                                            | [`[]KubernetesRelationships`](#kubernetesrelationships)                      | `false`  |
 
 ### KubernetesEvent
 
@@ -85,7 +95,7 @@ are created automatically, there are cases where we want to link objects on the 
 We support static values, expressions and label lookups to find the parent
 
 | Field       | Description                      | Scheme                                                          | Required |
-| ------------| ---------------------------------|-----------------------------------------------------------------| ---------|
+| ----------- | -------------------------------- | --------------------------------------------------------------- | -------- |
 | `kind`      | `kind` of Kubernetes Object      | [`KubernetesRelationshipLookup`](#kubernetesrelationshiplookup) | `true`   |
 | `name`      | `name` of Kubernetes Object      | [`KubernetesRelationshipLookup`](#kubernetesrelationshiplookup) | `true`   |
 | `namespace` | `namespace` of Kubernetes Object | [`KubernetesRelationshipLookup`](#kubernetesrelationshiplookup) | `true`   |
@@ -93,11 +103,10 @@ We support static values, expressions and label lookups to find the parent
 #### KubernetesRelationshipLookup
 
 | Field   | Description                                        | Scheme   | Required |
-| --------|----------------------------------------------------|----------| ---------|
+| ------- | -------------------------------------------------- | -------- | -------- |
 | `value` | Static string value of the resource                | `string` |          |
 | `expr`  | CEL Expression to evaluate                         | `string` |          |
 | `label` | Label key containing the value of the the resource | `string` |          |
-
 
 #### Kubernetes Relationship Example
 

@@ -14,6 +14,16 @@ The KubernetesFile config type is used to scrape configurations contained in you
         format: properties
 ```
 
+## Scraper
+
+| Field            | Description                                                                        | Scheme                                       | Required |
+| ---------------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| `logLevel`       | Specify the level of logging.                                                      | `string`                                     | `false`  |
+| `schedule`       | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     | `false`  |
+| `full`           | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       | `false`  |
+| `retention`      | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
+| `kubernetesFile` | Specifies the list of Kubernetes File configurations to scrape.                    | [`[]KubernetesFile`](#kubernetesfile-1)      | `false`  |
+
 ### KubernetesFile
 
 | Field             | Description                                                                                                                                                             | Scheme                                   | Required |
