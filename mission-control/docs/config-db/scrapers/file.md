@@ -15,29 +15,27 @@ For more examples of configuration file, please check the [GitHub repo](https://
 
 ## Scraper
 
-| Field       | Description                                                                        | Scheme                    | Required |
-| ----------- | ---------------------------------------------------------------------------------- | ------------------------- | -------- |
-| `logLevel`  | Specify the level of logging.                                                      | `string`                  | `false`  |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                  | `false`  |
-| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                    | `false`  |
+| Field       | Description                                                                        | Scheme                                       | Required |
+| ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| `logLevel`  | Specify the level of logging.                                                      | `string`                                     | `false`  |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     | `false`  |
+| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       | `false`  |
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
-| `file`       | Specifies the list of File configurations to scrape.                                | [`[]File`](#file-1)         | `false`  |
-
-
+| `file`      | Specifies the list of File configurations to scrape.                               | [`[]File`](#file-1)                          | `false`  |
 
 ### File
 
-| Field             | Description                                                                                                                                                             | Scheme                                  | Required |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------- |
-| `id`              | A static value or JSONPath expression to use as the ID for the resource.                                                                                                | `string`                                | `true`   |
-| `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                                | `false`  |
-| `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                                | `false`  |
-| `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                                | `true`   |
+| Field             | Description                                                                                                                                                             | Scheme                               | Required |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | -------- |
+| `id`              | A static value or JSONPath expression to use as the ID for the resource.                                                                                                | `string`                             | `true`   |
+| `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                             | `false`  |
+| `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                             | `false`  |
+| `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                             | `true`   |
 | `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](../concepts/transform) | `false`  |
-| `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                | `false`  |
-| `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                | `false`  |
-| `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                              | `false`  |
-| `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                              | `false`  |
-| `url`             | Specify URL e.g github repository containing the configuration(s)                                                                                                       | `string`                                | `false`  |
-| `paths`           | Specify paths to configuration(s) for scraping                                                                                                                          | `[]string`                              | `true`   |
-| `ignore`          | Set configurations to ignore                                                                                                                                            | `[]string`                              | `false`  |
+| `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                             | `false`  |
+| `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                             | `false`  |
+| `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                           | `false`  |
+| `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                           | `false`  |
+| `url`             | Specify URL e.g github repository containing the configuration(s)                                                                                                       | `string`                             | `false`  |
+| `paths`           | Specify paths to configuration(s) for scraping                                                                                                                          | `[]string`                           | `true`   |
+| `ignore`          | Set configurations to ignore                                                                                                                                            | `[]string`                           | `false`  |
