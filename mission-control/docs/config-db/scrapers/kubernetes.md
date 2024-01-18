@@ -32,6 +32,18 @@ kubernetes:
           - nodeoutofmemory
 ```
 
+## Scraper
+
+| Field       | Description                                                                        | Scheme                    | Required |
+| ----------- | ---------------------------------------------------------------------------------- | ------------------------- | -------- |
+| `logLevel`  | Specify the level of logging.                                                      | `string`                  | `false`  |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                  | `false`  |
+| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                    | `false`  |
+| `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
+| `kubernetes`       | Specifies the list of Kubernetes configurations to scrape.                                | [`[]Kubernetes`](#kubernetes-1)         | `false`  |
+
+
+
 ### Kubernetes
 
 | Field             | Description                                                                                                                                                             | Scheme                                                                       | Required |

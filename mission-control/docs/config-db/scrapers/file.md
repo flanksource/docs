@@ -13,6 +13,18 @@ file:
 
 For more examples of configuration file, please check the [GitHub repo](https://github.com/flanksource/config-db/tree/main/fixtures)
 
+## Scraper
+
+| Field       | Description                                                                        | Scheme                    | Required |
+| ----------- | ---------------------------------------------------------------------------------- | ------------------------- | -------- |
+| `logLevel`  | Specify the level of logging.                                                      | `string`                  | `false`  |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                  | `false`  |
+| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                    | `false`  |
+| `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
+| `file`       | Specifies the list of File configurations to scrape.                                | [`[]File`](#file-1)         | `false`  |
+
+
+
 ### File
 
 | Field             | Description                                                                                                                                                             | Scheme                                  | Required |

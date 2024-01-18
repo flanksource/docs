@@ -379,6 +379,11 @@ const sidebars = {
           id: 'config-db/concepts/transform',
           label: 'Transform'
         },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/retention',
+          label: 'Retention'
+        },
       ]
     },
     {
@@ -843,11 +848,12 @@ const sidebars = {
     }
   ],
   reference: [
-    {
-      type: 'doc',
-      id: 'reference/authentication',
-      label: 'Authentication',
-    },
+// TODO: @moshloop
+//  {
+//    type: 'doc',
+//    id: 'reference/authentication',
+//    label: 'Authentication',
+//  },
     {
       type: 'doc',
       id: 'reference/connections',

@@ -66,6 +66,17 @@ sql:
       select * from @mytable
 ```
 
+## Scraper
+
+| Field       | Description                                                                        | Scheme                    | Required |
+| ----------- | ---------------------------------------------------------------------------------- | ------------------------- | -------- |
+| `logLevel`  | Specify the level of logging.                                                      | `string`                  | `false`  |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                  | `false`  |
+| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                    | `false`  |
+| `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
+| `sql`       | Specifies the list of SQL configurations to scrape.                                | [`[]SQL`](#sql-1)         | `false`  |
+
+
 ## SQL
 
 | Field             | Description                                                                                                                                                             | Scheme                                  | Required |
