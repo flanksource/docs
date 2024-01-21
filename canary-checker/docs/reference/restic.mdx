@@ -56,11 +56,11 @@ spec:
 | `metrics`         | Metrics to export from                                       | [`[]Metrics`](../concepts/metrics-exporter)         |          |
 | **Encryption Connection** |  |  |          |
 | `connection`      | Path of an existing connection to get the encryption key e.g., `connection://restic/key` <br />Mutually exclusive with `password` <br /><Commercial /> | [Connection](../concepts/connections)             |          |
-| `password`        | Mutually exclusive with `connection`                         | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes      |
+| `password`        | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes      |
 | **AWS Connection** |  |  |          |
 | `awsConnectionName` | Path of an existing connection to connect to S3 e.g., `connection://aws/instance` <br />Mutually exclusive with `accessKey` <br /><Commercial /> | [Connection](../concepts/connections)             |          |
-| `accessKey`       | Mutually exclusive with `awsConnectionName`                  | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes      |
-| `secretKey`       | Mutually exclusive with `awsConnectionName`                  | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes      |
+| `accessKey`       | Mutually exclusive with `awsConnectionName`                  | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes      |
+| `secretKey`       | Mutually exclusive with `awsConnectionName`                  | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes      |
 | `endpoint`        | Custom AWS Config endpoint                                    | `string`                                          |          |
 | `region`          | AWS region                                                   | `string`                                          |          |
 | `skipTLSVerify`   | Skip TLS verify when connecting to AWS                        | `bool`                                            |          |

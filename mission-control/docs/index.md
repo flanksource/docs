@@ -9,7 +9,7 @@ hide_title: true
 
 ![](./images/flanksource.svg)
 
-### Welcome to the Flanksource Mission Control documentation page
+### Flanksource Mission Control
 
 Flanksource Mission Control is an internal developer platform that helps teams to understand and operate complex systems easier. Mission Control includes the following features:
 
@@ -28,8 +28,20 @@ Config DB is an open source tool that allows developers to easily configure, scr
 
 ## Health Checks
 
+Understand the health of complex services at a glance with red, amber, green statuses which leverage active/passive health checks and consolidated alerts from Prometheus, AWS, Dynatrace, etc.
+
 Canary checker is an open source tool that allows users to monitor the status of their canaries (server monitoring tools) in real-time. Canary checker allows users to set up alerts for when their canaries go down or encounter any issues, giving them the ability to quickly respond and fix any potential problems before they become more significant. It also provides users with detailed logs and analytics of their canary activity, giving them valuable insights into the performance and reliability of their systems. Canary checker is an essential tool for anyone who relies on canaries for server monitoring and maintenance, helping them to ensure the stability and uptime of their systems.
 
 One potential use of Canary Checker is, if you want to get the cert expiry dates for your URLs and get warn when we are X number of days from the expiry date.
 
 With Mission Control up and running, one can have a better understanding of their infrastructure, which helps in planning of disaster recovery and reducing downtime to the   minimum.
+
+##
+
+Playbooks
+
+Empower developers to be more self-sufficient without the need to become experts in the Cloud and Kubernetes.
+
+Run playbooks automatically on failing health checks/ alerts
+Implement security best practices of least privilege and just in time (JIT) access
+Use the built-In library of actions including HTTP, SQL, kubectl, AWS CLI or run any custom code from Git

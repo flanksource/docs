@@ -4,7 +4,7 @@ title: Azure DevOps
 
 # <Icon name="azure-devops" /> Azure Devops
 
-    <Standard />
+<Standard />
 
 Azure Devops checks for healthy pipeline runs.
 
@@ -44,6 +44,5 @@ spec:
 | `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/display-formatting) |          |
 | `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |          |
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
-| **Connection**            |                                                              |                                                   |          |
-| `connection`              | Connection Name e.g. `connection://azuredevops/org` <br />Mutually exclusive with `personalAccessToken` <br /><Commercial /> | `string`                                          |          |
-| **`personalAccessToken`** | Mutually exclusive with `connection`, See [Creating ADO PAT's](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=Windows) | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | true     |
+| **Connection**            |  <SkipOSS> Path of existing connection e.g. `connection://azuredevops/org`</SkipOSS>                                                             |    <SkipOSS>[Connection](../concepts/connections) </SkipOSS>                                                |          |
+| `personalAccessToken` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>  , See [Creating ADO PAT's](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=Windows) | <CommonLink to="authentication">*EnvVar*</CommonLink> | true     |

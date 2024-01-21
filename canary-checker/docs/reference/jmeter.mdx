@@ -4,7 +4,8 @@ title: Jmeter
 
 # <Icon name="jmeter" /> JMeter
 
-    <Standard /><FullImage />
+  <Standard />
+  <FullImage />
 
 This check will execute the JMeter CLI to execute the JMX test plan on the specified host.
 
@@ -28,7 +29,7 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **`jmx`** | Jmx defines the ConfigMap or Secret reference to get the JMX test plan | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes |
+| **`jmx`** | Jmx defines the ConfigMap or Secret reference to get the JMX test plan | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes |
 | `properties` | Properties defines the local JMeter properties | *\[\]string* |  |
 | `responseDuration` | duration  under which the all the test should pass | *int* |  |
 | `systemProperties` | SystemProperties defines the Java system property | *\[\]string* |  |

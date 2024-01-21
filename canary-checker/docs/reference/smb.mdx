@@ -44,7 +44,7 @@ spec:
 | Field        | Description                                                  | Scheme                                            |
 | ------------ | ------------------------------------------------------------ | ------------------------------------------------- |
 | `connection` | Path of existing connection e.g. `connection://windows/svc-account` <br />Mutually exclusive with`username` and `password` <br /> <Commercial /> | [Connection](../concepts/connections)             |
-| `username`   | Mutually exclusive with `connection`                         | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> |
-| `password`   | Mutually exclusive with `connection`                         | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> |
+| `username`   | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication">*EnvVar*</CommonLink> |
+| `password`   | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication">*EnvVar*</CommonLink> |
 | `domain`     | Windows domain name                                          | *string*                                          |
 | `port`       | Default to `445`                                             | *int*                                             |

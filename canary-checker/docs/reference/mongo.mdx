@@ -33,8 +33,8 @@ spec:
 | ----- | ----------- | ------ | -------- |
 | `connection` | Path of existing connection e.g. `connection://mongo/instance` or connection url <br /> <Commercial /> | <CommonLink to="connection" >*Connection*</CommonLink> | |
 | `url` | mongodb://:27017/?authSource=admin, See [connection-string](https://docs.mongodb.com/manual/reference/connection-string/) |  | |
-| `username` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
-| `password` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
+| `username` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | |
+| `password` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | |
 | **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
 | `description` | Description for the check                                   | `string`                                     |          |
 | `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |

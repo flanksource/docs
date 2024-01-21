@@ -4,8 +4,9 @@
 // There are various equivalent ways to declare your Docusaurus config.
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
+const lightCodeTheme = require('prism-react-renderer/themes/palenight');
+const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
-import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -16,15 +17,18 @@ const config = {
   baseUrl: '/',
   organizationName: 'flanksource', // Usually your GitHub org/user name.
   projectName: 'docs', // Usually your repo name.
-
+  favicon: 'img/flanksource-icon.png',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   customFields: {
+    oss: false,
+    productName: "Mission Control",
     links: {
       "authentication": '/reference/secret-management',
-      "connection": '/reference/authentication'
-
+      "secrets": '/reference/secret-management',
+      "connection": '/reference/authentication',
+      "cel": "/reference/scripting/cel"
     }
   },
 
@@ -116,15 +120,35 @@ const config = {
           },
         ],
       },
+
+      metadata: [
+        { name: 'keywords', content: 'health check, synthetic test, continuous testing, kubernetes operator' }
+      ],
+
+      algolia: {
+        // The application ID provided by Algolia
+        appId: 'OB826SK7ZD',
+
+        // Public API key: it is safe to commit it
+        apiKey: 'b6f91e146e1ed100664b6da07151f287',
+
+        indexName: 'flanksource',
+      },
+      colorMode: {
+        defaultMode: 'light',
+        disableSwitch: false,
+        respectPrefersColorScheme: true,
+      },
       footer: {
         style: 'dark',
         copyright: `Copyright © ${new Date().getFullYear()} Flanksource Inc.`,
       },
       prism: {
-        theme: prismThemes.palenight,
-        darkTheme: prismThemes.dracula,
+        additionalLanguages: ['powershell'],
+        darkTheme: darkCodeTheme,
+        theme: lightCodeTheme
       },
     }),
 };
 
-export default config;
+module.exports = config

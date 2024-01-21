@@ -10,32 +10,29 @@ The Kubernetes check performs requests on Kubernetes resources such as Pods to g
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
-  name: kube-check
+  name: kube-system-checks
 spec:
   interval: 30
   kubernetes:
-    - namespace:
-        name: default
-      name: k8s-ready pods
+      # failing checks will be inserted into kube-system, irrespective of which
+      # namespace this canary is created in
+    - namespace: kube-system
+      name: kube-system
       kind: Pod
+      ready: true
       resource:
-        labelSelector: app=k8s-ready
-    - namespace:
-        name: default
-      kind: Pod
-      name: k8s-not-ready pods
-      ready: false
-      resource:
-        labelSelector: app=k8s-not-ready
+        labelSelector: k8s-app=kube-dns
+      namespaceSelector:
+        name: kube-system
 ```
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
 | **`kind`** | Specifies the kind of Kubernetes object for interaction | *string* | Yes |
 | `resource` | Queries resources related to specified Kubernetes object | [*ResourceSelector*](#resourceselector) | |
-| `namespace` | Specifies namespace for Kubernetes object                    | [*ResourceSelector*](#resourceselector) |          |
+| `namespaceSelector` | Specifies namespace for Kubernetes object                    | [*ResourceSelector*](#resourceselector) |          |
 | `ignore`    | Ignore the specified resources from the fetched resources. Can be a glob pattern. | *[]string*                            |  |
-| `ready` | Boolean value of true or false to query and display resources based on availability | *bool* |  |
+| `ready` | Check if resources are healthy using [is-healthy](https://github.com/flanksource/is-healthy) if not fails the check | *bool* |  |
 | **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
 | `description` | Description for the check                                   | `string`                                     |          |
 | `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
@@ -44,6 +41,39 @@ spec:
 | `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/display-formatting) |          |
 | `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |          |
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
+
+
+## Ready
+
+Using `ready: true` is functionally equivalent to:
+
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: kube-system-checks
+spec:
+  interval: 30
+  kubernetes:
+    - namespace: kube-system
+      name: kube-system
+      kind: Pod
+      resource:
+        labelSelector: k8s-app=kube-dns
+      namespaceSelector:
+        name: kube-system
+      display:
+        expr: |
+          dyn(results).
+          map(i, i.Object).
+          filter(i, !k8s.isHealthy(i)).
+          map(i, "%s/%s -> %s".format([i.metadata.namespace, i.metadata.name, k8s.getHealth(i).message])).join('\n')
+      test:
+        expr: dyn(results).all(x, k8s.isHealthy(x))
+```
+
+See the CEL <CommonLink to="cel" anchor="kubernetes">*Kubernetes*</CommonLink> docs for more details on the `k8s.isHealthy` and other functions available
 
 ## ResourceSelector
 
