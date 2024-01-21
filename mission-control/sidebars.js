@@ -34,20 +34,9 @@ const sidebars = {
       link: {
         type: 'generated-index',
         title: 'Installation',
-        slug: '/installation',
+        slug: '/canary-checker/installation',
       },
       items: [
-
-        {
-          type: 'doc',
-          id: 'canary-checker/helm',
-          label: 'Helm',
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/database',
-          label: 'Database',
-        },
         {
           type: 'doc',
           id: 'canary-checker/cli',
@@ -520,7 +509,7 @@ const sidebars = {
           id: 'playbooks/triggers/events',
           label: 'Events'
         },
-         {
+        {
           type: 'doc',
           id: 'playbooks/triggers/self-service',
           label: 'Self-Service'
@@ -541,7 +530,7 @@ const sidebars = {
           id: 'playbooks/actions/exec',
           label: 'Exec'
         },
-         {
+        {
           type: 'doc',
           id: 'playbooks/actions/gitops',
           label: 'GitOps'
@@ -573,7 +562,7 @@ const sidebars = {
       label: 'Examples',
       items: [
         {
-          type:'doc',
+          type: 'doc',
           id: 'playbooks/examples/kubectl-logs-artifacts',
           label: 'Artifacts from kubectl logs',
         },
@@ -848,12 +837,11 @@ const sidebars = {
     }
   ],
   reference: [
-// TODO: @moshloop
-//  {
-//    type: 'doc',
-//    id: 'reference/authentication',
-//    label: 'Authentication',
-//  },
+    {
+      type: 'doc',
+      id: 'reference/secret-management',
+      label: 'Secret Management',
+    },
     {
       type: 'doc',
       id: 'reference/connections',
@@ -893,25 +881,87 @@ const sidebars = {
       label: 'Overview'
     },
     {
+      type: 'category',
+      label: 'Installation',
+      link: {
+        type: 'generated-index',
+        title: 'Installation',
+        slug: '/installation',
+      },
+      items: [
+        {
+          type: 'doc',
+          label: 'SaaS',
+          id: 'installation/saas'
+        },
+        {
+          type: 'category',
+          label: 'Self-Hosted',
+          items: [
+            {
+              type: 'doc',
+              id: 'installation/helm',
+              label: 'Helm',
+            },
+
+            {
+              type: 'doc',
+              id: 'installation/database',
+              label: 'Database',
+            },
+            {
+              type: 'doc',
+              id: 'installation/oidc',
+              label: 'SSO (OIDC)',
+            },
+          ]
+        },
+
+
+
+
+        {
+          type: 'category',
+          label: 'Cloud Providers',
+          items: [
+            {
+              type: 'doc',
+              id: 'installation/aws-eks',
+              label: 'AWS EKS',
+            },
+          ]
+        },
+
+
+        {
+          type: 'category',
+          label: 'Local Testing',
+          items: [
+            {
+              type: 'doc',
+              id: 'installation/kind_linux',
+              label: 'Kind',
+            },
+            {
+              type: 'doc',
+              id: 'installation/minikube_windows',
+              label: 'Minikube (Windows)',
+            }]
+        }
+      ]
+    },
+
+    {
       type: 'doc',
       id: 'architecture',
       label: 'Architecture'
     },
     {
       type: 'doc',
-      id: 'install',
-      label: 'Install'
-    },
-    {
-      type: 'doc',
       id: 'security',
       label: 'Security'
     },
-    {
-      type: 'doc',
-      id: 'connections',
-      label: 'Connections'
-    },
+
   ],
 
 };

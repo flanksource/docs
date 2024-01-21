@@ -16,7 +16,7 @@ const config = {
   baseUrl: '/',
   organizationName: 'flanksource', // Usually your GitHub org/user name.
   projectName: 'docs', // Usually your repo name.
-
+  favicon: 'img/flanksource-icon.png',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
