@@ -1,34 +1,26 @@
 # Transform
 
-`Config DB` allows you to transform the configuration after they've been scraped from the target. This is supported by all the scrapers.
-
-Transformation can be useful when you want to
+Transformation can be performed after the configs have been scraped from the target. This can be useful when you want to
 
 - hide/remove sensitive data from the scraped configuration (e.g. passwords, tokens, etc.)
 - transform the scraped configuration using Javascript and [Go templates](https://pkg.go.dev/text/template).
 - remove certain fields from the scraped configuration
 
-| Field                | Description                                                                                    | Scheme                            | Required |
-| -------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------- | -------- |
-| [`script`](#script)  | Script to transform scrape result.                                                             | [`Script`](#script)               |          |
-| [`exclude`](#filter) | Specify fields to remove from the config. It is useful for removing sensitive data and fields. | [`[]Filter`](./exclude.md#filter) | `false`  |
-| [`mask`](#mask)      | Specify configurations to replace sensitive fields with hash functions or static string.       | [`[]Mask`](./mask.md)             | `false`  |
-| [`createField`](#mask)      | A path to a field that indicates with an item was created      | JSONPath         | `false`  |
-| [`deleteField`](#mask)      | A path to a field that indicates with an item was deleted      | JSONPath           | `false`  |
+| Field           | Description                                                                              | Scheme                                  | Required |
+| --------------- | ---------------------------------------------------------------------------------------- | --------------------------------------- | -------- |
+| `gotemplate`    | Specify Go template for use in script                                                    | `string`                                |          |
+| `javascript`    | Specify javascript syntax for script                                                     | `string`                                |          |
+| `jsonpath`      | Specify JSONPath                                                                         | `string`                                |          |
+| `expr`          | Specify Cel expression                                                                   | `string`                                |          |
+| `change`        | Apply transformaion on the scraped changes                                               | [`[]TransformChange`](#transformchange) |          |
+| `exclude`       | Fields to remove from the config, useful for removing sensitive data and fields          | [`[]Exclude`](#exclude)                 |          |
+|                 | that change often without a material impact i.e. Last Scraped Time                       |                                         |          |
+| [`mask`](#mask) | Specify configurations to replace sensitive fields with hash functions or static string. | [`[]Mask`](./mask.md)                   |          |
 
-## Script
-
-Script allows you to transform the scraped configuration using Javascript and [Go templates](https://pkg.go.dev/text/template).
-
-| Field        | Description                           | Scheme   | Required |
-| ------------ | ------------------------------------- | -------- | -------- |
-| `gotemplate` | Specify Go template for use in script | `string` | `false`  |
-| `javascript` | Specify javascript syntax for script  | `string` | `false`  |
-
-!!! note
-
-    Unlike other transformation functions, script is ran before the attributes _(id, name, type, ...)_ are extracted.
-    So please make sure your transformation scripts are inline with the JSONPath selectors for the attributes.
+:::note
+Unlike other transformation functions, scripts (gotemplate, javascript, jsonpath & expr) are ran before the attributes _(id, name, type, ...)_ are extracted.
+So please make sure your transformation scripts are inline with the JSONPath selectors for the attributes.
+:::
 
 ### JavaScript
 
@@ -106,8 +98,8 @@ The above transformation will result in the following config
 { "id": "what", "name-1": "hi Config1", "name-2": "hi Config2" }
 ```
 
-
 ## Exclude
+
 This transformation function allows you to remove certain fields from the scraped configuration. This is useful when you want to remove sensitive or just useless data from the scraped configuration.
 
 ### Filter
@@ -128,6 +120,7 @@ aws:
 ```
 
 ## Mask
+
 Mask allows replacing sensitive fields with hash of that field or with a static string.
 _Example_: You could set the `value` to `***` and all the fields that match the `jsonPath` will be replaced with `***`.
 
@@ -178,7 +171,28 @@ At the moment, only `md5sum` is supported. More hash functions will be added in 
 
 `Config DB` allows selectively applying masks to certain types of configs. So you could apply a mask to all the `Config` types and another mask to all the `Secret` types.
 
+### TransformChange
 
+| Field     | Description                                                       | Scheme     | Required |
+| --------- | ----------------------------------------------------------------- | ---------- | -------- |
+| `exclude` | Exclude is a list of CEL expressions that excludes a given change | `[]string` |          |
+
+The scraped changes can be accessed using the `details` field.
+
+#### Examples:
+
+1. Excluding canary pass/fail events
+
+```yaml title=""
+spec:
+  kubernetes:
+    - clusterName: local-kind-cluster
+      transform:
+        change:
+          exclude:
+            - 'details.source.component == "canary-checker" && details.reason == "Failed"'
+            - 'details.source.component == "canary-checker" && details.reason == "Succeeded"'
+```
 
 ## Date Mapping
 
@@ -226,7 +240,6 @@ By default, the timestamp format is RFC3339 (`2006-01-02T15:04:05Z07:00`). If th
 In the above example if the value of `made_at` was `2017/03/06 21:04:11Z`, then the `timestampFormat` file would look like this
 
 ```yaml
-...
-    timestampFormat: '2006/01/02 15:04:05Z'
-...
+---
+timestampFormat: '2006/01/02 15:04:05Z'
 ```
