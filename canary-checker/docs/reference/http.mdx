@@ -21,34 +21,33 @@ spec:
       maxSSLExpiry: 7
 ```
 
-| Field             | Description                                                                                                                            | Scheme                                                                | Required | Templatable |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | -------- | ----------- |
-| **`url`**         |                                                                                                                                        | _string_                                                              | `true`   | `true`      |
-| `endpoint`        | _(Deprecated)_ Use `url` instread                                                                                                      | _string_                                                              |          |             |
-| `method`          | HTTP Request method, default to `GET`                                                                                                  | _string_                                                              |          |             |
-| `headers`         | Header fields to be used in the query                                                                                                  | [[]_EnvVar_](../../concepts/authentication/#envvar)                   |          |             |
-| `body`            | Request Body Contents                                                                                                                  | _string_                                                              |          | `true`      |
-| `templateBody`    | _(Deprecated)_ If true the `body` field will be templated using go templates these [variables](#templateVariables) will be available   | boo;                                                                  |          |             |
-| `responseCodes`   | Expected response codes for the HTTP Request.                                                                                          | _[]int_                                                               |          |             |
-| `responseContent` | Exact response content expected to be returned by the endpoint.                                                                        | _string_                                                              |          |             |
-| `thresholdMillis` | Maximum duration in milliseconds for the HTTP request. It will fail the check if it takes longer.                                      | _int_                                                                 |          |             |
-| `maxSSLExpiry`    | Maximum number of days until the SSL Certificate expires.                                                                              | _int_                                                                 |          |             |
-| **`name`**        | Name of the check, must be unique within the canary                                                                                    | `string`                                                              | `true`   |             |
-| `description`     | Description for the check                                                                                                              | `string`                                                              |          |             |
-| `icon`            | Icon for overwriting default icon on the dashboard                                                                                     | `string`                                                              |          |             |
-| `labels`          | Labels for check                                                                                                                       | `map[string]string`                                                   |          |             |
-| `test`            | Evaluate whether a check is healthy                                                                                                    | [`Expression`](../concepts/health-evaluation)                         |          |             |
-| `display`         | Expression to change the formatting of the display                                                                                     | [`Expression`](../concepts/display-formatting)                        |          |             |
-| `transform`       | Transform data from a check into multiple individual checks                                                                            | [`Expression`](../concepts/transforms)                                |          |             |
-| `metrics`         | Metrics to export from                                                                                                                 | [`[]Metrics`](../concepts/metrics-exporter)                           |          |             |
-| `env`             | Specify env vars that can be accessed during templating of the URL and the body                                                        | [[]_EnvVar_](../../concepts/authentication/#envvar)                   |          |             |
-| **Connection**    |                                                                                                                                        |                                                                       |          |             |
-| `connection`      | Path of existing connection e.g. `connection://http/instance` <br/> Mutually exclusive with `username`, `password` <br/> <Commercial/> | <CommonLink to="connection" >_Connection_</CommonLink>                |          |             |
-| `username`        | Mutually exclusive with `connection`                                                                                                   | <CommonLink to="authentication" anchor="envvar">_EnvVar_</CommonLink> |          |             |
-| `password`        | Mutually exclusive with `connection`                                                                                                   | <CommonLink to="authentication" anchor="envvar">_EnvVar_</CommonLink> |          |             |
-| **`url`**         | HTTP URL, if a URL is specified on both the connection and check, the url on the check takes precedence.                               | _string_                                                              | `true`   |             |
-| `ntlm`            | When true will do authentication using NTLM v1 protocol                                                                                | _bool_                                                                |          |             |
-| `ntlmv2`          | When true will do authentication using NTLM v2 protocol                                                                                | _bool_                                                                |          |             |
+| Field | Description | Scheme | Required |
+| ----- | ----------- | ------ | -------- |
+| **`url`** |  | *string* | Yes |
+| `endpoint`    | Deprecated, Use `url` instread | *string*                                                     |       |
+| `method`          | HTTP Request method, default to `GET` | *string*                                                     | |
+| `headers`         | Header fields to be used in the query                        | [[]*EnvVar*](../../concepts/authentication/#envvar) | |
+| `body` | Request Body Contents | *string* |  |
+| `templateBody` | If true the `body` field will be templated using go templates these [variables](#templateVariables) will be available | boo; | |
+| `responseCodes` | Expected response codes for the HTTP Request. | *[]int* |  |
+| `responseContent` | Exact response content expected to be returned by the endpoint. | *string* |  |
+| `thresholdMillis` | Maximum duration in milliseconds for the HTTP request. It will fail the check if it takes longer. | *int* |  |
+| `maxSSLExpiry` | Maximum number of days until the SSL Certificate expires. | *int* | |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes  |
+| `description` | Description for the check                                   | `string`                                     |      |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |      |
+| `labels`      | Labels for check                                            | `map[string]string`                          |      |
+| `test`        | Evaluate whether a check is healthy                         | [`Expression`](../concepts/health-evaluation)  |      |
+| `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/display-formatting) |      |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |      |
+| `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |      |
+| **Connection** |  |  | |
+| `connection` | Path of existing connection e.g. `connection://http/instance` <br/> Mutually exclusive with `username`, `password` <br/> <Commercial/> | <CommonLink to="connection" >*Connection*</CommonLink> | |
+| `username` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
+| `password` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
+| **`url`** | HTTP  URL, if a URL is specified on both the connection and check, the url on the check takes precedence. | *string* | Yes |
+| `ntlm` | When true will do authentication using NTLM v1 protocol | *bool* | |
+| `ntlmv2` | When true will do authentication using NTLM v2 protocol | *bool* | |
 
 ### Result Variables
 

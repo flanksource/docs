@@ -32,9 +32,9 @@ spec:
 | `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |          |
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
 | **Connection**   |                                                              |                                                   |          |
-| `connection`     | Path of existing connection e.g. `connection://aws/instance` Mutually exclusive with `accessKey`, `secretKey` | [Connection](../concepts/connections)             |          |
-| `accessKey`      | Mutually exclusive with `connection`                         | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes      |
-| `secretKey`      | Mutually exclusive with `connection`                         | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes      |
+| <SkipOSS>`connection<`</SkipOSS>     | <SkipOSS> Path of existing connection e.g. `connection://aws/instance` </SkipOSS>| <SkipOSS>[Connection](../concepts/connections) </SkipOSS>            |          |
+| `accessKey`      | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes      |
+| `secretKey`      | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes      |
 | `endpoint`       | Custom AWS endpoint                                          | *string*                                          |          |
 | `region`         | AWS region                                                   | *string*                                          |          |
 | `skipTLSVerify`  | Skip TLS verify when connecting to AWS                       | *bool*                                            |          |

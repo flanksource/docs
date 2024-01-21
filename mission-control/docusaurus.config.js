@@ -21,10 +21,12 @@ const config = {
   onBrokenMarkdownLinks: 'warn',
 
   customFields: {
+    oss: false,
+    productName: "Mission Control",
     links: {
       "authentication": '/reference/secret-management',
-      "connection": '/reference/authentication'
-
+      "connection": '/reference/authentication',
+      "cel": "/reference/scripting/cel"
     }
   },
 
@@ -116,11 +118,31 @@ const config = {
           },
         ],
       },
+
+      metadata: [
+        { name: 'keywords', content: 'health check, synthetic test, continuous testing, kubernetes operator' }
+      ],
+
+      algolia: {
+        // The application ID provided by Algolia
+        appId: 'OB826SK7ZD',
+
+        // Public API key: it is safe to commit it
+        apiKey: 'b6f91e146e1ed100664b6da07151f287',
+
+        indexName: 'canarychecker',
+      },
+      colorMode: {
+        defaultMode: 'light',
+        disableSwitch: false,
+        respectPrefersColorScheme: true,
+      },
       footer: {
         style: 'dark',
         copyright: `Copyright © ${new Date().getFullYear()} Flanksource Inc.`,
       },
       prism: {
+        additionalLanguages: ['powershell'],
         theme: prismThemes.palenight,
         darkTheme: prismThemes.dracula,
       },

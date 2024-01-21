@@ -4,7 +4,7 @@ title: EC2
 
 # <Icon name="aws-ec2-instance" /> EC2
 
-    <Enterprise />
+<Enterprise />
 
 This check connects to an AWS account with the specified credentials, launch an EC2 instance with an option for `userData`.
 This test can be used to check the availability of an ami, account service limits, run backup & restore operations, etc.
@@ -63,8 +63,8 @@ spec:
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
 | **Connection** |  |  | |
 | `connection` | Path of existing connection e.g. `connection://aws/instance`<br />*Mutually exclusive with `accessKey` and `secretKey`* <br /> <Commercial /> | [Connection](../concepts/connections) | |
-| `accessKey` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
-| `secretKey` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
+| `accessKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
+| `secretKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
 | `endpoint` | Custom AWS endpoint | *string* | |
 | `region` | AWS region | *string* | |
 | `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* | |

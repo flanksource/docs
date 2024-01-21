@@ -47,6 +47,6 @@ spec:
 | ------------ | ------------------------------------------------------------ | ------------------------------------------------- |
 | `connection` | Path of existing connection e.g. `connection://sftp/instance`<br /> Mutually exclusive with `username` <br /><Commercial /> | <CommonLink to="connection" >*Connection*</CommonLink>          |
 | `username`   | utually exclusive with `connection`                          | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> |
-| `password`   | Mutually exclusive with `connection`                         | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> |
+| `password`   | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> |
 | `host`       | Custom AWS Cloudwatch endpoint                               | *string*                                          |
 | `port`       | Default to `22`                                              | int                                               |

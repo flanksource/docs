@@ -346,13 +346,13 @@ module.exports = {
       items: [
         {
           type: 'doc',
-          id: 'scripting/gotemplate',
-          label: 'Go Templates',
+          id: 'scripting/cel',
+          label: 'CEL Expressions',
         },
         {
           type: 'doc',
-          id: 'scripting/cel',
-          label: 'Expressions',
+          id: 'scripting/gotemplate',
+          label: 'Go Templates',
         },
         {
           type: 'doc',

@@ -49,7 +49,7 @@ spec:
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
 | **Connection** |  |  | |
 | `connection` | Path of existing connection e.g. `connection://alertmanager/instance`/ Mutually exclusive with `username`, `password`, `url`  <br /> <Commercial /> | <CommonLink to="connection" >*Connection*</CommonLink> | |
-| `url` | e.g. `ldap://apacheds.ldap.svc:10389` <br />*Mutually exclusive with `connection`* | `string` | |
-| `username` | *Mutually exclusive with `connection`* | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
-| `password` | *Mutually exclusive with `connection`* | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
+| `url` | e.g. `ldap://apacheds.ldap.svc:10389` <br />*<SkipOSS>Mutually exclusive with `connection`</SkipOSS>  * | `string` | |
+| `username` | *<SkipOSS>Mutually exclusive with `connection`</SkipOSS>  * | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
+| `password` | *<SkipOSS>Mutually exclusive with `connection`</SkipOSS>  * | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
 | `skipTLSVerify` | Skip check of LDAP server TLS certificates | *bool* | |

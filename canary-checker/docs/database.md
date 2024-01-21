@@ -9,13 +9,13 @@ To persist history, canary-checker has 3 options:
 2. Deploy a postgres database as a statefulset
 3. Connect to an external postgres database
 
-### Mounting a persistent volume
+## Mounting a persistent volume
 
 ```yaml title="values.yaml"
 db:
  embedded:
   storageClass: # the name of a PV Storage Class
-  stoage: 10Gi
+  storage: 10Gi
 # ...
 ```
 
@@ -23,14 +23,14 @@ db:
 
 If you ever need to connect to the embedded database, you can do so by forwarding the port:
 
-```shell
+```shell-session
 kubectl port-forward canary-checker-0 6432:6432
 psql -U postgres localhost -p 6432 canary with password postgres #password will be postgres
 ```
 
 :::
 
-### Deploying a standalone db
+## Deploying a standalone Statefulset
 
 ```yaml title="values.yaml"
 db:
@@ -38,7 +38,7 @@ db:
   enabled: true
   create: true # creates a new postgres statefulset
   storageClass: # the name of a PV Storage Class
-  stoage: 10Gi
+  storage: 10Gi
 # ...
 ```
 
@@ -46,7 +46,7 @@ The helm chart will create a postgres server statefulset, with a random password
 
 To specify a username and password for the chart-managed Postgres server, create a secret in the namespace that the chart will install to, named `postgres-connection`, which contains `POSTGRES_USER` and `POSTGRES_PASSWORD` keys.
 
-### Connecting to an external db
+## Connecting to an existing database
 
 In order to connect to an existing Postgres server, a database must be created on the server, along with a user that has administrator permissions for the database.
 

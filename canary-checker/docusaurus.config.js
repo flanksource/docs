@@ -13,10 +13,12 @@ const config = {
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   customFields: {
-    oss: process.env.CANARY_CHECKER_OSS === 'true',
+    oss: false,
+    productName: "Canary Checker",
     links: {
       "authentication": '/concepts/secret-management',
-      "connection": '/concepts/authentication'
+      "connection": '/concepts/authentication',
+      "cel": "/scripting/cel"
     }
   },
   markdown: {
@@ -102,7 +104,7 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Flanksource, Inc.`,
       },
       prism: {
-        additionalLanguages: ['powershell'],
+        additionalLanguages: ['powershell', 'yaml', 'bash', 'shell-session'],
         darkTheme: darkCodeTheme,
         theme: lightCodeTheme
         //'log',jq'promql', 'regex','shell-session','uri', 'mermaid'

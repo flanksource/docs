@@ -25,45 +25,22 @@ spec:
 
 Takes in an AWS arn and parses it and returns a map.
 
-Snytax
-
-```
-    aws.arnToMap(string): map[string]string
-
-    arnToMap(string): map[string]string // Deprecated
-
-    Where
-        - arg: string
-        - returns: map[string]string{
-            "service": string,
-            "region": string,
-            "account": string,
-            "resource": string,
-        }
-```
-
-Examples:
-
 ```javascript
-aws.arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic").region; // evaluates to 'eu-west-1'
+aws.arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic") //
+// map[string]string{
+    // "service": string,
+    // "region": string,
+    // "account": string,
+    // "resource": string,
+// }
 ```
 
 ### aws.fromAWSMap
 
 `aws.fromAWSMap` takes a list of `map[string]string` and merges them into a single map. The input map is expected to have the field "Name".
 
-Syntax
-
-```
-    aws.fromAWSMap([]map[string]string{}): map[string]string{}
-
-    fromAWSMap([]map[string]string{}): map[string]string{} // Deprecated
-```
-
-Examples:
-
 ```javascript
-`aws.fromAWSMap(x).hello" == "world"`; // evaluates to `true`
+`aws.fromAWSMap(x).hello" == "world"`; // `true`
 // Where
 // x = [
 //   { Name: 'hello', Value: 'world' },
@@ -77,41 +54,22 @@ Examples:
 
 ### base64.encode
 
-The `base64.encode` function encodes the given byte slice to a Base64 encoded string.
-
-Syntax:
-
-    base64.encode([]bytes): string
-
-Examples:
+`base64.encode` encodes the given byte slice to a Base64 encoded string.
 
 ```javascript
 base64.decode("aGVsbG8="); // return b'hello'
-```
-
-```javascript
-base64.decode("aGVsbG8"); // error
 ```
 
 ### base64.decode
 
-The `base64.decode` function decodes the given base64 encoded string back to its original form.
+`base64.decode` decodes the given base64 encoded string back to its original form.
 
-Syntax:
 
-    base64.decode(string): []bytes
-
-Examples:
 
 ```javascript
 base64.decode("aGVsbG8="); // return b'hello'
 ```
 
-```javascript
-base64.decode("aGVsbG8"); // error
-```
-
----
 
 ## collections
 
@@ -122,36 +80,20 @@ The membership test operator checks whether an element is a member of a collecti
 Syntax:
 
 ```javascript
-`a in b` Where `a` is the element you're checking for, and `b` is the collection.
-```
-
-Examples:
-
-```javascript
-`"apple" in ["apple", "banana"]` // evaluates to `true`
-`3 in [1, 2, 4]`; // evaluates to `false`
+`"apple" in ["apple", "banana"]` // => true
+`3 in [1, 2, 4]`; // => false
 ```
 
 ### size
 
-The `size` function in CEL is used to determine the number of elements in a collection or the number of Unicode characters in a string.
-
-Syntax:
-
-```
-    collection.size() or string.size()
-```
-
-Examples:
+`size` determines the number of elements in a collection or the number of Unicode characters in a string.
 
 ```javascript
-// Getting the size of a list:
-["apple", "banana", "cherry"].size(); // Evaluates to 3
+["apple", "banana", "cherry"].size(); //  3
 ```
 
 ```javascript
-// Determining the number of characters in a string:
-"hello".size(); // Evaluates to 5
+"hello".size(); // 5
 ```
 
 ### has
@@ -171,11 +113,11 @@ Examples:
 If you have a message `person` with a potential field `name`, you can check for its presence with:
 
 ```javascript
-person.has(name); // Evaluates to true if 'name' is present, false otherwise
+person.has(name); // true if 'name' is present, false otherwise
 ```
 
 ```javascript
-addressBook.has(person.email); // Evaluates to true if 'email' field is present in 'person' within 'addressBook'
+addressBook.has(person.email); // true if 'email' field is present in 'person' within 'addressBook'
 ```
 
 ### map
@@ -207,17 +149,17 @@ Examples:
 
 ```javascript
 // Transforming each element of a list by multiplying it by 2:
-[1, 2, 3].map(e, e * 2); // Evaluates to [2, 4, 6]
+[1, 2, 3].map(e, e * 2); // [2, 4, 6]
 ```
 
 ```javascript
 // Transforming the values of a map by appending "!" to each value:
-{"a": "apple", "b": "banana"}.map(k, v, v + "!")  // Evaluates to {"a": "apple!", "b": "banana!"}
+{"a": "apple", "b": "banana"}.map(k, v, v + "!")  // {"a": "apple!", "b": "banana!"}
 ```
 
 ```javascript
 // Using both key and value for transformation in a map:
-{"a": 1, "b": 2}.map(k, v, k + v)  // Evaluates to {"a": "a1", "b": "b2"}
+{"a": 1, "b": 2}.map(k, v, k + v)  // {"a": "a1", "b": "b2"}
 ```
 
 ### filter
@@ -231,30 +173,22 @@ Syntax:
 list.filter(e, <condition>)
 ```
 
-```javascript
-//For maps:
-map.filter(k, v, <condition>)
-```
-
 Where:
 
 - `list` is the list you're filtering.
-- `map` is the map you're filtering.
 - `e` represents each element of the list.
-- `k` represents each key of the map.
-- `v` represents each value of the map.
 - `<condition>` is the condition applied to each entry.
 
 Examples:
 
 ```javascript
 // Filtering a list to include only numbers greater than 2:
-[1, 2, 3, 4].filter(e, e > 2); // Evaluates to [3, 4]
+[1, 2, 3, 4].filter(e, e > 2); // [3, 4]
 ```
 
 ```javascript
 // Filtering a map to include only entries with values greater than 1:
-{"a": 1, "b": 2, "c": 3}.filter(k, v, v > 1)  // Evaluates to {"b": 2, "c": 3}
+{"a": 1, "b": 2, "c": 3}.filter(k, v, v > 1)  // {"b": 2, "c": 3}
 ```
 
 ### all
@@ -286,17 +220,17 @@ Examples:
 
 ```javascript
 // Checking if all elements of a list are greater than 0:
-[1, 2, 3].all(e, e > 0); // Evaluates to true
+[1, 2, 3].all(e, e > 0); // true
 ```
 
 ```javascript
 // Checking if all values of a map are non-empty strings:
-{"a": "apple", "b": "banana", "c": ""}.all(k, v, v != "")  // Evaluates to false
+{"a": "apple", "b": "banana", "c": ""}.all(k, v, v != "")  // false
 ```
 
 ```javascript
 // Using both key and value for condition in a map:
-{"a": 1, "b": 2, "c": 3}.all(k, v, k != "a" || v > 1)  // Evaluates to true
+{"a": 1, "b": 2, "c": 3}.all(k, v, k != "a" || v > 1)  // true
 ```
 
 ### exists
@@ -328,17 +262,17 @@ Examples:
 
 ```javascript
 //Checking if any element of a list is equal to 2:
-[1, 2, 3].exists(e, e == 2); // Evaluates to true
+[1, 2, 3].exists(e, e == 2); // true
 ```
 
 ```javascript
 //Checking if any value of a map is an empty string:
-{"a": "apple", "b": "banana", "c": ""}.exists(k, v, v == "")  // Evaluates to true
+{"a": "apple", "b": "banana", "c": ""}.exists(k, v, v == "")  // true
 ```
 
 ```javascript
 /Using both key and value for condition in a map:
-{"a": 1, "b": 2, "c": 3}.exists(k, v, k == "a" && v == 1)  // Evaluates to true
+{"a": 1, "b": 2, "c": 3}.exists(k, v, k == "a" && v == 1)  // true
 ```
 
 ### fold
@@ -371,12 +305,12 @@ Examples:
 
 ```javascript
 // Computing the sum of all elements of a list:
-[1, 2, 3].fold(e, acc, acc + e); // Evaluates to 6
+[1, 2, 3].fold(e, acc, acc + e); // 6
 ```
 
 ```javascript
 // Concatenating all values of a map:
-{"a": "apple", "b": "banana"}.fold(k, v, acc, acc + v)  // Evaluates to "applebanana"
+{"a": "apple", "b": "banana"}.fold(k, v, acc, acc + v)  // "applebanana"
 ```
 
 ### slice
@@ -384,15 +318,8 @@ Examples:
 Returns a new sub-list using the indexes provided.
 
 ```javascript
-<list>.slice(<int>, <int>) -> <list>
-```
-
-Examples:
-
-```javascript
-[1, 2, 3, 4]
-  .slice(1, 3) // return [2, 3]
-  [(1, 2, 3, 4)].slice(2, 4); // return [3 ,4]
+[1, 2, 3, 4].slice(1, 3) // return [2, 3]
+[(1, 2, 3, 4)].slice(2, 4); // return [3 ,4]
 ```
 
 ---
@@ -462,10 +389,6 @@ Returns whether the first list has at least one element whose value is equal
 to an element in the second list. If either list is empty, the result will
 be false.
 
-    sets.intersects(list(T), list(T)) -> bool
-
-Examples:
-
 ```javascript
 sets.intersects([1], []); // false
 ```
@@ -490,27 +413,17 @@ sets.intersects(
 
 ### CSV
 
-The `CSV` function converts a CSV formatted array into a two-dimensional array, where each element is a row string.
-
-Syntax:
-
-    CSV(csvRowList)
-
-Where:
-
-- `csvRowList` is a list of rows.
-
-Examples:
+`CSV` converts a CSV formatted array into a two-dimensional array, where each element is a row string.
 
 ```javascript
-CSV(["Alice,30", "Bob,31"])[0][0]; // Evaluates to "Alice"
+CSV(["Alice,30", "Bob,31"])[0][0]; // "Alice"
 ```
 
 ---
 
 <!-- ### data.CSVByRow
 
-The `data.CSVByRow` function converts a CSV formatted string into an array of maps, where each map represents a row with column names as keys.
+`data.CSVByRow` converts a CSV formatted string into an array of maps, where each map represents a row with column names as keys.
 
 Syntax:
 
@@ -524,20 +437,20 @@ Examples:
 
 ```javascript
 Converting a CSV string with headers to an array of maps:
-data.CSVByRow("name,age\nAlice,30\nBob,35")  // Evaluates to [{"name": "Alice", "age": "30"}, {"name": "Bob", "age": "35"}]
+data.CSVByRow("name,age\nAlice,30\nBob,35")  // [{"name": "Alice", "age": "30"}, {"name": "Bob", "age": "35"}]
 
 Handling a single row CSV:
-data.CSVByRow("name,age\nAlice,30")  // Evaluates to [{"name": "Alice", "age": "30"}]
+data.CSVByRow("name,age\nAlice,30")  // [{"name": "Alice", "age": "30"}]
 
 An empty CSV string:
-data.CSVByRow("")  // Evaluates to an empty array
+data.CSVByRow("")  // an empty array
 ```
 
 ---
 
 ### data.CSVByColumn
 
-The `data.CSVByColumn` function converts a CSV formatted string into a map of arrays, where keys are column names and values are arrays of column values.
+`data.CSVByColumn` converts a CSV formatted string into a map of arrays, where keys are column names and values are arrays of column values.
 
 Syntax:
 
@@ -551,20 +464,20 @@ Examples:
 
 ```javascript
 Converting a CSV string with headers to a map of arrays:
-data.CSVByColumn("name,age\nAlice,30\nBob,35")  // Evaluates to {"name": ["Alice", "Bob"], "age": ["30", "35"]}
+data.CSVByColumn("name,age\nAlice,30\nBob,35")  // {"name": ["Alice", "Bob"], "age": ["30", "35"]}
 
 Handling a single column CSV:
-data.CSVByColumn("name\nAlice\nBob")  // Evaluates to {"name": ["Alice", "Bob"]}
+data.CSVByColumn("name\nAlice\nBob")  // {"name": ["Alice", "Bob"]}
 
 An empty CSV string:
-data.CSVByColumn("")  // Evaluates to an empty map
+data.CSVByColumn("")  // an empty map
 ```
 
 ---
 
 ### toCSV
 
-The `data.ToCSV` function converts an array of arrays or an array of maps into a CSV formatted string.
+`data.ToCSV` converts an array of arrays or an array of maps into a CSV formatted string.
 
 Syntax:
 
@@ -578,217 +491,64 @@ Examples:
 
 ```javascript
 Converting an array of arrays to a CSV string:
-data.ToCSV([["Alice", 30], ["Bob", 35]])  // Evaluates to "Alice,30\nBob,35"
+data.ToCSV([["Alice", 30], ["Bob", 35]])  // "Alice,30\nBob,35"
 
 Handling an array of maps:
-data.ToCSV([{"name": "Alice", "age": 30}, {"name": "Bob", "age": 35}])  // Evaluates to "name,age\nAlice,30\nBob,35"
+data.ToCSV([{"name": "Alice", "age": 30}, {"name": "Bob", "age": 35}])  // "name,age\nAlice,30\nBob,35"
 
 An empty array:
-data.ToCSV([])  // Evaluates to an empty string
+data.ToCSV([])  // an empty string
 ```
 
 --- -->
 
 ## crypto
 
-### crypto.SHA1
+### crypto.SHA1|256|384|512
 
-The `crypto.SHA1` function in CEL is used to compute the SHA-1 hash of the input data. Note that SHA-1 is considered insecure for cryptographic purposes.
-
-Syntax:
-
-    crypto.SHA1(data)
-
-Where:
-
-- `data` is the input data to be hashed.
-
-Examples:
+The `crypto.SHA*` functions are used to compute the SHA hash of the input data.
 
 ```javascript
-// Hashing a simple string:
-crypto.SHA1("hello"); // Might evaluate to "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c"
+crypto.SHA1("hello"); // "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c"
+crypto.SHA256("hello"); // "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+
 ```
-
-```javascript
-// Hashing a number represented as a string:
-crypto.SHA1("12345"); // Might evaluate to "8cb2237d0679ca88db6464eac60da96345513964"
-```
-
-```javascript
-// Hashing special characters:
-crypto.SHA1("!@#"); // Might evaluate to "8f9b6cb1cf7d70f23c16c9b9d4894d7f3b8fe15d"
-```
-
-### crypto.SHA224
-
-The `crypto.SHA224` function in CEL calculates the SHA-224 hash of the provided input data, offering a balance between security and performance.
-
-Syntax:
-
-    crypto.SHA224(data)
-
-Where:
-
-- `data` is the input data to be hashed.
-
-Examples:
-
-```javascript
-// Hashing a simple string:
-crypto.SHA224("hello"); // Might evaluate to "ea09ae9cc6768c50fcee903ed054556e5bfc8347907f12598aa24193"
-```
-
-```javascript
-// Hashing a number represented as a string:
-crypto.SHA224("12345"); // Might evaluate to "a7470858e79c282bc2f6adfd831b132672dfd1224c1e78cbf5bcd057"
-```
-
-### crypto.SHA256
-
-The `crypto.SHA256` function in CEL calculates the SHA-256 hash of the provided input data, offering a balance between security and performance.
-
-Syntax:
-
-    crypto.SHA256(data)
-
-Where:
-
-- `data` is the input data to be hashed.
-
-Examples:
-
-```javascript
-// Hashing a simple string:
-crypto.SHA256("hello"); // Might evaluate to "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
-```
-
-```javascript
-// Hashing a number represented as a string:
-crypto.SHA256("12345"); // Might evaluate to "d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2"
-```
-
-```javascript
-// Hashing special characters:
-crypto.SHA256("!@#"); // Might evaluate to "d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8"
-```
-
-### crypto.SHA384
-
-The `crypto.SHA384` function in CEL is used for computing the SHA-384 hash of the input data, which is a truncated version of SHA-512 and provides enhanced security.
-
-Syntax:
-
-    crypto.SHA384(data)
-
-Where:
-
-- `data` is the input data to be hashed.
-
-Examples:
-
-```javascript
-// Hashing a simple string:
-crypto.SHA384("hello"); // Might evaluate to a long hash string
-```
-
-```javascript
-// Hashing a number represented as a string:
-crypto.SHA384("12345"); // Might evaluate to another long hash string
-```
-
-```javascript
-// Hashing special characters:
-crypto.SHA384("!@#"); // Might evaluate to yet another long hash string
-```
-
-### crypto.SHA512
-
-The `crypto.SHA512` function in CEL calculates the SHA-512 hash of the given input data. It's commonly used for data integrity verification and password storage.
-
-Syntax:
-
-    crypto.SHA512(data)
-
-Where:
-
-- `data` is the input data to be hashed.
-
-Examples:
-
-```javascript
-// Hashing a simple string:
-crypto.SHA512("hello"); // Might evaluate to a very long hash string
-```
-
-```javascript
-// Hashing a number represented as a string:
-crypto.SHA512("12345"); // Might evaluate to another very long hash string
-```
-
-```javascript
-// Hashing special characters:
-crypto.SHA512("!@#"); // Might evaluate to yet another very long hash string
-```
-
----
 
 ## dates
 
 ### timestamp
 
-The `timestamp` function in CEL is used to represent a point in time. It's typically used in conjunction with other functions to extract or manipulate time-related data.
+`timestamp` represent a point in time. It's typically used in conjunction with other functions to extract or manipulate time-related data.
 
-Syntax:
-
-    timestamp("YYYY-MM-DDTHH:MM:SSZ")
-
-Where:
-
-- The string inside the function represents the date and time.
-
-Examples:
 
 ```javascript
 // Creating a timestamp for January 1st, 2023:
 timestamp("2023-01-01T00:00:00Z");
-```
-
-```javascript
 // Creating another timestamp:
 timestamp("2023-07-04T12:00:00Z");
 ```
 
-### getDate
+### .getDate
 
-The `getDate` function in CEL is used to extract the date part from a timestamp. It returns a string representation of the date.
+`getDate` extract the date part from a timestamp. It returns a string representation of the date.
 
-Syntax:
-
-    timestamp.getDate()
-
-Where:
-
-- `timestamp` is the timestamp value from which you're extracting the date.
-
-Examples:
 
 ```javascript
 // Extracting the date from a timestamp:
-"2023-01-01T12:34:56Z".getDate(); // Evaluates to "2023-01-01"
+"2023-01-01T12:34:56Z".getDate(); // "2023-01-01"
 ```
 
 ```javascript
 // Getting the date from another timestamp:
-"2023-07-04T00:00:00Z".getDate(); // Evaluates to "2023-07-04"
+"2023-07-04T00:00:00Z".getDate(); // "2023-07-04"
 ```
 
-### get[DatePart]
+### .get[DatePart]
 
 | Function                   | Description                                                                                    | Example |
 | -------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
 | `{date>.getDayOfMonth()`   | A integer value representing the day of the month, with the first day being 1.                 | 1 - 31  |
-| ` <date>.getDayOfWeek()`   | eturns an integer value representing the day of the week, where Sunday is 0 and Saturday is 6. | 0 - 6   |
+| `<date>.getDayOfWeek()`   | eturns an integer value representing the day of the week, where Sunday is 0 and Saturday is 6. | 0 - 6   |
 | `<date>.getDayOfYear()`    | an integer value representing the day of the year, with January 1st being day 1.               | 1 - 366 |
 | `<date>.getDayOfMonth()`   | the full year (4 digits for 4-digit years) of the specified timestamp.                         |         |
 | `<date>.getHours()`        | the full year (4 digits for 4-digit years) of the specified timestamp.                         | 0- 23   |
@@ -800,21 +560,12 @@ Examples:
 
 ### duration
 
-The `duration` function in CEL creates a new duration from a string representation. The string format is an integer followed by a unit: `s` for seconds, `m` for minutes, `h` for hours, and `d` for days.
-
-Syntax:
-
-    duration(stringRepresentation)
-
-Examples:
+`duration` parses a string into a new duration.
+The format is an integer followed by a unit: `s` for seconds, `m` for minutes, `h` for hours, and `d` for days.
 
 ```javascript
 // Creating a duration of 5 hours:
 duration("5h"); // Represents a duration of 5 hours
-```
-
-```javascript
-// Creating a duration of 30 minutes:
 duration("30m"); // Represents a duration of 30 minutes
 ```
 
@@ -832,77 +583,44 @@ Durations can also be crated using arithmetic:
 
 ### time.ZoneName
 
-The `time.ZoneName` function in CEL returns the name of the local system's time zone. It doesn't require any parameters and is useful for retrieving the time zone information.
-
-Syntax:
-
-    time.ZoneName()
-
-Examples:
+`time.ZoneName` returns the name of the local system's time zone. It doesn't require any parameters and is useful for retrieving the time zone information.
 
 ```javascript
 // Retrieving the local time zone name:
 time.ZoneName(); // Might evaluate to "PST" if the local time zone is Pacific Standard Time
 ```
 
-```javascript
-// Another example of retrieving the time zone:
-time.ZoneName(); // Could evaluate to "EST" for Eastern Standard Time
-```
-
-```javascript
-// Yet another example:
-time.ZoneName(); // Might evaluate to "UTC" for Coordinated Universal Time
-```
 
 ### time.ZoneOffset
 
-The `time.ZoneOffset` function in CEL returns the offset of the local system's time zone in minutes. It helps in understanding the time difference between the local time zone and UTC.
-
-Syntax:
-
-    time.ZoneOffset()
-
-Examples:
+ `time.ZoneOffset` returns the offset of the local system's time zone in minutes. It helps in understanding the time difference between the local time zone and UTC.
 
 ```javascript
 // Getting the time zone offset:
 time.ZoneOffset(); // Could evaluate to -480 for PST
 ```
 
-```javascript
-// Another example of getting the offset:
-time.ZoneOffset(); // Might evaluate to 0 for UTC
-```
-
-```javascript
-// Yet another example:
-time.ZoneOffset(); // Could evaluate to 330 for IST (Indian Standard Time)
-```
-
 ### time.Parse
 
-The `time.Parse` function in CEL is used to parse a given string into a time object based on a specified layout. It's handy for converting string representations of time into actual time objects.
+`time.Parse` parse a given string into a time object based on a specified layout. It's handy for converting string representations of time into actual time objects.
 
 Syntax:
 
-    time.Parse(layout, value)
-
-Where:
+```javascript
+time.Parse(layout, value)
+```
 
 - `layout` is the time layout string.
 - `value` is the string representation of the time to be parsed.
 
-Examples:
-
 ```javascript
 // Parsing a time string with a specific format:
-time.Parse("2006-01-02", "2023-09-26"); // Evaluates to a time object representing September 26, 2023
+time.Parse("2006-01-02", "2023-09-26"); // a time object representing September 26, 2023
 ```
 
 ```javascript
 // Another example with a different format:
-time.Parse("02-01-2006", "26-09-2023"); // Evaluates to the same time object as above
+time.Parse("02-01-2006", "26-09-2023"); // the same time object as above
 ```
 
 ```javascript
@@ -912,14 +630,11 @@ time.Parse("15:04 02-01-2006", "14:30 26-09-2023"); // Includes time of day info
 
 ### time.ParseLocal
 
-The `time.ParseLocal` function in CEL parses a given string into a time object according to a specified layout and the local time zone. It's useful for working with local times.
+`time.ParseLocal` parses a given string into a time object according to a specified layout and the local time zone. It's useful for working with local times.
 
-Syntax:
-
-    time.ParseLocal(layout, value)
-
-Where:
-
+```javascript
+time.ParseLocal(layout, value)
+```
 - `layout` is the time layout string.
 - `value` is the string representation of the time to be parsed.
 
@@ -927,12 +642,12 @@ Examples:
 
 ```javascript
 // Parsing a local time string:
-time.ParseLocal("2006-01-02 15:04", "2023-09-26 14:30"); // Evaluates to a local time object for 14:30 on September 26, 2023
+time.ParseLocal("2006-01-02 15:04", "2023-09-26 14:30"); // a local time object for 14:30 on September 26, 2023
 ```
 
 ```javascript
 // Another example:
-time.ParseLocal("02-01-2006", "26-09-2023"); // Evaluates to a local time object for September 26, 2023
+time.ParseLocal("02-01-2006", "26-09-2023"); // a local time object for September 26, 2023
 ```
 
 ```javascript
@@ -942,13 +657,13 @@ time.ParseLocal("15:04 02-01-2006", "14:30 26-09-2023"); // Includes time of day
 
 ### time.ParseInLocation
 
-The `time.ParseInLocation` function in CEL parses a string into a time object according to a specified layout and time zone. It provides more control over the time zone compared to `time.ParseLocal`.
+`time.ParseInLocation` parses a string into a time object according to a specified layout and time zone. It provides more control over the time zone compared to `time.ParseLocal`.
 
 Syntax:
 
-    time.ParseInLocation(layout, location, value)
-
-Where:
+```javascript
+time.ParseInLocation(layout, location, value)
+```
 
 - `layout` is the time layout string.
 - `location` is the string name of the time zone.
@@ -958,128 +673,82 @@ Examples:
 
 ```javascript
 // Parsing a time string for a specific time zone:
-time.ParseInLocation("2006-01-02", "America/New_York", "2023-09-26"); // Evaluates to a time object for EST/EDT
+time.ParseInLocation("2006-01-02", "America/New_York", "2023-09-26"); // a time object for EST/EDT
 ```
 
 ```javascript
 // Another example for a different time zone:
-time.ParseInLocation("02-01-2006", "Europe/London", "26-09-2023"); // Evaluates to a time object for GMT/BST
+time.ParseInLocation("02-01-2006", "Europe/London", "26-09-2023"); // a time object for GMT/BST
 ```
 
 ```javascript
 // Parsing with hour and minute for a specific zone:
-time.ParseInLocation("15:04 02-01-2006", "Asia/Tokyo", "14:30 26-09-2023"); // Evaluates to a time object for JST
+time.ParseInLocation("15:04 02-01-2006", "Asia/Tokyo", "14:30 26-09-2023"); // a time object for JST
 ```
 
 ### time.Now
 
-The `time.Now` function in CEL returns the current time. It's a straightforward way to retrieve the current date and time according to the system's local time zone.
-
-Syntax:
-
-    time.Now()
-
-Examples:
+`time.Now` returns the current time. It's a straightforward way to retrieve the current date and time according to the system's local time zone.
 
 ```javascript
 // Getting the current time:
-time.Now(); // Evaluates to the current date and time
-```
-
-```javascript
-// Another example of retrieving the current time:
-time.Now(); // Will always return the current moment's date and time
-```
-
-```javascript
-// Yet another example:
-time.Now(); // Useful for timestamping or time-stamping events in real-time
+time.Now(); // the current date and time
 ```
 
 ### time.ParseDuration
 
-The `time.ParseDuration` function in CEL parses a string into a duration. It supports various units like "s" for seconds, "m" for minutes, "h" for hours, etc.
-
-Syntax:
-
-    time.ParseDuration(duration)
-
-Where:
-
-- `duration` is the string representation of the duration.
-
-Examples:
+`time.ParseDuration` parses a string into a duration. It supports various units like "s" for seconds, "m" for minutes, "h" for hours, etc.
 
 ```javascript
 // Parsing a duration string:
-time.ParseDuration("1h30m"); // Evaluates to a duration of 1 hour and 30 minutes
+time.ParseDuration("1h30m"); // a duration of 1 hour and 30 minutes
 ```
 
 ```javascript
 // Another example with a different format:
-time.ParseDuration("15m30s"); // Evaluates to a duration of 15 minutes and 30 seconds
+time.ParseDuration("15m30s"); // a duration of 15 minutes and 30 seconds
 ```
 
 ```javascript
 // Parsing a negative duration:
-time.ParseDuration("-2h45m"); // Evaluates to a duration of -2 hours and -45 minutes
+time.ParseDuration("-2h45m"); // a duration of -2 hours and -45 minutes
 ```
 
 ### time.Since
 
-The `time.Since` function in CEL calculates the duration that has elapsed since a given time. It is commonly used to measure the time difference between a specified time and the current moment.
-
-Syntax:
-
-    time.Since(pastTime)
-
-Where:
-
-- `pastTime` is a `time.Time` object representing a past point in time.
-
-Examples:
+`time.Since` calculates the duration that has elapsed since a given time. It is commonly used to measure the time difference between a specified time and the current moment.
 
 ```javascript
 // Calculating the time elapsed since a specific past time:
-time.Since(time.Parse("2006-01-02", "2023-09-26")); // Evaluates to the duration since September 26, 2023
+time.Since(time.Parse("2006-01-02", "2023-09-26")); // the duration since September 26, 2023
 ```
 
 ```javascript
 // Another example with a different past time:
-time.Since(time.Parse("15:04 02-01-2006", "14:30 26-09-2023")); // Evaluates to the duration since 14:30 on September 26, 2023
+time.Since(time.Parse("15:04 02-01-2006", "14:30 26-09-2023")); // the duration since 14:30 on September 26, 2023
 ```
 
 ```javascript
-// Using the `time.Now` function for a real-time duration:
+// Using `time.Now` for a real-time duration:
 time.Since(time.Now()); // Always evaluates to a very small duration, as it's the time since "now"
 ```
 
 ### time.Until
 
-The `time.Until` function in CEL calculates the duration remaining until a specified future time. It helps in determining the time left for an event or deadline.
-
-Syntax:
-
-    time.Until(futureTime)
-
-Where:
-
-- `futureTime` is a `time.Time` object representing a future point in time.
-
-Examples:
+`time.Until` calculates the duration remaining until a specified future time. It helps in determining the time left for an event or deadline.
 
 ```javascript
 // Calculating the time remaining until a specific future time:
-time.Until(time.Parse("2006-01-02", "2023-10-01")); // Evaluates to the duration until October 1, 2023
+time.Until(time.Parse("2006-01-02", "2023-10-01")); // the duration until October 1, 2023
 ```
 
 ```javascript
 // Another example with a different future time:
-time.Until(time.Parse("15:04 02-01-2006", "16:00 30-09-2023")); // Evaluates to the duration until 16:00 on September 30, 2023
+time.Until(time.Parse("15:04 02-01-2006", "16:00 30-09-2023")); // the duration until 16:00 on September 30, 2023
 ```
 
 ```javascript
-// Using the `time.Now` function for a real-time duration:
+// Using `time.Now` for a real-time duration:
 time.Until(time.Now()); // Always evaluates to zero, as it's the time until "now"
 ```
 
@@ -1089,30 +758,18 @@ time.Until(time.Now()); // Always evaluates to zero, as it's the time until "now
 
 ### urlencode
 
-The `urlencode` function encodes the given string into a URL-encoded string.
-
-Syntax:
-
-    urlencode(string)
-
-Examples:
+`urlencode` encodes the given string into a URL-encoded string.
 
 ```javascript
-urlencode("hello world ?"); // Evaluates to hello+world+%3F
+urlencode("hello world ?"); // hello+world+%3F
 ```
 
 ### urldecode
 
-The `urldecode` function decodes a URL-encoded string.
-
-Syntax:
-
-    urldecode(string)
-
-Examples:
+`urldecode` decodes a URL-encoded string.
 
 ```javascript
-urldecode("hello+world+%3F"); // Evaluates to 'hello world ?'
+urldecode("hello+world+%3F"); // 'hello world ?'
 ```
 
 ---
@@ -1121,31 +778,19 @@ urldecode("hello+world+%3F"); // Evaluates to 'hello world ?'
 
 ### filepath.Base
 
-The `filepath.Base` function returns the last element of path.
+`filepath.Base` returns the last element of path.
 Trailing path separators are removed before extracting the last element.
 If the path is empty, Base returns ".".
 If the path consists entirely of separators, Base returns a single separator.
 
-Syntax:
-
-    filepath.Base(string)
-
-Examples:
-
 ```javascript
-filepath.Base("/home/flanksource/projects/gencel"); // Evaluates to gencel
+filepath.Base("/home/flanksource/projects/gencel"); // gencel
 ```
 
 ### filepath.Clean
 
 `filepath.Clean` returns the shortest path name equivalent to path by purely lexical processing.
 It applies the following rules iteratively until no further processing can be done:
-
-Syntax:
-
-    filepath.Clean(string)
-
-Examples:
 
 ```javascript
 filepath.Clean("/foo/bar/../baz"); // Evaluates /foo/baz
@@ -1160,14 +805,9 @@ If the path is empty, Dir returns ".".
 If the path consists entirely of separators, Dir returns a single separator.
 The returned path does not end in a separator unless it is the root directory.
 
-Syntax:
-
-    filepath.Dir(string)
-
-Examples:
 
 ```javascript
-filepath.Dir("/home/flanksource/projects/gencel"); // Evaluates to /home/flanksource/projects
+filepath.Dir("/home/flanksource/projects/gencel"); // /home/flanksource/projects
 ```
 
 ### filepath.Ext
@@ -1175,37 +815,25 @@ filepath.Dir("/home/flanksource/projects/gencel"); // Evaluates to /home/flankso
 `filepath.Ext` returns the file name extension used by path.
 The extension is the suffix beginning at the final dot in the final element of path; it is empty if there is no dot.
 
-Syntax:
-
-    filepath.Ext(string)
-
-Examples:
-
 ```javascript
-filepath.Ext("/opt/image.jpg"); // Evaluates to .jpg
+filepath.Ext("/opt/image.jpg"); // .jpg
 ```
 
 ### filepath.IsAbs
 
-The `filepath.IsAbs` function reports whether the path is absolute.
-
-Syntax:
-
-    filepath.IsAbs(string)
-
-Examples:
+`filepath.IsAbs` reports whether the path is absolute.
 
 ```javascript
-filepath.Base("/home/flanksource/projects/gencel"); // Evaluates to true
+filepath.Base("/home/flanksource/projects/gencel"); // true
 ```
 
 ```javascript
-filepath.Base("projects/gencel"); // Evaluates to false
+filepath.Base("projects/gencel"); // false
 ```
 
 ### filepath.Join
 
-The `filepath.Join` function joins any number of path elements into a single path,
+`filepath.Join` joins any number of path elements into a single path,
 separating them with an OS specific Separator. Empty elements
 are ignored. The result is Cleaned. However, if the argument
 list is empty or all its elements are empty, Join returns
@@ -1213,37 +841,26 @@ an empty string.
 On Windows, the result will only be a UNC path if the first
 non-empty element is a UNC path.
 
-Syntax:
-
-    filepath.Join([]string)
-
-Examples:
 
 ```javascript
-filepath.Join(["/home/flanksource", "projects", "gencel"]; // Evaluates to /home/flanksource/projects/gencel
+filepath.Join(["/home/flanksource", "projects", "gencel"]; // /home/flanksource/projects/gencel
 ```
 
 ### filepath.Match
 
-The `filepath.Match` function reports whether name matches the shell file name pattern.
-
-Syntax:
-
-    filepath.Match(pattern, inputString)
-
-Examples:
+`filepath.Match` reports whether name matches the shell file name pattern.
 
 ```javascript
-filepath.Match("*.txt", "foo.json"); // Evaluates to false
+filepath.Match("*.txt", "foo.json"); // false
 ```
 
 ```javascript
-filepath.Match("*.txt", "foo.txt"); // Evaluates to true
+filepath.Match("*.txt", "foo.txt"); // true
 ```
 
 ### filepath.Rel
 
-The `filepath.Rel` function returns a relative path that is lexically equivalent to targpath when
+`filepath.Rel` returns a relative path that is lexically equivalent to targpath when
 joined to basepath with an intervening separator. That is,
 Join(basepath, Rel(basepath, targpath)) is equivalent to targpath itself.
 On success, the returned path will always be relative to basepath,
@@ -1252,32 +869,20 @@ An error is returned if targpath can't be made relative to basepath or if
 knowing the current working directory would be necessary to compute it.
 Rel calls Clean on the result.
 
-Syntax:
-
-    filepath.Rel(basepath, targetpath)
-
-Examples:
-
 ```javascript
-filepath.Rel("/foo/bar", "/foo/bar/baz"); // Evaluates to baz
+filepath.Rel("/foo/bar", "/foo/bar/baz"); // baz
 ```
 
 ### filepath.Split
 
-The `filepath.Split` function splits path immediately following the final Separator,
+`filepath.Split` splits path immediately following the final Separator,
 separating it into a directory and file name component.
 If there is no Separator in path, Split returns an empty dir
 and file set to path.
 The returned values have the property that path = dir+file.
 
-Syntax:
-
-    filepath.Split(path) (dir, file)
-
-Examples:
-
 ```javascript
-filepath.Split("/foo/bar/baz"); // Evaluates to [/foo/bar/ baz]
+filepath.Split("/foo/bar/baz"); // [/foo/bar/ baz]
 ```
 
 ---
@@ -1286,17 +891,7 @@ filepath.Split("/foo/bar/baz"); // Evaluates to [/foo/bar/ baz]
 
 ### .JSON
 
-The `JSON` method in CEL is used to convert a JSON formatted string into a map.
-
-Syntax:
-
-    jsonObjectString.JSON()
-
-Where:
-
-- `jsonObjectString` is the JSON formatted string representing a JSON object.
-
-Examples:
+`JSON` parses a string into an object
 
 ```javascript
 '{"name": "Alice", "age": 30}'.JSON();
@@ -1304,17 +899,7 @@ Examples:
 
 ### .JSONArray
 
-The `JSONArray` method converts a JSON formatted string into an array. It is particularly useful for handling JSON arrays.
-
-Syntax:
-
-    jsonArrayString.JSONArray()
-
-Where:
-
-- `jsonArrayString` is the JSON formatted string representing an array.
-
-Examples:
+`JSONArray` parses a string into an array
 
 ```javascript
 '[{"name": "Alice"}, {"name": "Bob"}]'.JSONArray();
@@ -1322,15 +907,7 @@ Examples:
 
 ### .toJSON
 
-The `toJSON` method converts any data type into a JSON formatted string.
-
-Syntax:
-
-```
-    any.toJSON()
-```
-
-Examples:
+`toJSON` converts an object into a JSON formatted string.
 
 ```javascript
 [{ name: "John" }].toJSON(); // [{"name":"John"}]
@@ -1346,21 +923,11 @@ Examples:
 
 ### .toJSONPretty
 
-The `toJSONPretty` method converts any data type into a JSON formatted string with proper indentation.
-
-Syntax:
-
-    any.toJSONPretty(indent)
-
-Where:
-
-- `indent` is the string used for indentation.
-
-Examples:
+`toJSONPretty` converts any data type into a JSON formatted string with proper indentation.
 
 ```javascript
 {'name': 'aditya'}.toJSONPretty('\t')
-// Evaluates to
+//
 // {
 // 	"name": "aditya"
 // }
@@ -1378,27 +945,16 @@ Examples:
 
 ### jq
 
-The `jq` function in CEL applies a jq expression to filter or transform data.
-
-Syntax:
-
-    jq(jqExpr, data)
-
-Where:
-
-- `jqExpr` is the jq expression you're applying.
-- `data` is the data you're filtering or transforming.
-
-Examples:
+`jq` applies a jq expression to filter or transform data.
 
 ```javascript
 // Filtering data with a jq expression:
-jq(".name", { name: "John", age: 30 }); // Evaluates to "John"
+jq(".name", { name: "John", age: 30 }); // "John"
 ```
 
 ```javascript
 // Transforming data with a jq expression:
-jq("{name, age}", { name: "John", age: 30, city: "NY" }); // Evaluates to {"name": "John", "age": 30}
+jq("{name, age}", { name: "John", age: 30, city: "NY" }); // {"name": "John", "age": 30}
 ```
 
 ```javascript
@@ -1406,7 +962,7 @@ jq("{name, age}", { name: "John", age: 30, city: "NY" }); // Evaluates to {"name
 jq(".[] | select(.age > 25)", [
   { name: "John", age: 30 },
   { name: "Jane", age: 25 },
-]); // Evaluates to [{"name": "John", "age": 30}]
+]); // [{"name": "John", "age": 30}]
 ```
 
 ---
@@ -1415,143 +971,78 @@ jq(".[] | select(.age > 25)", [
 
 ### k8s.cpuAsMillicores
 
-The `k8s.cpuAsMillicores` function returns the millicores of a Kubernetes resource.
-
-Syntax:
-
-    k8s.cpuAsMillicores(resource): int
-
-Where:
-
-    resource: memory representation string
-
-Examples:
+`k8s.cpuAsMillicores` returns the millicores of a Kubernetes resource.
 
 ```javascript
 k8s.cpuAsMillicores("10m"); // 10
-```
-
-```javascript
 k8s.cpuAsMillicores("0.5"); // 500
-```
-
-```javascript
 k8s.cpuAsMillicores("1.234"); // 1234
 ```
 
 ### k8s.getHealth
 
-The `k8s.getHealth` function in CEL retrieves the health status of a Kubernetes resource as a map. The map contains key-value pairs providing detailed information about the resource's health.
-
-Syntax:
-
-```
-k8s.getHealth(resource)
-
-GetHealth(resource) // Deprecated
-
-Where:
-
-    - `resource` is the Kubernetes resource whose health information you're retrieving.
-```
+`k8s.getHealth` retrieves the health status of a Kubernetes resource as a map. The map contains key-value pairs providing detailed information about the resource's health.
 
 Examples:
 
 ```javascript
 // Retrieving the health information of a pod:
-k8s.getHealth(pod); // Evaluates to a map with keys and values indicating the pod's health
+k8s.getHealth(pod); // a map with keys and values indicating the pod's health
 ```
 
 ```javascript
 // Getting the health information of a service:
-k8s.getHealth(service); // Evaluates to a map with keys and values indicating the service's health
+k8s.getHealth(service); // a map with keys and values indicating the service's health
 ```
 
 ```javascript
 // Checking the health information of a deployment:
-k8s.getHealth(deployment); // Evaluates to a map with keys and values indicating the deployment's health
+k8s.getHealth(deployment); // a map with keys and values indicating the deployment's health
 ```
 
 ### k8s.getStatus
 
-The `k8s.getStatus` function in CEL retrieves the status of a Kubernetes resource as a string. It provides detailed information about the current state of the resource.
-
-Syntax:
-
-```
-k8s.getStatus(resource)
-
-GetStatus(resource) // Deprecated
-
-Where:
-
-    - `resource` is the Kubernetes resource whose status you're retrieving.
-```
-
-Examples:
+`k8s.getStatus` retrieves the status of a Kubernetes resource as a string. It provides detailed information about the current state of the resource.
 
 ```javascript
 // Retrieving the status of a pod:
-k8s.getStatus(pod); // Evaluates to "Running" if the pod is running
+k8s.getStatus(pod); // "Running" if the pod is running
 ```
 
 ```javascript
 // Getting the status of a service:
-k8s.getStatus(service); // Evaluates to "Active" if the service is active
+k8s.getStatus(service); // "Active" if the service is active
 ```
 
 ```javascript
 // Checking the status of a deployment:
-k8s.getStatus(deployment); // Evaluates to "Deployed" if the deployment is successful
+k8s.getStatus(deployment); // "Deployed" if the deployment is successful
 ```
 
 ### k8s.isHealthy
 
-The `k8s.isHealthy` function in CEL is used to determine if a Kubernetes resource is healthy. It returns a boolean value indicating the health status of the resource.
+`k8s.isHealthy` determine if a Kubernetes resource is healthy. It returns a boolean value indicating the health status of the resource.
 
-Syntax:
 
-```
-k8s.isHealthy(resource)
-
-k8s.is_healthy(resource) // Deprecated
-IsHealth(resource) // Deprecated
-
-Where:
-
-    - `resource` is the Kubernetes resource you're checking.
-```
-
-Examples:
 
 ```javascript
 // Checking if a pod is healthy:
-k8s.isHealthy(pod); // Evaluates to true if the pod is healthy
+k8s.isHealthy(pod); // true if the pod is healthy
 ```
 
 ```javascript
 // Verifying the health of a service:
-k8s.isHealthy(service); // Evaluates to false if the service is not healthy
+k8s.isHealthy(service); // false if the service is not healthy
 ```
 
 ```javascript
 // Assessing the health of a deployment:
-k8s.isHealthy(deployment); // Evaluates to true if the deployment is healthy
+k8s.isHealthy(deployment); // true if the deployment is healthy
 ```
 
 ### k8s.memoryAsBytes
 
-The `k8s.memoryAsBytes` function converts the memory string to bytes.
-
-Syntax:
-
-    k8s.memoryAsBytes(resource): int
-
-Where:
-
-    resource: memory representation string
-
-Examples:
+`k8s.memoryAsBytes` converts the memory string to bytes.
 
 ```javascript
 k8s.memoryAsBytes("10Ki"); // 10240
@@ -1567,194 +1058,126 @@ k8s.memoryAsBytes("1.234gi"); // 1324997410
 
 ### math.Add
 
-The `math.Add` function takes a list of number and returns their sum
-
-Syntax:
-
-    math.Add(list)
-
-Example:
+`math.Add` takes a list of number and returns their sum
 
 ```javascript
-math.Add([1, 2, 3, 4, 5]); // Evaluates to 15
+math.Add([1, 2, 3, 4, 5]); // 15
 ```
 
 ### math.Sub
 
-The `math.Sub` function takes two numbers and returns their difference
-
-Syntax:
-
-    math.Sub(num1, num2)
-
-Example:
+`math.Sub` takes two numbers and returns their difference
 
 ```javascript
-math.Sub(5, 4); // Evaluates to 1
+math.Sub(5, 4); // 1
 ```
 
 ### math.Mul
 
-The `math.Mul` function takes a list of numbers and returns their product
-
-Syntax:
-
-    math.Mul(list)
-
-Example:
+`math.Mul` takes a list of numbers and returns their product
 
 ```javascript
-math.Mul([1, 2, 3, 4, 5]); // Evaluates to 120
+math.Mul([1, 2, 3, 4, 5]); // 120
 ```
 
 ### math.Div
 
-The `math.Div` function takes two numbers and returns their quotient
+`math.Div` takes two numbers and returns their quotient
 
-Syntax:
-
-    math.Div(num1, num2)
-
-Example:
 
 ```javascript
-math.Div(4, 2); // Evaluates to 2
+math.Div(4, 2); // 2
 ```
 
 ### math.Rem
 
-The `math.Rem` function takes two numbers and returns their remainder
+`math.Rem` takes two numbers and returns their remainder
 
-Syntax:
-
-    math.Rem(num1, num2)
-
-Example:
 
 ```javascript
-math.Rem(4, 3); // Evaluates to 1
+math.Rem(4, 3); // 1
 ```
 
 ### math.Pow
 
-The `math.Pow` function takes two numbers and returns their power
+`math.Pow` takes two numbers and returns their power
 
-Syntax:
-
-    math.Pow(num1, num2)
-
-Example:
 
 ```javascript
-math.Pow(4, 2); // Evaluates to 16
+math.Pow(4, 2); // 16
 ```
 
 ### math.Seq
 
-The `math.Seq` function generates a sequence of numbers from the start value to the end value, incrementing by the step value.
+`math.Seq` generates a sequence of numbers from the start value to the end value, incrementing by the step value.
 
 Syntax:
 
-    math.Seq([start, end, ?step])
-
-Where:
+```javascript
+math.Seq([start, end, ?step])
+```
 
 - `start` is the starting value of the sequence.
 - `end` is the ending value of the sequence.
 - `step` is the increment value of the sequence. (optional. Defaults to 1)
 
-Examples:
-
 ```javascript
-math.Seq([1, 5]); // Evaluates to [1, 2, 3, 4, 5]
+math.Seq([1, 5]); // [1, 2, 3, 4, 5]
 ```
 
 ```javascript
-math.Seq([1, 6, 2]); // Evaluates to [1, 3, 5]
+math.Seq([1, 6, 2]); // [1, 3, 5]
 ```
 
 ### math.Abs
 
-The `math.Abs` function takes a number and returns its absolute value
-
-Syntax:
-
-    math.Abs(num)
-
-Example:
+`math.Abs` takes a number and returns its absolute value
 
 ```javascript
-math.Abs(-1); // Evaluates to 1
+math.Abs(-1); // 1
 ```
 
 ### math.greatest
 
-The `math.greatest` function takes a list of numbers and returns the greatest value
-
-Syntax:
-
-    math.greatest(list)
-
-Example:
+`math.greatest` takes a list of numbers and returns the greatest value
 
 ```javascript
-math.greatest([1, 2, 3, 4, 5]); // Evaluates to 5
+math.greatest([1, 2, 3, 4, 5]); // 5
 ```
 
 ### math.least
 
-The `math.least` function takes a list of numbers and returns the least value
+`math.least` takes a list of numbers and returns the least value
 
-Syntax:
-
-    math.least(list)
-
-Example:
 
 ```javascript
-math.least([1, 2, 3, 4, 5]); // Evaluates to 1
+math.least([1, 2, 3, 4, 5]); // 1
 ```
 
 ### math.Ceil
 
-The `math.Ceil` function returns the smallest integer greater than or equal to the provided float.
+`math.Ceil` returns the smallest integer greater than or equal to the provided float.
 
-Syntax:
-
-    math.Ceil(value)
-
-Example:
 
 ```javascript
-math.Ceil(2.3); // Evaluates to 3
+math.Ceil(2.3); // 3
 ```
 
 ### math.Floor
 
-The `math.Floor` function returns the largest integer less than or equal to the provided float.
+`math.Floor` returns the largest integer less than or equal to the provided float.
 
-Syntax:
-
-    math.Floor(value)
-
-Example:
 
 ```javascript
-math.Floor(2.3); // Evaluates to 2
+math.Floor(2.3); // 2
 ```
 
 ### math.Round
 
-The `math.Round` function returns the nearest integer to the provided float.
-
-Syntax:
-
-    math.Round(value)
-
-Example:
+`math.Round` returns the nearest integer to the provided float.
 
 ```javascript
-math.Round(2.3); // Evaluates to 2
+math.Round(2.3); // 2
 ```
 
 ---
@@ -1763,13 +1186,7 @@ math.Round(2.3); // Evaluates to 2
 
 ### random.ASCII
 
-The `random.ASCII` function generates random ASCII strings of a specified length.
-
-Syntax:
-
-    random.ASCII(count)
-
-Examples:
+`random.ASCII` generates random ASCII strings of a specified length.
 
 ```javascript
 random.ASCII(5);
@@ -1777,11 +1194,7 @@ random.ASCII(5);
 
 ### random.Alpha
 
-The `random.Alpha` function generates random alphabetic strings of a specified length.
-
-Syntax:
-
-    random.Alpha(count)
+`random.Alpha` generates random alphabetic strings of a specified length.
 
 ```javascript
 random.Alpha(5);
@@ -1789,11 +1202,7 @@ random.Alpha(5);
 
 ### random.AlphaNum
 
-The `random.AlphaNum` function generates random alphanumeric strings of a specified length.
-
-Syntax:
-
-    random.AlphaNum(count)
+`random.AlphaNum` generates random alphanumeric strings of a specified length.
 
 ```javascript
 random.AlphaNum(5);
@@ -1801,35 +1210,20 @@ random.AlphaNum(5);
 
 ### random.String
 
-The `random.String` function generates random strings of a specified length and character set.
-
-Syntax:
-
-    random.String(count, [min, max])
-
-Where:
-characters is a list specifying the characters to be used in the string.
-Optionally, the list can also be left empty to use the default character set.
-
-Examples:
+`random.String` generates random strings of a specified length and character set.
 
 ```javascript
-random.String(5, ["a", "d"]);
+random.String(5);
 ```
 
 ```javascript
-random.String(5, []);
+// generate 5 chars between a and d
+random.String(5, ["a", "d"]);
 ```
 
 ### random.Item
 
-The `random.Item` function generates a random item from a list.
-
-Syntax:
-
-    random.Item(list)
-
-Example:
+`random.Item` generates a random item from a list.
 
 ```javascript
 random.Item(["a", "b", "c"]);
@@ -1837,13 +1231,13 @@ random.Item(["a", "b", "c"]);
 
 ### random.Number
 
-The `random.Number` function generates a random integer within a specified range.
+`random.Number` generates a random integer within a specified range.
 
 Syntax:
 
-    random.Number(min, max)
-
-Where:
+```javascript
+random.Number(min, max)
+```
 
 - `min` is the minimum value of the range (inclusive).
 - `max` is the maximum value of the range (inclusive).
@@ -1856,13 +1250,13 @@ random.Number(1, 10);
 
 ### random.Float
 
-The `random.Float` function generates a random float within a specified range.
+`random.Float` generates a random float within a specified range.
 
 Syntax:
 
-    random.Float(min, max)
-
-Where:
+```javascript
+random.Float(min, max)
+```
 
 - `min` is the minimum value of the range (inclusive).
 - `max` is the maximum value of the range (inclusive).
@@ -1879,45 +1273,32 @@ random.Float(1, 10);
 
 ### regexp.Find
 
-The `regexp.Find` function in CEL is used to find the first occurrence of a pattern within a string. It returns the matched substring or an error if the pattern is invalid.
-
-Syntax:
-
-    regexp.Find(pattern, input)
-
-Where:
-
-- `pattern` is the regular expression pattern you're looking for.
-- `input` is the string you're searching within.
-
-Examples:
+`regexp.Find` find the first occurrence of a pattern within a string. It returns the matched substring or an error if the pattern is invalid.
 
 ```javascript
 // Finding a pattern within a string:
-regexp.Find("llo", "hello"); // Evaluates to "llo"
+regexp.Find("llo", "hello"); // "llo"
 ```
 
 ```javascript
 // Searching for digits within a string:
-regexp.Find("\\d+", "abc123def"); // Evaluates to "123"
+regexp.Find("\\d+", "abc123def"); // "123"
 ```
 
 ```javascript
 // Pattern not found in the string:
-regexp.Find("xyz", "hello"); // Evaluates to ""
+regexp.Find("xyz", "hello"); // ""
 ```
 
 ---
 
 ### regexp.FindAll
 
-The `regexp.FindAll` function in CEL retrieves all occurrences of a pattern within a string, up to a specified count. It returns a list of matched substrings or an error if the pattern is invalid.
+`regexp.FindAll` retrieves all occurrences of a pattern within a string, up to a specified count. It returns a list of matched substrings or an error if the pattern is invalid.
 
-Syntax:
-
-    regexp.FindAll(pattern, count, input)
-
-Where:
+```javascript
+regexp.FindAll(pattern, count, input)
+```
 
 - `pattern` is the regular expression pattern to find.
 - `count` is the maximum number of occurrences to return.
@@ -1927,120 +1308,97 @@ Examples:
 
 ```javascript
 // Finding all occurrences of a pattern:
-regexp.FindAll("a.", -1, "banana"); // Evaluates to ["ba", "na", "na"]
+regexp.FindAll("a.", -1, "banana"); // ["ba", "na", "na"]
 ```
 
 ```javascript
 // Limiting the number of matches:
-regexp.FindAll("\\d", 2, "12345"); // Evaluates to ["1", "2"]
+regexp.FindAll("\\d", 2, "12345"); // ["1", "2"]
 ```
 
 ```javascript
 // Pattern not found:
-regexp.FindAll("z", -1, "hello"); // Evaluates to []
+regexp.FindAll("z", -1, "hello"); // []
 ```
 
 ---
 
 ### regexp.Match
 
-The `regexp.Match` function in CEL checks if a string matches a given regular expression pattern. It returns a boolean value indicating the match status.
-
-Syntax:
-
-    regexp.Match(pattern, input)
-
-Where:
-
-- `pattern` is the regular expression pattern to match.
-- `input` is the string to check.
-
-Examples:
+`regexp.Match` checks if a string matches a given regular expression pattern. It returns a boolean value indicating the match status.
 
 ```javascript
 // Checking if a string matches a pattern:
-regexp.Match("^h.llo", "hello"); // Evaluates to true
+regexp.Match("^h.llo", "hello"); // true
 ```
 
 ```javascript
 // Pattern does not match the string:
-regexp.Match("^b", "apple"); // Evaluates to false
+regexp.Match("^b", "apple"); // false
 ```
 
 ```javascript
 // Matching digits in a string:
-regexp.Match("\\d+", "abc123"); // Evaluates to true
+regexp.Match("\\d+", "abc123"); // true
 ```
 
 ---
 
 ### regexp.QuoteMeta
 
-The `regexp.QuoteMeta` function in CEL quotes all regular expression metacharacters inside a string. It returns the quoted string.
-
-Syntax:
-
-    regexp.QuoteMeta(input)
-
-Where:
-
-- `input` is the string containing metacharacters to be quoted.
-
-Examples:
+`regexp.QuoteMeta` quotes all regular expression metacharacters inside a string. It returns the quoted string.
 
 ```javascript
 // Quoting metacharacters in a string:
-regexp.QuoteMeta("a.b"); // Evaluates to "a\\.b"
+regexp.QuoteMeta("a.b"); // "a\\.b"
 ```
 
 ```javascript
 // String without metacharacters:
-regexp.QuoteMeta("abc"); // Evaluates to "abc"
+regexp.QuoteMeta("abc"); // "abc"
 ```
 
 ```javascript
 // Quoting a complex pattern:
-regexp.QuoteMeta("[a-z].*"); // Evaluates to "\\[a\\-z\\]\\.\\*"
+regexp.QuoteMeta("[a-z].*"); // "\\[a\\-z\\]\\.\\*"
 ```
 
 ---
 
 ### regexp.Replace
 
-The `regexp.Replace` function in CEL replaces occurrences of a pattern within a string with a specified replacement string. It returns the modified string.
+`regexp.Replace` replaces occurrences of a pattern within a string with a specified replacement string. It returns the modified string.
 
 Syntax:
 
-    regexp.Replace(pattern, replacement, input)
-
-Where:
+```javascript
+regexp.Replace(pattern, replacement, input)
+```
 
 - `pattern` is the regular expression pattern to replace.
 - `replacement` is the string to replace the pattern with.
 - `input` is the original string.
 
-Examples:
-
 ```javascript
 // Replacing a pattern in a string:
-regexp.Replace("a.", "x", "banana"); // Evaluates to "bxnxna"
+regexp.Replace("a.", "x", "banana"); // "bxnxna"
 ```
 
 ```javascript
 // Pattern not found:
-regexp.Replace("z", "x", "apple"); // Evaluates to "apple"
+regexp.Replace("z", "x", "apple"); // "apple"
 ```
 
 ```javascript
 // Replacing digits:
-regexp.Replace("\\d+", "num", "abc123"); // Evaluates to "abcnum"
+regexp.Replace("\\d+", "num", "abc123"); // "abcnum"
 ```
 
 ---
 
 ### regexp.ReplaceLiteral
 
-The `regexp.ReplaceLiteral` function in CEL replaces occurrences of a pattern within a string with a specified replacement string, without interpreting the pattern as a regular expression. It returns the modified string or an error if the pattern is invalid.
+`regexp.ReplaceLiteral` replaces occurrences of a pattern within a string with a specified replacement string, without interpreting the pattern as a regular expression. It returns the modified string or an error if the pattern is invalid.
 
 Syntax:
 
@@ -2056,50 +1414,47 @@ Examples:
 
 ```javascript
 // Replacing a substring:
-regexp.ReplaceLiteral("apple", "orange", "apple pie"); // Evaluates to "orange pie"
+regexp.ReplaceLiteral("apple", "orange", "apple pie"); // "orange pie"
 ```
 
 ```javascript
 // Substring not found:
-regexp.ReplaceLiteral("z", "x", "apple"); // Evaluates to "apple"
+regexp.ReplaceLiteral("z", "x", "apple"); // "apple"
 ```
 
 ```javascript
 // Replacing a pattern without regex interpretation:
-regexp.ReplaceLiteral("a.", "x", "a.b c.d"); // Evaluates to "x.b c.d"
+regexp.ReplaceLiteral("a.", "x", "a.b c.d"); // "x.b c.d"
 ```
 
 ---
 
 ### regexp.Split
 
-The `regexp.Split` function in CEL splits a string into a slice of substrings separated by a pattern. It returns the slice of strings or an error if the pattern is invalid.
+`regexp.Split` splits a string into a slice of substrings separated by a pattern. It returns the slice of strings or an error if the pattern is invalid.
 
-Syntax:
 
-    regexp.Split(pattern, count, input)
-
-Where:
+```javascript
+regexp.Split(pattern, count, input)
+```
 
 - `pattern` is the regular expression pattern that separates the substrings.
 - `count` is the maximum number of splits. Use -1 for no limit.
 - `input` is the string to split.
 
-Examples:
 
 ```javascript
-// Splitting a string by a pattern:
-regexp.Split("a.", -1, "banana"); // Evaluates to ["", "n", "n"]
+regexp.Split("a.", -1, "banana"); // ["", "n", "n"]
 ```
 
 ```javascript
 // Limiting the number of splits:
-regexp.Split("\\s", 2, "apple pie is delicious"); // Evaluates to ["apple", "pie is delicious"]
+regexp.Split("\\s", 2, "apple pie is delicious"); // ["apple", "pie is delicious"]
 ```
 
 ```javascript
 // Pattern not found:
-regexp.Split("z", -1, "hello"); // Evaluates to ["hello"]
+regexp.Split("z", -1, "hello"); // ["hello"]
 ```
 
 ---
@@ -2108,23 +1463,19 @@ regexp.Split("z", -1, "hello"); // Evaluates to ["hello"]
 
 ### .abbrev
 
-The `abbrev` method on a string abbreviates the string using ellipses. This will turn the string "Now is the time for all good men" into "...s the time for..."
+`abbrev` on a string abbreviates the string using ellipses. This will turn the string "Now is the time for all good men" into "...s the time for..."
 This function works like `Abbreviate(string, int)`, but allows you to specify a "left edge" offset. Note that this left edge is not
 necessarily going to be the leftmost character in the result, or the first character following the ellipses, but it will appear
 somewhere in the result.
 In no case will it return a string of length greater than maxWidth.
 
+```javascript
+'string'.abbrev(offset, maxWidth)
 ```
-Syntax:
-    'string'.abbrev(maxWidth)
-    'string'.abbrev(offset, maxWidth)
 
-Where:
-
-    - str - the string to check
-    - offset - left edge of source string
-    - maxWidth - maximum length of result string, must be at least 4
-```
+- str - the string to check
+- offset - left edge of source string
+- maxWidth - maximum length of result string, must be at least 4
 
 Examples:
 
@@ -2142,43 +1493,28 @@ Examples:
 
 ### .camelCase
 
-The `camelCase` method in CEL converts a given string into camelCase format.
+`camelCase` converts a given string into camelCase format.
 
-Syntax:
-
-    'string'.camelCase()
-
-Where:
-
-- `string` is the input string to be converted.
-
-Examples:
 
 ```javascript
 // Converting a string to camelCase:
-"hello world".camelCase(); // Evaluates to "HelloWorld"
+"hello world".camelCase(); // "HelloWorld"
 ```
 
 ```javascript
 // Converting a snake_case string:
-"hello_world".camelCase(); // Evaluates to "HelloWorld"
+"hello_world".camelCase(); // "HelloWorld"
 ```
 
 ```javascript
 // Converting a string with spaces and special characters:
-"hello beautiful world!".camelCase(); // Evaluates to "HelloBeautifulWorld"
+"hello beautiful world!".camelCase(); // "HelloBeautifulWorld"
 ```
 
 ### .charAt
 
 Returns the character at the given position. If the position is negative, or
 greater than the length of the string, the function will produce an error:
-
-```
-    <string>.charAt(<int>) -> <string>
-```
-
-Examples:
 
 ```javascript
 "hello".charAt(4); // return 'o'
@@ -2194,49 +1530,45 @@ Examples:
 
 ### .contains
 
-The `contains` function in CEL is used to check if a string contains a given substring.
+`contains` check if a string contains a given substring.
 
-Syntax:
-
-    string.contains(substring)
-
-Examples:
 
 ```javascript
-//Checking if a string contains a certain substring:
-"apple".contains("app"); // Evaluates to true
+"apple".contains("app"); // true
 ```
 
 ### .endsWith
 
-The `endsWith` function in CEL is used to determine if a string ends with a specified substring.
+`endsWith` determine if a string ends with a specified substring.
 
-Syntax:
-
-    string.endsWith(substring)
-
-Examples:
 
 ```javascript
-// Checking if a string ends with a certain substring:
-"hello".endsWith("lo"); // Evaluates to true
+"hello".endsWith("lo"); // true
+```
+
+### .format
+
+`format` Returns a new string with substitutions being performed, printf-style.
+The valid formatting clauses are:
+
+- `%s` substitutes a string. This can also be used on `bools`, `lists`, `maps`, `bytes`,
+`Duration`, `Timestamp`,`int`, `double`
+<br/>Note that the dot/period decimal separator will always be used when printing a list or map that contains a double, and that null can be passed (which results in the string "null") in addition to types.
+- `%d` substitutes an integer.
+- `%f` substitutes a double with fixed-point precision. The default precision is 6, but this can be adjusted. The strings `Infinity`, `-Infinity`, and `NaN` are also valid input for this clause.
+- `%e` substitutes a double in scientific notation. The default precision is 6, but this can be adjusted.
+- `%b` substitutes an integer with its equivalent binary string. Can also be used on bools.
+- `%x` substitutes an integer with its equivalent in hexadecimal, or if given a string or bytes, will output each character's equivalent in hexadecimal.
+- `%X` same as above, but with A-F capitalized.
+- `%o` substitutes an integer with its equivalent in octal.
+
+```javascript
+"this is a string: %s\nand an integer: %d".format(["str", 42]) thsis is a string: str\nand an integer: 42
 ```
 
 ### .indent
 
-The `indent` method on a string indents each line of a string by the specified prefix. Additionally, a width paramater can also be specified
-which repeats the prefix that many times.
-
-Syntax:
-
-    'string'.indent(prefix)
-    'string'.indent(width, prefix)
-
-Examples:
-
-```javascript
-"hello world".indent("=="); // ==hello world
-```
+`indent`  indents each line of a string by the specified width and prefix
 
 ```javascript
 "hello world".indent(4, "-"); // ----hello world
@@ -2285,13 +1617,6 @@ Returns a new string where the elements of string list are concatenated.
 The function also accepts an optional separator which is placed between
 elements in the resulting string.
 
-```
-    <list<string>>.join() -> <string>
-    <list<string>>.join(<string>) -> <string>
-```
-
-Examples:
-
 ```javascript
 ["hello", "mellow"].join(); // returns 'hellomellow'
 ```
@@ -2310,31 +1635,21 @@ Examples:
 
 ### .kebabCase
 
-The `kebabCase` function in CEL converts a given string into kebab-case format.
-
-Syntax:
-
-    kebabCase(string)
-
-Where:
-
-- `string` is the input string to be converted.
-
-Examples:
+`kebabCase` converts a given string into kebab-case format.
 
 ```javascript
 // Converting a string to kebab-case:
-"Hello World".kebabCase(); // Evaluates to "hello-world"
+"Hello World".kebabCase(); // "hello-world"
 ```
 
 ```javascript
 // Converting a CamelCase string:
-"HelloWorld".kebabCase(); // Evaluates to "hello-world"
+"HelloWorld".kebabCase(); // "hello-world"
 ```
 
 ```javascript
 // Converting a string with spaces and special characters:
-"Hello Beautiful World!".kebabCase(); // Evaluates to "hello-beautiful-world"
+"Hello Beautiful World!".kebabCase(); // "hello-beautiful-world"
 ```
 
 ### .lastIndexOf
@@ -2346,13 +1661,6 @@ The function also accepts an optional position which represents the last index
 to be considered as the beginning of the substring match. If the substring is
 the empty string, the index where the search starts is returned (string length
 or custom).
-
-```
-    <string>.lastIndexOf(<string>) -> <int>
-    <string>.lastIndexOf(<string>, <int>) -> <int>
-```
-
-Examples:
 
 ```javascript
 "hello mellow".lastIndexOf(""); // returns 12
@@ -2381,12 +1689,6 @@ Returns a new string where all ASCII characters are lower-cased.
 This function does not perform Unicode case-mapping for characters outside the
 ASCII range.
 
-```
-     <string>.lowerAscii() -> <string>
-```
-
-Examples:
-
 ```javascript
 "TacoCat".lowerAscii(); // returns 'tacocat'
 "TacoCÆt Xii".lowerAscii(); // returns 'tacocÆt xii'
@@ -2394,48 +1696,30 @@ Examples:
 
 ### .matches
 
-The `matches` function in CEL is used to determine if a string matches a given regular expression pattern. It returns a boolean value indicating whether the string conforms to the pattern.
+`matches` determine if a string matches a given regular expression pattern. It returns a boolean value indicating whether the string conforms to the pattern.
 
-Syntax:
-
-```javascript
-"string".matches(pattern);
-```
-
-Where:
-
-- `string` is the string you're checking.
-- `pattern` is the regular expression pattern you're matching against.
-
-Examples:
 
 ```javascript
 // Checking if a string matches a simple pattern:
-"apple".matches("^a.*e$"); // Evaluates to true
+"apple".matches("^a.*e$"); // true
 ```
 
 ```javascript
 // Validating an email format:
 "example@email.com".matches(
   "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
-); // Evaluates to true
+); // true
 ```
 
 ```javascript
 // Checking for a pattern of digits:
-"12345".matches("^\\d+$"); // Evaluates to true
+"12345".matches("^\\d+$"); // true
 ```
 
 ### .quote
 
 Takes the given string and makes it safe to print (without any formatting due to escape sequences).
 If any invalid UTF-8 characters are encountered, they are replaced with \uFFFD.
-
-```
-    strings.quote(<string>)
-```
-
-Examples:
 
 ```javascript
 strings.quote('single-quote with "double quote"'); // returns '"single-quote with \"double quote\""'
@@ -2447,21 +1731,10 @@ strings.quote("two escape sequences a\n"); // returns '"two escape sequences \\a
 
 ### .repeat
 
-The `repeat` method on a string in CEL repeats the string for a given number of times.
-
-Syntax:
-
-    'string'.repeat(count)
-
-Where:
-
-- `count` is the number of times the string should be repeated.
-- `string` is the string to repeat.
-
-Examples:
+`repeat` on a string repeats the string for a given number of times.
 
 ```javascript
-"apple".repeat(3); // Evaluates to "appleappleapple"
+"apple".repeat(3); // "appleappleapple"
 ```
 
 ### .replace
@@ -2498,22 +1771,10 @@ Examples:
 
 ### .replaceAll
 
-The `replaceAll` function in CEL replaces all occurrences of a substring within a string with another substring.
-
-Syntax:
-
-    'string'.replaceAll(old, new)
-
-Where:
-
-- `old` is the substring to be replaced.
-- `new` is the substring to replace with.
-- `string` is the original string.
-
-Examples:
+`replaceAll` replaces all occurrences of a substring within a string with another substring.
 
 ```javascript
-"I have an apple".replaceAll("apple", "orange"); // Evaluates to "I have an orange"
+"I have an apple".replaceAll("apple", "orange"); // "I have an orange"
 ```
 
 ### .reverse
@@ -2521,13 +1782,6 @@ Examples:
 Returns a new string whose characters are the same as the target string, only formatted in
 reverse order.
 This function relies on converting strings to rune arrays in order to reverse.
-It can be located in Version 3 of strings.
-
-```
-    <string>.reverse() -> <string>
-```
-
-Examples:
 
 ```javascript
 "gums".reverse(); // returns 'smug'
@@ -2539,73 +1793,53 @@ Examples:
 
 ### .runeCount
 
-The `runeCount` method in CEL counts the number of runes in a given string.
-
-Syntax:
-
-    'string'.runeCount()
-
-Where:
-
-- `string` is the input string whose runes are to be counted.
-
-Examples:
+`runeCount` counts the number of runes in a given string.
 
 ```javascript
-"Hello World".runeCount(); // Evaluates to 11
+"Hello World".runeCount(); // 11
 ```
 
 ```javascript
-"Hello$World".runeCount(); // Evaluates to 11
+"Hello$World".runeCount(); // 11
 ```
 
 ### .shellQuote
 
-The `shellQuote` method in CEL quotes a string such that it can be safely used as a token in a shell command.
+`shellQuote` quotes a string such that it can be safely used as a token in a shell command.
 
-Syntax:
-
-    'string'.shellQuote()
-
-Examples:
 
 ```javascript
-"Hello World".shellQuote(); // Evaluates to "'Hello World'"
+"Hello World".shellQuote(); // "'Hello World'"
 ```
 
 ```javascript
 // Shell quoting a string with special characters:
-"Hello$World".shellQuote(); // Evaluates to "'Hello$World'"
+"Hello$World".shellQuote(); // "'Hello$World'"
 ```
 
 ```javascript
 // Shell quoting a string with spaces and special characters:
-"Hello World$123".shellQuote(); // Evaluates to "'Hello World$123'"
+"Hello World$123".shellQuote(); // "'Hello World$123'"
 ```
 
 ### .size
 
-The `size` function in CEL is used to determine the number of elements in a collection or the number of Unicode characters in a string.
+`size` determine the number of elements in a collection or the number of Unicode characters in a string.
 
-Syntax:
-
-    collection.size() or string.size()
-
-Examples:
 
 ```javascript
 // Getting the size of a list:
-["apple", "banana", "cherry"].size(); // Evaluates to 3
+["apple", "banana", "cherry"].size(); // 3
 ```
 
 ```javascript
 // Determining the number of characters in a string:
-"hello".size(); // Evaluates to 5
+"hello".size(); // 5
 ```
 
 ### .slug
 
-The `slug` method in CEL converts a given string into a URL-friendly slug format.
+`slug` converts a given string into a URL-friendly slug format.
 
 Syntax:
 
@@ -2619,57 +1853,41 @@ Examples:
 
 ```javascript
 // Converting a string to a slug:
-"Hello World!".slug(); // Evaluates to "hello-world"
+"Hello World!".slug(); // "hello-world"
 ```
 
 ```javascript
 // Converting a string with special characters:
-"Hello, World!".slug(); // Evaluates to "hello-world"
+"Hello, World!".slug(); // "hello-world"
 ```
 
 ```javascript
 // Converting a multi-word string:
-"Hello Beautiful World".slug(); // Evaluates to "hello-beautiful-world"
+"Hello Beautiful World".slug(); // "hello-beautiful-world"
 ```
 
 ### .snakeCase
 
-The `snakeCase` method in CEL converts a given string into snake_case format.
-
-Syntax:
-
-    'string'.snakeCase()
-
-Where:
-
-- `string` is the input string to be converted.
-
-Examples:
+`snakeCase` converts a given string into snake_case format.
 
 ```javascript
 // Converting a string to snake_case:
-"Hello World".snakeCase(); // Evaluates to "hello_world"
+"Hello World".snakeCase(); // "hello_world"
 ```
 
 ```javascript
 // Converting a CamelCase string:
-"HelloWorld".snakeCase(); // Evaluates to "hello_world"
+"HelloWorld".snakeCase(); // "hello_world"
 ```
 
 ```javascript
 // Converting a string with spaces and special characters:
-"Hello Beautiful World!".snakeCase(); // Evaluates to "hello_beautiful_world"
+"Hello Beautiful World!".snakeCase(); // "hello_beautiful_world"
 ```
 
 ### .sort
 
-The `sort` method on a string sorts the string alphabetically.
-
-Syntax:
-
-    'string'.sort()
-
-Examples:
+`sort` on a string sorts the string alphabetically.
 
 ```javascript
 "hello".sort(); // ehllo
@@ -2685,10 +1903,6 @@ When the split limit is 0, the result is an empty list. When the limit is 1,
 the result is the target string to split. When the limit is a negative
 number, the function behaves the same as split all.
 
-```
-    <string>.split(<string>) -> <list<string>>
-    <string>.split(<string>, <int>) -> <list<string>>
-```
 
 Examples:
 
@@ -2714,42 +1928,30 @@ Examples:
 
 ### .squote
 
-The `squote` method in CEL adds single quotes around a given string.
-
-Syntax:
-
-    'string'.squote()
-
-Examples:
+`squote` adds single quotes around a given string.
 
 ```javascript
 // Single quoting a simple string:
-"Hello World".squote(); // Evaluates to "'Hello World'"
+"Hello World".squote(); // "'Hello World'"
 ```
 
 ```javascript
 // Single quoting a string with a number:
-"12345".squote(); // Evaluates to "'12345'"
+"12345".squote(); // "'12345'"
 ```
 
 ```javascript
 // Single quoting an already single quoted string:
-"'Hello World'".squote(); // Evaluates to "'''Hello World'''"
+"'Hello World'".squote(); // "'''Hello World'''"
 ```
 
 ### .startsWith
 
-The `startsWith` function in CEL is used to determine if a string starts with a specified substring.
-
-Syntax:
-
-    string.startsWith(substring)
-
-Examples:
+`startsWith` determine if a string starts with a specified substring.
 
 ```javascript
 // Checking if a string starts with a certain substring:
-"hello".startsWith("he"); // Evaluates to true
+"hello".startsWith("he"); // true
 ```
 
 ### .substring
@@ -2763,12 +1965,6 @@ range. It is an error to specify an end range that is lower than the start
 range, or for either the start or end index to be negative or exceed the string
 length.
 
-```
-    <string>.substring(<int>) -> <string>
-    <string>.substring(<int>, <int>) -> <string>
-```
-
-Examples:
 
 ```javascript
 "tacocat".substring(4); // returns 'cat'
@@ -2788,98 +1984,62 @@ Examples:
 
 ### .title
 
-The `title` method in CEL converts the first character of each word in a string to uppercase.
-
-Syntax:
-
-    'string'.title()
-
-Where:
-
-- `string` is the string to convert.
-
-Examples:
+`title` converts the first character of each word in a string to uppercase.
 
 ```javascript
 // Converting a string:
-"hello world".title(); // Evaluates to "Hello World"
+"hello world".title(); // "Hello World"
 ```
 
 ```javascript
 // Working with mixed case:
-"mIxEd CaSe".title(); // Evaluates to "MIxED CASe"
+"mIxEd CaSe".title(); // "MIxED CASe"
 ```
 
 ### .trim
 
 Returns a new string which removes the leading and trailing whitespace in the
 target string. The trim function uses the Unicode definition of whitespace
-which does not include the zero-width spaces. See:
-https://en.wikipedia.org/wiki/Whitespace_character#Unicode
+which does not include the zero-width spaces.
 
+```javascript
+'  \ttrim\n    '.trim() //  'trim'
 ```
-    <string>.trim() -> <string>
-```
-
-Examples:
-
-    '  \ttrim\n    '.trim() // returns 'trim'
 
 ### .trimPrefix
 
-The `trimPrefix` method in CEL removes a given prefix from a string if the string starts with that prefix.
-
-Syntax:
-
-    'string'.trimPrefix(prefix)
-
-Where:
-
-- `prefix` is the starting substring to remove.
-- `string` is the string from which the prefix will be removed.
-
-Examples:
+`trimPrefix` removes a given prefix from a string if the string starts with that prefix.
 
 ```javascript
 // Removing a prefix from a string:
-"Mr. Smith".trimPrefix("Mr."); // Evaluates to "Smith"
+"Mr. Smith".trimPrefix("Mr."); // "Smith"
 ```
 
 ```javascript
 // Another example:
-"Astronaut".trimPrefix("Astro"); // Evaluates to "naut"
+"Astronaut".trimPrefix("Astro"); // "naut"
 ```
 
 ```javascript
 // If the prefix is not present:
-"Mr. Smith".trimPrefix("Dr."); // Evaluates to "Mr. Smith"
+"Mr. Smith".trimPrefix("Dr."); // "Mr. Smith"
 ```
 
 ---
 
 ### .trimSuffix
 
-The `trimSuffix` method in CEL removes a given suffix from a string if the string ends with that suffix.
+`trimSuffix` removes a given suffix from a string if the string ends with that suffix.
 
-Syntax:
-
-    trimSuffix(suffix, string)
-
-Where:
-
-- `suffix` is the ending substring to remove.
-- `string` is the string from which the suffix will be removed.
-
-Examples:
 
 ```javascript
 // Removing a suffix from a string:
-"image.jpg".trimSuffix(".jpg"); // Evaluates to "image"
+"image.jpg".trimSuffix(".jpg"); // "image"
 ```
 
 ```javascript
 // If the suffix is not present:
-"image.jpg".trimSuffix(".png"); // Evaluates to "image.jpg"
+"image.jpg".trimSuffix(".png"); // "image.jpg"
 ```
 
 ### .upperAscii
@@ -2888,12 +2048,6 @@ Returns a new string where all ASCII characters are upper-cased.
 
 This function does not perform Unicode case-mapping for characters outside the
 ASCII range.
-
-```
-    <string>.upperAscii() -> <string>
-```
-
-Examples:
 
 ```javascript
 "TacoCat".upperAscii(); // returns 'TACOCAT'
@@ -2905,7 +2059,7 @@ Examples:
 
 ### .wordWrap
 
-The `wordWrap` method on a string inserts line-breaks into the string, before it reaches the given max width
+`wordWrap` on a string inserts line-breaks into the string, before it reaches the given max width
 
 Syntax:
 
@@ -2929,160 +2083,103 @@ Examples:
 
 ### HumanDuration
 
-The `HumanDuration` function in CEL converts a duration into a human-readable format.
-
-Syntax:
-
-    HumanDuration(duration)
-
-Where:
-
-- `duration` is the duration you want to convert.
-
-Examples:
+`HumanDuration` converts a duration into a human-readable format.
 
 ```javascript
 // Converting a duration into a human-readable format:
-HumanDuration(3600); // Evaluates to "1 hour"
+HumanDuration(3600); // "1 hour"
 ```
 
 ```javascript
 // Converting another duration:
-HumanDuration(600); // Evaluates to "10 minutes"
+HumanDuration(600); // "10 minutes"
 ```
 
 ```javascript
 // Converting a longer duration:
-HumanDuration(86400); // Evaluates to "1 day"
+HumanDuration(86400); // "1 day"
 ```
 
 ### HumanSize
 
-The `HumanSize` function in CEL converts a size in bytes into a human-readable format.
-
-Syntax:
-
-    HumanSize(size)
-
-Where:
-
-- `size` is the size in bytes you want to convert.
-
-Examples:
+`HumanSize` converts a size in bytes into a human-readable format.
 
 ```javascript
 // Converting a size into a human-readable format:
-HumanSize(1024); // Evaluates to "1 KiB"
+HumanSize(1024); // "1 KiB"
 ```
 
 ```javascript
 // Converting another size:
-HumanSize(1048576); // Evaluates to "1 MiB"
+HumanSize(1048576); // "1 MiB"
 ```
 
 ```javascript
 // Converting a larger size:
-HumanSize(1073741824); // Evaluates to "1 GiB"
+HumanSize(1073741824); // "1 GiB"
 ```
 
 ### Semver
 
-The `Semver` function in CEL parses a version string and returns a map containing the major, minor, patch, prerelease, metadata, and original version.
-
-Syntax:
-
-    Semver(version)
-
-Where:
-
-- `version` is the version string to parse.
-
-Examples:
+`Semver` parses a version string and returns a map containing the major, minor, patch, prerelease, metadata, and original version.
 
 ```javascript
 // Parsing a semantic version:
-Semver("1.2.3-alpha+meta"); // Evaluates to a map with major: "1", minor: "2", patch: "3", prerelease: "alpha", metadata: "meta", original: "1.2.3-alpha+meta"
+Semver("1.2.3-alpha+meta"); // a map with major: "1", minor: "2", patch: "3", prerelease: "alpha", metadata: "meta", original: "1.2.3-alpha+meta"
 ```
 
 ```javascript
-Semver("2.3.4-beta+meta2"); // Evaluates to a map with major: "2", minor: "3", patch: "4", prerelease: "beta", metadata: "meta2", original: "2.3.4-beta+meta2"
+Semver("2.3.4-beta+meta2"); // a map with major: "2", minor: "3", patch: "4", prerelease: "beta", metadata: "meta2", original: "2.3.4-beta+meta2"
 ```
 
 ```javascript
 // Parsing a simple semantic version:
-Semver("3.4.5"); // Evaluates to a map with major: "3", minor: "4", patch: "5", prerelease: "", metadata: "", original: "3.4.5"
+Semver("3.4.5"); // a map with major: "3", minor: "4", patch: "5", prerelease: "", metadata: "", original: "3.4.5"
 ```
 
 ### SemverCompare
 
-The `SemverCompare` function in CEL compares two semantic version strings.
-
-Syntax:
-
-    SemverCompare(version1, version2)
-
-Where:
-
-- `version1` is the first version string to compare.
-- `version2` is the second version string to compare.
-
-Examples:
+`SemverCompare` compares two semantic version strings.
 
 ```javascript
 // Comparing two semantic versions:
-SemverCompare("1.2.3", "1.2.4"); // Evaluates to false
+SemverCompare("1.2.3", "1.2.4"); // false
 ```
 
 ```javascript
 // Comparing two identical versions:
-SemverCompare("2.3.4", "2.3.4"); // Evaluates to true
+SemverCompare("2.3.4", "2.3.4"); // true
 ```
 
 ```javascript
 // Comparing with a prerelease version:
-SemverCompare("3.4.5", "3.4.5-alpha"); // Evaluates to false
+SemverCompare("3.4.5", "3.4.5-alpha"); // false
 ```
 
 ## YAML
 
 ### YAML
 
-The `YAML` function in CEL converts a YAML formatted string into a map. It provides an easy way to handle YAML data.
-
-Syntax:
-
-    YAML(yamlString)
-
-Where:
-
-- `yamlString` is the YAML formatted string.
-
-Examples:
+`YAML` converts a YAML formatted string into a map. It provides an easy way to handle YAML data.
 
 ```javascript
 // Converting a simple YAML string to a map:
-YAML("name: Alice\nage: 30"); // Evaluates to a map with keys "name" and "age"
+YAML("name: Alice\nage: 30"); // a map with keys "name" and "age"
 ```
 
 ```javascript
 // Handling a YAML sequence:
-YAML("numbers:\n- 1\n- 2\n- 3"); // Evaluates to a map with a key "numbers" containing an array
+YAML("numbers:\n- 1\n- 2\n- 3"); // a map with a key "numbers" containing an array
 ```
 
 ```javascript
 // Nested YAML data conversion:
-YAML("person:\n  name: Bob\n  age: 35"); // Evaluates to a nested map
+YAML("person:\n  name: Bob\n  age: 35"); // a nested map
 ```
 
 ### toYAML
 
-The `toYAML` function converts an object into a YAML formatted string.
-
-Syntax:
-
-    toYAML(object|array)
-
-Examples:
+`toYAML` converts an object into a YAML formatted string.
 
 ```javascript
 toYAML({ name: "John" });
@@ -3091,31 +2188,21 @@ toYAML(["John", "Alice"]);
 
 ### YAMLArray
 
-The `YAMLArray` function converts a YAML formatted string representing a sequence into an array.
-
-Syntax:
-
-    YAMLArray(yamlArrayString)
-
-Where:
-
-- `yamlArrayString` is the YAML formatted string representing a sequence.
-
-Examples:
+`YAMLArray` converts a YAML formatted string representing a sequence into an array.
 
 ```javascript
 // Converting a YAML sequence to an array:
-YAMLArray("- 1\n- 2\n- 3"); // Evaluates to an array [1, 2, 3]
+YAMLArray("- 1\n- 2\n- 3"); // an array [1, 2, 3]
 ```
 
 ```javascript
 // Handling complex objects in a YAML sequence:
-YAMLArray("- name: Alice\n- name: Bob"); // Evaluates to an array of maps
+YAMLArray("- name: Alice\n- name: Bob"); // an array of maps
 ```
 
 ```javascript
 // An empty YAML sequence:
-YAMLArray(""); // Evaluates to an empty array
+YAMLArray(""); // an empty array
 ```
 
 ---
@@ -3124,36 +2211,26 @@ YAMLArray(""); // Evaluates to an empty array
 
 ### TOML
 
-The `TOML` function converts a TOML formatted string into a map, making it easy to work with TOML data.
-
-Syntax:ToYAML
-
-    TOML(tomlString)
-
-Where:
-
-- `tomlString` is the TOML formatted string.
-
-Examples:
+`TOML` converts a TOML formatted string into a map, making it easy to work with TOML data.
 
 ```javascript
 // Converting a TOML string to a map:
-TOML('name = "Alice"\nage = 30'); // Evaluates to a map with keys "name" and "age"
+TOML('name = "Alice"\nage = 30'); // a map with keys "name" and "age"
 ```
 
 ```javascript
 // Handling an array in TOML:
-TOML("numbers = [1, 2, 3]"); // Evaluates to a map with a key "numbers" containing an array
+TOML("numbers = [1, 2, 3]"); // a map with a key "numbers" containing an array
 ```
 
 ```javascript
 // Nested TOML data conversion:
-TOML('[person]\nname = "Bob"\nage = 35'); // Evaluates to a nested map
+TOML('[person]\nname = "Bob"\nage = 35'); // a nested map
 ```
 
 ### toTOML
 
-The `toTOML` function converts a map or an array into a TOML formatted string.
+`toTOML` converts a map or an array into a TOML formatted string.
 
 Syntax:
 
@@ -3167,17 +2244,17 @@ Examples:
 
 ```javascript
 // Converting a map to a TOML string:
-toTOML({ name: "Alice", age: 30 }); // Evaluates to "name = \"Alice\"\nage = 30"
+toTOML({ name: "Alice", age: 30 }); // "name = \"Alice\"\nage = 30"
 ```
 
 ```javascript
 // Handling an array (TOML arrays must be of the same type):
-toTOML({ people: ["Alice", "Bob"] }); // Evaluates to "people = [\"Alice\", \"Bob\"]"
+toTOML({ people: ["Alice", "Bob"] }); // "people = [\"Alice\", \"Bob\"]"
 ```
 
 ```javascript
 // An empty map:
-toTOML({}); // Evaluates to an empty string
+toTOML({}); // an empty string
 ```
 
 ---
@@ -3186,35 +2263,23 @@ toTOML({}); // Evaluates to an empty string
 
 ### uuid.Nil
 
-The `uuid.Nil` function returns the nil UUID.
+`uuid.Nil` returns the nil UUID.
 
-Syntax:
-
-    uuid.Nil()
+```javascript
+uuid.V1() != uuid.Nil();
+```
 
 ### uuid.V1
 
-The `uuid.V1` function returns a version 1 UUID.
-
-Syntax:
-
-    uuid.V1()
-
-Example:
+`uuid.V1` returns a version 1 UUID.
 
 ```javascript
-uuuuid.V1() != uuid.Nil();
+uuid.V1() != uuid.Nil();
 ```
 
 ### uuid.V4
 
-The `uuid.V4` function returns a version 4 UUID.
-
-Syntax:
-
-    uuid.V4()
-
-Example:
+`uuid.V4` returns a version 4 UUID.
 
 ```javascript
 uuid.V4() != uuid.Nil();
@@ -3222,13 +2287,8 @@ uuid.V4() != uuid.Nil();
 
 ### uuid.IsValid
 
-The `uuid.IsValid` function checks if a string is a valid UUID.
+`uuid.IsValid` checks if a string is a valid UUID.
 
-Syntax:
-
-    uuid.IsValid(uuid)
-
-Example:
 
 ```javascript
 uuid.IsValid("2a42e576-c308-4db9-8525-0513af307586");
@@ -3236,13 +2296,8 @@ uuid.IsValid("2a42e576-c308-4db9-8525-0513af307586");
 
 ### uuid.Parse
 
-The `uuid.Parse` function parses a string into a UUID.
+`uuid.Parse` parses a string into a UUID.
 
-Syntax:
-
-    uuid.Parse(uuid)
-
-Example:
 
 ```javascript
 uuid.Parse("2a42e576-c308-4db9-8525-0513af307586");

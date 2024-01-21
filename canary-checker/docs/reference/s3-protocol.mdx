@@ -4,7 +4,7 @@ title: S3 Protocol
 
 # <Icon name="s3" /> S3 Protocol
 
-    <Enterprise />
+<Enterprise />
 
 :::info
 This checks if S3 compatible endpoints (like Minio, EMC ECS) are functioning correctly, to check the contents of
@@ -38,7 +38,7 @@ spec:
         valueFrom:
           secretKeyRef:
             name: aws-credentials
-            key: AWS_SECRET_ACCESS_KEY      
+            key: AWS_SECRET_ACCESS_KEY
 ```
 
 | Field | Description | Scheme | Required |
@@ -55,8 +55,8 @@ spec:
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
 | **Connection** |  |  |  |
 | `connection` | Path of existing connection e.g. `connection://aws/instance`. Mutually exclusive with `accessKey` and `secretKey` <br /> <Commercial /> | [Connection](../concepts/connections) | |
-| `accessKey` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes |
-| `secretKey` | Mutually exclusive with `connection` | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes |
+| `accessKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes |
+| `secretKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes |
 | `endpoint` | Custom AWS endpoint | *string* | |
 | `region` | AWS region | *string* | Yes |
 | `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* |  |
