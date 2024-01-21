@@ -55,8 +55,8 @@ spec:
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
 | **Connection** |  |  |  |
 | `connection` | Path of existing connection e.g. `connection://aws/instance`. Mutually exclusive with `accessKey` and `secretKey` <br /> <Commercial /> | [Connection](../concepts/connections) | |
-| `accessKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes |
-| `secretKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes |
+| `accessKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes |
+| `secretKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes |
 | `endpoint` | Custom AWS endpoint | *string* | |
 | `region` | AWS region | *string* | Yes |
 | `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* |  |

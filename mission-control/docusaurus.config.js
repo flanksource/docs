@@ -25,6 +25,7 @@ const config = {
     productName: "Mission Control",
     links: {
       "authentication": '/reference/secret-management',
+      "secrets": '/reference/secret-management',
       "connection": '/reference/authentication',
       "cel": "/reference/scripting/cel"
     }

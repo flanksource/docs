@@ -13,10 +13,11 @@ const config = {
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   customFields: {
-    oss: false,
+    oss: true,
     productName: "Canary Checker",
     links: {
       "authentication": '/concepts/secret-management',
+      "secrets": '/concepts/secret-management',
       "connection": '/concepts/authentication',
       "cel": "/scripting/cel"
     }

@@ -26,7 +26,7 @@ spec:
 | **`url`** |  | *string* | Yes |
 | `endpoint`    | Deprecated, Use `url` instread | *string*                                                     |       |
 | `method`          | HTTP Request method, default to `GET` | *string*                                                     | |
-| `headers`         | Header fields to be used in the query                        | [[]*EnvVar*](../../concepts/authentication/#envvar) | |
+| `headers`         | Header fields to be used in the query                        | <CommonLink to="secrets" >[]*EnvVar*</CommonLink> | |
 | `body` | Request Body Contents | *string* |  |
 | `templateBody` | If true the `body` field will be templated using go templates these [variables](#templateVariables) will be available | boo; | |
 | `responseCodes` | Expected response codes for the HTTP Request. | *[]int* |  |
@@ -43,8 +43,8 @@ spec:
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |      |
 | **Connection** |  |  | |
 | `connection` | Path of existing connection e.g. `connection://http/instance` <br/> Mutually exclusive with `username`, `password` <br/> <Commercial/> | <CommonLink to="connection" >*Connection*</CommonLink> | |
-| `username` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
-| `password` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
+| `username` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | |
+| `password` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | |
 | **`url`** | HTTP  URL, if a URL is specified on both the connection and check, the url on the check takes precedence. | *string* | Yes |
 | `ntlm` | When true will do authentication using NTLM v1 protocol | *bool* | |
 | `ntlmv2` | When true will do authentication using NTLM v2 protocol | *bool* | |
@@ -114,7 +114,7 @@ spec:
           value: secret_path
 ```
 
-**Read**: [Escaping variables](../scripting/gotemplate#escaping)
+See [Escaping variables](../scripting/gotemplate#escaping)
 
 ## Metrics
 

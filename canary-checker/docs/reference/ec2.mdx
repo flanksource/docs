@@ -63,8 +63,8 @@ spec:
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
 | **Connection** |  |  | |
 | `connection` | Path of existing connection e.g. `connection://aws/instance`<br />*Mutually exclusive with `accessKey` and `secretKey`* <br /> <Commercial /> | [Connection](../concepts/connections) | |
-| `accessKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
-| `secretKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | |
+| `accessKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | |
+| `secretKey` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | |
 | `endpoint` | Custom AWS endpoint | *string* | |
 | `region` | AWS region | *string* | |
 | `skipTLSVerify` | Skip TLS verify when connecting to aws | *bool* | |
@@ -103,7 +103,7 @@ There are 3 options when connecting to AWS:
         securityGroup: default
   ```
 
-3. `accessKey` and `secretKey` <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> with the credentials stored in a secret.
+3. `accessKey` and `secretKey` <CommonLink to="authentication">*EnvVar*</CommonLink> with the credentials stored in a secret.
 
   ```yaml title="aws.yaml"
   apiVersion: canaries.flanksource.com/v1

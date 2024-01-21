@@ -38,7 +38,7 @@ spec:
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
 | **Connection** |  |  | |
 | `connection` | Path of an existing connection e.g. `connection://aws/instance` <br />Mutually exclusive with `credentials`  <br /> <Commercial /> | <CommonLink to="connection" >*Connection*</CommonLink> | |
-| `credentials` | GCP Access Token File. <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes |
+| `credentials` | GCP Access Token File. <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes |
 
 ### Connecting to GCP
 
@@ -61,7 +61,7 @@ spec:
           connection: connection://gcp/internal
 ```
 
-3. `credentials` <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> with the service account json key stored in a secret.
+3. `credentials` <CommonLink to="authentication">*EnvVar*</CommonLink> with the service account json key stored in a secret.
 
 ```yaml title="aws.yaml"
 apiVersion: canaries.flanksource.com/v1

@@ -33,8 +33,8 @@ spec:
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
 | **Connection**   |                                                              |                                                   |          |
 | <SkipOSS>`connection<`</SkipOSS>     | <SkipOSS> Path of existing connection e.g. `connection://aws/instance` </SkipOSS>| <SkipOSS>[Connection](../concepts/connections) </SkipOSS>            |          |
-| `accessKey`      | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes      |
-| `secretKey`      | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> | Yes      |
+| `accessKey`      | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes      |
+| `secretKey`      | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes      |
 | `endpoint`       | Custom AWS endpoint                                          | *string*                                          |          |
 | `region`         | AWS region                                                   | *string*                                          |          |
 | `skipTLSVerify`  | Skip TLS verify when connecting to AWS                       | *bool*                                            |          |
@@ -72,7 +72,7 @@ There are 3 options when connecting to AWS:
           query: "SELECT * FROM aws_config_rule"
     ```
 
-3. `accessKey` and `secretKey` <CommonLink to="authentication" anchor="envvar">*EnvVar*</CommonLink> with the credentials stored in a secret
+3. `accessKey` and `secretKey` <CommonLink to="authentication">*EnvVar*</CommonLink> with the credentials stored in a secret
 
     ```yaml title="aws-static.yaml"
     apiVersion: canaries.flanksource.com/v1
