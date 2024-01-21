@@ -84,7 +84,6 @@ export function Enterprise({ color }) {
         borderRadius: '5px',
         color: 'white',
         padding: '0.3rem',
-
         marginBottom: "5px"
       }}>
       Enterprise Edition Required

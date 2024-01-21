@@ -4,8 +4,9 @@
 // There are various equivalent ways to declare your Docusaurus config.
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
+const lightCodeTheme = require('prism-react-renderer/themes/palenight');
+const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
-import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -131,7 +132,7 @@ const config = {
         // Public API key: it is safe to commit it
         apiKey: 'b6f91e146e1ed100664b6da07151f287',
 
-        indexName: 'canarychecker',
+        indexName: 'flanksource',
       },
       colorMode: {
         defaultMode: 'light',
@@ -144,10 +145,10 @@ const config = {
       },
       prism: {
         additionalLanguages: ['powershell'],
-        theme: prismThemes.palenight,
-        darkTheme: prismThemes.dracula,
+        darkTheme: darkCodeTheme,
+        theme: lightCodeTheme
       },
     }),
 };
 
-export default config;
+module.exports = config
