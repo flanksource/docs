@@ -114,6 +114,12 @@ const config = {
             position: 'left',
           },
           {
+            to: 'registry/overview',
+            activeBasePath: 'registry',
+            label: 'Registry',
+            position: 'left',
+          },
+          {
             to: 'reference/scripting',
             label: 'Reference',
             position: 'left',
