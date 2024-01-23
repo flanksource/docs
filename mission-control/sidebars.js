@@ -836,6 +836,23 @@ const sidebars = {
       ]
     }
   ],
+  registrySidebar: [
+    {
+        type: 'doc',
+        id: 'registry/overview',
+        label: 'Overview',
+    },
+    {
+        type: 'doc',
+        id: 'registry/aws',
+        label: 'AWS',
+    },
+    {
+        type: 'doc',
+        id: 'registry/kubernetes',
+        label: 'Kubernetes',
+    },
+  ],
   reference: [
     {
       type: 'doc',
