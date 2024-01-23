@@ -7,7 +7,7 @@ The AWS helm chart installs a [catalog scraper](/config-db/scrapers/aws)
 ```sh
 helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
-helm install {release-name} flanksource/mission-control-registry-aws
+helm install {release-name} flanksource/mission-control-aws
 ```
 
 ### Values
