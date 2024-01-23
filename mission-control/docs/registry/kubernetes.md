@@ -7,7 +7,7 @@ The Kubernetes helm chart installs a [catalog scraper](/config-db/scrapers/kuber
 ```sh
 helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
-helm install {release-name} flanksource/mission-control-registry-kubernetes
+helm install {release-name} flanksource/mission-control-kubernetes
 ```
 
 ## Values
