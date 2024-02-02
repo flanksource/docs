@@ -3,7 +3,7 @@
 Transformation can be performed after the configs have been scraped from the target. This can be useful when you want to
 
 - hide/remove sensitive data from the scraped configuration (e.g. passwords, tokens, etc.)
-- transform the scraped configuration using Javascript and [Go templates](https://pkg.go.dev/text/template).
+- transform the scraped configuration using CEL
 - remove certain fields from the scraped configuration
 
 | Field           | Description                                                                              | Scheme                                  | Required |
@@ -12,7 +12,7 @@ Transformation can be performed after the configs have been scraped from the tar
 | `javascript`    | Specify javascript syntax for script                                                     | `string`                                |          |
 | `jsonpath`      | Specify JSONPath                                                                         | `string`                                |          |
 | `expr`          | Specify Cel expression                                                                   | `string`                                |          |
-| `change`        | Apply transformaion on the scraped changes                                               | [`[]TransformChange`](#transformchange) |          |
+| `change`        | Apply transformaion on the scraped changes                                               | [`[]Changes`](#changes) |          |
 | `exclude`       | Fields to remove from the config, useful for removing sensitive data and fields          | [`[]Exclude`](#exclude)                 |          |
 |                 | that change often without a material impact i.e. Last Scraped Time                       |                                         |          |
 | [`mask`](#mask) | Specify configurations to replace sensitive fields with hash functions or static string. | [`[]Mask`](./mask.md)                   |          |
@@ -154,7 +154,7 @@ file:
 This configuration specifies 2 different masks. The first one will replace the value of the field `password` with the md5sum of the value. The second one will replace the value of the field `secret` with `***`.
 
 :::info
-All the masks will be applied in the order they are specified in the configuration file.
+Masks are applied in the order they are specified in the configuration file.
 :::
 
 ### Supported hash functions
@@ -171,25 +171,23 @@ At the moment, only `md5sum` is supported. More hash functions will be added in 
 
 `Config DB` allows selectively applying masks to certain types of configs. So you could apply a mask to all the `Config` types and another mask to all the `Secret` types.
 
-### TransformChange
+## Changes
 
 | Field     | Description                                                       | Scheme     | Required |
 | --------- | ----------------------------------------------------------------- | ---------- | -------- |
-| `exclude` | Exclude is a list of CEL expressions that excludes a given change | `[]string` |          |
+| `exclude` | A list of CEL expressions that excludes a given change | `[]string` |          |
 
 The scraped changes can be accessed using the `details` field.
 
-#### Examples:
 
-1. Excluding canary pass/fail events
-
-```yaml title=""
+```yaml title="exclude-canary-pass-fail.yaml"
 spec:
   kubernetes:
     - clusterName: local-kind-cluster
       transform:
         change:
           exclude:
+            # Canary checker events are handled natively, no need to import the K8S events
             - 'details.source.component == "canary-checker" && details.reason == "Failed"'
             - 'details.source.component == "canary-checker" && details.reason == "Succeeded"'
 ```
@@ -200,7 +198,6 @@ This feature allows you to specify custom creation and deletion times for config
 
 You'll be making use of the `createFields` and `deleteFields` fields that are supported by all the scrapers. They are both a list of [JSONPath expression](../concepts/templating.md#jsonpath) and are used to extract the created/deleted time of the config item from the scraped configuration. If multiple fields are specified, the first non-empty value will be used.
 
-### Example
 
 Consider the following configuration file
 
@@ -233,13 +230,12 @@ aws:
 
 When the scraped configuration is saved in the database, the created date will be `2017-03-06T21:04:11Z` instead of being the current time and the deleted date will be `2017-04-04T15:04:05Z` instead of being empty.
 
-### Custom timestamp format
+### Timestamp Format
 
 By default, the timestamp format is RFC3339 (`2006-01-02T15:04:05Z07:00`). If the scraped configuration follows a different timestamp format, then you can specify it in the `timestampFormat` field. The format is specified using the [Go time format](https://golang.org/pkg/time/#Time.Format).
 
 In the above example if the value of `made_at` was `2017/03/06 21:04:11Z`, then the `timestampFormat` file would look like this
 
 ```yaml
----
 timestampFormat: '2006/01/02 15:04:05Z'
 ```

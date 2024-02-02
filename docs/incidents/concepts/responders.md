@@ -41,8 +41,8 @@ responder_clients:
 | Field      | Description   | Scheme                                                                        | Required |
 | ---------- | ------------- | ----------------------------------------------------------------------------- | -------- |
 | `url`      | Jira url      | `string`                                                                      | `true`   |
-| `username` | Jira username | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) | `true`   |
-| `password` | Jira password | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) | `true`   |
+| `username` | Jira username |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
+| `password` | Jira password |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
 | `defaults` | Jira defaults | `string`                                                                      | `option` |
 | `values`   | Jira values   | `string`                                                                      | `option` |
 
@@ -53,7 +53,7 @@ responder_clients:
 | `tenant_id` | MS Planner tenant id | `string`                                                                      | `true`   |
 | `client_id` | MS Planner client id | `string`                                                                      | `true`   |
 | `group_id`  | MS Planner group id  | `string`                                                                      | `true`   |
-| `username`  | MS Planner username  | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) | `true`   |
-| `password`  | MS Planner password  | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) | `true`   |
+| `username`  | MS Planner username  |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
+| `password`  | MS Planner password  |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
 | `defaults`  | MS Planner defaults  | `map[string]string`                                                           | `option` |
 | `values`    | MS Planner values    | `map[string]string`                                                           | `option` |
