@@ -60,8 +60,8 @@ If multiple authentication methods are specified, all of them will be used.
 
 | Field      | Description | Scheme                                                                        | Required |
 | ---------- | ----------- | ----------------------------------------------------------------------------- | -------- |
-| `username` | Username    | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) | `true`   |
-| `password` | Path        | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) | `true`   |
+| `username` | Username    |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
+| `password` | Path        |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
 
 #### Github Auth
 
@@ -69,13 +69,13 @@ If the webhook is being called by Github, you can use [GitHub's webhook verifica
 
 | Field   | Description                  | Scheme                                                                        | Required |
 | ------- | ---------------------------- | ----------------------------------------------------------------------------- | -------- |
-| `token` | Secret token for the webhook | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) | `true`   |
+| `token` | Secret token for the webhook |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
 
 #### Svix Auth
 
 | Field             | Description                                          | Scheme                                                                        | Required |
 | ----------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------- | -------- |
-| `secret`          | Signing secret                                       | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) | `true`   |
+| `secret`          | Signing secret                                       |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
 | `verifyTimestamp` | Specify the tolerance for the timestamp verification | `string`                                                                      |          |
 
 #### JWT Auth

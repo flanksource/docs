@@ -40,12 +40,12 @@ spec:
 | -------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | -------- | ----------- |
 | `connection`   | Connection name. e.g. connection://http/google                                                                  | `string`                                                                        |          |
 | `url`          | Url to make the request to                                                                                      | `string`                                                                        |          |
-| `username`     | Username to authenticate with                                                                                   | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar)   |          |
-| `password`     | Password to authenticate with                                                                                   | [`types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar)   |          |
+| `username`     | Username to authenticate with                                                                                   |  <CommonLink to="secrets">*EnvVar*</CommonLink>   |          |
+| `password`     | Password to authenticate with                                                                                   |  <CommonLink to="secrets">*EnvVar*</CommonLink>   |          |
 | `method`       | HTTP method to use _(default: GET)_                                                                             | `string`                                                                        |          |
 | `ntlm`         | NTLM when set to true will perform authentication using NTLM v1 protocol                                        | `bool`                                                                          |          |
 | `ntlmv2`       | NTLM when set to true will perform authentication using NTLM v2 protocol                                        | `bool`                                                                          |          |
-| `headers`      | Header fields to be used in the request                                                                         | [`[]types.EnvVar`](https://pkg.go.dev/github.com/flanksource/duty/types#EnvVar) |          |
+| `headers`      | Header fields to be used in the request                                                                         | <CommonLink to="secrets">[]*EnvVar*</CommonLink> |          |
 | `body`         | Request Body Contents                                                                                           | `string`                                                                        |          | `true`      |
 | `templateBody` | When set to true the request body is templated _(default: `false`)_. [Read more ...](../concepts/templating.md) | `bool`                                                                          |          |
 

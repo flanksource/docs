@@ -39,9 +39,9 @@ The KubernetesFile config type is used to scrape configurations contained in you
 | `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                               | `false`  |
 | `selector`        | Specify Kubernetes resource for configuration based on `namespace`, `kind`, `name` and more.                                                                            | [`ResourceSelector`](./resourceselector) | yes      |
 | `container`       | Set container name                                                                                                                                                      | `string`                                 |          |
-| `files`           | Specify path to file contained in Pod                                                                                                                                   | `[]PodFile`                              |          |
+| `files`           | Specify path to file contained in Pod                                                                                                                                   | `[]File`                              |          |
 
-### PodFile
+### File
 
 | Field    | Description                       | Scheme     | Required |
 | -------- | --------------------------------- | ---------- | -------- |
