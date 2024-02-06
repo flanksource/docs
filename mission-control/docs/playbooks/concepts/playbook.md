@@ -68,8 +68,71 @@ Playbook parameter defines a parameter that a playbook needs to run.
 | `required`    | Specify if the parameter is required                                                              | `bool`              |          |
 | `icon`        | Icon of parameter. See [icons](https://github.com/flanksource/flanksource-ui/tree/main/src/icons) | `string`            |          |
 | `description` | Description of the parameter.                                                                     | `string`            |          |
-| `type`        | Type of parameter.                                                                                | `string`            |          |
-| `properties`  | Properties of parameter.                                                                          | `map[string]string` |          |
+| `type`        | Type of parameter. _(Defaults to "text")_                                                         | `string`            |          |
+| `properties`  | Properties of parameter. _Varies based on the type_                                               | `map[string]string` |          |
+
+#### Parameter Type
+
+| name        | Description                        | UI Component | Schema    | Properties                                              |
+| ----------- | ---------------------------------- | ------------ | --------- | ------------------------------------------------------- |
+| `check`     | Limits the value to a check.       | Dropdown     | `string`  | [`Check Property`](#check-parameter-properties)         |
+| `checkbox`  | Boolean value toggle               | Checkbox     | `boolean` | -                                                       |
+| `code`      | Text area                          | Code Editor  | `string`  | [`Code Property`](#code-parameter-properties)           |
+| `component` | Limits the value to a component.   | Dropdown     | `string`  | [`Component Property`](#component-parameter-properties) |
+| `config`    | Limits the value to a config item. | Dropdown     | `string`  | [`Config Property`](#config-parameter-properties)       |
+| `list`      | Specify a custom list of values    | Dropdown     | `string`  | [`List Property`](#list-parameter-properties)           |
+| `people`    | Limits the value to people.        | Dropdown     | `string`  | [`People Property`](#people-parameter-properties)       |
+| `team`      | Limits the value to teams.         | Dropdown     | `string`  | -                                                       |
+| `text`      | Text input                         | Text Input   | `string`  | [`Text Property`](#text-parameter-properties)           |
+
+##### `check` parameter properties
+
+| Field    | Description                        | Schema   |
+| -------- | ---------------------------------- | -------- |
+| `filter` | Limit the checks to the given type | `string` |
+
+##### `component` parameter properties
+
+| Field    | Description                            | Schema   |
+| -------- | -------------------------------------- | -------- |
+| `filter` | Limit the components to the given type | `string` |
+
+##### `config` parameter properties
+
+| Field    | Description                         | Schema   |
+| -------- | ----------------------------------- | -------- |
+| `filter` | Limit the configs to the given type | `string` |
+
+##### `code` parameter properties
+
+| Field      | Description                               | Schema   |
+| ---------- | ----------------------------------------- | -------- |
+| `language` | Langauge name e.g. yaml, json, toml, etc. | `string` |
+
+##### `people` parameter properties
+
+| Field  | Description                        | Schema  |
+| ------ | ---------------------------------- | ------- |
+| `role` | Limit the people to the given role | `string |
+
+##### `text` parameter properties
+
+| Field       | Description                                             | Schema    |
+| ----------- | ------------------------------------------------------- | --------- |
+| `multiline` | Whether the text field should be rendered as a text are | `boolean` |
+
+##### `list` parameter properties
+
+| Field     | Description        | Schema                         |
+| --------- | ------------------ | ------------------------------ |
+| `options` | Label of the check | [`[]ListOption`](#list-option) |
+
+###### List Option
+
+| Field   | Description                      | Schema   |
+| ------- | -------------------------------- | -------- |
+| `label` | Specify label of the list option | `string` |
+| `value` | Specify value of the list option | `string` |
 
 ## Run
 
