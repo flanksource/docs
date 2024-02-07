@@ -832,6 +832,11 @@ const sidebars = {
           type: 'doc',
           id: 'notifications/events/health-checks',
           label: 'Health Checks'
+        },
+        {
+          type: 'doc',
+          id: 'notifications/events/incidents',
+          label: 'Incidents'
         }
       ]
     }
