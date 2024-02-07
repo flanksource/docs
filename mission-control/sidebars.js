@@ -532,6 +532,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'playbooks/actions/github',
+          label: 'Github'
+        },
+        {
+          type: 'doc',
           id: 'playbooks/actions/gitops',
           label: 'GitOps'
         },
