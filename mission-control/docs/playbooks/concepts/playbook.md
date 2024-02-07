@@ -1,7 +1,7 @@
 # Playbook
 
-Playbooks are configurable automated processes that can be used to perform a variety of actions for a component or a config item.
-They are defined using a YAML configuration.
+Playbooks are configurable automated processes that can be used to perform a variety of actions for a resource like config item, component, & check.
+They can also operate independently of any specific resource, providing versatility in handling different tasks and processes within a system or environment
 
 ```yaml title="restart-unhealthy-database.yaml"
 apiVersion: mission-control.flanksource.com/v1
