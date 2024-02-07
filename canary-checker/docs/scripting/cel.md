@@ -17,6 +17,22 @@ spec:
         expr: "code in [200,201,301] and sslAge < Duration('7d')"
 ```
 
+Values in CEL represent any of the following:
+
+| Type          | Description                                                     |
+| ------------- | --------------------------------------------------------------- |
+| `int`         | 64-bit signed integers                                          |
+| `uint`        | 64-bit unsigned integers                                        |
+| `double`      | 64-bit IEEE floating-point numbers                              |
+| `bool`        | Booleans (`true` or `false`)                                    |
+| `string`      | Strings of Unicode code points                                  |
+| `bytes`       | Byte sequences                                                  |
+| `list`        | Lists of values                                                 |
+| `map`         | Associative arrays with `int`, `uint`, `bool`, or `string` keys |
+| `null_type`   | The value `null`                                                |
+| message names | Protocol buffer messages                                        |
+| `type`        | Values representing the types in the first column               |
+
 ---
 
 ## aws
@@ -26,12 +42,12 @@ spec:
 Takes in an AWS arn and parses it and returns a map.
 
 ```javascript
-aws.arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic") //
+aws.arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic"); //
 // map[string]string{
-    // "service": string,
-    // "region": string,
-    // "account": string,
-    // "resource": string,
+// "service": string,
+// "region": string,
+// "account": string,
+// "resource": string,
 // }
 ```
 
@@ -64,157 +80,27 @@ base64.decode("aGVsbG8="); // return b'hello'
 
 `base64.decode` decodes the given base64 encoded string back to its original form.
 
-
-
 ```javascript
 base64.decode("aGVsbG8="); // return b'hello'
 ```
 
-
 ## collections
-
-### in
-
-The membership test operator checks whether an element is a member of a collection, such as a list or a map. It's worth noting that the `in` operator doesn't check for value membership in maps, only key membership.
-
-Syntax:
-
-```javascript
-`"apple" in ["apple", "banana"]` // => true
-`3 in [1, 2, 4]`; // => false
-```
-
-### size
-
-`size` determines the number of elements in a collection or the number of Unicode characters in a string.
-
-```javascript
-["apple", "banana", "cherry"].size(); //  3
-```
-
-```javascript
-"hello".size(); // 5
-```
-
-### has
-
-The `has` macro checks for the presence of a field in a message. It's particularly useful for protobuf messages where fields can be absent rather than set to a default value. It's especially useful for distinguishing between a field being set to its default value and a field being unset. For instance, in a protobuf message, an unset integer field is indistinguishable from that field set to 0 without the `has` macro.
-
-Syntax
-
-```javascript
-x.has(y);
-```
-
-Where `x` is the message and `y` is the field you're checking for.
-
-Examples:
-
-If you have a message `person` with a potential field `name`, you can check for its presence with:
-
-```javascript
-person.has(name); // true if 'name' is present, false otherwise
-```
-
-```javascript
-addressBook.has(person.email); // true if 'email' field is present in 'person' within 'addressBook'
-```
-
-### map
-
-The `map` macro creates a new collection by applying a function to each entry of an existing collection. It's useful for transforming the elements of a list or the values of a map.
-
-Syntax:
-
-```javascript
-//For lists
-list.map(e, <function>)
-```
-
-```javascript
-// For maps:
-map.map(k, v, <function>)
-```
-
-Where:
-
-- `list` is the list you're transforming.
-- `map` is the map you're transforming.
-- `e` represents each element of the list.
-- `k` represents each key of the map.
-- `v` represents each value of the map.
-- `<function>` is the transformation function applied to each entry.
-
-Examples:
-
-```javascript
-// Transforming each element of a list by multiplying it by 2:
-[1, 2, 3].map(e, e * 2); // [2, 4, 6]
-```
-
-```javascript
-// Transforming the values of a map by appending "!" to each value:
-{"a": "apple", "b": "banana"}.map(k, v, v + "!")  // {"a": "apple!", "b": "banana!"}
-```
-
-```javascript
-// Using both key and value for transformation in a map:
-{"a": 1, "b": 2}.map(k, v, k + v)  // {"a": "a1", "b": "b2"}
-```
-
-### filter
-
-The `filter` macro creates a new collection containing only the elements or entries of an existing collection that satisfy a given condition.
-
-Syntax:
-
-```javascript
-//For lists:
-list.filter(e, <condition>)
-```
-
-Where:
-
-- `list` is the list you're filtering.
-- `e` represents each element of the list.
-- `<condition>` is the condition applied to each entry.
-
-Examples:
-
-```javascript
-// Filtering a list to include only numbers greater than 2:
-[1, 2, 3, 4].filter(e, e > 2); // [3, 4]
-```
-
-```javascript
-// Filtering a map to include only entries with values greater than 1:
-{"a": 1, "b": 2, "c": 3}.filter(k, v, v > 1)  // {"b": 2, "c": 3}
-```
 
 ### all
 
-The `all` macro checks if all elements of a collection, such as a list or a map, satisfy a given condition. It returns a boolean value based on the evaluation.
+The `all` macro tests whether a predicate holds for **all** elements of a list `e` or keys of a map `e`. It returns a boolean value based on the evaluation.
+If any predicate evaluates to false, the macro evaluates to false, ignoring any errors from other predicates
 
 Syntax:
 
 ```javascript
-//For lists:
-list.all(e, <condition>)
+e.all(x, p);
+
+// Where:
+//  `e` is the list or a map.
+//  `x` represents each element of the list.
+//  `p` is the condition applied to each entry.
 ```
-
-```javascript
-//For maps:
-map.all(k, v, <condition>)
-```
-
-Where:
-
-- `list` is the list you're checking.
-- `map` is the map you're checking.
-- `e` represents each element of the list.
-- `k` represents each key of the map.
-- `v` represents each value of the map.
-- `<condition>` is the condition applied to each entry.
 
 Examples:
 
@@ -224,55 +110,78 @@ Examples:
 ```
 
 ```javascript
-// Checking if all values of a map are non-empty strings:
-{"a": "apple", "b": "banana", "c": ""}.all(k, v, v != "")  // false
-```
-
-```javascript
-// Using both key and value for condition in a map:
-{"a": 1, "b": 2, "c": 3}.all(k, v, k != "a" || v > 1)  // true
+// Ensure that the all the map keys begin with the letter "a"
+{"a": "apple", "b": "banana", "c": "coconut"}.all(k, k.startsWith("a")) // false
 ```
 
 ### exists
 
-The `exists` macro checks if there exists an element in a collection, such as a list or a map, that satisfies a given condition. It returns a boolean value based on the evaluation.
+The `exists` macro checks if there exists at least one element in a list that satisfies a given condition. It returns a boolean value based on the evaluation.
 
 Syntax:
 
 ```javascript
-// For lists
-list.exists(e, <condition>)
+e.exists(x, p);
+
+// Where:
+//  `e` is the list you're checking.
+//  `x` represents each element of the list.
+//  `p` is the condition applied to each entry.
+```
+
+Example:
+
+```javascript
+// Checking if any element of a list is equal to 2:
+[1, 2, 3].exists(e, e == 2); // true
+```
+
+### exists_one
+
+The `exists_one` macro checks if there exists exactly one element in a list that satisfies a given condition. It returns a boolean value based on the evaluation.
+
+Syntax:
+
+```javascript
+e.exists_one(x, p);
+
+// Where:
+//  `e` is the list you're checking.
+//  `x` represents each element of the list.
+//  `p` is the condition applied to each entry.
+```
+
+Example:
+
+```javascript
+[1, 2, 3].exists_one(e, e > 1); // false
 ```
 
 ```javascript
-// For maps
-map.exists(k, v, <condition>)
+[1, 2, 3].exists_one(e, e == 2); // true
+```
+
+### filter
+
+The `filter` macro creates a new list containing only the elements or entries of an existing list that satisfy the given condition.
+
+Syntax:
+
+```javascript
+e.filter(x, p);
 ```
 
 Where:
 
-- `list` is the list you're checking.
-- `map` is the map you're checking.
-- `e` represents each element of the list.
-- `k` represents each key of the map.
-- `v` represents each value of the map.
-- `<condition>` is the condition applied to each entry.
+- `e` is the list you're filtering.
+- `x` represents each element of the list.
+- `p` is the predicate expression applied to each entry.
 
 Examples:
 
 ```javascript
-//Checking if any element of a list is equal to 2:
-[1, 2, 3].exists(e, e == 2); // true
-```
-
-```javascript
-//Checking if any value of a map is an empty string:
-{"a": "apple", "b": "banana", "c": ""}.exists(k, v, v == "")  // true
-```
-
-```javascript
-/Using both key and value for condition in a map:
-{"a": 1, "b": 2, "c": 3}.exists(k, v, k == "a" && v == 1)  // true
+// Filtering a list to include only numbers greater than 2:
+[1, 2, 3, 4].filter(e, e > 2); // [3, 4]
 ```
 
 ### fold
@@ -313,13 +222,110 @@ Examples:
 {"a": "apple", "b": "banana"}.fold(k, v, acc, acc + v)  // "applebanana"
 ```
 
+### has
+
+The `has` macro tests whether a field is available. It's particularly useful for protobuf messages where fields can be absent rather than set to a default value. It's especially useful for distinguishing between a field being set to its default value and a field being unset. For instance, in a protobuf message, an unset integer field is indistinguishable from that field set to 0 without the `has` macro.
+
+Syntax
+
+```javascript
+has(x.y): boolean
+
+// Where
+//   `x` is a message or a map and
+//   `y` (string) is the field you're checking for.
+```
+
+Example:
+
+If you have a message `person` with a potential field `name`, you can check for its presence with:
+
+```javascript
+has(person.name); // true if 'name' is present, false otherwise
+```
+
+### in
+
+The membership test operator checks whether an element is a member of a collection, such as a list or a map. It's worth noting that the `in` operator doesn't check for value membership in maps, only key membership.
+
+Syntax:
+
+```javascript
+`"apple" in ["apple", "banana"]` // => true
+`3 in [1, 2, 4]`; // => false
+```
+
+### map
+
+The `map` macro creates a new list by transforming a list `e` by taking each element `x` to the function given by the expression `t`, which can use the variable `x`.
+
+Syntax:
+
+```javascript
+e.map(x, t);
+
+// Where:
+//   `e` is the list you're transforming.
+//   `x` represents each element of the list.
+//   `t` is the transformation function applied to each entry.
+```
+
+```javascript
+e.map(x, p, t);
+
+// Where:
+//   `e` is the list you're transforming.
+//   `p` filter before the value is transformed
+//   `x` represents each element of the list.
+//   `t` is the transformation function applied to each entry.
+```
+
+Examples:
+
+```javascript
+// Transforming each element of a list by multiplying it by 2:
+[1, 2, 3].map(e, e * 2); // [2, 4, 6]
+
+[1, 2, 3].map(x, x > 1, x + 1); // [3, 4]
+```
+
+### size
+
+`size` function determines the number of elements in a collection or the number of Unicode characters in a string.
+
+Syntax
+
+```javascript
+(string) -> int	string length
+(bytes) -> int	bytes length
+(list(A)) -> int	list size
+(map(A, B)) -> int	map size
+```
+
+```javascript
+"apple".size(); // 5
+```
+
+```javascript
+b"abc".size() // 3
+```
+
+```javascript
+["apple", "banana", "cherry"].size(); //  3
+```
+
+```javascript
+{"a": 1, "b": 2}.size(); // 2
+```
+
 ### slice
 
 Returns a new sub-list using the indexes provided.
 
 ```javascript
-[1, 2, 3, 4].slice(1, 3) // return [2, 3]
-[(1, 2, 3, 4)].slice(2, 4); // return [3 ,4]
+[1, 2, 3, 4]
+  .slice(1, 3) // return [2, 3]
+  [(1, 2, 3, 4)].slice(2, 4); // return [3 ,4]
 ```
 
 ---
@@ -511,7 +517,6 @@ The `crypto.SHA*` functions are used to compute the SHA hash of the input data.
 ```javascript
 crypto.SHA1("hello"); // "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c"
 crypto.SHA256("hello"); // "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
-
 ```
 
 ## dates
@@ -519,7 +524,6 @@ crypto.SHA256("hello"); // "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e7304
 ### timestamp
 
 `timestamp` represent a point in time. It's typically used in conjunction with other functions to extract or manipulate time-related data.
-
 
 ```javascript
 // Creating a timestamp for January 1st, 2023:
@@ -531,7 +535,6 @@ timestamp("2023-07-04T12:00:00Z");
 ### .getDate
 
 `getDate` extract the date part from a timestamp. It returns a string representation of the date.
-
 
 ```javascript
 // Extracting the date from a timestamp:
@@ -548,7 +551,7 @@ timestamp("2023-07-04T12:00:00Z");
 | Function                   | Description                                                                                    | Example |
 | -------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
 | `{date>.getDayOfMonth()`   | A integer value representing the day of the month, with the first day being 1.                 | 1 - 31  |
-| `<date>.getDayOfWeek()`   | eturns an integer value representing the day of the week, where Sunday is 0 and Saturday is 6. | 0 - 6   |
+| `<date>.getDayOfWeek()`    | eturns an integer value representing the day of the week, where Sunday is 0 and Saturday is 6. | 0 - 6   |
 | `<date>.getDayOfYear()`    | an integer value representing the day of the year, with January 1st being day 1.               | 1 - 366 |
 | `<date>.getDayOfMonth()`   | the full year (4 digits for 4-digit years) of the specified timestamp.                         |         |
 | `<date>.getHours()`        | the full year (4 digits for 4-digit years) of the specified timestamp.                         | 0- 23   |
@@ -590,10 +593,9 @@ Durations can also be crated using arithmetic:
 time.ZoneName(); // Might evaluate to "PST" if the local time zone is Pacific Standard Time
 ```
 
-
 ### time.ZoneOffset
 
- `time.ZoneOffset` returns the offset of the local system's time zone in minutes. It helps in understanding the time difference between the local time zone and UTC.
+`time.ZoneOffset` returns the offset of the local system's time zone in minutes. It helps in understanding the time difference between the local time zone and UTC.
 
 ```javascript
 // Getting the time zone offset:
@@ -607,7 +609,7 @@ time.ZoneOffset(); // Could evaluate to -480 for PST
 Syntax:
 
 ```javascript
-time.Parse(layout, value)
+time.Parse(layout, value);
 ```
 
 - `layout` is the time layout string.
@@ -633,8 +635,9 @@ time.Parse("15:04 02-01-2006", "14:30 26-09-2023"); // Includes time of day info
 `time.ParseLocal` parses a given string into a time object according to a specified layout and the local time zone. It's useful for working with local times.
 
 ```javascript
-time.ParseLocal(layout, value)
+time.ParseLocal(layout, value);
 ```
+
 - `layout` is the time layout string.
 - `value` is the string representation of the time to be parsed.
 
@@ -662,7 +665,7 @@ time.ParseLocal("15:04 02-01-2006", "14:30 26-09-2023"); // Includes time of day
 Syntax:
 
 ```javascript
-time.ParseInLocation(layout, location, value)
+time.ParseInLocation(layout, location, value);
 ```
 
 - `layout` is the time layout string.
@@ -805,7 +808,6 @@ If the path is empty, Dir returns ".".
 If the path consists entirely of separators, Dir returns a single separator.
 The returned path does not end in a separator unless it is the root directory.
 
-
 ```javascript
 filepath.Dir("/home/flanksource/projects/gencel"); // /home/flanksource/projects
 ```
@@ -840,7 +842,6 @@ list is empty or all its elements are empty, Join returns
 an empty string.
 On Windows, the result will only be a UNC path if the first
 non-empty element is a UNC path.
-
 
 ```javascript
 filepath.Join(["/home/flanksource", "projects", "gencel"]; // /home/flanksource/projects/gencel
@@ -1023,8 +1024,6 @@ k8s.getStatus(deployment); // "Deployed" if the deployment is successful
 
 `k8s.isHealthy` determine if a Kubernetes resource is healthy. It returns a boolean value indicating the health status of the resource.
 
-
-
 ```javascript
 // Checking if a pod is healthy:
 k8s.isHealthy(pod); // true if the pod is healthy
@@ -1084,7 +1083,6 @@ math.Mul([1, 2, 3, 4, 5]); // 120
 
 `math.Div` takes two numbers and returns their quotient
 
-
 ```javascript
 math.Div(4, 2); // 2
 ```
@@ -1093,7 +1091,6 @@ math.Div(4, 2); // 2
 
 `math.Rem` takes two numbers and returns their remainder
 
-
 ```javascript
 math.Rem(4, 3); // 1
 ```
@@ -1101,7 +1098,6 @@ math.Rem(4, 3); // 1
 ### math.Pow
 
 `math.Pow` takes two numbers and returns their power
-
 
 ```javascript
 math.Pow(4, 2); // 16
@@ -1149,7 +1145,6 @@ math.greatest([1, 2, 3, 4, 5]); // 5
 
 `math.least` takes a list of numbers and returns the least value
 
-
 ```javascript
 math.least([1, 2, 3, 4, 5]); // 1
 ```
@@ -1158,7 +1153,6 @@ math.least([1, 2, 3, 4, 5]); // 1
 
 `math.Ceil` returns the smallest integer greater than or equal to the provided float.
 
-
 ```javascript
 math.Ceil(2.3); // 3
 ```
@@ -1166,7 +1160,6 @@ math.Ceil(2.3); // 3
 ### math.Floor
 
 `math.Floor` returns the largest integer less than or equal to the provided float.
-
 
 ```javascript
 math.Floor(2.3); // 2
@@ -1236,7 +1229,7 @@ random.Item(["a", "b", "c"]);
 Syntax:
 
 ```javascript
-random.Number(min, max)
+random.Number(min, max);
 ```
 
 - `min` is the minimum value of the range (inclusive).
@@ -1255,7 +1248,7 @@ random.Number(1, 10);
 Syntax:
 
 ```javascript
-random.Float(min, max)
+random.Float(min, max);
 ```
 
 - `min` is the minimum value of the range (inclusive).
@@ -1297,7 +1290,7 @@ regexp.Find("xyz", "hello"); // ""
 `regexp.FindAll` retrieves all occurrences of a pattern within a string, up to a specified count. It returns a list of matched substrings or an error if the pattern is invalid.
 
 ```javascript
-regexp.FindAll(pattern, count, input)
+regexp.FindAll(pattern, count, input);
 ```
 
 - `pattern` is the regular expression pattern to find.
@@ -1372,7 +1365,7 @@ regexp.QuoteMeta("[a-z].*"); // "\\[a\\-z\\]\\.\\*"
 Syntax:
 
 ```javascript
-regexp.Replace(pattern, replacement, input)
+regexp.Replace(pattern, replacement, input);
 ```
 
 - `pattern` is the regular expression pattern to replace.
@@ -1433,15 +1426,13 @@ regexp.ReplaceLiteral("a.", "x", "a.b c.d"); // "x.b c.d"
 
 `regexp.Split` splits a string into a slice of substrings separated by a pattern. It returns the slice of strings or an error if the pattern is invalid.
 
-
 ```javascript
-regexp.Split(pattern, count, input)
+regexp.Split(pattern, count, input);
 ```
 
 - `pattern` is the regular expression pattern that separates the substrings.
 - `count` is the maximum number of splits. Use -1 for no limit.
 - `input` is the string to split.
-
 
 ```javascript
 regexp.Split("a.", -1, "banana"); // ["", "n", "n"]
@@ -1470,7 +1461,7 @@ somewhere in the result.
 In no case will it return a string of length greater than maxWidth.
 
 ```javascript
-'string'.abbrev(offset, maxWidth)
+"string".abbrev(offset, maxWidth);
 ```
 
 - str - the string to check
@@ -1494,7 +1485,6 @@ Examples:
 ### .camelCase
 
 `camelCase` converts a given string into camelCase format.
-
 
 ```javascript
 // Converting a string to camelCase:
@@ -1532,7 +1522,6 @@ greater than the length of the string, the function will produce an error:
 
 `contains` check if a string contains a given substring.
 
-
 ```javascript
 "apple".contains("app"); // true
 ```
@@ -1540,7 +1529,6 @@ greater than the length of the string, the function will produce an error:
 ### .endsWith
 
 `endsWith` determine if a string ends with a specified substring.
-
 
 ```javascript
 "hello".endsWith("lo"); // true
@@ -1552,8 +1540,8 @@ greater than the length of the string, the function will produce an error:
 The valid formatting clauses are:
 
 - `%s` substitutes a string. This can also be used on `bools`, `lists`, `maps`, `bytes`,
-`Duration`, `Timestamp`,`int`, `double`
-<br/>Note that the dot/period decimal separator will always be used when printing a list or map that contains a double, and that null can be passed (which results in the string "null") in addition to types.
+  `Duration`, `Timestamp`,`int`, `double`
+  <br/>Note that the dot/period decimal separator will always be used when printing a list or map that contains a double, and that null can be passed (which results in the string "null") in addition to types.
 - `%d` substitutes an integer.
 - `%f` substitutes a double with fixed-point precision. The default precision is 6, but this can be adjusted. The strings `Infinity`, `-Infinity`, and `NaN` are also valid input for this clause.
 - `%e` substitutes a double in scientific notation. The default precision is 6, but this can be adjusted.
@@ -1568,7 +1556,7 @@ The valid formatting clauses are:
 
 ### .indent
 
-`indent`  indents each line of a string by the specified width and prefix
+`indent` indents each line of a string by the specified width and prefix
 
 ```javascript
 "hello world".indent(4, "-"); // ----hello world
@@ -1698,7 +1686,6 @@ ASCII range.
 
 `matches` determine if a string matches a given regular expression pattern. It returns a boolean value indicating whether the string conforms to the pattern.
 
-
 ```javascript
 // Checking if a string matches a simple pattern:
 "apple".matches("^a.*e$"); // true
@@ -1807,7 +1794,6 @@ This function relies on converting strings to rune arrays in order to reverse.
 
 `shellQuote` quotes a string such that it can be safely used as a token in a shell command.
 
-
 ```javascript
 "Hello World".shellQuote(); // "'Hello World'"
 ```
@@ -1825,7 +1811,6 @@ This function relies on converting strings to rune arrays in order to reverse.
 ### .size
 
 `size` determine the number of elements in a collection or the number of Unicode characters in a string.
-
 
 ```javascript
 // Getting the size of a list:
@@ -1903,7 +1888,6 @@ When the split limit is 0, the result is an empty list. When the limit is 1,
 the result is the target string to split. When the limit is a negative
 number, the function behaves the same as split all.
 
-
 Examples:
 
 ```javascript
@@ -1965,7 +1949,6 @@ range. It is an error to specify an end range that is lower than the start
 range, or for either the start or end index to be negative or exceed the string
 length.
 
-
 ```javascript
 "tacocat".substring(4); // returns 'cat'
 ```
@@ -2003,7 +1986,7 @@ target string. The trim function uses the Unicode definition of whitespace
 which does not include the zero-width spaces.
 
 ```javascript
-'  \ttrim\n    '.trim() //  'trim'
+"  \ttrim\n    ".trim(); //  'trim'
 ```
 
 ### .trimPrefix
@@ -2030,7 +2013,6 @@ which does not include the zero-width spaces.
 ### .trimSuffix
 
 `trimSuffix` removes a given suffix from a string if the string ends with that suffix.
-
 
 ```javascript
 // Removing a suffix from a string:
@@ -2289,7 +2271,6 @@ uuid.V4() != uuid.Nil();
 
 `uuid.IsValid` checks if a string is a valid UUID.
 
-
 ```javascript
 uuid.IsValid("2a42e576-c308-4db9-8525-0513af307586");
 ```
@@ -2297,7 +2278,6 @@ uuid.IsValid("2a42e576-c308-4db9-8525-0513af307586");
 ### uuid.Parse
 
 `uuid.Parse` parses a string into a UUID.
-
 
 ```javascript
 uuid.Parse("2a42e576-c308-4db9-8525-0513af307586");
