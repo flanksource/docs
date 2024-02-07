@@ -20,13 +20,13 @@ spec:
 
 ## Spec
 
-| Field      | Description                                                 | Scheme                    | Required |
-| ---------- | ----------------------------------------------------------- | ------------------------- | -------- |
-| `events`   | [List of events](./events/) that trigger this notification. | `[]string`                | `true`   |
-| `to`       | Specify the receipients.                                    | [`Recipient`](#recipient) | `true`   |
-| `title`    | Title of notification.                                      | `string`                  |          |
-| `template` | Template of notification.                                   | `string`                  |          |
-| `filter`   | Filter of notification.                                     | `string`                  |          |
+| Field      | Description                                                        | Scheme                    | Required | Templatable |
+| ---------- | ------------------------------------------------------------------ | ------------------------- | -------- | ----------- |
+| `events`   | [List of events](./events/) that trigger this notification.        | `[]string`                | `true`   |
+| `to`       | Specify the receipients.                                           | [`Recipient`](#recipient) | `true`   |
+| `title`    | Title of the notification. [See templating](./concepts/templating) | `string`                  |          | `true`      |
+| `template` | Body of the notification. [See templating](./concepts/templating)  | `string`                  |          | `true`      |
+| `filter`   | Filter of notification.                                            | `string`                  |          |
 
 ### Recipient
 
