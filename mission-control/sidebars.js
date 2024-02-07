@@ -603,6 +603,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'playbooks/examples/action-filter-action-result',
+          label: 'Accessing result of previous actions'
+        },
+        {
+          type: 'doc',
           id: 'playbooks/examples/action-filter',
           label: 'Conditionally running actions'
         },

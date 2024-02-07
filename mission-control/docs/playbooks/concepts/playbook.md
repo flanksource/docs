@@ -226,3 +226,27 @@ Playbook actions can be conditionally run using a CEL Expression. The expression
 
 - `if: config.deleted_at ? true: false`
 - `if: always()`
+
+#### Accessing results of another action
+
+You can base your filters based on result of a previous action. The following two cel functions can be used:
+
+1. **getLastAction**
+
+`getLastAction()` returns the result of the action that ran just before this action.
+
+Syntax:
+
+```javascript
+getLastAction().result.stdout.JSON().count < 5;
+```
+
+2. **getAction**
+
+To fetch the result of any action that ran before this action, use `getAction()`
+
+Syntax:
+
+```javascript
+getAction('action_name').result.stdout.JSON().count < 5;
+```
