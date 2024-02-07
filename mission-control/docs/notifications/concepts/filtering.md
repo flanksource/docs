@@ -10,7 +10,7 @@ The cel expression receives different input variables based on the event type. T
 
 ## Examples
 
-```yaml
+```yaml title="check-alerts.yaml"
 ---
 # Filter HTTP checks that have failed for more than 5 times in the last 1 hour
 apiVersion: mission-control.flanksource.com/v1

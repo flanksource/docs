@@ -2,15 +2,15 @@
 
 In this example, we will walk through the process of creating a health check alert notification on slack starting from creating the Slack bot token.
 
-## A. Create a Slack bot
+## Create a Slack bot
 
-### 1. Create a new app
+### Create a new app
 
 Visit https://api.slack.com/apps and create a new app. Use the "From an app manifest" option.
 
-![](../../images/slack-app-creation.png)
+![App Creation](../../images/slack-app-creation.png)
 
-### 2. Set up necessary permission for oAuth
+### Set up OAuth permission
 
 After creating the app, you should be navigated to the app's homepage. On the left panel menu, go to Features->OAuth & Permissions. Scroll down and you should see the **"Scopes"** section
 
@@ -18,7 +18,7 @@ After creating the app, you should be navigated to the app's homepage. On the le
 
 Set `chat:write` permission
 
-### 3. Install the slack app to your Slack workspace
+### Install the Slack app
 
 While still on the same page, scroll up to the "OAuth Tokens for Your Workspace" section. Install the newly created app on your Slack workspace.
 
@@ -28,9 +28,9 @@ Once you install the app you should see the OAuth token
 
 ![](../../images/slack-bot-user-oauth-token.png)
 
-## B. Setting up the notification
+## Set up the notification
 
-### 1. Create the kubernetes secret
+### Create kubernetes secret
 
 We'll create a new kubernetes secret using the OAuth token we just created.
 
@@ -45,7 +45,7 @@ stringData:
   token: xoxb-910094966996-6596865117477-n7iujSYWmHtnTLMmITdm8z06
 ```
 
-### 2. Create a mission control connection for slack
+### Create Connection
 
 Then, we create a new slack connection using that kubernetes secret. The channel that should receive the notification should go into `spec.username` field.
 
@@ -69,7 +69,7 @@ spec:
         key: token
 ```
 
-### 3. Create the notification
+### Create notification
 
 ```yaml title="http-check-notification.yaml"
 ---
