@@ -794,6 +794,11 @@ const sidebars = {
       label: 'Overview'
     },
     {
+      type: 'doc',
+      id: 'notifications/channels',
+      label: 'Channels'
+    },
+    {
       type: 'category',
       label: 'Concepts',
       items: [
@@ -801,11 +806,6 @@ const sidebars = {
           type: 'doc',
           id: 'notifications/concepts/filtering',
           label: 'Filtering'
-        },
-        {
-          type: 'doc',
-          id: 'notifications/concepts/recipients',
-          label: 'Recipients'
         },
         {
           type: 'doc',
@@ -819,7 +819,7 @@ const sidebars = {
       label: 'Events',
       link: {
         type: 'generated-index',
-        title: 'Scripting',
+        title: 'Notification Events',
         slug: '/notifications/events',
       },
       items: [
