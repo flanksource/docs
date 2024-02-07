@@ -75,35 +75,29 @@ Playbook parameter defines a parameter that a playbook needs to run.
 
 #### Parameter Type
 
-| name        | Description                        | UI Component | Schema    | Properties                                              |
-| ----------- | ---------------------------------- | ------------ | --------- | ------------------------------------------------------- |
-| `check`     | Limits the value to a check.       | Dropdown     | `string`  | [`Check Property`](#check-parameter-properties)         |
-| `checkbox`  | Boolean value toggle               | Checkbox     | `boolean` | -                                                       |
-| `code`      | Text area                          | Code Editor  | `string`  | [`Code Property`](#code-parameter-properties)           |
-| `component` | Limits the value to a component.   | Dropdown     | `string`  | [`Component Property`](#component-parameter-properties) |
-| `config`    | Limits the value to a config item. | Dropdown     | `string`  | [`Config Property`](#config-parameter-properties)       |
-| `list`      | Specify a custom list of values    | Dropdown     | `string`  | [`List Property`](#list-parameter-properties)           |
-| `people`    | Limits the value to people.        | Dropdown     | `string`  | [`People Property`](#people-parameter-properties)       |
-| `team`      | Limits the value to teams.         | Dropdown     | `string`  | -                                                       |
-| `text`      | Text input                         | Text Input   | `string`  | [`Text Property`](#text-parameter-properties)           |
+| name        | Description                        | UI Component | Schema    | Properties                                                 |
+| ----------- | ---------------------------------- | ------------ | --------- | ---------------------------------------------------------- |
+| `check`     | Limits the value to a check.       | Dropdown     | `string`  | [`Check Property`](#table-filter-parameter-properties)     |
+| `checkbox`  | Boolean value toggle               | Checkbox     | `boolean` | -                                                          |
+| `code`      | Text area                          | Code Editor  | `string`  | [`Code Property`](#code-parameter-properties)              |
+| `component` | Limits the value to a component.   | Dropdown     | `string`  | [`Component Property`](#table-filter-parameter-properties) |
+| `config`    | Limits the value to a config item. | Dropdown     | `string`  | [`Config Property`](#table-filter-parameter-properties)    |
+| `list`      | Specify a custom list of values    | Dropdown     | `string`  | [`List Property`](#list-parameter-properties)              |
+| `people`    | Limits the value to people.        | Dropdown     | `string`  | [`People Property`](#people-parameter-properties)          |
+| `team`      | Limits the value to teams.         | Dropdown     | `string`  | -                                                          |
+| `text`      | Text input                         | Text Input   | `string`  | [`Text Property`](#text-parameter-properties)              |
 
-##### `check` parameter properties
+##### table filter parameter properties
 
-| Field    | Description                        | Schema   |
-| -------- | ---------------------------------- | -------- |
-| `filter` | Limit the checks to the given type | `string` |
+| Field    | Description                              | Schema                          |
+| -------- | ---------------------------------------- | ------------------------------- |
+| `filter` | A set of filters to apply on the options | [`Table Filter`](#table-filter) |
 
-##### `component` parameter properties
+###### table filter
 
-| Field    | Description                            | Schema   |
-| -------- | -------------------------------------- | -------- |
-| `filter` | Limit the components to the given type | `string` |
-
-##### `config` parameter properties
-
-| Field    | Description                         | Schema   |
-| -------- | ----------------------------------- | -------- |
-| `filter` | Limit the configs to the given type | `string` |
+| Field  | Description                            | Schema   |
+| ------ | -------------------------------------- | -------- |
+| `type` | Limit the components to the given type | `string` |
 
 ##### `code` parameter properties
 
@@ -165,6 +159,7 @@ Actions are the fundamental tasks executed by a playbook. A playbook can compris
 | `runsOn`       | Specify the [runners](./runners.md) that can run this action. One will be chosen on random. When empty, the playbook will run on the main instance itself | `[]string`                                         |          |
 | `templatesOn`  | Specify where the templating of the action spec should occur                                                                                              | `host`\|`agent`                                    |          |
 | `delay`        | A CEL expression that evaluates to a duration to delay the execution of the action. _(Sensitive to the minute.)_                                          | `string`                                           |          |
+| `filter`       | A CEL expression that returns a boolean or special value to indicated whether the action should run or not. [Read below](#conditionally-running-actions)  | `string`                                           |          |
 | `timeout`      | Timeout on this action.                                                                                                                                   | [`DurationString`](#duration-string)               |          |
 | `exec`         | Specify exec of action.                                                                                                                                   | [`ExecAction`](../actions/exec.md)                 |          |
 | `gitops`       | Specify gitops of action.                                                                                                                                 | [`GitopsAction`](../actions/gitops.md)             |          |
@@ -207,7 +202,7 @@ Valid time units are "s", "m", "h", "d", "w", "y". Eg:
 
 ### Conditionally running actions
 
-Playbook actions can be conditionally run using a CEL Expression. The expressions should either return
+Playbook actions can be selectively executed based on CEL expressions. These expressions must either return
 
 - a boolean value _(`true` indicating run the action & skip the action otherwise)_
 - or a special function among the ones listed below

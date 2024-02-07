@@ -6,10 +6,33 @@ Expressions is a powerful tool that allows formulating complex filters for playb
 
 **Examples:**
 
-```
-filter: check.type == 'http'
-
-filter: check.type == 'http' && summary.failed >  3
+```yaml title="notify-with-filter.yaml"
+---
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: notify-with-filter
+spec:
+  on:
+    config:
+      - event: created
+  configs:
+    - type: Kubernetes::Pod
+  actions:
+    - name: Send notification
+      exec:
+        script: notify-send "{{.config.name}} was created"
+    - name: Bad script to create a failing action
+      exec:
+        script: non-existing-command
+    - name: Send all success notification
+      if: success() # this filter practically skips this action as the second action above always fails
+      exec:
+        script: notify-send "Everything went successfully"
+    - name: Send notification regardless
+      if: always()
+      exec:
+        script: notify-send "a config was created"
 ```
 
 ## Context
