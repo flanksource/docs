@@ -55,7 +55,7 @@ spec:
     - local # Main instance
     - aws # agent
   parameters:
-    - name: check
+    - name: check_id
       type: config
       properties:
         filter: heartbeat
@@ -70,7 +70,7 @@ spec:
                 name: canary-checker-heartbeat
                 key: token
         script: |
-          curl -H "Authorization: $HEARTBEAT_TOKEN" https://canarychecker.com/heartbeat/{{.params.check}}
+          curl -H "Authorization: $HEARTBEAT_TOKEN" -H "X-CHECK-ID: {{.params.check_id}}" https://httpbin.demo.aws.flanksource.com/bearer
     - name: send heartbeat from the agent
       runsOn:
         - 'aws'
@@ -83,5 +83,5 @@ spec:
                 name: canary-checker-heartbeat
                 key: token
         script: |
-          curl -H "Authorization: $HEARTBEAT_TOKEN" https://canarychecker.com/heartbeat/{{.params.check}}
+          curl -H "Authorization: $HEARTBEAT_TOKEN" -H "X-CHECK-ID: {{.params.check_id}}" https://httpbin.demo.aws.flanksource.com/bearer
 ```
