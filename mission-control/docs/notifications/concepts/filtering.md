@@ -1,6 +1,10 @@
 # Filtering
 
-Customizing notifications is made possible through the use of filters, which are driven by CEL expressions _(Check Execution Language)_. You can learn more about CEL expressions on the [CEL-spec GitHub page](https://github.com/google/cel-spec).
+Customizing notifications is made possible through the use of filters, which are driven by CEL expressions _(Check Execution Language)_.
+
+:::info
+Learn more about CEL expressions [here](../../reference/scripting/cel.md).
+:::
 
 The cel expression receives different input variables based on the event type. To determine which variables are available, refer to the corresponding event details in the [events](../events) section.
 

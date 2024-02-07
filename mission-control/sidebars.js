@@ -794,11 +794,6 @@ const sidebars = {
       label: 'Overview'
     },
     {
-      type: 'doc',
-      id: 'notifications/channels',
-      label: 'Channels'
-    },
-    {
       type: 'category',
       label: 'Concepts',
       items: [
@@ -839,6 +834,11 @@ const sidebars = {
           label: 'Incidents'
         }
       ]
+    },
+    {
+      type: 'doc',
+      id: 'notifications/channels',
+      label: 'Channels'
     },
     {
       type: 'category',
