@@ -839,6 +839,17 @@ const sidebars = {
           label: 'Incidents'
         }
       ]
+    },
+    {
+      type: 'category',
+      label: 'Examples',
+      items: [
+        {
+          type: 'doc',
+          id: 'notifications/examples/slack',
+          label: 'Slack',
+        }
+      ]
     }
   ],
   registrySidebar: [
