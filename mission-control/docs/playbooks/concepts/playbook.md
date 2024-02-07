@@ -27,17 +27,19 @@ _Fig: Playbooks Page_
 
 ## Spec
 
-| Field         | Description                                                            | Scheme                                | Required |
-| ------------- | ---------------------------------------------------------------------- | ------------------------------------- | -------- |
-| `description` | A short description                                                    | `string`                              | `true`   |
-| `icon`        | Icon for the playbook                                                  | `string`                              |          |
-| `on`          | Specify events to automatically trigger the Playbook. .                | [`[]Trigger`](#trigger)               |          |
-| `checks`      | Specify selectors for checks that can be run on the Playbook.          | [`[]ResourceFilter`](#resourcefilter) |          |
-| `configs`     | Specify selectors for config items that can be run on the Playbook.    | [`[]ResourceFilter`](#resourcefilter) |          |
-| `components`  | Specify selectors for component items that can be run on the Playbook. | [`[]ResourceFilter`](#resourcefilter) |          |
-| `parameters`  | Define a set of labeled parameters for the Playbook.                   | [`[]Parameter`](#parameter)           |          |
-| `actions`     | Specify the set of actions to run.                                     | [`[]Action`](#action)                 | `true`   |
-| `approval`    | Specify who can approve runs on this playbook.                         | [`Approval`](./approval#approval)     |          |
+| Field         | Description                                                                                                                                                 | Scheme                                | Required |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | -------- |
+| `description` | A short description                                                                                                                                         | `string`                              | `true`   |
+| `icon`        | Icon for the playbook                                                                                                                                       | `string`                              |          |
+| `on`          | Specify events to automatically trigger the Playbook. .                                                                                                     | [`[]Trigger`](#trigger)               |          |
+| `runsOn`      | Specify the [runners](./runners.md) that can run this playbook. One will be chosen on random. When empty, the playbook will run on the main instance itself | `[]string`                            |          |
+| `templatesOn` | Specify where the templating of the action spec should occur                                                                                                | `host`\|`agent`                       |          |
+| `checks`      | Specify selectors for checks that can be run on the Playbook.                                                                                               | [`[]ResourceFilter`](#resourcefilter) |          |
+| `configs`     | Specify selectors for config items that can be run on the Playbook.                                                                                         | [`[]ResourceFilter`](#resourcefilter) |          |
+| `components`  | Specify selectors for component items that can be run on the Playbook.                                                                                      | [`[]ResourceFilter`](#resourcefilter) |          |
+| `parameters`  | Define a set of labeled parameters for the Playbook.                                                                                                        | [`[]Parameter`](#parameter)           |          |
+| `actions`     | Specify the set of actions to run.                                                                                                                          | [`[]Action`](#action)                 | `true`   |
+| `approval`    | Specify who can approve runs on this playbook.                                                                                                              | [`Approval`](./approval#approval)     |          |
 
 ### Trigger
 
@@ -60,10 +62,10 @@ Filters can define what resources (checks, configs or components) are permitted 
 
 Playbook parameter defines a parameter that a playbook needs to run.
 
-| Field         | Description                                                                                       | Scheme              | Required |
-| ------------- | ------------------------------------------------------------------------------------------------- | ------------------- | -------- |
+| Field         | Description                                                                                       | Scheme              | Required | Templatable |
+| ------------- | ------------------------------------------------------------------------------------------------- | ------------------- | -------- | ----------- |
 | `name`        | Name of parameter.                                                                                | `string`            | `true`   |
-| `default`     | Default value of the parameter.                                                                   | `string`            |          |
+| `default`     | Default value of the parameter.                                                                   | `string`            |          | `true`      |
 | `label`       | Label of the parameter.                                                                           | `string`            | `true`   |
 | `required`    | Specify if the parameter is required                                                              | `bool`              |          |
 | `icon`        | Icon of parameter. See [icons](https://github.com/flanksource/flanksource-ui/tree/main/src/icons) | `string`            |          |
@@ -157,17 +159,19 @@ Start time can be in future or even in the past.
 
 Actions are the fundamental tasks executed by a playbook. A playbook can comprise multiple actions, which are executed sequentially. If any action encounters an error and fails, the execution of the playbook is halted.
 
-| Field          | Description                                                                                                      | Scheme                                             | Required |
-| -------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
-| `name`         | Name of action.                                                                                                  | `string`                                           | `true`   |
-| `delay`        | A CEL expression that evaluates to a duration to delay the execution of the action. _(Sensitive to the minute.)_ | `string`                                           |          |
-| `timeout`      | Timeout on this action.                                                                                          | [`DurationString`](#duration-string)               |          |
-| `exec`         | Specify exec of action.                                                                                          | [`ExecAction`](../actions/exec.md)                 |          |
-| `gitops`       | Specify gitops of action.                                                                                        | [`GitopsAction`](../actions/gitops.md)             |          |
-| `http`         | Specify http of action.                                                                                          | [`HttpAction`](../actions/http.md)                 |          |
-| `sql`          | Specify sql of action.                                                                                           | [`SqlAction`](../actions/sql.md)                   |          |
-| `pod`          | Specify pod of action.                                                                                           | [`PodAction`](../actions/pod.md)                   |          |
-| `notification` | Specify notification of action.                                                                                  | [`NotificationAction`](../actions/notification.md) |          |
+| Field          | Description                                                                                                                                               | Scheme                                             | Required |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `name`         | Name of action.                                                                                                                                           | `string`                                           | `true`   |
+| `runsOn`       | Specify the [runners](./runners.md) that can run this action. One will be chosen on random. When empty, the playbook will run on the main instance itself | `[]string`                                         |          |
+| `templatesOn`  | Specify where the templating of the action spec should occur                                                                                              | `host`\|`agent`                                    |          |
+| `delay`        | A CEL expression that evaluates to a duration to delay the execution of the action. _(Sensitive to the minute.)_                                          | `string`                                           |          |
+| `timeout`      | Timeout on this action.                                                                                                                                   | [`DurationString`](#duration-string)               |          |
+| `exec`         | Specify exec of action.                                                                                                                                   | [`ExecAction`](../actions/exec.md)                 |          |
+| `gitops`       | Specify gitops of action.                                                                                                                                 | [`GitopsAction`](../actions/gitops.md)             |          |
+| `http`         | Specify http of action.                                                                                                                                   | [`HttpAction`](../actions/http.md)                 |          |
+| `sql`          | Specify sql of action.                                                                                                                                    | [`SqlAction`](../actions/sql.md)                   |          |
+| `pod`          | Specify pod of action.                                                                                                                                    | [`PodAction`](../actions/pod.md)                   |          |
+| `notification` | Specify notification of action.                                                                                                                           | [`NotificationAction`](../actions/notification.md) |          |
 
 :::note
 Specify one or more actions; but at least one.

@@ -480,6 +480,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'playbooks/concepts/runners',
+          label: 'Runners',
+        },
+        {
+          type: 'doc',
           id: 'playbooks/concepts/approval',
           label: 'Approval'
         },
