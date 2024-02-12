@@ -480,6 +480,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'playbooks/concepts/runners',
+          label: 'Runners',
+        },
+        {
+          type: 'doc',
           id: 'playbooks/concepts/approval',
           label: 'Approval'
         },
@@ -529,6 +534,11 @@ const sidebars = {
           type: 'doc',
           id: 'playbooks/actions/exec',
           label: 'Exec'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/actions/github',
+          label: 'Github'
         },
         {
           type: 'doc',
@@ -590,6 +600,11 @@ const sidebars = {
           type: 'doc',
           id: 'playbooks/examples/exec-delay',
           label: 'Delaying actions'
+        },
+        {
+          type: 'doc',
+          id: 'playbooks/examples/action-filter-action-result',
+          label: 'Accessing result of previous actions'
         },
         {
           type: 'doc',
