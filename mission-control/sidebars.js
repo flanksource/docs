@@ -804,11 +804,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'notifications/concepts/recipients',
-          label: 'Recipients'
-        },
-        {
-          type: 'doc',
           id: 'notifications/concepts/templating',
           label: 'Templating'
         }
@@ -819,7 +814,7 @@ const sidebars = {
       label: 'Events',
       link: {
         type: 'generated-index',
-        title: 'Scripting',
+        title: 'Notification Events',
         slug: '/notifications/events',
       },
       items: [
@@ -832,6 +827,27 @@ const sidebars = {
           type: 'doc',
           id: 'notifications/events/health-checks',
           label: 'Health Checks'
+        },
+        {
+          type: 'doc',
+          id: 'notifications/events/incidents',
+          label: 'Incidents'
+        }
+      ]
+    },
+    {
+      type: 'doc',
+      id: 'notifications/channels',
+      label: 'Channels'
+    },
+    {
+      type: 'category',
+      label: 'Examples',
+      items: [
+        {
+          type: 'doc',
+          id: 'notifications/examples/slack',
+          label: 'Slack',
         }
       ]
     }
