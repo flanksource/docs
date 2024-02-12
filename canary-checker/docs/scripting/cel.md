@@ -42,7 +42,7 @@ Values in CEL represent any of the following:
 Takes in an AWS arn and parses it and returns a map.
 
 ```javascript
-aws.arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic"); //
+aws.arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic") //
 // map[string]string{
 // "service": string,
 // "region": string,
@@ -56,7 +56,7 @@ aws.arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic"); //
 `aws.fromAWSMap` takes a list of `map[string]string` and merges them into a single map. The input map is expected to have the field "Name".
 
 ```javascript
-`aws.fromAWSMap(x).hello" == "world"`; // `true`
+aws.fromAWSMap(x).hello" == "world" // `true`
 // Where
 // x = [
 //   { Name: 'hello', Value: 'world' },
@@ -73,7 +73,7 @@ aws.arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic"); //
 `base64.encode` encodes the given byte slice to a Base64 encoded string.
 
 ```javascript
-base64.decode("aGVsbG8="); // return b'hello'
+base64.decode("aGVsbG8=") // return b'hello'
 ```
 
 ### base64.decode
@@ -81,7 +81,7 @@ base64.decode("aGVsbG8="); // return b'hello'
 `base64.decode` decodes the given base64 encoded string back to its original form.
 
 ```javascript
-base64.decode("aGVsbG8="); // return b'hello'
+base64.decode("aGVsbG8=") // return b'hello'
 ```
 
 ## collections
@@ -94,7 +94,7 @@ If any predicate evaluates to false, the macro evaluates to false, ignoring any 
 Syntax:
 
 ```javascript
-e.all(x, p);
+e.all(x, p)
 
 // Where:
 //  `e` is the list or a map.
@@ -106,7 +106,7 @@ Examples:
 
 ```javascript
 // Checking if all elements of a list are greater than 0:
-[1, 2, 3].all(e, e > 0); // true
+[1, 2, 3].all(e, e > 0) // true
 ```
 
 ```javascript
@@ -121,7 +121,7 @@ The `exists` macro checks if there exists at least one element in a list that sa
 Syntax:
 
 ```javascript
-e.exists(x, p);
+e.exists(x, p)
 
 // Where:
 //  `e` is the list you're checking.
@@ -133,7 +133,7 @@ Example:
 
 ```javascript
 // Checking if any element of a list is equal to 2:
-[1, 2, 3].exists(e, e == 2); // true
+[1, 2, 3].exists(e, e == 2) // true
 ```
 
 ### exists_one
@@ -143,7 +143,7 @@ The `exists_one` macro checks if there exists exactly one element in a list that
 Syntax:
 
 ```javascript
-e.exists_one(x, p);
+e.exists_one(x, p)
 
 // Where:
 //  `e` is the list you're checking.
@@ -154,11 +154,11 @@ e.exists_one(x, p);
 Example:
 
 ```javascript
-[1, 2, 3].exists_one(e, e > 1); // false
+[1, 2, 3].exists_one(e, e > 1) // false
 ```
 
 ```javascript
-[1, 2, 3].exists_one(e, e == 2); // true
+[1, 2, 3].exists_one(e, e == 2) // true
 ```
 
 ### filter
@@ -168,7 +168,7 @@ The `filter` macro creates a new list containing only the elements or entries of
 Syntax:
 
 ```javascript
-e.filter(x, p);
+e.filter(x, p)
 ```
 
 Where:
@@ -181,7 +181,7 @@ Examples:
 
 ```javascript
 // Filtering a list to include only numbers greater than 2:
-[1, 2, 3, 4].filter(e, e > 2); // [3, 4]
+[1, 2, 3, 4].filter(e, e > 2) // [3, 4]
 ```
 
 ### fold
@@ -213,8 +213,7 @@ Where:
 Examples:
 
 ```javascript
-// Computing the sum of all elements of a list:
-[1, 2, 3].fold(e, acc, acc + e); // 6
+[1, 2, 3].fold(e, acc, acc + e) // 6
 ```
 
 ```javascript
@@ -241,7 +240,7 @@ Example:
 If you have a message `person` with a potential field `name`, you can check for its presence with:
 
 ```javascript
-has(person.name); // true if 'name' is present, false otherwise
+has(person.name) // true if 'name' is present, false otherwise
 ```
 
 ### in
@@ -251,8 +250,11 @@ The membership test operator checks whether an element is a member of a collecti
 Syntax:
 
 ```javascript
-`"apple" in ["apple", "banana"]` // => true
-`3 in [1, 2, 4]`; // => false
+"apple" in ["apple", "banana"] // => true
+```
+
+```javascript
+3 in [1, 2, 4] // => false
 ```
 
 ### map
@@ -262,7 +264,7 @@ The `map` macro creates a new list by transforming a list `e` by taking each ele
 Syntax:
 
 ```javascript
-e.map(x, t);
+e.map(x, t)
 
 // Where:
 //   `e` is the list you're transforming.
@@ -271,7 +273,7 @@ e.map(x, t);
 ```
 
 ```javascript
-e.map(x, p, t);
+e.map(x, p, t)
 
 // Where:
 //   `e` is the list you're transforming.
@@ -284,9 +286,11 @@ Examples:
 
 ```javascript
 // Transforming each element of a list by multiplying it by 2:
-[1, 2, 3].map(e, e * 2); // [2, 4, 6]
+[1, 2, 3].map(e, e * 2) // [2, 4, 6]
+```
 
-[1, 2, 3].map(x, x > 1, x + 1); // [3, 4]
+```javascript
+[(1, 2, 3)].map(x, x > 1, x + 1) // [3, 4]
 ```
 
 ### size
@@ -303,7 +307,7 @@ Syntax
 ```
 
 ```javascript
-"apple".size(); // 5
+"apple".size() // 5
 ```
 
 ```javascript
@@ -311,7 +315,7 @@ b"abc".size() // 3
 ```
 
 ```javascript
-["apple", "banana", "cherry"].size(); //  3
+["apple", "banana", "cherry"].size() //  3
 ```
 
 ```javascript
@@ -323,9 +327,11 @@ b"abc".size() // 3
 Returns a new sub-list using the indexes provided.
 
 ```javascript
-[1, 2, 3, 4]
-  .slice(1, 3) // return [2, 3]
-  [(1, 2, 3, 4)].slice(2, 4); // return [3 ,4]
+[1, 2, 3, 4].slice(1, 3) // return [2, 3]
+```
+
+```javascript
+[(1, 2, 3, 4)].slice(2, 4) // return [3 ,4]
 ```
 
 ---
@@ -346,15 +352,15 @@ sets.contains(list(T), list(T)) -> bool
 Examples:
 
 ```javascript
-sets.contains([], []); // true
+sets.contains([], []) // true
 ```
 
 ```javascript
-sets.contains([], [1]); // false
+sets.contains([], [1]) // false
 ```
 
 ```javascript
-sets.contains([1, 2, 3, 4], [2, 3]); // true
+sets.contains([1, 2, 3, 4], [2, 3]) // true
 ```
 
 ```javascript
@@ -374,11 +380,11 @@ the computation.
 Examples:
 
 ```javascript
-sets.equivalent([], []); // true
+sets.equivalent([], []) // true
 ```
 
 ```javascript
-sets.equivalent([1], [1, 1]); // true
+sets.equivalent([1], [1, 1]) // true
 ```
 
 ```javascript
@@ -396,11 +402,11 @@ to an element in the second list. If either list is empty, the result will
 be false.
 
 ```javascript
-sets.intersects([1], []); // false
+sets.intersects([1], []) // false
 ```
 
 ```javascript
-sets.intersects([1], [1, 2]); // true
+sets.intersects([1], [1, 2]) // true
 ```
 
 ```javascript
@@ -408,9 +414,9 @@ sets.intersects(
   [[1], [2, 3]],
   [
     [1, 2],
-    [2, 3.0],
+    [2, 3.0]
   ]
-); // true
+) // true
 ```
 
 ---
@@ -422,7 +428,7 @@ sets.intersects(
 `CSV` converts a CSV formatted array into a two-dimensional array, where each element is a row string.
 
 ```javascript
-CSV(["Alice,30", "Bob,31"])[0][0]; // "Alice"
+CSV(["Alice,30", "Bob,31"])[0][0] // "Alice"
 ```
 
 ---
@@ -515,8 +521,8 @@ data.ToCSV([])  // an empty string
 The `crypto.SHA*` functions are used to compute the SHA hash of the input data.
 
 ```javascript
-crypto.SHA1("hello"); // "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c"
-crypto.SHA256("hello"); // "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+crypto.SHA1("hello") // "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c"
+crypto.SHA256("hello") // "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
 ```
 
 ## dates
@@ -527,9 +533,9 @@ crypto.SHA256("hello"); // "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e7304
 
 ```javascript
 // Creating a timestamp for January 1st, 2023:
-timestamp("2023-01-01T00:00:00Z");
+timestamp("2023-01-01T00:00:00Z")
 // Creating another timestamp:
-timestamp("2023-07-04T12:00:00Z");
+timestamp("2023-07-04T12:00:00Z")
 ```
 
 ### .getDate
@@ -538,12 +544,12 @@ timestamp("2023-07-04T12:00:00Z");
 
 ```javascript
 // Extracting the date from a timestamp:
-"2023-01-01T12:34:56Z".getDate(); // "2023-01-01"
+"2023-01-01T12:34:56Z".getDate() // "2023-01-01"
 ```
 
 ```javascript
 // Getting the date from another timestamp:
-"2023-07-04T00:00:00Z".getDate(); // "2023-07-04"
+"2023-07-04T00:00:00Z".getDate() // "2023-07-04"
 ```
 
 ### .get[DatePart]
@@ -568,8 +574,8 @@ The format is an integer followed by a unit: `s` for seconds, `m` for minutes, `
 
 ```javascript
 // Creating a duration of 5 hours:
-duration("5h"); // Represents a duration of 5 hours
-duration("30m"); // Represents a duration of 30 minutes
+duration("5h") // Represents a duration of 5 hours
+duration("30m") // Represents a duration of 30 minutes
 ```
 
 Durations can also be crated using arithmetic:
@@ -590,7 +596,7 @@ Durations can also be crated using arithmetic:
 
 ```javascript
 // Retrieving the local time zone name:
-time.ZoneName(); // Might evaluate to "PST" if the local time zone is Pacific Standard Time
+time.ZoneName() // Might evaluate to "PST" if the local time zone is Pacific Standard Time
 ```
 
 ### time.ZoneOffset
@@ -599,7 +605,7 @@ time.ZoneName(); // Might evaluate to "PST" if the local time zone is Pacific St
 
 ```javascript
 // Getting the time zone offset:
-time.ZoneOffset(); // Could evaluate to -480 for PST
+time.ZoneOffset() // Could evaluate to -480 for PST
 ```
 
 ### time.Parse
@@ -609,7 +615,7 @@ time.ZoneOffset(); // Could evaluate to -480 for PST
 Syntax:
 
 ```javascript
-time.Parse(layout, value);
+time.Parse(layout, value)
 ```
 
 - `layout` is the time layout string.
@@ -617,17 +623,17 @@ time.Parse(layout, value);
 
 ```javascript
 // Parsing a time string with a specific format:
-time.Parse("2006-01-02", "2023-09-26"); // a time object representing September 26, 2023
+time.Parse("2006-01-02", "2023-09-26") // a time object representing September 26, 2023
 ```
 
 ```javascript
 // Another example with a different format:
-time.Parse("02-01-2006", "26-09-2023"); // the same time object as above
+time.Parse("02-01-2006", "26-09-2023") // the same time object as above
 ```
 
 ```javascript
 // Parsing a time with hour and minute information:
-time.Parse("15:04 02-01-2006", "14:30 26-09-2023"); // Includes time of day information
+time.Parse("15:04 02-01-2006", "14:30 26-09-2023") // Includes time of day information
 ```
 
 ### time.ParseLocal
@@ -635,7 +641,7 @@ time.Parse("15:04 02-01-2006", "14:30 26-09-2023"); // Includes time of day info
 `time.ParseLocal` parses a given string into a time object according to a specified layout and the local time zone. It's useful for working with local times.
 
 ```javascript
-time.ParseLocal(layout, value);
+time.ParseLocal(layout, value)
 ```
 
 - `layout` is the time layout string.
@@ -645,17 +651,17 @@ Examples:
 
 ```javascript
 // Parsing a local time string:
-time.ParseLocal("2006-01-02 15:04", "2023-09-26 14:30"); // a local time object for 14:30 on September 26, 2023
+time.ParseLocal("2006-01-02 15:04", "2023-09-26 14:30") // a local time object for 14:30 on September 26, 2023
 ```
 
 ```javascript
 // Another example:
-time.ParseLocal("02-01-2006", "26-09-2023"); // a local time object for September 26, 2023
+time.ParseLocal("02-01-2006", "26-09-2023") // a local time object for September 26, 2023
 ```
 
 ```javascript
 // Parsing with a different time format:
-time.ParseLocal("15:04 02-01-2006", "14:30 26-09-2023"); // Includes time of day information in local time zone
+time.ParseLocal("15:04 02-01-2006", "14:30 26-09-2023") // Includes time of day information in local time zone
 ```
 
 ### time.ParseInLocation
@@ -665,7 +671,7 @@ time.ParseLocal("15:04 02-01-2006", "14:30 26-09-2023"); // Includes time of day
 Syntax:
 
 ```javascript
-time.ParseInLocation(layout, location, value);
+time.ParseInLocation(layout, location, value)
 ```
 
 - `layout` is the time layout string.
@@ -676,17 +682,17 @@ Examples:
 
 ```javascript
 // Parsing a time string for a specific time zone:
-time.ParseInLocation("2006-01-02", "America/New_York", "2023-09-26"); // a time object for EST/EDT
+time.ParseInLocation("2006-01-02", "America/New_York", "2023-09-26") // a time object for EST/EDT
 ```
 
 ```javascript
 // Another example for a different time zone:
-time.ParseInLocation("02-01-2006", "Europe/London", "26-09-2023"); // a time object for GMT/BST
+time.ParseInLocation("02-01-2006", "Europe/London", "26-09-2023") // a time object for GMT/BST
 ```
 
 ```javascript
 // Parsing with hour and minute for a specific zone:
-time.ParseInLocation("15:04 02-01-2006", "Asia/Tokyo", "14:30 26-09-2023"); // a time object for JST
+time.ParseInLocation("15:04 02-01-2006", "Asia/Tokyo", "14:30 26-09-2023") // a time object for JST
 ```
 
 ### time.Now
@@ -695,7 +701,7 @@ time.ParseInLocation("15:04 02-01-2006", "Asia/Tokyo", "14:30 26-09-2023"); // a
 
 ```javascript
 // Getting the current time:
-time.Now(); // the current date and time
+time.Now() // the current date and time
 ```
 
 ### time.ParseDuration
@@ -704,17 +710,17 @@ time.Now(); // the current date and time
 
 ```javascript
 // Parsing a duration string:
-time.ParseDuration("1h30m"); // a duration of 1 hour and 30 minutes
+time.ParseDuration("1h30m") // a duration of 1 hour and 30 minutes
 ```
 
 ```javascript
 // Another example with a different format:
-time.ParseDuration("15m30s"); // a duration of 15 minutes and 30 seconds
+time.ParseDuration("15m30s") // a duration of 15 minutes and 30 seconds
 ```
 
 ```javascript
 // Parsing a negative duration:
-time.ParseDuration("-2h45m"); // a duration of -2 hours and -45 minutes
+time.ParseDuration("-2h45m") // a duration of -2 hours and -45 minutes
 ```
 
 ### time.Since
@@ -723,17 +729,17 @@ time.ParseDuration("-2h45m"); // a duration of -2 hours and -45 minutes
 
 ```javascript
 // Calculating the time elapsed since a specific past time:
-time.Since(time.Parse("2006-01-02", "2023-09-26")); // the duration since September 26, 2023
+time.Since(time.Parse("2006-01-02", "2023-09-26")) // the duration since September 26, 2023
 ```
 
 ```javascript
 // Another example with a different past time:
-time.Since(time.Parse("15:04 02-01-2006", "14:30 26-09-2023")); // the duration since 14:30 on September 26, 2023
+time.Since(time.Parse("15:04 02-01-2006", "14:30 26-09-2023")) // the duration since 14:30 on September 26, 2023
 ```
 
 ```javascript
 // Using `time.Now` for a real-time duration:
-time.Since(time.Now()); // Always evaluates to a very small duration, as it's the time since "now"
+time.Since(time.Now()) // Always evaluates to a very small duration, as it's the time since "now"
 ```
 
 ### time.Until
@@ -742,17 +748,17 @@ time.Since(time.Now()); // Always evaluates to a very small duration, as it's th
 
 ```javascript
 // Calculating the time remaining until a specific future time:
-time.Until(time.Parse("2006-01-02", "2023-10-01")); // the duration until October 1, 2023
+time.Until(time.Parse("2006-01-02", "2023-10-01")) // the duration until October 1, 2023
 ```
 
 ```javascript
 // Another example with a different future time:
-time.Until(time.Parse("15:04 02-01-2006", "16:00 30-09-2023")); // the duration until 16:00 on September 30, 2023
+time.Until(time.Parse("15:04 02-01-2006", "16:00 30-09-2023")) // the duration until 16:00 on September 30, 2023
 ```
 
 ```javascript
 // Using `time.Now` for a real-time duration:
-time.Until(time.Now()); // Always evaluates to zero, as it's the time until "now"
+time.Until(time.Now()) // Always evaluates to zero, as it's the time until "now"
 ```
 
 ---
@@ -764,7 +770,7 @@ time.Until(time.Now()); // Always evaluates to zero, as it's the time until "now
 `urlencode` encodes the given string into a URL-encoded string.
 
 ```javascript
-urlencode("hello world ?"); // hello+world+%3F
+urlencode("hello world ?") // hello+world+%3F
 ```
 
 ### urldecode
@@ -772,7 +778,7 @@ urlencode("hello world ?"); // hello+world+%3F
 `urldecode` decodes a URL-encoded string.
 
 ```javascript
-urldecode("hello+world+%3F"); // 'hello world ?'
+urldecode("hello+world+%3F") // 'hello world ?'
 ```
 
 ---
@@ -787,7 +793,7 @@ If the path is empty, Base returns ".".
 If the path consists entirely of separators, Base returns a single separator.
 
 ```javascript
-filepath.Base("/home/flanksource/projects/gencel"); // gencel
+filepath.Base("/home/flanksource/projects/gencel") // gencel
 ```
 
 ### filepath.Clean
@@ -796,7 +802,7 @@ filepath.Base("/home/flanksource/projects/gencel"); // gencel
 It applies the following rules iteratively until no further processing can be done:
 
 ```javascript
-filepath.Clean("/foo/bar/../baz"); // Evaluates /foo/baz
+filepath.Clean("/foo/bar/../baz") // Evaluates /foo/baz
 ```
 
 ### filepath.Dir
@@ -809,7 +815,7 @@ If the path consists entirely of separators, Dir returns a single separator.
 The returned path does not end in a separator unless it is the root directory.
 
 ```javascript
-filepath.Dir("/home/flanksource/projects/gencel"); // /home/flanksource/projects
+filepath.Dir("/home/flanksource/projects/gencel") // /home/flanksource/projects
 ```
 
 ### filepath.Ext
@@ -818,7 +824,7 @@ filepath.Dir("/home/flanksource/projects/gencel"); // /home/flanksource/projects
 The extension is the suffix beginning at the final dot in the final element of path; it is empty if there is no dot.
 
 ```javascript
-filepath.Ext("/opt/image.jpg"); // .jpg
+filepath.Ext("/opt/image.jpg") // .jpg
 ```
 
 ### filepath.IsAbs
@@ -826,11 +832,11 @@ filepath.Ext("/opt/image.jpg"); // .jpg
 `filepath.IsAbs` reports whether the path is absolute.
 
 ```javascript
-filepath.Base("/home/flanksource/projects/gencel"); // true
+filepath.Base("/home/flanksource/projects/gencel") // true
 ```
 
 ```javascript
-filepath.Base("projects/gencel"); // false
+filepath.Base("projects/gencel") // false
 ```
 
 ### filepath.Join
@@ -852,11 +858,11 @@ filepath.Join(["/home/flanksource", "projects", "gencel"]; // /home/flanksource/
 `filepath.Match` reports whether name matches the shell file name pattern.
 
 ```javascript
-filepath.Match("*.txt", "foo.json"); // false
+filepath.Match("*.txt", "foo.json") // false
 ```
 
 ```javascript
-filepath.Match("*.txt", "foo.txt"); // true
+filepath.Match("*.txt", "foo.txt") // true
 ```
 
 ### filepath.Rel
@@ -871,7 +877,7 @@ knowing the current working directory would be necessary to compute it.
 Rel calls Clean on the result.
 
 ```javascript
-filepath.Rel("/foo/bar", "/foo/bar/baz"); // baz
+filepath.Rel("/foo/bar", "/foo/bar/baz") // baz
 ```
 
 ### filepath.Split
@@ -883,7 +889,7 @@ and file set to path.
 The returned values have the property that path = dir+file.
 
 ```javascript
-filepath.Split("/foo/bar/baz"); // [/foo/bar/ baz]
+filepath.Split("/foo/bar/baz") // [/foo/bar/ baz]
 ```
 
 ---
@@ -895,7 +901,7 @@ filepath.Split("/foo/bar/baz"); // [/foo/bar/ baz]
 `JSON` parses a string into an object
 
 ```javascript
-'{"name": "Alice", "age": 30}'.JSON();
+'{"name": "Alice", "age": 30}'.JSON()
 ```
 
 ### .JSONArray
@@ -903,7 +909,7 @@ filepath.Split("/foo/bar/baz"); // [/foo/bar/ baz]
 `JSONArray` parses a string into an array
 
 ```javascript
-'[{"name": "Alice"}, {"name": "Bob"}]'.JSONArray();
+'[{"name": "Alice"}, {"name": "Bob"}]'.JSONArray()
 ```
 
 ### .toJSON
@@ -911,7 +917,7 @@ filepath.Split("/foo/bar/baz"); // [/foo/bar/ baz]
 `toJSON` converts an object into a JSON formatted string.
 
 ```javascript
-[{ name: "John" }].toJSON(); // [{"name":"John"}]
+[{ name: "John" }].toJSON() // [{"name":"John"}]
 ```
 
 ```javascript
@@ -936,7 +942,7 @@ filepath.Split("/foo/bar/baz"); // [/foo/bar/ baz]
 
 ```javascript
 // Using tab for indentation:
-["Alice", 30].toJSONPretty("\t");
+["Alice", 30].toJSONPretty("\t")
 ```
 
 ```javascript
@@ -950,20 +956,20 @@ filepath.Split("/foo/bar/baz"); // [/foo/bar/ baz]
 
 ```javascript
 // Filtering data with a jq expression:
-jq(".name", { name: "John", age: 30 }); // "John"
+jq(".name", { name: "John", age: 30 }) // "John"
 ```
 
 ```javascript
 // Transforming data with a jq expression:
-jq("{name, age}", { name: "John", age: 30, city: "NY" }); // {"name": "John", "age": 30}
+jq("{name, age}", { name: "John", age: 30, city: "NY" }) // {"name": "John", "age": 30}
 ```
 
 ```javascript
 // Using a complex jq expression:
 jq(".[] | select(.age > 25)", [
   { name: "John", age: 30 },
-  { name: "Jane", age: 25 },
-]); // [{"name": "John", "age": 30}]
+  { name: "Jane", age: 25 }
+]) // [{"name": "John", "age": 30}]
 ```
 
 ---
@@ -975,9 +981,9 @@ jq(".[] | select(.age > 25)", [
 `k8s.cpuAsMillicores` returns the millicores of a Kubernetes resource.
 
 ```javascript
-k8s.cpuAsMillicores("10m"); // 10
-k8s.cpuAsMillicores("0.5"); // 500
-k8s.cpuAsMillicores("1.234"); // 1234
+k8s.cpuAsMillicores("10m") // 10
+k8s.cpuAsMillicores("0.5") // 500
+k8s.cpuAsMillicores("1.234") // 1234
 ```
 
 ### k8s.getHealth
@@ -988,17 +994,17 @@ Examples:
 
 ```javascript
 // Retrieving the health information of a pod:
-k8s.getHealth(pod); // a map with keys and values indicating the pod's health
+k8s.getHealth(pod) // a map with keys and values indicating the pod's health
 ```
 
 ```javascript
 // Getting the health information of a service:
-k8s.getHealth(service); // a map with keys and values indicating the service's health
+k8s.getHealth(service) // a map with keys and values indicating the service's health
 ```
 
 ```javascript
 // Checking the health information of a deployment:
-k8s.getHealth(deployment); // a map with keys and values indicating the deployment's health
+k8s.getHealth(deployment) // a map with keys and values indicating the deployment's health
 ```
 
 ### k8s.getStatus
@@ -1007,17 +1013,17 @@ k8s.getHealth(deployment); // a map with keys and values indicating the deployme
 
 ```javascript
 // Retrieving the status of a pod:
-k8s.getStatus(pod); // "Running" if the pod is running
+k8s.getStatus(pod) // "Running" if the pod is running
 ```
 
 ```javascript
 // Getting the status of a service:
-k8s.getStatus(service); // "Active" if the service is active
+k8s.getStatus(service) // "Active" if the service is active
 ```
 
 ```javascript
 // Checking the status of a deployment:
-k8s.getStatus(deployment); // "Deployed" if the deployment is successful
+k8s.getStatus(deployment) // "Deployed" if the deployment is successful
 ```
 
 ### k8s.isHealthy
@@ -1026,17 +1032,17 @@ k8s.getStatus(deployment); // "Deployed" if the deployment is successful
 
 ```javascript
 // Checking if a pod is healthy:
-k8s.isHealthy(pod); // true if the pod is healthy
+k8s.isHealthy(pod) // true if the pod is healthy
 ```
 
 ```javascript
 // Verifying the health of a service:
-k8s.isHealthy(service); // false if the service is not healthy
+k8s.isHealthy(service) // false if the service is not healthy
 ```
 
 ```javascript
 // Assessing the health of a deployment:
-k8s.isHealthy(deployment); // true if the deployment is healthy
+k8s.isHealthy(deployment) // true if the deployment is healthy
 ```
 
 ### k8s.memoryAsBytes
@@ -1044,11 +1050,11 @@ k8s.isHealthy(deployment); // true if the deployment is healthy
 `k8s.memoryAsBytes` converts the memory string to bytes.
 
 ```javascript
-k8s.memoryAsBytes("10Ki"); // 10240
+k8s.memoryAsBytes("10Ki") // 10240
 ```
 
 ```javascript
-k8s.memoryAsBytes("1.234gi"); // 1324997410
+k8s.memoryAsBytes("1.234gi") // 1324997410
 ```
 
 ---
@@ -1060,7 +1066,7 @@ k8s.memoryAsBytes("1.234gi"); // 1324997410
 `math.Add` takes a list of number and returns their sum
 
 ```javascript
-math.Add([1, 2, 3, 4, 5]); // 15
+math.Add([1, 2, 3, 4, 5]) // 15
 ```
 
 ### math.Sub
@@ -1068,7 +1074,7 @@ math.Add([1, 2, 3, 4, 5]); // 15
 `math.Sub` takes two numbers and returns their difference
 
 ```javascript
-math.Sub(5, 4); // 1
+math.Sub(5, 4) // 1
 ```
 
 ### math.Mul
@@ -1076,7 +1082,7 @@ math.Sub(5, 4); // 1
 `math.Mul` takes a list of numbers and returns their product
 
 ```javascript
-math.Mul([1, 2, 3, 4, 5]); // 120
+math.Mul([1, 2, 3, 4, 5]) // 120
 ```
 
 ### math.Div
@@ -1084,7 +1090,7 @@ math.Mul([1, 2, 3, 4, 5]); // 120
 `math.Div` takes two numbers and returns their quotient
 
 ```javascript
-math.Div(4, 2); // 2
+math.Div(4, 2) // 2
 ```
 
 ### math.Rem
@@ -1092,7 +1098,7 @@ math.Div(4, 2); // 2
 `math.Rem` takes two numbers and returns their remainder
 
 ```javascript
-math.Rem(4, 3); // 1
+math.Rem(4, 3) // 1
 ```
 
 ### math.Pow
@@ -1100,7 +1106,7 @@ math.Rem(4, 3); // 1
 `math.Pow` takes two numbers and returns their power
 
 ```javascript
-math.Pow(4, 2); // 16
+math.Pow(4, 2) // 16
 ```
 
 ### math.Seq
@@ -1118,11 +1124,11 @@ math.Seq([start, end, ?step])
 - `step` is the increment value of the sequence. (optional. Defaults to 1)
 
 ```javascript
-math.Seq([1, 5]); // [1, 2, 3, 4, 5]
+math.Seq([1, 5]) // [1, 2, 3, 4, 5]
 ```
 
 ```javascript
-math.Seq([1, 6, 2]); // [1, 3, 5]
+math.Seq([1, 6, 2]) // [1, 3, 5]
 ```
 
 ### math.Abs
@@ -1130,7 +1136,7 @@ math.Seq([1, 6, 2]); // [1, 3, 5]
 `math.Abs` takes a number and returns its absolute value
 
 ```javascript
-math.Abs(-1); // 1
+math.Abs(-1) // 1
 ```
 
 ### math.greatest
@@ -1138,7 +1144,7 @@ math.Abs(-1); // 1
 `math.greatest` takes a list of numbers and returns the greatest value
 
 ```javascript
-math.greatest([1, 2, 3, 4, 5]); // 5
+math.greatest([1, 2, 3, 4, 5]) // 5
 ```
 
 ### math.least
@@ -1146,7 +1152,7 @@ math.greatest([1, 2, 3, 4, 5]); // 5
 `math.least` takes a list of numbers and returns the least value
 
 ```javascript
-math.least([1, 2, 3, 4, 5]); // 1
+math.least([1, 2, 3, 4, 5]) // 1
 ```
 
 ### math.Ceil
@@ -1154,7 +1160,7 @@ math.least([1, 2, 3, 4, 5]); // 1
 `math.Ceil` returns the smallest integer greater than or equal to the provided float.
 
 ```javascript
-math.Ceil(2.3); // 3
+math.Ceil(2.3) // 3
 ```
 
 ### math.Floor
@@ -1162,7 +1168,7 @@ math.Ceil(2.3); // 3
 `math.Floor` returns the largest integer less than or equal to the provided float.
 
 ```javascript
-math.Floor(2.3); // 2
+math.Floor(2.3) // 2
 ```
 
 ### math.Round
@@ -1170,7 +1176,7 @@ math.Floor(2.3); // 2
 `math.Round` returns the nearest integer to the provided float.
 
 ```javascript
-math.Round(2.3); // 2
+math.Round(2.3) // 2
 ```
 
 ---
@@ -1182,7 +1188,7 @@ math.Round(2.3); // 2
 `random.ASCII` generates random ASCII strings of a specified length.
 
 ```javascript
-random.ASCII(5);
+random.ASCII(5)
 ```
 
 ### random.Alpha
@@ -1190,7 +1196,7 @@ random.ASCII(5);
 `random.Alpha` generates random alphabetic strings of a specified length.
 
 ```javascript
-random.Alpha(5);
+random.Alpha(5)
 ```
 
 ### random.AlphaNum
@@ -1198,7 +1204,7 @@ random.Alpha(5);
 `random.AlphaNum` generates random alphanumeric strings of a specified length.
 
 ```javascript
-random.AlphaNum(5);
+random.AlphaNum(5)
 ```
 
 ### random.String
@@ -1206,12 +1212,12 @@ random.AlphaNum(5);
 `random.String` generates random strings of a specified length and character set.
 
 ```javascript
-random.String(5);
+random.String(5)
 ```
 
 ```javascript
 // generate 5 chars between a and d
-random.String(5, ["a", "d"]);
+random.String(5, ["a", "d"])
 ```
 
 ### random.Item
@@ -1219,7 +1225,7 @@ random.String(5, ["a", "d"]);
 `random.Item` generates a random item from a list.
 
 ```javascript
-random.Item(["a", "b", "c"]);
+random.Item(["a", "b", "c"])
 ```
 
 ### random.Number
@@ -1229,7 +1235,7 @@ random.Item(["a", "b", "c"]);
 Syntax:
 
 ```javascript
-random.Number(min, max);
+random.Number(min, max)
 ```
 
 - `min` is the minimum value of the range (inclusive).
@@ -1238,7 +1244,7 @@ random.Number(min, max);
 Examples:
 
 ```javascript
-random.Number(1, 10);
+random.Number(1, 10)
 ```
 
 ### random.Float
@@ -1248,7 +1254,7 @@ random.Number(1, 10);
 Syntax:
 
 ```javascript
-random.Float(min, max);
+random.Float(min, max)
 ```
 
 - `min` is the minimum value of the range (inclusive).
@@ -1257,7 +1263,7 @@ random.Float(min, max);
 Examples:
 
 ```javascript
-random.Float(1, 10);
+random.Float(1, 10)
 ```
 
 ---
@@ -1270,17 +1276,17 @@ random.Float(1, 10);
 
 ```javascript
 // Finding a pattern within a string:
-regexp.Find("llo", "hello"); // "llo"
+regexp.Find("llo", "hello") // "llo"
 ```
 
 ```javascript
 // Searching for digits within a string:
-regexp.Find("\\d+", "abc123def"); // "123"
+regexp.Find("\\d+", "abc123def") // "123"
 ```
 
 ```javascript
 // Pattern not found in the string:
-regexp.Find("xyz", "hello"); // ""
+regexp.Find("xyz", "hello") // ""
 ```
 
 ---
@@ -1290,7 +1296,7 @@ regexp.Find("xyz", "hello"); // ""
 `regexp.FindAll` retrieves all occurrences of a pattern within a string, up to a specified count. It returns a list of matched substrings or an error if the pattern is invalid.
 
 ```javascript
-regexp.FindAll(pattern, count, input);
+regexp.FindAll(pattern, count, input)
 ```
 
 - `pattern` is the regular expression pattern to find.
@@ -1301,17 +1307,17 @@ Examples:
 
 ```javascript
 // Finding all occurrences of a pattern:
-regexp.FindAll("a.", -1, "banana"); // ["ba", "na", "na"]
+regexp.FindAll("a.", -1, "banana") // ["ba", "na", "na"]
 ```
 
 ```javascript
 // Limiting the number of matches:
-regexp.FindAll("\\d", 2, "12345"); // ["1", "2"]
+regexp.FindAll("\\d", 2, "12345") // ["1", "2"]
 ```
 
 ```javascript
 // Pattern not found:
-regexp.FindAll("z", -1, "hello"); // []
+regexp.FindAll("z", -1, "hello") // []
 ```
 
 ---
@@ -1322,17 +1328,17 @@ regexp.FindAll("z", -1, "hello"); // []
 
 ```javascript
 // Checking if a string matches a pattern:
-regexp.Match("^h.llo", "hello"); // true
+regexp.Match("^h.llo", "hello") // true
 ```
 
 ```javascript
 // Pattern does not match the string:
-regexp.Match("^b", "apple"); // false
+regexp.Match("^b", "apple") // false
 ```
 
 ```javascript
 // Matching digits in a string:
-regexp.Match("\\d+", "abc123"); // true
+regexp.Match("\\d+", "abc123") // true
 ```
 
 ---
@@ -1343,17 +1349,17 @@ regexp.Match("\\d+", "abc123"); // true
 
 ```javascript
 // Quoting metacharacters in a string:
-regexp.QuoteMeta("a.b"); // "a\\.b"
+regexp.QuoteMeta("a.b") // "a\\.b"
 ```
 
 ```javascript
 // String without metacharacters:
-regexp.QuoteMeta("abc"); // "abc"
+regexp.QuoteMeta("abc") // "abc"
 ```
 
 ```javascript
 // Quoting a complex pattern:
-regexp.QuoteMeta("[a-z].*"); // "\\[a\\-z\\]\\.\\*"
+regexp.QuoteMeta("[a-z].*") // "\\[a\\-z\\]\\.\\*"
 ```
 
 ---
@@ -1365,7 +1371,7 @@ regexp.QuoteMeta("[a-z].*"); // "\\[a\\-z\\]\\.\\*"
 Syntax:
 
 ```javascript
-regexp.Replace(pattern, replacement, input);
+regexp.Replace(pattern, replacement, input)
 ```
 
 - `pattern` is the regular expression pattern to replace.
@@ -1374,17 +1380,17 @@ regexp.Replace(pattern, replacement, input);
 
 ```javascript
 // Replacing a pattern in a string:
-regexp.Replace("a.", "x", "banana"); // "bxnxna"
+regexp.Replace("a.", "x", "banana") // "bxnxna"
 ```
 
 ```javascript
 // Pattern not found:
-regexp.Replace("z", "x", "apple"); // "apple"
+regexp.Replace("z", "x", "apple") // "apple"
 ```
 
 ```javascript
 // Replacing digits:
-regexp.Replace("\\d+", "num", "abc123"); // "abcnum"
+regexp.Replace("\\d+", "num", "abc123") // "abcnum"
 ```
 
 ---
@@ -1407,17 +1413,17 @@ Examples:
 
 ```javascript
 // Replacing a substring:
-regexp.ReplaceLiteral("apple", "orange", "apple pie"); // "orange pie"
+regexp.ReplaceLiteral("apple", "orange", "apple pie") // "orange pie"
 ```
 
 ```javascript
 // Substring not found:
-regexp.ReplaceLiteral("z", "x", "apple"); // "apple"
+regexp.ReplaceLiteral("z", "x", "apple") // "apple"
 ```
 
 ```javascript
 // Replacing a pattern without regex interpretation:
-regexp.ReplaceLiteral("a.", "x", "a.b c.d"); // "x.b c.d"
+regexp.ReplaceLiteral("a.", "x", "a.b c.d") // "x.b c.d"
 ```
 
 ---
@@ -1427,7 +1433,7 @@ regexp.ReplaceLiteral("a.", "x", "a.b c.d"); // "x.b c.d"
 `regexp.Split` splits a string into a slice of substrings separated by a pattern. It returns the slice of strings or an error if the pattern is invalid.
 
 ```javascript
-regexp.Split(pattern, count, input);
+regexp.Split(pattern, count, input)
 ```
 
 - `pattern` is the regular expression pattern that separates the substrings.
@@ -1435,17 +1441,17 @@ regexp.Split(pattern, count, input);
 - `input` is the string to split.
 
 ```javascript
-regexp.Split("a.", -1, "banana"); // ["", "n", "n"]
+regexp.Split("a.", -1, "banana") // ["", "n", "n"]
 ```
 
 ```javascript
 // Limiting the number of splits:
-regexp.Split("\\s", 2, "apple pie is delicious"); // ["apple", "pie is delicious"]
+regexp.Split("\\s", 2, "apple pie is delicious") // ["apple", "pie is delicious"]
 ```
 
 ```javascript
 // Pattern not found:
-regexp.Split("z", -1, "hello"); // ["hello"]
+regexp.Split("z", -1, "hello") // ["hello"]
 ```
 
 ---
@@ -1461,7 +1467,7 @@ somewhere in the result.
 In no case will it return a string of length greater than maxWidth.
 
 ```javascript
-"string".abbrev(offset, maxWidth);
+"string".abbrev(offset, maxWidth)
 ```
 
 - str - the string to check
@@ -1471,15 +1477,15 @@ In no case will it return a string of length greater than maxWidth.
 Examples:
 
 ```javascript
-"Now is the time for all good men".abbrev(5, 20); // "...s the time for..."
+"Now is the time for all good men".abbrev(5, 20) // "...s the time for..."
 ```
 
 ```javascript
-"KubernetesPod".abbrev(1, 5); // "Ku..."
+"KubernetesPod".abbrev(1, 5) // "Ku..."
 ```
 
 ```javascript
-"KubernetesPod".abbrev(6); // "Kub..."
+"KubernetesPod".abbrev(6) // "Kub..."
 ```
 
 ### .camelCase
@@ -1488,17 +1494,17 @@ Examples:
 
 ```javascript
 // Converting a string to camelCase:
-"hello world".camelCase(); // "HelloWorld"
+"hello world".camelCase() // "HelloWorld"
 ```
 
 ```javascript
 // Converting a snake_case string:
-"hello_world".camelCase(); // "HelloWorld"
+"hello_world".camelCase() // "HelloWorld"
 ```
 
 ```javascript
 // Converting a string with spaces and special characters:
-"hello beautiful world!".camelCase(); // "HelloBeautifulWorld"
+"hello beautiful world!".camelCase() // "HelloBeautifulWorld"
 ```
 
 ### .charAt
@@ -1507,15 +1513,15 @@ Returns the character at the given position. If the position is negative, or
 greater than the length of the string, the function will produce an error:
 
 ```javascript
-"hello".charAt(4); // return 'o'
+"hello".charAt(4) // return 'o'
 ```
 
 ```javascript
-"hello".charAt(5); // return ''
+"hello".charAt(5) // return ''
 ```
 
 ```javascript
-"hello".charAt(-1); // error
+"hello".charAt(-1) // error
 ```
 
 ### .contains
@@ -1523,7 +1529,7 @@ greater than the length of the string, the function will produce an error:
 `contains` check if a string contains a given substring.
 
 ```javascript
-"apple".contains("app"); // true
+"apple".contains("app") // true
 ```
 
 ### .endsWith
@@ -1531,7 +1537,7 @@ greater than the length of the string, the function will produce an error:
 `endsWith` determine if a string ends with a specified substring.
 
 ```javascript
-"hello".endsWith("lo"); // true
+"hello".endsWith("lo") // true
 ```
 
 ### .format
@@ -1559,7 +1565,7 @@ The valid formatting clauses are:
 `indent` indents each line of a string by the specified width and prefix
 
 ```javascript
-"hello world".indent(4, "-"); // ----hello world
+"hello world".indent(4, "-") // ----hello world
 ```
 
 ### .indexOf
@@ -1579,23 +1585,23 @@ search starts is returned (zero or custom).
 Examples:
 
 ```javascript
-"hello mellow".indexOf(""); // returns 0
+"hello mellow".indexOf("") // returns 0
 ```
 
 ```javascript
-"hello mellow".indexOf("ello"); // returns 1
+"hello mellow".indexOf("ello") // returns 1
 ```
 
 ```javascript
-"hello mellow".indexOf("jello"); // returns -1
+"hello mellow".indexOf("jello") // returns -1
 ```
 
 ```javascript
-"hello mellow".indexOf("", 2); // returns 2
+"hello mellow".indexOf("", 2) // returns 2
 ```
 
 ```javascript
-"hello mellow".indexOf("ello", 20); // error
+"hello mellow".indexOf("ello", 20) // error
 ```
 
 ### .join
@@ -1606,19 +1612,19 @@ The function also accepts an optional separator which is placed between
 elements in the resulting string.
 
 ```javascript
-["hello", "mellow"].join(); // returns 'hellomellow'
+["hello", "mellow"].join() // returns 'hellomellow'
 ```
 
 ```javascript
-["hello", "mellow"].join(" "); // returns 'hello mellow'
+["hello", "mellow"].join(" ") // returns 'hello mellow'
 ```
 
 ```javascript
-[].join(); // returns ''
+[].join() // returns ''
 ```
 
 ```javascript
-[].join("/"); // returns ''
+[].join("/") // returns ''
 ```
 
 ### .kebabCase
@@ -1627,17 +1633,17 @@ elements in the resulting string.
 
 ```javascript
 // Converting a string to kebab-case:
-"Hello World".kebabCase(); // "hello-world"
+"Hello World".kebabCase() // "hello-world"
 ```
 
 ```javascript
 // Converting a CamelCase string:
-"HelloWorld".kebabCase(); // "hello-world"
+"HelloWorld".kebabCase() // "hello-world"
 ```
 
 ```javascript
 // Converting a string with spaces and special characters:
-"Hello Beautiful World!".kebabCase(); // "hello-beautiful-world"
+"Hello Beautiful World!".kebabCase() // "hello-beautiful-world"
 ```
 
 ### .lastIndexOf
@@ -1651,23 +1657,23 @@ the empty string, the index where the search starts is returned (string length
 or custom).
 
 ```javascript
-"hello mellow".lastIndexOf(""); // returns 12
+"hello mellow".lastIndexOf("") // returns 12
 ```
 
 ```javascript
-"hello mellow".lastIndexOf("ello"); // returns 7
+"hello mellow".lastIndexOf("ello") // returns 7
 ```
 
 ```javascript
-"hello mellow".lastIndexOf("jello"); // returns -1
+"hello mellow".lastIndexOf("jello") // returns -1
 ```
 
 ```javascript
-"hello mellow".lastIndexOf("ello", 6); // returns 1
+"hello mellow".lastIndexOf("ello", 6) // returns 1
 ```
 
 ```javascript
-"hello mellow".lastIndexOf("ello", -1); // error
+"hello mellow".lastIndexOf("ello", -1) // error
 ```
 
 ### .lowerAscii
@@ -1678,8 +1684,8 @@ This function does not perform Unicode case-mapping for characters outside the
 ASCII range.
 
 ```javascript
-"TacoCat".lowerAscii(); // returns 'tacocat'
-"TacoCÆt Xii".lowerAscii(); // returns 'tacocÆt xii'
+"TacoCat".lowerAscii() // returns 'tacocat'
+"TacoCÆt Xii".lowerAscii() // returns 'tacocÆt xii'
 ```
 
 ### .matches
@@ -1688,19 +1694,17 @@ ASCII range.
 
 ```javascript
 // Checking if a string matches a simple pattern:
-"apple".matches("^a.*e$"); // true
+"apple".matches("^a.*e$") // true
 ```
 
 ```javascript
 // Validating an email format:
-"example@email.com".matches(
-  "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
-); // true
+"example@email.com".matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$") // true
 ```
 
 ```javascript
 // Checking for a pattern of digits:
-"12345".matches("^\\d+$"); // true
+"12345".matches("^\\d+$") // true
 ```
 
 ### .quote
@@ -1709,11 +1713,11 @@ Takes the given string and makes it safe to print (without any formatting due to
 If any invalid UTF-8 characters are encountered, they are replaced with \uFFFD.
 
 ```javascript
-strings.quote('single-quote with "double quote"'); // returns '"single-quote with \"double quote\""'
+strings.quote('single-quote with "double quote"') // returns '"single-quote with \"double quote\""'
 ```
 
 ```javascript
-strings.quote("two escape sequences a\n"); // returns '"two escape sequences \\a\\n"'
+strings.quote("two escape sequences a\n") // returns '"two escape sequences \\a\\n"'
 ```
 
 ### .repeat
@@ -1721,7 +1725,7 @@ strings.quote("two escape sequences a\n"); // returns '"two escape sequences \\a
 `repeat` on a string repeats the string for a given number of times.
 
 ```javascript
-"apple".repeat(3); // "appleappleapple"
+"apple".repeat(3) // "appleappleapple"
 ```
 
 ### .replace
@@ -1741,19 +1745,19 @@ limit is a negative number, the function behaves the same as replace all.
 Examples:
 
 ```javascript
-"hello hello".replace("he", "we"); // returns 'wello wello'
+"hello hello".replace("he", "we") // returns 'wello wello'
 ```
 
 ```javascript
-"hello hello".replace("he", "we", -1); // returns 'wello wello'
+"hello hello".replace("he", "we", -1) // returns 'wello wello'
 ```
 
 ```javascript
-"hello hello".replace("he", "we", 1); // returns 'wello hello'
+"hello hello".replace("he", "we", 1) // returns 'wello hello'
 ```
 
 ```javascript
-"hello hello".replace("he", "we", 0); // returns 'hello hello'
+"hello hello".replace("he", "we", 0) // returns 'hello hello'
 ```
 
 ### .replaceAll
@@ -1761,7 +1765,7 @@ Examples:
 `replaceAll` replaces all occurrences of a substring within a string with another substring.
 
 ```javascript
-"I have an apple".replaceAll("apple", "orange"); // "I have an orange"
+"I have an apple".replaceAll("apple", "orange") // "I have an orange"
 ```
 
 ### .reverse
@@ -1771,11 +1775,11 @@ reverse order.
 This function relies on converting strings to rune arrays in order to reverse.
 
 ```javascript
-"gums".reverse(); // returns 'smug'
+"gums".reverse() // returns 'smug'
 ```
 
 ```javascript
-"John Smith".reverse(); // returns 'htimS nhoJ'
+"John Smith".reverse() // returns 'htimS nhoJ'
 ```
 
 ### .runeCount
@@ -1783,11 +1787,11 @@ This function relies on converting strings to rune arrays in order to reverse.
 `runeCount` counts the number of runes in a given string.
 
 ```javascript
-"Hello World".runeCount(); // 11
+"Hello World".runeCount() // 11
 ```
 
 ```javascript
-"Hello$World".runeCount(); // 11
+"Hello$World".runeCount() // 11
 ```
 
 ### .shellQuote
@@ -1795,17 +1799,17 @@ This function relies on converting strings to rune arrays in order to reverse.
 `shellQuote` quotes a string such that it can be safely used as a token in a shell command.
 
 ```javascript
-"Hello World".shellQuote(); // "'Hello World'"
+"Hello World".shellQuote() // "'Hello World'"
 ```
 
 ```javascript
 // Shell quoting a string with special characters:
-"Hello$World".shellQuote(); // "'Hello$World'"
+"Hello$World".shellQuote() // "'Hello$World'"
 ```
 
 ```javascript
 // Shell quoting a string with spaces and special characters:
-"Hello World$123".shellQuote(); // "'Hello World$123'"
+"Hello World$123".shellQuote() // "'Hello World$123'"
 ```
 
 ### .size
@@ -1814,12 +1818,12 @@ This function relies on converting strings to rune arrays in order to reverse.
 
 ```javascript
 // Getting the size of a list:
-["apple", "banana", "cherry"].size(); // 3
+["apple", "banana", "cherry"].size() // 3
 ```
 
 ```javascript
 // Determining the number of characters in a string:
-"hello".size(); // 5
+"hello".size() // 5
 ```
 
 ### .slug
@@ -1838,17 +1842,17 @@ Examples:
 
 ```javascript
 // Converting a string to a slug:
-"Hello World!".slug(); // "hello-world"
+"Hello World!".slug() // "hello-world"
 ```
 
 ```javascript
 // Converting a string with special characters:
-"Hello, World!".slug(); // "hello-world"
+"Hello, World!".slug() // "hello-world"
 ```
 
 ```javascript
 // Converting a multi-word string:
-"Hello Beautiful World".slug(); // "hello-beautiful-world"
+"Hello Beautiful World".slug() // "hello-beautiful-world"
 ```
 
 ### .snakeCase
@@ -1857,17 +1861,17 @@ Examples:
 
 ```javascript
 // Converting a string to snake_case:
-"Hello World".snakeCase(); // "hello_world"
+"Hello World".snakeCase() // "hello_world"
 ```
 
 ```javascript
 // Converting a CamelCase string:
-"HelloWorld".snakeCase(); // "hello_world"
+"HelloWorld".snakeCase() // "hello_world"
 ```
 
 ```javascript
 // Converting a string with spaces and special characters:
-"Hello Beautiful World!".snakeCase(); // "hello_beautiful_world"
+"Hello Beautiful World!".snakeCase() // "hello_beautiful_world"
 ```
 
 ### .sort
@@ -1875,7 +1879,7 @@ Examples:
 `sort` on a string sorts the string alphabetically.
 
 ```javascript
-"hello".sort(); // ehllo
+"hello".sort() // ehllo
 ```
 
 ### .split
@@ -1891,23 +1895,23 @@ number, the function behaves the same as split all.
 Examples:
 
 ```javascript
-"hello hello hello".split(" "); // returns ['hello', 'hello', 'hello']
+"hello hello hello".split(" ") // returns ['hello', 'hello', 'hello']
 ```
 
 ```javascript
-"hello hello hello".split(" ", 0); // returns []
+"hello hello hello".split(" ", 0) // returns []
 ```
 
 ```javascript
-"hello hello hello".split(" ", 1); // returns ['hello hello hello']
+"hello hello hello".split(" ", 1) // returns ['hello hello hello']
 ```
 
 ```javascript
-"hello hello hello".split(" ", 2); // returns ['hello', 'hello hello']
+"hello hello hello".split(" ", 2) // returns ['hello', 'hello hello']
 ```
 
 ```javascript
-"hello hello hello".split(" ", -1); // returns ['hello', 'hello', 'hello']
+"hello hello hello".split(" ", -1) // returns ['hello', 'hello', 'hello']
 ```
 
 ### .squote
@@ -1916,17 +1920,17 @@ Examples:
 
 ```javascript
 // Single quoting a simple string:
-"Hello World".squote(); // "'Hello World'"
+"Hello World".squote() // "'Hello World'"
 ```
 
 ```javascript
 // Single quoting a string with a number:
-"12345".squote(); // "'12345'"
+"12345".squote() // "'12345'"
 ```
 
 ```javascript
 // Single quoting an already single quoted string:
-"'Hello World'".squote(); // "'''Hello World'''"
+"'Hello World'".squote() // "'''Hello World'''"
 ```
 
 ### .startsWith
@@ -1935,7 +1939,7 @@ Examples:
 
 ```javascript
 // Checking if a string starts with a certain substring:
-"hello".startsWith("he"); // true
+"hello".startsWith("he") // true
 ```
 
 ### .substring
@@ -1950,19 +1954,19 @@ range, or for either the start or end index to be negative or exceed the string
 length.
 
 ```javascript
-"tacocat".substring(4); // returns 'cat'
+"tacocat".substring(4) // returns 'cat'
 ```
 
 ```javascript
-"tacocat".substring(0, 4); // returns 'taco'
+"tacocat".substring(0, 4) // returns 'taco'
 ```
 
 ```javascript
-"tacocat".substring(-1); // error
+"tacocat".substring(-1) // error
 ```
 
 ```javascript
-"tacocat".substring(2, 1); // error
+"tacocat".substring(2, 1) // error
 ```
 
 ### .title
@@ -1971,12 +1975,12 @@ length.
 
 ```javascript
 // Converting a string:
-"hello world".title(); // "Hello World"
+"hello world".title() // "Hello World"
 ```
 
 ```javascript
 // Working with mixed case:
-"mIxEd CaSe".title(); // "MIxED CASe"
+"mIxEd CaSe".title() // "MIxED CASe"
 ```
 
 ### .trim
@@ -1986,7 +1990,7 @@ target string. The trim function uses the Unicode definition of whitespace
 which does not include the zero-width spaces.
 
 ```javascript
-"  \ttrim\n    ".trim(); //  'trim'
+"  \ttrim\n    ".trim() //  'trim'
 ```
 
 ### .trimPrefix
@@ -1995,17 +1999,17 @@ which does not include the zero-width spaces.
 
 ```javascript
 // Removing a prefix from a string:
-"Mr. Smith".trimPrefix("Mr."); // "Smith"
+"Mr. Smith".trimPrefix("Mr.") // "Smith"
 ```
 
 ```javascript
 // Another example:
-"Astronaut".trimPrefix("Astro"); // "naut"
+"Astronaut".trimPrefix("Astro") // "naut"
 ```
 
 ```javascript
 // If the prefix is not present:
-"Mr. Smith".trimPrefix("Dr."); // "Mr. Smith"
+"Mr. Smith".trimPrefix("Dr.") // "Mr. Smith"
 ```
 
 ---
@@ -2016,12 +2020,12 @@ which does not include the zero-width spaces.
 
 ```javascript
 // Removing a suffix from a string:
-"image.jpg".trimSuffix(".jpg"); // "image"
+"image.jpg".trimSuffix(".jpg") // "image"
 ```
 
 ```javascript
 // If the suffix is not present:
-"image.jpg".trimSuffix(".png"); // "image.jpg"
+"image.jpg".trimSuffix(".png") // "image.jpg"
 ```
 
 ### .upperAscii
@@ -2032,11 +2036,11 @@ This function does not perform Unicode case-mapping for characters outside the
 ASCII range.
 
 ```javascript
-"TacoCat".upperAscii(); // returns 'TACOCAT'
+"TacoCat".upperAscii() // returns 'TACOCAT'
 ```
 
 ```javascript
-"TacoCÆt Xii".upperAscii(); // returns 'TACOCÆT XII'
+"TacoCÆt Xii".upperAscii() // returns 'TACOCÆT XII'
 ```
 
 ### .wordWrap
@@ -2056,11 +2060,11 @@ Where:
 Examples:
 
 ```javascript
-"testing this line from here".wordWrap(10); // testing\nthis line\nfrom here
+"testing this line from here".wordWrap(10) // testing\nthis line\nfrom here
 ```
 
 ```javascript
-"Hello Beautiful World".wordWrap(16, "==="); // Hello Beautiful===World
+"Hello Beautiful World".wordWrap(16, "===") // Hello Beautiful===World
 ```
 
 ### HumanDuration
@@ -2069,17 +2073,17 @@ Examples:
 
 ```javascript
 // Converting a duration into a human-readable format:
-HumanDuration(3600); // "1 hour"
+HumanDuration(3600) // "1 hour"
 ```
 
 ```javascript
 // Converting another duration:
-HumanDuration(600); // "10 minutes"
+HumanDuration(600) // "10 minutes"
 ```
 
 ```javascript
 // Converting a longer duration:
-HumanDuration(86400); // "1 day"
+HumanDuration(86400) // "1 day"
 ```
 
 ### HumanSize
@@ -2088,17 +2092,17 @@ HumanDuration(86400); // "1 day"
 
 ```javascript
 // Converting a size into a human-readable format:
-HumanSize(1024); // "1 KiB"
+HumanSize(1024) // "1 KiB"
 ```
 
 ```javascript
 // Converting another size:
-HumanSize(1048576); // "1 MiB"
+HumanSize(1048576) // "1 MiB"
 ```
 
 ```javascript
 // Converting a larger size:
-HumanSize(1073741824); // "1 GiB"
+HumanSize(1073741824) // "1 GiB"
 ```
 
 ### Semver
@@ -2107,16 +2111,16 @@ HumanSize(1073741824); // "1 GiB"
 
 ```javascript
 // Parsing a semantic version:
-Semver("1.2.3-alpha+meta"); // a map with major: "1", minor: "2", patch: "3", prerelease: "alpha", metadata: "meta", original: "1.2.3-alpha+meta"
+Semver("1.2.3-alpha+meta") // a map with major: "1", minor: "2", patch: "3", prerelease: "alpha", metadata: "meta", original: "1.2.3-alpha+meta"
 ```
 
 ```javascript
-Semver("2.3.4-beta+meta2"); // a map with major: "2", minor: "3", patch: "4", prerelease: "beta", metadata: "meta2", original: "2.3.4-beta+meta2"
+Semver("2.3.4-beta+meta2") // a map with major: "2", minor: "3", patch: "4", prerelease: "beta", metadata: "meta2", original: "2.3.4-beta+meta2"
 ```
 
 ```javascript
 // Parsing a simple semantic version:
-Semver("3.4.5"); // a map with major: "3", minor: "4", patch: "5", prerelease: "", metadata: "", original: "3.4.5"
+Semver("3.4.5") // a map with major: "3", minor: "4", patch: "5", prerelease: "", metadata: "", original: "3.4.5"
 ```
 
 ### SemverCompare
@@ -2125,17 +2129,17 @@ Semver("3.4.5"); // a map with major: "3", minor: "4", patch: "5", prerelease: "
 
 ```javascript
 // Comparing two semantic versions:
-SemverCompare("1.2.3", "1.2.4"); // false
+SemverCompare("1.2.3", "1.2.4") // false
 ```
 
 ```javascript
 // Comparing two identical versions:
-SemverCompare("2.3.4", "2.3.4"); // true
+SemverCompare("2.3.4", "2.3.4") // true
 ```
 
 ```javascript
 // Comparing with a prerelease version:
-SemverCompare("3.4.5", "3.4.5-alpha"); // false
+SemverCompare("3.4.5", "3.4.5-alpha") // false
 ```
 
 ## YAML
@@ -2146,17 +2150,17 @@ SemverCompare("3.4.5", "3.4.5-alpha"); // false
 
 ```javascript
 // Converting a simple YAML string to a map:
-YAML("name: Alice\nage: 30"); // a map with keys "name" and "age"
+YAML("name: Alice\nage: 30") // a map with keys "name" and "age"
 ```
 
 ```javascript
 // Handling a YAML sequence:
-YAML("numbers:\n- 1\n- 2\n- 3"); // a map with a key "numbers" containing an array
+YAML("numbers:\n- 1\n- 2\n- 3") // a map with a key "numbers" containing an array
 ```
 
 ```javascript
 // Nested YAML data conversion:
-YAML("person:\n  name: Bob\n  age: 35"); // a nested map
+YAML("person:\n  name: Bob\n  age: 35") // a nested map
 ```
 
 ### toYAML
@@ -2164,8 +2168,8 @@ YAML("person:\n  name: Bob\n  age: 35"); // a nested map
 `toYAML` converts an object into a YAML formatted string.
 
 ```javascript
-toYAML({ name: "John" });
-toYAML(["John", "Alice"]);
+toYAML({ name: "John" })
+toYAML(["John", "Alice"])
 ```
 
 ### YAMLArray
@@ -2174,17 +2178,17 @@ toYAML(["John", "Alice"]);
 
 ```javascript
 // Converting a YAML sequence to an array:
-YAMLArray("- 1\n- 2\n- 3"); // an array [1, 2, 3]
+YAMLArray("- 1\n- 2\n- 3") // an array [1, 2, 3]
 ```
 
 ```javascript
 // Handling complex objects in a YAML sequence:
-YAMLArray("- name: Alice\n- name: Bob"); // an array of maps
+YAMLArray("- name: Alice\n- name: Bob") // an array of maps
 ```
 
 ```javascript
 // An empty YAML sequence:
-YAMLArray(""); // an empty array
+YAMLArray("") // an empty array
 ```
 
 ---
@@ -2197,17 +2201,17 @@ YAMLArray(""); // an empty array
 
 ```javascript
 // Converting a TOML string to a map:
-TOML('name = "Alice"\nage = 30'); // a map with keys "name" and "age"
+TOML('name = "Alice"\nage = 30') // a map with keys "name" and "age"
 ```
 
 ```javascript
 // Handling an array in TOML:
-TOML("numbers = [1, 2, 3]"); // a map with a key "numbers" containing an array
+TOML("numbers = [1, 2, 3]") // a map with a key "numbers" containing an array
 ```
 
 ```javascript
 // Nested TOML data conversion:
-TOML('[person]\nname = "Bob"\nage = 35'); // a nested map
+TOML('[person]\nname = "Bob"\nage = 35') // a nested map
 ```
 
 ### toTOML
@@ -2226,17 +2230,17 @@ Examples:
 
 ```javascript
 // Converting a map to a TOML string:
-toTOML({ name: "Alice", age: 30 }); // "name = \"Alice\"\nage = 30"
+toTOML({ name: "Alice", age: 30 }) // "name = \"Alice\"\nage = 30"
 ```
 
 ```javascript
 // Handling an array (TOML arrays must be of the same type):
-toTOML({ people: ["Alice", "Bob"] }); // "people = [\"Alice\", \"Bob\"]"
+toTOML({ people: ["Alice", "Bob"] }) // "people = [\"Alice\", \"Bob\"]"
 ```
 
 ```javascript
 // An empty map:
-toTOML({}); // an empty string
+toTOML({}) // an empty string
 ```
 
 ---
@@ -2248,7 +2252,7 @@ toTOML({}); // an empty string
 `uuid.Nil` returns the nil UUID.
 
 ```javascript
-uuid.V1() != uuid.Nil();
+uuid.V1() != uuid.Nil()
 ```
 
 ### uuid.V1
@@ -2256,7 +2260,7 @@ uuid.V1() != uuid.Nil();
 `uuid.V1` returns a version 1 UUID.
 
 ```javascript
-uuid.V1() != uuid.Nil();
+uuid.V1() != uuid.Nil()
 ```
 
 ### uuid.V4
@@ -2264,7 +2268,7 @@ uuid.V1() != uuid.Nil();
 `uuid.V4` returns a version 4 UUID.
 
 ```javascript
-uuid.V4() != uuid.Nil();
+uuid.V4() != uuid.Nil()
 ```
 
 ### uuid.IsValid
@@ -2272,7 +2276,7 @@ uuid.V4() != uuid.Nil();
 `uuid.IsValid` checks if a string is a valid UUID.
 
 ```javascript
-uuid.IsValid("2a42e576-c308-4db9-8525-0513af307586");
+uuid.IsValid("2a42e576-c308-4db9-8525-0513af307586")
 ```
 
 ### uuid.Parse
@@ -2280,5 +2284,5 @@ uuid.IsValid("2a42e576-c308-4db9-8525-0513af307586");
 `uuid.Parse` parses a string into a UUID.
 
 ```javascript
-uuid.Parse("2a42e576-c308-4db9-8525-0513af307586");
+uuid.Parse("2a42e576-c308-4db9-8525-0513af307586")
 ```
