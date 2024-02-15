@@ -7,13 +7,13 @@ The Kubernetes helm chart installs a [catalog scraper](/config-db/scrapers/kuber
 ```sh
 helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
-helm install {release-name} flanksource/mission-control-kubernetes
+helm install mission-control-kubernetes flanksource/mission-control-kubernetes
 ```
 
 After running `helm install` you should get a success message:
 
 ```sh
-NAME: {release-name}
+NAME: mission-control-kubernetes
 LAST DEPLOYED: Thu Feb 14 19:00:32 2024
 NAMESPACE: default
 STATUS: deployed

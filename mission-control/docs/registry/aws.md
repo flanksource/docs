@@ -7,13 +7,13 @@ The AWS helm chart installs a [catalog scraper](/config-db/scrapers/aws)
 ```sh
 helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
-helm install {release-name} flanksource/mission-control-aws
+helm install mission-control-aws flanksource/mission-control-aws
 ```
 
 After running `helm install` you should get a success message:
 
 ```sh
-NAME: {release-name}
+NAME: mission-control-aws
 LAST DEPLOYED: Thu Feb 14 19:00:32 2024
 NAMESPACE: default
 STATUS: deployed
@@ -28,6 +28,67 @@ When you go to the catalog now, you can now see all the AWS Resources
 ![AWS Catalog](/img/aws-registry-catalog-scraper.png)
 
 
+## Prerequisites
+
+1. Connection to AWS must be authenticated via [IAM Roles for Service Accounts](#conn1) or [AWS Access and Secret Key](#conn2)
+
+2. The role should have permissions to fetch the AWS Resources
+
+Sample IAM Policy:
+```json
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "mission-control-config-role",
+			"Effect": "Allow",
+			"Action": [
+				"acm:Describe*",
+				"acm:Get*",
+				"acm:List*",
+				"cloudtrail:LookupEvents",
+				"ec2:Describe*",
+				"ecr:Describe*",
+				"eks:ListClusters",
+				"eks:Describe*",
+				"rds:Describe*",
+				"elasticfilesystem:Describe*",
+				"elasticloadbalancing:Describe*",
+				"sts:GetCallerIdentity"
+				"config:BatchGetAggregateResourceConfig",
+				"config:BatchGetResourceConfig",
+				"config:Describe*",
+				"config:Get*",
+				"config:List*",
+				"config:SelectAggregateResourceConfig",
+				"config:SelectResourceConfig",
+				"guardduty:Describe*",
+				"guardduty:Get*",
+				"guardduty:List*",
+				"iam:GetAccountName",
+				"iam:GetAccountSummary",
+				"iam:GetGroup",
+				"iam:GetGroupPolicy",
+				"iam:GetInstanceProfile",
+				"iam:GetLoginProfile",
+				"iam:GetPolicy",
+				"iam:GetRole",
+				"iam:GetRolePolicy",
+				"iam:GetUser",
+				"iam:List*",
+				"lambda:List*",
+				"trustedadvisor:Describe*",
+				"trustedadvisor:DownloadRisk",
+				"trustedadvisor:Get*",
+				"trustedadvisor:List*",
+			],
+			"Resource": "*"
+		}
+	]
+}
+```
+
+
 ### Values
 
 This document provides an overview of configurable values for deploying Mission Control Registry on AWS using Helm.
@@ -38,38 +99,37 @@ The following table lists the configurable parameters and their default values:
 
 | Parameter | Description | Default |
 | --- | --- | --- |
-| `nameOverride` | Overrides the name of the chart. | "" |
-| `fullnameOverride` | Overrides the full name of the chart. | "" |
 | `labels` | Additional labels to apply to resources. | {} |
 | `scraper.name` | Name of the AWS scraper. | "aws" |
 
 ### Connection Details
 
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `connectionDetails.connection` | AWS connection details. | "" |
-| `connectionDetails.accessKey.name` | Name of the access key. | "" |
-| `connectionDetails.accessKey.value` | Value of the access key. | "" |
-| `connectionDetails.accessKey.valueFrom.serviceAccount` | Service account for fetching the value. | "" |
-| `connectionDetails.accessKey.valueFrom.helmRef.key` | Key for Helm reference. | "" |
-| `connectionDetails.accessKey.valueFrom.helmRef.name` | Name for Helm reference. | "" |
-| `connectionDetails.accessKey.valueFrom.configMapKeyRef.key` | Key for ConfigMap key reference. | "" |
-| `connectionDetails.accessKey.valueFrom.configMapKeyRef.name` | Name for ConfigMap key reference. | "" |
-| `connectionDetails.accessKey.valueFrom.secretKeyRef.key` | Key for Secret key reference. | "" |
-| `connectionDetails.accessKey.valueFrom.secretKeyRef.name` | Name for Secret key reference. | "" |
-| `connectionDetails.secretKey.name` | Name of the secret key. | "" |
-| `connectionDetails.secretKey.value` | Value of the secret key. | "" |
-| `connectionDetails.secretKey.valueFrom.serviceAccount` | Service account for fetching the value. | "" |
-| `connectionDetails.secretKey.valueFrom.helmRef.key` | Key for Helm reference. | "" |
-| `connectionDetails.secretKey.valueFrom.helmRef.name` | Name for Helm reference. | "" |
-| `connectionDetails.secretKey.valueFrom.configMapKeyRef.key` | Key for ConfigMap key reference. | "" |
-| `connectionDetails.secretKey.valueFrom.configMapKeyRef.name` | Name for ConfigMap key reference. | "" |
-| `connectionDetails.secretKey.valueFrom.secretKeyRef.key` | Key for Secret key reference. | "" |
-| `connectionDetails.secretKey.valueFrom.secretKeyRef.name` | Name for Secret key reference. | "" |
-| `connectionDetails.region` | AWS region. | "" |
-| `connectionDetails.endpoint` | AWS endpoint. | "" |
-| `connectionDetails.skipTLSVerify` | Skip TLS verification. | "" |
-| `connectionDetails.assumeRole` | Assume AWS role. | "" |
+| Parameter | Description | Schema | Default |
+| --- | --- | --- | --- |
+| `connectionDetails.connection` | AWS connection details. | string | "" |
+| `connectionDetails.accessKey` | Name of the access key. | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
+| `connectionDetails.secretKey` | Name of the secret key. | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
+| `connectionDetails.region` | AWS region. | string | "" |
+| `connectionDetails.endpoint` | AWS endpoint. | string | "" |
+| `connectionDetails.skipTLSVerify` | Skip TLS verification.| bool | false |
+| `connectionDetails.assumeRole` | Assume AWS role. | string | "" |
+
+Example:
+```yaml title="values.yaml"
+connectionDetails:
+  accessKey:
+    valueFrom:
+      secretKeyRef:
+        name: aws-credentials
+        key: AWS_ACCESS_KEY
+  secretKey:
+    valueFrom:
+      secretKeyRef:
+        name: aws-credentials
+        key: AWS_SECRET_KEY
+```
+
+
 
 ### Cloudtrail
 
@@ -93,6 +153,23 @@ The following table lists the configurable parameters and their default values:
 | `costReporting.region` | Cost reporting region. | "" |
 | `costReporting.s3BucketPath` | S3 bucket path for cost reporting. | "" |
 | `costReporting.table` | Table for cost reporting. | "" |
+
+
+Cost reporting needs to be setup on AWS: https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html
+
+Sample IAM Policy required for cost reporting:
+```json
+{
+	"Effect": "Allow",
+	"Action": [
+		"athena:GetQueryExecution",
+		"athena:GetQueryResults",
+		"athena:StartQueryExecution"
+	],
+	"Resource": "arn:aws:athena:eu-west-1:765618022540:workgroup/primary"
+},
+
+```
 
 ### Inventory
 
