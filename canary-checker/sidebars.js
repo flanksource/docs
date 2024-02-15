@@ -37,6 +37,11 @@ module.exports = {
           id: 'concepts/image-variants',
           label: 'Image Variants',
         },
+        {
+          type: 'doc',
+          id: 'windows',
+          label: 'Windows',
+        },
 
       ]
     },
