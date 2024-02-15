@@ -682,6 +682,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'topology/concepts/connection',
+          label: 'Connection',
+        },
+        {
+          type: 'doc',
           id: 'topology/concepts/authentication',
           label: 'Authentication',
         },
