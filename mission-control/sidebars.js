@@ -682,11 +682,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'topology/concepts/connection',
-          label: 'Connection',
-        },
-        {
-          type: 'doc',
           id: 'topology/concepts/authentication',
           label: 'Authentication',
         },
@@ -746,6 +741,11 @@ const sidebars = {
           type: 'doc',
           id: 'topology/references/properties',
           label: 'Properties',
+        },
+        {
+          type: 'doc',
+          id: 'topology/references/connection',
+          label: 'Connection',
         },
         {
           type: 'category',

@@ -27,7 +27,9 @@ spec:
 
 Eventually, the URL that gets templated is used for establishing connections. This can be used for any datasource that authenticates via URL (PostgreSQL, MySQL, MSSQL, Redis, Opensearch, Elasticsearch etc.)
 
-A connection can then be used in canary-checks via `connection` attribute in the form of `type/connection_name` or `type/namespace/connection_name`
+A connection string can be represented in the form of `type/connection_name` or `type/namespace/connection_name` 
+
+It can then be used in Health Checks via `connection` attribute or during Topology creation in `component.lookup`
 
 ```yaml
 

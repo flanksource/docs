@@ -61,6 +61,11 @@ module.exports = {
         },
         {
           type: 'doc',
+          id: 'concepts/connection',
+          label: 'Connection',
+        },
+        {
+          type: 'doc',
           id: 'concepts/secret-management',
           label: 'Secret Management',
         },
