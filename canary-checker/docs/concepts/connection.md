@@ -65,3 +65,17 @@ spec:
         key: OPENSEARCH_URL
 ```
 :::
+
+## Schema
+
+| **Field**    | **Description**                                       | **Scheme**                                     | **Required** |
+|--------------|-------------------------------------------------------|------------------------------------------------|--------------|
+| url          | URL in templatable form                               | <CommonLink to="secrets">*EnvVar*</CommonLink> | yes          |
+| port         | Port number                                           | <CommonLink to="secrets">*EnvVar*</CommonLink> |              |
+| type         | Type of datasource (postgres,mysql,elasticsearch ...) | string                                         |              |
+| username     | Username                                              | <CommonLink to="secrets">*EnvVar*</CommonLink> |              |
+| password     | Password                                              | <CommonLink to="secrets">*EnvVar*</CommonLink> |              |
+| certificate  | Certificate for verification                          | <CommonLink to="secrets">*EnvVar*</CommonLink> |              |
+| properties   | Property fields                                       | map[string]string                              |              |
+| insecure_tls | Allow insecure tls                                    | bool                                           |              |
+
