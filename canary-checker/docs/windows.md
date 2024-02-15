@@ -1,7 +1,6 @@
 ---
 title: Windows
 description: Installing canary-checker on a windows os
-image: 
 ---
 # Quick Start
 
