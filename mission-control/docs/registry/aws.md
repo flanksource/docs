@@ -10,6 +10,24 @@ helm repo update
 helm install {release-name} flanksource/mission-control-aws
 ```
 
+After running `helm install` you should get a success message:
+
+```sh
+NAME: {release-name}
+LAST DEPLOYED: Thu Feb 14 19:00:32 2024
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+AWS scraper added
+```
+
+When you go to the catalog now, you can now see all the AWS Resources
+
+![AWS Catalog](/img/aws-registry-catalog-scraper.png)
+
+
 ### Values
 
 This document provides an overview of configurable values for deploying Mission Control Registry on AWS using Helm.
