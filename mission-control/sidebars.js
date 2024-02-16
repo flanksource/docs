@@ -543,7 +543,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'playbooks/actions/github',
-          label: 'Github'
+          label: 'GitHub'
         },
         {
           type: 'doc',
