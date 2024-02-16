@@ -743,11 +743,6 @@ const sidebars = {
           label: 'Properties',
         },
         {
-          type: 'doc',
-          id: 'topology/references/connection',
-          label: 'Connection',
-        },
-        {
           type: 'category',
           label: 'Component Lookups',
           items: [
@@ -897,8 +892,13 @@ const sidebars = {
     },
     {
       type: 'doc',
+      id: 'reference/connection',
+      label: 'Connection',
+    },
+    {
+      type: 'doc',
       id: 'reference/connections',
-      label: 'Connections',
+      label: 'Authentication',
     },
     {
       type: 'category',
