@@ -20,9 +20,4 @@ yarn-debug.log*
 yarn-error.log*
 
 # copied from canary-checker
-docs/canary-checker
-src/components
-src/theme
-src/css
-static/img/icons
 canary-checker/cli
