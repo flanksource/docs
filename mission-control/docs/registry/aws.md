@@ -30,64 +30,11 @@ When you go to the catalog now, you can now see all the AWS Resources
 
 ## Prerequisites
 
-1. Connection to AWS must be authenticated via [IAM Roles for Service Accounts](#conn1) or [AWS Access and Secret Key](#conn2)
+1. Connection to AWS must be authenticated via IAM Roles for Service Accounts or AWS Access and Secret Key. [Click Here to see how to configure AWS](/installation/aws-eks)
 
 2. The role should have permissions to fetch the AWS Resources
 
-Sample IAM Policy:
-```json
-{
-	"Version": "2012-10-17",
-	"Statement": [
-		{
-			"Sid": "mission-control-config-role",
-			"Effect": "Allow",
-			"Action": [
-				"acm:Describe*",
-				"acm:Get*",
-				"acm:List*",
-				"cloudtrail:LookupEvents",
-				"ec2:Describe*",
-				"ecr:Describe*",
-				"eks:ListClusters",
-				"eks:Describe*",
-				"rds:Describe*",
-				"elasticfilesystem:Describe*",
-				"elasticloadbalancing:Describe*",
-				"sts:GetCallerIdentity"
-				"config:BatchGetAggregateResourceConfig",
-				"config:BatchGetResourceConfig",
-				"config:Describe*",
-				"config:Get*",
-				"config:List*",
-				"config:SelectAggregateResourceConfig",
-				"config:SelectResourceConfig",
-				"guardduty:Describe*",
-				"guardduty:Get*",
-				"guardduty:List*",
-				"iam:GetAccountName",
-				"iam:GetAccountSummary",
-				"iam:GetGroup",
-				"iam:GetGroupPolicy",
-				"iam:GetInstanceProfile",
-				"iam:GetLoginProfile",
-				"iam:GetPolicy",
-				"iam:GetRole",
-				"iam:GetRolePolicy",
-				"iam:GetUser",
-				"iam:List*",
-				"lambda:List*",
-				"trustedadvisor:Describe*",
-				"trustedadvisor:DownloadRisk",
-				"trustedadvisor:Get*",
-				"trustedadvisor:List*",
-			],
-			"Resource": "*"
-		}
-	]
-}
-```
-
+3. Cost Reporting should also be setup if you want to associate costs to each resource. [Check the guide here](/installation/aws-eks#cost-reporting)
 
 ### Values
 
@@ -114,6 +61,9 @@ The following table lists the configurable parameters and their default values:
 | `connectionDetails.skipTLSVerify` | Skip TLS verification.| bool | false |
 | `connectionDetails.assumeRole` | Assume AWS role. | string | "" |
 
+:::info
+If you have setup IAM Roles for Service Account, you do not have to do anything else. If you do not have that setup, you can use AWS Access and Secret Keys as well
+
 Example:
 ```yaml title="values.yaml"
 connectionDetails:
@@ -129,6 +79,7 @@ connectionDetails:
         key: AWS_SECRET_KEY
 ```
 
+:::
 
 
 ### Cloudtrail
@@ -155,21 +106,6 @@ connectionDetails:
 | `costReporting.table` | Table for cost reporting. | "" |
 
 
-Cost reporting needs to be setup on AWS: https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html
-
-Sample IAM Policy required for cost reporting:
-```json
-{
-	"Effect": "Allow",
-	"Action": [
-		"athena:GetQueryExecution",
-		"athena:GetQueryResults",
-		"athena:StartQueryExecution"
-	],
-	"Resource": "arn:aws:athena:eu-west-1:765618022540:workgroup/primary"
-},
-
-```
 
 ### Inventory
 
