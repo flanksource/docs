@@ -7,8 +7,33 @@ The Kubernetes helm chart installs a [catalog scraper](/config-db/scrapers/kuber
 ```sh
 helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
-helm install {release-name} flanksource/mission-control-kubernetes
+helm install mission-control-kubernetes flanksource/mission-control-kubernetes
 ```
+
+After running `helm install` you should get a success message:
+
+```sh
+NAME: mission-control-kubernetes
+LAST DEPLOYED: Thu Feb 14 19:00:32 2024
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Kubernetes topology and scraper added
+```
+
+When you go to the dashboard now, you can now see a cluster topology:
+
+![Cluster on dashboard](/img/kubernetes-registry-dashboard.png)
+
+On clicking the topology, you can access nodes, namespaces and pods
+
+![Nodes Topology](/img/kubernetes-registry-node-component.png)
+![Namespace Topology](/img/kubernetes-registry-namespace-component.png)
+
+And we also have added a catalog scraper which populated our catalog
+![Kuberenetes Catalog](/img/kubernetes-registry-catalog-scraper.png)
 
 ## Values
 

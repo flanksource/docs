@@ -7,8 +7,34 @@ The AWS helm chart installs a [catalog scraper](/config-db/scrapers/aws)
 ```sh
 helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
-helm install {release-name} flanksource/mission-control-aws
+helm install mission-control-aws flanksource/mission-control-aws
 ```
+
+After running `helm install` you should get a success message:
+
+```sh
+NAME: mission-control-aws
+LAST DEPLOYED: Thu Feb 14 19:00:32 2024
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+AWS scraper added
+```
+
+When you go to the catalog now, you can now see all the AWS Resources
+
+![AWS Catalog](/img/aws-registry-catalog-scraper.png)
+
+
+## Prerequisites
+
+1. Connection to AWS must be authenticated via IAM Roles for Service Accounts or AWS Access and Secret Key. [Click Here to see how to configure AWS](/installation/aws-eks)
+
+2. The role should have permissions to fetch the AWS Resources
+
+3. Cost Reporting should also be setup if you want to associate costs to each resource. [Check the guide here](/installation/aws-eks#cost-reporting)
 
 ### Values
 
@@ -20,38 +46,41 @@ The following table lists the configurable parameters and their default values:
 
 | Parameter | Description | Default |
 | --- | --- | --- |
-| `nameOverride` | Overrides the name of the chart. | "" |
-| `fullnameOverride` | Overrides the full name of the chart. | "" |
 | `labels` | Additional labels to apply to resources. | {} |
 | `scraper.name` | Name of the AWS scraper. | "aws" |
 
 ### Connection Details
 
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `connectionDetails.connection` | AWS connection details. | "" |
-| `connectionDetails.accessKey.name` | Name of the access key. | "" |
-| `connectionDetails.accessKey.value` | Value of the access key. | "" |
-| `connectionDetails.accessKey.valueFrom.serviceAccount` | Service account for fetching the value. | "" |
-| `connectionDetails.accessKey.valueFrom.helmRef.key` | Key for Helm reference. | "" |
-| `connectionDetails.accessKey.valueFrom.helmRef.name` | Name for Helm reference. | "" |
-| `connectionDetails.accessKey.valueFrom.configMapKeyRef.key` | Key for ConfigMap key reference. | "" |
-| `connectionDetails.accessKey.valueFrom.configMapKeyRef.name` | Name for ConfigMap key reference. | "" |
-| `connectionDetails.accessKey.valueFrom.secretKeyRef.key` | Key for Secret key reference. | "" |
-| `connectionDetails.accessKey.valueFrom.secretKeyRef.name` | Name for Secret key reference. | "" |
-| `connectionDetails.secretKey.name` | Name of the secret key. | "" |
-| `connectionDetails.secretKey.value` | Value of the secret key. | "" |
-| `connectionDetails.secretKey.valueFrom.serviceAccount` | Service account for fetching the value. | "" |
-| `connectionDetails.secretKey.valueFrom.helmRef.key` | Key for Helm reference. | "" |
-| `connectionDetails.secretKey.valueFrom.helmRef.name` | Name for Helm reference. | "" |
-| `connectionDetails.secretKey.valueFrom.configMapKeyRef.key` | Key for ConfigMap key reference. | "" |
-| `connectionDetails.secretKey.valueFrom.configMapKeyRef.name` | Name for ConfigMap key reference. | "" |
-| `connectionDetails.secretKey.valueFrom.secretKeyRef.key` | Key for Secret key reference. | "" |
-| `connectionDetails.secretKey.valueFrom.secretKeyRef.name` | Name for Secret key reference. | "" |
-| `connectionDetails.region` | AWS region. | "" |
-| `connectionDetails.endpoint` | AWS endpoint. | "" |
-| `connectionDetails.skipTLSVerify` | Skip TLS verification. | "" |
-| `connectionDetails.assumeRole` | Assume AWS role. | "" |
+| Parameter | Description | Schema | Default |
+| --- | --- | --- | --- |
+| `connectionDetails.connection` | AWS connection details. | string | "" |
+| `connectionDetails.accessKey` | Name of the access key. | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
+| `connectionDetails.secretKey` | Name of the secret key. | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
+| `connectionDetails.region` | AWS region. | string | "" |
+| `connectionDetails.endpoint` | AWS endpoint. | string | "" |
+| `connectionDetails.skipTLSVerify` | Skip TLS verification.| bool | false |
+| `connectionDetails.assumeRole` | Assume AWS role. | string | "" |
+
+:::info
+If you have setup IAM Roles for Service Account, you do not have to do anything else. If you do not have that setup, you can use AWS Access and Secret Keys as well
+
+Example:
+```yaml title="values.yaml"
+connectionDetails:
+  accessKey:
+    valueFrom:
+      secretKeyRef:
+        name: aws-credentials
+        key: AWS_ACCESS_KEY
+  secretKey:
+    valueFrom:
+      secretKeyRef:
+        name: aws-credentials
+        key: AWS_SECRET_KEY
+```
+
+:::
+
 
 ### Cloudtrail
 
@@ -75,6 +104,8 @@ The following table lists the configurable parameters and their default values:
 | `costReporting.region` | Cost reporting region. | "" |
 | `costReporting.s3BucketPath` | S3 bucket path for cost reporting. | "" |
 | `costReporting.table` | Table for cost reporting. | "" |
+
+
 
 ### Inventory
 
