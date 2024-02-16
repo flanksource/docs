@@ -916,6 +916,11 @@ const sidebars = {
         },
       ],
     },
+    {
+      type: 'doc',
+      id: 'reference/resource_selector',
+      label: 'Resource Selector',
+    },
   ],
   overview: [
     {
