@@ -8,6 +8,7 @@ sync:
 	rm -rf  static/img/icons
 	cp -r  ../canary-checker/static/img/icons static/img
 	cp docs/canary-checker/concepts/secret-management.md docs/reference/
+	cp docs/canary-checker/reference/connection.md docs/reference/
 	cp docs/canary-checker/concepts/connections.md docs/reference/
 	cp -r ../canary-checker/src/components src/
 	cp -r ../canary-checker/src/theme src/
