@@ -662,11 +662,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'topology/concepts/linking-components',
-          label: 'Components',
-        },
-        {
-          type: 'doc',
           id: 'topology/concepts/properties',
           label: 'Properties',
         },
