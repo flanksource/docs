@@ -20,7 +20,7 @@ Components are the building blocks of a Topology. The component specification pr
 | `lookup`        | Lookup component definitions from an external source, use the `forEach` property to iterate over the results to further enrich each component.                       | [`Lookup`](lookup#lookup)              |            |
 | `properties`    | Customize component properties as to be visualized on Mission control UI                                                                                          | [`[]Property`](./property#property)    |            |
 | `relationships` | Specify relationship of component                                                                                                                                    | [`[]RelationshipSpec`](#relationshipspec) |            |
-| `selectors`     | Specify component for topology based on `fieldSelector` and `labelSelector`                                                                                          | [`[]ResourceSelector`](#resourceselector) |            |
+| `selectors`     | Specify component for topology based on `fieldSelector` and `labelSelector`                                                                                          | [`[]ResourceSelector`](/reference/resource_selector) |            |
 | `forEach`       | Only applies when using lookup. When specified, the components and properties specified under ForEach will be templated using the components returned by the lookup. | [`ForEach`](#foreach)                     | `optional` |
 
 ### ID
@@ -39,13 +39,6 @@ Components are the building blocks of a Topology. The component specification pr
 | `ref`  | Set reference for components relationship                                                | `string` |          |
 | `type` | Set the type of relationship, e.g. dependsOn, subcomponentOf, providesApis, consumesApis | `string` |          |
 
-### ResourceSelector
-
-| Field           | Description                                                                       | Scheme   | Required |
-| --------------- | --------------------------------------------------------------------------------- | -------- | -------- |
-| `name`          | Set name for selector                                                             | `string` |          |
-| `fieldSelector` | Select Kubernetes or Canary object based on the value of specified resource field | `string` |          |
-| `labelSelector` | Select Kubernetes or Canary object based on label. e.g. app, canary.              | `string` |          |
 
 ### ForEach
 

@@ -10,6 +10,7 @@ sync:
 	cp docs/canary-checker/concepts/secret-management.md docs/reference/
 	cp docs/canary-checker/reference/connection.md docs/reference/
 	cp docs/canary-checker/concepts/connections.md docs/reference/
+	cp docs/canary-checker/reference/resource_selector.md docs/reference/
 	cp -r ../canary-checker/src/components src/
 	cp -r ../canary-checker/src/theme src/
 	cp -r ../canary-checker/src/css src/

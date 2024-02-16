@@ -662,11 +662,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'topology/concepts/linking-components',
-          label: 'Components',
-        },
-        {
-          type: 'doc',
           id: 'topology/concepts/properties',
           label: 'Properties',
         },
@@ -925,6 +920,11 @@ const sidebars = {
           label: 'Javascript',
         },
       ],
+    },
+    {
+      type: 'doc',
+      id: 'reference/resource_selector',
+      label: 'Resource Selector',
     },
   ],
   overview: [
