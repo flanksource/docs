@@ -146,22 +146,12 @@ The above transformation will result in the following config
 
 This transformation function allows you to remove certain fields from the scraped configuration. This is useful when you want to remove sensitive or just useless data from the scraped configuration.
 
-### Filter
+| Field      | Description                                                                | Scheme     | Required |
+| ---------- | -------------------------------------------------------------------------- | ---------- | -------- |
+| `jsonpath` | Specify JSONPath expression for the fields                                 | `string`   | `true`   |
+| `types`    | specify the config types from which the JSONPath fields need to be removed | `[]string` |          |
 
-| Field      | Description                                | Scheme   | Required |
-| ---------- | ------------------------------------------ | -------- | -------- |
-| `jsonpath` | Specify JSONPath expression for the fields | `string` | `true`   |
-
-_Example_: With the following `Config DB` configuration for AWS, the transformation will delete the `tags` and `privateDnsNameOptionsOnLaunch` fields from the scraped configuration.
-
-```yaml
-aws:
-  - type: AWS
-    transform:
-      exclude:
-        - jsonpath: $.tags
-        - jsonpath: $.privateDnsNameOptionsOnLaunch
-```
+The `types` field is optional and if left empty, the filter will apply to all config items. [See Example](../examples/exclude-fields)
 
 ## Mask
 

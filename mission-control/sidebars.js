@@ -461,6 +461,11 @@ const sidebars = {
           id: 'config-db/examples/kubernetes-relationship',
           label: 'Forming relationships'
         },
+         {
+          type: 'doc',
+          id: 'config-db/examples/exclude-fields',
+          label: 'Exclude superflous fields'
+        },
       ]
     },
   ],
