@@ -860,7 +860,18 @@ const sidebars = {
           label: 'Slack',
         }
       ]
-    }
+    },
+    {
+      type: 'category',
+      label: 'References',
+      items: [
+        {
+          type: 'doc',
+          id: 'notifications/references/metrics',
+          label: 'Metrics'
+        }
+      ]
+    },
   ],
   registrySidebar: [
     {
