@@ -6,21 +6,65 @@ Transformation can be performed after the configs have been scraped from the tar
 - transform the scraped configuration using CEL
 - remove certain fields from the scraped configuration
 
-| Field           | Description                                                                              | Scheme                                  | Required |
-| --------------- | ---------------------------------------------------------------------------------------- | --------------------------------------- | -------- |
-| `gotemplate`    | Specify Go template for use in script                                                    | `string`                                |          |
-| `javascript`    | Specify javascript syntax for script                                                     | `string`                                |          |
-| `jsonpath`      | Specify JSONPath                                                                         | `string`                                |          |
-| `expr`          | Specify Cel expression                                                                   | `string`                                |          |
-| `change`        | Apply transformaion on the scraped changes                                               | [`[]Changes`](#changes) |          |
-| `exclude`       | Fields to remove from the config, useful for removing sensitive data and fields          | [`[]Exclude`](#exclude)                 |          |
-|                 | that change often without a material impact i.e. Last Scraped Time                       |                                         |          |
-| [`mask`](#mask) | Specify configurations to replace sensitive fields with hash functions or static string. | [`[]Mask`](./mask.md)                   |          |
+| Field           | Description                                                                              | Scheme                                        | Required |
+| --------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------- | -------- |
+| `gotemplate`    | Specify Go template for use in script                                                    | `string`                                      |          |
+| `javascript`    | Specify javascript syntax for script                                                     | `string`                                      |          |
+| `jsonpath`      | Specify JSONPath                                                                         | `string`                                      |          |
+| `expr`          | Specify Cel expression                                                                   | `string`                                      |          |
+| `changes`       | Apply transformation on the scraped changes                                              | [`[]Changes`](#changes)                       |          |
+| `exclude`       | Fields to remove from the config, useful for removing sensitive data and fields          | [`[]Exclude`](#exclude)                       |          |
+|                 | that change often without a material impact i.e. Last Scraped Time                       |                                               |          |
+| [`mask`](#mask) | Specify configurations to replace sensitive fields with hash functions or static string. | [`[]Mask`](./mask.md)                         |          |
+| `relationship`  | form relationships between config items using selectors                                  | [`[]RelationshipConfig`](#relationshipconfig) |          |
 
 :::note
 Unlike other transformation functions, scripts (gotemplate, javascript, jsonpath & expr) are ran before the attributes _(id, name, type, ...)_ are extracted.
 So please make sure your transformation scripts are inline with the JSONPath selectors for the attributes.
 :::
+
+## RelationshipConfig
+
+This transformation function allows you to dynamically form relationships between two different config items using selectors.
+
+Example: You can link a kubernetes deployment with the corresponding pods, or you can link AWS EC2 instances with the AWS Account. It's even possible to link two configs scraped by different scrape configs like: linking a Kubernetes Node in an EKS cluster to the EC2 instance.
+
+| Field    | Description                                                                           | Scheme                                      | Required |
+| -------- | ------------------------------------------------------------------------------------- | ------------------------------------------- | -------- |
+| `filter` | Specify the config item with which relationship should be formed                      | `string`                                    | `true`   |
+| `expr`   | cel-expression that returns a list of [relationship selector](#relationshipselector). | `string`                                    |          |
+| `id`     | id of the config to link to                                                           | [`RelationshipLookup`](#relationshiplookup) |          |
+| `name`   | id of the config to link to                                                           | [`RelationshipLookup`](#relationshiplookup) |          |
+| `type`   | id of the config to link to                                                           | [`RelationshipLookup`](#relationshiplookup) |          |
+| `agent`  | id of the config to link to                                                           | [`RelationshipLookup`](#relationshiplookup) |          |
+| `labels` | Labels of the config to link to                                                       | [`RelationshipLookup`](#relationshiplookup) |          |
+
+:::info
+`expr` is an alternative, more flexible, way to define the selectors. Either use `expr` or the other selector fields (`id`, `name`, `type`, `agent`, `labels`) but not both.
+[**See example**](../examples/kubernetes-relationship).
+:::
+
+### RelationshipSelector
+
+| Field    | Description                     | Scheme   | Required |
+| -------- | ------------------------------- | -------- | -------- |
+| `id`     | id of the config to link to     | `string` |          |
+| `name`   | id of the config to link to     | `string` |          |
+| `type`   | id of the config to link to     | `string` |          |
+| `agent`  | id of the config to link to     | `string` |          |
+| `labels` | Labels of the config to link to | `string` |          |
+
+### RelationshipLookup
+
+RelationshipLookup offers different ways to specify a lookup value
+
+| Field   | Description                        | Scheme   | Required |
+| ------- | ---------------------------------- | -------- | -------- |
+| `expr`  | Use an expression to get the value | `string` |          |
+| `value` | Specify a static value             | `string` |          |
+| `label` | Get the value from a label         | `string` |          |
+
+## Script
 
 ### JavaScript
 
@@ -173,12 +217,11 @@ At the moment, only `md5sum` is supported. More hash functions will be added in 
 
 ## Changes
 
-| Field     | Description                                                       | Scheme     | Required |
-| --------- | ----------------------------------------------------------------- | ---------- | -------- |
+| Field     | Description                                            | Scheme     | Required |
+| --------- | ------------------------------------------------------ | ---------- | -------- |
 | `exclude` | A list of CEL expressions that excludes a given change | `[]string` |          |
 
 The scraped changes can be accessed using the `details` field.
-
 
 ```yaml title="exclude-canary-pass-fail.yaml"
 spec:
@@ -197,7 +240,6 @@ spec:
 This feature allows you to specify custom creation and deletion times for config items. This is useful when you want to import config items from an external source, and you want to preserve the creation and deletion times of the config items in the external source.
 
 You'll be making use of the `createFields` and `deleteFields` fields that are supported by all the scrapers. They are both a list of [JSONPath expression](../concepts/templating.md#jsonpath) and are used to extract the created/deleted time of the config item from the scraped configuration. If multiple fields are specified, the first non-empty value will be used.
-
 
 Consider the following configuration file
 

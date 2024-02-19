@@ -452,6 +452,17 @@ const sidebars = {
         }
       ]
     },
+      {
+      type: 'category',
+      label: 'Examples',
+      items: [
+        {
+          type: 'doc',
+          id: 'config-db/examples/kubernetes-relationship',
+          label: 'Forming relationships'
+        },
+      ]
+    },
   ],
   playbooksSidebar: [
     {
