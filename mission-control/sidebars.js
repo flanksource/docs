@@ -672,11 +672,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'topology/concepts/lookup',
-          label: 'Lookup',
-        },
-        {
-          type: 'doc',
           id: 'topology/concepts/for-each',
           label: 'For Each',
         },
@@ -734,7 +729,12 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Component Lookups',
+          label: 'Component Lookup',
+          link: {
+            type: 'generated-index',
+            title: 'Component Lookup',
+            slug: 'topology/references/lookup',
+          },
           items: [
             {
               type: 'doc',
