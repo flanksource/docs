@@ -478,17 +478,6 @@ const sidebars = {
         },
       ]
     },
-    {
-      type: 'category',
-      label: 'References',
-      items: [
-        {
-          type: 'doc',
-          id: 'config-db/references/relationship-lookup',
-          label: 'Relationship Lookup'
-        },
-      ]
-    },
   ],
   playbooksSidebar: [
     {
