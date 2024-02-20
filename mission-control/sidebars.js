@@ -861,17 +861,6 @@ const sidebars = {
         }
       ]
     },
-    {
-      type: 'category',
-      label: 'References',
-      items: [
-        {
-          type: 'doc',
-          id: 'notifications/references/metrics',
-          label: 'Metrics'
-        }
-      ]
-    },
   ],
   registrySidebar: [
     {
@@ -959,6 +948,11 @@ const sidebars = {
           id: 'installation/saas'
         },
         {
+          type: 'doc',
+          id: 'installation/monitoring-and-tracing',
+          label: 'Monitoring & Tracing'
+        },
+        {
           type: 'category',
           label: 'Self-Hosted',
           items: [
@@ -967,7 +961,6 @@ const sidebars = {
               id: 'installation/helm',
               label: 'Helm',
             },
-
             {
               type: 'doc',
               id: 'installation/database',
