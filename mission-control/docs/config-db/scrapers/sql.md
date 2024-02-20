@@ -75,25 +75,25 @@ spec:
 
 | Field       | Description                                                                        | Scheme                                       | Required |
 | ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `logLevel`  | Specify the level of logging.                                                      | `string`                                     | `false`  |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     | `false`  |
-| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       | `false`  |
+| `logLevel`  | Specify the level of logging.                                                      | `string`                                     |          |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
+| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
-| `sql`       | Specifies the list of SQL configurations to scrape.                                | [`[]SQL`](#sql-1)                            | `false`  |
+| `sql`       | Specifies the list of SQL configurations to scrape.                                | [`[]SQL`](#sql-1)                            |          |
 
 ## SQL
 
 | Field             | Description                                                                                                                                                             | Scheme                               | Required |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | -------- |
 | `id`              | A static value or JSONPath expression to use as the ID for the resource.                                                                                                | `string`                             | `true`   |
-| `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                             | `false`  |
-| `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                             | `false`  |
+| `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                             |          |
+| `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                             |          |
 | `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                             | `true`   |
-| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](../concepts/transform) | `false`  |
-| `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                             | `false`  |
-| `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                             | `false`  |
-| `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                           | `false`  |
-| `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                           | `false`  |
+| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](../concepts/transform) |          |
+| `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                             |          |
+| `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                             |          |
+| `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                           |          |
+| `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                           |          |
 | -                 | Specify connection details to the database                                                                                                                              | [Connection](#connection)            |          |
-| `driver`          | Specify the name of the driver to use for connecting to the database                                                                                                    | `string`                             | `false`  |
+| `driver`          | Specify the name of the driver to use for connecting to the database                                                                                                    | `string`                             |          |
 | `query`           | Specify the SQL query to execute                                                                                                                                        | `string`                             | `true`   |

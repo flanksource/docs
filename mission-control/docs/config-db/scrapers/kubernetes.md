@@ -41,25 +41,25 @@ spec:
 
 | Field        | Description                                                                        | Scheme                                       | Required |
 | ------------ | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `logLevel`   | Specify the level of logging.                                                      | `string`                                     | `false`  |
-| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     | `false`  |
-| `full`       | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       | `false`  |
+| `logLevel`   | Specify the level of logging.                                                      | `string`                                     |          |
+| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
+| `full`       | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
 | `retention`  | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
-| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                         | [`[]Kubernetes`](#kubernetes-1)              | `false`  |
+| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                         | [`[]Kubernetes`](#kubernetes-1)              |          |
 
 ### Kubernetes
 
 | Field             | Description                                                                                                                                                             | Scheme                                           | Required |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | -------- |
-| `id`              | A static value or JSONPath expression to use as the ID for the resource.                                                                                                | `string`                                         | `true`   |
-| `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                                         | `false`  |
-| `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                                         | `false`  |
-| `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                                         | `true`   |
-| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](../concepts/transform.md)          | `false`  |
-| `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                         | `false`  |
-| `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                         | `false`  |
-| `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                                       | `false`  |
-| `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                                       | `false`  |
+| `id`              | A static value or JSONPath expression to use as the ID for the resource.                                                                                                | `string`                                         |          |
+| `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                                         |          |
+| `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                                         |          |
+| `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                                         |          |
+| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](../concepts/transform.md)          |          |
+| `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                         |          |
+| `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                         |          |
+| `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                                       |          |
+| `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                                       |          |
 | `clusterName`     | Specify cluster name                                                                                                                                                    | `string`                                         |          |
 | `namespace`       | Specify namespace for scraping of Kubernetes resources                                                                                                                  | `string`                                         |          |
 | `useCache`        | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd                                                                        | `bool`                                           |          |
@@ -68,9 +68,9 @@ spec:
 | `selector`        | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels`                                                                                              | `string`                                         |          |
 | `fieldSelector`   | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running`                                                                               | `string`                                         |          |
 | `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                                                                                               | `[]string`                                       |          |
-| **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                                                                                                | <CommonLink to="secrets">[]_EnvVar_</CommonLink> | yes      |
-| `event`           | Specify configuration to handle Kubernetes events.                                                                                                                      | [`Event`](#sevent)                               | yes      |
-| `relationships`   | Create relationships between kubernetes objects.                                                                                                                        | [`[]Relationship`](#kubernetes-relationship)     | `false`  |
+| **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                                                                                                | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
+| `event`           | Specify configuration to handle Kubernetes events.                                                                                                                      | [`Event`](#sevent)                               |          |
+| `relationships`   | Create relationships between kubernetes objects.                                                                                                                        | [`[]Relationship`](#kubernetes-relationship)     |          |
 
 ### Events
 
@@ -80,15 +80,15 @@ In addition, you can also specify keywords used to identify the severity of the 
 
 | Field              | Description                                                                                | Scheme                                  | Required |
 | ------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------- | -------- |
-| `exclusions`       | A list of keywords used to exclude event objects based on the reason                       | `[]string`                              | `false`  |
-| `severityKeywords` | Specify keywords used to identify the severity of the Kubernetes Event based on the reason | [`SeverityKeywords`](#severitykeywords) | `false`  |
+| `exclusions`       | A list of keywords used to exclude event objects based on the reason                       | `[]string`                              |          |
+| `severityKeywords` | Specify keywords used to identify the severity of the Kubernetes Event based on the reason | [`SeverityKeywords`](#severitykeywords) |          |
 
 ### SeverityKeywords
 
 | Field   | Description                                                                                                                                                            | Scheme     | Required |
 | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `warn`  | A list of keywords used to identify a warning severity from the reason. It could also be a match pattern: example "\*" to match all or "!badword" to exclude "badword" | `[]string` | `false`  |
-| `error` | Same as `warn` but used to map to error severity.                                                                                                                      | `[]string` | `false`  |
+| `warn`  | A list of keywords used to identify a warning severity from the reason. It could also be a match pattern: example "\*" to match all or "!badword" to exclude "badword" | `[]string` |          |
+| `error` | Same as `warn` but used to map to error severity.                                                                                                                      | `[]string` |          |
 
 ### Kubernetes Relationship
 
