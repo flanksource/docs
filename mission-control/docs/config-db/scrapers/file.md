@@ -2,13 +2,18 @@
 
 The file config type is set to scrape configurations or configurations in common with the related elements that can be specified in the fields; `type`, and `id`. The paths to the configuration(s) to be scraped is set with the field `path` as a list.
 
-```yaml
-file:
-  - type: $.Config.InstanceType
-    id: $.Config.InstanceId
-    path:
-      - config*.json
-      - test*.json
+```yaml title='file-scraper.yaml'
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: file-scraper
+spec:
+  file:
+    - type: $.Config.InstanceType
+      id: $.Config.InstanceId
+      path:
+        - config*.json
+        - test*.json
 ```
 
 For more examples of configuration file, please check the [GitHub repo](https://github.com/flanksource/config-db/tree/main/fixtures)

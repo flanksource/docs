@@ -2,11 +2,16 @@
 
 The `trivy` scraper uses [Trivy](https://trivy.dev/) to scan for security vulnerabilities & misconfigurations in your configuration. At the moment, there's only support for scanning Kubernetes objects.
 
-```yaml
-trivy:
-  - version: "0.40.0"
-    kubernetes:
-      namespace: production
+```yaml title="trivy-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: trivy-scraper
+spec:
+  trivy:
+    - version: '0.40.0'
+      kubernetes:
+        namespace: production
 ```
 
 Unlike other scrapers, this one does not scape new configs but rather look for security vulnerabilities in the existing configs. This scrapper, if configured to scan a kubernetes cluster, will map all the found vulnerabilities to the corresponding config item.

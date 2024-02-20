@@ -72,20 +72,25 @@ You can supply a JavaScript code to transform the scraped configuration. Your JS
 
 _Example_: The following `Config DB` configuration specifies a transformation that'll add a new field `"hello"` with the value `"world"` to all the scraped configurations.
 
-```yaml
-file:
-  - type: Config
-    id: $[0].id
-    name: $[0].name
-    transform:
-      script:
-        javascript: |+
-          for (var i = 0; i < config.length; i++) {
-            config[i].hello = "world"
-          }
-          JSON.stringify(config)
-    paths:
-      - fixtures/data/multiple-configs.json
+```yaml title="file-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: file-scraper
+spec:
+  file:
+    - type: Config
+      id: $[0].id
+      name: $[0].name
+      transform:
+        script:
+          javascript: |+
+            for (var i = 0; i < config.length; i++) {
+              config[i].hello = "world"
+            }
+            JSON.stringify(config)
+      paths:
+        - fixtures/data/multiple-configs.json
 ```
 
 Considering that the `fixtures/data/multiple-configs.json` file contains the following configuration
@@ -118,22 +123,27 @@ The JS transformation will result in two new config items
 
 Go template is another powerful way to transform the scraped configuration. Just as you provide a javascript code, you can also provide a Go template. The Go template will have access to the special `config` variable which will contain the scraped config.
 
-```yaml
-file:
-  - type: Config
-    id: '$.id'
-    name: 'scraped'
-    transform:
-      script:
-        gotemplate: |+
-          [{
-            {{range .config}}
-              "name-{{.id}}": "hi {{.name}}",
-            {{end}}
-            "id": "what"
-          }]
-    paths:
-      - fixtures/data/multiple-configs.json
+```yaml title="file-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: file-scraper
+spec:
+  file:
+    - type: Config
+      id: '$.id'
+      name: 'scraped'
+      transform:
+        script:
+          gotemplate: |+
+            [{
+              {{range .config}}
+                "name-{{.id}}": "hi {{.name}}",
+              {{end}}
+              "id": "what"
+            }]
+      paths:
+        - fixtures/data/multiple-configs.json
 ```
 
 The above transformation will result in the following config
@@ -185,22 +195,27 @@ At the moment, only `md5sum` is supported. More hash functions will be added in 
 
 ## Changes
 
+Changes define how the config changes should be transformed. At the moment, only change exclusion is supported which lets you selectively discard changes that are not relevant.
+
 | Field     | Description                                            | Scheme     | Required |
 | --------- | ------------------------------------------------------ | ---------- | -------- |
 | `exclude` | A list of CEL expressions that excludes a given change | `[]string` |          |
 
 The scraped changes can be accessed using the `details` field.
 
-```yaml title="exclude-canary-pass-fail.yaml"
+```yaml title="kubernetes-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: kubernetes-scraper
 spec:
   kubernetes:
     - clusterName: local-kind-cluster
       transform:
-        change:
+        changes:
           exclude:
-            # Canary checker events are handled natively, no need to import the K8S events
-            - 'details.source.component == "canary-checker" && details.reason == "Failed"'
-            - 'details.source.component == "canary-checker" && details.reason == "Succeeded"'
+            - 'config_type == "Kubernetes::Node" && details.message == "status.images"'
+            - 'details.source.component == "canary-checker" && (change_type == "Failed" || change_type == "Pass")'
 ```
 
 ## Date Mapping
@@ -211,31 +226,41 @@ You'll be making use of the `createFields` and `deleteFields` fields that are su
 
 Consider the following configuration file
 
-```yaml
-file:
-  - type: $.aws[0].region
-    id: $.aws[0].region
-    createFields:
-      - $.aws[0].made_at
-      - $.aws[0].created_at
-    deleteFields:
-      - '$.aws[0].removed_at'
-      - '$.aws[0].deleted_at'
-    paths:
-      - fixtures/data/test.yaml
+```yaml title="kubernetes-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: kubernetes-scraper
+spec:
+  file:
+    - type: $.aws[0].region
+      id: $.aws[0].region
+      createFields:
+        - $.aws[0].made_at
+        - $.aws[0].created_at
+      deleteFields:
+        - '$.aws[0].removed_at'
+        - '$.aws[0].deleted_at'
+      paths:
+        - fixtures/data/test.yaml
 ```
 
 where `fixtures/data/test.yaml` is
 
-```yaml
-aws:
-  - region: eu-west-1
-    compliance: true
-    patch_states: true
-    patch_details: true
-    inventory: true
-    made_at: '2017-03-06T21:04:11Z'
-    deleted_at: '2017-04-04T15:04:05Z'
+```yaml title="aws-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-scraper
+spec:
+  aws:
+    - region: eu-west-1
+      compliance: true
+      patch_states: true
+      patch_details: true
+      inventory: true
+      made_at: '2017-03-06T21:04:11Z'
+      deleted_at: '2017-04-04T15:04:05Z'
 ```
 
 When the scraped configuration is saved in the database, the created date will be `2017-03-06T21:04:11Z` instead of being the current time and the deleted date will be `2017-04-04T15:04:05Z` instead of being empty.

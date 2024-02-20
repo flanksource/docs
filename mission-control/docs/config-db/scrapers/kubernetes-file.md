@@ -2,7 +2,12 @@
 
 The KubernetesFile config type is used to scrape configurations contained in your specified resource e.g Pod.
 
-```yaml
+```yaml title='k8s-file-scraper.yaml'
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: k8s-file-scraper
+spec:
   kubernetesFile:
     - selector:
       namespace: demo
@@ -39,7 +44,7 @@ The KubernetesFile config type is used to scrape configurations contained in you
 | `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                               | `false`  |
 | `selector`        | Specify Kubernetes resource for configuration based on `namespace`, `kind`, `name` and more.                                                                            | [`ResourceSelector`](./resourceselector) | yes      |
 | `container`       | Set container name                                                                                                                                                      | `string`                                 |          |
-| `files`           | Specify path to file contained in Pod                                                                                                                                   | `[]File`                              |          |
+| `files`           | Specify path to file contained in Pod                                                                                                                                   | `[]File`                                 |          |
 
 ### File
 
