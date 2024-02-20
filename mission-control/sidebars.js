@@ -924,6 +924,11 @@ const sidebars = {
     },
     {
       type: 'doc',
+      id: 'reference/property',
+      label: 'Property',
+    },
+    {
+      type: 'doc',
       id: 'reference/connection',
       label: 'Connection',
     },
