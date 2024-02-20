@@ -682,11 +682,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'topology/concepts/authentication',
-          label: 'Authentication',
-        },
-        {
-          type: 'doc',
           id: 'topology/concepts/config',
           label: 'Configuration',
         },
@@ -736,11 +731,6 @@ const sidebars = {
           type: 'doc',
           id: 'topology/references/components',
           label: 'Components',
-        },
-        {
-          type: 'doc',
-          id: 'topology/references/properties',
-          label: 'Properties',
         },
         {
           type: 'category',
