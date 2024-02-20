@@ -532,13 +532,18 @@ const sidebars = {
       items: [
         {
           type: 'doc',
+          id: 'playbooks/actions/azure_devops_pipeline',
+          label: 'Azure DevOps Pipeline'
+        },
+        {
+          type: 'doc',
           id: 'playbooks/actions/exec',
           label: 'Exec'
         },
         {
           type: 'doc',
           id: 'playbooks/actions/github',
-          label: 'Github'
+          label: 'GitHub'
         },
         {
           type: 'doc',
