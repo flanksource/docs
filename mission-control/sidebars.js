@@ -698,13 +698,13 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'topology/examples/aws',
-          label: 'AWS',
+          id: 'topology/examples/prometheus',
+          label: 'Prometheus',
         },
         {
           type: 'doc',
-          id: 'topology/examples/git',
-          label: 'Git',
+          id: 'topology/examples/flux',
+          label: 'Flux',
         },
         {
           type: 'doc',

@@ -4,7 +4,7 @@ The Kubernetes topology fetches and displays a Kubernetes cluster's resources de
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
-kind: SystemTemplate
+kind: Topology
 metadata:
   name: cluster
 labels:

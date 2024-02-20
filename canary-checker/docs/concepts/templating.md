@@ -3,7 +3,7 @@
 **Templating is:**
 > Simply a way to represent data in different forms.
 
-Templating comes in handy when you want the results of your operation displayed in your desired configuration and order. They can be specified in `display`, `test`, `transform` fields for the `Canary` object, `id`, `test`, `transform`, `display` for `SystemTemplate` object. The template can be configured In the next section, you'll see the different supported templates.
+Templating comes in handy when you want the results of your operation displayed in your desired configuration and order. They can be specified in `display`, `test`, `transform` fields for the `Canary` object, `id`, `test`, `transform`, `display` for `Topology` object. The template can be configured In the next section, you'll see the different supported templates.
 
 ## Canary Template Types
 

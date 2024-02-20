@@ -3,7 +3,7 @@
 ```yaml
 
 apiVersion: canaries.flanksource.com/v1
-kind: SystemTemplate
+kind: Topology
 metadata:
   name: acme-app
 spec:

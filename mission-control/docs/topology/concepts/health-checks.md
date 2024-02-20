@@ -1,5 +1,6 @@
 # Health Checks
-Components can be associated with a health check, when the health checks associated to the component become unhealthy, the component will also become unhealthy.
+
+Components can be associated with health checks. This association allows you to check the health of a component. When the health checks associated to the component become unhealthy, the component will also become unhealthy & vice-versa.
 
 Health checks can be associated in 2 ways:
 
@@ -8,27 +9,26 @@ Health checks can be associated in 2 ways:
 
 ## Check
 
-| Field      | Description | Scheme                                                        | Required |
-| ---------- | ----------- | ------------------------------------------------------------- | -------- |
-| `inline`   |             | [`CanarySpec`](../../canary-checker/reference/canary-spec.md) |          |
-| `selector` |             | [`[]Selector`](#selector)                                     |          |
+| Field      | Description                      | Scheme                                                        | Required |
+| ---------- | -------------------------------- | ------------------------------------------------------------- | -------- |
+| `inline`   | Define a new health check inline | [`CanarySpec`](../../canary-checker/reference/canary-spec.md) |          |
+| `selector` | Select an existing health check  | [`[]ResourceSelector`](../../reference/resource_selector)     |          |
 
 ### Selector
 
-```yaml
+```yaml title="topology.yaml"
 apiVersion: canaries.flanksource.com/v1
-kind: SystemTemplate
+kind: Topology
 metadata:
   name: single-check
-spec| `id`      | The UUID of config item, rarely used                       | `string`                       |          |
-
+spec:
   type: Website
   icon: Application
   schedule: "@every 5m"
   components:
-    - checks:
+    - name: single-check
+      checks:
         - labelSelector: "check=http-200" # labels specified on an existing check
-      name: single-check
 ---
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
@@ -44,21 +44,13 @@ spec:
       - 202
 ```
 
-By selecting health checks rather than inlining them you are able to re-use the same health check across multiple components.
-
-| Field           | Description                                                                       | Scheme   |
-| --------------- | --------------------------------------------------------------------------------- | -------- |
-| `fieldSelector` | Select Kubernetes or Canary object based on the value of specified resource field | _string_ |
-| `labelSelector` | Select Kubernetes or Canary object based on label. e.g. app, canary.              | _string_ |
-| `name`          | Set name for selector                                                             | _string_ |
-
 ### Inline Health Checks
 
 Sometimes a health check is specific to the component being created, in which case it can be inlined.
 
-```yaml
+```yaml title="topology.yaml"
 apiVersion: canaries.flanksource.com/v1
-kind: SystemTemplate
+kind: Topology
 metadata:
   name: inline-check
 spec:
