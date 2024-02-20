@@ -464,7 +464,12 @@ const sidebars = {
          {
           type: 'doc',
           id: 'config-db/examples/exclude-fields',
-          label: 'Exclude superflous fields'
+          label: 'Exclude superflous/sensitive fields'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/examples/masking-fields',
+          label: 'Masking sensitive fields'
         },
       ]
     },
