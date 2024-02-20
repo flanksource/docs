@@ -1,31 +1,32 @@
 # Kubernetes Relationship
 
-This example demonstrates 2 different ways you can form relationships between config items.
+Kubernetes scraper offers a more tailored relationship selector in addition to the [general relationship selector](../concepts/transform.md#relationshipconfig).
 
-The first relationship is formed between a Kubernetes service and its corresponding deployment using the inline relationship selector _(type & name)_ while the second relationship is formed between Pods and PVCs using the `expr` way.
+```yaml title="kubernetes-relationship.yaml"
+kubernetes:
+  - clusterName: 'eks'
+    relationships:
+      # If object has spec.claimRef field, use its kind, name and namespace
+      - kind:
+          expr: "has(spec.claimRef) ? spec.claimRef.kind : ''"
+        name:
+          expr: "has(spec.claimRef) ? spec.claimRef.name : ''"
+        namespace:
+          expr: "has(spec.claimRef) ? spec.claimRef.namespace : ''"
 
-```yaml title="kubernetes-scraper.yaml"
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: kubernetes-scraper
-spec:
-  kubernetes:
-    - clusterName: local-kind-cluster
-      transform:
-        relationship:
-          # Link a service to a deployment (adjust the label selector accordingly)
-          - filter: config_type == "Kubernetes::Service"
-            type:
-              value: 'Kubernetes::Deployment'
-            name:
-              expr: |
-                has(config.spec.selector) && has(config.spec.selector.name) ? config.spec.selector.name : ''
-          # Link Pods to PVCs
-          - filter: config_type == 'Kubernetes::Pod'
-            expr: |
-              config.spec.volumes.
-                filter(item, has(item.persistentVolumeClaim)).
-                map(item, {"type": "Kubernetes::PersistentVolumeClaim", "name": item.persistentVolumeClaim.claimName}).
-                toJSON()
+      # If object flux kustomize labels, link it to the parent Kustomization object
+      - kind:
+          value: Kustomization
+        name:
+          label: kustomize.toolkit.fluxcd.io/name
+        namespace:
+          label: kustomize.toolkit.fluxcd.io/namespace
+
+      # If object helm kustomize labels, link it to the parent HelmRelease object
+      - kind:
+          value: HelmRelease
+        name:
+          label: helm.toolkit.fluxcd.io/name
+        namespace:
+          label: helm.toolkit.fluxcd.io/namespace
 ```

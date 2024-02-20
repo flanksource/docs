@@ -452,14 +452,19 @@ const sidebars = {
         }
       ]
     },
-      {
+    {
       type: 'category',
       label: 'Examples',
       items: [
         {
           type: 'doc',
-          id: 'config-db/examples/kubernetes-relationship',
+          id: 'config-db/examples/forming-relationship',
           label: 'Forming relationships'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/examples/kubernetes-relationship',
+          label: 'Kubernetes relationships'
         },
          {
           type: 'doc',
@@ -470,6 +475,17 @@ const sidebars = {
           type: 'doc',
           id: 'config-db/examples/masking-fields',
           label: 'Masking sensitive fields'
+        },
+      ]
+    },
+    {
+      type: 'category',
+      label: 'References',
+      items: [
+        {
+          type: 'doc',
+          id: 'config-db/references/relationship-lookup',
+          label: 'Relationship Lookup'
         },
       ]
     },
