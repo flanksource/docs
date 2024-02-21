@@ -4,9 +4,8 @@
 // There are various equivalent ways to declare your Docusaurus config.
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
-const lightCodeTheme = require('prism-react-renderer/themes/palenight');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
-
+const lightCodeTheme = require('prism-react-renderer/themes/palenight')
+const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -23,12 +22,12 @@ const config = {
 
   customFields: {
     oss: false,
-    productName: "Mission Control",
+    productName: 'Mission Control',
     links: {
-      "authentication": '/reference/secret-management',
-      "secrets": '/reference/secret-management',
-      "connection": '/reference/authentication',
-      "cel": "/reference/scripting/cel"
+      authentication: '/reference/secret-management',
+      secrets: '/reference/secret-management',
+      connection: '/reference/authentication',
+      cel: '/reference/scripting/cel'
     }
   },
 
@@ -41,10 +40,10 @@ const config = {
             resolve: {
               symlinks: false
             }
-          };
+          }
         }
-      };
-    },
+      }
+    }
   ],
 
   // Even if you don't use internationalization, you can use this field to set
@@ -52,7 +51,7 @@ const config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en']
   },
 
   presets: [
@@ -65,17 +64,16 @@ const config = {
           sidebarPath: './sidebars.js',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/flanksource/docs/tree/main/',
+          editUrl: 'https://github.com/flanksource/docs/tree/main/'
         },
         blog: {
-          showReadingTime: true,
+          showReadingTime: true
         },
         theme: {
-          customCss: './src/css/custom.css',
-        },
-      }),
-    ],
+          customCss: './src/css/custom.css'
+        }
+      })
+    ]
   ],
 
   themeConfig:
@@ -88,7 +86,7 @@ const config = {
         title: '',
         logo: {
           alt: 'Flanksource Mission Control',
-          src: 'img/mission-control-logo.svg',
+          src: 'img/mission-control-logo.svg'
         },
         items: [
           {
@@ -96,54 +94,58 @@ const config = {
             sidebarId: 'overview',
             // activeBasePath: '/',
             position: 'left',
-            label: 'Overview',
+            label: 'Overview'
           },
           {
             to: 'canary-checker/overview',
             label: 'Health Check',
             activeBasePath: 'canary-checker',
-            position: 'left',
+            position: 'left'
           },
           {
             to: 'config-db/overview',
             activeBasePath: 'config-db',
             label: 'Catalog',
-            position: 'left',
+            position: 'left'
           },
           {
             to: 'notifications/overview',
             activeBasePath: 'notifications',
             label: 'Notifications',
-            position: 'left',
+            position: 'left'
           },
           {
             to: 'topology/overview',
             activeBasePath: 'topology',
             label: 'Topology',
-            position: 'left',
+            position: 'left'
           },
           {
             to: 'playbooks/overview',
             activeBasePath: 'playbooks',
             label: 'Playbooks',
-            position: 'left',
+            position: 'left'
           },
           {
             to: 'registry/overview',
             activeBasePath: 'registry',
             label: 'Registry',
-            position: 'left',
+            position: 'left'
           },
           {
             to: 'reference/scripting',
             label: 'Reference',
-            position: 'left',
-          },
-        ],
+            position: 'left'
+          }
+        ]
       },
 
       metadata: [
-        { name: 'keywords', content: 'health check, synthetic test, continuous testing, kubernetes operator' }
+        {
+          name: 'keywords',
+          content:
+            'health check, synthetic test, continuous testing, kubernetes operator'
+        }
       ],
 
       algolia: {
@@ -153,23 +155,23 @@ const config = {
         // Public API key: it is safe to commit it
         apiKey: 'b6f91e146e1ed100664b6da07151f287',
 
-        indexName: 'flanksource',
+        indexName: 'flanksource'
       },
       colorMode: {
         defaultMode: 'light',
         disableSwitch: false,
-        respectPrefersColorScheme: true,
+        respectPrefersColorScheme: true
       },
       footer: {
         style: 'dark',
-        copyright: `Copyright © ${new Date().getFullYear()} Flanksource Inc.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Flanksource Inc.`
       },
       prism: {
         additionalLanguages: ['powershell'],
         darkTheme: darkCodeTheme,
         theme: lightCodeTheme
-      },
-    }),
-};
+      }
+    })
+}
 
 module.exports = config
