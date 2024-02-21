@@ -452,6 +452,32 @@ const sidebars = {
         }
       ]
     },
+    {
+      type: 'category',
+      label: 'Examples',
+      items: [
+        {
+          type: 'doc',
+          id: 'config-db/examples/forming-relationship',
+          label: 'Forming relationships'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/examples/kubernetes-relationship',
+          label: 'Kubernetes relationships'
+        },
+         {
+          type: 'doc',
+          id: 'config-db/examples/exclude-fields',
+          label: 'Exclude superflous/sensitive fields'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/examples/masking-fields',
+          label: 'Masking sensitive fields'
+        },
+      ]
+    },
   ],
   playbooksSidebar: [
     {
@@ -532,13 +558,18 @@ const sidebars = {
       items: [
         {
           type: 'doc',
+          id: 'playbooks/actions/azure_devops_pipeline',
+          label: 'Azure DevOps Pipeline'
+        },
+        {
+          type: 'doc',
           id: 'playbooks/actions/exec',
           label: 'Exec'
         },
         {
           type: 'doc',
           id: 'playbooks/actions/github',
-          label: 'Github'
+          label: 'GitHub'
         },
         {
           type: 'doc',
@@ -884,6 +915,11 @@ const sidebars = {
       type: 'doc',
       id: 'reference/secret-management',
       label: 'Secret Management',
+    },
+    {
+      type: 'doc',
+      id: 'reference/property',
+      label: 'Property',
     },
     {
       type: 'doc',

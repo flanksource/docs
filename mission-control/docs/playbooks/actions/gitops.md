@@ -49,7 +49,7 @@ spec:
 ```
 
 :::info
-On Github and Azure Devops, it's possible to create Pull Requests as well.
+On Github, GitLab and Azure Devops, it's possible to create Pull Requests as well.
 :::
 
 | Field     | Description                                                   | Scheme                                   | Required | Templatable |
@@ -66,15 +66,18 @@ At least a patch or files config is required.
 
 ### Repository Detail
 
-| Field        | Description                                                           | Scheme   | Required | Templatable |
-| ------------ | --------------------------------------------------------------------- | -------- | -------- | ----------- |
-| `connection` | Connection name to use the credentials for the git repo               | `string` |          |             |
-| `url`        | URL of the git repository                                             | `string` |          |             |
-| `base`       | Branch to clone. _(Defaults to "main")_                               | `string` |          | `true`      |
-| `branch`     | The new branch to create. _(Defaults to base branch specified above)_ | `string` |          | `true`      |
+| Field        | Description                                                               | Scheme   | Required | Templatable |
+| ------------ | ------------------------------------------------------------------------- | -------- | -------- | ----------- |
+| `connection` | Connection name to use the credentials for the git repo                   | `string` |          |             |
+| `url`        | URL of the git repository                                                 | `string` |          |             |
+| `base`       | Branch to clone. _(Defaults to "main")_                                   | `string` |          | `true`      |
+| `branch`     | The new branch to create. _(Defaults to base branch specified above)_     | `string` |          | `true`      |
+| `type`       | Specify the service the repository is hosted on (eg: github, gitlab, etc) | `string` |          |             |
 
 :::note
-Either the `connection` or the `url` is required
+Either the `connection` or the `url` is required.
+
+For private GitLab repositories, please sepcify the type as "gitlab"
 :::
 
 ### Commit Detail
