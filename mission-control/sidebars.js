@@ -452,6 +452,32 @@ const sidebars = {
         }
       ]
     },
+    {
+      type: 'category',
+      label: 'Examples',
+      items: [
+        {
+          type: 'doc',
+          id: 'config-db/examples/forming-relationship',
+          label: 'Forming relationships'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/examples/kubernetes-relationship',
+          label: 'Kubernetes relationships'
+        },
+         {
+          type: 'doc',
+          id: 'config-db/examples/exclude-fields',
+          label: 'Exclude superflous/sensitive fields'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/examples/masking-fields',
+          label: 'Masking sensitive fields'
+        },
+      ]
+    },
   ],
   playbooksSidebar: [
     {
@@ -855,7 +881,7 @@ const sidebars = {
           label: 'Slack',
         }
       ]
-    }
+    },
   ],
   registrySidebar: [
     {
@@ -879,6 +905,11 @@ const sidebars = {
       type: 'doc',
       id: 'reference/secret-management',
       label: 'Secret Management',
+    },
+    {
+      type: 'doc',
+      id: 'reference/property',
+      label: 'Property',
     },
     {
       type: 'doc',
@@ -943,6 +974,11 @@ const sidebars = {
           id: 'installation/saas'
         },
         {
+          type: 'doc',
+          id: 'installation/monitoring-and-tracing',
+          label: 'Monitoring & Tracing'
+        },
+        {
           type: 'category',
           label: 'Self-Hosted',
           items: [
@@ -951,7 +987,6 @@ const sidebars = {
               id: 'installation/helm',
               label: 'Helm',
             },
-
             {
               type: 'doc',
               id: 'installation/database',

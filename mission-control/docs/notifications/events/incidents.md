@@ -183,3 +183,90 @@ There are various subcategories for incident related evens
 | `created_at`   | created timestamp                            | `time.Time`      |          |
 | `updated_at`   | updated timestamp                            | `time.Time`      |          |
 | `deleted_at`   | deleted timestamp                            | `time.Time`      |          |
+
+## Notification Template Defaults
+
+### `incident.created`
+
+```
+# Title
+{{.incident.incident_id}}: {{.incident.title}} ({{.incident.severity}}) created
+
+# Body
+Type: {{.incident.type}}
+
+[Reference]({{.permalink}})
+```
+
+### `incident.comment.added`
+
+```
+# Title
+{{.author.name}} left a comment on {{.incident.incident_id}}: {{.incident.title}}
+
+# Body
+{{.comment.comment}}
+
+[Reference]({{.permalink}})"
+```
+
+### `incident.dod.added`
+
+```
+# Title
+Definition of Done added | {{.incident.incident_id}}: {{.incident.title}}
+
+# Body
+Evidence: {{.evidence.description}}
+
+[Reference]({{.permalink}})
+```
+
+### `incident.dod.passed`, `incident.dod.regressed`
+
+```
+# Title
+Definition of Done {{if .evidence.done}}passed{{else}}regressed{{end}} | {{.incident.incident_id}}: {{.incident.title}}
+
+# Body
+Evidence: {{.evidence.description}}
+Hypothesis: {{.hypothesis.title}}
+
+[Reference]({{.permalink}})`
+```
+
+### `incident.responder.added`
+
+```
+# Title
+New responder added to {{.incident.incident_id}}: {{.incident.title}}
+
+# Body
+Responder {{.responder.name}}
+
+[Reference]({{.permalink}})
+```
+
+### `incident.responder.removed`
+
+```
+# Title
+Responder removed from {{.incident.incident_id}}: {{.incident.title}}
+
+# Body
+Responder {{.responder.name}}
+
+[Reference]({{.permalink}})
+```
+
+### `incident.status.*`
+
+```
+# Title
+{{.incident.title}} status updated
+
+# Body
+New Status: {{.incident.status}}
+
+[Reference]({{.permalink}})
+```

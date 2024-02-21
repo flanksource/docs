@@ -2,70 +2,75 @@
 
 The `kubernetes` config type scrapes the configurations of your Kubernetes resources as specified with the fields; `namespace`, `selector`, `fieldSelector` and more.
 
-```yaml
-kubernetes:
-  - clusterName: local-kind-cluster
-    exclusions:
-      - Secret
-      - ReplicaSet
-      - APIService
-      - endpoints.discovery.k8s.io
-      - endpointslices.discovery.k8s.io
-      - leases.coordination.k8s.io
-      - podmetrics.metrics.k8s.io
-      - nodemetrics.metrics.k8s.io
-      - customresourcedefinition
-      - controllerrevision
-      - certificaterequest
-      - orders.acme.cert-manager.io
-    event:
+```yaml title='kubernetes-scraper.yaml'
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: kubernetes-scraper
+spec:
+  kubernetes:
+    - clusterName: local-kind-cluster
       exclusions:
-        - SuccessfulCreate
-        - Created
-        - DNSConfigForming
-      severityKeywords:
-        error:
-          - failed
-          - error
-        warn:
-          - backoff
-          - nodeoutofmemory
+        - Secret
+        - ReplicaSet
+        - APIService
+        - endpoints.discovery.k8s.io
+        - endpointslices.discovery.k8s.io
+        - leases.coordination.k8s.io
+        - podmetrics.metrics.k8s.io
+        - nodemetrics.metrics.k8s.io
+        - customresourcedefinition
+        - controllerrevision
+        - certificaterequest
+        - orders.acme.cert-manager.io
+      event:
+        exclusions:
+          - SuccessfulCreate
+          - Created
+          - DNSConfigForming
+        severityKeywords:
+          error:
+            - failed
+            - error
+          warn:
+            - backoff
+            - nodeoutofmemory
 ```
 
 ## Scraper
 
 | Field        | Description                                                                        | Scheme                                       | Required |
 | ------------ | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `logLevel`   | Specify the level of logging.                                                      | `string`                                     | `false`  |
-| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     | `false`  |
-| `full`       | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       | `false`  |
+| `logLevel`   | Specify the level of logging.                                                      | `string`                                     |          |
+| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
+| `full`       | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
 | `retention`  | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
-| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                         | [`[]Kubernetes`](#kubernetes-1)              | `false`  |
+| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                         | [`[]Kubernetes`](#kubernetes-1)              |          |
 
 ### Kubernetes
 
-| Field             | Description                                                  | Scheme                                                       | Required |
-| ----------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------- |
-| `id`              | A static value or JSONPath expression to use as the ID for the resource. | `string`                                                     | `true`   |
-| `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`. | `string`                                                     | `false`  |
-| `items`           | A JSONPath expression to use to extract individual items from the resource | `string`                                                     | `false`  |
-| `type`            | A static value or JSONPath expression to use as the type for the resource. | `string`                                                     | `true`   |
-| `transform`       | Specify field to transform result                            | [`Transform`](../concepts/transform.md)                      | `false`  |
-| `format`          | Format of config item, defaults to JSON, available options are JSON | `string`                                                     | `false`  |
-| `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`. | `string`                                                     | `false`  |
-| `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                                                   | `false`  |
-| `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                                                   | `false`  |
-| `clusterName`     | Specify cluster name                                         | `string`                                                     |          |
-| `namespace`       | Specify namespace for scraping of Kubernetes resources       | `string`                                                     |          |
-| `useCache`        | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd | `bool`                                                       |          |
-| `scope`           | Specify scope for scrape. e.g `cluster` for scraping at Cluster level | `string`                                                     |          |
-| `since`           | Set time constraint for scraping resources within the set period | `string`                                                     |          |
-| `selector`        | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels` | `string`                                                     |          |
-| `fieldSelector`   | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running` | `string`                                                     |          |
-| `exclusions`      | Specify Kubernetes resources to be excluded from scraping    | `[]string`                                                   |          |
-| **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster     | [`kommons.EnvVar`](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | yes      |
-| `event`           | Specify configuration to handle Kubernetes events.  | [`Event`](#sevent)                        | yes      |
-| `relationships`   | Create relationships between kubernetes objects.  | [`[]Relationships`](#srelationships)      | `false`  |
+| Field             | Description                                                                                                                                                             | Scheme                                           | Required |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | -------- |
+| `id`              | A static value or JSONPath expression to use as the ID for the resource.                                                                                                | `string`                                         |          |
+| `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                                         |          |
+| `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                                         |          |
+| `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                                         |          |
+| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](../concepts/transform.md)          |          |
+| `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                         |          |
+| `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                         |          |
+| `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                                       |          |
+| `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                                       |          |
+| `clusterName`     | Specify cluster name                                                                                                                                                    | `string`                                         |          |
+| `namespace`       | Specify namespace for scraping of Kubernetes resources                                                                                                                  | `string`                                         |          |
+| `useCache`        | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd                                                                        | `bool`                                           |          |
+| `scope`           | Specify scope for scrape. e.g `cluster` for scraping at Cluster level                                                                                                   | `string`                                         |          |
+| `since`           | Set time constraint for scraping resources within the set period                                                                                                        | `string`                                         |          |
+| `selector`        | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels`                                                                                              | `string`                                         |          |
+| `fieldSelector`   | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running`                                                                               | `string`                                         |          |
+| `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                                                                                               | `[]string`                                       |          |
+| **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                                                                                                | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
+| `event`           | Specify configuration to handle Kubernetes events.                                                                                                                      | [`Event`](#sevent)                               |          |
+| `relationships`   | Create relationships between kubernetes objects.                                                                                                                        | [`[]Relationship`](#kubernetes-relationship)     |          |
 
 ### Events
 
@@ -75,65 +80,35 @@ In addition, you can also specify keywords used to identify the severity of the 
 
 | Field              | Description                                                                                | Scheme                                  | Required |
 | ------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------- | -------- |
-| `exclusions`       | A list of keywords used to exclude event objects based on the reason                       | `[]string`                              | `false`  |
-| `severityKeywords` | Specify keywords used to identify the severity of the Kubernetes Event based on the reason | [`SeverityKeywords`](#severitykeywords) | `false`  |
+| `exclusions`       | A list of keywords used to exclude event objects based on the reason                       | `[]string`                              |          |
+| `severityKeywords` | Specify keywords used to identify the severity of the Kubernetes Event based on the reason | [`SeverityKeywords`](#severitykeywords) |          |
 
 ### SeverityKeywords
 
 | Field   | Description                                                                                                                                                            | Scheme     | Required |
 | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `warn`  | A list of keywords used to identify a warning severity from the reason. It could also be a match pattern: example "\*" to match all or "!badword" to exclude "badword" | `[]string` | `false`  |
-| `error` | Same as `warn` but used to map to error severity.                                                                                                                      | `[]string` | `false`  |
+| `warn`  | A list of keywords used to identify a warning severity from the reason. It could also be a match pattern: example "\*" to match all or "!badword" to exclude "badword" | `[]string` |          |
+| `error` | Same as `warn` but used to map to error severity.                                                                                                                      | `[]string` |          |
 
-### KubernetesRelationships
+### Kubernetes Relationship
 
 You can create relationships between kubernetes objects on the basis of kind, name and labels. While relationships between node and pod, deployment and pod, namespace and deployment
-are created automatically, there are cases where we want to link objects on the basis of metadata (like linking resources created by a flux object to it).
+are created automatically, there are cases where we want to link objects on the basis of metadata (like linking resources created by a flux object to it). [See Example](../examples/kubernetes-relationship).
 
 We support static values, expressions and label lookups to find the parent
 
-| Field       | Description                      | Scheme                                                          | Required |
-| ----------- | -------------------------------- | --------------------------------------------------------------- | -------- |
-| `kind`      | `kind` of Kubernetes Object      | [`RelationshipLookup`](#relationshiplookup) | `true`   |
-| `name`      | `name` of Kubernetes Object      | [`RelationshipLookup`](#relationshiplookup) | `true`   |
-| `namespace` | `namespace` of Kubernetes Object | [`RelationshipLookup`](#relationshiplookup) | `true`   |
+| Field       | Description                      | Scheme                                       | Required |
+| ----------- | -------------------------------- | -------------------------------------------- | -------- |
+| `kind`      | `kind` of Kubernetes Object      | [`RelationshipLookup`](#relationship-lookup) | `true`   |
+| `name`      | `name` of Kubernetes Object      | [`RelationshipLookup`](#relationship-lookup) | `true`   |
+| `namespace` | `namespace` of Kubernetes Object | [`RelationshipLookup`](#relationship-lookup) | `true`   |
 
-#### RelationshipLookup
+#### Relationship Lookup
 
-| Field   | Description                                        | Scheme   | Required |
-| ------- | -------------------------------------------------- | -------- | -------- |
-| `value` | Static string value of the resource                | `string` |          |
-| `expr`  | CEL Expression to evaluate                         | `string` |          |
-| `label` | Label key containing the value of the the resource | `string` |          |
+RelationshipLookup offers different ways to specify a lookup value
 
-#### 
-
-```yaml title="relationship-example.yaml"
-kubernetes:
-  - clusterName: 'eks'
-    ...
-  relationships:
-    # If object has spec.claimRef field, use its kind, name and namespace
-    - kind:
-        expr: "has(spec.claimRef) ? spec.claimRef.kind : ''"
-      name:
-        expr: "has(spec.claimRef) ? spec.claimRef.name : ''"
-      namespace:
-        expr: "has(spec.claimRef) ? spec.claimRef.namespace : ''"
-
-    # If object flux kustomize labels, link it to the parent Kustomization object
-    - kind:
-        value: Kustomization
-      name:
-        label: kustomize.toolkit.fluxcd.io/name
-      namespace:
-        label: kustomize.toolkit.fluxcd.io/namespace
-
-    # If object helm kustomize labels, link it to the parent HelmRelease object
-    - kind:
-        value: HelmRelease
-      name:
-        label: helm.toolkit.fluxcd.io/name
-      namespace:
-        label: helm.toolkit.fluxcd.io/namespace
-```
+| Field   | Description                        | Scheme   | Required |
+| ------- | ---------------------------------- | -------- | -------- |
+| `expr`  | Use an expression to get the value | `string` |          |
+| `value` | Specify a static value             | `string` |          |
+| `label` | Get the value from a label         | `string` |          |
