@@ -13,36 +13,34 @@ module.exports = {
         title: 'Installation',
         // description: 'Learn about the most important Docusaurus concepts!',
         slug: '/installation',
-        keywords: ['guides'],
+        keywords: ['guides']
       },
       items: [
-
         {
           type: 'doc',
           id: 'helm',
-          label: 'Helm',
+          label: 'Helm'
         },
         {
           type: 'doc',
           id: 'database',
-          label: 'Database',
+          label: 'Database'
         },
         {
           type: 'doc',
           id: 'cli',
-          label: 'CLI',
+          label: 'CLI'
         },
         {
           type: 'doc',
           id: 'concepts/image-variants',
-          label: 'Image Variants',
+          label: 'Image Variants'
         },
         {
           type: 'doc',
           id: 'windows',
-          label: 'Windows',
-        },
-
+          label: 'Windows'
+        }
       ]
     },
     {
@@ -52,22 +50,22 @@ module.exports = {
         {
           type: 'doc',
           id: 'concepts/metrics-exporter',
-          label: 'Metrics Exporter',
+          label: 'Metrics Exporter'
         },
         {
           type: 'doc',
           id: 'concepts/artifacts',
-          label: 'Artifacts',
+          label: 'Artifacts'
         },
         {
           type: 'doc',
           id: 'concepts/scaling',
-          label: 'Scaling Canaries',
+          label: 'Scaling Canaries'
         },
         {
           type: 'doc',
           id: 'concepts/secret-management',
-          label: 'Secret Management',
+          label: 'Secret Management'
         },
 
         {
@@ -76,41 +74,40 @@ module.exports = {
           link: {
             type: 'generated-index',
             title: 'Expressions',
-            slug: '/concepts/expressions',
+            slug: '/concepts/expressions'
           },
           items: [
             {
               type: 'doc',
               id: 'concepts/display-formatting',
-              label: 'Display Formatting',
+              label: 'Display Formatting'
             },
             {
               type: 'doc',
               id: 'concepts/health-evaluation',
-              label: 'Health Evaluation',
+              label: 'Health Evaluation'
             },
 
             {
               type: 'doc',
               id: 'concepts/transforms',
-              label: 'Transforms',
-            },
-
+              label: 'Transforms'
+            }
           ]
         },
 
         {
           type: 'doc',
           id: 'concepts/grafana',
-          label: 'Grafana',
+          label: 'Grafana'
         },
 
         {
           type: 'doc',
           id: 'concepts/troubleshooting',
-          label: 'Troubleshooting',
-        },
-      ],
+          label: 'Troubleshooting'
+        }
+      ]
     },
     {
       type: 'category',
@@ -120,45 +117,45 @@ module.exports = {
         title: 'Probes / Alerts',
         slug: '/types',
         keywords: ['guides'],
-        image: '/img/docusaurus.png',
+        image: '/img/docusaurus.png'
       },
       items: [
         {
           type: 'doc',
           id: 'reference/http',
-          label: 'HTTP',
+          label: 'HTTP'
         },
         {
           type: 'doc',
           id: 'reference/tcp',
-          label: 'TCP',
+          label: 'TCP'
         },
         {
           type: 'doc',
           id: 'reference/dns',
-          label: 'DNS',
+          label: 'DNS'
         },
         {
           type: 'doc',
           id: 'reference/icmp',
-          label: 'ICMP',
+          label: 'ICMP'
         },
         {
           type: 'doc',
           id: 'reference/alert-manager',
-          label: 'Alert Manager',
+          label: 'Alert Manager'
         },
         {
           type: 'doc',
           id: 'reference/cloudwatch',
-          label: 'AWS Cloud Watch',
+          label: 'AWS Cloud Watch'
         },
         {
           type: 'doc',
           id: 'reference/aws-config-rule',
-          label: 'AWS Config Rule',
-        },
-      ],
+          label: 'AWS Config Rule'
+        }
+      ]
     },
     {
       type: 'category',
@@ -167,39 +164,38 @@ module.exports = {
         {
           type: 'doc',
           id: 'reference/folder',
-          label: 'Folder',
+          label: 'Folder'
         },
         {
           type: 'doc',
           id: 'reference/gcs-bucket',
-          label: 'GCS Bucket',
+          label: 'GCS Bucket'
         },
         {
           type: 'doc',
           id: 'reference/s3-bucket',
-          label: 'S3 Bucket',
+          label: 'S3 Bucket'
         },
         {
           type: 'doc',
           id: 'reference/sftp',
-          label: 'SFTP',
+          label: 'SFTP'
         },
         {
           type: 'doc',
           id: 'reference/smb',
-          label: 'SMB/CIFS',
+          label: 'SMB/CIFS'
         },
         {
           type: 'doc',
           id: 'reference/gcs-database-backup',
-          label: 'GCS Database Backup',
+          label: 'GCS Database Backup'
         },
         {
           type: 'doc',
           id: 'reference/restic',
-          label: 'Restic',
-        },
-
+          label: 'Restic'
+        }
       ]
     },
 
@@ -210,62 +206,60 @@ module.exports = {
         {
           type: 'doc',
           id: 'reference/prometheus',
-          label: 'Prometheus',
+          label: 'Prometheus'
         },
 
         {
           type: 'doc',
           id: 'reference/aws-config',
-          label: 'AWS Config',
+          label: 'AWS Config'
         },
         {
           type: 'doc',
           id: 'reference/configdb',
-          label: 'Flanksource Config DB',
+          label: 'Flanksource Config DB'
         },
         {
           type: 'doc',
           id: 'reference/kubernetes',
-          label: 'Kubernetes Resources',
+          label: 'Kubernetes Resources'
         },
         {
           type: 'doc',
           id: 'reference/elasticsearch',
-          label: 'Elasticsearch',
+          label: 'Elasticsearch'
         },
         {
           type: 'doc',
           id: 'reference/ldap',
-          label: 'LDAP',
+          label: 'LDAP'
         },
         {
           type: 'doc',
           id: 'reference/mongo',
-          label: 'MongoDB',
+          label: 'MongoDB'
         },
         {
           type: 'doc',
           id: 'reference/mssql',
-          label: 'MSSQL',
+          label: 'MSSQL'
         },
         {
           type: 'doc',
           id: 'reference/mysql',
-          label: 'MySQL',
+          label: 'MySQL'
         },
         {
           type: 'doc',
           id: 'reference/postgres',
-          label: 'Postgres',
+          label: 'Postgres'
         },
         {
           type: 'doc',
           id: 'reference/redis',
-          label: 'Redis',
-        },
-
-      ],
-
+          label: 'Redis'
+        }
+      ]
     },
     {
       type: 'category',
@@ -274,19 +268,19 @@ module.exports = {
         {
           type: 'doc',
           id: 'reference/exec',
-          label: 'Exec',
+          label: 'Exec'
         },
         {
           type: 'doc',
           id: 'reference/junit',
-          label: 'JUnit',
+          label: 'JUnit'
         },
         {
           type: 'doc',
           id: 'reference/azure-devops',
-          label: 'Azure DevOps',
-        },
-      ],
+          label: 'Azure DevOps'
+        }
+      ]
     },
     {
       type: 'category',
@@ -295,54 +289,54 @@ module.exports = {
         {
           type: 'doc',
           id: 'reference/containerd',
-          label: 'Containerd/Docker',
+          label: 'Containerd/Docker'
         },
         {
           type: 'doc',
           id: 'reference/helm',
-          label: 'Helm',
+          label: 'Helm'
         },
         {
           type: 'doc',
           id: 'reference/ec2',
-          label: 'EC2',
+          label: 'EC2'
         },
         {
           type: 'doc',
           id: 'reference/pod',
-          label: 'Pod',
+          label: 'Pod'
         },
         {
           type: 'doc',
           id: 'reference/s3-protocol',
-          label: 'S3 Protocol',
-        },
-      ],
+          label: 'S3 Protocol'
+        }
+      ]
     },
     {
       type: 'category',
-      label: "Examples",
+      label: 'Examples',
       items: [
         {
           type: 'doc',
           id: 'reference/k6',
-          label: 'K6',
+          label: 'K6'
         },
         {
           type: 'doc',
           id: 'reference/newman',
-          label: 'Newman / Postman',
+          label: 'Newman / Postman'
         },
         {
           type: 'doc',
           id: 'reference/playwright',
-          label: 'Playwright',
+          label: 'Playwright'
         },
         {
           type: 'doc',
           id: 'reference/jmeter',
-          label: 'JMeter',
-        },
+          label: 'JMeter'
+        }
       ]
     },
     {
@@ -352,19 +346,19 @@ module.exports = {
         {
           type: 'doc',
           id: 'scripting/cel',
-          label: 'CEL Expressions',
+          label: 'CEL Expressions'
         },
         {
           type: 'doc',
           id: 'scripting/gotemplate',
-          label: 'Go Templates',
+          label: 'Go Templates'
         },
         {
           type: 'doc',
           id: 'scripting/javascript',
-          label: 'Javascript',
-        },
-      ],
+          label: 'Javascript'
+        }
+      ]
     },
 
     {
@@ -374,9 +368,9 @@ module.exports = {
         {
           type: 'doc',
           id: 'comparisons/blackbox-exporter',
-          label: 'Blackbox Exporter',
-        },
-      ],
-    },
-  ],
-};
+          label: 'Blackbox Exporter'
+        }
+      ]
+    }
+  ]
+}
