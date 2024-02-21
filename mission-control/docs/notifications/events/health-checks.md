@@ -89,3 +89,29 @@ Health checks emit 2 events
 | `message`    | The success message of the check                | `string`    |          |
 | `error`      | The error of the check in case of failure       | `string`    |          |
 | `created_at` | The created at of the check                     | `time.Time` |          |
+
+## Notification Template Defaults
+
+### `check.passed`
+
+```
+# Title
+Check {{.check.name}} has passed
+
+# Body
+Canary: {{.canary.name}}
+{{if .agent}}Agent: {{.agent.name}}{{end}}
+{{if .status.message}}Message: {{.status.message}}{{end}}
+```
+
+### `check.failed`
+
+```
+# Title
+Check {{.check.name}} has failed
+
+# Body
+Canary: {{.canary.name}}
+{{if .agent}}Agent: {{.agent.name}}{{end}}
+Error: {{.status.error}}
+```

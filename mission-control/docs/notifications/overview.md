@@ -26,7 +26,11 @@ spec:
 | `to`       | Specify the receipients.                                           | [`Recipient`](#recipient) | `true`   |
 | `title`    | Title of the notification. [See templating](./concepts/templating) | `string`                  |          | `true`      |
 | `template` | Body of the notification. [See templating](./concepts/templating)  | `string`                  |          | `true`      |
-| `filter`   | Filter of notification.                                            | `string`                  |          |
+| `filter`   | Filter of notification.                                            | `string`                  |          |             |
+
+:::info
+The title and body _(template)_ have default templates based on the event. Eg: [Component](./events/components.md#notification-defaults)
+:::
 
 ### Recipient
 

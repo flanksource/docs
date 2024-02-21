@@ -2,11 +2,11 @@
 
 Component status updates emit the following events
 
-1. `component.status.healthy`
-2. `component.status.unhealthy`
-3. `component.status.warning`
-4. `component.status.error`
-5. `component.status.info`
+- `component.status.healthy`
+- `component.status.unhealthy`
+- `component.status.warning`
+- `component.status.error`
+- `component.status.info`
 
 ## Environment variables
 
@@ -52,3 +52,13 @@ Component status updates emit the following events
 | `id`          | The id of the agent            | `uuid`   |          |
 | `name`        | The name of the agent          | `string` |          |
 | `description` | Short description of the agent | `string` |          |
+
+## Notification Defaults
+
+```
+# Title
+Component {{.component.name}} status updated to {{.component.status}}
+
+# Body
+[Reference]({{.permalink}})
+```
