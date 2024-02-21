@@ -17,8 +17,6 @@ spec:
               namespace: ${.properties.namespace}
             name: PAS.properties
             type: File
-
-
       lookup:
         postgres:
           - auth:
@@ -74,14 +72,7 @@ spec:
                         icon: "folder",
                         label: "efs"
                       },
-                      {
-                        text: config.repo + " (" + config.branch + ")",
-                        url: "https://dev.azure.com/OM-OMA/OIPA/_git/"  + config.repo +  "?version=GB" + config.branch,
-                        icon: "git",
-                        label: "git",
-                        type: "url"
-
-                      }
+            
 
                     ]
                   })
