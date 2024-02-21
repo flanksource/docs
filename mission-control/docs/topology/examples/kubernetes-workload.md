@@ -3,7 +3,7 @@ This example demonstrates creating a component from the ABP Microservice Demo
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
-kind: SystemTemplate
+kind: Topology
 metadata:
   name: abp
 spec:

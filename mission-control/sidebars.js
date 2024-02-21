@@ -698,18 +698,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'topology/concepts/lookup',
-          label: 'Lookup',
-        },
-        {
-          type: 'doc',
           id: 'topology/concepts/for-each',
           label: 'For Each',
-        },
-        {
-          type: 'doc',
-          id: 'topology/concepts/authentication',
-          label: 'Authentication',
         },
         {
           type: 'doc',
@@ -734,13 +724,13 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'topology/examples/aws',
-          label: 'AWS',
+          id: 'topology/examples/prometheus',
+          label: 'Prometheus',
         },
         {
           type: 'doc',
-          id: 'topology/examples/git',
-          label: 'Git',
+          id: 'topology/examples/flux',
+          label: 'Flux',
         },
         {
           type: 'doc',
@@ -764,13 +754,13 @@ const sidebars = {
           label: 'Components',
         },
         {
-          type: 'doc',
-          id: 'topology/references/properties',
-          label: 'Properties',
-        },
-        {
           type: 'category',
-          label: 'Component Lookups',
+          label: 'Component Lookup',
+          link: {
+            type: 'generated-index',
+            title: 'Component Lookup',
+            slug: 'topology/references/lookup',
+          },
           items: [
             {
               type: 'doc',

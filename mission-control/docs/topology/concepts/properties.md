@@ -53,7 +53,7 @@ Property values can be looked up from configuration items using the `configLooku
 
 ```yaml title="config-lookup.yaml"
 apiVersion: canaries.flanksource.com/v1
-kind: SystemTemplate
+kind: Topology
 metadata:
   name: application-config-lookup
 spec:

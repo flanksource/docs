@@ -7,18 +7,17 @@ You are able to write your own tests and execute them to continually verify that
 In this guide, you'll see how to use canary-checker to test a Postgres database in several ways, using the CLI.
 
 ## Prerequisites
+
 For the purposes of this guide, you need a PostgreSQL instance running in Kubernetes. See the following guide on [how to install PostgreSQL](https://phoenixnap.com/kb/postgresql-kubernetes) in your Kubernetes Cluster via Helm.
 
 ## Installing the CLI
 
 > For this guide, Docker Desktop is used to create a Kubernetes cluster on MacOS. You can create your Cluster on the environment of your choice.
 
-
 The canary-checker CLI will allow you to quickly and simply execute checks that you have defined, via a single CLI command.
 
 !!! info "Info"
-    To install the CLI for preferred environment, See the [Canary-checker Installation guide](../run/#installation) for more information.
-
+To install the CLI for preferred environment, See the [Canary-checker Installation guide](../run/#installation) for more information.
 
 To verify whether the CLI has been installed correctly, run `canary-checker run -h` from your terminal. You should see the following output:
 
@@ -67,7 +66,7 @@ metadata:
 spec:
   interval: 30
   postgres:
-    - connection: "postgres://$(username):$(password)@127.0.0.1:5432/postgres?sslmode=disable"
+    - connection: 'postgres://$(username):$(password)@127.0.0.1:5432/postgres?sslmode=disable'
       name: postgres schemas check
       auth:
         username:
@@ -106,6 +105,7 @@ Let’s modify the `results` field in our Canary definition to be `2` instead of
 2022-08-20T13:05:38+02:00 	FAIL [postgres] default/postgres-succeed/postgres schemas check duration=130 {pg_catalog,public} Query return 1 rows, expected 2
 2022-08-20T13:05:38.607+0200	INFO	0 passed, 1 failed in 145ms
 ```
+
 You can see that canary-checker is able to validate that the result was not as expected, as well as provide us with contextual information about why it was incorrect.
 Writing a custom check
 
@@ -125,7 +125,7 @@ metadata:
 spec:
   interval: 30
   postgres:
-    - connection: "postgres://$(username):$(password)@127.0.0.1:5432/postgres?sslmode=disable"
+    - connection: 'postgres://$(username):$(password)@127.0.0.1:5432/postgres?sslmode=disable'
       name: postgres schemas check
       auth:
         username:
@@ -135,7 +135,6 @@ spec:
       query: SELECT * from Users
       resultsFunction: '[[ if index .results 0 "username | eq "admin" ]]true[[else]]false[[end]]'
       displayTemplate: '[[ index .results 0 ]]'
-
 ```
 
 If you run your Canary right away, using the `canary-checker run` CLI command, you'll see that it fails, because you have not created the Users table yet.
@@ -143,6 +142,7 @@ If you run your Canary right away, using the `canary-checker run` CLI command, y
 ```bash
 canary-checker run ../postgres-canaries/postgres-canary-local-does-admin-user-exist.yaml
 ```
+
 ```
 2022-09-08T13:18:31.547+0200	INFO	Checking ../postgres-canaries/postgres-canary-local-does-admin-user-exist.yaml, 1 checks found
 2022-09-08T13:18:31+02:00 	FAIL [postgres] default/postgres-succeed/postgres schemas check duration=126  failed to query db: pq: relation "users" does not exist
@@ -150,6 +150,7 @@ canary-checker run ../postgres-canaries/postgres-canary-local-does-admin-user-ex
 ```
 
 Let’s create and insert the required data into our database with the following SQL.
+
 ```sql
 CREATE TABLE users(
    id int,
@@ -159,6 +160,7 @@ CREATE TABLE users(
 
 insert into users (id, username) values (1, 'admin')
 ```
+
 Now, running the Canary again, you see the expected behaviour occurs - and our data is validated as expected.
 
 ```bash
@@ -194,7 +196,7 @@ spec:
     - endpoint: https://httpstat.us/200
       thresholdMillis: 3000
       responseCodes: [201, 200, 301]
-      responseContent: ""
+      responseContent: ''
       maxSSLExpiry: 7`
 ```
 
@@ -203,6 +205,7 @@ You can then deploy this canary into our namespace using:
 ```bash
 kubectl apply -f http_pass.yaml
 ```
+
 ```
 canary.canaries.flanksource.com/http-pass created
 ```
@@ -217,4 +220,4 @@ TODO - Add the status
 
 In this guide, you've seen how to get started with canary-checker and run a few synthetic tests against PostgreSQL running in Kubernetes. You've also seen how you can deploy canary-checker as a Kubernetes operator and deploy a Canary into your Kubernetes cluster to continuously monitor your systems.
 
-In the next guide, You'll take a look at how to model an application and Kubernetes cluster using SystemTemplates, as well as how to link components together - eventually linking components to canaries.
+In the next guide, You'll take a look at how to model an application and Kubernetes cluster using Topologies, as well as how to link components together - eventually linking components to canaries.
