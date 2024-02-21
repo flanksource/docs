@@ -1,4 +1,5 @@
 # Extraction
+
 `Config DB` needs to extract few important pieces of information from the config. For example: to know the id of a config item it needs to extract the id from the scraped config. For this, it makes heavy use of JSONPath expression.
 
 ## JSONPath
@@ -9,12 +10,17 @@ A JSONPath expression, similar to `XPath` for XML, is used to extract data from 
 
 Below is an example of the JSONPath expression in use for the [File scraper](../scrapers/file.md)
 
-```yaml
-file:
-  - type: $.Config.InstanceType
-    id: $.Config.InstanceId
-    path:
-      - my-config.json
+```yaml title="file-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: file-scraper
+spec:
+  file:
+    - type: $.Config.InstanceType
+      id: $.Config.InstanceId
+      path:
+        - my-config.json
 ```
 
 Suppose that `my-config.json` file referenced in the path above contains the following JSON structure
