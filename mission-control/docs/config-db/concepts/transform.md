@@ -6,24 +6,24 @@ Transformation can be performed after the configs have been scraped from the tar
 - transform the scraped configuration using CEL
 - remove certain fields from the scraped configuration
 
-| Field           | Description                                                                              | Scheme                                        | Required |
-| --------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------- | -------- |
-| `gotemplate`    | Specify Go template for use in script                                                    | `string`                                      |          |
-| `javascript`    | Specify javascript syntax for script                                                     | `string`                                      |          |
-| `jsonpath`      | Specify JSONPath                                                                         | `string`                                      |          |
-| `expr`          | Specify Cel expression                                                                   | `string`                                      |          |
-| `changes`       | Apply transformation on the scraped changes                                              | [`[]Changes`](#changes)                       |          |
-| `exclude`       | Fields to remove from the config, useful for removing sensitive data and fields          | [`[]Exclude`](#exclude)                       |          |
-|                 | that change often without a material impact i.e. Last Scraped Time                       |                                               |          |
-| [`mask`](#mask) | Specify configurations to replace sensitive fields with hash functions or static string. | [`[]Mask`](./mask.md)                         |          |
-| `relationship`  | form relationships between config items using selectors                                  | [`[]RelationshipConfig`](#relationshipconfig) |          |
+| Field           | Description                                                                              | Scheme                                         | Required |
+| --------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------- | -------- |
+| `gotemplate`    | Specify Go template for use in script                                                    | `string`                                       |          |
+| `javascript`    | Specify javascript syntax for script                                                     | `string`                                       |          |
+| `jsonpath`      | Specify JSONPath                                                                         | `string`                                       |          |
+| `expr`          | Specify Cel expression                                                                   | `string`                                       |          |
+| `changes`       | Apply transformation on the scraped changes                                              | [`[]Changes`](#changes)                        |          |
+| `exclude`       | Fields to remove from the config, useful for removing sensitive data and fields          | [`[]Exclude`](#exclude)                        |          |
+|                 | that change often without a material impact i.e. Last Scraped Time                       |                                                |          |
+| [`mask`](#mask) | Specify configurations to replace sensitive fields with hash functions or static string. | [`[]Mask`](./mask.md)                          |          |
+| `relationship`  | form relationships between config items using selectors                                  | [`[]RelationshipConfig`](#relationship-config) |          |
 
 :::note
 Unlike other transformation functions, scripts (gotemplate, javascript, jsonpath & expr) are ran before the attributes _(id, name, type, ...)_ are extracted.
 So please make sure your transformation scripts are inline with the JSONPath selectors for the attributes.
 :::
 
-## RelationshipConfig
+## Relationship Config
 
 This transformation function allows you to dynamically form relationships between two different config items using selectors.
 
@@ -34,9 +34,9 @@ Example: You can link a kubernetes deployment with the corresponding pods, or yo
 | `filter` | Specify the config item with which relationship should be formed                      | `string`                                     | `true`   |
 | `expr`   | cel-expression that returns a list of [relationship selector](#relationshipselector). | `string`                                     |          |
 | `id`     | id of the config to link to                                                           | [`RelationshipLookup`](#relationship-lookup) |          |
-| `name`   | id of the config to link to                                                           | [`RelationshipLookup`](#relationship-lookup) |          |
-| `type`   | id of the config to link to                                                           | [`RelationshipLookup`](#relationship-lookup) |          |
-| `agent`  | id of the config to link to                                                           | [`RelationshipLookup`](#relationship-lookup) |          |
+| `name`   | name of the config to link to                                                         | [`RelationshipLookup`](#relationship-lookup) |          |
+| `type`   | type of the config to link to                                                         | [`RelationshipLookup`](#relationship-lookup) |          |
+| `agent`  | agent of the config to link to                                                        | [`RelationshipLookup`](#relationship-lookup) |          |
 | `labels` | Labels of the config to link to                                                       | [`RelationshipLookup`](#relationship-lookup) |          |
 
 :::info
@@ -46,13 +46,13 @@ Example: You can link a kubernetes deployment with the corresponding pods, or yo
 
 ### RelationshipSelector
 
-| Field    | Description                     | Scheme   | Required |
-| -------- | ------------------------------- | -------- | -------- |
-| `id`     | id of the config to link to     | `string` |          |
-| `name`   | id of the config to link to     | `string` |          |
-| `type`   | id of the config to link to     | `string` |          |
-| `agent`  | id of the config to link to     | `string` |          |
-| `labels` | Labels of the config to link to | `string` |          |
+| Field    | Description                     | Scheme              | Required |
+| -------- | ------------------------------- | ------------------- | -------- |
+| `id`     | id of the config to link to     | `string`            |          |
+| `name`   | id of the config to link to     | `string`            |          |
+| `type`   | id of the config to link to     | `string`            |          |
+| `agent`  | id of the config to link to     | `string`            |          |
+| `labels` | Labels of the config to link to | `map[string]string` |          |
 
 ### Relationship Lookup
 
