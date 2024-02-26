@@ -3,6 +3,7 @@
     "apiserver",
     "kubeconfig",
     "organisation",
+    "pgdata",
     "Suceeded",
     "templatable",
     "trivy",
