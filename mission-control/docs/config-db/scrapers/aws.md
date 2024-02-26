@@ -73,37 +73,29 @@ spec:
 
 ### Scraper
 
-| Field       | Description                                                                        | Scheme                                       | Required |
-| ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `logLevel`  | Specify the level of logging.                                                      | `string`                                     |          |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
-| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
-| `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
-| `aws`       | Specifies the list of AWS configurations to scrape.                                | [`[]AWS`](#aws-1)                            |          |
+| Field       | Description                                                                  | Scheme                                       | Required |
+| ----------- | ---------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| `logLevel`  | Specify the level of logging.                                                | `string`                                     |          |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                     |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/config-db/concepts/retention) |          |
+| `aws`       | Specifies the list of AWS configurations to scrape.                          | [`[]AWS`](#aws-1)                            |          |
 
 ### AWS
 
-| Field                   | Description                                                                                                                                            | Scheme                                         | Required |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- | -------- |
-| `id`                    | A static value or JSONPath expression to use as the ID for the resource.                                                                               | `string`                                       | `true`   |
-| `name`                  | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                  | `string`                                       |          |
-| `type`                  | A static value or JSONPath expression to use as the type for the resource.                                                                             | `string`                                       | `true`   |
-| `cloud_trail`           | Set CloudTrail specifications                                                                                                                          | [`CloudTrail`](#cloudtrail-cloudtrail)         |          |
-| `compliance`            | Toggle scraping of compliance metadata                                                                                                                 | `bool`                                         |          |
-| `cost_reporting`        | Specify cost reporting for scraping of data                                                                                                            | [`CostReporting`](#cost-reporting)             |          |
-| `createFields`          | List of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used. | `[]string`                                     |          |
-| `deleteFields`          | List of JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used. | `[]string`                                     |          |
-| `exclude`               | AWS resources to exclude from scraping                                                                                                                 | `[]string`                                     |          |
-| `format`                | Format of config item, defaults to JSON, available options are JSON                                                                                    | `string`                                       |          |
-| `include`               | AWS resources to include for scraping                                                                                                                  | `[]string`                                     |          |
-| `inventory`             | Toggle scrape of _metadata_ for AWS resources                                                                                                          | `bool`                                         |          |
-| `items`                 | A JSONPath expression to use to extract individual items from the resource                                                                             | `string`                                       |          |
-| `patch_details`         | Enable/disable scraping of patch details                                                                                                               | `bool`                                         |          |
-| `patch_states`          | Scrape patch state status, and report                                                                                                                  | `bool`                                         |          |
-| `properties`            | Custom templatable properties for the scraped config items.                                                                                            | [`[]ConfigProperty`](../../reference/property) |          |
-| `timestampFormat`       | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.     | `string`                                       |          |
-| `transform`             | Field to transform result                                                                                                                              | [`Transform`](../concepts/transform.md)        |          |
-| `trusted_advisor_check` | Enable/Disable scraping analyses from Trusted Advisor                                                                                                  | `bool`                                         |          |
+| Field                   | Description                                                 | Scheme                                         | Required |
+| ----------------------- | ----------------------------------------------------------- | ---------------------------------------------- | -------- |
+| `properties`            | Custom templatable properties for the scraped config items. | [`[]ConfigProperty`](../../reference/property) |          |
+| `transform`             | Field to transform result                                   | [`Transform`](../concepts/transform.md)        |          |
+| `tags`                  | set custom tags on the scraped config items                 | `map[string]string`                            |          |
+| `cloudtrail`            | Set CloudTrail specifications                               | [`CloudTrail`](#cloudtrail-cloudtrail)         |          |
+| `compliance`            | Toggle scraping of compliance metadata                      | `bool`                                         |          |
+| `cost_reporting`        | Specify cost reporting for scraping of data                 | [`CostReporting`](#cost-reporting)             |          |
+| `exclude`               | AWS resources to exclude from scraping                      | `[]string`                                     |          |
+| `include`               | AWS resources to include for scraping                       | `[]string`                                     |          |
+| `inventory`             | Toggle scrape of _metadata_ for AWS resources               | `bool`                                         |          |
+| `patch_details`         | Enable/disable scraping of patch details                    | `bool`                                         |          |
+| `patch_states`          | Scrape patch state status, and report                       | `bool`                                         |          |
+| `trusted_advisor_check` | Enable/Disable scraping analyses from Trusted Advisor       | `bool`                                         |          |
 
 ### CloudTrail
 

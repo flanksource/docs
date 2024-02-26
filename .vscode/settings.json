@@ -1,5 +1,12 @@
 {
   "cSpell.words": [
-    "Unmarshaler"
+    "apiserver",
+    "kubeconfig",
+    "organisation",
+    "Suceeded",
+    "templatable",
+    "trivy",
+    "Unmarshaler",
+    "vuln"
   ]
 }

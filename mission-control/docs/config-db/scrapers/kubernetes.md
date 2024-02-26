@@ -39,38 +39,33 @@ spec:
 
 ## Scraper
 
-| Field        | Description                                                                        | Scheme                                       | Required |
-| ------------ | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `logLevel`   | Specify the level of logging.                                                      | `string`                                     |          |
-| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
-| `full`       | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
-| `retention`  | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
-| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                         | [`[]Kubernetes`](#kubernetes-1)              |          |
+| Field        | Description                                                                  | Scheme                                       | Required |
+| ------------ | ---------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| `logLevel`   | Specify the level of logging.                                                | `string`                                     |          |
+| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                     |          |
+| `retention`  | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/config-db/concepts/retention) |          |
+| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                   | [`[]Kubernetes`](#kubernetes-1)              |          |
 
 ### Kubernetes
 
-| Field             | Description                                                                                                                                                             | Scheme                                           | Required |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | -------- |
-| `id`              | A static value or JSONPath expression to use as the ID for the resource.                                                                                                | `string`                                         |          |
-| `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                                         |          |
-| `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                                         |          |
-| `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                                         |          |
-| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](../concepts/transform.md)          |          |
-| `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                         |          |
-| `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                         |          |
-| `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                                       |          |
-| `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                                       |          |
-| `clusterName`     | Specify cluster name                                                                                                                                                    | `string`                                         |          |
-| `namespace`       | Specify namespace for scraping of Kubernetes resources                                                                                                                  | `string`                                         |          |
-| `useCache`        | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd                                                                        | `bool`                                           |          |
-| `scope`           | Specify scope for scrape. e.g `cluster` for scraping at Cluster level                                                                                                   | `string`                                         |          |
-| `since`           | Set time constraint for scraping resources within the set period                                                                                                        | `string`                                         |          |
-| `selector`        | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels`                                                                                              | `string`                                         |          |
-| `fieldSelector`   | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running`                                                                               | `string`                                         |          |
-| `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                                                                                               | `[]string`                                       |          |
-| **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                                                                                                | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
-| `event`           | Specify configuration to handle Kubernetes events.                                                                                                                      | [`Event`](#sevent)                               |          |
-| `relationships`   | Create relationships between kubernetes objects.                                                                                                                        | [`[]Relationship`](#kubernetes-relationship)     |          |
+| Field             | Description                                                                                      | Scheme                                           | Required |
+| ----------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------ | -------- |
+| `properties`      | Custom templatable properties for the scraped config items.                                      | [`[]ConfigProperty`](../../reference/property)   |          |
+| `transform`       | Field to transform result                                                                        | [`Transform`](../concepts/transform.md)          |          |
+| `tags`            | set custom tags on the scraped config items                                                      | `map[string]string`                              |          |
+| `allowIncomplete` | Show partial results when fetching of API resources fails                                        | `bool`                                           |          |
+| `clusterName`     | Specify cluster name                                                                             | `string`                                         |          |
+| `event`           | Specify configuration to handle Kubernetes events.                                               | [`Event`](#events)                               |          |
+| `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                        | `[]string`                                       |          |
+| `fieldSelector`   | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running`        | `string`                                         |          |
+| **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                         | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
+| `maxInFlight`     | restrict parallelism to X inflight requests                                                      | `int64`                                          |          |
+| `namespace`       | Specify namespace for scraping of Kubernetes resources                                           | `string`                                         |          |
+| `relationships`   | Create relationships between kubernetes objects.                                                 | [`[]Relationship`](#kubernetes-relationship)     |          |
+| `scope`           | Specify scope for scrape. e.g `cluster` for scraping at Cluster level                            | `string`                                         |          |
+| `selector`        | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels`                       | `string`                                         |          |
+| `since`           | Set time constraint for scraping resources within the set period                                 | `string`                                         |          |
+| `useCache`        | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd | `bool`                                           |          |
 
 ### Events
 

@@ -24,41 +24,34 @@ _Fig: A detailed view of the analysis on the postgres container_
 
 ## Scraper
 
-| Field       | Description                                                                        | Scheme                                       | Required |
-| ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `logLevel`  | Specify the level of logging.                                                      | `string`                                     |          |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
-| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
-| `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
-| `trivy`     | Specifies the list of Trivy configurations to scrape.                              | [`[]Trivy`](#trivy-1)                        |          |
+| Field      | Description                                                                  | Scheme                | Required |
+| ---------- | ---------------------------------------------------------------------------- | --------------------- | -------- |
+| `logLevel` | Specify the level of logging.                                                | `string`              |          |
+| `schedule` | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`              |          |
+| `trivy`    | Specifies the list of Trivy configurations to scrape.                        | [`[]Trivy`](#trivy-1) |          |
 
 ### Trivy
 
-| Field             | Description                                                                                                                                        | Scheme                                  | Required |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------- |
-| `id`              | A static value or JSONPath expression to use as the ID for the resource.                                                                           | `string`                                | `true`   |
-| `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                              | `string`                                |          |
-| `items`           | A JSONPath expression to use to extract individual items from the resource                                                                         | `string`                                |          |
-| `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                         | `string`                                | `true`   |
-| `transform`       | Specify field to transform result.                                                                                                                 | [`Transform`](../concepts/transform.md) |          |
-| `format`          | Format of config item, defaults to JSON, available options are JSON.                                                                               | `string`                                |          |
-| `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`. | `string`                                |          |
-| `version`         | Specify the Trivy version to use. (default 0.40.0)                                                                                                 | `string`                                |          |
-| `compliance`      | compliance report to generate(k8s-nsa, k8s-cis, k8s-pss-baseline, k8s-pss-restricted).                                                             | `string`                                |          |
-| `ignoredLicenses` | specify a list of license to ignore.                                                                                                               | `[]string`                              |          |
-| `ignoreUnfixed`   | display only fixed vulnerabilities.                                                                                                                | `bool`                                  |          |
-| `licenseFull`     | eagerly look for licenses in source code headers and license files.                                                                                | `bool`                                  |          |
-| `severity`        | severities of security issues to be displayed (comma separated)_(default "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL")_.                                     | `string`                                |          |
-| `vulnType`        | comma-separated list of vulnerability types (comma separated)_(default "os,library")_.                                                             | `string`                                |          |
-| `kubernetes`      | Specify the trivy option to scan kubernetes objects.                                                                                               | [`K8sOptions`](#k8soptions)             | `true`   |
+| Field             | Description                                                                                                     | Scheme                      | Required |
+| ----------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------- | -------- |
+| `compliance`      | compliance report to generates(k8s-nsa, k8s-cis, k8s-pss-baseline, k8s-pss-restricted).                         | `string`                    |          |
+| `ignoredLicenses` | specify a list of license to ignore.                                                                            | `[]string`                  |          |
+| `ignoreUnfixed`   | display only fixed vulnerabilities.                                                                             | `bool`                      |          |
+| `kubernetes`      | Specify the trivy option to scan kubernetes objects.                                                            | [`K8sOptions`](#k8soptions) | `true`   |
+| `licenseFull`     | eagerly look for licenses in source code headers and license files.                                             | `bool`                      |          |
+| `scanners`        | Scanners to use.                                                                                                | `[]string`                  |          |
+| `severity`        | severities of security issues to be displayed s(comma separated)_(default "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL")_. | `string`                    |          |
+| `timeout`         | Trivy timeout                                                                                                   | `string`                    |          |
+| `version`         | Specify the Trivy version to use. s(default 0.40.0)                                                             | `string`                    |          |
+| `vulnType`        | comma-separated list of vulnerability types s(comma separated)_(default "os,library")_.                         | `string`                    |          |
 
 ### K8sOptions
 
 Trivy Options consist of selected few flags that are passed on to trivy.
 
 | Field        | Description                                                                            | Scheme     | Required |
-| ------------ | -------------------------------------------------------------------------------------- | ---------- | -------- |
-| `components` | Specify which components to scan*(default workload, infra).*                           | `[]string` |          |
-| `kubeconfig` | Specify the kubeconfig file path to use as a static value or as a JSONPath expression. | `string`   |          |
+| ------------ | -------------------------------------------------------------------------------------- | ---------- | -------- | --- |
+| `components` | Specify which components to scan*(default workload, infra).*                           | `[]string` |          | s   |
+| `kubeconfig` | Specify the kubeconfig file path to use as a static value or as a JSONPath expression. | `string`   |          | s   |
 | `namespace`  | Specify a namespace to scan.                                                           | `string`   | `true`   |
-| `context`    | Specify a context to scan.                                                             | `string`   |          |
+| `context`    | Specify a context to scan.                                                             | `string`   |          | s   |
