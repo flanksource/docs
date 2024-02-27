@@ -42,7 +42,6 @@ spec:
 | `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |      |
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |      |
 | **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://http/instance` <br/> Mutually exclusive with `username`, `password` <br/> <Commercial/> | <CommonLink to="connection" >*Connection*</CommonLink> | |
 | `username` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | |
 | `password` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | |
 | **`url`** | HTTP  URL, if a URL is specified on both the connection and check, the url on the check takes precedence. | *string* | Yes |

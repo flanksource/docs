@@ -1,1 +1,1 @@
-../../../canary-checker/docs/concepts/secret-management.md
+../../../canary-checker/docs/reference/secret-management.md

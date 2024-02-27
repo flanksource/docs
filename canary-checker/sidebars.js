@@ -63,12 +63,6 @@ module.exports = {
           label: 'Scaling Canaries'
         },
         {
-          type: 'doc',
-          id: 'concepts/secret-management',
-          label: 'Secret Management'
-        },
-
-        {
           type: 'category',
           label: 'Expressions',
           link: {
@@ -341,34 +335,44 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Scripting',
-      items: [
-        {
-          type: 'doc',
-          id: 'scripting/cel',
-          label: 'CEL Expressions'
-        },
-        {
-          type: 'doc',
-          id: 'scripting/gotemplate',
-          label: 'Go Templates'
-        },
-        {
-          type: 'doc',
-          id: 'scripting/javascript',
-          label: 'Javascript'
-        }
-      ]
-    },
-
-    {
-      type: 'category',
       label: 'Comparisons',
       items: [
         {
           type: 'doc',
           id: 'comparisons/blackbox-exporter',
           label: 'Blackbox Exporter'
+        }
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Reference',
+      items: [
+        {
+          type: 'doc',
+          id: 'reference/secret-management',
+          label: 'Secret Management'
+        },
+        {
+          type: 'category',
+          label: 'Scripting',
+          items: [
+            {
+              type: 'doc',
+              id: 'reference/scripting/cel',
+              label: 'CEL Expressions'
+            },
+            {
+              type: 'doc',
+              id: 'reference/scripting/gotemplate',
+              label: 'Go Templates'
+            },
+            {
+              type: 'doc',
+              id: 'reference/scripting/javascript',
+              label: 'Javascript'
+            }
+          ]
         }
       ]
     }

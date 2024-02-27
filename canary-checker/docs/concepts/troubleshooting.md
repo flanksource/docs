@@ -2,24 +2,24 @@
 
 ## Increase the log verbosity of a Canary using `trace` annotation
 
-  To add detailed debug information related to a specific Canary to the log output, add a `debug: true` or `trace: true` annotation to the Canary resource:
+To add detailed debug information related to a specific Canary to the log output, add a `debug: true` or `trace: true` annotation to the Canary resource:
 
-  ```yaml trace.yaml
-  apiVersion: canaries.flanksource.com/v1
-  kind: Canary
-  metadata:
-    name: http-check
-    annotations:
-      trace: "true"
-  spec:
-    http:
-      - url: https://httpbin.demo.aws.flanksource.com/headers
-  ```
+```yaml trace.yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-check
+  annotations:
+    trace: 'true'
+spec:
+  http:
+    - url: https://httpbin.demo.aws.flanksource.com/headers
+```
 
-  ![](/img/trace-screenshot.png)
+![](/img/trace-screenshot.png)
 
 :::danger Sensitive Data & Excessive Logging
-  Trace level logging will return the HTTP response body which may contain sensitive data (The authorization headers will be sanitized)
+Trace level logging will return the HTTP response body which may contain sensitive data (The authorization headers will be sanitized)
 :::
 
 ### Trace Levels
@@ -29,24 +29,23 @@
 | `debug` | - HTTP Request and Response Header                                                  |
 | `trace` | - HTTP Request and Response Header <br/>- HTTP Response Body <br />- Custom Metrics |
 
-
 ## Run a Canary immediately using `next-runtime` annotation
 
 To run a canary outside of its normal schedule add the annotation:
 
 ```bash
  kubectl annotate canary <canary> next-runtime=$(date -Iseconds)
- ```
+```
 
 ## Temporarily pause a Canary using `suspend` annotation
 
 ```bash
  kubectl annotate canary <canary> supend=true
- ```
+```
 
 ## Run a Canary from the CLI
 
-   The easiest method of troubleshooting is to run the `canary-checker run` command with a copy of the canary resource locally.  This increases velocity of troubleshooting iteration, and also prevents the possibility of sensitive information in verbose output being leaked to logging systems by the canary pod.
+The easiest method of troubleshooting is to run the `canary-checker run` command with a copy of the canary resource locally. This increases velocity of troubleshooting iteration, and also prevents the possibility of sensitive information in verbose output being leaked to logging systems by the canary pod.
 
 ### Local permissions
 
@@ -66,7 +65,7 @@ The following local settings will affect the permissions available for use by th
 
 ### Local Canary execution
 
-Install the CLI as per the [Installation instructions](../../cli/)
+Install the CLI as per the [Installation instructions](../cli)
 Generate a local resource file with the trace annotation enabled:
 
 ```bash

@@ -23,7 +23,7 @@ spec:
 `test` expressions must return a bool or boolean type string (`'true'` or `'false`')
 :::
 
-See [CEL](/scripting/cel) for a function reference
+See [CEL](/reference/scripting/cel) for a function reference
 
 :::note Javascript and Go Templating
 While `test` fields do support Javascript and Go Text Templates, they are not recommended for health evaluations due to their verbosity and performance.

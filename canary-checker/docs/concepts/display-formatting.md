@@ -29,7 +29,7 @@ Which would display:
 $1 = €0.94913, £0.82394, ₪3.8455
 ```
 
-See [Go Template](/scripting/gotemplate)
+See [Go Template](/reference/scripting/gotemplate)
 
 ## CEL Expressions
 
@@ -48,7 +48,7 @@ spec:
         expr: "'$1 = €' + string(json.rates.EUR) + ', £' + string(json.rates.GBP) + ', ₪' + string(json.rates.ILS)"
 ```
 
-See [CEL](/scripting/cel) for a function reference
+See [CEL](/reference/scripting/cel) for a function reference
 
 ## Javascript
 
@@ -79,7 +79,7 @@ spec:
 Do not return anything from the function, e.g. instead of `return "hello" + "world"` use just `"hello" + "world"`
 :::
 
-See [Javascript](/scripting/javascript) for more details and a function reference.
+See [Javascript](/reference/scripting/javascript) for more details and a function reference.
 
 ## Variables
 
