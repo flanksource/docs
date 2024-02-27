@@ -1,18 +1,10 @@
 # Transform
 
-| Field           | Description                                                                              | Scheme                                                       | Required |
-| --------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------ | -------- |
-| `gotemplate`    | Specify Go template for use in script                                                    | `string`                                                     |          |
-| `javascript`    | Specify javascript syntax for script                                                     | `string`                                                     |          |
-| `jsonpath`      | Specify JSONPath                                                                         | `string`                                                     |          |
-| `expr`          | Specify Cel expression                                                                   | `string`                                                     |          |
-| `changes`       | Apply transformation on the scraped changes                                              | [`[]Changes`](#changes)                                      |          |
-| `exclude`       | Fields to remove from the config, useful for removing sensitive data and fields          | [`[]Exclude`](#exclude)                                      |          |
-|                 | that change often without a material impact i.e. Last Scraped Time                       |                                                              |          |
-| [`mask`](#mask) | Specify configurations to replace sensitive fields with hash functions or static string. | [`[]Mask`](./masking)                                        |          |
-| `relationship`  | form relationships between config items using selectors                                  | [`[]RelationshipConfig`](./relationship#relationship-config) |          |
+Transformation allows you to transform the scraped configs & changes before they are saved to config db.
 
-## Script
+## Configs
+
+You can use any of the following ways to transform config items.
 
 ### JavaScript
 

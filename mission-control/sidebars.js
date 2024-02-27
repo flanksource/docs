@@ -360,8 +360,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'config-db/concepts/extraction',
-          label: 'Extraction'
+          id: 'config-db/concepts/insights',
+          label: 'Insights'
         },
         {
           type: 'doc',
