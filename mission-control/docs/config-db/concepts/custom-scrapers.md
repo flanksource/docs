@@ -35,7 +35,7 @@ Custom scrapers need to define the id, type & class for each items that are scra
 
 Date mapping allows you to specify custom creation and deletion times for config items. This is useful when you want to import config items from an external source, and you want to preserve the creation and deletion times of the config items in the external source.
 
-You'll be making use of the `createFields` and `deleteFields` fields. They are both a list of [JSONPath expression](../concepts/templating.md#jsonpath) and are used to extract the created/deleted time of the config item from the scraped configuration. If multiple fields are specified, the first non-empty value will be used.
+You'll be making use of the `createFields` and `deleteFields` fields. They are both a list of JSONPath expression and are used to extract the created/deleted time of the config item from the scraped configuration. If multiple fields are specified, the first non-empty value will be used.
 
 Consider the following configuration file
 

@@ -87,7 +87,7 @@ spec:
 | `properties`            | Custom templatable properties for the scraped config items. | [`[]ConfigProperty`](../../reference/property) |          |
 | `transform`             | Field to transform result                                   | [`Transform`](#transform)                      |          |
 | `tags`                  | set custom tags on the scraped config items                 | `map[string]string`                            |          |
-| `cloudtrail`            | Set CloudTrail specifications                               | [`CloudTrail`](#cloudtrail-cloudtrail)         |          |
+| `cloudtrail`            | Set CloudTrail specifications                               | [`CloudTrail`](#cloudtrail)                    |          |
 | `compliance`            | Toggle scraping of compliance metadata                      | `bool`                                         |          |
 | `cost_reporting`        | Specify cost reporting for scraping of data                 | [`CostReporting`](#cost-reporting)             |          |
 | `exclude`               | AWS resources to exclude from scraping                      | `[]string`                                     |          |

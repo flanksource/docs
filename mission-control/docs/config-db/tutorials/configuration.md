@@ -1,4 +1,5 @@
 # Configuration
+
 Configuration in `Config DB` can refer to two things:
 
 - The configuration YAML file required by `Config DB` to scrape external configuration files
@@ -17,6 +18,7 @@ In order to run `Config DB` you need to first have a configuration file. Below i
 | `file`           | Specifies the list of local file paths to scrape.                                                | [`[]File`](../scrapers/file.md#file)                                | `false`  |
 | `kubernetes`     | Specifies the list of Kubernetes configurations to scrape.                                       | [`[]Kubernetes`](../scrapers/kubernetes.md#kubernetes)              | `false`  |
 | `kubernetesFile` | Specifies the list of Kubernetes configurations from a file to scrape.                           | [`[]KubernetesFile`](../scrapers/kubernetes-file.md#kubernetesfile) | `false`  |
+| `azure`          | Specifies the list of Azure configurations to scrape.                                            | [`[]Azure`](../scrapers/azure#azure)                                | `false`  |
 | `azureDevops`    | Specifies the list of Azure DevOps configurations to scrape.                                     | [`[]AzureDevops`](../scrapers/azure-devops.md#azuredevops)          | `false`  |
 | `sql`            | Specifies the list of SQL configurations to scrape.                                              | [`[]SQL`](../scrapers/sql.md#sql)                                   | `false`  |
 

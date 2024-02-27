@@ -370,6 +370,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'config-db/concepts/templating',
+          label: 'Templating'
+        },
+        {
+          type: 'doc',
           id: 'config-db/concepts/transform',
           label: 'Transform'
         },

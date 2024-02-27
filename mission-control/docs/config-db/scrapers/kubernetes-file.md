@@ -27,7 +27,7 @@ spec:
 | `schedule`       | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
 | `full`           | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
 | `retention`      | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
-| `kubernetesFile` | Specifies the list of Kubernetes File configurations to scrape.                    | [`[]KubernetesFile`](#kubernetesfile-1)      |          |
+| `kubernetesFile` | Specifies the list of Kubernetes File configurations to scrape.                    | [`[]KubernetesFile`](#kubernetesfile)        |          |
 
 ### KubernetesFile
 
@@ -40,7 +40,7 @@ spec:
 | `container`       | Set container name                                                                                                                                                      | `string`                                                |          |
 | `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                                              |          |
 | `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                                              |          |
-| `files`           | Specify path to file contained in Pod                                                                                                                                   | `[]File`                                                |          |
+| `files`           | Specify path to file contained in Pod                                                                                                                                   | [`[]File`](#file)                                       |          |
 | `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                                |          |
 | `properties`      | Custom templatable properties for the scraped config items.                                                                                                             | [`[]ConfigProperty`](../../reference/property)          |          |
 | `selector`        | Specify Kubernetes resource for configuration based on `namespace`, `kind`, `name` and more.                                                                            | [`ResourceSelector`](../../reference/resource_selector) | `true`   |
