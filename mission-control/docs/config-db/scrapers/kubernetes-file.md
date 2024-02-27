@@ -46,11 +46,15 @@ spec:
 | `selector`        | Specify Kubernetes resource for configuration based on `namespace`, `kind`, `name` and more.                                                                            | [`ResourceSelector`](../../reference/resource_selector) | `true`   |
 | `tags`            | set custom tags on the scraped config items                                                                                                                             | `map[string]string`                                     |          |
 | `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                                |          |
-| `transform`       | Field to transform result                                                                                                                                               | [`Transform`](../concepts/transform.md)                 |          |
+| `transform`       | Field to transform result                                                                                                                                               | [`Transform`](#transform)                               |          |
 
-### File
+#### File
 
 | Field    | Description                       | Scheme     | Required |
 | -------- | --------------------------------- | ---------- | -------- |
 | `path`   | Set path to file contained in Pod | `[]string` |          |
 | `format` | Specify format of file            | `string`   |          |
+
+#### Transform
+
+<ConfigTransform></ConfigTransform>

@@ -40,7 +40,7 @@ spec:
 | Field            | Description                                                                | Scheme                                         | Required |
 | ---------------- | -------------------------------------------------------------------------- | ---------------------------------------------- | -------- |
 | `properties`     | Custom templatable properties for the scraped config items.                | [`[]ConfigProperty`](../../reference/property) |          |
-| `transform`      | Field to transform result                                                  | [`Transform`](../concepts/transform.md)        |          |
+| `transform`      | Field to transform result                                                  | [`Transform`](#transform)                      |          |
 | `tags`           | Set custom tags on the scraped config items                                | `map[string]string`                            |          |
 | `connection`     | Specify the connection that provides the clientID, clientSecret & tenantID | `string`                                       |          |
 | `subscriptionID` | Azure subscription ID                                                      | `string`                                       |          |
@@ -53,6 +53,10 @@ spec:
 :::note
 Either the connection name or the credentials (clientID, clientSecret & tenatnID) are required
 :::
+
+#### Transform
+
+<ConfigTransform></ConfigTransform>
 
 #### Azure Exclusion
 

@@ -81,7 +81,7 @@ spec:
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
 | `sql`       | Specifies the list of SQL configurations to scrape.                                | [`[]SQL`](#sql-1)                            |          |
 
-## SQL
+### SQL
 
 | Field             | Description                                                                                                                                                             | Scheme                                         | Required |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | -------- |
@@ -89,7 +89,7 @@ spec:
 | `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                                       |          |
 | `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                                       |          |
 | `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                                       | `true`   |
-| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](../concepts/transform)           |          |
+| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](#transform)                      |          |
 | `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                       |          |
 | `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                       |          |
 | `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                                     |          |
@@ -99,3 +99,7 @@ spec:
 | `query`           | Specify the SQL query to execute                                                                                                                                        | `string`                                       | `true`   |
 | `properties`      | Custom templatable properties for the scraped config items.                                                                                                             | [`[]ConfigProperty`](../../reference/property) |          |
 | `tags`            | set custom tags on the scraped config items                                                                                                                             | `map[string]string`                            |          |
+
+#### Transform
+
+<ConfigTransform></ConfigTransform>

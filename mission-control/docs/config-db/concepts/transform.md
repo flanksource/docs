@@ -1,11 +1,5 @@
 # Transform
 
-Transformation can be performed after the configs have been scraped from the target. This can be useful when you want to
-
-- hide/remove sensitive data from the scraped configuration (e.g. passwords, tokens, etc.)
-- transform the scraped configuration using CEL
-- remove certain fields from the scraped configuration
-
 | Field           | Description                                                                              | Scheme                                                       | Required |
 | --------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------ | -------- |
 | `gotemplate`    | Specify Go template for use in script                                                    | `string`                                                     |          |
@@ -17,11 +11,6 @@ Transformation can be performed after the configs have been scraped from the tar
 |                 | that change often without a material impact i.e. Last Scraped Time                       |                                                              |          |
 | [`mask`](#mask) | Specify configurations to replace sensitive fields with hash functions or static string. | [`[]Mask`](./masking)                                        |          |
 | `relationship`  | form relationships between config items using selectors                                  | [`[]RelationshipConfig`](./relationship#relationship-config) |          |
-
-:::note
-Unlike other transformation functions, scripts (gotemplate, javascript, jsonpath & expr) are ran before the attributes _(id, name, type, ...)_ are extracted.
-So please make sure your transformation scripts are inline with the JSONPath selectors for the attributes.
-:::
 
 ## Script
 

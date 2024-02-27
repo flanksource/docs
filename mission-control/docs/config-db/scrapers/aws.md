@@ -85,7 +85,7 @@ spec:
 | Field                   | Description                                                 | Scheme                                         | Required |
 | ----------------------- | ----------------------------------------------------------- | ---------------------------------------------- | -------- |
 | `properties`            | Custom templatable properties for the scraped config items. | [`[]ConfigProperty`](../../reference/property) |          |
-| `transform`             | Field to transform result                                   | [`Transform`](../concepts/transform.md)        |          |
+| `transform`             | Field to transform result                                   | [`Transform`](transform)                       |          |
 | `tags`                  | set custom tags on the scraped config items                 | `map[string]string`                            |          |
 | `cloudtrail`            | Set CloudTrail specifications                               | [`CloudTrail`](#cloudtrail-cloudtrail)         |          |
 | `compliance`            | Toggle scraping of compliance metadata                      | `bool`                                         |          |
@@ -97,14 +97,18 @@ spec:
 | `patch_states`          | Scrape patch state status, and report                       | `bool`                                         |          |
 | `trusted_advisor_check` | Enable/Disable scraping analyses from Trusted Advisor       | `bool`                                         |          |
 
-### CloudTrail
+#### Transform
+
+<ConfigTransform></ConfigTransform>
+
+#### CloudTrail
 
 | Field     | Description                             | Scheme     | Required |
 | --------- | --------------------------------------- | ---------- | -------- |
 | `exclude` | Set events to be excluded from scraping | `[]string` |          |
 | `max_age` | Set maximum age of events for scraping  | `string`   |          |
 
-### Cost Reporting
+#### Cost Reporting
 
 | Field            | Description                                                    | Scheme   | Required |
 | ---------------- | -------------------------------------------------------------- | -------- | -------- |
