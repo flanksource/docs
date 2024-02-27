@@ -1,12 +1,8 @@
 # Transform
 
-Transformation allows you to transform the scraped configs & changes before they are saved to config db.
+Transformation allows you to transform the scraped configs before they are saved to config db.
 
-## Configs
-
-You can use any of the following ways to transform config items.
-
-### JavaScript
+## JavaScript
 
 You can supply a JavaScript code to transform the scraped configuration. Your JS code will have access to the special `config` variable which will contain the scraped config. Your script is expected to return a stringified JSON object which will be the new configuration.
 
@@ -59,7 +55,7 @@ The JS transformation will result in two new config items
 {"id": 2, "name": "Config2", "added": "a", "secret": "secret_2", "password": "p2"}
 ```
 
-### Go Templates
+## Go Templates
 
 Go template is another powerful way to transform the scraped configuration. Just as you provide a javascript code, you can also provide a Go template. The Go template will have access to the special `config` variable which will contain the scraped config.
 
@@ -90,29 +86,4 @@ The above transformation will result in the following config
 
 ```json
 { "id": "what", "name-1": "hi Config1", "name-2": "hi Config2" }
-```
-
-## Changes
-
-Changes define how the config changes should be transformed. At the moment, only change exclusion is supported which lets you selectively discard changes that are not relevant.
-
-| Field     | Description                                            | Scheme     | Required |
-| --------- | ------------------------------------------------------ | ---------- | -------- |
-| `exclude` | A list of CEL expressions that excludes a given change | `[]string` |          |
-
-The scraped changes can be accessed using the `details` field.
-
-```yaml title="kubernetes-scraper.yaml"
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: kubernetes-scraper
-spec:
-  kubernetes:
-    - clusterName: local-kind-cluster
-      transform:
-        changes:
-          exclude:
-            - 'config_type == "Kubernetes::Node" && details.message == "status.images"'
-            - 'details.source.component == "canary-checker" && (change_type == "Failed" || change_type == "Pass")'
 ```

@@ -33,7 +33,7 @@ export function ConfigTransform({ children, to, anchor }) {
       field: 'changes',
       description: 'Apply transformation on the scraped changes',
       scheme: '[]Changes',
-      schemaLink: '../concepts/transform#changes',
+      schemaLink: '../concepts/changes',
       required: ''
     },
     {
