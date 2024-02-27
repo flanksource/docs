@@ -57,3 +57,25 @@ spec:
 | --------- | ---------------------------------------------------------- | -------- | -------- |
 | `filter`  | CEL expressions that selects a change to apply the mapping | `string` | `true`   |
 | `exclude` | Type to be set on the change                               | `string` | `true`   |
+
+## Retention
+
+```yaml title="kubernetes-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: kubernetes-scraper
+spec:
+  retention:
+    changes:
+      - name: PullSuceeded
+        age: 7d # Only keep one week of PullSuceeded changes
+  kubernetes:
+    clusterName: local
+```
+
+| Field   | Description                                             | Scheme   | Required |
+| ------- | ------------------------------------------------------- | -------- | -------- |
+| `name`  | Name of the change type                                 | `string` | `true`   |
+| `age`   | Maximum age of the change type to retain (`12h`, `30d`) | `string` |          |
+| `count` | Maximum count to retain the change type                 | `int`    |          |
