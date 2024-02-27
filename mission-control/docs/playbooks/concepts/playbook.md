@@ -45,9 +45,9 @@ _Fig: Playbooks Page_
 
 | Field       | Description                                          | Scheme                                          | Required |
 | ----------- | ---------------------------------------------------- | ----------------------------------------------- | -------- |
-| `canary`    | Setup trigger on canary events                       | [`EventTrigger`](../concepts/events#event-spec) |          |
-| `component` | Setup trigger on health check events.                | [`EventTrigger`](../concepts/events#event-spec) |          |
-| `webhook`   | Setup a webhook endpoint that triggers the playbook. | [`WebhookTrigger`](../concepts/webhook#spec)    |          |
+| `canary`    | Setup trigger on canary events                       | [`EventTrigger`](../triggers/events#event-spec) |          |
+| `component` | Setup trigger on health check events.                | [`EventTrigger`](../triggers/events#event-spec) |          |
+| `webhook`   | Setup a webhook endpoint that triggers the playbook. | [`WebhookTrigger`](../triggers/webhook#spec)    |          |
 
 ### ResourceFilter
 
@@ -160,7 +160,7 @@ Actions are the fundamental tasks executed by a playbook. A playbook can compris
 | `templatesOn`  | Specify where the templating of the action spec should occur                                                                                              | `host`\|`agent`                                    |          |
 | `delay`        | A CEL expression that evaluates to a duration to delay the execution of the action. _(Sensitive to the minute.)_                                          | `string`                                           |          |
 | `filter`       | A CEL expression that returns a boolean or special value to indicated whether the action should run or not. [Read below](#conditionally-running-actions)  | `string`                                           |          |
-| `timeout`      | Timeout on this action.                                                                                                                                   | [`DurationString`](#duration-string)               |          |
+| `timeout`      | Timeout on this action.                                                                                                                                   | `string`                                           |          |
 | `exec`         | Specify exec of action.                                                                                                                                   | [`ExecAction`](../actions/exec.md)                 |          |
 | `gitops`       | Specify gitops of action.                                                                                                                                 | [`GitopsAction`](../actions/gitops.md)             |          |
 | `http`         | Specify http of action.                                                                                                                                   | [`HttpAction`](../actions/http.md)                 |          |
@@ -233,7 +233,7 @@ You can base your filters based on result of a previous action. The following tw
 Syntax:
 
 ```javascript
-getLastAction().result.stdout.JSON().count < 5;
+getLastAction().result.stdout.JSON().count < 5
 ```
 
 2. **getAction**
@@ -243,5 +243,5 @@ To fetch the result of any action that ran before this action, use `getAction()`
 Syntax:
 
 ```javascript
-getAction('action_name').result.stdout.JSON().count < 5;
+getAction('action_name').result.stdout.JSON().count < 5
 ```
