@@ -350,8 +350,28 @@ const sidebars = {
       items: [
         {
           type: 'doc',
+          id: 'config-db/concepts/changes',
+          label: 'Changes'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/date-mapping',
+          label: 'Date Mapping'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/exclusion',
+          label: 'Exclusion'
+        },
+        {
+          type: 'doc',
           id: 'config-db/concepts/extraction',
           label: 'Extraction'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/masking',
+          label: 'Masking'
         },
         {
           type: 'doc',
@@ -362,6 +382,11 @@ const sidebars = {
           type: 'doc',
           id: 'config-db/concepts/retention',
           label: 'Retention'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/relationship',
+          label: 'Relationship'
         }
       ]
     },
