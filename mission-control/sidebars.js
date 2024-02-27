@@ -325,7 +325,6 @@ const sidebars = {
         }
       ]
     },
-
     {
       type: 'category',
       label: 'Comparisons',
