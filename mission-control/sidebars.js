@@ -355,13 +355,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'config-db/concepts/date-mapping',
-          label: 'Date Mapping'
-        },
-        {
-          type: 'doc',
           id: 'config-db/concepts/exclusion',
-          label: 'Exclusion'
+          label: 'Field Exclusion'
         },
         {
           type: 'doc',
@@ -411,33 +406,50 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'config-db/scrapers/custom',
-          label: 'Custom'
-        },
-        {
-          type: 'doc',
           id: 'config-db/scrapers/trivy',
           label: 'Trivy'
         },
         {
           type: 'doc',
-          id: 'config-db/scrapers/file',
-          label: 'File'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/scrapers/kubernetes-file',
-          label: 'Kubernetes File'
-        },
-        {
-          type: 'doc',
           id: 'config-db/scrapers/kubernetes',
           label: 'Kubernetes'
-        },
+        }
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Custom',
+      items: [
         {
           type: 'doc',
-          id: 'config-db/scrapers/sql',
-          label: 'SQL'
+          id: 'config-db/concepts/custom-scrapers',
+          label: 'Overview'
+        },
+        {
+          type: 'category',
+          label: 'Scrapers',
+          items: [
+            {
+              type: 'doc',
+              id: 'config-db/scrapers/custom',
+              label: 'Custom'
+            },
+            {
+              type: 'doc',
+              id: 'config-db/scrapers/file',
+              label: 'File'
+            },
+            {
+              type: 'doc',
+              id: 'config-db/scrapers/kubernetes-file',
+              label: 'Kubernetes File'
+            },
+            {
+              type: 'doc',
+              id: 'config-db/scrapers/sql',
+              label: 'SQL'
+            }
+          ]
         }
       ]
     },
