@@ -376,6 +376,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'config-db/scrapers/azure',
+          label: 'Azure'
+        },
+        {
+          type: 'doc',
           id: 'config-db/scrapers/azure-devops',
           label: 'Azure DevOps'
         },
