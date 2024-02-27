@@ -84,9 +84,6 @@ spec:
 
 | Field                   | Description                                                 | Scheme                                         | Required |
 | ----------------------- | ----------------------------------------------------------- | ---------------------------------------------- | -------- |
-| `properties`            | Custom templatable properties for the scraped config items. | [`[]ConfigProperty`](../../reference/property) |          |
-| `transform`             | Field to transform result                                   | [`Transform`](#transform)                      |          |
-| `tags`                  | set custom tags on the scraped config items                 | `map[string]string`                            |          |
 | `cloudtrail`            | Set CloudTrail specifications                               | [`CloudTrail`](#cloudtrail)                    |          |
 | `compliance`            | Toggle scraping of compliance metadata                      | `bool`                                         |          |
 | `cost_reporting`        | Specify cost reporting for scraping of data                 | [`CostReporting`](#cost-reporting)             |          |
@@ -96,6 +93,9 @@ spec:
 | `patch_details`         | Enable/disable scraping of patch details                    | `bool`                                         |          |
 | `patch_states`          | Scrape patch state status, and report                       | `bool`                                         |          |
 | `trusted_advisor_check` | Enable/Disable scraping analyses from Trusted Advisor       | `bool`                                         |          |
+| `properties`            | Custom templatable properties for the scraped config items. | [`[]ConfigProperty`](../../reference/property) |          |
+| `transform`             | Field to transform result                                   | [`Transform`](#transform)                      |          |
+| `tags`                  | set custom tags on the scraped config items                 | `map[string]string`                            |          |
 
 #### Transform
 

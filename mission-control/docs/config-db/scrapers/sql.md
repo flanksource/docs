@@ -89,7 +89,6 @@ spec:
 | `name`            | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                                       |          |
 | `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                                       |          |
 | `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                                       | `true`   |
-| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](#transform)                      |          |
 | `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                       |          |
 | `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                       |          |
 | `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                                     |          |
@@ -98,6 +97,7 @@ spec:
 | `driver`          | Specify the name of the driver to use for connecting to the database                                                                                                    | `string`                                       |          |
 | `query`           | Specify the SQL query to execute                                                                                                                                        | `string`                                       | `true`   |
 | `properties`      | Custom templatable properties for the scraped config items.                                                                                                             | [`[]ConfigProperty`](../../reference/property) |          |
+| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](#transform)                      |          |
 | `tags`            | set custom tags on the scraped config items                                                                                                                             | `map[string]string`                            |          |
 
 #### Transform

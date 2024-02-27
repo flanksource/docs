@@ -42,11 +42,11 @@ spec:
 | `deleteFields`    | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                                              |          |
 | `files`           | Specify path to file contained in Pod                                                                                                                                   | [`[]File`](#file)                                       |          |
 | `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                                |          |
-| `properties`      | Custom templatable properties for the scraped config items.                                                                                                             | [`[]ConfigProperty`](../../reference/property)          |          |
 | `selector`        | Specify Kubernetes resource for configuration based on `namespace`, `kind`, `name` and more.                                                                            | [`ResourceSelector`](../../reference/resource_selector) | `true`   |
-| `tags`            | set custom tags on the scraped config items                                                                                                                             | `map[string]string`                                     |          |
 | `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                                |          |
 | `transform`       | Field to transform result                                                                                                                                               | [`Transform`](#transform)                               |          |
+| `tags`            | set custom tags on the scraped config items                                                                                                                             | `map[string]string`                                     |          |
+| `properties`      | Custom templatable properties for the scraped config items.                                                                                                             | [`[]ConfigProperty`](../../reference/property)          |          |
 
 #### File
 

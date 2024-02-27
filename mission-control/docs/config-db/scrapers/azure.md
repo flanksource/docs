@@ -39,9 +39,6 @@ spec:
 
 | Field            | Description                                                                | Scheme                                         | Required |
 | ---------------- | -------------------------------------------------------------------------- | ---------------------------------------------- | -------- |
-| `properties`     | Custom templatable properties for the scraped config items.                | [`[]ConfigProperty`](../../reference/property) |          |
-| `transform`      | Field to transform result                                                  | [`Transform`](#transform)                      |          |
-| `tags`           | Set custom tags on the scraped config items                                | `map[string]string`                            |          |
 | `connection`     | Specify the connection that provides the clientID, clientSecret & tenantID | `string`                                       |          |
 | `subscriptionID` | Azure subscription ID                                                      | `string`                                       |          |
 | `organisation`   | Azure organisation ID                                                      | `string`                                       |          |
@@ -49,6 +46,9 @@ spec:
 | `clientID`       | Microsoft Entra ID app client id                                           | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
 | `clientSecret`   | Microsoft Entra ID app client secret                                       | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
 | `exclusions`     | Specifies the Azure projects to scrape                                     | [`Exclusion`](#azure-exclusion)                |          |
+| `properties`     | Custom templatable properties for the scraped config items.                | [`[]ConfigProperty`](../../reference/property) |          |
+| `transform`      | Field to transform result                                                  | [`Transform`](#transform)                      |          |
+| `tags`           | Set custom tags on the scraped config items                                | `map[string]string`                            |          |
 
 :::note
 Either the connection name or the credentials (clientID, clientSecret & tenatnID) are required

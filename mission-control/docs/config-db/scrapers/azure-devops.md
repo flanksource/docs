@@ -37,14 +37,14 @@ spec:
 
 | Field                 | Description                                                           | Scheme                                           | Required |
 | --------------------- | --------------------------------------------------------------------- | ------------------------------------------------ | -------- |
-| `properties`          | Custom templatable properties for the scraped config items.           | [`[]ConfigProperty`](../../reference/property)   |          |
-| `transform`           | Field to transform result                                             | [`Transform`](#transform)                        |          |
-| `tags`                | Set custom tags on the scraped config items                           | `map[string]string`                              |          |
 | `connection`          | Connection to use for azure devops credential                         | `string`                                         |          |
 | `organization`        | Specifies the name of the Azure DevOps organization to scrape         | `string`                                         |          |
 | `personalAccessToken` | Specifies the personal access token to authenticate with Azure DevOps | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
 | `projects`            | Specifies the Azure DevOps projects to scrape                         | `[]string`                                       | `true`   |
 | `pipelines`           | Specifies the Azure DevOps pipelines to scrape                        | `[]string`                                       | `true`   |
+| `properties`          | Custom templatable properties for the scraped config items.           | [`[]ConfigProperty`](../../reference/property)   |          |
+| `transform`           | Field to transform result                                             | [`Transform`](#transform)                        |          |
+| `tags`                | Set custom tags on the scraped config items                           | `map[string]string`                              |          |
 
 :::note
 Either the connection name or the credentials (organization & personalAccessToken) are required

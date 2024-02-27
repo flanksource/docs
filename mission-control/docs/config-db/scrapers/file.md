@@ -37,7 +37,6 @@ For more examples of configuration file, please check the [GitHub repo](https://
 | `items`           | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                                       |          |
 | `type`            | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                                       | `true`   |
 | `class`           | A static value or JSONPath expression to use as the config class. _(Defaults to `type`)_                                                                                | `string`                                       |          |
-| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](#transform)                      |          |
 | `format`          | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                       |          |
 | `timestampFormat` | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                       |          |
 | `createFields`    | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                                     |          |
@@ -47,6 +46,7 @@ For more examples of configuration file, please check the [GitHub repo](https://
 | `ignore`          | Set configurations to ignore                                                                                                                                            | `[]string`                                     |          |
 | `properties`      | Custom templatable properties for the scraped config items.                                                                                                             | [`[]ConfigProperty`](../../reference/property) |          |
 | `tags`            | set custom tags on the scraped config items                                                                                                                             | `map[string]string`                            |          |
+| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](#transform)                      |          |
 
 #### Transform
 

@@ -50,9 +50,6 @@ spec:
 
 | Field             | Description                                                                                      | Scheme                                           | Required |
 | ----------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------ | -------- |
-| `properties`      | Custom templatable properties for the scraped config items.                                      | [`[]ConfigProperty`](../../reference/property)   |          |
-| `transform`       | Field to transform result                                                                        | [`Transform`](#transform)                        |          |
-| `tags`            | set custom tags on the scraped config items                                                      | `map[string]string`                              |          |
 | `allowIncomplete` | Show partial results when fetching of API resources fails                                        | `bool`                                           |          |
 | `clusterName`     | Specify cluster name                                                                             | `string`                                         |          |
 | `event`           | Specify configuration to handle Kubernetes events.                                               | [`Event`](#events)                               |          |
@@ -66,6 +63,9 @@ spec:
 | `selector`        | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels`                       | `string`                                         |          |
 | `since`           | Set time constraint for scraping resources within the set period                                 | `string`                                         |          |
 | `useCache`        | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd | `bool`                                           |          |
+| `properties`      | Custom templatable properties for the scraped config items.                                      | [`[]ConfigProperty`](../../reference/property)   |          |
+| `transform`       | Field to transform result                                                                        | [`Transform`](#transform)                        |          |
+| `tags`            | set custom tags on the scraped config items                                                      | `map[string]string`                              |          |
 
 #### Transform
 
