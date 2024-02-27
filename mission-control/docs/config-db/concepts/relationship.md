@@ -2,7 +2,7 @@
 
 Relationships associate two different configs. They help in visualizing the connection of a config above and below in a heirarchy. Example: A kubernetes pod is linked to a Deployment and Replicaset and also to the persistent volumes.
 
-![Kubernetes Relationship](../../images/2024-02-27_10-57.png)
+![Kubernetes Relationship](../../images/config-relationships.png)
 
 ## Relationship Config
 

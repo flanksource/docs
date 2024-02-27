@@ -2,7 +2,7 @@
 
 Some scrapers have the ability to tap into an advisor source that provides insights about a config.
 
-![Config Insights](../../images/2024-02-27_13-52.png)
+![Config Insights](../../images/config-insights.png)
 
 _Fig: Config insights_
 
