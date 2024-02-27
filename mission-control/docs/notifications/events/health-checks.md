@@ -11,7 +11,7 @@ Health checks emit 2 events
 | ----------- | ----------------------------- | ------------------------------ | -------- |
 | `canary`    | The parent canary object      | [`Canary`](#canary)            |          |
 | `check`     | The check                     | [`Check`](#check)              |          |
-| `agent`     | Agent details (if applicable) | [`Agent`](#check)              | `true`   |
+| `agent`     | Agent details (if applicable) | [`Agent`](#agent)              | `true`   |
 | `status`    | Check status details          | [`CheckStatus`](#check-status) |          |
 | `permalink` | A link to the health check    | `string`                       |          |
 

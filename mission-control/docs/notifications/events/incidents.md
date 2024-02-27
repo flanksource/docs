@@ -72,24 +72,24 @@ There are various subcategories for incident related evens
 
 ### Incident
 
-| Field              | Description                                                                             | Schema      | Optional |
-| ------------------ | --------------------------------------------------------------------------------------- | ----------- | -------- |
-| `id`               | The id of the incident                                                                  | `uuid.UUID` |          |
-| `incident_id`      | The incident id                                                                         | `string`    |          |
-| `title`            | The title of the incident                                                               | `string`    |          |
-| `description`      | The description of the incident                                                         | `string`    |          |
-| `type`             | The type of the incident ([Read more](../../incidents/overview.md#types))               | `string`    |          |
-| `status`           | The status of the incident ([Read more](../../incidents/overview.md#status))            | `string`    |          |
-| `severity`         | The severity of the incident ([Read more](../../incidents/overview.md#severity-levels)) | `string`    |          |
-| `created_at`       | The time the incident was created                                                       | `time.Time` |          |
-| `updated_at`       | The time the incident was updated                                                       | `time.Time` |          |
-| `acknowledged`     | The time the incident was acknowledged                                                  | `time.Time` | `true`   |
-| `resolved`         | The time the incident was resolved                                                      | `time.Time` | `true`   |
-| `closed`           | The time the incident was closed                                                        | `time.Time` | `true`   |
-| `created_by`       | The user who created the incident                                                       | `uuid.UUID` |          |
-| `incident_rule_id` | The incident rule id                                                                    | `uuid.UUID` | `true`   |
-| `commander_id`     | The commander id                                                                        | `uuid.UUID` | `true`   |
-| `communicator_id`  | The communicator id                                                                     | `uuid.UUID` | `true`   |
+| Field              | Description                            | Schema      | Optional |
+| ------------------ | -------------------------------------- | ----------- | -------- |
+| `id`               | The id of the incident                 | `uuid.UUID` |          |
+| `incident_id`      | The incident id                        | `string`    |          |
+| `title`            | The title of the incident              | `string`    |          |
+| `description`      | The description of the incident        | `string`    |          |
+| `type`             | The type of the incident               | `string`    |          |
+| `status`           | The status of the incident             | `string`    |          |
+| `severity`         | The severity of the incident           | `string`    |          |
+| `created_at`       | The time the incident was created      | `time.Time` |          |
+| `updated_at`       | The time the incident was updated      | `time.Time` |          |
+| `acknowledged`     | The time the incident was acknowledged | `time.Time` | `true`   |
+| `resolved`         | The time the incident was resolved     | `time.Time` | `true`   |
+| `closed`           | The time the incident was closed       | `time.Time` | `true`   |
+| `created_by`       | The user who created the incident      | `uuid.UUID` |          |
+| `incident_rule_id` | The incident rule id                   | `uuid.UUID` | `true`   |
+| `commander_id`     | The commander id                       | `uuid.UUID` | `true`   |
+| `communicator_id`  | The communicator id                    | `uuid.UUID` | `true`   |
 
 ### Comment
 

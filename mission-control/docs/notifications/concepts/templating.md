@@ -8,7 +8,7 @@ Templating is essential for crafting customized notifications. It involves using
 
 ## Go Template
 
-Go templates are a feature of the Go programming language that allow you to define and execute templates. Templates are text files that contain placeholders for data, which are filled in at runtime. The view data for the template is the [search param](./api.md#search-params).
+Go templates are a feature of the Go programming language that allow you to define and execute templates. Templates are text files that contain placeholders for data, which are filled in at runtime.
 
 ### Examples
 
