@@ -2,7 +2,7 @@
 
 The Redis check connects to a specified Redis database instance to check its availability.
 
-```yaml
+```yaml title="redis-check.yml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
@@ -11,7 +11,7 @@ spec:
   interval: 30
   spec:
     redis:
-      - addr: "redis.default.svc:6379"
+      - addr: 'redis.default.svc:6379'
         name: redis-check
         auth:
           username:
@@ -25,25 +25,18 @@ spec:
                 name: redis-credentials
                 key: PASSWORD
         db: 0
-        description: "The redis check"
+        description: 'The redis check'
 ```
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`addr`** | host:port address | string | Yes |
-| `auth` | username and password value, configMapKeyRef or SecretKeyRef for redis server | [*Authentication*](../concepts/authentication.md) |  |
-| **`db`** | Database to be selected after connecting to the server | *int* | Yes |
-| `description` | Description for the check | *string* |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
-| `name` | Name of the check | *string* |  |
-
----
-
-# Scheme Reference
+| Field      | Description                                                                   | Scheme                                            | Required |
+| ---------- | ----------------------------------------------------------------------------- | ------------------------------------------------- | -------- |
+| **`addr`** | host:port address                                                             | string                                            | Yes      |
+| `auth`     | username and password value, configMapKeyRef or SecretKeyRef for redis server | [_Authentication_](../concepts/authentication.md) |          |
+| **`db`**   | Database to be selected after connecting to the server                        | _int_                                             | Yes      |
 
 ## Authentication
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| Field          | Description                                                                     | Scheme                                                                       | Required |
+| -------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | -------- |
+| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [_kommons.EnvVar_](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes      |
+| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [_kommons.EnvVar_](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes      |
