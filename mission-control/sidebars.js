@@ -474,6 +474,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'config-db/tutorials/file-scraper',
+          label: 'Scraping Custom File'
+        },
+        {
+          type: 'doc',
           id: 'config-db/tutorials/example-git-file',
           label: 'Example Git File'
         },

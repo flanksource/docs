@@ -5,9 +5,9 @@ The scraped configuration will be branch and environment aware, enabling you to 
 
 Additionally - you'll see how `Config DB` can keep track of configuration changes should there be any modifications to the configuration in your Git repository.
 
-!!! info
-
-    It is recommended that you fork this repository so you can modify it and play with the different features that `Config DB` provides.
+:::info
+It is recommended that you fork this repository so you can modify it and play with the different features that `Config DB` provides.
+:::
 
 This repository contains a simple YAML definition (`simple-config.yaml`) for a canary that can be used by `canary-checker`.
 
