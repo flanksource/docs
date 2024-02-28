@@ -26,7 +26,7 @@ const config = {
     links: {
       authentication: '/reference/secret-management',
       secrets: '/reference/secret-management',
-      connection: '/reference/authentication',
+      connections: '/reference/connection',
       cel: '/reference/scripting/cel'
     }
   },

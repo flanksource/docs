@@ -55,10 +55,10 @@ spec:
 | `transform`       | Transform data from a check into multiple individual checks  | [`Expression`](../concepts/transforms)               |          |
 | `metrics`         | Metrics to export from                                       | [`[]Metrics`](../concepts/metrics-exporter)         |          |
 | **Encryption Connection** |  |  |          |
-| `connection`      | Path of an existing connection to get the encryption key e.g., `connection://restic/key` <br />Mutually exclusive with `password` <br /><Commercial /> | [Connection](../concepts/connections)             |          |
+| `connection`      | Path of an existing connection to get the encryption key e.g., `connection://restic/key` <br />Mutually exclusive with `password` <br /><Commercial /> | [Connection](../reference/connections)             |          |
 | `password`        | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes      |
 | **AWS Connection** |  |  |          |
-| `awsConnectionName` | Path of an existing connection to connect to S3 e.g., `connection://aws/instance` <br />Mutually exclusive with `accessKey` <br /><Commercial /> | [Connection](../concepts/connections)             |          |
+| `awsConnectionName` | Path of an existing connection to connect to S3 e.g., `connection://aws/instance` <br />Mutually exclusive with `accessKey` <br /><Commercial /> | [Connection](../reference/connections)             |          |
 | `accessKey`       | Mutually exclusive with `awsConnectionName`                  | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes      |
 | `secretKey`       | Mutually exclusive with `awsConnectionName`                  | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes      |
 | `endpoint`        | Custom AWS Config endpoint                                    | `string`                                          |          |

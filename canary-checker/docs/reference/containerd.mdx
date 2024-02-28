@@ -28,7 +28,7 @@ spec:
 
 | Field            | Description                                                  | Scheme                                            | Required |
 | ---------------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
-| `auth`           | Username and password value, configMapKeyRef or SecretKeyRef for registry | [_Authentication_](../concepts/authentication.md) |          |
+| `auth`           | Username and password value, configMapKeyRef or SecretKeyRef for registry | [_Authentication_](../reference/authentication) |          |
 | `expectedDigest` | Expected digest of the pulled image                          | _string_                                          | Yes      |
 | `expectedSize`   | Expected size of the pulled image                            | _int64_                                           | Yes      |
 | **`image`**      | Full path to image, including registry                       | _string_                                          | Yes      |

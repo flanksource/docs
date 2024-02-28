@@ -1,8 +1,8 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/palenight');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const lightCodeTheme = require('prism-react-renderer/themes/palenight')
+const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -14,16 +14,16 @@ const config = {
   onBrokenMarkdownLinks: 'warn',
   customFields: {
     oss: true,
-    productName: "Canary Checker",
+    productName: 'Canary Checker',
     links: {
-      "authentication": '/concepts/secret-management',
-      "secrets": '/concepts/secret-management',
-      "connection": '/concepts/authentication',
-      "cel": "/scripting/cel"
+      authentication: '/reference/secret-management',
+      secrets: '/concepts/secret-management',
+      connections: '/reference/connections',
+      cel: '/scripting/cel'
     }
   },
   markdown: {
-    mermaid: true,
+    mermaid: true
   },
   favicon: 'img/canary-checker-icon.svg',
   organizationName: 'flanksource',
@@ -34,11 +34,11 @@ const config = {
       '@docusaurus/preset-classic',
       {
         googleTagManager: {
-          containerId: 'GTM-5H2R2N48',
+          containerId: 'GTM-5H2R2N48'
         },
 
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve('./src/css/custom.css')
         },
         docs: {
           // remarkPlugins: [sectionPrefix],
@@ -50,16 +50,20 @@ const config = {
           //   '**/*.test.{js,jsx,ts,tsx}',
           //   '**/__tests__/**',
           // ],
-          sidebarPath: require.resolve('./sidebars.js'),
-        },
-      },
-    ],
+          sidebarPath: require.resolve('./sidebars.js')
+        }
+      }
+    ]
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       metadata: [
-        { name: 'keywords', content: 'health check, synthetic test, continuous testing, kubernetes operator' }
+        {
+          name: 'keywords',
+          content:
+            'health check, synthetic test, continuous testing, kubernetes operator'
+        }
       ],
 
       algolia: {
@@ -69,48 +73,48 @@ const config = {
         // Public API key: it is safe to commit it
         apiKey: '6f7d25ae5d5b3b677c1039246031e049',
 
-        indexName: 'canarychecker',
+        indexName: 'canarychecker'
       },
       navbar: {
         logo: {
           alt: 'Canary Checker Logo',
           src: 'img/canary-checker.svg',
-          srcDark: 'img/canary-checker-white.svg',
+          srcDark: 'img/canary-checker-white.svg'
         },
         items: [
           {
             type: 'docSidebar',
             sidebarId: 'docs',
             position: 'left',
-            label: 'Docs',
+            label: 'Docs'
           },
           {
             href: 'https://github.com/flanksource/canary-checker',
             label: 'GitHub',
-            position: 'right',
-          },
-        ],
+            position: 'right'
+          }
+        ]
       },
       colorMode: {
         defaultMode: 'light',
         disableSwitch: false,
-        respectPrefersColorScheme: true,
+        respectPrefersColorScheme: true
       },
       announcementBar: {
         content:
-          '⭐️ If you like Canary Checker, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/flanksource/canary-checker">GitHub</a>! ⭐️',
+          '⭐️ If you like Canary Checker, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/flanksource/canary-checker">GitHub</a>! ⭐️'
       },
       footer: {
         style: 'light',
-        copyright: `Copyright © ${new Date().getFullYear()} Flanksource, Inc.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Flanksource, Inc.`
       },
       prism: {
         additionalLanguages: ['powershell', 'yaml', 'bash', 'shell-session'],
         darkTheme: darkCodeTheme,
         theme: lightCodeTheme
         //'log',jq'promql', 'regex','shell-session','uri', 'mermaid'
-      },
-    }),
-};
+      }
+    })
+}
 
-module.exports = config;
+module.exports = config

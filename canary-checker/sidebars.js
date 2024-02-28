@@ -346,12 +346,22 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Reference',
+      label: 'References',
       items: [
         {
           type: 'doc',
           id: 'reference/secret-management',
           label: 'Secret Management'
+        },
+        {
+          type: 'doc',
+          id: 'reference/authentication',
+          label: 'Authentication'
+        },
+        {
+          type: 'doc',
+          id: 'reference/connections',
+          label: 'Connections'
         },
         {
           type: 'category',

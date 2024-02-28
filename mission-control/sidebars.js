@@ -335,6 +335,17 @@ const sidebars = {
           label: 'Blackbox Exporter'
         }
       ]
+    },
+    {
+      type: 'category',
+      label: 'References',
+      items: [
+        {
+          type: 'doc',
+          id: 'canary-checker/reference/connections',
+          label: 'Connections'
+        }
+      ]
     }
   ],
   configdbSidebar: [
@@ -907,7 +918,7 @@ const sidebars = {
     },
     {
       type: 'doc',
-      id: 'reference/connections',
+      id: 'reference/authentication',
       label: 'Authentication'
     },
     {

@@ -15,7 +15,7 @@ spec:
   interval: 30
   postgres:
     - name: postgres schemas check
-      url: "postgres://$(username):$(password)@postgres.default.svc:5432/postgres?sslmode=disable"
+      url: 'postgres://$(username):$(password)@postgres.default.svc:5432/postgres?sslmode=disable'
       username:
         valueFrom:
           secretKeyRef:
@@ -35,27 +35,27 @@ spec:
       results: 1
 ```
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`query`** | query that needs to be executed on the server | *string* | Yes |
-| **`results`** | Number rows to check for | *int* | Yes |
-| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
-| `description` | Description for the check                                   | `string`                                     |          |
-| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
-| `labels`      | Labels for check                                            | `map[string]string`                          |          |
-| `test`        | Evaluate whether a check is healthy                         | [`Expression`](../concepts/health-evaluation)  |          |
-| `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/display-formatting) |          |
-| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |          |
-| `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
-| **Connection** |  |  | |
-| `connection` | Path of existing connection e.g. `connection://postgres/instance` Mutually exclusive with `username`, `password` <br /> <Commercial /> | <CommonLink to="connection" >*Connection*</CommonLink> | |
-| `url` | If the url is specifed in both the `connection` and in the `url` field, the `url` field takes precedence |  | |
-| `username` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | |
-| `password` | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | |
+| Field          | Description                                                                                                                            | Scheme                                                  | Required |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | -------- |
+| **`query`**    | query that needs to be executed on the server                                                                                          | _string_                                                | Yes      |
+| **`results`**  | Number rows to check for                                                                                                               | _int_                                                   | Yes      |
+| **`name`**     | Name of the check, must be unique within the canary                                                                                    | `string`                                                | Yes      |
+| `description`  | Description for the check                                                                                                              | `string`                                                |          |
+| `icon`         | Icon for overwriting default icon on the dashboard                                                                                     | `string`                                                |          |
+| `labels`       | Labels for check                                                                                                                       | `map[string]string`                                     |          |
+| `test`         | Evaluate whether a check is healthy                                                                                                    | [`Expression`](../concepts/health-evaluation)           |          |
+| `display`      | Expression to change the formatting of the display                                                                                     | [`Expression`](../concepts/display-formatting)          |          |
+| `transform`    | Transform data from a check into multiple individual checks                                                                            | [`Expression`](../concepts/transforms)                  |          |
+| `metrics`      | Metrics to export from                                                                                                                 | [`[]Metrics`](../concepts/metrics-exporter)             |          |
+| **Connection** |                                                                                                                                        |                                                         |          |
+| `connection`   | Path of existing connection e.g. `connection://postgres/instance` Mutually exclusive with `username`, `password` <br /> <Commercial /> | <CommonLink to="connections" >_Connection_</CommonLink> |          |
+| `url`          | If the url is specifed in both the `connection` and in the `url` field, the `url` field takes precedence                               |                                                         |          |
+| `username`     | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                                                | <CommonLink to="authentication">_EnvVar_</CommonLink>   |          |
+| `password`     | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                                                | <CommonLink to="authentication">_EnvVar_</CommonLink>   |          |
 
 ## Result Variables
 
-| Name    | Description             | Scheme                     |
-| ------- | ----------------------- | -------------------------- |
-| `rows`  |                         | *[]map[string]interface{ }* |
-| `count` | Number of rows returned | *int*                      |
+| Name    | Description             | Scheme                      |
+| ------- | ----------------------- | --------------------------- |
+| `rows`  |                         | _[]map[string]interface{}_ |
+| `count` | Number of rows returned | _int_                       |

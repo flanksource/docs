@@ -31,7 +31,7 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `auth` | Username and password value, configMapKeyRef or SecretKeyRef for Mongo server | [*Authentication*](../concepts/authentication.md) |  |
+| `auth` | Username and password value, configMapKeyRef or SecretKeyRef for Mongo server | [*Authentication*](../reference/authentication) |  |
 | **`connection`** | Connection string to connect to the Mongo server | *string* | Yes |
 | `description` | Description for the check | *string* |  |
 | `icon` | Icon for overwriting default icon on the dashboard | *string* |  |

@@ -34,7 +34,7 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `auth` | username and password value, configMapKeyRef, or SecretKeyRef for Postgres server | [*Authentication*](../concepts/authentication.md) |  |
+| `auth` | username and password value, configMapKeyRef, or SecretKeyRef for Postgres server | [*Authentication*](../reference/authentication) |  |
 | **`connection`** | connection string to connect to the server | *string* | Yes |
 | `description` | Description for the check | *string* |  |
 | `display` | Template to display query results in text (overrides default bar format for UI) | [*Template*](../concepts/templating.md) |  |

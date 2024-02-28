@@ -6,7 +6,7 @@ export var Connection = [
   {
     name: "connection",
     description: <>Path of an existing connection e.g. <code>connection://http/instance</code> <br /><Commercial /></>,
-    scheme: <a href="../../concepts/connections">Connection</a>,
+    scheme: <a href="../../reference/authentication">Connection</a>,
   },
   {
     name: "url",

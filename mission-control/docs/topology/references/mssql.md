@@ -29,7 +29,7 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `auth` | Username and password value, configMapKeyRef or SecretKeyRef for Postgres server | [*Authentication*](../concepts/authentication.md) |  |
+| `auth` | Username and password value, configMapKeyRef or SecretKeyRef for Postgres server | [*Authentication*](../reference/authentication) |  |
 | **`connection`** | Connection string to connect to the SQL Server server | *string* | Yes |
 | `description` | Description for the check | string |  |
 | `display` | Template to display query results in text (overrides default bar format for UI) | [*Template*](../concepts/templating.md) |  |

@@ -32,7 +32,7 @@ spec:
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| `authentication` | Username and password value, configMapKeyRef or SecretKeyRef for ConfigDB server | [*Authentication*](../concepts/authentication.md) |  |
+| `authentication` | Username and password value, configMapKeyRef or SecretKeyRef for ConfigDB server | [*Authentication*](../reference/authentication) |  |
 | `description` | Description for the check | *string* |  |
 | `display` | Template to display query results in text (overrides default bar format for UI) | [*Template*](../concepts/templating.md) |  |
 | **`host`** | Host is the server against which check needs to be executed | *string* | Yes |

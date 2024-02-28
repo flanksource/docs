@@ -259,7 +259,7 @@ microservice
 Gitops
 kubernetes-native
 CRD's
- - canary-checker/concepts/authentication.md
+ - canary-checker/reference/authentication
 ValuesFrom
 Configmaps
 configmap

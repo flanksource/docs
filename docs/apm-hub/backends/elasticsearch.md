@@ -1,4 +1,4 @@
-Elastic search backend fetches logs from elastic search instances. The backend requires credentials to access the elastic search instance. The credentials can be provided as a Kubernetes secret or right in the config file itself. Read more about authentication [here](../concepts/authentication.md).
+Elastic search backend fetches logs from elastic search instances. The backend requires credentials to access the elastic search instance. The credentials can be provided as a Kubernetes secret or right in the config file itself. Read more about authentication [here](../reference/authentication).
 
 You can craft the elastic search query using [Go Templates](../concepts/templating.md). The view data for the template is the [search param](../concepts/api.md#search-params).
 
