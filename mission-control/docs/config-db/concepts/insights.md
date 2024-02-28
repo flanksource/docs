@@ -1,6 +1,6 @@
 # Insights
 
-Some scrapers have the ability to tap into an advisor source that provides insights about a config.
+Scrapers can create and attach insights (security, performance, cost, etc..) to related config items.
 
 ![Config Insights](../../images/config-insights.png)
 

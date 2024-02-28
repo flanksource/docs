@@ -21,19 +21,19 @@ spec:
 
 Custom scrapers need to define the id, type & class for each items that are scraped. For example: if you're scraping a file with a JSON Array where each element on the array is to be scraped as a config item, you need to define what the id, type & config class of the items should be. This can be done using mappings.
 
-| Field             | Description                                                                      | Scheme   | Required |
-| ----------------- | -------------------------------------------------------------------------------- | -------- | -------- |
-| `id`              | Specify JSONPath to get the id for each config item                              | `string` | `true`   |
-| `type`            | Specify JSONPath to get the type for each config item                            | `string` | `true`   |
-| `class`           | Specify JSONPath to get the class for each config item. _(Defaults to `type`)_   | `string` |          |
-| `name`            | Specify JSONPath to get the name for each config item                            | `string` |          |
-| `createFields`    | Specify JSONPath to get the creation timestamp for each config item              | `string` |          |
-| `deleteFields`    | Specify JSONPath to get the deletion timestamp for each config item              | `string` |          |
-| `timestampFormat` | Specify the format of the timestamp specified in `createFields` & `deleteFields` | `string` |          |
+| Field             | Description                                                              | Scheme                                              | Required |
+| ----------------- | ------------------------------------------------------------------------ | --------------------------------------------------- | -------- |
+| `id`              | ID for the config item                                                   | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> | `true`   |
+| `type`            | Type for the config item                                                 | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> | `true`   |
+| `class`           | Class for the config item. _(Defaults to `type`)_                        | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> |          |
+| `name`            | Name for the config item                                                 | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> |          |
+| `createFields`    | Creation timestamp for the config item                                   | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> |          |
+| `deleteFields`    | Deletion timestamp for the config item                                   | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> |          |
+| `timestampFormat` | Timestamp format for fields specified in `createFields` & `deleteFields` | [`string`](#timestamp-format)                       |          |
 
 ### Date Mapping
 
-Date mapping allows you to specify custom creation and deletion times for config items. This is useful when you want to import config items from an external source, and you want to preserve the creation and deletion times of the config items in the external source.
+In Mission Control, config items possess created, updated, and deleted dates. While Kubernetes and Cloud resources receive these dates from the API, custom config items require extraction of these values from the config item itself. If no date mapping is provided, the scrape time will be used instead.
 
 You'll be making use of the `createFields` and `deleteFields` fields. They are both a list of JSONPath expression and are used to extract the created/deleted time of the config item from the scraped configuration. If multiple fields are specified, the first non-empty value will be used.
 

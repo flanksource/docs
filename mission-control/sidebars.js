@@ -469,11 +469,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'config-db/tutorials/configuration',
-          label: 'Configuration'
-        },
-        {
-          type: 'doc',
           id: 'config-db/tutorials/file-scraper',
           label: 'Scraping Custom File'
         },
