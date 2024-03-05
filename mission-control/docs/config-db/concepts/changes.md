@@ -97,6 +97,7 @@ spec:
     changes:
       - name: PullSuceeded
         age: 7d # Only keep one week of PullSuceeded changes
+    staleItemAge: 1h
   kubernetes:
     clusterName: local
 ```

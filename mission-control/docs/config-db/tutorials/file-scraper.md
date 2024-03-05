@@ -149,6 +149,4 @@ To see the details of the change, click on the config item.
 
 ## Deleting items
 
-Remove the proxy-server that we added before. If you notice, it's not immediately removed by config-db. That is because config-db waits for a certain time before it deletes a config item that it doesn't see anymore. By default, the timeout is 30 minutes but it can be configured using the `--stale-timeout` flag.
-
-To see an immediate result, restart config db with `stale-timeout` set to 0 and you'll see that the proxy config is deleted and no longer visible on the UI.
+Remove the proxy-server that we added before. If you notice, it's not immediately removed by config-db. That is because config-db waits for a certain time before it deletes a config item that it doesn't see anymore. By default, the timeout is 30 minutes but it can be [configured on the scraper](../concepts/retention#cleaning-up-stale-configs). To see an immediate result, update the `staleItemAge` to 0.
