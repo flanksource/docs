@@ -4,6 +4,7 @@
     "kubeconfig",
     "organisation",
     "pgdata",
+    "Replicaset",
     "Suceeded",
     "templatable",
     "trivy",

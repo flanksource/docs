@@ -474,8 +474,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'config-db/tutorials/example-git-file',
-          label: 'Example Git File'
+          id: 'config-db/tutorials/date-mapping',
+          label: 'Extracting config creation/deletion dates'
         },
         {
           type: 'doc',

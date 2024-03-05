@@ -1,85 +1,43 @@
 # Scraping Custom File
 
-In this tutorial we'll scrape a custom JSON file and see how config-db monitors changes to it over time.
+In this tutorial you'll scrape the currency conversion rates from a JSON file that comes from [this api](https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json).
 
-Let's start off by creating this example file that we want to scrape
-
-```json title="vms.json"
-{
-  "servers": [
-    {
-      "name": "web-server",
-      "ip": "192.168.1.100",
-      "port": 80,
-      "role": "frontend"
-    },
-    {
-      "name": "api-server",
-      "ip": "192.168.1.101",
-      "port": 8080,
-      "role": "backend"
-    },
-    {
-      "name": "database-server",
-      "ip": "192.168.1.102",
-      "port": 27017,
-      "role": "database"
-    }
-  ],
-  "logging": {
-    "level": "info",
-    "file_path": "/var/log/app.log"
-  }
-}
-```
-
-Place this file anywhere in your system and take note of its path. For the sake of simplicity, let's keep that file inside the `/tmp` dir.
-
-## Goal
-
-In the file above, we're mainly concerned with the servers. We want to have each of those servers as a config items.
-
-## Designing the scaper
+## Designing the scraper
 
 Each config item needs two mandatory fields
 
 - id
 - type
 
-We need to tell config-db where it can get those for each of our servers.
+We need to tell config-db where it can get those for our config. In this case, we'll hard-code the ids and type since
+there isn't any field in the config itself that's better suited for it.
 
-We can utilize the IP address as the identifier since it is unique for our purposes, and designate the "role" attribute as the type.
-We do this by specifying the fields using JSONPath.
-Additionally, we're also going to specify the name of each config even though it's optional.
-
-We can also supply hard coded values instead of a json path. Since all of these servers are virtual machines, let's specify the class as a static value "VritualMachine".
-
-:::note
-If the class wasn't specified, the type would have been used as a fallback.
-:::
-
-Now finally, we need to tell config-db how it can generate 3 different configs for each of those servers from one config file. We do that by using transformation scripts. In this example, we've used javascript but other scripting option are also available like - CEL Expression & Go Template.
-
-```yaml title='vms-scraper.yaml'
+```yaml title='currency-scraper.yaml'
+---
 apiVersion: configs.flanksource.com/v1
 kind: ScrapeConfig
 metadata:
-  name: vm-scraper
+  name: currency-scraper
   namespace: default
 spec:
   schedule: '@every 30s'
   file:
-    - type: $.role
-      id: $.ip
-      name: $.name
-      class: VirtualMachine
-      transform:
-        javascript: JSON.stringify(config.servers)
-      paths:
-        - /tmp/vms.json
+    // highlight-start
+    - type: Currency
+      id: currency-api
+    // highlight-end
+      name: currency-api
+      url: https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json
 ```
 
-To summarize, this scraper will scraper our file `/tmp/vms.json` every 30 seconds and generate 3 config items for each of the servers. If more servers are added/removed in future, they'll be reflected in config-db.
+:::note
+A config has a class associated to it. We haven't specified it here as it defaults to the `type`.
+:::
+
+The source for the file scraper can be paths to local files and also a URL to a remote file.
+In this example, you'll be using the api endpoint above as the config source.
+
+This scraper will scraper our file the api endpoint every 30 seconds and track its changes over time.
 
 ## Run the scraper
 
@@ -87,66 +45,49 @@ Save the scraper and wait for it to run. You should see the job status go green.
 
 ![](../../images/tutorial-config-scrapers.png)
 
-You should now be able to see the 3 servers in Catalog.
+You should now be able to see the currency config type in Catalog page.
 
 ![](../../images/example-config-items-vms.png)
 
-The content of the config items should be exactly what we have in `/tmp/vms.json`.
-They are represented as YAML but internally they are still saved as JSON.
+The number `1` represents that there is one config item of type `Currency`.
 
-![](../../images/example-vm-scraper-database.png)
+The content of the config items should be exactly what the api endpoint returns.
 
-## Adding a new item
+![](../../images/example-currency-scraper-config.png)
 
-In our `/tmp/vms.json`, let's add one more vm for a proxy server and see how config-db reacts to it.
-
-```json title=vms.json
-{
-  "servers": [
-    {
-      "name": "web-server",
-      "ip": "192.168.1.100",
-      "port": 80,
-      "role": "frontend"
-    },
-    {
-      "name": "proxy-server",
-      "ip": "192.168.1.103",
-      "port": 443,
-      "role": "proxy"
-    },
-    {
-      "name": "api-server",
-      "ip": "192.168.1.101",
-      "port": 8080,
-      "role": "backend"
-    },
-    {
-      "name": "database-server",
-      "ip": "192.168.1.102",
-      "port": 27017,
-      "role": "database"
-    }
-  ],
-  "logging": {
-    "level": "info",
-    "file_path": "/var/log/app.log"
-  }
-}
-```
-
-You should see a new config item for the proxy server.
+:::note
+The config is represented as YAML by default however internally it is stored in its original JSON form.
+:::
 
 ## Monitoring changes
 
-Let's modify the port of our api-server from `8080` to `3000`. Wait for a few seconds until the change is picked up.
+Over time, as the currency exchange rate changes, you'll start to see those changes in the catalog page.
+For this demonstration, we can simulate that change, by modifying the url to get the exchange rate of
+the day before.
 
-The catalog summary table now shows that there's 1 change in our api-server.
-![Catalog Overview Page](../../images/example-vm-scraper-changes-overview.png)
+```yaml title='currency-scraper.yaml'
+---
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: currency-scraper
+  namespace: default
+spec:
+  schedule: '@every 30s'
+  file:
+    - type: Currency
+      id: currency-api
+      name: currency-api
+      // highlight-start
+      # You'll need to adjust the date (2024.3.4)
+      url: https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2024.3.4/v1/currencies/eur.json
+      // highlight-end
+```
 
-To see the details of the change, click on the config item.
-![](../../images/example-vm-scraper-api-server-change.png)
+You should see a new `diff` change in the config changes tab.
+![Catalog Overview Page](../../images/example-currency-scraper-changes.png)
 
-## Deleting items
+The summary `eur, date` indicates that the fields `eur` and `date` were modified.
 
-Remove the proxy-server that we added before. If you notice, it's not immediately removed by config-db. That is because config-db waits for a certain time before it deletes a config item that it doesn't see anymore. By default, the timeout is 30 minutes but it can be [configured on the scraper](../concepts/retention#cleaning-up-stale-configs). To see an immediate result, update the `staleItemAge` to 0.
+To see the details of the change, click on the change row.
+![](../../images/example-currency-scraper-diff-change.png)
