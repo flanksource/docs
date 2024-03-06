@@ -16,7 +16,7 @@ The field to mask is specified by the `jsonPath` config and `value` field define
 | ------ | ----------------------------------------- | -------- | -------- |
 | `type` | Type is the config type to apply the mask | `string` | `true`   |
 
-`Config DB` allows selectively applying masks to certain types of configs. So you could apply a mask to all the `Config` types and another mask to all the `Secret` types.
+Config DB allows selectively applying masks to certain types of configs. Therefore, you can apply a mask to all the `Config` types and another mask to all the `Secret` types.
 
 :::info
 Masks are applied in the order they are specified in the configuration file.
@@ -24,4 +24,4 @@ Masks are applied in the order they are specified in the configuration file.
 
 ### Supported hash functions
 
-- md5sum
+- `md5sum`

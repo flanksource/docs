@@ -514,6 +514,22 @@ const sidebars = {
           label: 'Masking sensitive fields'
         }
       ]
+    },
+    {
+      type: 'category',
+      label: 'References',
+      items: [
+        {
+          type: 'doc',
+          id: 'config-db/references/scrape-result',
+          label: 'Scrape Result'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/references/change-result',
+          label: 'Change Result'
+        }
+      ]
     }
   ],
   playbooksSidebar: [

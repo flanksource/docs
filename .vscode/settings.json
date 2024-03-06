@@ -2,9 +2,11 @@
   "cSpell.words": [
     "apiserver",
     "kubeconfig",
+    "omitempty",
     "organisation",
     "pgdata",
     "Replicaset",
+    "struct",
     "Suceeded",
     "templatable",
     "trivy",
