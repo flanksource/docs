@@ -1,6 +1,8 @@
 # Catalog
 
-Configs can be associated to a component using the `config` property. A linked config shows up in the component page in the right hand side panel.
+You can link components with configs. The linked config items appears in the component page in the right hand side panel.
+
+To establish this relationship, you need to specify which config items to link with using the `config` field.
 
 ![Component Config relationship](../images/component-config-relationship.png)
 
@@ -23,7 +25,7 @@ spec:
         - type: Kubernetes::Pod
 ```
 
-## Config
+## Config Selector
 
 | Field         | Description                               | Scheme              | Required |
 | ------------- | ----------------------------------------- | ------------------- | -------- |

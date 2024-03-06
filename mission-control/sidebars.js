@@ -741,11 +741,6 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'topology/concepts/topology',
-          label: 'Topology'
-        },
-        {
-          type: 'doc',
           id: 'topology/concepts/properties',
           label: 'Properties'
         },
@@ -756,8 +751,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'topology/concepts/config',
-          label: 'Configuration'
+          id: 'topology/concepts/catalog',
+          label: 'Catalog'
         },
         {
           type: 'doc',
@@ -801,6 +796,11 @@ const sidebars = {
       type: 'category',
       label: 'References',
       items: [
+        {
+          type: 'doc',
+          id: 'topology/references/topology',
+          label: 'Topology'
+        },
         {
           type: 'doc',
           id: 'topology/references/components',
