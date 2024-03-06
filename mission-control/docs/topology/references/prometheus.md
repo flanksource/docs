@@ -1,3 +1,7 @@
+---
+title: Prometheus
+---
+
 # <Icon name="prometheus" /> Prometheus
 
 The Prometheus Check connects to the Prometheus host, performs the desired query, and displays the results.
@@ -18,8 +22,8 @@ spec:
         template: 'true'
 ```
 
-| Field         | Description                                        | Scheme                                | Required |
-| ------------- | -------------------------------------------------- | ------------------------------------- | -------- |
-| `display`     | Template to display the result in                  | [Template](../concepts/templating.md) |          |
-| **`host`**    | Address of the Prometheus server                   | string                                | Yes      |
-| **`query`**   | PromQL query                                       | string                                | Yes      |
+| Field       | Description                       | Scheme                                | Required |
+| ----------- | --------------------------------- | ------------------------------------- | -------- |
+| `display`   | Template to display the result in | [Template](../concepts/templating.md) |          |
+| **`host`**  | Address of the Prometheus server  | string                                | Yes      |
+| **`query`** | PromQL query                      | string                                | Yes      |

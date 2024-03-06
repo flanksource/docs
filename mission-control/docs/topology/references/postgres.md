@@ -1,3 +1,7 @@
+---
+title: Postgres
+---
+
 # <Icon name="postgres" /> Postgres
 
 This check will try to connect to a specified Postgres database, run a query against it, and verify the results.

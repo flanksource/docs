@@ -1,3 +1,7 @@
+---
+title: Config DB
+---
+
 # <Icon name="config-db"/> Config DB
 
 ConfigDB check connects to the specified database host, run a specified query for your configuration data, and return the result.

@@ -1,3 +1,7 @@
+---
+title: MySQL
+---
+
 # <Icon name="mysql" /> MySQL
 
 This check will try to connect to a specified MySQL database, run a query against it and verify the results.

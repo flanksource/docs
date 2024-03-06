@@ -1,3 +1,7 @@
+---
+title: Exec
+---
+
 # <Icon name="console" /> Exec
 
 Exec Check executes a command or script file on the target host. The type of scripts executed include:

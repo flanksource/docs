@@ -1,3 +1,7 @@
+---
+title: HTTP
+---
+
 # <Icon name="http" /> HTTP
 
 This check performs queries on HTTP endpoints and HTTP Namespaces to monitor their activity.

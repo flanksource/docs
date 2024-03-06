@@ -1,3 +1,7 @@
+---
+title: Mongo
+---
+
 # <Icon name="mongo" /> MongoDB
 
 The Mongo check tries to connect to a specified Mongo Database to ensure connectivity.

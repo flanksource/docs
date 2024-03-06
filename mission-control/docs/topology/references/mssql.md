@@ -1,3 +1,7 @@
+---
+title: MSSQL
+---
+
 # <Icon name="mssql" /> MSSQL
 
 This check will try to connect to a specified SQL Server database, run a query against it and verify the results.

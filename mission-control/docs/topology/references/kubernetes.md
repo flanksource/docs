@@ -1,3 +1,7 @@
+---
+title: Kubernetes
+---
+
 # <Icon name="k8s" /> Kubernetes
 
 The Kubernetes check performs requests on Kubernetes resources such as Pods to get the desired information.
