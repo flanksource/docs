@@ -1,15 +1,22 @@
 # For Each
 
-```yaml
+Lookup component definitions from an external source, use the
+forEach property to iterate over the results to further enrich each component.
 
+```yaml
 apiVersion: canaries.flanksource.com/v1
 kind: Topology
 metadata:
   name: acme-app
 spec:
+  icon: oracle_icon
+  id:
+    expr: $.external_id
+  name: OIPA
+  type: virtual
   components:
+    // highlight-start
     - forEach:
-        components: null
         configs:
           - name: ${.component.name}
             type: OIPA
@@ -17,6 +24,8 @@ spec:
               namespace: ${.properties.namespace}
             name: PAS.properties
             type: File
+      // highlight-end
+      type: virtual
       lookup:
         postgres:
           - auth:
@@ -24,10 +33,10 @@ spec:
                 value: postgres
               username:
                 value: postgres
-            connection: >-
-              postgres://$(username):$(password)@localhost:5432/incident_commander?sslmode=disable
+            connection: 'postgres://$(username):$(password)@localhost:5432/incident_commander?sslmode=disable'
+            query: SELECT * from config_items where config_type = 'OIPA' and name = 'dev-qa' ;
             display:
-              javascript: |+
+              javascript: |
                 var components = []
                 for (var i = 0; i < this.results.Rows.length; i++) {
                   var row = this.results.Rows[i]
@@ -53,7 +62,6 @@ spec:
                         type: "url",
                         text: "https://" + config.domain,
                         icon: "world"
-
                       },
                       {
                         type: "text",
@@ -72,28 +80,24 @@ spec:
                         icon: "folder",
                         label: "efs"
                       },
-            
-
                     ]
                   })
                 }
                 JSON.stringify(components);
-
-            query: SELECT * from config_items where config_type = 'OIPA' and name = 'dev-qa' ;
-      type: virtual
-  icon: oracle_icon
-  id:
-    expr: $.external_id
-  name: OIPA
-  type: virtual
-
 ```
 
-### ForEach
+| Field           | Description                                     | Scheme                                                       | Required |
+| --------------- | ----------------------------------------------- | ------------------------------------------------------------ | -------- |
+| `components`    | Create sub-components for each component        | [`[]Component`](../references/components.md)                 |          |
+| `properties`    | Create or lookup properties for each component  | [`[]Property`](./properties.md)                              |          |
+| `configs`       | Link configuration items for each component     | [`[]ConfigSelector`](./catalog.md#config-selector)           |          |
+| `checks`        | Create or link health checks for each component | [`[]CheckSelector`](./health-checks.md#check)                |          |
+| `selectors`     | Create or link health checks for each component | [`[]ResourceSelector`](../../reference/resource_selector.md) |          |
+| `relationships` | Create or link health checks for each component | [`[]RelationshipSpec`](#relationship-spec)                   |          |
 
-| Field           | Description               | Scheme                                    | Required |
-| --------------- | ------------------------- | ----------------------------------------- | -------- |
-| `components`    | Create sub-components for each component  | [`[]Component`](#component)               |          |
-| `properties`    | Create or lookup properties for each component    | [`[]Property`](#property)                 |          |
-| `configs`       | Link configuration items for each component     | [`[]Config`](#config)                     |          |
-| `checks`        | Create or link health checks for each component       | [`[]Check`](./health-checks.md#check)     |          |
+## Relationship Spec
+
+| Field  | Description                                                                              | Scheme   | Required |
+| ------ | ---------------------------------------------------------------------------------------- | -------- | -------- |
+| `ref`  | Set reference for components relationship                                                | `string` |          |
+| `type` | Set the type of relationship, e.g. dependsOn, subcomponentOf, providesApis, consumesApis | `string` |          |
