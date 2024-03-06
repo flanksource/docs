@@ -44,3 +44,7 @@ RelationshipLookup offers different ways to specify a lookup value
 | `expr`  | Use an expression to get the value | `string` |          |
 | `value` | Specify a static value             | `string` |          |
 | `label` | Get the value from a label         | `string` |          |
+
+### Template Variables
+
+Both the `filter` and `expr` in the relationship config & the `expr` in relationship lookup receive the [`ScrapeResult`](../references/scrape-result) as its template variable.

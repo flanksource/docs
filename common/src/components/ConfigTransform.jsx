@@ -1,32 +1,35 @@
 import React from 'react'
+import Admonition from '@theme/Admonition'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import Link from '@docusaurus/Link'
 
-export function ConfigTransform({ children, to, anchor }) {
-  // Define table rows as an array of TableRow objects
+export function ConfigTransform() {
+  const { siteConfig } = useDocusaurusContext()
   const tableRows = [
     {
       field: 'gotemplate',
-      description: 'Specify Go template for use in script',
+      description: 'Go template to transform the scraped config item',
       scheme: 'string',
       required: ''
     },
     {
       field: 'javascript',
-      description: 'Specify javascript syntax for script',
+      description: 'Javascript to transform the scraped config item',
       scheme: 'string',
       required: ''
     },
     {
       field: 'jsonpath',
       description: 'Specify JSONPath',
-      scheme: 'string',
+      scheme: 'jsonpath',
+      schemaLink: siteConfig.customFields.links['jsonpath'],
       required: ''
     },
     {
       field: 'expr',
       description: 'Specify Cel expression',
-      scheme: 'string',
+      scheme: 'cel-expression',
+      schemaLink: siteConfig.customFields.links['cel'],
       required: ''
     },
     {
@@ -62,33 +65,45 @@ export function ConfigTransform({ children, to, anchor }) {
   ]
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Field</th>
-          <th>Description</th>
-          <th>Scheme</th>
-          <th>Required</th>
-        </tr>
-      </thead>
-      <tbody>
-        {tableRows.map((row, index) => (
-          <tr key={index}>
-            <td>{row.field}</td>
-            <td>{row.description}</td>
-            <td>
-              {row.schemaLink ? (
-                <Link to={row.schemaLink}>
-                  <code>{row.scheme}</code>
-                </Link>
-              ) : (
-                <code>{row.scheme}</code>
-              )}
-            </td>
-            <td>{row.required}</td>
+    <>
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Description</th>
+            <th>Scheme</th>
+            <th>Required</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {tableRows.map((row, index) => (
+            <tr key={index}>
+              <td>
+                <code>{row.field}</code>
+              </td>
+              <td>{row.description}</td>
+              <td>
+                {row.schemaLink ? (
+                  <Link to={row.schemaLink}>
+                    <code>{row.scheme}</code>
+                  </Link>
+                ) : (
+                  <code>{row.scheme}</code>
+                )}
+              </td>
+              <td>{row.required}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <Admonition type="info">
+        <p>
+          Both the go template and javascript receive{' '}
+          <a href="/config-db/references/scrape-result">ScrapeResult</a> as the
+          template variable.
+        </p>
+      </Admonition>
+    </>
   )
 }
