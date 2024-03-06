@@ -27,7 +27,8 @@ const config = {
       authentication: '/reference/secret-management',
       secrets: '/reference/secret-management',
       connection: '/reference/authentication',
-      cel: '/reference/scripting/cel'
+      cel: '/reference/scripting/cel',
+      jsonpath: 'https://jsonpath.com/'
     }
   },
 

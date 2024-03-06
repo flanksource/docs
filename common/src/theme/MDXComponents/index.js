@@ -1,25 +1,32 @@
-import React from 'react';
-import MDXHead from '@theme/MDXComponents/Head';
-import MDXCode from '@theme/MDXComponents/Code';
-import MDXA from '@theme/MDXComponents/A';
-import MDXPre from '@theme/MDXComponents/Pre';
-import MDXDetails from '@theme/MDXComponents/Details';
-import MDXHeading from '@theme/MDXComponents/Heading';
-import MDXUl from '@theme/MDXComponents/Ul';
-import MDXImg from '@theme/MDXComponents/Img';
-import Admonition from '@theme/Admonition';
-import Mermaid from '@theme/Mermaid';
-import Icon from '@site/src/components/Icon';
-import { Asciinema } from '@site/src/components/Asciinema';
-import { Commercial, Standard, Enterprise, SkipOSS } from '@site/src/components/Badges';
-import Highlight from '@site/src/components/Highlight';
-import { FullImage } from '@site/src/components/Badges';
-import { CommonLink } from '@site/src/components/Link';
-import { CustomField } from '../../components/Badges';
+import React from 'react'
+import MDXHead from '@theme/MDXComponents/Head'
+import MDXCode from '@theme/MDXComponents/Code'
+import MDXA from '@theme/MDXComponents/A'
+import MDXPre from '@theme/MDXComponents/Pre'
+import MDXDetails from '@theme/MDXComponents/Details'
+import MDXHeading from '@theme/MDXComponents/Heading'
+import MDXUl from '@theme/MDXComponents/Ul'
+import MDXImg from '@theme/MDXComponents/Img'
+import Admonition from '@theme/Admonition'
+import Mermaid from '@theme/Mermaid'
+import Icon from '@site/src/components/Icon'
+import { Asciinema } from '@site/src/components/Asciinema'
+import {
+  Commercial,
+  Standard,
+  Enterprise,
+  SkipOSS
+} from '@site/src/components/Badges'
+import Highlight from '@site/src/components/Highlight'
+import { FullImage } from '@site/src/components/Badges'
+import { CommonLink } from '@site/src/components/Link'
+import { ConfigTransform } from '@site/src/components/ConfigTransform'
+import { CustomField } from '../../components/Badges'
 
 const MDXComponents = {
   Icon: Icon,
   CommonLink: CommonLink,
+  ConfigTransform: ConfigTransform,
   CustomField: CustomField,
   Asciinema: Asciinema,
   Commercial: Commercial,
@@ -42,6 +49,6 @@ const MDXComponents = {
   h5: (props) => <MDXHeading as="h5" {...props} />,
   h6: (props) => <MDXHeading as="h6" {...props} />,
   admonition: Admonition,
-  mermaid: Mermaid,
-};
-export default MDXComponents;
+  mermaid: Mermaid
+}
+export default MDXComponents

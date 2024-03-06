@@ -26,28 +26,30 @@ spec:
 
 ## Scraper
 
-| Field         | Description                                                                        | Scheme                                       | Required |
-| ------------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `logLevel`    | Specify the level of logging.                                                      | `string`                                     |          |
-| `schedule`    | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
-| `full`        | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
-| `retention`   | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
-| `azureDevops` | Specifies the list of Azure DevOps configurations to scrape.                       | [`[]AzureDevops`](#azuredevops-1)            |          |
+| Field         | Description                                                                  | Scheme                                       | Required |
+| ------------- | ---------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| `logLevel`    | Specify the level of logging.                                                | `string`                                     |          |
+| `schedule`    | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                     |          |
+| `retention`   | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/config-db/concepts/retention) |          |
+| `azureDevops` | Specifies the list of Azure DevOps configurations to scrape.                 | [`[]AzureDevops`](#azuredevops-1)            |          |
 
 ### AzureDevops
 
-| Field                 | Description                                                                                                                                                             | Scheme                                           | Required |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | -------- |
-| `id`                  | A static value or JSONPath expression to use as the ID for the resource.                                                                                                | `string`                                         | `true`   |
-| `name`                | A static value or JSONPath expression to use as the Name for the resource. Default value is the `id`.                                                                   | `string`                                         |          |
-| `items`               | A JSONPath expression to use to extract individual items from the resource                                                                                              | `string`                                         |          |
-| `type`                | A static value or JSONPath expression to use as the type for the resource.                                                                                              | `string`                                         | `true`   |
-| `transform`           | Specify field to transform result                                                                                                                                       | [`Transform`](../concepts/transform.md)          |          |
-| `format`              | Format of config item, defaults to JSON, available options are JSON                                                                                                     | `string`                                         |          |
-| `timestampFormat`     | TimestampFormat is a Go time format string used to parse timestamps in createFields and DeletedFields. If not specified, the default is `RFC3339`.                      | `string`                                         |          |
-| `createFields`        | CreateFields is a list of JSONPath expression used to identify the created time of the config. If multiple fields are specified, the first non-empty value will be used | `[]string`                                       |          |
-| `deleteFields`        | DeleteFields is a JSONPath expression used to identify the deleted time of the config. If multiple fields are specified, the first non-empty value will be used         | `[]string`                                       |          |
-| `organization`        | Specifies the name of the Azure DevOps organization to scrape                                                                                                           | `string`                                         | `true`   |
-| `personalAccessToken` | Specifies the personal access token to authenticate with Azure DevOps                                                                                                   | <CommonLink to="secrets">[]_EnvVar_</CommonLink> | `true`   |
-| `projects`            | Specifies the Azure DevOps projects to scrape                                                                                                                           | `[]string`                                       |          |
-| `pipelines`           | Specifies the Azure DevOps pipelines to scrape                                                                                                                          | `[]string`                                       |          |
+| Field                 | Description                                                           | Scheme                                           | Required |
+| --------------------- | --------------------------------------------------------------------- | ------------------------------------------------ | -------- |
+| `connection`          | Connection to use for azure devops credential                         | `string`                                         |          |
+| `organization`        | Specifies the name of the Azure DevOps organization to scrape         | `string`                                         |          |
+| `personalAccessToken` | Specifies the personal access token to authenticate with Azure DevOps | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
+| `projects`            | Specifies the Azure DevOps projects to scrape                         | `[]string`                                       | `true`   |
+| `pipelines`           | Specifies the Azure DevOps pipelines to scrape                        | `[]string`                                       | `true`   |
+| `properties`          | Custom templatable properties for the scraped config items.           | [`[]ConfigProperty`](../../reference/property)   |          |
+| `transform`           | Field to transform result                                             | [`Transform`](#transform)                        |          |
+| `tags`                | Set custom tags on the scraped config items                           | `map[string]string`                              |          |
+
+:::note
+Either the connection name or the credentials (organization & personalAccessToken) are required
+:::
+
+#### Transform
+
+<ConfigTransform></ConfigTransform>

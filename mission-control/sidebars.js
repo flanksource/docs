@@ -350,8 +350,28 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'config-db/concepts/extraction',
-          label: 'Extraction'
+          id: 'config-db/concepts/changes',
+          label: 'Changes'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/exclusion',
+          label: 'Field Exclusion'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/insights',
+          label: 'Insights'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/masking',
+          label: 'Masking'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/templating',
+          label: 'Templating'
         },
         {
           type: 'doc',
@@ -362,6 +382,11 @@ const sidebars = {
           type: 'doc',
           id: 'config-db/concepts/retention',
           label: 'Retention'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/relationship',
+          label: 'Relationship'
         }
       ]
     },
@@ -376,13 +401,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'config-db/scrapers/azure-devops',
-          label: 'Azure DevOps'
+          id: 'config-db/scrapers/azure',
+          label: 'Azure'
         },
         {
           type: 'doc',
-          id: 'config-db/scrapers/custom',
-          label: 'Custom'
+          id: 'config-db/scrapers/azure-devops',
+          label: 'Azure DevOps'
         },
         {
           type: 'doc',
@@ -391,23 +416,45 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'config-db/scrapers/file',
-          label: 'File'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/scrapers/kubernetes-file',
-          label: 'Kubernetes File'
-        },
-        {
-          type: 'doc',
           id: 'config-db/scrapers/kubernetes',
           label: 'Kubernetes'
-        },
+        }
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Custom',
+      items: [
         {
           type: 'doc',
-          id: 'config-db/scrapers/sql',
-          label: 'SQL'
+          id: 'config-db/concepts/custom-scrapers',
+          label: 'Overview'
+        },
+        {
+          type: 'category',
+          label: 'Scrapers',
+          items: [
+            {
+              type: 'doc',
+              id: 'config-db/scrapers/custom',
+              label: 'Custom'
+            },
+            {
+              type: 'doc',
+              id: 'config-db/scrapers/file',
+              label: 'File'
+            },
+            {
+              type: 'doc',
+              id: 'config-db/scrapers/kubernetes-file',
+              label: 'Kubernetes File'
+            },
+            {
+              type: 'doc',
+              id: 'config-db/scrapers/sql',
+              label: 'SQL'
+            }
+          ]
         }
       ]
     },
@@ -422,13 +469,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'config-db/tutorials/configuration',
-          label: 'Configuration'
+          id: 'config-db/tutorials/file-scraper',
+          label: 'Scraping Custom File'
         },
         {
           type: 'doc',
-          id: 'config-db/tutorials/example-git-file',
-          label: 'Example Git File'
+          id: 'config-db/tutorials/date-mapping',
+          label: 'Extracting config creation/deletion dates'
         },
         {
           type: 'doc',
@@ -465,6 +512,22 @@ const sidebars = {
           type: 'doc',
           id: 'config-db/examples/masking-fields',
           label: 'Masking sensitive fields'
+        }
+      ]
+    },
+    {
+      type: 'category',
+      label: 'References',
+      items: [
+        {
+          type: 'doc',
+          id: 'config-db/references/scrape-result',
+          label: 'Scrape Result'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/references/change-result',
+          label: 'Change Result'
         }
       ]
     }
