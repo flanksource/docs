@@ -1,5 +1,7 @@
 # Prometheus
 
+The following configuration creates a topology for Prometheus. The topology will have all the kubernetes pods in the "monitoring" namespace as its child components.
+
 ```yaml title=prometheus.yaml
 apiVersion: canaries.flanksource.com/v1
 kind: Topology
