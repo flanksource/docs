@@ -746,8 +746,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'topology/concepts/for-each',
-          label: 'For Each'
+          id: 'topology/concepts/lookup',
+          label: 'Lookup'
         },
         {
           type: 'doc',
