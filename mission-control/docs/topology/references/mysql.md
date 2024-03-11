@@ -4,32 +4,47 @@ title: MySQL
 
 # <Icon name="mysql" /> MySQL
 
-This check will try to connect to a specified MySQL database, run a query against it and verify the results.
+The mysql component lookup allows you to form components from the records in a Postgres database.
+
+In this example below, we form components from all the tables in the `incident_commander` database.
 
 ```yaml title="mysql-check.yml"
 apiVersion: canaries.flanksource.com/v1
-kind: Canary
+kind: Topology
 metadata:
-  name: mysql-check
+  name: mysql-tables
+  namespace: default
 spec:
-  interval: 30
-  spec:
-    mysql:
-      - connection: '$(username):$(password)@tcp(mysql.default.svc:3306)/mysqldb'
-        name: mysql ping check
-        auth:
-          username:
-            valueFrom:
-              secretKeyRef:
-                name: mysql-credentials
-                key: USERNAME
-          password:
-            valueFrom:
-              secretKeyRef:
-                name: mysql-credentials
-                key: PASSWORD
-        query: <insert-query>
-        results: 1
+  schedule: '@every 30s'
+  components:
+    - name: MySQL
+      type: Table
+      icon: mysql
+      lookup:
+        mysql:
+          - connection: mysql://root:password@localhost:3306/incident_commander
+            query: |
+              SELECT 
+                TABLE_SCHEMA AS database_name,
+                TABLE_NAME AS table_name,
+                TABLE_ROWS AS num_rows
+              FROM 
+                information_schema.TABLES
+              WHERE
+                TABLE_TYPE = 'BASE TABLE'
+              ORDER BY
+                TABLE_ROWS DESC;
+            display:
+              expr: |
+                results.rows.map(row, {
+                  'name': row.database_name + '.' + row.table_name,
+                  'type': "Table",
+                  'properties': [{
+                    "name": "Records",
+                    "headline": true,
+                    "value": double(row.num_rows),
+                  }]
+                }).toJSON()
 ```
 
 | Field            | Description                                                                      | Scheme                                            | Required |

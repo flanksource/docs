@@ -4,31 +4,50 @@ title: MSSQL
 
 # <Icon name="mssql" /> MSSQL
 
-This check will try to connect to a specified SQL Server database, run a query against it and verify the results.
+The MSSQL component lookup allows you to form components from the records in a Postgres database.
+
+In this example below, we form components from all the tables in the `incident_commander` database.
 
 ```yaml title="mssql-check.yml"
 apiVersion: canaries.flanksource.com/v1
-kind: Canary
+kind: Topology
 metadata:
-  name: mssql-check
+  name: mssql-tables
+  namespace: default
 spec:
-  interval: 30
-  spec:
-    mssql:
-      - connection: 'server=mssql.default.svc;user id=$(username);password=$(password);port=1433;database=master'
-        auth:
-          username:
-            valueFrom:
-              secretKeyRef:
-                name: mssql-credentials
-                key: USERNAME
-          password:
-            valueFrom:
-              secretKeyRef:
-                name: mssql-credentials
-                key: PASSWORD
-        query: <insert-query>
-        results: 1
+  schedule: '@every 30s'
+  components:
+    - name: MSSQL
+      type: Table
+      icon: mssql
+      lookup:
+        mssql:
+          - connection: mssql://sa:yourStrong(!)Password@localhost:1433/incident_commander
+            query: |
+              SELECT 
+                s.name AS schema_name,
+                t.name AS table_name,
+                p.rows AS num_rows
+              FROM 
+                sys.tables t
+                INNER JOIN sys.schemas s ON t.schema_id = s.schema_id
+                INNER JOIN sys.partitions p ON p.object_id = t.object_id
+                INNER JOIN sys.allocation_units a ON p.partition_id = a.container_id
+              WHERE
+                t.is_ms_shipped = 0
+              ORDER BY
+                p.rows DESC;
+            display:
+              expr: |
+                results.rows.map(row, {
+                  'name': row.schema_name + '.' + row.table_name,
+                  'type': "Table",
+                  'properties': [{
+                    "name": "Records",
+                    "headline": true,
+                    "value": double(row.num_rows),
+                  }]
+                }).toJSON()
 ```
 
 | Field            | Description                                                                      | Scheme                                            | Required |
