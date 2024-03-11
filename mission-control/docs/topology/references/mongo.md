@@ -4,32 +4,44 @@ title: Mongo
 
 # <Icon name="mongo" /> MongoDB
 
-The Mongo check tries to connect to a specified Mongo Database to ensure connectivity.
+The Mongo component lookup allows you to form components from the records in a Postgres database.
+
+In this example below, we form components from all the tables in the `incident_commander` database.
 
 ```yaml title="mongo-check.yml"
 apiVersion: canaries.flanksource.com/v1
-kind: Canary
+kind: Topology
 metadata:
-  name: mongo-check
+  name: mongo-collections
+  namespace: default
 spec:
-  interval: 30
-  spec:
-    mongodb:
-      - connection: mongodb://$(username):$(password)@mongo.default.svc:27017/?authSource=admin
-        description: mongo ping
-        auth:
-          username:
-            valueFrom:
-              secretKeyRef:
-                name: mongo-credentials
-                key: USERNAME
-          password:
-            valueFrom:
-              secretKeyRef:
-                name: mongo-credentials
-                key: PASSWORD
-        dns:
-          - query: mongo.default.svc
+  schedule: '@every 30s'
+  components:
+    - name: MongoDB
+      type: Table
+      icon: mongodb
+      lookup:
+        mongodb:
+          - connection: mongodb://username:password@localhost:27017/incident_commander
+            query: |
+              db.getCollectionNames().map(function(collectionName) {
+                const stats = db.getCollection(collectionName).stats();
+                return {
+                  name: collectionName,
+                  numRows: stats.count
+                };
+              });
+            display:
+              expr: |
+                results.map(result, {
+                  'name': result.name,
+                  'type': "Collection",
+                  'properties': [{
+                    "name": "Documents",
+                    "headline": true,
+                    "value": double(result.numRows),
+                  }]
+                }).toJSON()
 ```
 
 | Field            | Description                                                                   | Scheme                                            | Required |

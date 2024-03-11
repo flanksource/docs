@@ -835,11 +835,12 @@ const sidebars = {
               id: 'topology/references/kubernetes',
               label: 'Kubernetes'
             },
-            {
-              type: 'doc',
-              id: 'topology/references/mongo',
-              label: 'Mongo'
-            },
+            // Mongo lookup cannot query
+            // {
+            //   type: 'doc',
+            //   id: 'topology/references/mongo',
+            //   label: 'Mongo'
+            // },
             {
               type: 'doc',
               id: 'topology/references/mssql',
@@ -853,13 +854,13 @@ const sidebars = {
             {
               type: 'doc',
               id: 'topology/references/postgres',
-              label: 'Postgres',
+              label: 'Postgres'
             },
             {
               type: 'doc',
               id: 'topology/references/prometheus',
               label: 'Prometheus'
-            },
+            }
             // Redis component lookup isn't implemeneted. You can't supply a query.
             // {
             //   type: 'doc',
