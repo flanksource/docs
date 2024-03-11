@@ -4,36 +4,44 @@ title: Postgres
 
 # <Icon name="postgres" /> Postgres
 
-This check will try to connect to a specified Postgres database, run a query against it, and verify the results.
+The postgres component lookup allows you to form components from the records in a Postgres database.
 
-```yaml title="postgres-check.yml"
+In this example below, we form components from all the tables in the `incident_commander` database.
+
+```yaml title="postgres-tables.yml"
 apiVersion: canaries.flanksource.com/v1
-kind: Canary
+kind: Topology
 metadata:
-  name: postgres-check
+  name: postgres-tables
+  namespace: default
 spec:
-  interval: 30
-  spec:
-    postgres:
-      - connection: 'postgres://$(username):$(password)@postgres.default.svc:5432/postgres?sslmode=disable'
-        auth:
-          username:
-            valueFrom:
-              secretKeyRef:
-                name: postgres-credentials
-                key: USERNAME
-          password:
-            valueFrom:
-              secretKeyRef:
-                name: postgres-credentials
-                key: PASSWORD
-        query: SELECT current_schemas(true)
-        display:
-          template: |
-            {{- range $r := .results.rows }}
-              {{- $r.current_schemas}}
-            {{- end}}
-        results: 1
+  schedule: '@every 30s'
+  components:
+    - name: Postgres
+      type: Table
+      icon: postgres
+      lookup:
+        postgres:
+          - connection: postgres://postgres:gunners@localhost:5432/incident_commander?sslmode=disable
+            query: |
+              SELECT
+                schemaname || '.' || relname AS table_name,
+                n_live_tup AS num_rows
+              FROM
+                pg_catalog.pg_stat_user_tables
+              ORDER BY
+                n_live_tup DESC;
+            display:
+              expr: |
+                results.rows.map(row, {
+                  'name': row.table_name,
+                  'type': "Table",
+                  'properties': [{
+                    "name": "Records",
+                    "headline": true,
+                    "value": double(row.num_rows),
+                  }]
+                }).toJSON()
 ```
 
 | Field            | Description                                                                       | Scheme                                            | Required |

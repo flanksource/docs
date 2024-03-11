@@ -850,22 +850,22 @@ const sidebars = {
               id: 'topology/references/mysql',
               label: 'MySQL'
             },
-            // There are errors while compiling this file
-            // {
-            //   type: 'doc',
-            //   id: 'topology/references/postgres',
-            //   label: 'Postgres',
-            // },
+            {
+              type: 'doc',
+              id: 'topology/references/postgres',
+              label: 'Postgres',
+            },
             {
               type: 'doc',
               id: 'topology/references/prometheus',
               label: 'Prometheus'
             },
-            {
-              type: 'doc',
-              id: 'topology/references/redis',
-              label: 'Redis'
-            }
+            // Redis component lookup isn't implemeneted. You can't supply a query.
+            // {
+            //   type: 'doc',
+            //   id: 'topology/references/redis',
+            //   label: 'Redis'
+            // }
           ]
         }
       ]

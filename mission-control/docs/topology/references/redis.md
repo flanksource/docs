@@ -4,19 +4,19 @@ title: Redis
 
 # <Icon name="redis" /> Redis
 
-The Redis check connects to a specified Redis database instance to check its availability.
+The Redis component lookup allows you to form components from the records in a Redis database.
 
-```yaml title="redis-check.yml"
+```yaml title="redis-components.yml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
-  name: redis-check
+  name: redis-components
 spec:
   interval: 30
   spec:
     redis:
       - addr: 'redis.default.svc:6379'
-        name: redis-check
+        name: redis-components
         auth:
           username:
             valueFrom:
@@ -28,8 +28,7 @@ spec:
               secretKeyRef:
                 name: redis-credentials
                 key: PASSWORD
-        db: 0
-        description: 'The redis check'
+        query: INFO keyspace
 ```
 
 | Field      | Description                                                                   | Scheme                                            | Required |
