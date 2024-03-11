@@ -20,6 +20,7 @@ spec:
     - name: Postgres
       type: Table
       icon: postgres
+      // highlight-start
       lookup:
         postgres:
           - connection: postgres://postgres:gunners@localhost:5432/incident_commander?sslmode=disable
@@ -42,6 +43,7 @@ spec:
                     "value": double(row.num_rows),
                   }]
                 }).toJSON()
+      // highlight-end
 ```
 
 | Field            | Description                                                                       | Scheme                                            | Required |

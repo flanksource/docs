@@ -18,6 +18,7 @@ spec:
     - name: Prometheus
       type: Table
       icon: prometheus
+      // highlight-start
       lookup:
         prometheus:
           - connection: http://prometheus.monitoring:9090
@@ -28,6 +29,7 @@ spec:
                   'name': target.job,
                   'type': "Job",
                 }).toJSON()
+      // highlight-end
 ```
 
 | Field       | Description                       | Scheme                                | Required |

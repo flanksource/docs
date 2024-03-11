@@ -20,6 +20,7 @@ spec:
     - name: MongoDB
       type: Table
       icon: mongodb
+      // highlight-start
       lookup:
         mongodb:
           - connection: mongodb://username:password@localhost:27017/incident_commander
@@ -42,6 +43,7 @@ spec:
                     "value": double(result.numRows),
                   }]
                 }).toJSON()
+      // highlight-end
 ```
 
 | Field            | Description                                                                   | Scheme                                            | Required |

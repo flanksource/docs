@@ -20,6 +20,7 @@ spec:
     - name: MSSQL
       type: Table
       icon: mssql
+      // highlight-start
       lookup:
         mssql:
           - connection: mssql://sa:yourStrong(!)Password@localhost:1433/incident_commander
@@ -48,6 +49,7 @@ spec:
                     "value": double(row.num_rows),
                   }]
                 }).toJSON()
+      // highlight-end
 ```
 
 | Field            | Description                                                                      | Scheme                                            | Required |

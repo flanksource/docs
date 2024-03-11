@@ -20,6 +20,7 @@ spec:
     - name: MySQL
       type: Table
       icon: mysql
+      // highlight-start
       lookup:
         mysql:
           - connection: mysql://root:password@localhost:3306/incident_commander
@@ -45,6 +46,7 @@ spec:
                     "value": double(row.num_rows),
                   }]
                 }).toJSON()
+      // highlight-end
 ```
 
 | Field            | Description                                                                      | Scheme                                            | Required |
