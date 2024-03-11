@@ -4,30 +4,33 @@ title: Kubernetes
 
 # <Icon name="k8s" /> Kubernetes
 
-The Kubernetes check performs requests on Kubernetes resources such as Pods to get the desired information.
+The Kubernetes component lookup fetches kubernetes resources to be used as components.
 
 ```yaml title="kube-check.yml"
+---
 apiVersion: canaries.flanksource.com/v1
-kind: Canary
+kind: Topology
 metadata:
-  name: kube-check
+  name: kubernetes-configs
 spec:
-  interval: 30
-  spec:
-    kubernetes:
-      - namespace:
-          name: default
-        name: k8s-ready pods
-        kind: Pod
-        resource:
-          labelSelector: app=k8s-ready
-      - namespace:
-          name: default
-        kind: Pod
-        name: k8s-ready pods
-        ready: false
-        resource:
-          labelSelector: app=k8s-not-ready
+  type: Config
+  icon: kubernetes
+  schedule: '@every 30s'
+  components:
+    - name: configs
+      icon: server
+      type: ConfigMap
+      // highlight-start
+      lookup:
+        kubernetes:
+          - kind: ConfigMap
+        display:
+          expr: |
+            dyn(results).map(c, {
+              'name': c.name,
+              'type': 'ConfigMap',
+            }).toJSON()
+      // highlight-end
 ```
 
 | Field       | Description                                                                         | Scheme                                  | Required |
