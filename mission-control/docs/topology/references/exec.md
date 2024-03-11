@@ -9,20 +9,35 @@ Exec Check executes a command or script file on the target host. The type of scr
 - Bash scripts
 - Powershell scripts
 
-```yaml title="exec-check.yml"
+```yaml title="exec-lookup.yml"
+---
 apiVersion: canaries.flanksource.com/v1
-kind: Canary
+kind: Topology
 metadata:
-  name: exec-check
+  name: kubernetes-pods
 spec:
-  interval: 30
-  exec:
-    - description: 'exec dummy check'
-      script: |
-        echo "hello"
-      name: exec-pass-check
-      test:
-        expr: 'results.Stdout == "hello"'
+  type: Pods
+  icon: kubernetes
+  schedule: '@every 30s'
+  components:
+    - name: pods
+      icon: server
+      type: KubernetesPod
+      // highlight-start
+      lookup:
+        exec:
+          - script: |
+              echo '[
+                {
+                  "name": "pod-1",
+                  "type": "Kubernetes::Pod"
+                },
+                {
+                  "name": "pod-2",
+                  "type": "Kubernetes::Pod"
+                }
+              ]'
+      // highlight-end
 ```
 
 | Field        | Description                                                                                                                                                    | Scheme                                  | Required |
