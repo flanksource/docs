@@ -4,34 +4,28 @@ title: Config DB
 
 # <Icon name="config-db"/> Config DB
 
-ConfigDB check connects to the specified database host, run a specified query for your configuration data, and return the result.
+ConfigDB component lookup enables you to query configs from the database to use as components.
 
 ```yaml title="kubernetes-cluster.yml"
 apiVersion: canaries.flanksource.com/v1
 kind: Topology
 metadata:
-  name: cluster
-labels:
-  canary: 'kubernetes-cluster'
+  name: kubernetes-cluster
 spec:
   type: KubernetesCluster
   icon: kubernetes
   schedule: '@every 10m'
   id:
     javascript: properties.id
-  configs:
-    - name: flanksource-canary-cluster
-      type: EKS
   components:
     - name: nodes
       icon: server
-      owner: infra
-      id:
-        javascript: properties.zone + "/" + self.name
       type: KubernetesNode
+      // highlight-start
       lookup:
         configDB:
-          query: <insert-query>
+          - query: SELECT name, type FROM config_items WHERE type = 'Kubernetes::Node'
+      // highlight-end
 ```
 
 | Field            | Description                                                                      | Scheme                                            | Required |
