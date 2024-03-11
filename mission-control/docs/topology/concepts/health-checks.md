@@ -9,10 +9,10 @@ Health checks can be associated in 2 ways:
 
 ## Check
 
-| Field      | Description                      | Scheme                                                        | Required |
-| ---------- | -------------------------------- | ------------------------------------------------------------- | -------- |
-| `inline`   | Define a new health check inline | [`CanarySpec`](../../canary-checker/reference/canary-spec.md) |          |
-| `selector` | Select an existing health check  | [`[]ResourceSelector`](../../reference/resource_selector)     |          |
+| Field      | Description                      | Scheme                                                         | Required |
+| ---------- | -------------------------------- | -------------------------------------------------------------- | -------- |
+| `inline`   | Define a new health check inline | [`CanarySpec`](../../canary-checker/reference/canary-spec.mdx) |          |
+| `selector` | Select an existing health check  | [`[]ResourceSelector`](../../reference/resource_selector)      |          |
 
 ### Selector
 

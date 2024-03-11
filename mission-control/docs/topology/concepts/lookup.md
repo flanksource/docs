@@ -1,35 +1,34 @@
 # Component lookup
 
-Lookup enables you to form components from an external source eg: an HTTP endpoint or a database.
+Lookup enables you to form components from an external source eg: an HTTP endpoint, kubernetes clusters or a database.
 The response from the external sources are then "shaped" to a component using the `display` field.
 The `display` field contains several scripting mechanism to transform any arbitrary data to a [component](../references/components.md).
 
-```yaml title="users-topology.yaml"
+```yaml title="kubernetes-ingress-classes.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Topology
 metadata:
-  name: users
+  name: kubernetes-ingress-classes
   namespace: default
 spec:
   schedule: '@every 30s'
   components:
-    - name: Users
-      type: Employees
-      icon: person
+    - name: Ingress
+      type: Ingress
+      icon: server
       // highlight-start
       lookup:
-        http:
-          - url: https://jsonplaceholder.typicode.com/users
-            display:
-              expr: |
-                dyn(json).map(c, {
-                  'name': c.name,
-                  'type': 'person',
-                }).toJSON()
+        configDB:
+          - query: SELECT name FROM config_items WHERE type = 'Kubernetes::IngressClass'
+            expr: |
+              dyn(results).map(e, {
+                'name': e.name,
+                'type': "Ingress",
+              }).toJSON()
       // highlight-end
 ```
 
-This topology will create a root **"users"** component with all the users returned by the HTTP endpoint as its child components.
+This topology will create a root **"Ingress"** component with all the ingresses in a kubernetes cluster as its child components.
 
 | Field        | Description                                  | Type                                          | Required |
 | ------------ | -------------------------------------------- | --------------------------------------------- | -------- |
@@ -46,54 +45,39 @@ This topology will create a root **"users"** component with all the users return
 
 ## For Each
 
-You might find that a lookup by itself can be limited for some use cases. That's where the `forEach` operation comes in.
-The `forEach` operation is applied to each component formed by the lookup.
+The forEach operation allows you to perform operations that you would apply to all the components crafted during the lookup phase.
 
-In the example above, we can apply a unique property to each of those user components using `forEach`.
+In the example above, we can add a kubernetes check on each of the ingresses as follows
 
-```yaml title="users-topology.yaml"
+```yaml title="kubernetes-ingress-classes.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Topology
 metadata:
-  name: users
+  name: kubernetes-ingress-classes
   namespace: default
 spec:
   schedule: '@every 30s'
   components:
-    - name: Users
-      type: Employees
-      icon: person
+    - name: Ingress
+      type: Ingress
+      icon: server
       lookup:
-        http:
-          - url: https://jsonplaceholder.typicode.com/users
-            display:
-              expr: |
-                dyn(json).map(c, {
-                  'name': c.name,
-                  'type': 'person',
-                }).toJSON()
+        configDB:
+          - query: SELECT name FROM config_items WHERE type = 'Kubernetes::IngressClass'
+            expr: |
+              dyn(results).map(e, {
+                'name': e.name,
+                'type': "Ingress",
+              }).toJSON()
       // highlight-start
       forEach:
-        properties:
-          - name: Posts
-            lookup:
-              http:
-                - url: https://jsonplaceholder.typicode.com/posts
-                  display:
-                    javascript: |
-                      // NOTE: Need to get post count for each component.
-                      // However, you don't have access to the component name 
-                      // at all.
-                      let postCount = {}
-                      for (i = 0; i < json.length; i++) {
-                        postCount[json[i].name] = postCount[json[i].name] + 1 || 1
-                      }
-
-                      let output = []
-                      for (const [key, value] of Object.entries(postCount)) {
-                        output.push({ name: key, text: value })
-                      }
-                      JSON.stringify(output)
+        checks:
+          - inline:
+              kubernetes:
+                - kind: Pod
+                  ready: true
+                  resource:
+                    labelSelector: 'app.kubernetes.io/name=ingress-{{.component.name}}&app.kubernetes.io/component=controller'
       // highlight-end
 ```
 
@@ -105,6 +89,15 @@ spec:
 | `checks`        | Create or link health checks for each component | [`[]CheckSelector`](./health-checks.md#check)                |          |
 | `selectors`     | Create or link health checks for each component | [`[]ResourceSelector`](../../reference/resource_selector.md) |          |
 | `relationships` | Create or link health checks for each component | [`[]RelationshipSpec`](#relationship-spec)                   |          |
+
+## Templating
+
+All the fields in forEach are templatable. They receive the following two variables:
+
+| Field        | Description                | Scheme                                       |
+| ------------ | -------------------------- | -------------------------------------------- |
+| `component`  | Component from the lookup  | [`[]Component`](../references/components.md) |
+| `properties` | The component's properties | `map[string]any`                             |
 
 ### Relationship Spec
 
