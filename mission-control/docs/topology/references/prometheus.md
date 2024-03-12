@@ -37,3 +37,11 @@ spec:
 | `display`   | Template to display the result in | [Template](../concepts/templating.md) |          |
 | **`host`**  | Address of the Prometheus server  | string                                | Yes      |
 | **`query`** | PromQL query                      | string                                | Yes      |
+
+## Results
+
+The `results` variable in the template is a list of prometheus metrics.
+
+| Field     | Description                | Scheme             |
+| --------- | -------------------------- | ------------------ |
+| `results` | List of prometheus metrics | `[]map[string]any` |

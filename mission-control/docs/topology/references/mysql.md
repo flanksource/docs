@@ -56,3 +56,12 @@ spec:
 | `display`        | Template to display query results in text (overrides default bar format for UI)  | [_Template_](../concepts/templating.md)           |          |
 | **`query`**      | query that needs to be executed on the server                                    | _string_                                          | Yes      |
 | **`results`**    | Number rows to check for                                                         | _int_                                             | Yes      |
+
+## Results
+
+The `results` variable in the template will contain the following fields
+
+| Field   | Description             | Scheme             |
+| ------- | ----------------------- | ------------------ |
+| `rows`  | stderr from the script  | `[]map[string]any` |
+| `count` | exit code of the script | `int`              |

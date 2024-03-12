@@ -36,3 +36,12 @@ spec:
 | `labels`         | Labels for the check                                                             | [_Labels_](#labels)                               |          |
 | **`query`**      | Query that needs to be executed on the server                                    | _string_                                          | Yes      |
 | `transform`      | Template to transform results to                                                 | [_Template_](../concepts/templating.md)           |          |
+
+## Results
+
+The `results` variable in the template will contain the following fields
+
+| Field   | Description             | Scheme             |
+| ------- | ----------------------- | ------------------ |
+| `rows`  | stderr from the script  | `[]map[string]any` |
+| `count` | exit code of the script | `int`              |
