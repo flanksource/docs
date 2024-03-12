@@ -1,38 +1,46 @@
+---
+title: HTTP
+---
+
 # <Icon name="http" /> HTTP
 
-This check performs queries on HTTP endpoints and HTTP Namespaces to monitor their activity.
+HTTP lookup queries an HTTP endpoint.
 
-## Highlight
-
-| **Connection** | | | |
-| --------------- | ---------------------------------------------- | --------------------------------- | --- |
-| `connection`    | Path of existing connection e.g. `connection://sftp/instance`/ Mutually exclusive with `username`, `password` | <CommonLink to="connection" >*Connection*</CommonLink> |   |
-| `username`      | Mutually exclusive with `connection`             | [_EnvVar_](../../concepts/authentication/#envvar) |   |
-| `password`      | Mutually exclusive with `connection`             | [_EnvVar_](../../concepts/authentication/#envvar) |   |
-| **`url`**       | HTTP URL, if a URL is specified on both the connection and check, the URL on the check takes precedence. | _string_ | Yes |
-| `ntlm`          | When true, will do authentication using NTLM v1 protocol | _bool_ |   |
-| `ntlmv2`        | When true, will do authentication using NTLM v2 protocol | _bool_ |   |
-
-```yaml
+```yaml title="users-topology.yaml"
 apiVersion: canaries.flanksource.com/v1
-kind: Canary
+kind: Topology
 metadata:
-  name: http-check
+  name: users
+  namespace: default
 spec:
-  interval: 30
-  http:
-    - url: https://httpbin.demo.aws.flanksource.com/status/200
-      thresholdMillis: 3000
-      responseCodes: [201, 200, 301]
-      responseContent: ""
-      maxSSLExpiry: 7
-    - endpoint: https://httpbin.demo.aws.flanksource.com/status/404
-      thresholdMillis: 3000
-      responseCodes: [404]
-      responseContent: ""
-      maxSSLExpiry: 7
-    - endpoint: https://httpbin.demo.aws.flanksource.com/status/500
-      thresholdMillis: 3000
-      responseCodes: [500]
-      responseContent: ""
-      maxSSLExpiry: 7
+  schedule: '@every 30s'
+  components:
+    - name: Users
+      type: Employees
+      icon: person
+      // highlight-start
+      lookup:
+        http:
+          - url: https://jsonplaceholder.typicode.com/users
+            display:
+              expr: |
+                dyn(json).map(c, {
+                  'name': c.name,
+                  'type': 'person',
+                }).toJSON()
+      // highlight-end
+```
+
+This topology will create a root **"users"** component with all the users returned by the HTTP endpoint as its child components.
+
+![](../images/component-lookup-http.png)
+
+| Field          | Description                                                                                                   | Scheme                                                 | Required |
+| -------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------- |
+| **Connection** |                                                                                                               |                                                        |          |
+| `connection`   | Path of existing connection e.g. `connection://sftp/instance`/ Mutually exclusive with `username`, `password` | <CommonLink to="connection" >_Connection_</CommonLink> |          |
+| `username`     | Mutually exclusive with `connection`                                                                          | [_EnvVar_](../../concepts/authentication/#envvar)      |          |
+| `password`     | Mutually exclusive with `connection`                                                                          | [_EnvVar_](../../concepts/authentication/#envvar)      |          |
+| **`url`**      | HTTP URL, if a URL is specified on both the connection and check, the URL on the check takes precedence.      | _string_                                               | Yes      |
+| `ntlm`         | When true, will do authentication using NTLM v1 protocol                                                      | _bool_                                                 |          |
+| `ntlmv2`       | When true, will do authentication using NTLM v2 protocol                                                      | _bool_                                                 |          |

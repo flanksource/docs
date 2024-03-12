@@ -741,23 +741,18 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'topology/concepts/topology',
-          label: 'Topology'
-        },
-        {
-          type: 'doc',
           id: 'topology/concepts/properties',
           label: 'Properties'
         },
         {
           type: 'doc',
-          id: 'topology/concepts/for-each',
-          label: 'For Each'
+          id: 'topology/concepts/lookup',
+          label: 'Lookup'
         },
         {
           type: 'doc',
-          id: 'topology/concepts/config',
-          label: 'Configuration'
+          id: 'topology/concepts/catalog',
+          label: 'Catalog'
         },
         {
           type: 'doc',
@@ -803,6 +798,11 @@ const sidebars = {
       items: [
         {
           type: 'doc',
+          id: 'topology/references/topology',
+          label: 'Topology'
+        },
+        {
+          type: 'doc',
           id: 'topology/references/components',
           label: 'Components'
         },
@@ -835,11 +835,12 @@ const sidebars = {
               id: 'topology/references/kubernetes',
               label: 'Kubernetes'
             },
-            {
-              type: 'doc',
-              id: 'topology/references/mongo',
-              label: 'Mongo'
-            },
+            // Mongo lookup cannot query
+            // {
+            //   type: 'doc',
+            //   id: 'topology/references/mongo',
+            //   label: 'Mongo'
+            // },
             {
               type: 'doc',
               id: 'topology/references/mssql',
@@ -850,22 +851,22 @@ const sidebars = {
               id: 'topology/references/mysql',
               label: 'MySQL'
             },
-            // There are errors while compiling this file
-            // {
-            //   type: 'doc',
-            //   id: 'topology/references/postgres',
-            //   label: 'Postgres',
-            // },
+            {
+              type: 'doc',
+              id: 'topology/references/postgres',
+              label: 'Postgres'
+            },
             {
               type: 'doc',
               id: 'topology/references/prometheus',
               label: 'Prometheus'
-            },
-            {
-              type: 'doc',
-              id: 'topology/references/redis',
-              label: 'Redis'
             }
+            // Redis component lookup isn't implemeneted. You can't supply a query.
+            // {
+            //   type: 'doc',
+            //   id: 'topology/references/redis',
+            //   label: 'Redis'
+            // }
           ]
         }
       ]

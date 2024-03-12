@@ -1,5 +1,13 @@
 # Flux
 
+The following configuration creates a topology for Flux CD. The topology will have all the the following 5 direct child components
+
+- **Controllers**: Contains all Kubernetes pods in the "flux-system" namespace as its children
+- **Releases**: Contains all helm release config items as its children
+- **Repos**: Contains all Helm repository config items as its children
+- **Kustomizations**: Contains all Kustomization config items as its children
+- **Git**: Contains all Git repository config items as its children
+
 ```yaml title="flux.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Topology

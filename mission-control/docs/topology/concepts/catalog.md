@@ -1,23 +1,31 @@
-# Config
+# Catalog
 
-Configs can be associated to a component using the `config` property. A linked config shows up in the component page in the right hand side panel.
+You can link components with configs. The linked config items appears in the component page in the right hand side panel.
 
-![Component Config relationship](../images/component-config-relationship.jpg)
+To establish this relationship, you need to specify which config items to link with using the `config` field.
 
-```yaml title="topology.yaml"
+![Component Config relationship](../images/component-config-relationship.png)
+
+```yaml title="kubernetes-cluster.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Topology
 metadata:
-  name: test-topology-property-merge
+  name: kubernetes-cluster
 spec:
   schedule: '@every 10m'
   components:
-    - configs:
-        - name: flanksource-canary-cluster
-          type: EKS
+    - icon: pods
+      lookup:
+        kubernetes:
+          - display:
+              javascript: JSON.stringify(k8s.getPodTopology(results))
+            kind: Pod
+            name: k8s-pods
+      configs:
+        - type: Kubernetes::Pod
 ```
 
-## Config
+## Config Selector
 
 | Field         | Description                               | Scheme              | Required |
 | ------------- | ----------------------------------------- | ------------------- | -------- |

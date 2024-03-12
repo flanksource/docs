@@ -1,40 +1,70 @@
+---
+title: MSSQL
+---
+
 # <Icon name="mssql" /> MSSQL
 
-This check will try to connect to a specified SQL Server database, run a query against it and verify the results.
+The MSSQL component lookup allows you to form components from the records in a Postgres database.
 
-```yaml
+In this example below, we form components from all the tables in the `incident_commander` database.
+
+```yaml title="mssql-check.yml"
 apiVersion: canaries.flanksource.com/v1
-kind: Canary
+kind: Topology
 metadata:
-  name: mssql-check
+  name: mssql-tables
+  namespace: default
 spec:
-  interval: 30
-  spec:
-    mssql:
-      - connection: "server=mssql.default.svc;user id=$(username);password=$(password);port=1433;database=master"
-        auth:
-          username:
-            valueFrom:
-              secretKeyRef:
-                name: mssql-credentials
-                key: USERNAME
-          password:
-            valueFrom:
-              secretKeyRef:
-                name: mssql-credentials
-                key: PASSWORD
-        query: <insert-query>
-        results: 1
+  schedule: '@every 30s'
+  components:
+    - name: MSSQL
+      type: Table
+      icon: mssql
+      // highlight-start
+      lookup:
+        mssql:
+          - connection: mssql://sa:yourStrong(!)Password@localhost:1433/incident_commander
+            query: |
+              SELECT 
+                s.name AS schema_name,
+                t.name AS table_name,
+                p.rows AS num_rows
+              FROM 
+                sys.tables t
+                INNER JOIN sys.schemas s ON t.schema_id = s.schema_id
+                INNER JOIN sys.partitions p ON p.object_id = t.object_id
+                INNER JOIN sys.allocation_units a ON p.partition_id = a.container_id
+              WHERE
+                t.is_ms_shipped = 0
+              ORDER BY
+                p.rows DESC;
+            display:
+              expr: |
+                results.rows.map(row, {
+                  'name': row.schema_name + '.' + row.table_name,
+                  'type': "Table",
+                  'properties': [{
+                    "name": "Records",
+                    "headline": true,
+                    "value": double(row.num_rows),
+                  }]
+                }).toJSON()
+      // highlight-end
 ```
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `auth` | Username and password value, configMapKeyRef or SecretKeyRef for Postgres server | [*Authentication*](../concepts/authentication.md) |  |
-| **`connection`** | Connection string to connect to the SQL Server server | *string* | Yes |
-| `description` | Description for the check | string |  |
-| `display` | Template to display query results in text (overrides default bar format for UI) | [*Template*](../concepts/templating.md) |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
-| `name` | Name of the check | string |  |
-| **`query`** | query that needs to be executed on the server | *string* | Yes |
-| **`results`** | Number rows to check for | *int* | Yes |
-| `test` | Template to test the result against | [*Template*](../concepts/templating.md) |  |
+| Field            | Description                                                                      | Scheme                                            | Required |
+| ---------------- | -------------------------------------------------------------------------------- | ------------------------------------------------- | -------- |
+| `auth`           | Username and password value, configMapKeyRef or SecretKeyRef for Postgres server | [_Authentication_](../concepts/authentication.md) |          |
+| **`connection`** | Connection string to connect to the SQL Server server                            | _string_                                          | Yes      |
+| `display`        | Template to display query results in text (overrides default bar format for UI)  | [_Template_](../concepts/templating.md)           |          |
+| **`query`**      | query that needs to be executed on the server                                    | _string_                                          | Yes      |
+| **`results`**    | Number rows to check for                                                         | _int_                                             | Yes      |
+
+## Results
+
+The `results` variable in the template will contain the following fields
+
+| Field   | Description             | Scheme             |
+| ------- | ----------------------- | ------------------ |
+| `rows`  | stderr from the script  | `[]map[string]any` |
+| `count` | exit code of the script | `int`              |

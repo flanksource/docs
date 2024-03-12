@@ -1,43 +1,63 @@
+---
+title: Postgres
+---
+
 # <Icon name="postgres" /> Postgres
 
-This check will try to connect to a specified Postgres database, run a query against it, and verify the results.
+The postgres component lookup allows you to form components from the records in a Postgres database.
 
-```yaml
+In this example below, we form components from all the tables in the `incident_commander` database.
+
+```yaml title="postgres-tables.yml"
 apiVersion: canaries.flanksource.com/v1
-kind: Canary
+kind: Topology
 metadata:
-  name: postgres-check
+  name: postgres-tables
+  namespace: default
 spec:
-  interval: 30
-  spec:
-    postgres:
-      - connection: "postgres://$(username):$(password)@postgres.default.svc:5432/postgres?sslmode=disable"
-        auth:
-          username:
-            valueFrom:
-              secretKeyRef:
-                name: postgres-credentials
-                key: USERNAME
-          password:
-            valueFrom:
-              secretKeyRef:
-                name: postgres-credentials
-                key: PASSWORD
-        query: SELECT current_schemas(true)
-        display:
-          template: |
-            {{- range $r := .results.rows }}
-              {{- $r.current_schemas}}
-            {{- end}}
-        results: 1
+  schedule: '@every 30s'
+  components:
+    - name: Postgres
+      type: Table
+      icon: postgres
+      // highlight-start
+      lookup:
+        postgres:
+          - connection: postgres://postgres:gunners@localhost:5432/incident_commander?sslmode=disable
+            query: |
+              SELECT
+                schemaname || '.' || relname AS table_name,
+                n_live_tup AS num_rows
+              FROM
+                pg_catalog.pg_stat_user_tables
+              ORDER BY
+                n_live_tup DESC;
+            display:
+              expr: |
+                results.rows.map(row, {
+                  'name': row.table_name,
+                  'type': "Table",
+                  'properties': [{
+                    "name": "Records",
+                    "headline": true,
+                    "value": double(row.num_rows),
+                  }]
+                }).toJSON()
+      // highlight-end
 ```
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `auth` | username and password value, configMapKeyRef, or SecretKeyRef for Postgres server | [*Authentication*](../concepts/authentication.md) |  |
-| **`connection`** | connection string to connect to the server | *string* | Yes |
-| `description` | Description for the check | *string* |  |
-| `display` | Template to display query results in text (overrides default bar format for UI) | [*Template*](../concepts/templating.md) |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |          |
-| **`query`** | query that needs to be executed on the server | *string* | Yes |
-| `results` | Expected number of results from the query | *integer* |          |
+| Field            | Description                                                                       | Scheme                                            | Required |
+| ---------------- | --------------------------------------------------------------------------------- | ------------------------------------------------- | -------- |
+| `auth`           | username and password value, configMapKeyRef, or SecretKeyRef for Postgres server | [_Authentication_](../concepts/authentication.md) |          |
+| **`connection`** | connection string to connect to the server                                        | _string_                                          | Yes      |
+| `display`        | Template to display query results in text (overrides default bar format for UI)   | [_Template_](../concepts/templating.md)           |          |
+| **`query`**      | query that needs to be executed on the server                                     | _string_                                          | Yes      |
+
+## Results
+
+The `results` variable in the template will contain the following fields
+
+| Field   | Description             | Scheme             |
+| ------- | ----------------------- | ------------------ |
+| `rows`  | stderr from the script  | `[]map[string]any` |
+| `count` | exit code of the script | `int`              |
