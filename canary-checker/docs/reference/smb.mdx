@@ -32,19 +32,19 @@ spec:
         minAge: 10h
 ```
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`name`** | Name of the check | *string* | Yes |
-| **`path`** | A path to a shared windows folder e.g. `smb://host/folder` | string | Yes |
-| `smbConnection` | SMB connection details | [SMBConnection](#smb-connection) |  |
-| `*` | All other fields available in the folder check | [*Folder*](folder) | |
+| Field           | Description                                                | Scheme                           | Required |
+| --------------- | ---------------------------------------------------------- | -------------------------------- | -------- |
+| **`name`**      | Name of the check                                          | _string_                         | Yes      |
+| **`path`**      | A path to a shared windows folder e.g. `smb://host/folder` | string                           | Yes      |
+| `smbConnection` | SMB connection details                                     | [SMBConnection](#smb-connection) |          |
+| `*`             | All other fields available in the folder check             | [_Folder_](folder)               |          |
 
 ## SMB Connection
 
-| Field        | Description                                                  | Scheme                                            |
-| ------------ | ------------------------------------------------------------ | ------------------------------------------------- |
-| `connection` | Path of existing connection e.g. `connection://windows/svc-account` <br />Mutually exclusive with`username` and `password` <br /> <Commercial /> | [Connection](../concepts/connections)             |
-| `username`   | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication">*EnvVar*</CommonLink> |
-| `password`   | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication">*EnvVar*</CommonLink> |
-| `domain`     | Windows domain name                                          | *string*                                          |
-| `port`       | Default to `445`                                             | *int*                                             |
+| Field        | Description                                                                                                                                      | Scheme                                                |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| `connection` | Path of existing connection e.g. `connection://windows/svc-account` <br />Mutually exclusive with`username` and `password` <br /> <Commercial /> | <CommonLink to="connection">_Connections_</CommonLink>  |
+| `username`   | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                                                          | <CommonLink to="authentication">_EnvVar_</CommonLink> |
+| `password`   | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                                                          | <CommonLink to="authentication">_EnvVar_</CommonLink> |
+| `domain`     | Windows domain name                                                                                                                              | _string_                                              |
+| `port`       | Default to `445`                                                                                                                                 | _int_                                                 |

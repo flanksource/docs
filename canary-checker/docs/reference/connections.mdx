@@ -2,30 +2,30 @@
 
 ### AWS Connection
 
-| Field            | Description     | Type                                                                          | Required |
-| ---------------- | --------------- | ----------------------------------------------------------------------------- | -------- |
-| `connectionName` | Connection name | `string`                                                                      |          |
-| `accessKey`      | Access key      |  <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
-| `secretKey`      | Secret key      |  <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
-| `region`         | Region          | `string`                                                                      |          |
-| `endpoint`       | Endpoint        | `string`                                                                      |          |
-| `skipTLSVerify`  | Skip TLS verify | `bool`                                                                        |          |
-| `objectPath`     | Object path     | `string`                                                                      |          |
-| `usePathStyle`   | Use path style  | `bool`                                                                        |          |
+| Field                           | Description     | Type                                                                       | Required |
+| ------------------------------- | --------------- | -------------------------------------------------------------------------- | -------- |
+| <SkipOSS>`connection`</SkipOSS> |                 | <SkipOSS><CommonLink to="connection">_Connections_</CommonLink> </SkipOSS> |          |
+| `accessKey`                     | Access key      | <CommonLink to="secrets">_EnvVar_</CommonLink>                             |          |
+| `secretKey`                     | Secret key      | <CommonLink to="secrets">_EnvVar_</CommonLink>                             |          |
+| `region`                        | Region          | `string`                                                                   |          |
+| `endpoint`                      | Endpoint        | `string`                                                                   |          |
+| `skipTLSVerify`                 | Skip TLS verify | `bool`                                                                     |          |
+| `objectPath`                    | Object path     | `string`                                                                   |          |
+| `usePathStyle`                  | Use path style  | `bool`                                                                     |          |
 
 ### GCP Connection
 
-| Field            | Description     | Type                                                                          | Required |
-| ---------------- | --------------- | ----------------------------------------------------------------------------- | -------- |
-| `connectionName` | Connection name | `string`                                                                      |          |
-| `endpoint`       | Endpoint        | `string`                                                                      |          |
-| `credentials`    | Credentials     |  <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
+| Field                           | Description | Type                                                                       | Required |
+| ------------------------------- | ----------- | -------------------------------------------------------------------------- | -------- |
+| <SkipOSS>`connection`</SkipOSS> |             | <SkipOSS><CommonLink to="connection">_Connections_</CommonLink> </SkipOSS> |          |
+| `endpoint`                      | Endpoint    | `string`                                                                   |          |
+| `credentials`                   | Credentials | <CommonLink to="secrets">_EnvVar_</CommonLink>                             |          |
 
 ### Azure Connection
 
-| Field            | Description     | Type                                                                          | Required |
-| ---------------- | --------------- | ----------------------------------------------------------------------------- | -------- |
-| `connectionName` | Connection name | `string`                                                                      |          |
-| `clientID`       | Client ID       |  <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
-| `clientSecret`   | Client Secret   |  <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
-| `tenantID`       | Tenant ID       | `string`                                                                      |          |
+| Field                           | Description   | Type                                                                       | Required |
+| ------------------------------- | ------------- | -------------------------------------------------------------------------- | -------- |
+| <SkipOSS>`connection`</SkipOSS> |               | <SkipOSS><CommonLink to="connection">_Connections_</CommonLink> </SkipOSS> |          |
+| `clientID`                      | Client ID     | <CommonLink to="secrets">_EnvVar_</CommonLink>                             |          |
+| `clientSecret`                  | Client Secret | <CommonLink to="secrets">_EnvVar_</CommonLink>                             |          |
+| `tenantID`                      | Tenant ID     | `string`                                                                   |          |

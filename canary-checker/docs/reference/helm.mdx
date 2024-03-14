@@ -27,18 +27,17 @@ spec:
             secretKeyRef:
               name: helm-credentials
               key: PASSWORD
-
 ```
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `auth` | Username and password value, configMapKeyRef or SecretKeyRef for Helm repository | [Authentication](../concepts/authentication.md) |  |
-| `cafile` | Verify certificates of HTTPS-enabled servers in case of self-signed certificates | *string* |  |
-| **`chartmuseum`** | Chartmuseum URL | *string* | Yes |
-| `description` | Description for the check | *string* |  |
-| `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
-| `name` | Name of the check | *string* |  |
-| `project` | Specify Helm project | *string* |  |
+| Field             | Description                                                                      | Scheme                            | Required |
+| ----------------- | -------------------------------------------------------------------------------- | --------------------------------- | -------- |
+| `auth`            | Username and password value, configMapKeyRef or SecretKeyRef for Helm repository | [Authentication](#authentication) |          |
+| `cafile`          | Verify certificates of HTTPS-enabled servers in case of self-signed certificates | _string_                          |          |
+| **`chartmuseum`** | Chartmuseum URL                                                                  | _string_                          | Yes      |
+| `description`     | Description for the check                                                        | _string_                          |          |
+| `icon`            | Icon for overwriting default icon on the dashboard                               | _string_                          |          |
+| `name`            | Name of the check                                                                | _string_                          |          |
+| `project`         | Specify Helm project                                                             | _string_                          |          |
 
 ---
 
@@ -46,7 +45,7 @@ spec:
 
 ## Authentication
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
-| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | [*kommons.EnvVar*](https://pkg.go.dev/github.com/flanksource/kommons#EnvVar) | Yes |
+| Field          | Description                                                                     | Scheme                                                                       | Required |
+| -------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | -------- |
+| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">*EnvVar*</CommonLink> | Yes      |
+| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">*EnvVar*</CommonLink> | Yes      |

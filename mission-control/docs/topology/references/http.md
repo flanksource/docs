@@ -38,7 +38,7 @@ This topology will create a root **"users"** component with all the users return
 | Field          | Description                                                                                                   | Scheme                                                 | Required |
 | -------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------- |
 | **Connection** |                                                                                                               |                                                        |          |
-| `connection`   | Path of existing connection e.g. `connection://sftp/instance`/ Mutually exclusive with `username`, `password` | <CommonLink to="connection" >_Connection_</CommonLink> |          |
+| `connection`   | Path of existing connection e.g. `connection://sftp/instance`/ Mutually exclusive with `username`, `password` | <CommonLink to="connection">_Connections_</CommonLink> |          |
 | `username`     | Mutually exclusive with `connection`                                                                          | [_EnvVar_](../../concepts/authentication/#envvar)      |          |
 | `password`     | Mutually exclusive with `connection`                                                                          | [_EnvVar_](../../concepts/authentication/#envvar)      |          |
 | **`url`**      | HTTP URL, if a URL is specified on both the connection and check, the URL on the check takes precedence.      | _string_                                               | Yes      |

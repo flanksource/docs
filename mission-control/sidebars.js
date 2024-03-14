@@ -70,7 +70,7 @@ const sidebars = {
           link: {
             type: 'generated-index',
             title: 'Expressions',
-            slug: '/concepts/expressions'
+            slug: '/canary-checker/concepts/expressions'
           },
           items: [
             {
@@ -325,7 +325,6 @@ const sidebars = {
         }
       ]
     },
-
     {
       type: 'category',
       label: 'Comparisons',
@@ -334,6 +333,22 @@ const sidebars = {
           type: 'doc',
           id: 'canary-checker/comparisons/blackbox-exporter',
           label: 'Blackbox Exporter'
+        }
+      ]
+    },
+    {
+      type: 'category',
+      label: 'References',
+      items: [
+        {
+          type: 'doc',
+          id: 'canary-checker/reference/canary-spec',
+          label: 'Canary Spec'
+        },
+        {
+          type: 'doc',
+          id: 'canary-checker/reference/connections',
+          label: 'Cloud Connections'
         }
       ]
     }

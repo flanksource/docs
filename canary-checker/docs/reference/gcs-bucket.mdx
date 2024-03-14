@@ -6,7 +6,7 @@ title: GCS Bucket
 
 Checks the contents of a GCP bucket for size, age and count.
 
-See [Folder](folder) for a full description.
+See [Folder](./folder.mdx) for a full description.
 
 ```yaml title="gcs-folder-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -22,23 +22,23 @@ spec:
         minCount: 5
 ```
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`name`** | Name of the check                                            | *string*              | Yes      |
-| **`path`** | A path to a GCS bucket and folder e.g. `gcs://bucket/folder` | string                | Yes      |
-| `gcpConnection` | Connection details for GCP | [GCPConnection](#gcp-connection) |  |
-| `*`        | All other fields available in the folder check               | [*Folder*](folder) |          |
-| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
-| `description` | Description for the check                                   | `string`                                     |          |
-| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
-| `labels`      | Labels for check                                            | `map[string]string`                          |          |
-| `test`        | Evaluate whether a check is healthy                         | [`Expression`](../concepts/health-evaluation)  |          |
-| `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/display-formatting) |          |
-| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |          |
-| `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
-| **Connection** |  |  | |
-| `connection` | Path of an existing connection e.g. `connection://aws/instance` <br />Mutually exclusive with `credentials`  <br /> <Commercial /> | <CommonLink to="connection" >*Connection*</CommonLink> | |
-| `credentials` | GCP Access Token File. <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes |
+| Field           | Description                                                                                                                       | Scheme                                                 | Required |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------- |
+| **`name`**      | Name of the check                                                                                                                 | _string_                                               | Yes      |
+| **`path`**      | A path to a GCS bucket and folder e.g. `gcs://bucket/folder`                                                                      | string                                                 | Yes      |
+| `gcpConnection` | Connection details for GCP                                                                                                        | [GCPConnection](./connections.mdx#gcp-connection)      |          |
+| `*`             | All other fields available in the folder check                                                                                    | [_Folder_](./folder.mdx)                               |          |
+| **`name`**      | Name of the check, must be unique within the canary                                                                               | `string`                                               | Yes      |
+| `description`   | Description for the check                                                                                                         | `string`                                               |          |
+| `icon`          | Icon for overwriting default icon on the dashboard                                                                                | `string`                                               |          |
+| `labels`        | Labels for check                                                                                                                  | `map[string]string`                                    |          |
+| `test`          | Evaluate whether a check is healthy                                                                                               | [`Expression`](../concepts/health-evaluation)          |          |
+| `display`       | Expression to change the formatting of the display                                                                                | [`Expression`](../concepts/display-formatting)         |          |
+| `transform`     | Transform data from a check into multiple individual checks                                                                       | [`Expression`](../concepts/transforms)                 |          |
+| `metrics`       | Metrics to export from                                                                                                            | [`[]Metrics`](../concepts/metrics-exporter)            |          |
+| **Connection**  |                                                                                                                                   |                                                        |          |
+| `connection`    | Path of an existing connection e.g. `connection://aws/instance` <br />Mutually exclusive with `credentials` <br /> <Commercial /> | <CommonLink to="connection" >_Connection_</CommonLink> |          |
+| `credentials`   | GCP Access Token File. <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                    | <CommonLink to="authentication">_EnvVar_</CommonLink>  | Yes      |
 
 ### Connecting to GCP
 
@@ -55,13 +55,13 @@ metadata:
 spec:
   interval: 60
   folder:
-      - name: gcs auth test
-        path: gcs://somegcsbucket
-        gcpConnection:
-          connection: connection://gcp/internal
+    - name: gcs auth test
+      path: gcs://somegcsbucket
+      gcpConnection:
+        connection: connection://gcp/internal
 ```
 
-3. `credentials` <CommonLink to="authentication">*EnvVar*</CommonLink> with the service account json key stored in a secret.
+3. `credentials` <CommonLink to="authentication">_EnvVar_</CommonLink> with the service account json key stored in a secret.
 
 ```yaml title="aws.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -71,17 +71,18 @@ metadata:
 spec:
   interval: 60
   folder:
-      - name: gcs auth test
-        path: gcs://somegcsbucket
-        gcpConnection:
-          credentials:
-            valueFrom:
-              secretKeyRef:
-                name: gcp-credentials
-                key: AUTH_ACCESS_TOKEN
-
+    - name: gcs auth test
+      path: gcs://somegcsbucket
+      gcpConnection:
+        credentials:
+          valueFrom:
+            secretKeyRef:
+              name: gcp-credentials
+              key: AUTH_ACCESS_TOKEN
 ```
+
 To create the secret
+
 ```bash
 kubectl create secret generic gcp-credentials --from-file=AUTH_ACCESS_TOKEN=path/to/your/SA_Key.json
 ```

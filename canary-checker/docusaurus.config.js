@@ -18,8 +18,11 @@ const config = {
     links: {
       "authentication": '/concepts/secret-management',
       "secrets": '/concepts/secret-management',
-      "connection": '/concepts/authentication',
-      "cel": "/scripting/cel"
+      "connection": '/concepts/connection', // TODO:
+      "cel": "/scripting/cel",
+      "gotemplate": "/scripting/gotemplate",
+      "javascript": '/scripting/javascript',
+      "jsonpath": 'https://jsonpath.com/'
     }
   },
   markdown: {

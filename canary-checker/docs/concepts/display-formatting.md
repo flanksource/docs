@@ -20,7 +20,7 @@ spec:
     - name: USD
       url: https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,ILS,ZAR
       display:
-        template: "$1 = €{{.json.rates.EUR}}, £{{.json.rates.GBP}}, ₪{{.json.rates.ILS}}"
+        template: '$1 = €{{.json.rates.EUR}}, £{{.json.rates.GBP}}, ₪{{.json.rates.ILS}}'
 ```
 
 Which would display:
@@ -29,7 +29,8 @@ Which would display:
 $1 = €0.94913, £0.82394, ₪3.8455
 ```
 
-See [Go Template](/scripting/gotemplate)
+See <CommonLink to="gotemplate">Go Template</CommonLink>
+
 ## CEL Expressions
 
 The equivalent using CEL expressions would be:
@@ -44,10 +45,10 @@ spec:
     - name: USD
       url: https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,ILS,ZAR
       display:
-         expr: "'$1 = €' + string(json.rates.EUR) + ', £' + string(json.rates.GBP) + ', ₪' + string(json.rates.ILS)"
-````
+        expr: "'$1 = €' + string(json.rates.EUR) + ', £' + string(json.rates.GBP) + ', ₪' + string(json.rates.ILS)"
+```
 
-See [CEL](/scripting/cel) for a function reference
+See <CommonLink to="cel">Cel Expressions</CommonLink> for a function reference
 
 ## Javascript
 
@@ -72,15 +73,14 @@ spec:
             display += currency + " = " + currencyCodes[currency] + json.rates[currency] + ", "
           }
           "$1 = " + display
-````
+```
 
 :::info
 Do not return anything from the function, e.g. instead of `return "hello" + "world"` use just `"hello" + "world"`
 :::
 
-See [Javascript](/scripting/javascript) for more details and a function reference.
+See <CommonLink to="javascript">JavaScript</CommonLink> for more details and a function reference.
 
 ## Variables
 
 Each check exposes different variables to use in the `display` expression, See the **Result Variables** section for each check.
-
