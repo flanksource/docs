@@ -66,7 +66,7 @@ The following local settings will affect the permissions available for use by th
 
 ### Local Canary execution
 
-Install the CLI as per the [Installation instructions](../../cli/)
+Install the CLI as per the [Installation instructions](../cli)
 Generate a local resource file with the trace annotation enabled:
 
 ```bash

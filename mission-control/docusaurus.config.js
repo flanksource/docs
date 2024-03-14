@@ -26,8 +26,10 @@ const config = {
     links: {
       authentication: '/reference/secret-management',
       secrets: '/reference/secret-management',
-      connection: '/reference/authentication',
+      connection: '/reference/connection',
       cel: '/reference/scripting/cel',
+      gotemplate: '/reference/scripting/gotemplate',
+      javascript: '/reference/scripting/javascript',
       jsonpath: 'https://jsonpath.com/'
     }
   },

@@ -20,33 +20,33 @@ spec:
         instance: cloudsql-instance-name
 ```
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`gcp`** | Connect to GCP project and instance | [*GCPDatabase*](#gcpdatabase) | Yes |
-| **`maxAge`** | Max age for backup allowed, eg. 5h30m | *Duration* |  |
-| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
-| `description` | Description for the check                                   | `string`                                     |          |
-| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
-| `labels`      | Labels for check                                            | `map[string]string`                          |          |
+| Field         | Description                                                 | Scheme                                         | Required |
+| ------------- | ----------------------------------------------------------- | ---------------------------------------------- | -------- |
+| **`gcp`**     | Connect to GCP project and instance                         | [_GCPDatabase_](#gcpdatabase)                  | Yes      |
+| **`maxAge`**  | Max age for backup allowed, eg. 5h30m                       | _Duration_                                     |          |
+| **`name`**    | Name of the check, must be unique within the canary         | `string`                                       | Yes      |
+| `description` | Description for the check                                   | `string`                                       |          |
+| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                       |          |
+| `labels`      | Labels for check                                            | `map[string]string`                            |          |
 | `test`        | Evaluate whether a check is healthy                         | [`Expression`](../concepts/health-evaluation)  |          |
 | `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/display-formatting) |          |
-| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |          |
+| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)         |          |
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
-|  |  |  | |
+|               |                                                             |                                                |          |
 
 ## Duration
 
-Durations are strings with an optional fraction and unit e.g.  `300ms`, `1.5h` or `2h45m`. Valid time units are `ms`, `s`, `m`, `h`.
+Durations are strings with an optional fraction and unit e.g. `300ms`, `1.5h` or `2h45m`. Valid time units are `ms`, `s`, `m`, `h`.
 
 ## GCPDatabase
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| `project` | GCP project\ name | *string* | Yes |
-| `instance` | Google CloudSQL instance name | *string* | Yes |
-| **Connection** |  |  |  |
-| `connection` | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` <br /> <Commercial /> | <CommonLink to="connection" >*Connection*</CommonLink> |  |
-| `credentials` | GCP Access Token File. <SkipOSS>Mutually exclusive with `connection`</SkipOSS>   | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes |
+| Field          | Description                                                                                                                   | Scheme                                                 | Required |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------- |
+| `project`      | GCP project\ name                                                                                                             | _string_                                               | Yes      |
+| `instance`     | Google CloudSQL instance name                                                                                                 | _string_                                               | Yes      |
+| **Connection** |                                                                                                                               |                                                        |          |
+| `connection`   | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` <br /> <Commercial /> | <CommonLink to="connection">_Connections_</CommonLink> |          |
+| `credentials`  | GCP Access Token File. <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                | <CommonLink to="authentication">_EnvVar_</CommonLink>  | Yes      |
 
 ### Connecting to GCP
 
@@ -70,7 +70,7 @@ spec:
        connection: connection://gcp/internal
 ```
 
-3. `accessKey` and `secretKey` <CommonLink to="authentication">*EnvVar*</CommonLink> with the credentials stored in a secret.
+3. `accessKey` and `secretKey` <CommonLink to="authentication">_EnvVar_</CommonLink> with the credentials stored in a secret.
 
 ```yaml title="aws.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -89,5 +89,4 @@ spec:
             secretKeyRef:
               name: gcp-credentials
               key: AUTH_ACCESS_TOKEN
-
 ```
