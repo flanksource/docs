@@ -360,7 +360,6 @@ module.exports = {
         }
       ]
     },
-
     {
       type: 'category',
       label: 'Comparisons',
@@ -369,6 +368,22 @@ module.exports = {
           type: 'doc',
           id: 'comparisons/blackbox-exporter',
           label: 'Blackbox Exporter'
+        }
+      ]
+    },
+    {
+      type: 'category',
+      label: 'References',
+      items: [
+        {
+          type: 'doc',
+          id: 'reference/canary-spec',
+          label: 'Canary Spec'
+        },
+        {
+          type: 'doc',
+          id: 'reference/connections',
+          label: 'Cloud Connections'
         }
       ]
     }

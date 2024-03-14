@@ -6,7 +6,7 @@ title: GCS Bucket
 
 Checks the contents of a GCP bucket for size, age and count.
 
-See [Folder](folder) for a full description.
+See [Folder](./folder.mdx) for a full description.
 
 ```yaml title="gcs-folder-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -26,8 +26,8 @@ spec:
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------- |
 | **`name`**      | Name of the check                                                                                                                 | _string_                                               | Yes      |
 | **`path`**      | A path to a GCS bucket and folder e.g. `gcs://bucket/folder`                                                                      | string                                                 | Yes      |
-| `gcpConnection` | Connection details for GCP                                                                                                        | [GCPConnection](#gcp-connection)                       |          |
-| `*`             | All other fields available in the folder check                                                                                    | [_Folder_](folder)                                     |          |
+| `gcpConnection` | Connection details for GCP                                                                                                        | [GCPConnection](./connections.mdx#gcp-connection)      |          |
+| `*`             | All other fields available in the folder check                                                                                    | [_Folder_](./folder.mdx)                               |          |
 | **`name`**      | Name of the check, must be unique within the canary                                                                               | `string`                                               | Yes      |
 | `description`   | Description for the check                                                                                                         | `string`                                               |          |
 | `icon`          | Icon for overwriting default icon on the dashboard                                                                                | `string`                                               |          |
@@ -86,11 +86,3 @@ To create the secret
 ```bash
 kubectl create secret generic gcp-credentials --from-file=AUTH_ACCESS_TOKEN=path/to/your/SA_Key.json
 ```
-
-## GCP Connection
-
-| Field                            | Description                                                                       | Scheme                                                                     | Required |
-| -------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------- |
-| <SkipOSS>`connection<`</SkipOSS> | <SkipOSS> Path of existing connection e.g. `connection://aws/instance` </SkipOSS> | <SkipOSS><CommonLink to="connection">_Connections_</CommonLink> </SkipOSS> |          |
-| endpoint                         | GCP Endpoint                                                                      | _string_                                                                   | Yes      |
-| credentials                      | Credentials                                                                       | <CommonLink to="secrets" >_Secrets_</CommonLink>                           | Yes      |

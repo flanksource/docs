@@ -344,6 +344,11 @@ const sidebars = {
           type: 'doc',
           id: 'canary-checker/reference/canary-spec',
           label: 'Canary Spec'
+        },
+        {
+          type: 'doc',
+          id: 'canary-checker/reference/connections',
+          label: 'Cloud Connections'
         }
       ]
     }

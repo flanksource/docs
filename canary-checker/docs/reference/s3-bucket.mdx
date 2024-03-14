@@ -6,7 +6,7 @@ title: S3 Bucket
 
 Checks the contents of a S3 bucket for size, age and count.
 
-See [Folder](../reference/folder) for a full description.
+See [Folder](./folder.mdx) for a full description.
 
 :::info
 This check looks at the contents of an S3 bucket, to verify that an S3 compatible
@@ -27,12 +27,12 @@ spec:
       minCount: 10
 ```
 
-| Field           | Description                                                | Scheme                           | Required |
-| --------------- | ---------------------------------------------------------- | -------------------------------- | -------- |
-| **`name`**      | Name of the check                                          | _string_                         | Yes      |
-| **`path`**      | A path to a S3 bucket and folder e.g. `s3://bucket/folder` | string                           | Yes      |
-| `awsConnection` | AWS Access credentials                                     | [AWSConnection](#aws-connection) |          |
-| `*`             | All other fields available in the folder check             | [_Folder_](folder)               |          |
+| Field           | Description                                                | Scheme                                            | Required |
+| --------------- | ---------------------------------------------------------- | ------------------------------------------------- | -------- |
+| **`name`**      | Name of the check                                          | _string_                                          | Yes      |
+| **`path`**      | A path to a S3 bucket and folder e.g. `s3://bucket/folder` | string                                            | Yes      |
+| `awsConnection` | AWS Access credentials                                     | [AWSConnection](./connections.mdx#aws-connection) |          |
+| `*`             | All other fields available in the folder check             | [_Folder_](./folder.mdx)                          |          |
 
 ### Connecting to AWS
 
@@ -84,14 +84,3 @@ There are 3 options when connecting to AWS:
                  key: AWS_SECRET_ACCESS_KEY
            region: us-east-1
    ```
-
-### AWS connection fields
-
-| Field           | Description                                                                                                                                  | Scheme                                                 | Required |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------- |
-| `connection`    | Path of existing connection e.g. `connection://aws/instance` <br />Mutually exclusive with `accessKey` and `secretKey` <br /> <Commercial /> | <CommonLink to="connection">_Connections_</CommonLink> |          |
-| `accessKey`     | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                                                      | <CommonLink to="authentication">_EnvVar_</CommonLink>  | Yes      |
-| `secretKey`     | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                                                      | <CommonLink to="authentication">_EnvVar_</CommonLink>  | Yes      |
-| `endpoint`      | Custom AWS endpoint                                                                                                                          | _string_                                               |          |
-| `region`        | AWS region                                                                                                                                   | _string_                                               | Yes      |
-| `skipTLSVerify` | Skip TLS verify when connecting to aws                                                                                                       | _bool_                                                 |          |
