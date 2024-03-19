@@ -479,11 +479,6 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'config-db/tutorials/cli',
-          label: 'CLI'
-        },
-        {
-          type: 'doc',
           id: 'config-db/tutorials/file-scraper',
           label: 'Scraping Custom File'
         },
@@ -492,42 +487,6 @@ const sidebars = {
           id: 'config-db/tutorials/date-mapping',
           label: 'Extracting config creation/deletion dates'
         },
-        {
-          type: 'doc',
-          id: 'config-db/tutorials/install-helm',
-          label: 'Helm Installation'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/tutorials/install-standalone',
-          label: 'Standalone Installation'
-        }
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Examples',
-      items: [
-        {
-          type: 'doc',
-          id: 'config-db/examples/forming-relationship',
-          label: 'Forming relationships'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/examples/kubernetes-relationship',
-          label: 'Kubernetes relationships'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/examples/exclude-fields',
-          label: 'Exclude superflous/sensitive fields'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/examples/masking-fields',
-          label: 'Masking sensitive fields'
-        }
       ]
     },
     {

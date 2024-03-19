@@ -1,8 +1,37 @@
 # Relationships
 
-Relationships associate two different configs. They help in visualizing the connection of a config above and below in a hierarchy. Example: A kubernetes pod is linked to a Deployment and Replicaset and also to the persistent volumes.
+Relationships associate two different configs. They help in visualizing the connection of a config above and below in a hierarchy. Example: A kubernetes pod is linked to a Deployment and ReplicaSet and also to the persistent volumes.
 
 ![Kubernetes Relationship](../../images/config-relationships.png)
+
+```yaml title="kubernetes-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: kubernetes-scraper
+spec:
+  kubernetes:
+    - clusterName: local-kind-cluster
+      transform:
+        relationship:
+          # Link a service to a deployment
+          - filter: config_type == "Kubernetes::Service"
+            type:
+              value: 'Kubernetes::Deployment'
+            name:
+              expr: |
+                has(config.spec.selector) && has(config.spec.selector.name) ? config.spec.selector.name : ''
+          # Link Pods to PVCs
+          - filter: config_type == 'Kubernetes::Pod'
+            expr: |
+              config.spec.volumes.
+                filter(item, has(item.persistentVolumeClaim)).
+                map(item, {
+                  "type": "Kubernetes::PersistentVolumeClaim",
+                  "name": item.persistentVolumeClaim.claimName
+                }).
+                toJSON()
+```
 
 ## Relationship Config
 
@@ -22,7 +51,6 @@ Example: You can link a kubernetes deployment with the corresponding pods, or yo
 
 :::info
 `expr` is an alternative, more flexible, way to define the selectors. Either use `expr` or the other selector fields (`id`, `name`, `type`, `agent`, `labels`) but not both.
-[**See example**](../examples/kubernetes-relationship).
 :::
 
 ### RelationshipSelector

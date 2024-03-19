@@ -2,7 +2,28 @@
 
 Masking allows replacing sensitive fields with hash of that field or with a static string.
 The field to mask is specified by the `jsonPath` config and `value` field defines the hash function or the static value.
-[See example](../examples/masking-fields).
+
+```yaml title="file-mask-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: file-mask-scraper
+spec:
+  file:
+    - type: Config
+      id: $.id
+      name: $.name
+      transform:
+        mask:
+          - selector: config.name == 'Config1'
+            jsonpath: $.password
+            value: md5sum
+          - selector: config.name == 'Config1'
+            jsonpath: $.secret
+            value: '***'
+      paths:
+        - fixtures/data/single-config.json
+```
 
 | Field      | Description                                                   | Scheme                                            | Required |
 | ---------- | ------------------------------------------------------------- | ------------------------------------------------- | -------- |
