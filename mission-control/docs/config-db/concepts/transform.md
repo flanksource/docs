@@ -6,7 +6,7 @@ Transformation allows you to transform the scraped configs before they are saved
 
 You can supply a JavaScript code to transform the scraped configuration. Your JS code will have access to the special `config` variable which will contain the scraped config. Your script is expected to return a stringified JSON object which will be the new configuration.
 
-_Example_: The following `Config DB` configuration specifies a transformation that'll add a new field `"hello"` with the value `"world"` to all the scraped configurations.
+_Example_: The following `Config DB` configuration specifies a transformation that'll add a new field "hello" with the value "world" to all the scraped configurations.
 
 ```yaml title="file-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
