@@ -33,6 +33,7 @@ On clicking the topology, you can access nodes, namespaces and pods
 ![Namespace Topology](/img/kubernetes-registry-namespace-component.png)
 
 And we also have added a catalog scraper which populated our catalog
+
 ![Kuberenetes Catalog](/img/kubernetes-registry-catalog-scraper.png)
 
 ## Values
@@ -71,4 +72,25 @@ The following table lists the configurable parameters and their default values:
 | `scraper.retention.changes` | Retention changes. | [{"name": "ReconciliationSucceeded", "count": 10}] |
 | `scraper.relationships` | Kubernetes relationships to create via name, namespace and kind. [Reference Docs](/config-db/scrapers/kubernetes#kubernetesrelationships) | [{"name": {"label": "helm.toolkit.fluxcd.io/name"}, {"name": {"label": "helm.toolkit.fluxcd.io/namespace"}, {"kind": {"value": "HelmRelease"}] |
 
-Feel free to customize this template according to your specific needs.
+
+### Playbooks
+
+#### Edit flux resources
+
+
+| Parameter | Description | Schema | Default |
+| --- | --- | --- | --- |
+| `playbooks.edit_kubernetes_manifests.enabled` | Enable this to have a playbook to edit and commit flux resources back to git | bool | `false`
+| `playbooks.edit_kubernetes_manifests.git_connection` | Connection string to be used with git credentials | `string` (<CommonLink to="connection">_Connections_</CommonLink>) | `""`
+
+After enabling the playbook, you can see a `Edit Kustomize Resource` option in playbooks for any catalog item that is linked to flux
+
+![Playbook option in catalog](/img/kubernetes-registry-playbook-edit-catalog-option.png)
+
+We can then edit this resource in UI, write our own commit message and it will automatically open a Pull Request to the corresponding repo
+
+![Playbook edit dialog](/img/kubernetes-registry-playbook-edit-catalog-dialog.png)
+
+:::tip
+Make sure the token in the Connection provided has access to create pull requests in the repositories that might have the manifests. We support GitHub, GitLab and Gitea
+:::
