@@ -487,21 +487,6 @@ const sidebars = {
           id: 'config-db/tutorials/date-mapping',
           label: 'Extracting config creation/deletion dates'
         },
-        {
-          type: 'doc',
-          id: 'config-db/tutorials/forming-relationship',
-          label: 'Forming relationships'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/tutorials/exclude-fields',
-          label: 'Exclude superflous/sensitive fields'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/tutorials/masking-fields',
-          label: 'Masking sensitive fields'
-        }
       ]
     },
     {
