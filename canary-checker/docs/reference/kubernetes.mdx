@@ -14,10 +14,7 @@ metadata:
 spec:
   interval: 30
   kubernetes:
-      # failing checks will be inserted into kube-system, irrespective of which
-      # namespace this canary is created in
-    - namespace: kube-system
-      name: kube-system
+    - name: kube-system
       kind: Pod
       ready: true
       resource:
@@ -56,8 +53,7 @@ metadata:
 spec:
   interval: 30
   kubernetes:
-    - namespace: kube-system
-      name: kube-system
+    - name: kube-system
       kind: Pod
       resource:
         labelSelector: k8s-app=kube-dns
