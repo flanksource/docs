@@ -926,6 +926,11 @@ const sidebars = {
       type: 'doc',
       id: 'registry/kubernetes',
       label: 'Kubernetes'
+    },
+    {
+      type: 'doc',
+      id: 'registry/azure',
+      label: 'Azure'
     }
   ],
   reference: [
