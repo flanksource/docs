@@ -77,6 +77,9 @@ The following table lists the configurable parameters and their default values:
 
 #### Edit flux resources
 
+This feature allows you to edit any kustomize resource managed via flux in the UI and then create a Pull Request back to source with your changes.
+
+To use this, the Kustomization file must have `buildMetadata` with `[originAnnotations]` set. [Kustomize documentations for setting up buildMetadata](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/buildmetadata/#origin-annotation)
 
 | Parameter | Description | Schema | Default |
 | --- | --- | --- | --- |
