@@ -26,33 +26,22 @@ spec:
         - lookup:
             prometheus:
               - display:
-                  javascript: |
-                    var components = [];
-                    for (idx in results) {
-                      var value = parseInt(Number(results[idx].value))
-                      // CPU can be between 0 & 1, so take ceil for that case
-                      if (value < 1) {value = 1}
+                  expr: |
+                    dyn(results).map(r, {
+                      'name': r.node,
+                      'properties': [{'name': 'cpu', 'value': math.Ceil(int(r.value))}]
+                    }).toJSON()
 
-                      components.push({
-                        name: results[idx].pod,
-                        properties: [{name: 'cpu', value: value}],
-                      })
-                    }
-                    JSON.stringify(components)
                 query: 1000 * max by (pod) (rate(container_cpu_usage_seconds_total{container!=""}[5m]))
           name: cpu
         - lookup:
             prometheus:
               - display:
-                  javascript: |
-                    var components = [];
-                    for (idx in results) {
-                      components.push({
-                        name: results[idx].pod,
-                        properties: [{name: 'memory', value: parseInt(Number(results[idx].value))}],
-                      })
-                    }
-                    JSON.stringify(components)
+                  expr: |
+                    dyn(results).map(r, {
+                      'name': r.node,
+                      'properties': [{'name': 'memory', 'value': int(r.value)}]
+                    }).toJSON()
                 query: max by (pod) (avg_over_time(container_memory_working_set_bytes{container!=""}[5m]))
           name: memory
   properties:
