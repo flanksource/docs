@@ -12,6 +12,7 @@ To specify the template to be used for representing your data, the following opt
 
 - [Go template](#go-template)
 - [Javascript](#javascript)
+- [CEL Expression](#cel)
 
 ### Go Template
 
@@ -54,6 +55,23 @@ file:
             config[i].hello = "world"
           }
           JSON.stringify(config)
+    paths:
+      - fixtures/data/multiple-configs.json
+```
+
+### CEL
+
+CEL code can used to transformed the scraped configuration. Below is an example.
+
+```yaml
+file:
+  - type: Config
+    id: $[0].id
+    name: $[0].name
+    transform:
+      script:
+        expr: |+
+          config.map(e,e.hello = "world").toJSON()
     paths:
       - fixtures/data/multiple-configs.json
 ```

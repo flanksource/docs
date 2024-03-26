@@ -10,65 +10,40 @@ kind: ScrapeConfig
 metadata:
   name: sql-scraper
 spec:
+  schedule: '@every 30s'  
   sql:
-    - connection: 'sqlserver://localhost:1433?database=master'
-      auth:
-        username:
-          value: sa
-        password:
-          value: password
+    - connection: 'sqlserver://sa:password@172.18.5.55:1433?database=master'
       type: MSSQL::Database
-      id: $.name
-
+      id: $.id
       transform:
-        full: true # transform the entire configuration item, and not just the configuration data (row)
-        script:
-          javascript: |+
-            var dbs = {}
-            for (var i = 0; i < config.rows.length; i++) {
-              var db = config.rows[i]
-              var name = db.DB
-              if (dbs[db.DB] == null) {
-                {
-                  config:               dbs[db.DB] = {
-                    name: name,
-                    roles: {}
-                  },
-                  changes: {
-
-                  },
-                  analysis: {
-
-                  }
-
-                }
-              }
-              dbs[name].roles[db.role] = db.name
-            }
-            JSON.stringify(_.values(dbs))
-
+        expr: |+
+          dyn(config).map(e,{ "id": e.DB, 
+                              "roles": e.Roles.map(er,
+                                      {er.role : er.Principals.map(ep,ep.name)})
+                            }).toJSON()
       query: |
-        declare  @mytable table (
+        declare @mytable table (
           [DB] [nvarchar](128) NULL,
-          [name]  [nvarchar](255)  NOT NULL,
-          [role]  [nvarchar](255)  NOT NULL
-          )
-
-
+          [name] [nvarchar](255) NOT NULL,
+          [role] [nvarchar](255) NOT NULL
+            )
         DECLARE @command varchar(1000)
-        SELECT @command =
-        'USE ?; SELECT DB_NAME() as DB, DP1.name AS [user],
-          isnull (DP2.name, ''No members'') AS [role]
-        FROM sys.database_role_members AS DRM
-        RIGHT OUTER JOIN sys.database_principals AS DP1
-          ON DRM.role_principal_id = DP1.principal_id
-        LEFT OUTER JOIN sys.database_principals AS DP2
-          ON DRM.member_principal_id = DP2.principal_id
-        WHERE DP1.type = ''R'' and DP2.name is not null'
+        SELECT @command = 'USE ?; SELECT DB_NAME() as DB, DP1.name AS [user],
+            isnull (DP2.name, ''No members'') AS [role]
+          FROM sys.database_role_members AS DRM
+          RIGHT OUTER JOIN sys.database_Principals AS DP1
+            ON DRM.role_principal_id = DP1.principal_id
+          LEFT OUTER JOIN sys.database_Principals AS DP2
+            ON DRM.member_principal_id = DP2.principal_id
+          WHERE DP1.type = ''R'' and DP2.name is not null'
+        insert into @mytable EXEC sp_MSforeachdb @command
 
-        insert into @mytable  EXEC sp_MSforeachdb @command
+        select distinct d.DB,Roles.role , Principals.name
+        from @mytable d 
+        left join @mytable Roles on d.DB = Roles.DB 
+        left join @mytable Principals on Roles.name = Principals.name 
+        and Roles.DB = Principals.DB FOR JSON AUTO
 
-        select * from @mytable
 ```
 
 ## Scraper
@@ -81,7 +56,17 @@ spec:
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
 | `sql`       | Specifies the list of SQL configurations to scrape.                                | [`[]SQL`](#sql-1)                            |          |
 
-### SQL
+## Result Variables
+
+| Name    | Description             | Scheme                     |
+| ------- | ----------------------- | -------------------------- |
+| `config`  |                         | *[]map[string]interface{ }* |
+| `result`  |                         | *map[string]interface{ }* |
+| `result.config`  |                  | *[]map[string]interface{ }* |
+| `result.last_modified`|             | *DateTime*                  |
+| `result.last_scraped_time`|         | *DateTime*                  |
+
+## SQL
 
 | Field             | Description                                                                                                                                                             | Scheme                                         | Required |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | -------- |

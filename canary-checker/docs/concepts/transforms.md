@@ -21,17 +21,14 @@ spec:
       ignore:
         - KubeScheduler.*
       transform:
-        javascript: |
-          var out = _.map(results, function(r) {
-            return {
-              name: r.name,
-              labels: r.labels,
-              icon: 'alert',
-              message: r.message,
-              description: r.message,
-            }
-          })
-          JSON.stringify(out);
+        expr: |
+          results.alerts.map(r, {
+              'name': r.name,
+              'labels': r.labels,
+              'icon': 'alert',
+              'message': r.message,
+              'description': r.message,
+          }).toJSON()
 ```
 
 In the above example, the check will return multiple alerts from alertmanager. By default, all of those alerts will be grouped in a single check.

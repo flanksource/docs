@@ -34,41 +34,39 @@ spec:
               - name: config-db-check
                 query: SELECT * FROM config_items WHERE config_class = 'HelmRelease'
                 display:
-                  javascript: |
-                    JSON.stringify(results.results.map(function(r) {
-                      return {
-                        name: r.name,
-                        icon: 'helm',
-                        namespace: r.namespace,
-                        status: r.status,
-                        status_reason: r.description,
-                        selectors: [{
-                          name: 'pods',
-                          labelSelector: 'app.kubernetes.io/instance='+r.name,
+                  expr: |
+                    dyn(results.results).map(r, {
+                        'name': r.name,
+                        'icon': 'helm',
+                        'namespace': r.namespace,
+                        'status': r.status,
+                        'status_reason': r.description,
+                        'selectors': [{
+                          'name': 'pods',
+                          'labelSelector': 'app.kubernetes.io/instance='+r.name,
                         }],
-                        configs: [
+                        'configs': [
                           {
-                            name: r.name,
-                            type: "HelmRelease",
+                            'name': r.name,
+                            'type': "HelmRelease",
                           }
                         ],
-                        properties: [
+                        'properties': [
                           {
                             'name': 'Message',
-                            text: r.config.status.conditions[0].message,
+                            'text': r.config.status.conditions[0].message,
                           },
                           {
                             'name': 'Version',
-                            text: r.config.status.lastAppliedRevision,
-                            headline: true,
+                            'text': r.config.status.lastAppliedRevision,
+                            'headline': true,
                           },
                           {
                             'name': 'Last attempted version',
-                            text: r.config.status.lastAttemptedRevision,
+                            'text': r.config.status.lastAttemptedRevision,
                           }
                         ]
-                      }
-                    }))
+                      }).toJSON()
     - name: Kustomizations
       icon: kustomize
       components:
