@@ -43,17 +43,17 @@ This scraper will scraper our file the api endpoint every 30 seconds and track i
 
 Save the scraper and wait for it to run. You should see the job status go green.
 
-![](../../images/tutorial-config-scrapers.png)
+![](/img/tutorial-config-scrapers.png)
 
 You should now be able to see the currency config type in Catalog page.
 
-![](../../images/example-config-items-vms.png)
+![](/img/example-config-items-vms.png)
 
 The number `1` represents that there is one config item of type `Currency`.
 
 The content of the config items should be exactly what the api endpoint returns.
 
-![](../../images/example-currency-scraper-config.png)
+![](/img/example-currency-scraper-config.png)
 
 :::note
 The config is represented as YAML by default however internally it is stored in its original JSON form.
@@ -85,9 +85,9 @@ spec:
 ```
 
 You should see a new `diff` change in the config changes tab.
-![Catalog Overview Page](../../images/example-currency-scraper-changes.png)
+![Catalog Overview Page](/img/example-currency-scraper-changes.png)
 
 The summary `eur, date` indicates that the fields `eur` and `date` were modified.
 
 To see the details of the change, click on the change row.
-![](../../images/example-currency-scraper-diff-change.png)
+![](/img/example-currency-scraper-diff-change.png)

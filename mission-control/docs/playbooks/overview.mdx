@@ -1,0 +1,141 @@
+---
+slug: /playbooks
+title: Playbooks
+hide_title: true
+# hide_table_of_contents: true
+pagination_prev: config-db/overview
+pagination_next: topology/overview
+---
+
+# Playbooks
+
+Playbooks are configurable automated processes that can be used to perform a variety of actions for a resource like config item, component, & check.
+They can also operate independently of any specific resource, providing versatility in handling different tasks and processes within a system or environment
+
+<img src="/img/playbooks.svg" width="800px"/>
+
+
+
+## Triggers
+
+
+## Context
+<Step step={1} name="Self-Service" style="list">
+</Step>
+
+<Step step={2} name="Events" style="list">
+</Step>
+
+<Step step={3} name="Webhooks" style="list">
+</Step>
+
+```yaml title="restrict-to-deployment.yaml"
+#...
+kind: Playbook
+spec:
+  # components: ...
+  # checks: ...
+  //highlight-next-line
+  configs:
+    - types:
+        - Kubernetes::Deployment
+```
+
+## Self-Service
+
+
+## Parameters
+
+Playbooks have 2 types of parameters:
+
+<Step step={1} name="Resources" style="list">
+
+A playbook can be restricted to specific `configs`, `components` or health `checks` using [resource selectors](/reference/resource-selector). For example Restarting a Kubernetes Deployment is only applicable to config items of type: `Kubernetes::Deployment`
+
+```yaml title="scale-deployment.yaml"
+#...
+kind: Playbook
+spec:
+  configs:
+    - types:
+        - Kubernetes::Deployment
+   #....
+```
+
+</Step>
+<Step step={2} name="User Input" style="list">
+
+Before running a playbook, users can provide input using [`parameters`](/reference/playbooks/parameters)
+```yaml title="parameters.yaml"
+#...
+kind: Playbook
+spec:
+  # user input
+  parameters:
+    - name: replicas
+  # ...
+```
+
+</Step>
+
+## Events
+
+## Webhooks
+
+
+## Actions
+
+Playbooks execute a sequence of actions (steps), these actions can update git repositories, invoke pipelines or run command line tools like `kubectl` and `aws`.
+
+### Templating
+
+The actions values can be templated using [Go Templates](/reference/scripting/gotemplate)
+
+```yaml title="restart-deployment.yaml"
+#...
+kind: Playbook
+spec:
+  configs:
+    - types:
+        - Kubernetes::Deployment
+  actions:
+    - name: 'Restart kubernetes deployment'
+      exec:
+        //highlight-next-line
+        script: kubectl rollout restart deployment {{.config.name}} -n {{.config.tags.namespace}}
+```
+
+The parameters to the playbooks are available in the [Context](reference/playbooks/context)
+
+
+![Playbook Action Logs](/img/playbook-action-logs.png)
+
+
+### Runners
+
+## Approvals
+
+Authorization safeguards can be applied to playbook runs, ensuring their execution is limited to specific individuals or teams who grant approval.
+
+```yaml title="approve-kubernetes-scaling.yaml"
+#...
+kind: Playbook
+spec:
+  #...
+  approval:
+    type: any
+    approvers:
+      people:
+        - admin@local
+      teams:
+        - DevOps
+```
+
+| Field       | Description                    | Scheme       | Required |
+| ----------- | ------------------------------ | ------------ | -------- |
+| `type`      | How many approvals required. Defaults to `all`    | `any` or `all`     | `false`  |
+| `approvers.[]people` | Login or id of a person| `People` | `false`  |
+| `approvers.[]teams` | Name or id of a team | `Team` | `false`  |
+
+
+

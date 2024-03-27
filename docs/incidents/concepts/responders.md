@@ -5,11 +5,11 @@ Responders allow you to link up the incident to an external incident management 
 - MS Planner, and
 - Jira
 
-![Adding a Jira responder](../../images/responder-add-jira.png)
+![Adding a Jira responder](/img/responder-add-jira.png)
 
 Once the responder is linked up, the comments are synced between Flanksource and the responder client.
 
-![Comments in Jira from Flanksource](../../images/responder-jira-comments.png)
+![Comments in Jira from Flanksource](/img/responder-jira-comments.png)
 
 ## How to add a responder
 

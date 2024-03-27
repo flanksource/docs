@@ -87,7 +87,7 @@ spec:
 | `properties` | Create or lookup properties for each component                 | [`[]Property`](./properties.md)                              |          |
 | `configs`    | Link configuration items for each component                    | [`[]ConfigSelector`](./catalog.md#config-selector)           |          |
 | `checks`     | Create or link health checks for each component                | [`[]CheckSelector`](./health-checks.md#check)                |          |
-| `selectors`  | Select existing components to be used as the child components. | [`[]ResourceSelector`](../../reference/resource_selector.md) |          |
+| `selectors`  | Select existing components to be used as the child components. | [`[]ResourceSelector`](../../reference/resource-selector.md) |          |
 
 ## Templating
 
