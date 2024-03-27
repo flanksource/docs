@@ -9,7 +9,7 @@ Playbook parameter defines a parameter that a playbook needs to run.
 | `default`     | Default value of the parameter.                                                                   | `string`            |          | `true`      |
 | `label`       | Label of the parameter.                                                                           | `string`            | `true`   |
 | `required`    | Specify if the parameter is required                                                              | `bool`              |          |
-| `icon`        | Icon of parameter. See [icons](https://github.com/flanksource/flanksource-ui/tree/main/src/icons) | `string`            |          |
+| `icon`        |  | [`Icon`](/reference/types#icon)            |          |
 | `description` | Description of the parameter.                                                                     | `string`            |          |
 | `type`        | Type of parameter. _(Defaults to "text")_                                                         | `string`            |          |
 | `properties`  | Properties of parameter. _Varies based on the type_                                               | `map[string]string` |          |

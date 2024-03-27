@@ -9,39 +9,25 @@ pagination_next: topology/overview
 
 # Playbooks
 
-Playbooks are configurable automated processes that can be used to perform a variety of actions for a resource like config item, component, & check.
-They can also operate independently of any specific resource, providing versatility in handling different tasks and processes within a system or environment
-
 <img src="/img/playbooks.svg" width="800px"/>
 
 
+Playbooks provide a way to standardize and automate operational activities.
 
-## Triggers
+
+Some key benefits include:
+
+* **Accelerated GitOps Adoption** - Use  _"ClickOps"_ to make changes to resources but have them being applied as Git pull requests in the background, enabling non-technical teams to leverage GitOps workflows.
+* **Consistency** - Provide easy to discover and reusable templates for common tasks, preventing the complexity of doing the same thing multiple ways.
+* **Self-Service** - Enable developers/operators to provision and manage their own resources without involving a central DevOps/Platform team.
+* **Compliance** - Enforce security, compliance, and governance policies by codifying processes and limiting the need for elevated privileges.
+* **Cost Efficiency** - Optimize costs with on-demand environments that spin down after a fixed duration.
+* **Portability** - A consistent interface for performing operations irrespective of the underlying infrastructure and/or environment
 
 
-## Context
-<Step step={1} name="Self-Service" style="list">
-</Step>
+<hr/>
 
-<Step step={2} name="Events" style="list">
-</Step>
-
-<Step step={3} name="Webhooks" style="list">
-</Step>
-
-```yaml title="restrict-to-deployment.yaml"
-#...
-kind: Playbook
-spec:
-  # components: ...
-  # checks: ...
-  //highlight-next-line
-  configs:
-    - types:
-        - Kubernetes::Deployment
-```
-
-## Self-Service
+Playbooks can either create/scaffold or operate on existing resources
 
 
 ## Parameters
@@ -77,6 +63,36 @@ spec:
 ```
 
 </Step>
+
+## Triggers
+
+
+## Context
+<Step step={1} name="Self-Service" style="list">
+</Step>
+
+<Step step={2} name="Events" style="list">
+</Step>
+
+<Step step={3} name="Webhooks" style="list">
+</Step>
+
+```yaml title="restrict-to-deployment.yaml"
+#...
+kind: Playbook
+spec:
+  # components: ...
+  # checks: ...
+  //highlight-next-line
+  configs:
+    - types:
+        - Kubernetes::Deployment
+```
+
+## Self-Service
+
+
+
 
 ## Events
 
@@ -115,7 +131,7 @@ The parameters to the playbooks are available in the [Context](reference/playboo
 
 ## Approvals
 
-Authorization safeguards can be applied to playbook runs, ensuring their execution is limited to specific individuals or teams who grant approval.
+Playbooks can require approval before execution by configuring an `approval` block:
 
 ```yaml title="approve-kubernetes-scaling.yaml"
 #...

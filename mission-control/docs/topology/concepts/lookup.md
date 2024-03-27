@@ -1,8 +1,14 @@
 # Component lookup
 
 Lookup enables you to form components from an external source eg: an HTTP endpoint, kubernetes clusters or a database.
+
 The response from the external sources are then "shaped" to a component using the `display` field.
 The `display` field contains several scripting mechanism to transform any arbitrary data to a [component](../references/components.md).
+
+
+For example this topology will create a root `Ingress` component with all the ingresses in a kubernetes cluster as its child components.
+
+<div style={{width: "800px"}}>
 
 ```yaml title="kubernetes-ingress-classes.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -27,8 +33,8 @@ spec:
               }).toJSON()
       // highlight-end
 ```
+</div>
 
-This topology will create a root **"Ingress"** component with all the ingresses in a kubernetes cluster as its child components.
 
 | Field        | Description                                  | Type                                          | Required |
 | ------------ | -------------------------------------------- | --------------------------------------------- | -------- |
@@ -47,7 +53,7 @@ This topology will create a root **"Ingress"** component with all the ingresses 
 
 The forEach operation allows you to perform operations that you would apply to all the components crafted during the lookup phase.
 
-In the example above, we can add a kubernetes check on each of the ingresses as follows
+In the example below, we can add a kubernetes check on each of the ingresses as follows
 
 ```yaml title="kubernetes-ingress-classes.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -89,18 +95,12 @@ spec:
 | `checks`     | Create or link health checks for each component                | [`[]CheckSelector`](./health-checks.md#check)                |          |
 | `selectors`  | Select existing components to be used as the child components. | [`[]ResourceSelector`](../../reference/resource-selector.md) |          |
 
-## Templating
+### Templating
 
-All the fields in forEach are templatable. They receive the following two variables:
+All the fields in forEach are templatable. They receive the following context
 
 | Field        | Description                | Scheme                                       |
 | ------------ | -------------------------- | -------------------------------------------- |
 | `component`  | Component from the lookup  | [`[]Component`](../references/components.md) |
 | `properties` | The component's properties | `map[string]any`                             |
 
-### Relationship Spec
-
-| Field  | Description                                                                              | Scheme   | Required |
-| ------ | ---------------------------------------------------------------------------------------- | -------- | -------- |
-| `ref`  | Set reference for components relationship                                                | `string` |          |
-| `type` | Set the type of relationship, e.g. dependsOn, subcomponentOf, providesApis, consumesApis | `string` |          |

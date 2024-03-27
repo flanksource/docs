@@ -361,8 +361,18 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'config-db/concepts/relationship',
+          id: 'config-db/concepts/relationships',
           label: 'Relationships'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/transform',
+          label: 'Transformation'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/concepts/retention',
+          label: 'Retention'
         },
         {
           type: 'doc',
@@ -378,16 +388,7 @@ const sidebars = {
 
 
 
-        {
-          type: 'doc',
-          id: 'config-db/concepts/transform',
-          label: 'Transform'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/concepts/retention',
-          label: 'Retention'
-        },
+
 
       ]
     },
@@ -395,12 +396,6 @@ const sidebars = {
       type: 'category',
       label: 'Scrapers',
       items: [
-        {
-          type: 'doc',
-          id: 'config-db/concepts/scraping',
-          label: 'Overview'
-        },
-
         {
           type: 'doc',
           id: 'config-db/scrapers/aws',
@@ -468,22 +463,6 @@ const sidebars = {
           id: 'config-db/tutorials/date-mapping',
           label: 'Extracting config creation/deletion dates'
         },
-      ]
-    },
-    {
-      type: 'category',
-      label: 'References',
-      items: [
-        {
-          type: 'doc',
-          id: 'config-db/references/scrape-result',
-          label: 'Scrape Result'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/references/change-result',
-          label: 'Change Result'
-        }
       ]
     }
   ],
@@ -914,13 +893,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'config-db/references/scrape-result',
+          id: 'reference/config-db/scrape-result',
           label: 'Scrape Result'
         },
         {
           type: 'doc',
-          id: 'config-db/references/change-result',
-          label: 'Change Result'
+          id: 'reference/config-db/changes',
+          label: 'Changes'
         }
       ]
     },
@@ -941,7 +920,12 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'config-db/references/change-result',
+          id: 'reference/playbooks/webhooks',
+          label: 'Webhooks'
+        },
+        {
+          type: 'doc',
+          id: 'reference/playbooks/events',
           label: 'Events'
         },
 

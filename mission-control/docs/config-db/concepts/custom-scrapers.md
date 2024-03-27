@@ -1,6 +1,7 @@
 # Custom Scrapers
 
-Custom scrapers allow you to scrape from sources that are not well defined eg: scraping a file of an arbitrary structure. It is upon the user to define how the configs should be scraped from the source.
+Custom scrapers allow you to scrape from sources that are not well defined eg: scraping a [File](/config-db/scrapers/file) sitting on disk, inside a [Kubernetes Pod](/config-db/scrapers/kubernetes-file) or from a [SQL](/config-db/scrapers/sql) query.
+
 
 ```yaml title="file-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -10,11 +11,21 @@ metadata:
 spec:
   file:
     - type: $.Config.InstanceType
-      class: $.Config.InstanceType
       id: $.Config.InstanceId
       path:
         - config*.json
         - test*.json
+```
+
+
+
+```json title="config-file.json"
+{
+  "Config": {
+    "InstanceId": "i-1234567890abcdef0",
+    "InstanceType": "t2.micro"
+  }
+}
 ```
 
 ## Mapping
@@ -23,24 +34,92 @@ Custom scrapers need to define the id, type & class for each items that are scra
 
 | Field             | Description                                                                                                                                                                                  | Scheme                                              | Required |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------- |
-| `id`              | ID for the config item                                                                                                                                                                       | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> | `true`   |
-| `type`            | Type for the config item                                                                                                                                                                     | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> | `true`   |
-| `class`           | Class for the config item. _(Defaults to `type`)_                                                                                                                                            | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> |          |
-| `name`            | Name for the config item                                                                                                                                                                     | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> |          |
-| `createFields`    | JSONPath expression and are used to extract the created time of the config item from the scraped configuration. _(If multiple fields are specified, the first non-empty value will be used)_ | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> |          |
-| `deleteFields`    | JSONPath expression and are used to extract the deleted time of the config item from the scraped configuration. _(If multiple fields are specified, the first non-empty value will be used)_ | <CommonLink to="jsonpath">_`jsonpath`_</CommonLink> |          |
-| `timestampFormat` | Timestamp format for fields specified in `createFields` & `deleteFields`. _(Default 2006-01-02T15:04:05Z07:00)_                                                                              | [`timestampFormat`](#timestamp-format)              |          |
+| `items`            |  A path pointing to an array, each item will be created as a a separate config item, all other JSONPath will be evaluated from the new items root                                                                                                                                                                  | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink> | `true`   |
+| `id`              | ID for the config item                                                                                                                                                                       | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink> | `true`   |
+| `type`            | Type for the config item                                                                                                                                                                     | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink> | `true`   |
+| `class`           | Class for the config item. _(Defaults to `type`)_                                                                                                                                            | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink> |          |
+| `name`            | Name for the config item                                                                                                                                                                     | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink> |          |
+| `format` | Format of the config source. Defaults to `json` | `json`, `xml` or `properties` See [Formats](#formats) | |
+| `createFields`    | Fields to use to determine the items created date, if not specified or the field is not found, defaults to scrape time| <CommonLink to="jsonpath">_`[]JSONPath`_</CommonLink> |          |
+| `deleteFields`    | Fields to use to determine when an item was deleted if not specified or the field is not found, defaults to scrape time of when the item was no longer detected| <CommonLink to="jsonpath">_`[]JSONPath`_</CommonLink> |          |
+| `timestampFormat` | Timestamp format of `createFields` and `deleteFields`. _(Default 2006-01-02T15:04:05Z07:00)_                                                                              | [`time.Format`](https://golang.org/pkg/time/#Time.Format)              |          |
+| `full` | Scrape result includes the full metadata of a config, including possible changes, See [Change Extraction](#change-extraction) | `bool` | |
 
-### Date Mapping
 
-In Mission Control, config items possess created, updated, and deleted dates. While Kubernetes and Cloud resources receive these dates from the API, custom config items require extraction of these values from the config item itself. If no date mapping is provided, the scrape time will be used instead.
 
-#### Timestamp Format
+## Formats
 
-The format is specified using the [Go time format](https://golang.org/pkg/time/#Time.Format).
+#### JSON
+Config items are stored as `jsonb` fields in PostgreSQL.
 
-In the above example if the value of `made_at` was `2017/03/06 21:04:11Z`, then the `timestampFormat` file would look like this
+ The JSON used is typically returned by resource provider e.g.  `kubectl get -o json` or `aws --output=json`
+
+The UI will convert from JSON to YAML when showing the config.
+
+#### XML / Properties / etc.
+[**Custom**](./concepts/custom-scraper) scrapers can ingest non-JSON config which is represented as:
 
 ```yaml
-timestampFormat: '2006/01/02 15:04:05Z'
+{
+	"format": "xml",
+  "content": "<root>..</root>"
+}
 ```
+
+The UI will format and render XML appropriately.
+
+
+
+
+## Change Extraction
+
+Custom scrapers can also be used to ingest changes from external systems, by using the `full` option. In this example, the scraped JSON contains the actual config under `config` and a list of changes under `changes`.
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: file-scraper
+spec:
+	full: true
+  file:
+    - type: Car
+      id: $.reg_no
+      paths:
+        - fixtures/data/car_changes.json
+```
+
+```json title=fixtures/data/car_changes.json
+{
+  "reg_no": "A123",
+  "config": {
+    "meta": "this is the actual config that'll be stored."
+  },
+  "changes": [
+    {
+      "action": "drive",
+      "summary": "car color changed to blue",
+      "unrelated_stuff": 123
+    }
+  ]
+}
+```
+
+Since `full=true`, `Config DB` will extract the `config` and `changes` from the scraped JSON config. So, the actual config will simply be
+
+```json
+{
+  "meta": "this is the actual config that'll be stored."
+}
+```
+
+and the following new config change would be registered for that particular config item
+
+```json
+{
+  "action": "drive",
+  "summary": "car color changed to blue",
+  "unrelated_stuff": 123
+}
+```
+

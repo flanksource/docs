@@ -8,7 +8,7 @@ _Fig: Playbooks Page_
 | Field         | Description                                                  | Scheme                                               | Required |
 | ------------- | ------------------------------------------------------------ | ---------------------------------------------------- | -------- |
 | `description` | A short description                                          | `string`                                             | `true`   |
-| `icon`        | Icon for the playbook                                        | `string`                                             |          |
+| `icon`        | Icon for the playbook                                        | [`Icon`](/reference/types#icon)                                              |          |
 | `on`          | Specify events to automatically trigger the Playbook. .      | [`[]Trigger`](#trigger)                              |          |
 | `runsOn`      | Specify the [runners](./runners.md) that can run this playbook. One will be chosen on random. When empty, the playbook will run on the main instance itself | `[]string`                                           |          |
 | `templatesOn` | Specify where the templating of the action spec should occur | `host` or `agent`                                      |          |

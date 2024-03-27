@@ -6,13 +6,13 @@ The `filter`, `actions`, `if` and `delays` fields that can be templated have a c
 
 | Field       | Description                              | Schema                                       |
 | ----------- | ---------------------------------------- | -------------------------------------------- |
-| `.config`    | Config passed to the playbook            | [`ConfigItem`](/reference/config-db/config-item) |
-| `.component` | Component passed to the playbook         | [`Component`](/reference/topology/components)    |
-| `.check`     | Canary Check passed to the playbook      | [`Check`](/reference/canary-checker/check)            |
-| `.params`    | User provided parameters to the playbook | `map[string]string`                          |
-| `.env`    | Environment variables defined on the playbook | `map[string]string`                          |
-| `.user.name`    | Name of the user who invoked the action | `string`                          |
-| `.user.email`    | Email of the user who invoked the action | `string`                          |
+| `config`    | Config passed to the playbook            | [`ConfigItem`](/reference/config-db/config-item) |
+| `component` | Component passed to the playbook         | [`Component`](/reference/topology/components)    |
+| `check`     | Canary Check passed to the playbook      | [`Check`](/reference/canary-checker/check)            |
+| `params`    | User provided parameters to the playbook | `map[string]string`                          |
+| `env`    | Environment variables defined on the playbook | `map[string]string`                          |
+| `user.name`    | Name of the user who invoked the action | `string`                          |
+| `user.email`    | Email of the user who invoked the action | `string`                          |
 
 ### Functions
 
@@ -40,5 +40,3 @@ Playbook actions can be selectively executed based on CEL expressions. These exp
 
 - `if: config.deleted_at ? true: false`
 - `if: always()`
-
-## Context

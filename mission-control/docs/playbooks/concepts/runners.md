@@ -1,7 +1,7 @@
 # Playbook Runners
 
 Playbook runners offer the flexibility to designate where actions are executed. By default, actions run on the main instance, but a set of agents can also be provided and one of them will be chosen at random.
-This enables a playbook action to access environment specific information such as kubernetes secrets, connection details, environment variables, ... without having to share those to the main instance.
+This enables a playbook action to access environment specific information such as kubernetes secrets, connection details, environment variables, without having to share those to the main instance.
 
 Runners can be set at the playbook or action level.
 
@@ -53,9 +53,6 @@ kind: Playbook
 metadata:
   name: heartbeat
 spec:
-  runsOn:
-    - local # Main instance
-    - aws # agent
   parameters:
     - name: check_id
       type: config
@@ -63,17 +60,6 @@ spec:
         filter: heartbeat
   description: Call a heartbeat endpoint
   actions:
-    - name: send heartbeat
-      exec:
-        # environment variables from the mission control cluster
-        env:
-          - name: HEARTBEAT_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: canary-checker-heartbeat
-                key: token
-        script: |
-          curl -H "Authorization: $HEARTBEAT_TOKEN"  https://httpbin.demo.aws.flanksource.com/bearer
     - name: send heartbeat from the agent
       runsOn:
         - 'aws'

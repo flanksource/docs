@@ -46,8 +46,6 @@ For more examples of configuration file, please check the [GitHub repo](https://
 | `ignore`          | Set configurations to ignore                                                                                                                                            | `[]string`                                     |          |
 | `properties`      | Custom templatable properties for the scraped config items.                                                                                                             | [`[]ConfigProperty`](../../reference/property) |          |
 | `tags`            | set custom tags on the scraped config items                                                                                                                             | `map[string]string`                            |          |
-| `transform`       | Specify field to transform result                                                                                                                                       | [`Transform`](#transform)                      |          |
+| `transform`       | Field to transform result                                                                        | [`Transform`](/config-db/concepts/transform)                        |          |                   |          |
 
-#### Transform
 
-<ConfigTransform></ConfigTransform>

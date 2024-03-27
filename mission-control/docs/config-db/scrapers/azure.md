@@ -1,5 +1,15 @@
 # Azure
 
+
+
+:::tip Registry
+
+The registry has an [Azure](/registry/azure) Helm chart that provides a pre-configured Scraper with some common defaults
+
+:::
+
+
+
 The Azure scrapers scrapes your azure account to fetch all the resources & save them as configs.
 
 ```yaml title="azure-scraper.yaml"
@@ -47,7 +57,7 @@ spec:
 | `clientSecret`   | Microsoft Entra ID app client secret                                       | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
 | `exclusions`     | Specifies the Azure projects to scrape                                     | [`Exclusion`](#azure-exclusion)                |          |
 | `properties`     | Custom templatable properties for the scraped config items.                | [`[]ConfigProperty`](../../reference/property) |          |
-| `transform`      | Field to transform result                                                  | [`Transform`](#transform)                      |          |
+| `transform`       | Field to transform result                                                                        | [`Transform`](/config-db/concepts/transform)                        |          |
 | `tags`           | Set custom tags on the scraped config items                                | `map[string]string`                            |          |
 
 :::note

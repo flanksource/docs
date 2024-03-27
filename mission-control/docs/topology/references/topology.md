@@ -7,7 +7,7 @@ This page defines the specification for Topology. There are few samples in the e
 | `id`         | Specify unique ID for topology                                                | [`IDSelector`](#id-selector)                                 |          |
 | `components` | Specify the topology fields for your service, application, check, etc.        | [`[]Component`](./components.md#topology)                    |          |
 | `configs`    | Specify selectors for config items that should be related with this topology. | [`[]ConfigSelector`](../concepts/catalog.md#config-selector) |          |
-| `icon`       | Set an icon class for topology.                                               | `string`                                                     |          |
+| `icon`       | Set an icon class for topology.                                               | [`Icon`](/reference/types#icon)                                                      |          |
 | `owner`      | Specify owner for the topology.                                               | `string`                                                     |          |
 | `properties` | Customize topology properties as to be visualized on Mission control UI.      | [`[]Property`](../concepts/properties.md)                    |          |
 | `schedule`   | Set schedule to update topology at the set interval.                          | `string`                                                     |          |

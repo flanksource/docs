@@ -1,5 +1,19 @@
 # CEL Expressions
 
+<SkipOSS>
+
+Expressions are always evaluated with a context, depending
+
+
+| Use Case               | Context     |
+| ---------------------- | ----------- |
+| Playbook Action Filter | [Context](/reference/playbooks/context) |
+| Notification Filter                       |             |
+|
+
+
+</SkipOSS>
+
 `expr` expressions in canary checker use the [Go Common Expression Language (CEL)](https://github.com/google/cel-go).
 See [Language Definition](https://github.com/google/cel-spec/blob/master/doc/langdef.md#overview)
 

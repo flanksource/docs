@@ -18,10 +18,6 @@ Resource Selectors are used in multiple places including:
 | agent         | Select resources created on this agent, Defaults to `local`  | `uuid`, `{name}`, `local` or `all`                           |          |
 | cache         | Cache settings to use for the results, expensive selectors or selectors that are are use very often should be cached for longer periods. Defaults to `max-age=10m` | `no-cache`, `no-store` or `max-age={duration}`               |          |
 
-
-
-## Examples
-
 ### Selecting components in a topology
 
 ```yaml title="topology-component-selectors.yaml"
@@ -42,7 +38,7 @@ spec:
       fieldSelector: 'instance-type=spot'
       labelSelector: 'sku-type=gpu'
 
-  - name: Components with labels of team payments and team orders
+  - name: Components with labels of team payments or team orders
     # Using multiple selectors to aggregate
     selectors:
     - labelSelector: 'team=payments'

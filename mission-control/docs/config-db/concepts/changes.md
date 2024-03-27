@@ -2,8 +2,6 @@
 
 When you save a config item to ConfigDB, it also tracks its changes. These changes may come from external sources like Kubernetes events or Azure activities. Alternatively, they can be automatically detected by comparing the old config with the newly changed one.
 
-## Types
-
 Changes are of two types
 
 - Diff change
@@ -21,114 +19,6 @@ These are changes provided by an external source example: Kubernetes Events & AW
 
 ![Event based config changes of a Kubernetes Pod](/img/event-based-config-changes.png)
 
-## Change Transformation
 
-You can transform a change before it's saved to the database.
 
-| Field     | Description                                                                   | Scheme                                      | Required | Templatable |
-| --------- | ----------------------------------------------------------------------------- | ------------------------------------------- | -------- | ----------- |
-| `mapping` | Mapping is a list of CEL expressions that maps a change to the specified type | [_`[]ChangeMapping`_](#mapping)             |          |             |
-| `exclude` | Select what changes to exclude                                                | <CommonLink to="cel">_`[]CEL`_</CommonLink> |          | `true`      |
-
-### Exclusions
-
-Some configs can have changes in high volume that may not be relevant. Example: A kubernetes Node config changes frequently as the pods in the cluster update their images. From the node's perspective the image changes are irrelevant.
-
-This is where exclusions can become handy. Here's an example that ignore all image changes in a kubernetes node config:
-
-```yaml title="kubernetes-scraper.yaml"
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: kubernetes-scraper
-spec:
-  kubernetes:
-    - clusterName: local-kind-cluster
-      transform:
-        changes:
-          exclude:
-            - 'config_type == "Kubernetes::Node" && details.message == "status.images"'
-```
-
-#### Template Variables
-
-| Field                | Description                                                            | Scheme           |
-| -------------------- | ---------------------------------------------------------------------- | ---------------- |
-| `action`             | Action of the change                                                   | `delete\|ignore` |
-| `change_type`        | Type of the change                                                     | `string`         |
-| `config_type`        | Type of the config                                                     | `string`         |
-| `config`             | The corresponding json config of the change                            | `map[string]any` |
-| `created_at`         | Creation time of the change                                            | `time.Time`      |
-| `created_by`         | User who created the change                                            | `string`         |
-| `details`            | Details of the change. Example: it could be a kubernetes event object. | `map[string]any` |
-| `diff`               | Diff of the change                                                     | `string`         |
-| `external_change_id` | ID of the change in the external system                                | `string`         |
-| `external_id`        | ID of the change                                                       | `string`         |
-| `patches`            | Patches of the change                                                  | `string`         |
-| `severity`           | Severity of the change                                                 | `string`         |
-| `source`             | Source of the change                                                   | `string`         |
-| `summary`            | Summary of the change                                                  | `string`         |
-
-### Mapping
-
-When you encounter a diff change, unlike an event based change, it can sometimes appear cryptic. The summary of the change may not immediately indicate what the change is about. For example, the change 'status.images' might not be self-explanatory. To address this issue, we can assign types to these diff changes using mapping.
-
-```yaml title="kubernetes-scraper.yaml"
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: kubernetes-scraper
-spec:
-  kubernetes:
-    - clusterName: local-kind-cluster
-      transform:
-        changes:
-          mapping:
-            - filter: >
-                change.change_type == 'diff' && change.summary == "status.containerStatuses" &&
-                patch != null && has(patch.status) && has(patch.status.containerStatuses) &&
-                patch.status.containerStatuses.size() > 0 &&
-                has(patch.status.containerStatuses[0].restartCount)
-              type: PodCrashLooping
-            - filter: >
-                change.change_type == 'diff' && change.summary == "status.images" && config.kind == "Node"
-              type: ImageUpdated
-```
-
-| Field     | Description                          | Scheme                                    | Required |
-| --------- | ------------------------------------ | ----------------------------------------- | -------- |
-| `filter`  | Selects changes to apply the mapping | <CommonLink to="cel">_`CEL`_</CommonLink> | `true`   |
-| `exclude` | Type to be set on the change         | `string`                                  | `true`   |
-
-#### Template Variables
-
-| Field         | Description               | Scheme                                         |
-| ------------- | ------------------------- | ---------------------------------------------- |
-| `config_type` | Type of the config        | `string`                                       |
-| `config`      | Access the scraped config | [`ScrapedResult`](../references/scrape-result) |
-
-## Change Retention
-
-Changes can quickly accumulate and grow large over time. While it's important to retain some changes, others can be discarded after a period. Retention enables you to discard changes based on their type.
-
-Example: The scraper config below only retains one week of PullSuceeded changes.
-
-```yaml title="kubernetes-scraper.yaml"
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: kubernetes-scraper
-spec:
-  retention:
-    changes:
-      - name: PullSuceeded
-        age: 7d # Only keep one week of PullSuceeded changes
-  kubernetes:
-    clusterName: local
-```
-
-| Field   | Description                                             | Scheme   | Required |
-| ------- | ------------------------------------------------------- | -------- | -------- |
-| `name`  | Name of the change type                                 | `string` | `true`   |
-| `age`   | Maximum age of the change type to retain (`12h`, `30d`) | `string` |          |
-| `count` | Maximum count to retain the change type                 | `int`    |          |
+See [Transformation Changes](./transform#changes)

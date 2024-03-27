@@ -2,20 +2,21 @@
 
 Actions are the fundamental tasks executed by a playbook. A playbook can comprise multiple actions, which are executed sequentially. If any action encounters an error and fails, the execution of the playbook is halted.
 
-| Field          | Description                                                                                                                                               | Scheme                                             | Required |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
-| `name`         | Name of action.                                                                                                                                           | `string`                                           | `true`   |
-| `runsOn`       | Specify the [runners](./runners.md) that can run this action. One will be chosen on random. When empty, the playbook will run on the main instance itself | `[]string`                                         |          |
-| `templatesOn`  | Specify where the templating of the action spec should occur                                                                                              | `host` or `agent`                                    |          |
-| `delay`        | A delay before running the action e.g. `8h`                                        | `Duration` or  [`Expression`](../concepts/expression)                                           |          |
-| `filter`       | Whether to run the step or not  | [`Expression`](../concepts/expression)                                           |          |
-| `timeout`      | Timeout on this action.                                                                                                                                   | `Duration`               |          |
-| `exec`         | Specify exec of action.                                                                                                                                   | [`Exec`](../actions/exec.md)                 |          |
-| `gitops`       | Specify gitops of action.                                                                                                                                 | [`Gitops`](../actions/gitops.md)             |          |
-| `http`         | Specify http of action.                                                                                                                                   | [`Http`](../actions/http.md)                 |          |
-| `sql`          | Specify sql of action.                                                                                                                                    | [`Sql`](../actions/sql.md)                   |          |
-| `pod`          | Specify pod of action.                                                                                                                                    | [`Pod`](../actions/pod.md)                   |          |
-| `notification` | Specify notification of action.                                                                                                                           | [`Notification`](../actions/notification.md) |          |
+| Field                 | Description                                                  | Scheme                                                | Required |
+| --------------------- | ------------------------------------------------------------ | ----------------------------------------------------- | -------- |
+| `name`                | Name of action.                                              | `string`                                              | `true`   |
+| `runsOn`              | Specify the [runners](./runners.md) that can run this action. One will be chosen on random. When empty, the playbook will run on the main instance itself | `[]string`                                            |          |
+| `templatesOn`         | Specify where the templating of the action spec should occur | `host` or `agent`                                     |          |
+| `delay`               | A delay before running the action e.g. `8h`                  | `Duration` or  [`Expression`](../concepts/expression) |          |
+| `filter`              | Whether to run the step or not                               | [`Expression`](../concepts/expression)                |          |
+| `timeout`             | Timeout on this action.                                      | `Duration`                                            |          |
+| `azureDevopsPipeline` |                                                              | [AzureDevops](./azure_devops_pipeline)                |          |
+| `exec`                | Specify exec of action.                                      | [Exec](../actions/exec.md)                          |          |
+| `gitops`              | Specify gitops of action.                                    | [Gitops](../actions/gitops.md)                      |          |
+| `http`                | Specify http of action.                                      | [Http](../actions/http.md)                          |          |
+| `sql`                 | Specify sql of action.                                       | [Sql`](../actions/sql.md)                            |          |
+| `pod`                 | Specify pod of action.                                       | [Pod](../actions/pod.md)                            |          |
+| `notification`        | Specify notification of action.                              | [Notification](../actions/notification.md)          |          |
 
 :::note
 Specify one or more actions; but at least one.

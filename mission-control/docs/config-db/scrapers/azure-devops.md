@@ -43,13 +43,9 @@ spec:
 | `projects`            | Specifies the Azure DevOps projects to scrape                         | `[]string`                                       | `true`   |
 | `pipelines`           | Specifies the Azure DevOps pipelines to scrape                        | `[]string`                                       | `true`   |
 | `properties`          | Custom templatable properties for the scraped config items.           | [`[]ConfigProperty`](../../reference/property)   |          |
-| `transform`           | Field to transform result                                             | [`Transform`](#transform)                        |          |
+| `transform`       | Field to transform result                                                                        | [`Transform`](/config-db/concepts/transform)                        |          |
 | `tags`                | Set custom tags on the scraped config items                           | `map[string]string`                              |          |
 
 :::note
 Either the connection name or the credentials (organization & personalAccessToken) are required
 :::
-
-#### Transform
-
-<ConfigTransform></ConfigTransform>

@@ -8,60 +8,59 @@ pagination_next: canary-checker/health-checks
 pagination_prev: playbooks/overview
 ---
 
-
 # Topology
 
-A topology is a represenation of logical system made up of components and sub-components. Many views can be created using the same underlying components based on the way the consumer thinks about the system - e.g. from an Infrastructure or Application focused view.
+A topology is a representation of logical system made up of components and sub-components.
+
+Some of the benefits include:
+
+- **Different Views** of the same resources based on use case e.g. Platform teams might want an infra focused view, while application teams want an app focused view
+- **Partial Views** enable publishing high-level details of a component without exposing internal or private data more widely.
 
 
-
-<img src="/img/topology.svg" width="900px"/>
-
+<img src="/img/topology.svg" width="900px" className="py-3"/>
 
 
+A topology is comprised of:
 
-
-
-
-* **Components**
-* **Catalog**
-* **Health Checks**
-* **Properties**
-* Metrics
-
-
+* **Components** and sub-components that represent logical parts of the system. Components can be nested to represent hierarchy.
+* **Config Items** (and their associated changed/insights) that represent the underlying configuration or code of a component.
+* **Health Checks** (or SLO's) to determine the health of a component in a consistent way.
+* **Properties** and links to documentation or external consoles and dashboards
+* **Metrics** aggregated from external data sources
 
 ## Components
 
-### Relationships
+Components are represented as cards:
+<img src="/img/topology-card.svg" width="700px" className="pb-10"/>
 
+<div style={{width: "800px"}}>
 
-## Health / RAG Status
 :::tip Mini Dashboards
 
 One way to think about a component is as a mini dashboard that has provides a detailed RAG status that incorporates metrics and configuration from multiple sub-components and/or external systems.
 
 :::
-
-![](/img/topology-card.svg)
-
-
+</div>
 
 ## Logical Views
 
 Components can be created to represent any logical view of a system, for example the below represents a FluxCD installation, mapping helm releases to pods and resources that they create.
 
 
-
-<img src="/img/flux-topology.svg" width="800px"/>
-
+<img src="/img/flux-topology.svg" width="800px" className="py-3"/>
 
 
-## Catalog
+## Components vs Config Items
+
+Sometimes a logical resource is both a Component and a Config Item, for example a Kubernetes Namespace or Pod.  What distinguishes them is that config items are physical - they represent a resource or configuration that exists.
+
+Components on the other hand are how people think about and model complex systems.
+
+<!--
 
 |                    | Component                                       | Catalog                                        |
 | ------------------ | ----------------------------------------------- | ---------------------------------------------- |
-|                    |                                                 |                                                |
 | Examples           | Namespace, Pod, Datacenter                      | Namespace, Pod, Security Group, postgres.conf  |
 | Ownership          | Yes                                             | No                                             |
 | Properties         | Custom Properties                               | Derived from config                            |
@@ -70,15 +69,4 @@ Components can be created to represent any logical view of a system, for example
 | Changes / Insights | None -  (Derived from linked catalog item only) | Using change tracking, events and audit trails |
 | Cost               | Sum of related catalog costs                    | Based on Cloud Cost & Usage Reports            |
 
-
-
-
-
-
-Topology is a way for you to describe the different parts of your infrastructure, like servers, databases, applications, or any other elements that make up your system, in a structured way. It is represented as a tree-like structure where the nodes are called Components.
-
-The Components in a Topology can reference each other, which allows you to create a more complex and interconnected topology. This makes it easy to visualize how different parts of your infrastructure are related to each other and how they interact with each other. For example, you can have a database component that is referenced by multiple server components, indicating that these servers are all dependent on the database.
-
-Users can provide the Topology structure as a YAML specification, which is a simple way to represent data in a human-readable format. With this specification, users can create a clear and detailed description of their system infrastructure, allowing them to easily manage and maintain their systems.
-
-## Health
+ -->
