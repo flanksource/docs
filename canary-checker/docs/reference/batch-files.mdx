@@ -1,0 +1,37 @@
+```yaml title="batch-files.yaml"
+ - name: Correspondence/OSC - Failed
+      path: /mnt/efs/{{.Values.efs.path}}/oipa/correspondence/out/failed
+      filter:
+        regex: ".*.err"
+        # use the last known max, or 60 days ago if no last known max
+        since: |
+          {{`
+            {{-  if last_result.results.max }}
+            {{  last_result.results.max }}
+            {{- else}}
+            now-1d
+            {{- end}}
+          `}}
+      transform:
+        # Save the newest modified time to the results, overriding the full file listing that would normally be saved
+        # if no new files detected, use the last known max
+        expr: |
+          {
+            "detail": {
+              "max": string(results.?newest.modified.orValue(last_result().results.?max.orValue("now-60d"))),
+            }
+          }.toJSON()
+      display:
+        expr: results.?files.orValue([]).map(i, i.name).join(", ")
+      test:
+        expr: results.?files.orValue([]).size() ==  0
+      metrics:
+        - name: sybrin_xml_failed
+          value: results.?files.orValue([]).size()
+          type: counter
+          labels:
+            - name: folder
+              value: osc
+            - name: namespace
+              value: {{ .Release.Namespace }}
+  ```

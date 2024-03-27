@@ -26,10 +26,10 @@ spec:
 
 ### Triggering playbook on the component
 
-![Playbook trigger](../../images/etcd-kind-component-playbook.png)
+![Playbook trigger](/img/etcd-kind-component-playbook.png)
 
-![Trigger Playbook](../../images/etcd-component-playbook-trigger-popup.png)
+![Trigger Playbook](/img/etcd-component-playbook-trigger-popup.png)
 
 ### Playbook action logs
 
-![Playbook action logs](../../images/etcd-component-kubectl-logs.png)
+![Playbook action logs](/img/etcd-component-kubectl-logs.png)

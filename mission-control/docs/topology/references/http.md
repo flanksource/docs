@@ -33,14 +33,12 @@ spec:
 
 This topology will create a root **"users"** component with all the users returned by the HTTP endpoint as its child components.
 
-![](../images/component-lookup-http.png)
+![](/img/component-lookup-http.png)
 
 | Field          | Description                                                                                                   | Scheme                                                 | Required |
 | -------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------- |
+| **`url`**      | HTTP URL, if a URL is specified on both the connection and check, the URL on the check takes precedence.      | _string_                                               | Yes      |
 | **Connection** |                                                                                                               |                                                        |          |
-| `connection`   | Path of existing connection e.g. `connection://sftp/instance`/ Mutually exclusive with `username`, `password` | <CommonLink to="connection">_Connections_</CommonLink> |          |
+| `connection`   | Path of existing connection e.g. `connection://http/instance`/ Mutually exclusive with `username`, `password` | <CommonLink to="connection">_Connections_</CommonLink> |          |
 | `username`     | Mutually exclusive with `connection`                                                                          | [_EnvVar_](../../concepts/authentication/#envvar)      |          |
 | `password`     | Mutually exclusive with `connection`                                                                          | [_EnvVar_](../../concepts/authentication/#envvar)      |          |
-| **`url`**      | HTTP URL, if a URL is specified on both the connection and check, the URL on the check takes precedence.      | _string_                                               | Yes      |
-| `ntlm`         | When true, will do authentication using NTLM v1 protocol                                                      | _bool_                                                 |          |
-| `ntlmv2`       | When true, will do authentication using NTLM v2 protocol                                                      | _bool_                                                 |          |

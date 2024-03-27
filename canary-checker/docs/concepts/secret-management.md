@@ -12,6 +12,10 @@ Whenever a field uses the `EnvVar` object type you have the option of specifying
 
 ## Static Values
 
+:::warning
+Avoid inlining secrets, use `valueFrom` and <CommonLink to="authentication">EnvVar</CommonLink>
+:::
+
 Using a HTTP health check as an example for static values:
 
 ```yaml title="http-basic-auth-static.yaml"

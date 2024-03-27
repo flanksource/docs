@@ -1,0 +1,58 @@
+# GCP
+
+| Field                           | Description | Type                                                                       | Required |
+| ------------------------------- | ----------- | -------------------------------------------------------------------------- | -------- |
+| <SkipOSS>`connection`</SkipOSS> |  Mutually exclusive with `credentials`4           | <SkipOSS><CommonLink to="connection">_Connections_</CommonLink> </SkipOSS> |          |
+| `endpoint`                      | Endpoint    | `string`                                                                   |          |
+| `credentials`                   | Credentials | <CommonLink to="secrets">_EnvVar_</CommonLink> to service account JSON                             |          |
+
+
+
+
+There are 3 options when connecting to GCP:
+
+<Step step={1} name="GKE Workload Identity"  style="list">
+
+GKE [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) (the default if no `connection` or `credentials` is specified)
+</Step>
+
+<Step step={2} name="Connection" style="list">
+
+```yaml title="gcs-connection.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: database-backup-check
+spec:
+  interval: 60
+  folder:
+    - name: gcs auth test
+      path: gcs://somegcsbucket
+      gcpConnection:
+        connection: connection://gcp/internal
+```
+
+</Step>
+
+<Step step={3} name="Inline"  style="list">
+
+```yaml title="gcp-inline.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: database-backup-check
+spec:
+  interval: 60
+  folder:
+    - name: gcs auth test
+      path: gcs://somegcsbucket
+      gcpConnection:
+        credentials:
+          valueFrom:
+            secretKeyRef:
+              name: gcp-credentials
+              key: AUTH_ACCESS_TOKEN
+```
+</Step>
+
+

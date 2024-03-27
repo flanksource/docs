@@ -2,7 +2,7 @@
 
 `apm-hub` can possibly serve hundreds of backends, but you might not want all of them to serve a request. Routing helps you to control which backends should serve a given request based on the parameters shown below.
 
-![Routing Diagram](../images/routing.svg)
+![Routing Diagram](/img/routing.svg)
 
 ## Route
 
@@ -88,7 +88,7 @@ As you can imagine, a single search query can possibly be served by numerous bac
 
     All routes are non-additive by default.
 
-![Non additive route](../images/non-additive-route.svg)
+![Non additive route](/img/non-additive-route.svg)
 
 ````yaml
 backends:

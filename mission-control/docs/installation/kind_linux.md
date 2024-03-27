@@ -56,11 +56,6 @@ Add the Flanksource repository to helm:
 
 ```bash
 helm repo add flanksource https://flanksource.github.io/charts
-```
-
-then fetch the latest chart list with
-
-```bash
 helm repo update
 ```
 

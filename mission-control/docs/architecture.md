@@ -3,7 +3,7 @@
 
 
 
-![](./images/architecture.svg)
+![](/img/architecture.svg)
 
 
 
@@ -30,7 +30,7 @@ Communication between services happen in 3 ways:
 3. **HTTP/REST** - This model is primarily used when the service need to interact with services outside the DB (e.g. the APM hub needs to connect to log stores to retrieve logs)
 
 ## Postgres
-
++
 Postgres is the only data store used by Mission Control and is also used as a JSON document database and message queue. This limits the dependencies and complexity especially when self-hosting.
 
 All services use a shared database and model via the [duty](https://github.com/flanksource/duty) project, this provides the following benefits:

@@ -6,24 +6,24 @@ Evidence plays a critical role in understanding and resolving incidents. Evidenc
 
 ### A. Topology
 
-![Topology as an evidence](../../images/evidence-component.png)
+![Topology as an evidence](/img/evidence-component.png)
 
 ### B. Config Items
 
-![Topology as an evidence](../../images/evidence-config.png)
+![Topology as an evidence](/img/evidence-config.png)
 
 ### C. Config Changes
 
-![Topology as an evidence](../../images/evidence-config-change.png)
+![Topology as an evidence](/img/evidence-config-change.png)
 
 ### D. Config Analysis
 
-![Topology as an evidence](../../images/evidence-config-analysis.png)
+![Topology as an evidence](/img/evidence-config-analysis.png)
 
 ### E. Health Checks
 
-![Topology as an evidence](../../images/evidence-health-check.png)
+![Topology as an evidence](/img/evidence-health-check.png)
 
 ### F. Logs
 
-![Topology as an evidence](../../images/evidence-logs.png)
+![Topology as an evidence](/img/evidence-logs.png)

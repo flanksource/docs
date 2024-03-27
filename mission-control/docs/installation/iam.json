@@ -1,0 +1,37 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"cloudtrail:LookupEvents",
+				"ec2:DescribeDhcpOptions",
+				"ec2:DescribeInstances",
+				"ec2:DescribeRouteTables",
+				"ec2:DescribeSecurityGroups",
+				"ec2:DescribeSubnets",
+				"ec2:DescribeVolumes",
+				"ec2:DescribeVpcs",
+				"ecr:DescribeRepositories",
+				"eks:ListClusters",
+				"elasticfilesystem:DescribeFileSystems",
+				"elasticloadbalancing:DescribeLoadBalancers",
+				"elasticloadbalancing:DescribeTags",
+				"sts:GetCallerIdentity",
+        "eks:DescribeCluster",
+        "rds:DescribeDBInstances",
+        "s3:GetBucketLocation"
+			],
+			"Resource": "*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"athena:GetQueryExecution",
+				"athena:GetQueryResults",
+				"athena:StartQueryExecution"
+			],
+			"Resource": "arn:aws:athena:${Region}:${Account}:workgroup/${WorkGroupName}"
+		}
+	]
+}

@@ -4,12 +4,15 @@ hide:
 title: CLI
 description: Troubleshooting and/or running from CI/CD pipeline
 ---
-
-# Installation
-
+import { set } from "lodash"
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ReactMarkdown from 'react-markdown';
+
+
+# Installation
+
+<Step step={1} name="Install the CLI">
 
 <Tabs>
 <TabItem value="linux-amd64" label="Linux (amd64)" default>
@@ -68,7 +71,9 @@ wget -nv -nc -O https://github.com/flanksource/canary-checker/releases/latest/do
   </TabItem>
 </Tabs>
 
-# Run
+</Step>
+<Step step={2} name="Create a canary definition">
+
 
 ```yaml title="canary.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -85,8 +90,13 @@ spec:
 
 ```
 
+</Step>
+<Step step={3} name="Run the check locally">
+
 ```shell-session
 canary-checker run canary.yaml
 ```
 
 <Asciinema id="594517"/>
+
+</Step>

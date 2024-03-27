@@ -28,7 +28,7 @@ export function ConfigTransform() {
     {
       field: 'expr',
       description: 'Specify Cel expression',
-      scheme: 'cel-expression',
+      scheme: 'CEL',
       schemaLink: siteConfig.customFields.links['cel'],
       required: ''
     },

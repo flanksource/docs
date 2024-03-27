@@ -2,11 +2,10 @@
 
 | Field            | Description                                                                                   | Type                                                | Required |
 | ---------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------- |
-| `env`            | Environment variables.                                                                        | `map[string]`[`VarSource`](#varsource)              |          |
-| `schedule`       | Schedule to run checks on.\Supports all cron expression.\Also supports golang duration. | `string`                                            |          |
+| `env`            | Environment variables.                                                                        | `map[string]`<CommonLink to="authentication">`EnvVar`</CommonLink>            |          |
+| `schedule`       | Schedule to run checks on.\Supports all cron expression.\Also supports golang duration. | `cron`                                            |          |
 | `icon`           | Icon to use for the check.                                                                    | `string`                                            |          |
 | `severity`       | Severity of the check.                                                                        | `string`                                            |          |
-| `owner`          | Owner of the check.                                                                           | `string`                                            |          |
 | `resultmode`     | Result mode of the check.                                                                     | `string`                                            |          |
 | `alertmanager`   | List of AlertManager checks to run.                                                           | [`[]AlertManagerCheck`](alert-manager)         |          |
 | `awsConfig`      | List of AWS Config checks to run.                                                             | [`[]AwsConfigCheck`](aws-config)               |          |
@@ -41,36 +40,3 @@
 | `s3`             | List of S3 checks to run.                                                                     | [`[]S3Check`](s3-bucket)                              |          |
 | `tcp`            | List of TCP checks to run.                                                                    | [`[]TCPCheck`](./tcp)                            |          |
 
-## Scheme Reference
-
-### VarSource
-
-| Field             | Description                                                                                                                                                                                        | Type                                            | Required |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------- |
-| `value`           |                                                                                                                                                                                                    | `string`                                        |          |
-| `fieldRef`        | Selects a field of the pod: supports metadata.name, metadata.namespace, metadata.labels, metadata.annotations, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs. | [`ObjectFieldSelector`](#objectfieldselector)   |          |
-| `configMapKeyRef` | Selects a key of a ConfigMap.                                                                                                                                                                      | [`ConfigMapKeySelector`](#configmapkeyselector) |          |
-| `secretKeyRef`    | Selects a key of a secret in the pod's namespace                                                                                                                                                   | [`SecretKeySelector`](#secretkeyselector)       |          |
-
-### ObjectFieldSelector
-
-| Field        | Description                                                                   | Type     | Required |
-| ------------ | ----------------------------------------------------------------------------- | -------- | -------- |
-| `apiVersion` | Version of the schema the FieldPath is written in terms of, defaults to "v1". | `string` |          |
-| `fieldPath`  | Path of the field to select in the specified API version.                     | `string` |          |
-
-### ConfigMapKeySelector
-
-| Field      | Description                                              | Type     | Required |
-| ---------- | -------------------------------------------------------- | -------- | -------- |
-| `name`     | Name of the referent.                                    | `string` |          |
-| `key`      | The key to select.                                       | `string` |          |
-| `optional` | Specify whether the ConfigMap or its key must be defined | `bool`   |          |
-
-### SecretKeySelector
-
-| Field      | Description                                                       | Type     | Required |
-| ---------- | ----------------------------------------------------------------- | -------- | -------- |
-| `name`     | Name of the referent.                                             | `string` |          |
-| `key`      | The key of the secret to select from. Must be a valid secret key. | `string` |          |
-| `optional` | Specify whether the Secret or its key must be defined             | `bool`   |          |

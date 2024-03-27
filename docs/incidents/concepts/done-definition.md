@@ -2,7 +2,7 @@
 
 Incidents can be programatically resolved using done definition. When an evidence is added to an incident, a done definition can be created based on the attached object of the evidence.
 
-![Done definition form](../../images/done-definition-form.png)
+![Done definition form](/img/done-definition-form.png)
 
 Done definitions are checked periodically every 5 minutes.
 

@@ -1,0 +1,66 @@
+# Quick Start
+
+In this walkthrough, we'll create and run a playbook that scales a Kubernetes deployment.
+The only prerequisites are
+
+- you have a config item for a Kubernetes Deployment
+- you have kubectl configured.
+
+<Step step={1} name="Create a playbook">
+
+```yaml title="restart-deployment.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: restart-deployment
+spec:
+  description: Restart deployment
+  configs:
+    - types:
+        - Kubernetes::Deployment
+  actions:
+    - name: 'Restart kubernetes deployment'
+      exec:
+        script: kubectl rollout restart deployment {{.config.name}} -n {{.config.tags.namespace}}
+```
+
+
+This playbook is designed to run on a Kubernetes Deployment (with a config type of `Kubernetes::Deployment`).
+
+Save the above YAML to a file called `scale-deployment.yaml`. Then, to store the playbook, run:
+
+```bash
+kubectl apply -f scale-deployment.yaml
+```
+
+</Step>
+<Step step={2} name="Run a playbook">
+
+To run the playbook, we need its id. In addition to that please get the id for the deployment config item that you want to scale.
+
+```bash
+curl -sL -X POST -u 'admin@local:admin' \
+  --json '{
+    "id": "<playbook_id>",
+    "config_id": "<config_id>",
+    "params": {
+      "replicas": "1"
+    }
+  }' \
+  localhost:8080/playbook/run
+```
+
+The above command scales the deployment of the given config item to just 1 replica. Since the playbook didn't have any approvers defined, the run starts immediately.
+
+</Step>
+<Step step={3} name="See the Results">
+
+At this stage, the run should have terminated successfully. We can check the status of the run by running:
+
+```bash
+curl -sL -X GET -u 'admin@local:admin' \
+  localhost:8080/playbook/run/<run_id>
+```
+
+The run id is returned by the API call in the previous step.
+</Step>

@@ -61,20 +61,18 @@ will be setup on the host running the script.
 | ------ | ------------- | -------- | -------- |
 | `path` | Path or glob. | `string` | `true`   |
 
-[Read more ...](../concepts/artifacts.md)
-
 ### Git Checkout
 
 For authentication, either provide the connection name or the basic auth or the certificate.
 
-| Field         | Description                                                                                                                                                    | Type                                                                          | Required |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | -------- |
-| `url`         | Git repository URL.                                                                                                                                            | `string`                                                                      | `true`   |
-| `connection`  | Specify the connection name to use for git authentication (if required)                                                                                        |  <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
-| `username`    | Git auth username.                                                                                                                                             |  <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
-| `password`    | Git auth password.                                                                                                                                             |  <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
-| `certificate` | Git auth certificate.                                                                                                                                          |  <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
-| `destination` | Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL will be used as the dir name. | `string`                                                                      |          |
+| Field         | Description                                                  | Type                                                  | Required |
+| ------------- | ------------------------------------------------------------ | ----------------------------------------------------- | -------- |
+| `url`         | Git repository URL.                                          | `string`                                              | `true`   |
+| `connection`  | Specify the connection name to use for git authentication (if required) | <CommonLink to="connection">*Connection*</CommonLink> |          |
+| `username`    | Git auth username.                                           | <CommonLink to="secrets">*EnvVar*</CommonLink>        |          |
+| `password`    | Git auth password.                                           | <CommonLink to="secrets">*EnvVar*</CommonLink>        |          |
+| `certificate` | Git auth certificate.                                        | <CommonLink to="secrets">*EnvVar*</CommonLink>        |          |
+| `destination` | Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL will be used as the dir name. | `string`                                              |          |
 
 ## Templating
 
@@ -86,3 +84,14 @@ Scripts can be templated. The script template receives a environment variable th
 | `component` | Component passed to the playbook         | [`Component`](../references/component.md)    |
 | `check`     | Canary Check passed to the playbook      | [`Check`](../references/check.md)            |
 | `params`    | User provided parameters to the playbook | `map[string]string`                          |
+
+
+
+### Action Result
+
+| Field      | Description       | Schema   |
+| ---------- | ----------------- | -------- |
+| `stdout`   |                   | `string` |
+| `stderr`   |                   | `string` |
+| `exitCode` | Process exit code | `int`    |
+

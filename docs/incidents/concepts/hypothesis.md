@@ -22,10 +22,10 @@ To update the hypothesis status:
 - Go to the "Action Plan" tab.
 - On the relevant hypothesis and click on the icon at the beginning and select the desired status.
 
-![Updating the status of a hypothesis](../../images/hypothesis-status.png)
+![Updating the status of a hypothesis](/img/hypothesis-status.png)
 
 ### Commenting
 
 You can comment on a hypothesis either from the main incident page or from the action plan tab.
 
-![Leaving a comment on a hypothesis](../../images/hypothesis-comment.png)
+![Leaving a comment on a hypothesis](/img/hypothesis-comment.png)

@@ -1,20 +1,14 @@
-# Quick Start
-
-How to Install Mission control with helm
+# Self-Hosted Install With Helm
 
 ## Prerequisites
 
-To install and run the Mission Control chart on your Kubernetes Cluster, you need to have the following prerequisites;
+To install and run Mission Control you need to have the following prerequisites:
 
 - A Kubernetes installation of version 1.26 or higher.
 - (Optional) SMTP Server (For sending notifications and invites)
 - (Optional) Connection details for an external Postgres Database
 
 ## Install Chart
-
-```console
-helm install [RELEASE_NAME] flanksource/mission-control
-```
 
 To set custom values file for your mission-control helm chart installation to override existing values in [`mission-control-chart`](https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml).
 
@@ -26,10 +20,6 @@ global:
     annotations: # Any annotations required to attach custom IAM policies etc.
 
 adminPassword: admin # The default password for the admin@local user
-
-canary-checker:
-  image:
-    type: full # use minimal for a smaller image
 
 flanksource-ui:
   ingress:
@@ -43,6 +33,8 @@ db:
 ```
 
 ```bash
+helm repo add flanksource https://flanksource.github.io/charts
+helm repo update
 helm install mission-control  \
   flanksource/mission-control  \
  -n mission-control \
