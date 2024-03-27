@@ -2,7 +2,7 @@
 
 Scrapers can create and attach insights (security, performance, cost, etc..) to related config items.
 
-![Config Insights](../../images/config-insights.png)
+![Config Insights](/img/config-insights.png)
 
 _Fig: Config insights_
 

@@ -82,3 +82,31 @@ See the CEL <CommonLink to="cel" anchor="kubernetes">*Kubernetes*</CommonLink> d
 | `name` | Name of Kubernetes resource | *string* |  |
 | `labelSelector` | Select Kubernetes resource based on label. e.g. app, canary. | *string* |
 | `fieldSelector` | Select Kubernetes resource based on the value of specified resource field | *string* |
+
+
+## Examples
+
+### Certificate readiness
+
+```yaml title="cert-manager-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: cert-manager
+spec:
+  schedule: "@every 15m"
+  kubernetes:
+    - name: cert-manager-check
+      kind: Certificate
+      test:
+        expr: |
+          dyn(results).
+          map(i, i.Object).
+          filter(i, i.status.conditions[0].status != "True").size() == 0
+      display:
+        expr: |
+          dyn(results).
+          map(i, i.Object).
+          filter(i, i.status.conditions[0].status != "True").
+          map(i, "%s/%s -> %s".format([i.metadata.namespace, i.metadata.name, i.status.conditions[0].message])).join('\n')
+```

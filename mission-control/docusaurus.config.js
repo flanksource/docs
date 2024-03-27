@@ -11,7 +11,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 const config = {
   title: 'Mission Control',
   tagline: '',
-
+  // staticDirectories: ['images', 'static'],
   url: 'https://docs.flanksource.com',
   baseUrl: '/',
   organizationName: 'flanksource', // Usually your GitHub org/user name.
@@ -24,8 +24,8 @@ const config = {
     oss: false,
     productName: 'Mission Control',
     links: {
-      authentication: '/reference/secret-management',
-      secrets: '/reference/secret-management',
+      authentication: '/reference/env-var',
+      secrets: '/reference/env-var',
       connection: '/reference/connection',
       cel: '/reference/scripting/cel',
       gotemplate: '/reference/scripting/gotemplate',
@@ -64,6 +64,7 @@ const config = {
       ({
         docs: {
           routeBasePath: '/',
+
           sidebarPath: './sidebars.js',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -73,6 +74,7 @@ const config = {
           showReadingTime: true
         },
         theme: {
+
           customCss: './src/css/custom.css'
         }
       })
@@ -85,6 +87,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/flanksource-icon.png',
       home: 'docs/index.md',
+
       navbar: {
         title: '',
         logo: {
@@ -95,40 +98,43 @@ const config = {
           {
             to: '/',
             sidebarId: 'overview',
-            // activeBasePath: '/',
+            activeBasePath: 'null',
             position: 'left',
             label: 'Overview'
           },
           {
-            to: 'canary-checker/overview',
-            label: 'Health Check',
-            activeBasePath: 'canary-checker',
-            position: 'left'
-          },
-          {
-            to: 'config-db/overview',
-            activeBasePath: 'config-db',
+            to: 'config-db',
+            activeBasePath: '/config-db',
             label: 'Catalog',
             position: 'left'
           },
+          {
+            to: 'playbooks',
+            activeBasePath: '/playbooks',
+            label: 'Playbooks',
+            position: 'left'
+          },
+          {
+            to: 'topology',
+            activeBasePath: 'topology',
+            label: 'Topology',
+            position: 'left'
+          },
+          {
+            to: 'canary-checker/health-checks',
+            label: 'Health Checks',
+            activeBasePath: 'canary-checker',
+            position: 'left'
+          },
+
           {
             to: 'notifications/overview',
             activeBasePath: 'notifications',
             label: 'Notifications',
             position: 'left'
           },
-          {
-            to: 'topology/overview',
-            activeBasePath: 'topology',
-            label: 'Topology',
-            position: 'left'
-          },
-          {
-            to: 'playbooks/overview',
-            activeBasePath: 'playbooks',
-            label: 'Playbooks',
-            position: 'left'
-          },
+
+
           {
             to: 'registry/overview',
             activeBasePath: 'registry',
@@ -137,6 +143,7 @@ const config = {
           },
           {
             to: 'reference/scripting',
+            activeBasePath: 'reference',
             label: 'Reference',
             position: 'left'
           }

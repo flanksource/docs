@@ -1,23 +1,26 @@
 # Property
 
-| Field            | Description                         | Schema   | Required |
-| ---------------- | ----------------------------------- | -------- | -------- |
-| `label`          | The label of the property.          | `string` |          |
-| `name`           | The name of the property.           | `string` |          |
-| `tooltip`        | The tooltip of the property.        | `string` |          |
-| `icon`           | The icon of the property.           | `string` |          |
-| `type`           | The type of the property.           | `string` |          |
-| `color`          | The color of the property.          | `string` |          |
-| `order`          | The order of the property.          | `int`    |          |
-| `headline`       | The headline of the property.       | `bool`   |          |
-| `text`           | The text of the property.           | `string` |          |
-| `value`          | The value of the property.          | `int`    |          |
-| `unit`           | The unit of the property.           | `string` |          |
-| `max`            | The max of the property.            | `int`    |          |
-| `min`            | The min of the property.            | `int`    |          |
-| `status`         | The status of the property.         | `string` |          |
-| `lastTransition` | The lastTransition of the property. | `string` |          |
-| `links`          | The links of the property.          | `[]Link` |          |
+| Field          | Description                                                                   | Scheme                                  | Required   |
+| -------------- | ----------------------------------------------------------------------------- | --------------------------------------- | ---------- |
+| `name`         | Set name for component property.                                              | `string`                                |            |
+| `value`        | Mutually exclusive with `text`                                                | `int64`                                 |            |
+| `text`         | Mutually exclusive with `value`                                               | `string`                                |            |
+| `type`         | Specify type of component property, one of `currency`, `number`, `url`        | `string`                                |            |
+| `unit`         | Unit for component property e.g. milliseconds, bytes, millicores, epoch etc.  | `string`                                |            |
+| `color`        | Set color for component property.                                             | `string`                                |            |
+| `headline`     | Toggle headline for component property.                                       | `bool`                                  |            |
+| `icon`         | Specify icon for component.                                                   | `string`                                |            |
+| `label`        | Specify label for component property.                                         | `string`                                |            |
+| `links`        | Set links pertaining to component.                                            | [`[]Link`](#link)                       |            |
+| `max`          | Set maximum value for components to display.                                  | `int64`                                 | `optional` |
+| `min`          | Set minimum value for components to display.                                  | `int64`                                 |            |
+| `order`        | Set integer value order for component property.                               | `int`                                   |            |
+| `status`       | Specify status for component property.                                        | `string`                                |            |
+| `tooltip`      | Set tooltip outlining information pertaining to the component.                | `string`                                |            |
+| `configLookup` | Specify lookup for component config.                                          | [`ConfigLookup`](#config-lookup)         | `optional` |
+
+<!-- | `summary`      | Set Summary for component property e.g Healthy, Unhealthy, Warning, and Info. | [`Template`](../concepts/templating.md) | `optional` | -->
+
 
 ## Link
 
@@ -29,3 +32,15 @@
 | `icon`    | The icon of the link.    | `string` |          |
 | `text`    | The text of the link.    | `string` |          |
 | `label`   | The label of the link.   | `string` |          |
+
+
+## Config Lookup
+
+| Field           | Description                                              | Scheme                                 | Required |
+| --------------- | -------------------------------------------------------- | -------------------------------------- | -------- |
+| `config.name`   | The name of the config item.                             | `string`                               |          |
+| `config.type`   | The type of config item.                                 | `string`                               |          |
+| `config.labels` | Match labels of the config item, all labels must match   | `map[string]string`                    |          |
+| `field`         | A JSONPath expression to lookup the value in the config. | `string`                               | `true`   |
+| `display`       | Apply transformations to the value.                      | [`Display`](../concepts/templating.md) |          |
+| `id`            | The UUID of config item, rarely used                     | `string`                               |          |

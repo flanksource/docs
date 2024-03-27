@@ -29,7 +29,11 @@ spec:
 
 | Field      | Description                                                  | Scheme                          | Required |
 | ---------- | ------------------------------------------------------------ | ------------------------------- | -------- |
-| **`path`** | A local folder path or a remote folder ([SMB](smb), [SFTP](sftp), [S3](s3-bucket), [GCS](gcs-bucket)) | string                          | Yes      |
+| **`path`** | A local folder path or a remote folder `smb://`, `sftp://`, `s3://` or `gcs://`  | string                          | Yes      |
+| `sftpConnection` | Connection details                                   | [SFTPConnection](./connections.mdx#sftp) | Yes |
+| `gcpConnection` | Connection details for GCP                                                                                                        | [GCPConnection](./connections.mdx#gcp)      |          |
+| `awsConnection` | AWS Access credentials                                     | [AWSConnection](./connections.mdx#aws) |          |
+| `smbConnection` | SMB connection details                                     | [SMBConnection](./connections.mdx#smb) |          |
 | `filter`   | Filter objects out before checking if they are valid         | [*FolderFilter*](#folderfilter) |          |
 | `minCount` | The minimum number of files inside the `path`                | int                             |          |
 | `maxCount` | The maximum number of files inside the `path`, can be used in conjunction with `filter.regex` to detect error files | *int*                           |          |
@@ -106,3 +110,79 @@ The following fields are available in `test`, `display` and `transform` [express
 | `minSize` |             | [`Size`](#size)         |          |
 | `maxSize` |             | [`Size`](#size)         |          |
 | `regex`   |             | `string`                |          |
+
+
+## Connection Types
+
+### SFTP
+
+```yaml title="sftp-check.yaml"
+# ...
+kind: Canary
+spec:
+  folder:
+  //highlight-next-line
+  - path: folder
+    sftpConnection:
+      host: 192.168.1.9
+      # ...
+```
+
+| Field        | Description                                                  | Scheme                                            |
+| ------------ | ------------------------------------------------------------ | ------------------------------------------------- |
+| `connection` | Path of existing connection e.g. `connection://sftp/instance`<br /> Mutually exclusive with `username` <br /><Commercial /> | <CommonLink to="connection" >*Connection*</CommonLink>          |
+| `username`   | utually exclusive with `connection`                          | <CommonLink to="authentication">*EnvVar*</CommonLink> |
+| `password`   | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                           | <CommonLink to="authentication">*EnvVar*</CommonLink> |
+| `host`       | Custom AWS Cloudwatch endpoint                               | *string*                                          |
+| `port`       | Default to `22`                                              | int                                               |
+
+
+
+
+
+### S3
+```yaml title="s3-check.yaml"
+        # ...
+kind: Canary
+spec:
+  folder:
+    //highlight-next-line
+    - path: s3://bucket/folder
+      awsConnection:
+        # ...
+```
+
+
+### SMB
+
+```yaml title="smb-check.yaml"
+# ...
+kind: Canary
+spec:
+  folder:
+    //highlight-next-line
+    - path: smb:\\192.168.1.9\Some Public Folder\somedir
+      smbConnection:
+           #...
+```
+| Field        | Description                                                                                                                                      | Scheme                                                |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| `connection` | Path of existing connection e.g. `connection://windows/svc-account` <br />Mutually exclusive with`username` and `password` <br /> <Commercial /> | <CommonLink to="connection">_Connections_</CommonLink>  |
+| `username`   | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                                                          | <CommonLink to="authentication">_EnvVar_</CommonLink> |
+| `password`   | <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                                                          | <CommonLink to="authentication">_EnvVar_</CommonLink> |
+| `domain`     | Windows domain name                                                                                                                              | _string_                                              |
+| `port`       | Default to `445`                                                                                                                                 | _int_                                                 |
+
+
+### GCS
+
+```yaml title="gcs-check.yaml"
+# ...
+kind: Canary
+spec:
+  folder:
+  //highlight-next-line
+  - path: gcs://bucket/folder
+    gcpConnection:
+      # ...
+```

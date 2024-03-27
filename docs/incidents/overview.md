@@ -1,6 +1,6 @@
 # Incidents
 
-![Incidents Overview](../images/incidents.png)
+![Incidents Overview](/img/incidents.png)
 
 Any event capable of causing a disruption in your organization's workflow qualifies as an incident. It's crucial to establish a methodical procedure for managing such events. Our incident management feature serves as a strategic solution for your organization to efficiently identify and resolve incidents.
 

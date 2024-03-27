@@ -5,6 +5,8 @@ This enables a playbook action to access environment specific information such a
 
 Runners can be set at the playbook or action level.
 
+## Runs On
+
 ```yaml title='delete-namespace.yaml'
 apiVersion: mission-control.flanksource.com/v1
 kind: Playbook
@@ -39,7 +41,7 @@ spec:
         title: Namespace {{.config.name}} deleted successfully
 ```
 
-## Templating on the agent
+## Templates On
 
 Actions are templated by the host before it's sent to the runner for execution. This setup permits the runner to execute actions that are templated with resources exclusively available on the host, such as config items or components, checks, ... etc.
 
@@ -63,6 +65,7 @@ spec:
   actions:
     - name: send heartbeat
       exec:
+        # environment variables from the mission control cluster
         env:
           - name: HEARTBEAT_TOKEN
             valueFrom:
@@ -70,12 +73,13 @@ spec:
                 name: canary-checker-heartbeat
                 key: token
         script: |
-          curl -H "Authorization: $HEARTBEAT_TOKEN" -H "X-CHECK-ID: {{.params.check_id}}" https://httpbin.demo.aws.flanksource.com/bearer
+          curl -H "Authorization: $HEARTBEAT_TOKEN"  https://httpbin.demo.aws.flanksource.com/bearer
     - name: send heartbeat from the agent
       runsOn:
         - 'aws'
       templatesOn: 'agent'
       exec:
+        # environment variables from cluster the agent is running on
         env:
           - name: HEARTBEAT_TOKEN
             valueFrom:
@@ -83,5 +87,5 @@ spec:
                 name: canary-checker-heartbeat
                 key: token
         script: |
-          curl -H "Authorization: $HEARTBEAT_TOKEN" -H "X-CHECK-ID: {{.params.check_id}}" https://httpbin.demo.aws.flanksource.com/bearer
+          curl -H "Authorization: $HEARTBEAT_TOKEN"  https://httpbin.demo.aws.flanksource.com/bearer
 ```

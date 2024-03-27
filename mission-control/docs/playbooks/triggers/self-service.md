@@ -40,11 +40,11 @@ spec:
           sleep 10
           echo Draining ip-10-0-4-33.eu-west-1.compute.internal
           echo Terminating ip-10-0-4-33.eu-west-1.compute.internal
-      
+
 ```
 
-![Playbook on a config item](../../images/playbook-on-a-eks-cluster-config-item.png)
+![Playbook on a config item](/img/playbook-on-a-eks-cluster-config-item.png)
 **Fig: Playbook on a config item**
 
-![Playbook parameters](../../images/playbook-on-a-eks-cluster-config-item-popup.png)
+![Playbook parameters](/img/playbook-on-a-eks-cluster-config-item-popup.png)
 **Fig: Playbook parameters**
