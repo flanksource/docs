@@ -1,0 +1,107 @@
+---
+slug: /config-db
+title: Catalog
+# hide_title: true
+hide_table_of_contents: true
+pagination_next: playbooks/overview
+pagination_prev:
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+import ConceptURL from "/img/config-db.svg";
+
+# Catalog
+The catalog in Mission Control is implemented under the hood using [config-db](https://github.com/flanksource/config-db) - A JSON based configuration management database (CMDB) that scrapes data from external systems.
+
+
+<img src="/img/config-db.svg" width="900px" className='pb-10'></img>
+
+
+
+The catalog is comprised of:
+
+
+* **Config Items** are individual reaources e.g. `Pod`, `EBS`, `IAM Role`, `postgres.conf` file
+* **Changes** recorded against config items either through automatic change detection (diffs) or from sources like `AWS CloudTrail` or `Kubernetes Events`
+* **Insights** recorded against config items from external sources like `AWS Trusted Advisor` or `Trivy`
+* **Relationships** between configuration items
+
+## Scraping
+
+Config items, insights and change are ingested using scrapers which are jobs that run periodically, scrapers come in 2 types:
+
+<Step step={1} name="Native" style="list">
+
+
+Native scrapers ingest config items from common sources like [AWS](./scrapers/aws), [Kubernetes](./scrapers/kubernetes), [Azure](./scrapers/azure) and automatically add metadata and relationshops
+</Step>
+
+<Step step={2} name="Custom" style="list">
+
+Custom scrapers ingest raw data from [Files](./scrapers/file) and [SQL queries](./scrapers/sql) the results of which need to mapped to metadata and relationships manually.
+
+</Step>
+#### Transformation
+
+
+## Relationships
+
+Config items can be related to other items using both hard and soft links.
+
+**Hard Links** represent a physical relationship, e.g. A pod is always a child of namespace, hard links are created automatically by the relevant scraper or can be created by specifying `Parent Type` and `ID` in custom scrapers.
+
+**Soft Links** represent logical relationships and can have directionality. e.g. Node is related to a pod that runs on it, and a pod is related to an Persistent Volume that is attached the pod. Soft Links are created automatically by some scrapers e.g. Using `ownerRef` in kubernetes  and `subnet-id` in AWS. Custom soft links can be created using a [Relationship](./relationship) transformation.
+
+
+
+## Config Items
+
+#### JSON
+Config items are stored as `jsonb` fields in Postrgres, The JSON used is typically returned by resource provider e.g.  `kubectl get -o json` or `aws --output=json` - The UI will convert from JSON to YAML when showing the config.
+
+#### XML / Properties / etc.
+[**Custom**](./concepts/custom-scraper) scrapers can ingest non-JSON config which is represented as:
+
+```yaml
+{
+	"format": "xml",
+  "content": "<root>..</root>"
+}
+```
+
+The UI will format and render XML appropriately.
+
+
+
+
+## Features
+
+* Scrape data from typical data sources like AWS, GCP, Azure, Kubernetes and Github
+*
+
+By doing this, `Config DB` enables you to view and search the change history of your configuration across multiple dimensions _(node, zone, environment, application, technology, etc...)_ as well as compare and view the differences between configurations across environments.
+
+It is able to scan multiple configuration sources including
+
+- [AWS Cloud Resources](./scrapers/aws.md)
+- [Azure Devops](./scrapers/azure-devops.md) - Azure Devops Pipeline runs
+- [Files](./scrapers/file.md) - On a local filesystem, git or HTTP
+- [Files - Kubernetes](./scrapers/kubernetes-file.md) - Files inside a running Kubernetes pod
+- [Kubernetes](./scrapers/kubernetes.md) - Kubernetes resources
+- [SQL](./scrapers/sql.md) - Data available via queries on MySQL, SQL Server, and Postgres databases
+- [Trivy](./scrapers/trivy.md) - Security scanning of Kubernetes clusters
+
+Each configuration has:
+
+- **Configuration** - Normally JSON, but XML and properties files are also available
+- **Insights** - Security, cost, performance, and other recommendations from scanners including AWS Trusted Advisor, AWS Config rules, etc...
+- **Changes** - Either change directly on the config _(recorded as diff change type)_ or changes identified via AWS Cloudtrail, etc...
+
+
+
+A configuration summary is shown below:
+
+![](/img/config-db.png)
+import { name } from "file-loader"
+

@@ -10,42 +10,56 @@ GitOps action allows you to make commits and push to a remote repository.
 apiVersion: mission-control.flanksource.com/v1
 kind: Playbook
 metadata:
-  name: update-pod-namespace
+  name: edit-kubernetes-manifests-gitops
 spec:
+  title: 'Edit Kustomize Resource'
+  icon: flux
   parameters:
-    - name: namespace
-      label: The new namespace
+    - default: 'chore: update $(.config.type)/$(.config.name)'
+      label: Commit Message
+      name: commit_message
+    - default: $(.config.config | toJSON | neat | json | toYAML)
+      label: ""
+      name: yamlInput
+      properties:
+        size: large
+      type: code
+
   configs:
-    - type: Kubernetes::Pod
+    - labelSelector: 'kustomize.toolkit.fluxcd.io/name'
+
+  env:
+    - name: file_path
+      value: {{ .config.config | jq `.metadata.annotations["config.kubernetes.io/origin"]` | yaml).path }}
+    - name: kustomization_path
+      value:  {{ (catalog_traverse .config.id  "Kubernetes::Kustomization").Config | json | jq `.spec.path` }}
+    - name: git_url
+      value:  {{ (catalog_traverse .config.id  "Kubernetes::Kustomization/Kubernetes::GitRepository").Config | json | jq `.spec.url` }}
+    - name: git_branch
+      value:  {{ (catalog_traverse .config.id  "Kubernetes::Kustomization/Kubernetes::GitRepository").Config | json | jq `.spec.ref.branch` }}
+
   actions:
-    - name: Modify namespace
+    - name: Create Pull Request With Changes
       gitops:
         repo:
-          url: https://github.com/example/repo
-          connection: connection://github/example
-          base: master
-          branch: playbooks-branch-{{.params.namespace}}
+          url: '$(.env.git_url)'
+          connection:
+          base: '$(.env.git_branch)'
+          branch: edit-manifest-$(random.Alpha 8)
         commit:
-          email: john@doe.com
-          author: John Doe
-          message: |
-            Modifying namespace from {{.config.namespace}} to {{.params.namespace}}
+          author: '$(.user.name)'
+          email: '$(.user.email)'
+          message: $(.params.commit_message)
         pr:
-          title: 'chore: Update namespace to {{.params.namespace}}'
-          tags:
-            - low
+          title: $(.params.commit_message)
         patches:
-          - path: navidrome.yaml
-            yq: '.metadata.namespace = "{{.params.namespace}}"'
-        files:
-          - path: { { .config.namespace } }
-            content: $delete
-          - path: '{{.params.namespace}}/namespace.yaml'
-            content: |
-              apiVersion: v1
-              kind: Namespace
-              metadata:
-                name:  {{.params.namespace}}
+          - path: '$(filepath.Join .env.kustomization_path .env.file_path)'
+            yq: |
+              select(
+                .kind=="$(.config.config | jq `.kind`)" and
+                .metadata.name=="$(.config.config | jq `.metadata.name`)"
+              ) |= $(.params.yamlInput | yaml | toJSON)
+
 ```
 
 :::info

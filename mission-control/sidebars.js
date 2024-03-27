@@ -20,7 +20,7 @@ const sidebars = {
   canaryCheckerSidebar: [
     {
       type: 'doc',
-      id: 'canary-checker/overview',
+      id: 'canary-checker/health-checks',
       label: 'Overview'
     },
     {
@@ -42,11 +42,7 @@ const sidebars = {
           id: 'canary-checker/cli',
           label: 'CLI'
         },
-        {
-          type: 'doc',
-          id: 'canary-checker/concepts/image-variants',
-          label: 'Image Variants'
-        }
+
       ]
     },
     {
@@ -99,38 +95,96 @@ const sidebars = {
         }
       ]
     },
+
+    {
+      type: 'html',
+      value: '<span class="font-semibold" >Common Checks</span>',
+      defaultStyle: true
+    },
+    {
+      type: 'doc',
+      id: 'canary-checker/reference/http',
+      label: 'HTTP'
+    },
+
+
+    {
+      type: 'doc',
+      id: 'canary-checker/reference/prometheus',
+      label: 'Prometheus'
+    },
+
+    {
+      type: 'doc',
+      id: 'canary-checker/reference/kubernetes',
+      label: 'Kubernetes Resources'
+    },
+
+    {
+      type: 'doc',
+      id: 'canary-checker/reference/pod',
+      label: 'Pod'
+    },
+
+    {
+      type: 'doc',
+      id: 'canary-checker/reference/exec',
+      label: 'Exec'
+    },
+    {
+      type: 'doc',
+      id: 'canary-checker/reference/folder',
+      label: 'Folder'
+    },
+
+    {
+      type: 'doc',
+      id: 'canary-checker/reference/sql',
+      label: 'SQL'
+    },
+
+
     {
       type: 'category',
-      label: 'Probes / Alerts',
-      link: {
-        type: 'generated-index',
-        title: 'Probes / Alerts',
-        // description: 'Learn about the most important Docusaurus concepts!',
-        slug: '/types',
-        keywords: ['guides'],
-        image: '/img/docusaurus.png'
-      },
+      label: 'Other Checks',
+      className: "condensed",
+      collapsed: false,
       items: [
+
         {
-          type: 'doc',
-          id: 'canary-checker/reference/http',
-          label: 'HTTP'
+          type: 'html',
+          value: '<span class="font-semibold" >Protocols</span>',
+
+          defaultStyle: true
         },
 
         {
           type: 'doc',
-          id: 'canary-checker/reference/tcp',
-          label: 'TCP'
-        },
-        {
-          type: 'doc',
           id: 'canary-checker/reference/dns',
-          label: 'DNS'
+          label: 'DNS',
         },
         {
           type: 'doc',
           id: 'canary-checker/reference/icmp',
           label: 'ICMP'
+        },
+        {
+          type: 'doc',
+          id: 'canary-checker/reference/tcp',
+          label: 'TCP'
+        },
+
+
+        {
+          type: 'doc',
+          id: 'canary-checker/reference/s3-protocol',
+          label: 'S3 Protocol'
+        },
+
+        {
+          type: 'html',
+          value: '<span class="font-semibold" >Alerts</span>',
+          defaultStyle: true
         },
 
         {
@@ -147,58 +201,13 @@ const sidebars = {
           type: 'doc',
           id: 'canary-checker/reference/aws-config-rule',
           label: 'AWS Config Rule'
-        }
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Folder / Backups',
-      items: [
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/folder',
-          label: 'Folder'
         },
+
+
         {
-          type: 'doc',
-          id: 'canary-checker/reference/gcs-bucket',
-          label: 'GCS Bucket'
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/s3-bucket',
-          label: 'S3 Bucket'
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/sftp',
-          label: 'SFTP'
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/smb',
-          label: 'SMB/CIFS'
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/gcs-database-backup',
-          label: 'GCS Database Backup'
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/restic',
-          label: 'Restic'
-        }
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Data / Queries',
-      items: [
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/prometheus',
-          label: 'Prometheus'
+          type: 'html',
+          value: '<span class="font-semibold" >Data Sources</span>',
+          defaultStyle: true
         },
 
         {
@@ -211,11 +220,7 @@ const sidebars = {
           id: 'canary-checker/reference/configdb',
           label: 'Flanksource Config DB'
         },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/kubernetes',
-          label: 'Kubernetes Resources'
-        },
+
         {
           type: 'doc',
           id: 'canary-checker/reference/elasticsearch',
@@ -231,37 +236,42 @@ const sidebars = {
           id: 'canary-checker/reference/mongo',
           label: 'MongoDB'
         },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/mssql',
-          label: 'MSSQL'
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/mysql',
-          label: 'MySQL'
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/postgres',
-          label: 'Postgres'
-        },
+
         {
           type: 'doc',
           id: 'canary-checker/reference/redis',
           label: 'Redis'
-        }
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Active / Integration',
-      items: [
+        },
+
+        {
+          type: 'html',
+          value: '<span class="font-semibold" >Infrastructure</span>',
+          defaultStyle: true
+        },
+
         {
           type: 'doc',
-          id: 'canary-checker/reference/exec',
-          label: 'Exec'
+          id: 'canary-checker/reference/containerd',
+          label: 'Containerd/Docker'
         },
+        {
+          type: 'doc',
+          id: 'canary-checker/reference/helm',
+          label: 'Helm'
+        },
+        {
+          type: 'doc',
+          id: 'canary-checker/reference/ec2',
+          label: 'EC2'
+        },
+
+        {
+          type: 'html',
+          value: '<span class="font-semibold" >Integration</span>',
+          defaultStyle: true
+        },
+
+
         {
           type: 'doc',
           id: 'canary-checker/reference/jmeter',
@@ -272,6 +282,13 @@ const sidebars = {
           id: 'canary-checker/reference/junit',
           label: 'JUnit'
         },
+
+        {
+          type: 'doc',
+          id: 'canary-checker/reference/azure-devops',
+          label: 'Azure DevOps'
+        },
+
         {
           type: 'doc',
           id: 'canary-checker/reference/k6',
@@ -289,39 +306,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'canary-checker/reference/azure-devops',
-          label: 'Azure DevOps'
-        }
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Infrastructure',
-      items: [
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/containerd',
-          label: 'Containerd/Docker'
+          id: 'canary-checker/reference/gcs-database-backup',
+          label: 'GCS Database Backup'
         },
         {
           type: 'doc',
-          id: 'canary-checker/reference/helm',
-          label: 'Helm'
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/ec2',
-          label: 'EC2'
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/pod',
-          label: 'Pod'
-        },
-        {
-          type: 'doc',
-          id: 'canary-checker/reference/s3-protocol',
-          label: 'S3 Protocol'
+          id: 'canary-checker/reference/restic',
+          label: 'Restic'
         }
       ]
     },
@@ -338,8 +329,13 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'References',
+      label: 'Reference',
       items: [
+        {
+          type: 'doc',
+          id: 'canary-checker/concepts/image-variants',
+          label: 'Image Variants'
+        },
         {
           type: 'doc',
           id: 'canary-checker/reference/canary-spec',
@@ -365,29 +361,23 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'config-db/concepts/changes',
-          label: 'Changes'
+          id: 'config-db/concepts/relationship',
+          label: 'Relationships'
         },
         {
           type: 'doc',
-          id: 'config-db/concepts/exclusion',
-          label: 'Field Exclusion'
+          id: 'config-db/concepts/changes',
+          label: 'Changes'
         },
+
         {
           type: 'doc',
           id: 'config-db/concepts/insights',
           label: 'Insights'
         },
-        {
-          type: 'doc',
-          id: 'config-db/concepts/masking',
-          label: 'Masking'
-        },
-        {
-          type: 'doc',
-          id: 'config-db/concepts/templating',
-          label: 'Templating'
-        },
+
+
+
         {
           type: 'doc',
           id: 'config-db/concepts/transform',
@@ -398,17 +388,19 @@ const sidebars = {
           id: 'config-db/concepts/retention',
           label: 'Retention'
         },
-        {
-          type: 'doc',
-          id: 'config-db/concepts/relationship',
-          label: 'Relationship'
-        }
+
       ]
     },
     {
       type: 'category',
       label: 'Scrapers',
       items: [
+        {
+          type: 'doc',
+          id: 'config-db/concepts/scraping',
+          label: 'Overview'
+        },
+
         {
           type: 'doc',
           id: 'config-db/scrapers/aws',
@@ -433,26 +425,15 @@ const sidebars = {
           type: 'doc',
           id: 'config-db/scrapers/kubernetes',
           label: 'Kubernetes'
-        }
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Custom',
-      items: [
-        {
-          type: 'doc',
-          id: 'config-db/concepts/custom-scrapers',
-          label: 'Overview'
         },
         {
           type: 'category',
-          label: 'Scrapers',
+          label: 'Custom',
           items: [
             {
               type: 'doc',
-              id: 'config-db/scrapers/custom',
-              label: 'Custom'
+              id: 'config-db/concepts/custom-scrapers',
+              label: 'Overview'
             },
             {
               type: 'doc',
@@ -468,11 +449,11 @@ const sidebars = {
               type: 'doc',
               id: 'config-db/scrapers/sql',
               label: 'SQL'
-            }
-          ]
-        }
+            }]
+        },
       ]
     },
+
     {
       type: 'category',
       label: 'Tutorials',
@@ -517,11 +498,7 @@ const sidebars = {
       id: 'playbooks/quick-start',
       label: 'Quick Start'
     },
-    {
-      type: 'doc',
-      id: 'playbooks/api',
-      label: 'API'
-    },
+
     {
       type: 'category',
       label: 'Concepts',
@@ -539,17 +516,17 @@ const sidebars = {
         {
           type: 'doc',
           id: 'playbooks/concepts/approval',
-          label: 'Approval'
+          label: 'Approvals'
         },
-        {
-          type: 'doc',
-          id: 'playbooks/concepts/artifacts',
-          label: 'Artifacts'
-        },
+        // {
+        //   type: 'doc',
+        //   id: 'playbooks/concepts/artifacts',
+        //   label: 'Artifacts'
+        // },
         {
           type: 'doc',
           id: 'playbooks/concepts/expression',
-          label: 'Expression'
+          label: 'Expressions'
         },
         {
           type: 'doc',
@@ -583,6 +560,11 @@ const sidebars = {
       type: 'category',
       label: 'Actions',
       items: [
+        {
+          type: 'doc',
+          id: 'playbooks/actions/overview',
+          label: 'Overview'
+        },
         {
           type: 'doc',
           id: 'playbooks/actions/azure_devops_pipeline',
@@ -662,7 +644,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'playbooks/examples/action-filter-action-result',
-          label: 'Accessing result of previous actions'
+          label: 'Passing values between steps'
         },
         {
           type: 'doc',
@@ -671,37 +653,7 @@ const sidebars = {
         }
       ]
     },
-    {
-      type: 'category',
-      label: 'References',
-      items: [
-        {
-          type: 'doc',
-          id: 'playbooks/references/connections',
-          label: 'Connections'
-        },
-        {
-          type: 'doc',
-          id: 'playbooks/references/component',
-          label: 'Component'
-        },
-        {
-          type: 'doc',
-          id: 'playbooks/references/check',
-          label: 'Check'
-        },
-        {
-          type: 'doc',
-          id: 'playbooks/references/config_item',
-          label: 'ConfigItem'
-        },
-        {
-          type: 'doc',
-          id: 'playbooks/references/envvar',
-          label: 'EnvVar'
-        }
-      ]
-    }
+
   ],
   topologySidebar: [
     {
@@ -740,10 +692,70 @@ const sidebars = {
         }
       ]
     },
+
+
+    {
+      type: 'category',
+      label: 'Lookups',
+      link: {
+        type: 'generated-index',
+        title: 'Component Lookup',
+        slug: 'topology/references/lookup'
+      },
+      items: [
+        {
+          type: 'doc',
+          id: 'topology/references/configdb',
+          label: 'Catalog'
+        },
+        {
+          type: 'doc',
+          id: 'topology/references/exec',
+          label: 'Exec'
+        },
+        {
+          type: 'doc',
+          id: 'topology/references/http',
+          label: 'HTTP'
+        },
+        {
+          type: 'doc',
+          id: 'topology/references/kubernetes',
+          label: 'Kubernetes'
+        },
+        // Mongo lookup cannot query
+        // {
+        //   type: 'doc',
+        //   id: 'topology/references/mongo',
+        //   label: 'Mongo'
+        // },
+        {
+          type: 'doc',
+          id: 'topology/references/sql',
+          label: 'SQL'
+        },
+        {
+          type: 'doc',
+          id: 'topology/references/prometheus',
+          label: 'Prometheus'
+        }
+        // Redis component lookup isn't implemeneted. You can't supply a query.
+        // {
+        //   type: 'doc',
+        //   id: 'topology/references/redis',
+        //   label: 'Redis'
+        // }
+      ]
+    },
     {
       type: 'category',
       label: 'Examples',
       items: [
+        {
+          type: 'doc',
+          id: 'topology/examples/embedding',
+          label: 'Embedding Cards'
+        },
         {
           type: 'doc',
           id: 'topology/examples/prometheus',
@@ -763,85 +775,6 @@ const sidebars = {
           type: 'doc',
           id: 'topology/examples/kubernetes-workload',
           label: 'Kubernetes-workload'
-        }
-      ]
-    },
-    {
-      type: 'category',
-      label: 'References',
-      items: [
-        {
-          type: 'doc',
-          id: 'topology/references/topology',
-          label: 'Topology'
-        },
-        {
-          type: 'doc',
-          id: 'topology/references/components',
-          label: 'Components'
-        },
-        {
-          type: 'category',
-          label: 'Component Lookup',
-          link: {
-            type: 'generated-index',
-            title: 'Component Lookup',
-            slug: 'topology/references/lookup'
-          },
-          items: [
-            {
-              type: 'doc',
-              id: 'topology/references/configdb',
-              label: 'Config DB'
-            },
-            {
-              type: 'doc',
-              id: 'topology/references/exec',
-              label: 'Exec'
-            },
-            {
-              type: 'doc',
-              id: 'topology/references/http',
-              label: 'HTTP'
-            },
-            {
-              type: 'doc',
-              id: 'topology/references/kubernetes',
-              label: 'Kubernetes'
-            },
-            // Mongo lookup cannot query
-            // {
-            //   type: 'doc',
-            //   id: 'topology/references/mongo',
-            //   label: 'Mongo'
-            // },
-            {
-              type: 'doc',
-              id: 'topology/references/mssql',
-              label: 'MS SQL Server'
-            },
-            {
-              type: 'doc',
-              id: 'topology/references/mysql',
-              label: 'MySQL'
-            },
-            {
-              type: 'doc',
-              id: 'topology/references/postgres',
-              label: 'Postgres'
-            },
-            {
-              type: 'doc',
-              id: 'topology/references/prometheus',
-              label: 'Prometheus'
-            }
-            // Redis component lookup isn't implemeneted. You can't supply a query.
-            // {
-            //   type: 'doc',
-            //   id: 'topology/references/redis',
-            //   label: 'Redis'
-            // }
-          ]
         }
       ]
     }
@@ -931,23 +864,122 @@ const sidebars = {
   reference: [
     {
       type: 'doc',
-      id: 'reference/secret-management',
-      label: 'Secret Management'
+      id: 'reference/env-var',
+      label: 'Env Vars'
+    },
+
+    {
+      type: 'category',
+      label: 'Connections',
+      items: [
+        {
+          type: 'doc',
+          id: 'reference/connection',
+          label: 'Overview'
+        },
+        {
+          type: 'doc',
+          id: 'reference/connections/aws',
+          label: 'AWS'
+        },
+        {
+          type: 'doc',
+          id: 'reference/connections/gcp',
+          label: 'GCP'
+        },
+        {
+          type: 'doc',
+          id: 'reference/connections/azure',
+          label: 'Azure'
+        }
+      ]
+    },
+
+
+
+    {
+      type: 'doc',
+      id: 'reference/resource-selector',
+      label: 'Resource Selectors'
+    },
+
+    {
+      type: 'category',
+      label: 'Catalog',
+      items: [
+        {
+          type: 'doc',
+          id: 'reference/config-db/config-item',
+          label: 'Config Item'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/references/scrape-result',
+          label: 'Scrape Result'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/references/change-result',
+          label: 'Change Result'
+        }
+      ]
+    },
+
+    {
+      type: 'category',
+      label: 'Playbooks',
+      items: [
+        {
+          type: 'doc',
+          id: 'reference/playbooks/playbook',
+          label: 'Playbook'
+        },
+        {
+          type: 'doc',
+          id: 'reference/playbooks/parameters',
+          label: 'Parameters'
+        },
+        {
+          type: 'doc',
+          id: 'config-db/references/change-result',
+          label: 'Events'
+        },
+
+        {
+          type: 'doc',
+          id: 'reference/playbooks/context',
+          label: 'Context'
+        },
+
+
+      ]
+    },
+
+    {
+      type: 'category',
+      label: 'Topology',
+      items: [
+        {
+          type: 'doc',
+          id: 'topology/references/topology',
+          label: 'Topology'
+        },
+        {
+          type: 'doc',
+          id: 'topology/references/components',
+          label: 'Components'
+        },
+        {
+          type: 'doc',
+          id: 'reference/property',
+          label: 'Properties'
+        },
+      ]
     },
     {
       type: 'doc',
-      id: 'reference/property',
-      label: 'Property'
-    },
-    {
-      type: 'doc',
-      id: 'reference/connection',
-      label: 'Connection'
-    },
-    {
-      type: 'doc',
-      id: 'reference/connections',
-      label: 'Authentication'
+      label: 'Common Types',
+      id: 'reference/types',
     },
     {
       type: 'category',
@@ -974,11 +1006,6 @@ const sidebars = {
           label: 'Javascript'
         }
       ]
-    },
-    {
-      type: 'doc',
-      id: 'reference/resource_selector',
-      label: 'Resource Selector'
     }
   ],
   overview: [
@@ -1001,11 +1028,7 @@ const sidebars = {
           label: 'SaaS',
           id: 'installation/saas'
         },
-        {
-          type: 'doc',
-          id: 'installation/monitoring-and-tracing',
-          label: 'Monitoring & Tracing'
-        },
+
         {
           type: 'category',
           label: 'Self-Hosted',
@@ -1024,7 +1047,17 @@ const sidebars = {
               type: 'doc',
               id: 'installation/oidc',
               label: 'SSO (OIDC)'
-            }
+            },
+            {
+              type: 'doc',
+              id: 'installation/monitoring-and-tracing',
+              label: 'Monitoring & Tracing'
+            },
+            // {
+            //   type: 'doc',
+            //   id: 'installation/artifacts',
+            //   label: 'Artifacts'
+            // },
           ]
         },
 

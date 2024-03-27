@@ -15,8 +15,10 @@ import {
   Commercial,
   Standard,
   Enterprise,
-  SkipOSS
+  SkipOSS,
+  SkipCommercial
 } from '@site/src/components/Badges'
+import Step from '@site/src/components/Step'
 import Highlight from '@site/src/components/Highlight'
 import { FullImage } from '@site/src/components/Badges'
 import { CommonLink } from '@site/src/components/Link'
@@ -33,8 +35,10 @@ const MDXComponents = {
   FullImage: FullImage,
   Standard: Standard,
   SkipOSS: SkipOSS,
+  SkipCommercial: SkipCommercial,
   Enterprise: Enterprise,
   Highlight: Highlight,
+  Step: Step,
   head: MDXHead,
   code: MDXCode,
   a: MDXA,

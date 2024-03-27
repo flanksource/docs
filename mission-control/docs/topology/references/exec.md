@@ -4,7 +4,7 @@ title: Exec
 
 # <Icon name="console" /> Exec
 
-Exec Check executes a command or script file on the target host. The type of scripts executed include:
+Run a script and use the results to generate a topology.
 
 - Bash scripts
 - Powershell scripts
@@ -51,9 +51,9 @@ spec:
 
 | Field        | Description                                                                                                                                                    | Scheme                                  | Required |
 | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------- |
+| **`script`** | Script can be a inline script or a path to a script that needs to be executed. On windows executed via powershell and in darwin and linux executed using bash. | `Path`, `Bash`or`Powershell`                                | Yes      |
 | `display`    | Template to display server response in text (overrides default bar format for UI)                                                                              | [_Template_](../concepts/templating.md) |          |
 | `labels`     | Labels for the check                                                                                                                                           | Labels                                  |          |
-| **`script`** | Script can be a inline script or a path to a script that needs to be executed. On windows executed via powershell and in darwin and linux executed using bash. | _string_                                | Yes      |
 | `transform`  | Template to transform results by excluding or including certain fields in result                                                                               | [_Template_](../concepts/templating.md) |          |
 
 ## Results
