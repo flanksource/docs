@@ -22,3 +22,7 @@
 | `updated_at`           | The updated at of the check                                 | `time`              |
 | `deleted_at`           | The deleted at of the check                                 | `*time`             |
 | `silenced_at`          | The silenced at of the check                                | `*time`             |
+
+
+
+# Status

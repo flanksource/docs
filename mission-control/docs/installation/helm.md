@@ -1,14 +1,24 @@
 # Self-Hosted Install With Helm
 
-## Prerequisites
-
+:::info Prerequisites
 To install and run Mission Control you need to have the following prerequisites:
 
-- A Kubernetes installation of version 1.26 or higher.
+- Kubernetes 1.26+ with an Ingress Controller
+- 500-1000m of CPU and 2GB of Memory
+- Persistent Volumes with 20GB+ of storage or an external postgres database
 - (Optional) SMTP Server (For sending notifications and invites)
-- (Optional) Connection details for an external Postgres Database
+:::
 
-## Install Chart
+
+
+<Step step={1} name="Install Helm Repository">
+
+```shell
+helm repo add flanksource https://flanksource.github.io/charts
+helm repo update
+```
+</Step>
+<Step step={2} name="Install Helm Chart">
 
 To set custom values file for your mission-control helm chart installation to override existing values in [`mission-control-chart`](https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml).
 
@@ -33,8 +43,6 @@ db:
 ```
 
 ```bash
-helm repo add flanksource https://flanksource.github.io/charts
-helm repo update
 helm install mission-control  \
   flanksource/mission-control  \
  -n mission-control \
@@ -45,7 +53,11 @@ helm install mission-control  \
 
 See [mission-control-chart/values.yaml](https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml)  or `helm show values flanksource/mission-control` for a full list of configuration options
 
-## SMTP
+</Step>
+
+## Optional Steps
+
+<Step step={3} name="Configure SMTP">
 
 An SMTP server is required for sending notifications, user invites and password resets.
 
@@ -66,16 +78,15 @@ kratos:
 
 Kratos also supports [HTTP Webhooks](https://www.ory.sh/docs/kratos/self-hosted/email-http) for sending emails.
 
-See [Customizing the Chart Before Installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing). To see all configurable options with detailed comments, visit the chart's [values.yaml](https://github.com/flanksource/config-db/blob/main/chart/values.yaml), or run these configuration commands:
-
-```console
-helm show values flanksource/mission-control
-```
-
-## Single Sign On
+</Step>
+<Step step={4} name="Single Sign On">
 
 See [SSO](./oidc.md) for OIDC.
 
-## Database
+</Step>
+
+<Step step={5} name="External Database">
 
 See [Database](./database.md) for using an external database like AWS RDS or for tweaking postgres settings.
+
+</Step>

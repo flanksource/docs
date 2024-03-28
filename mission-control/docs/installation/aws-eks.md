@@ -1,29 +1,70 @@
 # Install Mission Control on AWS EKS cluster
 
-## Prerequisites
 
-1. Kubernetes 1.22+ with Identity Federation enabled
-2. [cert-manager](https://cert-manager.io/docs/)
+:::info Prerequisites
+To install and run Mission Control you need to have the following prerequisites:
 
----
-## Deployment steps
-
-1. `helm repo add flanksource [https://flanksource.github.io/charts]`
-2. `helm repo update`
-3. `helm install flanksource flanksource/mission-control -n flanksource`
-4. To set custom values file for your mission-control helm chart installation, override existing values in [mission-control-chart](https://github.com/flanksource/mission-control-chart/tree/main/chart). Some common values that can be changed can be found [here](https://docs.flanksource.com/#install-chart)
----
+- EKS 1.26+ with an Ingress Controller
+- 500-1000m of CPU and 2GB of Memory
+- Persistent Volumes with 20GB+ of storage or an external postgres database like RDS
+- (Optional) SMTP Server (For sending notifications and invites)
+:::
 
 
-## Creating a read-only IAM role
+<Step step={1} name="Install Helm Repository">
 
-Create a role to allow mission-control to configuration of your AWS resources. Attach the following AWS managed policies to the role:
+```shell
+helm repo add flanksource https://flanksource.github.io/charts
+helm repo update
+```
+</Step>
+
+<Step step={2} name="Install Helm Chart">
+
+```yaml title="values.yaml"
+global:
+  ui:
+    host: "mission-control-ui.local" # hostname
+  serviceAccount:
+    annotations: # Any annotations required to attach custom IAM policies etc.
+
+adminPassword: admin # The default password for the admin@local user
+
+flanksource-ui:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+db:
+  storageClass: # e.g. gp3
+  storage: 50Gi
+```
+
+```bash
+helm install mission-control  \
+  flanksource/mission-control  \
+ -n mission-control \
+ --create-namespace \
+ --wait \
+ -f values.yaml
+```
+
+</Step>
+
+<Step step={3} name="(Optional) Create an IAM Role">
+
+
+(a) Create a role to allow mission-control to configuration of your AWS resources. Attach the following AWS managed policies to the role:
 
 1. ReadOnlyAccess
 2. AWSConfigUserAccess
 3. AWSQuicksightAthenaAccess
 
-Sample IAM Policy:
+<details>
+  <summary>IAM policy.json</summary>
+  <div>
+
 ```json
 {
 	"Version": "2012-10-17",
@@ -76,9 +117,11 @@ Sample IAM Policy:
 	]
 }
 ```
+</div>
+</details>
 
-Modify the trust policy of the IAM role by changing the OIDC arn, OIDC endpoint and the namespace below. 
-```
+b) Modify the trust policy of the IAM role by changing the OIDC arn, OIDC endpoint and the namespace below.
+```json
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -91,6 +134,8 @@ Modify the trust policy of the IAM role by changing the OIDC arn, OIDC endpoint 
             "Condition": {
                 "StringEquals": {
                     "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:config-db-sa",
+										"oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:mission-control-sa",
+								   	"oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:canary-checker-sa",
                     "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:aud": "sts.amazonaws.com"
                 }
             }
@@ -99,21 +144,44 @@ Modify the trust policy of the IAM role by changing the OIDC arn, OIDC endpoint 
 }
 ```
 
-## Cost reporting
 
-### Enable AWS cost and usage reports
+c) Annotate the service account
 
-Mission Control can read the cost and usage reports stored in the S3 bucket and map it to the resources it discovers in your AWS environment. To achieve this, 
-1. Setup Cost and Usage Reports in your AWS account and integrate it with Athena. Refer this [AWS documentation](https://docs.aws.amazon.com/cur/latest/userguide/use-athena-cf.html)
+```yaml title='values.yaml'
+
+
+# service account used by for scraping
+config-db:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: IAM Role ARN
+
+# service account used for notifications and playbooks
+serviceAccount:
+	annotations:
+		eks.amazonaws.com/role-arn: IAM Role ARN
+
+# service account used for notifications and playbooks
+serviceAccount:
+	annotations:
+		eks.amazonaws.com/role-arn: IAM Role ARN
+```
+
+</Step>
+
+
+<Step step={4} name="Cost & Usage Reporting">
+
+
+Mission Control can read the cost and usage reports stored in the S3 bucket and map it to the resources it discovers in your AWS environment. To achieve this,
+1. Setup [Cost and Usage Reports](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) and integrate it with [Athena](https://docs.aws.amazon.com/cur/latest/userguide/use-athena-cf.html)
 
 2. Modify the config db IAM role used by the config scraper above to give Mission Control the permissions to read the cost reports. Attach a Customer managed policy to the role with [this json policy document](https://github.com/flanksource/docs/blob/main/mission-control/docs/installation/resources/iam-policy.json)
-
-Cost reporting needs to be setup on AWS: https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html
 
 3. We also need to allow athena query executions
 
 Sample IAM Policy required for cost reporting:
-```json
+```json title=athena-policy.json
 {
 	"Effect": "Allow",
 	"Action": [
@@ -126,20 +194,14 @@ Sample IAM Policy required for cost reporting:
 
 ```
 
-### Annotate the service account
 
-- Modify the helm chart values for incident commander and pass the role ARN 
-```yaml title='values.yaml'
-config-db:
-  serviceAccount:
-    name: "config-db-sa"
-    annotations:
-      eks.amazonaws.com/role-arn: IAM Role ARN
-```
 
 - Upgrade the helm chart to apply the changes
 
 
-## Setup catalog scraping
+</Step>
 
-You can now install a [helm chart from the registry](/registry/aws)
+<Step step={5} name="Next Steps">
+
+Install the [AWS](/registry/aws) registry chart to configure the AWS Scraper
+</Step>

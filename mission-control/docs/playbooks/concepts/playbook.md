@@ -55,9 +55,9 @@ The CEL expression receives a environment variable that contain details about th
 
 | Field       | Description                              | Schema                                       |
 | ----------- | ---------------------------------------- | -------------------------------------------- |
-| `config`    | Config passed to the playbook            | [`ConfigItem`](../references/config_item.md) |
+| `config`    | Config passed to the playbook            | [`ConfigItem`](./reference/config-db/config-item) |
 | `component` | Component passed to the playbook         | [`Component`](../references/component.md)    |
-| `check`     | Canary Check passed to the playbook      | [`Check`](../references/check.md)            |
+| `check`     | Canary Check passed to the playbook      | [`Check`](/reference/canary-checker/checl)            |
 | `params`    | User provided parameters to the playbook | `map[string]string`                          |
 
 

@@ -906,6 +906,18 @@ const sidebars = {
 
     {
       type: 'category',
+      label: 'Health Checks',
+      items: [
+        {
+          type: 'doc',
+          id: 'reference/canary-checker/check',
+          label: 'Check'
+        }
+      ]
+    },
+
+    {
+      type: 'category',
       label: 'Playbooks',
       items: [
         {
