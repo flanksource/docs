@@ -10,64 +10,7 @@ The registry has an [AWS](/registry/aws) Helm chart that provides a pre-configur
 
 :::
 
-```yaml title="aws-scraper.yaml"
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: aws-scraper
-spec:
-  aws:
-    - region:
-        - eu-west-1
-      properties:
-        - name: AWS Link
-          filter: 'config_type == AWS::IAM::Role'
-          icon: aws-iam
-          links:
-            - text: AWS Link
-              url: 'https://us-east-1.console.aws.amazon.com/iamv2/home#/roles/details/{{.name}}?section=permissions'
-      cost_reporting:
-        s3_bucket_path: s3://flanksource-cost-reports/query-results
-        database: athenacurcfn_flanksource_report
-        table: flanksource_report
-        region: eu-west-1
-      exclude:
-        - Amazon EC2 Reserved Instances Optimization
-        -  Amazon EC2 Reserved Instances Optimization
-      transform:
-        relationship:
-          # EKS Cluster to Kubernetes Cluster & Kubernetes Node
-          - filter: config_type == 'AWS::EKS::Cluster'
-            expr: |
-              [
-                {"type": "Kubernetes::Cluster","labels": {"aws/account-id": tags['account'],"eks-cluster-name": tags["alpha.eksctl.io/cluster-name"]}},
-                {"type": "Kubernetes::Node","labels": {"aws/account-id": tags['account'],"alpha.eksctl.io/cluster-name": tags["alpha.eksctl.io/cluster-name"]}}
-              ].toJSON()
-          # EC2 Instance to kubernetes node
-          - filter: config_type == 'AWS::EC2:Instance'
-            expr: |
-              [{"type": "Kubernetes::Node", "labels": {"alpha.eksctl.io/instance-id": config["instance_id"]}}].toJSON()
-          # IAM Role to Kubernetes Node
-          - filter: config_type == 'AWS::IAM::Role'
-            expr: |
-              [{"type": "Kubernetes::Node", "labels": {"aws/iam-role": config["Arn"]}}].toJSON()
-          # AvailabilityZone to Zone ID & Kubernetes Node
-          - filter: config_type == 'AWS::AvailabilityZone'
-            expr: |
-              [
-                {"type": "Kubernetes::Node", "labels": {"aws/account-id": tags['account'], "topology.kubernetes.io/zone": name}},
-                {"type": "AWS::AvailabilityZoneID", "name": config["ZoneId"]}
-              ].toJSON()
-          # Region to ZoneID
-          - filter: config_type == 'AWS::Region'
-            expr: |
-              [{"type": "AWS::AvailabilityZoneID", "labels": {"region": name}}].toJSON()
-        exclude:
-          - jsonpath: $.tags
-          - jsonpath: $.privateDnsNameOptionsOnLaunch
-          - jsonpath: outpostArn
-          - jsonpath: mapCustomerOwnedIpOnLaunch
-          - jsonpath: subnetArn
+```yaml title="aws-scraper.yaml" file=../../../modules/config-db/fixtures/aws.yaml
 ```
 
 | Field       | Description                                                                  | Scheme                                       | Required |

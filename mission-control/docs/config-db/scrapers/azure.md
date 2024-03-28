@@ -12,28 +12,7 @@ The registry has an [Azure](/registry/azure) Helm chart that provides a pre-conf
 
 The Azure scrapers scrapes your azure account to fetch all the resources & save them as configs.
 
-```yaml title="azure-scraper.yaml"
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: azure-scraper
-spec:
-  azure:
-    - connection: connection://azure/flanksource # connection provides the clientID, clientSecret & the tenant id
-      organisation: flanksource
-      subscriptionID: e3911016-5810-415f-b075-682db169988f
-      transform:
-        relationship:
-          # Link AKS Cluster to Kubernetes Cluster
-          - filter: config_class == 'KubernetesCluster'
-            expr: |
-              [{
-                "type": "Kubernetes::Cluster",
-                "labels": {
-                  "aks-nodeResourceGroup": config["properties"]["nodeResourceGroup"],
-                  "azure/subscription-id": tags["azure-subscription-id"]
-                },
-              }].toJSON()
+```yaml title="azure-scraper.yaml" file=../../../modules/config-db/fixtures/azure.yaml
 ```
 
 ## Scraper

@@ -133,7 +133,7 @@ EOF
 kubectl get canary
 ```
 
-```shell-session
+```bash
 NAME       INTERVAL     STATUS   LAST CHECK   UPTIME 1H       LATENCY 1H   LAST TRANSITIONED
 http-check   30         Passed   13s          18/18 (100.0%)   480ms        13s
 ```

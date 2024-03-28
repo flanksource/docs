@@ -23,7 +23,7 @@ db:
 
 If you ever need to connect to the embedded database, you can do so by forwarding the port:
 
-```shell-session
+```bash
 kubectl port-forward canary-checker-0 6432:6432
 psql -U postgres localhost -p 6432 canary with password postgres #password will be postgres
 ```

@@ -8,39 +8,7 @@ The registry has an [Kuebrnetes](/registry/kubernetes) Helm chart that provides 
 
 The `kubernetes` config type scrapes the configurations of your Kubernetes resources as specified with the fields; `namespace`, `selector`, `fieldSelector` and more.
 
-```yaml title='kubernetes-scraper.yaml'
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: kubernetes-scraper
-spec:
-  kubernetes:
-    - clusterName: local-kind-cluster
-      exclusions:
-        - Secret
-        - ReplicaSet
-        - APIService
-        - endpoints.discovery.k8s.io
-        - endpointslices.discovery.k8s.io
-        - leases.coordination.k8s.io
-        - podmetrics.metrics.k8s.io
-        - nodemetrics.metrics.k8s.io
-        - customresourcedefinition
-        - controllerrevision
-        - certificaterequest
-        - orders.acme.cert-manager.io
-      event:
-        exclusions:
-          - SuccessfulCreate
-          - Created
-          - DNSConfigForming
-        severityKeywords:
-          error:
-            - failed
-            - error
-          warn:
-            - backoff
-            - nodeoutofmemory
+```yaml title='kubernetes-scraper.yaml' file=../../../modules/config-db/fixtures/kubernetes.yaml
 ```
 
 ## Scraper

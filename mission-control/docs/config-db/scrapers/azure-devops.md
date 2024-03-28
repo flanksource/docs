@@ -4,7 +4,7 @@ The Azure Devops scanner will create a new configuration item for each unique pi
 
 Each time the pipeline is run it will create a change for that configuration item.
 
-```yaml title="azure-devops-scraper.yaml"
+```yaml title="azure-devops-scraper.yaml" file=../../../modules/config-db/fixtures/azure-devops.yaml
 apiVersion: configs.flanksource.com/v1
 kind: ScrapeConfig
 metadata:
