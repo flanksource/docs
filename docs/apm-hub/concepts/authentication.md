@@ -27,7 +27,7 @@ metadata:
   name: k8s-backend
 spec:
   backends:
-    - elasticsearch: 
+    - elasticsearch:
       ...
       username:
         valueFrom:
@@ -43,4 +43,4 @@ spec:
 ```
 
 
-For more details see [connections](/connections.md)
+For more details see [connections](/connections)

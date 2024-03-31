@@ -83,12 +83,12 @@ Kratos also supports [HTTP Webhooks](https://www.ory.sh/docs/kratos/self-hosted/
 </Step>
 <Step step={4} name="Single Sign On">
 
-See [SSO](./oidc.md) for OIDC.
+See [SSO](./oidc) for OIDC.
 
 </Step>
 
 <Step step={5} name="External Database">
 
-See [Database](./database.md) for using an external database like AWS RDS or for tweaking postgres settings.
+See [Database](./database) for using an external database like AWS RDS or for tweaking postgres settings.
 
 </Step>

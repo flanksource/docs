@@ -1,0 +1,81 @@
+---
+title: JUnit
+---
+
+# <Icon name="junit" /> JUnit
+
+
+
+JUnit check performs a Unit test, parses the JUnit test reports in a container at a specified path as defined in `testResults`.
+
+
+```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/junit_pass.yaml
+```
+
+<HealthCheck name="junit" edition="standard"  rows={[
+  {field: "spec", description: "Pod specification", scheme: '[Spec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) ', required: true},
+  {field: "testResults", description: "Path to JUnit test results", scheme: 'string', required: true},
+  {field: "timeout", description: " Timeout in minutes to wait for specified container to finish its job", scheme: 'int', default: '5'},
+  {
+  field: "artifacts",
+  description: "Specify what files/folders created in the pod need to be archived",
+  scheme: "[`[]Artifact`](#artifact)",
+},
+]}/>
+
+
+<details summary="Export custom metrics from JUnit results">
+<div>
+```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/junit_pass_metrics.yaml
+```
+</div>
+</details>
+
+
+
+## Test Result Variables
+
+| Name       | Description                                      | Scheme                         |
+| ---------- | ------------------------------------------------ | ------------------------------ |
+| `suites`   |                                                  | [`[]JunitSuite`](#junit-suite) |
+| `passed`   | Number of passing tests                          | _int_                          |
+| `failed`   | Number of failed tests                           | _int_                          |
+| `skipped`  | NUmber of tests that were skipped                | _int_                          |
+| `error`    | Number of errors produced when running the tests | _int_                          |
+| `duration` | Total time in seconds                            | _float64_                      |
+
+### Junit Suite
+
+| Name       | Description                                      | Scheme                       |
+| ---------- | ------------------------------------------------ | ---------------------------- |
+| `name`     |                                                  | _string_                     |
+| `tests`    |                                                  | [`[]JunitTest`](#junit-test) |
+| `passed`   | Number of passing tests                          | _int_                        |
+| `failed`   | Number of failed tests                           | _int_                        |
+| `skipped`  | NUmber of tests that were skipped                | _int_                        |
+| `error`    | Number of errors produced when running the tests | _int_                        |
+| `duration` | Total time in seconds                            | _float64_                    |
+
+### Junit Test
+
+| Name         | Description                                             | Scheme              |
+| ------------ | ------------------------------------------------------- | ------------------- |
+| `name`       |                                                         | _string_            |
+| `classname`  | an additional descriptor for the hierarchy of the test. | _string_            |
+| `duration`   | Time in seconds                                         | _float64_           |
+| `status`     | One of `passed`, `skipped`, `failed` or `error`         | _string_            |
+| `message`    | Description optionally included with a skipped,         | _string_            |
+| `properties` | Additional info about the test                          | `map[string]string` |
+| `error`      | Any errors encountered when running atest               | _string_            |
+| `stdout`     | Standard output produced during test                    | _string_            |
+| `stderr`     | Standard error output produced during test              | _string_            |
+
+<SkipOSS>
+## Artifact
+
+| Field  | Description   | Type     | Required |
+| ------ | ------------- | -------- | -------- |
+| `path` | Path or glob. | `string` | `true`   |
+
+See [artifacts](../concepts/artifacts)
+</SkipOSS>

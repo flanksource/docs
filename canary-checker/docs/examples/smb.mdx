@@ -1,0 +1,45 @@
+---
+title: SMB/CIFS
+---
+
+# <Icon name="smb" /> Windows File Share (SMB/CIFS)
+
+Checks the contents of a Windows / CIFS file share for size, age and count.
+
+See [Folder](folder) for a full description.
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: smb-check
+spec:
+  interval: 30
+  folder:
+    - path: smb:\\192.168.1.9\Some Public Folder\somedir
+      name: sample smb check
+      smbConnection:
+        username:
+          valueFrom:
+            secretKeyRef:
+              name: smb-credentials
+              key: USERNAME
+        password:
+          valueFrom:
+            secretKeyRef:
+              name: smb-credentials
+              key: PASSWORD
+        minAge: 10h
+```
+
+| Field           | Description                                                | Scheme                           | Required |
+| --------------- | ---------------------------------------------------------- | -------------------------------- | -------- |
+| **`name`**      | Name of the check                                          | _string_                         | Yes      |
+| **`path`**      | A path to a shared windows folder e.g. `smb://host/folder` | string                           | Yes      |
+| `smbConnection` | SMB connection details                                     | [SMB](#smb) |          |
+| `*`             | All other fields available in the folder check             | [_Folder_](folder)               |          |
+
+
+
+
+<Fields connection="smb"/>

@@ -46,6 +46,10 @@
 
 
 
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // import PrismLight from './src/prismLight';
 // import PrismDark from './src/prismDark';
@@ -71,7 +75,7 @@ export default async function createConfigAsync() {
     // ],
 
     customFields: {
-      oss: false,
+      oss: true,
       productName: 'Mission Control',
       links: {
         authentication: '/reference/env-var',
@@ -85,6 +89,26 @@ export default async function createConfigAsync() {
     },
 
     plugins: [
+
+
+      ['@docusaurus/plugin-client-redirects',
+        {
+          fromExtensions: ['html', 'htm'], // /myPage.html -> /myPage
+          toExtensions: ['exe', 'zip'], // /myAsset -> /myAsset.zip (if latter exists)
+          redirects: [
+            // /docs/oldDoc -> /docs/newDoc
+            {
+              to: '/canary-checker/reference/sql',
+              from: ['/canary-checker/reference/postgres', '/canary-checker/reference/mysql', '/canary-checker/reference/mssql'],
+            },
+
+            {
+              to: '/canary-checker/reference/folder#s3',
+              from: '/canary-checker/reference/s3-bucket',
+            }
+          ],
+
+        }],
 
       async function myPlugin(context, options) {
         return {
@@ -187,14 +211,14 @@ export default async function createConfigAsync() {
               position: 'left'
             },
             {
-              to: 'canary-checker/health-checks',
+              to: 'canary-checker',
               label: 'Health Checks',
               activeBasePath: 'canary-checker',
               position: 'left'
             },
 
             {
-              to: 'notifications/overview',
+              to: 'notifications',
               activeBasePath: 'notifications',
               label: 'Notifications',
               position: 'left'
@@ -202,14 +226,14 @@ export default async function createConfigAsync() {
 
 
             {
-              to: 'registry/overview',
+              to: 'registry',
               activeBasePath: 'registry',
               label: 'Registry',
               position: 'left'
             },
             {
-              to: 'reference/scripting',
-              activeBasePath: 'reference',
+              to: 'reference',
+              activeBasePath: '/reference',
               label: 'Reference',
               position: 'left'
             }

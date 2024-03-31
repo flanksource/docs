@@ -1,5 +1,7 @@
 ---
 hide_title: true
+title: Common Types
+sidebar_position: 100
 ---
 ## Agent
 
@@ -45,6 +47,10 @@ Valid time units are "s", "m", "h", "d", "w", "y". Eg:
 - `1d8h`
 - `1w6d8h`
 - `19w0d8h`
+
+## Size
+
+Sizes are string with a unit suffix e.g. `100` / `100b`, `10mb`, Valid size units are `kb`, `mb`, `gb`, `tb`
 
 
 ## Icon

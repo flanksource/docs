@@ -1,5 +1,6 @@
 ---
 title: Azure
+sidebar_position: 2
 ---
 
 # <Icon name="azure"/> Azure
@@ -35,7 +36,7 @@ The Azure scrapers scrapes your azure account to fetch all the resources & save 
 | `clientID`       | Microsoft Entra ID app client id                                           | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
 | `clientSecret`   | Microsoft Entra ID app client secret                                       | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
 | `exclusions`     | Specifies the Azure projects to scrape                                     | [`Exclusion`](#azure-exclusion)                |          |
-| `properties`     | Custom templatable properties for the scraped config items.                | [`[]ConfigProperty`](../../reference/property) |          |
+| `properties`     | Custom templatable properties for the scraped config items.                | [`[]ConfigProperty`](/reference/config-db/properties) |          |
 | `transform`       | Field to transform result                                                                        | [`Transform`](/config-db/concepts/transform)                        |          |
 | `tags`           | Set custom tags on the scraped config items                                | `map[string]string`                            |          |
 
@@ -43,9 +44,6 @@ The Azure scrapers scrapes your azure account to fetch all the resources & save 
 Either the connection name or the credentials (clientID, clientSecret & tenatnID) are required
 :::
 
-#### Transform
-
-<ConfigTransform></ConfigTransform>
 
 #### Azure Exclusion
 

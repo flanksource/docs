@@ -13,8 +13,8 @@ Health checks can be associated in 2 ways:
 
 | Field      | Description                      | Scheme                                                         | Required |
 | ---------- | -------------------------------- | -------------------------------------------------------------- | -------- |
-| `inline`   | Define a new health check inline | [`CanarySpec`](../../canary-checker/reference/canary-spec.mdx) |          |
-| `selector` | Select an existing health check  | [`[]ResourceSelector`](../../reference/resource-selector)      |          |
+| `inline`   | Define a new health check inline | [`CanarySpec`](/reference/canary-checker/canary) |          |
+| `selector` | Select an existing health check  | [`[]ResourceSelector`](/reference/resource-selector)      |          |
 
 ### Selector
 
@@ -70,4 +70,4 @@ spec:
       name: inline-canary
 ```
 
-The inline object can specify any [Check](../../canary-checker/reference/canary-spec.md)
+The inline object can specify any [Check](/reference/canary-checker/canary)

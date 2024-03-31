@@ -2,17 +2,7 @@
 title: AWS
 ---
 
-| Field                           | Description     | Type                                                                       | Required |
-| ------------------------------- | --------------- | -------------------------------------------------------------------------- | -------- |
-| <SkipOSS>`connection`</SkipOSS> | Mutually exclusive with `accessKey` and `secretKey`                 | <SkipOSS><CommonLink to="connection">_Connections_</CommonLink> </SkipOSS> |          |
-| `accessKey`                     | Access key      | <CommonLink to="secrets">_EnvVar_</CommonLink>                             |          |
-| `secretKey`                     | Secret key      | <CommonLink to="secrets">_EnvVar_</CommonLink>                             |          |
-| `region`                        | Region          | `string`                                                                   |          |
-| `endpoint`                      | Endpoint        | `string`                                                                   |          |
-| `skipTLSVerify`                 | Skip TLS verify | `bool`                                                                     |          |
-| `objectPath`                    | Object path     | `string`                                                                   |          |
-| `usePathStyle`                  | Use path style  | `bool`                                                                     |          |
-
+<Fields connection="aws"/>
 
 
 There are 3 options when connecting to AWS:

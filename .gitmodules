@@ -7,3 +7,6 @@
 [submodule "mission-control/modules/mission-control"]
 	path = mission-control/modules/mission-control
 	url = https://github.com/flanksource/mission-control.git
+[submodule "mission-control/canary-checker/canary-checker"]
+	path = mission-control/canary-checker/canary-checker
+	url = https://github.com/flanksource/canary-checker

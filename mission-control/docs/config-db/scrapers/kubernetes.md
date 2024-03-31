@@ -1,5 +1,6 @@
 ---
 title: Kubernetes
+sidebar_position: 4
 ---
 
 # <Icon name="k8s"/> Kubernetes
@@ -38,7 +39,7 @@ The `kubernetes` config type scrapes the configurations of your Kubernetes resou
 | `scope`           | Specify scope for scrape. e.g `cluster` for scraping at Cluster level                            | `string`                                         |          |
 | `selector`        | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels`                       | `string`                                         |          |
 | `since`           | Set time constraint for scraping resources within the set period                                 | `string`                                         |          |
-| `properties`      | Custom templatable properties for the scraped config items.                                      | [`[]ConfigProperty`](../../reference/property)   |          |
+| `properties`      | Custom templatable properties for the scraped config items.                                      | [`[]ConfigProperty`](/reference/config-db/properties)   |          |
 | `transform`       | Field to transform result                                                                        | [`Transform`](/config-db/concepts/transform)                        |          |
 | `tags`            | set custom tags on the scraped config items                                                      | `map[string]string`                              |          |
 

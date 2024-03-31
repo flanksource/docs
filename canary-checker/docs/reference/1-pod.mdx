@@ -1,0 +1,50 @@
+---
+title: Pod
+sidebar_className: infra
+tags:
+- enterprise
+---
+
+# <Icon name="k8s-pod" /> Pod
+
+
+
+The Pod check creates a new pod and verifies its reachability.
+
+
+```yaml title="tcp.yaml"  file=../../../modules/canary-checker/fixtures/k8s/pod_pass.yaml
+```
+
+<HealthCheck name="pod"  rows={[
+{field: "namespace", description: "Namespace where pod will be created", scheme: 'string'},
+{field: "spec", description: "Pod spec to create", scheme: '[Spec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) ', required: true},
+{field: "port", description: "Port on which the created pod will serve traffic", scheme: 'int'},
+{field: "path", description: " Path on which the created pod will respond to requests", scheme: 'string'},
+{field: "expectedContent", description: "Expected content in HTTP response", scheme: 'string'},
+{field: "expectedHttpStatuses", description: "Expected HTTP response statuses", scheme: '[]int'},
+{field: "scheduleTimeout", description: "Timeout for pod creation", scheme: 'Duration'},
+{field: "readyTimeout", description: "Timeout waiting for pod to become ready", scheme: 'Duration'},
+{field: "httpTimeout", description: "Timeout for HTTP requests", scheme: 'Duration'},
+{field: "deleteTimeout", description: "Timeout for pod deletion", scheme: 'Duration'},
+{field: "ingressTimeout", description: "Timeout waiting for ingress creation", scheme: 'Duration'},
+{field: "deadline", description: "Overall deadline for pod check", scheme: 'Duration'},
+{field: "httpRetryInterval", description: "Interval between HTTP retries", scheme: 'Duration'},
+{field:"ingressName", description: "Name to use for the ingress object that will expose the created pod", scheme: 'string'},
+{field: "ingressHost", description: " URL to be used by the ingress to expose the created pod ", scheme: 'string'},
+{field: "priorityClass", description: " Priority class to assign to the created pod", scheme: 'string'}
+
+
+]}/>
+
+
+
+
+## Metrics
+
+| **Metric**                                     |           |                                             |
+| ---------------------------------------------- | --------- | ------------------------------------------- |
+| `canary_check_histogram{metric = "creation_time"}` | Histogram | Time for pod to be `Pending`                |
+| `canary_check_histogram{metric = "delete_time"}`   | Histogram | Time to delete pod                          |
+| `canary_check_histogram{metric = "ingress_time"}`  | Histogram | Time until ingress is returning requests    |
+| `canary_check_histogram{metric = "request_time"}`  | Histogram | Duration of http request once ingress is up |
+| `canary_check_histogram{metric = "schedule_time"} `| Histogram | Time for pod to be `Running`                |

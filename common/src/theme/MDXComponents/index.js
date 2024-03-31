@@ -19,6 +19,7 @@ import {
   SkipCommercial
 } from '@site/src/components/Badges'
 import Action from '@site/src/components/Action'
+import HealthCheck from '@site/src/components/HealthCheck'
 import ShadowBox from '@site/src/components/ShadowBox'
 import Fields from '@site/src/components/Fields'
 import Step from '@site/src/components/Step'
@@ -26,7 +27,7 @@ import Highlight from '@site/src/components/Highlight'
 import { FullImage } from '@site/src/components/Badges'
 import { CommonLink } from '@site/src/components/Link'
 import { ConfigTransform } from '@site/src/components/ConfigTransform'
-import { CustomField } from '../../components/Badges'
+import { CustomField } from '@site/src/components/Badges'
 
 const MDXComponents = {
   Icon: Icon,
@@ -36,6 +37,7 @@ const MDXComponents = {
   Asciinema: Asciinema,
   Commercial: Commercial,
   FullImage: FullImage,
+  HealthCheck: HealthCheck,
   Standard: Standard,
   SkipOSS: SkipOSS,
   SkipCommercial: SkipCommercial,

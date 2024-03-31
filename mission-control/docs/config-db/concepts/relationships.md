@@ -1,5 +1,6 @@
 ---
 title: Relationships
+sidebar_position: 1
 ---
 
 :::tip Registry

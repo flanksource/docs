@@ -1,0 +1,27 @@
+---
+title: Prometheus
+sidebar_class_name: popular
+---
+
+# <Icon name="prometheus" /> Prometheus
+
+The Prometheus Check connects to the Prometheus host, performs the desired query, and displays the results.
+
+
+```yaml title="promtheus.yaml"  file=../../../modules/canary-checker/fixtures/datasources/prometheus.yaml
+```
+<HealthCheck name="prometheus" connection="url" rows={[
+  {field: "url", description: "Prometheus instance, if not specified in installation it is required", required: true},
+  {field: "query", description: "PromQL query to execute", required: true},
+
+]}/>
+
+
+
+## Result Variables
+
+| Name         | Description             | Scheme                     |
+| ------------ | ----------------------- | -------------------------- |
+| `value`      |                         | *float*                    |
+| `firstValue` | Number of rows returned | *int*                      |
+| `results`    | A list of results       | *[]map[string]interface{ }* |

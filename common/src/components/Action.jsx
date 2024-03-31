@@ -49,6 +49,6 @@ export default function Action({ rows, ...props }) {
 
   ]
 
-  return <Fields rows={commonsRows.concat(rows)} {...props} />
+  return <Fields rows={rows} common={commonsRows} {...props} />
 
 }

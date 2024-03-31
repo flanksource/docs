@@ -41,5 +41,5 @@ export function ConfigTransform({ rows, ...props }) {
     }
   ]
 
-  return <Fields rows={commonRows.concat(rows)} {...props} />
+  return <Fields rows={rows} common={commonRows} {...props} />
 }

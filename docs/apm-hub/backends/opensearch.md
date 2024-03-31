@@ -1,6 +1,6 @@
-OpenSearch backend fetches logs from open search instances. The backend requires credentials to access the open search instance. The credentials can be provided as a Kubernetes secret or right in the config file itself. Read more about authentication [here](../concepts/authentication.md).
+OpenSearch backend fetches logs from open search instances.
 
-You can craft the elastic search query using [Go Templates](../concepts/templating.md). The view data for the template is the [search param](../concepts/api.md#search-params).
+You can craft the elastic search query using [Go Templates](../concepts/templating). The view data for the template is the [search param](../concepts/api.md#search-params).
 
 ## Example configuration
 
@@ -51,7 +51,7 @@ spec:
 
 | Field       | Description                                                                                                | Scheme                                    | Required   |
 | ----------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ---------- |
-| `routes`    | Specify routes that would match this backend.<br> _(Read more [Routing](../concepts/routing.md))_          | [`[]Route`](../concepts/routing.md#route) | `true`     |
+| `routes`    | Specify routes that would match this backend.<br> _(Read more [Routing](../concepts/routing))_          | [`[]Route`](../concepts/routing.md#route) | `true`     |
 | `labels`    | A set of key value pairs that'll be attached to individual items in the search result.                     | `map[string]string`                       | `optional` |
 | `address`   | Elastic search instance URL.                                                                               | `string`                                  | `true`     |
 | `query`     | The query for elastic search.<br>It's a go template which will receive the search param as it's view data. | `string`                                  | `true`     |

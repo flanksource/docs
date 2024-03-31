@@ -1,5 +1,6 @@
 ---
 title: AWS
+sidebar_position: 1
 ---
 
 # <Icon name="aws"/> AWS
@@ -32,7 +33,7 @@ The registry has an [AWS](/registry/aws) Helm chart that provides a pre-configur
 | `cost_reporting`        | Enable cost and usage reporting                 | [`CostReporting`](#cost-reporting)             |          |
 | `exclude`               | AWS resources to exclude from scraping                      | `[]string`                                     |          |
 | `include`               | AWS resources to include for scraping                       | `[]string`                                     |          |
-| `properties`            | Custom templatable properties for the scraped config items. | [`[]ConfigProperty`](../../reference/property) |          |
+| `properties`            | Custom templatable properties for the scraped config items. | [`[]ConfigProperty`](/reference/config-db/properties) |          |
 | `transform`       | Field to transform result                                                                        | [`Transform`](/config-db/concepts/transform)                        |          |
 | `tags`                  | set custom tags on the scraped config items                 | `map[string]string`                            |          |
 

@@ -1,5 +1,5 @@
 ---
-title: ResourceSelector
+title: Resource Selectors
 ---
 
 Resource Selectors are used in multiple places including:

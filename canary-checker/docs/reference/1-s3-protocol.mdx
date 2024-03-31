@@ -1,0 +1,32 @@
+---
+title: S3 Protocol
+sidebar_className: infra
+tags:
+- enterprise
+---
+
+# <Icon name="s3" /> S3 Protocol
+
+Checks if S3 compatible endpoints (like Minio, EMC ECS) are functioning correctly,
+
+:::info
+To check the contents of a S3 bucket use: [S3 Bucket](folder#s3)
+:::
+
+The S3 check:
+
+- Lists objects in the bucket to check for Read permissions
+- Puts an object into the bucket for Write permissions
+- Downloads previously uploaded object to check for Get permissions
+
+
+```yaml title="s3-protocol"  file=../../../modules/canary-checker/fixtures/aws/s3-protocol.yaml
+```
+<HealthCheck name="s3" edition="enterprise" connection="aws" rows={[
+
+  {field: "bucket", description: "Bucket name to test against", scheme: "string", required: true},
+  {field: "objectPath", description: "Path of object to upload/download for test", scheme: "string", required: true},
+
+]}/>
+
+

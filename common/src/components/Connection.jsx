@@ -6,7 +6,7 @@ export var Connection = [
   {
     name: "connection",
     description: <>Path of an existing connection e.g. <code>connection://http/instance</code> <br /><Commercial /></>,
-    scheme: <a href="../../concepts/connections">Connection</a>,
+    scheme: <a href="/reference/connections">Connection</a>,
   },
   {
     name: "url",
@@ -17,11 +17,11 @@ export var Connection = [
   {
     name: "username",
     description: <>Username for HTTP Basic Auth</>,
-    scheme: <a href="../../concepts/authentication/#envvar">EnvVar</a>,
+    scheme: <a href="/reference/env-var">EnvVar</a>,
   },
   {
     name: "password",
     description: <>Password for HTTP Basic Auth</>,
-    scheme: <a href="../../concepts/authentication/#envvar">EnvVar</a>,
+    scheme: <a href="/reference/env-var">EnvVar</a>,
   }
 ];

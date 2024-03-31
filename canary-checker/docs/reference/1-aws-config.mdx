@@ -1,0 +1,29 @@
+---
+title: AWS Config
+---
+
+# <Icon name="aws-config" /> AWS Config
+
+AWS Config checks
+
+
+```yaml title="aws-config-rule.yaml"  file=../../../modules/canary-checker/fixtures/aws/aws_config_pass.yaml
+```
+
+
+
+<HealthCheck name="awsConfigRule" connection="aws" rows={[
+  {
+    field: "query",
+    required: true,
+    description: "Specify one or more Config rule names to filter the results by rule",
+    scheme: 'string'
+  },
+  {
+    field: "aggregatorName",
+    description: "Specify the name of the configuration aggregator",
+    scheme: 'string'
+  }
+]}/>
+
+

@@ -1,6 +1,7 @@
 ---
 title: Github
 show_title: false
+sidebar_position: 4
 ---
 
 # <Icon name="github"/> Github

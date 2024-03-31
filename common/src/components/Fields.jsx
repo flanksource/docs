@@ -10,16 +10,195 @@ const schemes = {
   "[]EnvVar": "[[]EnvVar](/reference/env-var)",
   "CEL": "[CEL](/reference/scripting/cel)",
   "Duration": "[Duration](/reference/types#duration)",
+  "Size": "[Size](/reference/types#size)",
   "Agent": "[Agent](/reference/types#agent)",
   "ResourceSelector": "[ResourceSelector](/reference/resource-selector)",
   "Connection": "[Connection](/reference/connection)",
   "string": "`string`",
+  "Icon": "[Icon](/reference/types#icon)",
   "bool": "`boolean`",
   "NotificationURL": "[url](/reference/notifications/channels)",
   "NotificationConnection": "[Connection](/reference/connection)",
   "NotificationProperties": "[map[string]string](/reference/notifications/channels#properties)",
 }
-export default function Fields({ rows, oneOf, anyOf }) {
+export default function Fields({ common = [], rows = [], oneOf, anyOf, connection }) {
+
+  const { siteConfig, siteMetadata } = useDocusaurusContext();
+
+  const oss = siteConfig.customFields.oss;
+
+  if (connection == "url") {
+    rows = rows.concat([
+      {
+        field: oss ? null : "connection",
+        description: "The connection to use, mutually exclusive with `username` and `password`",
+        scheme: "Connection",
+      },
+      {
+        field: "username",
+        scheme: "EnvVar",
+      },
+      {
+        field: "password",
+        scheme: "EnvVar",
+      }
+    ])
+  } else if (connection == "aws") {
+    rows = rows.concat([
+      {
+        field: oss ? null : "connection",
+        description: "The connection to use, mutually exclusive with `accessKey` and `secretKey`",
+        scheme: "Connection",
+      },
+      {
+        field: "accessKey",
+        scheme: "EnvVar"
+      },
+      {
+        field: "secretKey",
+        scheme: "EnvVar"
+      },
+      {
+        field: "region",
+        description: "The AWS region",
+        scheme: "string"
+      },
+      {
+        field: "endpoint",
+        description: "Custom AWS Endpoint to use",
+      },
+      {
+        field: "skipTLSVerify",
+        description: "Skip TLS verify when connecting to AWS",
+        scheme: 'bool'
+      }
+    ])
+  } else if (connection == "gcp") {
+    rows = rows.concat([
+      {
+        field: oss ? null : "connection",
+        description: "The connection to use, mutually exclusive with `credentials`",
+        scheme: "Connection",
+      },
+      {
+        field: "credentials",
+        description: "The credentials to use for authentication",
+        scheme: "EnvVar"
+      }
+    ])
+  } else if (connection == "sftp") {
+    rows = rows.concat([
+      {
+        field: oss ? null : "connection",
+        description: "The connection to use, mutually exclusive with `host` and `port`",
+        scheme: "Connection",
+      },
+      {
+        field: "host",
+        description: "SFTP host",
+        scheme: "string"
+      },
+      {
+        field: "port",
+        description: "SFTP port",
+        scheme: "int"
+      },
+      {
+        field: "username",
+        scheme: "EnvVar"
+      },
+      {
+        field: "password",
+        scheme: "EnvVar"
+      }
+    ])
+  } else if (connection == "smb") {
+    rows = rows.concat([
+      {
+        field: oss ? null : "connection",
+        description: "The connection to use, mutually exclusive with `host`, `share`, and `credentials`",
+        scheme: "Connection",
+      },
+      {
+        field: "host",
+        description: "The SMB host",
+        scheme: "string"
+      },
+      {
+        field: "port",
+        scheme: "int"
+      },
+      {
+        field: "domain",
+        description: "Windows Domain",
+      },
+      {
+        field: "username",
+        scheme: "EnvVar",
+      },
+      {
+        field: "password",
+        scheme: "EnvVar",
+      }
+    ])
+
+  } else if (connection == "kubeconfig") {
+    rows = rows.concat([
+      {
+        field: "kubeconfig",
+        description: "Path to a kubeconfig on disk, or a reference to an existing secret",
+        scheme: "EnvVar",
+      }])
+  } else if (connection == "azure") {
+    rows = rows.concat([
+      {
+        field: oss ? null : "connection",
+        description: "The connection to use, mutually exclusive with `tenantId`, `subscriptionId`, `clientId`, and `clientSecret`",
+        scheme: "Connection",
+      },
+      {
+        field: "tenantId",
+        description: "The Azure Active Directory tenant ID",
+        required: true
+      },
+      {
+        field: "subscriptionId",
+        description: "The Azure subscription ID",
+        required: true,
+        scheme: "EnvVar"
+      },
+      {
+        field: "clientId",
+        description: "The Azure client/application ID",
+        scheme: "EnvVar"
+      },
+      {
+        field: "clientSecret",
+        description: "The Azure client/application secret",
+        scheme: "EnvVar"
+      }
+    ])
+  }
+
+  rows = rows.filter(row => row.field != null &&
+    (row.field != "artifacts" || !oss));
+
+
+  var fieldSorter = function (a, b) {
+    if (a.required && !b.required) {
+      return -1;
+    }
+    if (!a.required && b.required) {
+      return 1;
+    }
+    return a.field.localeCompare(b.field)
+  }
+  rows = rows.concat(common.filter(row => row.required))
+  rows.sort(fieldSorter);
+  common = common.filter(row => !row.required)
+  common.sort(fieldSorter)
+  rows = rows.concat(common)
+
 
   return (
     <>
@@ -37,10 +216,10 @@ export default function Fields({ rows, oneOf, anyOf }) {
               <td>
                 <code className={row.required ? "font-bold" : ""}>{row.field}{row.required ? "*" : ""}</code>
               </td>
-              <td><ReactMarkdown>{row.description + (row.default ? `. Defaults to \`${row.default}\`` : '')}</ReactMarkdown></td>
+              <td><ReactMarkdown>{(row.description ? row.description : "") + (row.default ? `. Defaults to \`${row.default}\`` : '')}</ReactMarkdown></td>
               <td>
                 <ReactMarkdown>
-                  {schemes[row.scheme] || row.scheme}
+                  {schemes[row.scheme] || (row.scheme ? row.scheme : 'string')}
                 </ReactMarkdown>
               </td>
             </tr>
