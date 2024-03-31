@@ -1,4 +1,6 @@
-# Kubectl Logs
+---
+title: Kubectl Logs
+---
 
 ```yaml title="kubectl-logs.yaml"
 apiVersion: mission-control.flanksource.com/v1

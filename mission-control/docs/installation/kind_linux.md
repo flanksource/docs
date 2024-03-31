@@ -1,4 +1,6 @@
-# Self host Mission Control using Kind
+---
+title: Self host Mission Control using Kind
+---
 
 ## Prerequisites
 
@@ -21,7 +23,7 @@ nodes:
         kind: InitConfiguration
         nodeRegistration:
           kubeletExtraArgs:
-            node-labels: "ingress-ready=true"        
+            node-labels: "ingress-ready=true"
     extraPortMappings:
       - containerPort: 80
         hostPort: 8080

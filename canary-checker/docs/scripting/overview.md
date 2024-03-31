@@ -1,4 +1,6 @@
-# Scripting
+---
+title: Scripting
+---
 
 Canary checker is a fully scriptable platforms, scripts can be used in multiple places including:
 

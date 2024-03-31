@@ -1,6 +1,7 @@
 ---
-title: GitOps Action
+title: GitOps
 ---
+import Templating from "../../reference/playbooks/context.mdx"
 
 # <Icon name="git"/> GitOps Action
 
@@ -62,37 +63,28 @@ spec:
 
 ```
 
-:::info
-On Github, GitLab and Azure Devops, it's possible to create Pull Requests as well.
-:::
 
-| Field     | Description                                                   | Scheme                                   | Required | Templatable |
-| --------- | ------------------------------------------------------------- | ---------------------------------------- | -------- | ----------- |
-| `repo`    | Repository details                                            | [`RepositoryDetail`](#repository-detail) | `true`   | `true`      |
-| `commit`  | Commit details                                                | [`Commit`](#commit-detail)               | `true`   | `true`      |
-| `pr`      | Pull Request details _(Valid only for GitHub & Azure Devops)_ | [`PullRequest`](#pull-request)           |          | `true`      |
-| `patches` | List of patches to apply                                      | [`[]Patch`](#patch)                      |          | `true`      |
-| `files`   | List of files to create                                       | [`[]File`](#file)                        |          | `true`      |
+<Action anyOf={['patches', 'files']} rows={[
+  {field: "repo", description: "The repository details", scheme: "[Repository](#repository)", required: true},
+  {field: "commit", description: "Commit details", scheme: "[Commit](#commit-detail)", required: true},
+  {field: "pr", description: "Create a Pull Request instead of a commit (Only available for `github` and `gitlab`)", scheme: "[PullRequest](#pull-request)"},
+  {field: "patches", description: "List of JQ/YQ patches to apply", scheme: "[[]Patch](#patch)"},
+  {field: "files", description: "List of files to create", scheme: "[[]File](#file)"}
+]}/>
 
-:::note
-At least a patch or files config is required.
-:::
 
-### Repository Detail
+### Repository
 
-| Field        | Description                                                               | Scheme   | Required | Templatable |
-| ------------ | ------------------------------------------------------------------------- | -------- | -------- | ----------- |
-| `connection` | Connection name to use the credentials for the git repo                   | `string` |          |             |
-| `url`        | URL of the git repository                                                 | `string` |          |             |
-| `base`       | Branch to clone. _(Defaults to "main")_                                   | `string` |          | `true`      |
-| `branch`     | The new branch to create. _(Defaults to base branch specified above)_     | `string` |          | `true`      |
-| `type`       | Specify the service the repository is hosted on (eg: github, gitlab, etc) | `string` |          |             |
 
-:::note
-Either the `connection` or the `url` is required.
+<Fields oneOf={["connection", "url"]} rows={[
+  {field: "connection", description: "Connection name to use the credentials for the git repo", scheme: "string"},
+  {field: "url", description: "URL of the git repository", scheme: "string"},
+  {field: "base", description: "Branch to clone. Defaults to `main`", scheme: "string"},
+  {field: "branch", description: "The branch to update. Defaults to base", scheme: "string"},
+  {field: "type", description: "Git reposistory type", scheme: "`github`, `gitlab`, `azure_devops`, `http`, `git`"}
 
-For private GitLab repositories, please sepcify the type as "gitlab"
-:::
+]}/>
+
 
 ### Commit Detail
 
@@ -130,11 +122,5 @@ Files create or delete existing files on the git repo.
 
 ## Templating
 
-The template receives a environment variable that contain details about the corresponding config, check or component and the parameter(if applicable).
+<Templating/>
 
-| Field       | Description                              | Schema                                       |
-| ----------- | ---------------------------------------- | -------------------------------------------- |
-| `config`    | Config passed to the playbook            | [`ConfigItem`](./reference/config-db/config-item) |
-| `component` | Component passed to the playbook         | [`Component`](../references/component.md)    |
-| `check`     | Canary Check passed to the playbook      | [`Check`](/reference/canary-checker/checl)            |
-| `params`    | User provided parameters to the playbook | `map[string]string`                          |

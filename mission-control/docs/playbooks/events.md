@@ -1,4 +1,7 @@
-# Event Triggers
+---
+title: Event Triggers
+sidebar_position: 5
+---
 
 Playbook events are triggers that cause a Playbook to run. Events are triggered when specific activity on Mission Control occurs.
 For example: you can trigger a Playbook to run when a component goes unhealthy.

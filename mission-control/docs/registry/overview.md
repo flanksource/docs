@@ -1,4 +1,6 @@
-# Registry
+---
+title: Registry
+---
 
 We provide ready to use helm charts for setting up:
 

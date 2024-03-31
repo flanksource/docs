@@ -1,7 +1,7 @@
 ---
+title: Database
 description: Alternative methods for connecting to the db used for persistence
 ---
-# Database
 
 Mission Control stores all state in a Postgres Database, by default a Postgres StatefulSet is created.
 

@@ -1,4 +1,6 @@
-# Health Evaluation
+---
+title: Health Evaluation
+---
 
 All checks expose a health stats of passing (Green) or failing (Red),  for example the HTTP check fails if the status is `200 >= code < 299`
 these default behaviors can be changed using the `test` field:

@@ -1,4 +1,6 @@
-# Templating
+---
+title: Templating
+---
 
 **Templating is:**
 > Simply a way to represent data in different forms.

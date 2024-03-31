@@ -1,4 +1,6 @@
-# Health Checks
+---
+title: Health Checks
+---
 
 Components can be associated with health checks. This association allows you to check the health of a component. When the health checks associated to the component become unhealthy, the component will also become unhealthy & vice-versa.
 

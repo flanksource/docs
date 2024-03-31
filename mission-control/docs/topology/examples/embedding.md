@@ -1,1 +1,3 @@
-# Embedding Cards
+---
+title: Embedding Cards
+---

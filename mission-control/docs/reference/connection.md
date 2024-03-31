@@ -1,4 +1,6 @@
-# Connections
+---
+title: Connections
+---
 
 Connections are an easy way to authenticate against sources. It can be created via a CRD or by adding it in the settings page
 

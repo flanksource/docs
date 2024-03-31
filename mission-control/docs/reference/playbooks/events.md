@@ -1,4 +1,6 @@
-# Event Triggers
+---
+title: Event Triggers
+---
 
 Playbook can be triggered when specific occurs, e.g.  you can trigger a playbook to run when a component becomes unhealthy.
 

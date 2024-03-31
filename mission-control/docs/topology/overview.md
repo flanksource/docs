@@ -5,10 +5,8 @@ hide_title: true
 # hide_table_of_contents: true
 
 pagination_next: canary-checker/health-checks
-pagination_prev: playbooks/overview
+# pagination_prev: playbooks/overview
 ---
-
-# Topology
 
 A topology is a representation of logical system made up of components and sub-components.
 

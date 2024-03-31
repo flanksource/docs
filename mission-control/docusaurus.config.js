@@ -6,44 +6,49 @@
 
 // const lightCodeTheme = require('prism-react-renderer/themes/palenight')
 // const darkCodeTheme = require('prism-react-renderer/themes/dracula')
-import fs from 'node:fs/promises';
+// import fs from 'node:fs/promises';
+// import rehypeShiki, { RehypeShikiOptions } from '@shikijs/rehype';
+// import { bundledLanguages } from 'shiki';
+// import {
+//   transformerMetaHighlight,
+//   transformerNotationDiff,
+//   transformerNotationHighlight,
+//   transformerNotationFocus,
+// } from '@shikijs/transformers';
 
-import rehypeShiki, { RehypeShikiOptions } from '@shikijs/rehype';
-import { bundledLanguages } from 'shiki';
-import {
-  transformerMetaHighlight,
-  transformerNotationDiff,
-  transformerNotationHighlight,
-  transformerNotationFocus,
-} from '@shikijs/transformers';
+// const rehypeShikiPlugin = [
+//   rehypeShiki,
+//   {
+//     themes: {
+//       dark: 'github-light',
+//       light: 'github-light',
+//     },
+//     transformers: [
+//       {
+//         name: 'meta',
+//         code(node) {
+//           const language = this.options.lang ?? 'plaintext';
+//           this.addClassToHast(node, `language-${language}`);
+//           return node;
+//         },
+//       },
+//       transformerMetaHighlight(),
+//       transformerNotationDiff(),
+//       transformerNotationHighlight(),
+//       transformerNotationFocus(),
+//     ],
+//     langs: [
+//       ...(Object.keys(bundledLanguages)),
+//       async () => JSON.parse(await fs.readFile('./languages/bash.tmLanguage.json', 'utf-8')),
+//     ],
+//   }
+// ];
 
-const rehypeShikiPlugin = [
-  rehypeShiki,
-  {
-    themes: {
-      dark: 'github-light',
-      light: 'github-light',
-    },
-    transformers: [
-      {
-        name: 'meta',
-        code(node) {
-          const language = this.options.lang ?? 'plaintext';
-          this.addClassToHast(node, `language-${language}`);
-          return node;
-        },
-      },
-      transformerMetaHighlight(),
-      transformerNotationDiff(),
-      transformerNotationHighlight(),
-      transformerNotationFocus(),
-    ],
-    langs: [
-      ...(Object.keys(bundledLanguages)),
-      async () => JSON.parse(await fs.readFile('./languages/bash.tmLanguage.json', 'utf-8')),
-    ],
-  }
-];
+
+
+
+// import PrismLight from './src/prismLight';
+// import PrismDark from './src/prismDark';
 
 /** @type {import('@docusaurus/types').Config} */
 export default async function createConfigAsync() {
@@ -61,6 +66,9 @@ export default async function createConfigAsync() {
     favicon: 'img/flanksource-icon.png',
     onBrokenLinks: 'warn',
     onBrokenMarkdownLinks: 'warn',
+    // scripts: [
+    //   "https://cdn.tailwindcss.com",
+    // ],
 
     customFields: {
       oss: false,
@@ -77,6 +85,19 @@ export default async function createConfigAsync() {
     },
 
     plugins: [
+
+      async function myPlugin(context, options) {
+        return {
+          name: "docusaurus-tailwindcss",
+          configurePostCss(postcssOptions) {
+            // Appends TailwindCSS and AutoPrefixer.
+            postcssOptions.plugins.push(require("tailwindcss"));
+            postcssOptions.plugins.push(require("autoprefixer"));
+            return postcssOptions;
+          },
+        };
+      },
+
       async function resolveSymlinkPlgugin(context, options) {
         return {
           name: 'resolve-symlinks',
@@ -112,7 +133,7 @@ export default async function createConfigAsync() {
             // Remove this to remove the "edit this page" links.
             editUrl: 'https://github.com/flanksource/docs/tree/main/',
             remarkPlugins: [codeImport],
-            beforeDefaultRehypePlugins: [rehypeShikiPlugin]
+            // beforeDefaultRehypePlugins: [rehypeShikiPlugin]
             // rehypePlugins: [rehypeKatex],
           },
           blog: {
@@ -120,7 +141,7 @@ export default async function createConfigAsync() {
           },
           theme: {
 
-            customCss: './src/css/custom.css'
+            customCss: './src/css/out.css'
           }
         })
       ]
@@ -199,7 +220,7 @@ export default async function createConfigAsync() {
           {
             name: 'keywords',
             content:
-              'health check, synthetic test, continuous testing, kubernetes operator'
+              'internal developer portal, internal developer platform, IDP, kubernetes'
           }
         ],
 
@@ -221,10 +242,15 @@ export default async function createConfigAsync() {
           style: 'dark',
           copyright: `Copyright © ${new Date().getFullYear()} Flanksource Inc.`
         },
+
+        // prism: {
+        //   theme: PrismLight,
+        //   darkTheme: PrismDark,
+        // },
         // prism: {
         //   additionalLanguages: ['powershell'],
-        //   darkTheme: prismThemes.palenight,
-        //   theme: prismThemes.dracula
+        //   // darkTheme: themes.palenight,
+        //   // theme: themes.dracula
         // }
       })
   }

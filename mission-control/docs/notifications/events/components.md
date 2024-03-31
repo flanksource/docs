@@ -1,4 +1,6 @@
-# Components
+---
+title: Components
+---
 
 Component status updates emit the following events
 

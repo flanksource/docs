@@ -1,4 +1,6 @@
-# Check
+---
+title: Check
+---
 
 | Field                  | Description                                                 | Scheme              |
 | ---------------------- | ----------------------------------------------------------- | ------------------- |
@@ -23,6 +25,3 @@
 | `deleted_at`           | The deleted at of the check                                 | `*time`             |
 | `silenced_at`          | The silenced at of the check                                | `*time`             |
 
-
-
-# Status

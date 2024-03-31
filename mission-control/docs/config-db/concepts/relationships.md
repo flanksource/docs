@@ -1,4 +1,6 @@
-# Relationships
+---
+title: Relationships
+---
 
 :::tip Registry
 
@@ -104,8 +106,3 @@ spec:
             //highlight-end
 ```
 
-
-
-|      |      |      |      |
-| ---- | ---- | ---- | ---- |
-|      |      |      |      |

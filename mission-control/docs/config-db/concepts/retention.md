@@ -1,4 +1,6 @@
-# Retention
+---
+title: Retention
+---
 
 After scraping we can choose to retain results on the basis of name, age, count and more.
 
@@ -57,7 +59,7 @@ spec:
 
 ## Changes
 
-Changes can quickly accumulate and grow large over time. While it's important to retain some changes, others can be discarded after a period. 
+Changes can quickly accumulate and grow large over time. While it's important to retain some changes, others can be discarded after a period.
 
 
 

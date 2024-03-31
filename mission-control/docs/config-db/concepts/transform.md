@@ -1,6 +1,8 @@
-# Transform
+---
+title: Transform
+---
 
-Transformation allows you to transform the scraped configs before they are saved to config db.
+Transformations allows you to transform the scraped configs before they are saved to config db.
 
 
 

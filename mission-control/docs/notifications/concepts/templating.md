@@ -1,4 +1,6 @@
-# Templating
+---
+title: Templating
+---
 
 **Templating is:**
 

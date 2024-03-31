@@ -1,4 +1,6 @@
-# Insights
+---
+title: Insights
+---
 
 Scrapers can create and attach insights (security, performance, cost, etc..) to related config items.
 

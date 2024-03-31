@@ -1,4 +1,6 @@
-# Component lookup
+---
+title: Component lookup
+---
 
 Lookup enables you to form components from an external source eg: an HTTP endpoint, kubernetes clusters or a database.
 

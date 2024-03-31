@@ -1,20 +1,15 @@
-
-# Webhook
+---
+title: Webhook
+---
 
 
 | Field            | Description                      | Scheme                                | Required |
 | ---------------- | -------------------------------- | ------------------------------------- | -------- |
 | `path`           | Unique endpoint for the webhook. | `string`                              | `true`   |
-| `authentication` |    | [`[]Authentication`](#authentication) |          |
-
-## Authentication
-
-| Field    | Description | Scheme                       | Required |
-| -------- | ----------- | ---------------------------- | -------- |
-| `basic`  | Basic Auth  | [`Basic`](#basic)   |          |
-| `github` | Github Auth | [`Github`](#github) |          |
-| `svix`   | Svix Auth   | [`Svix`](#svix)     |          |
-| `jwt`    | JWT Auth    | [`JWT`](#jwt)       |          |
+| `authentication[].basic`  | Basic Auth  | [`Basic`](#basic)   |          |
+| `authentication[].github` | Github Auth | [`Github`](#github) |          |
+| `authentication[].svix`   | Svix Auth   | [`Svix`](#svix)     |          |
+| `authentication[].jwt`    | JWT Auth    | [`JWT`](#jwt)       |          |
 
 ### Basic
 
@@ -25,7 +20,7 @@
 
 ### Github
 
-If the webhook is being called by Github, you can use [GitHub's webhook verification](https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries) to ensure that the webhook calls are really from GitHub.
+Use GitHub [webhook verification](https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries) to authenticate requests.
 
 | Field   | Description                  | Scheme                                                                        | Required |
 | ------- | ---------------------------- | ----------------------------------------------------------------------------- | -------- |

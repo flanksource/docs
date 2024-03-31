@@ -1,4 +1,6 @@
-# ResourceSelector
+---
+title: ResourceSelector
+---
 
 Resource Selectors are used in multiple places including:
 

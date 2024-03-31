@@ -1,4 +1,6 @@
-# SQL
+---
+title: SQL
+---
 
 The SQL configuration scraper will execute a SQL query and then create a configuration item for each returned row.
 

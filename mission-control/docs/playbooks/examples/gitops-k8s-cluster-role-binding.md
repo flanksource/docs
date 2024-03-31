@@ -1,4 +1,6 @@
-# Add cluster role binding via gitops
+---
+title: JIT Access via GitOps
+---
 
 ```yaml title="gitops-k8s-cluster-role-binding.yaml"
 apiVersion: mission-control.flanksource.com/v1

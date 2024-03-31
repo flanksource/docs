@@ -1,4 +1,6 @@
-# Secret Management
+---
+title: Secret Management
+---
 
 Canary checker uses the Kubernetes ValuesFrom pattern to retrieve sensitive values like usernames, password and access keys.
 

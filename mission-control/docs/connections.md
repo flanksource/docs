@@ -1,4 +1,6 @@
-# Authentication
+---
+title: Authentication
+---
 
 Mission Control uses the Kubernetes ValuesFrom pattern to retrieve sensitive values like usernames, password and access keys.
 

@@ -1,4 +1,8 @@
-# Kubernetes
+---
+title: Kubernetes
+---
+
+# <Icon name="k8s"/> Kubernetes
 
 :::tip Registry
 

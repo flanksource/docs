@@ -1,8 +1,10 @@
-# File
+---
+title: File
+---
 
 The file config type is set to scrape configurations or configurations in common with the related elements that can be specified in the fields; `type`, and `id`. The paths to the configuration(s) to be scraped is set with the field `path` as a list.
 
-```yaml title='file-scraper.yaml'
+```yaml title='file-scraper.yaml' file=../../../modules/config-db/fixtures/file-git.yaml
 apiVersion: configs.flanksource.com/v1
 kind: ScrapeConfig
 metadata:
@@ -16,13 +18,11 @@ spec:
         - test*.json
 ```
 
-For more examples of configuration file, please check the [GitHub repo](https://github.com/flanksource/config-db/tree/main/fixtures)
 
 ## Scraper
 
 | Field       | Description                                                                        | Scheme                                       | Required |
 | ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `logLevel`  | Specify the level of logging.                                                      | `string`                                     |          |
 | `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
 | `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |

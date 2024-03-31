@@ -1,4 +1,6 @@
-# Playbook Runners
+---
+title: Runners
+---
 
 Playbook runners offer the flexibility to designate where actions are executed. By default, actions run on the main instance, but a set of agents can also be provided and one of them will be chosen at random.
 This enables a playbook action to access environment specific information such as kubernetes secrets, connection details, environment variables, without having to share those to the main instance.

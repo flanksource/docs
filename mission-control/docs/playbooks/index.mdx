@@ -1,42 +1,42 @@
 ---
 slug: /playbooks
-title: Playbooks
+title: Overview
+sidebar_position: 1
 hide_title: true
 # hide_table_of_contents: true
 pagination_prev: config-db/overview
 pagination_next: topology/overview
 ---
 
-# Playbooks
+Playbooks automate common workflows and processes by defining reusable templates of actions that can be triggered on-demand by users, when specific events happen or through webhooks.
 
 <img src="/img/playbooks.svg" width="800px"/>
-
-
-Playbooks provide a way to standardize and automate operational activities.
-
 
 Some key benefits include:
 
 * **Accelerated GitOps Adoption** - Use  _"ClickOps"_ to make changes to resources but have them being applied as Git pull requests in the background, enabling non-technical teams to leverage GitOps workflows.
 * **Consistency** - Provide easy to discover and reusable templates for common tasks, preventing the complexity of doing the same thing multiple ways.
 * **Self-Service** - Enable developers/operators to provision and manage their own resources without involving a central DevOps/Platform team.
-* **Compliance** - Enforce security, compliance, and governance policies by codifying processes and limiting the need for elevated privileges.
+* **Compliance** - Improve compliance and security by limiting the need for elevated privileges.
 * **Cost Efficiency** - Optimize costs with on-demand environments that spin down after a fixed duration.
 * **Portability** - A consistent interface for performing operations irrespective of the underlying infrastructure and/or environment
 
 
 <hr/>
 
-Playbooks can either create/scaffold or operate on existing resources
+
+## Use cases
 
 
-## Parameters
+### Provisioning
 
-Playbooks have 2 types of parameters:
 
-<Step step={1} name="Resources" style="list">
 
-A playbook can be restricted to specific `configs`, `components` or health `checks` using [resource selectors](/reference/resource-selector). For example Restarting a Kubernetes Deployment is only applicable to config items of type: `Kubernetes::Deployment`
+### Day 2 Operations
+
+Day 2 operations can be added onto existing resources using `configs`, `components` or health `checks` using [resource selectors](/reference/resource-selector).
+
+For example Restarting a Kubernetes Deployment is only applicable to config items of type: `Kubernetes::Deployment`
 
 ```yaml title="scale-deployment.yaml"
 #...
@@ -48,9 +48,6 @@ spec:
    #....
 ```
 
-</Step>
-<Step step={2} name="User Input" style="list">
-
 Before running a playbook, users can provide input using [`parameters`](/reference/playbooks/parameters)
 ```yaml title="parameters.yaml"
 #...
@@ -60,22 +57,24 @@ spec:
   parameters:
     - name: replicas
   # ...
+
 ```
 
-</Step>
+### Just In Time Access
 
-## Triggers
+### AIOps
 
 
-## Context
-<Step step={1} name="Self-Service" style="list">
-</Step>
 
-<Step step={2} name="Events" style="list">
-</Step>
+```
 
-<Step step={3} name="Webhooks" style="list">
-</Step>
+
+## Parameters
+
+Playbooks have 2 types of parameters:
+
+
+
 
 ```yaml title="restrict-to-deployment.yaml"
 #...

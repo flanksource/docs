@@ -1,5 +1,9 @@
+---
+title: Parameters
+---
 
-# Parameters
+```yaml title="scale-deployment.yaml" file=../../../modules/mission-control/fixtures/playbooks/scale-deployment.yaml
+```
 
 Playbook parameter defines a parameter that a playbook needs to run.
 

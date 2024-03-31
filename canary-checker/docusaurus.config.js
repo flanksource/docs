@@ -41,7 +41,7 @@ const config = {
         },
 
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve('./src/css/canary-checker.css'),
         },
         docs: {
           // remarkPlugins: [sectionPrefix],

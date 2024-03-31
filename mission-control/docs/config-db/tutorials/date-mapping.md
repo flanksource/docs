@@ -1,4 +1,6 @@
-# Date Mapping
+---
+title: Date Mapping
+---
 
 In this tutorial, you'll use the config-db CLI to scrape a file that consists of a list of virtual machines.
 

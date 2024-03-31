@@ -1,4 +1,6 @@
-# Changes
+---
+title: Changes
+---
 
 When you save a config item to ConfigDB, it also tracks its changes. These changes may come from external sources like Kubernetes events or Azure activities. Alternatively, they can be automatically detected by comparing the old config with the newly changed one.
 

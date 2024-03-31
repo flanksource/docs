@@ -1,4 +1,6 @@
-# Scraping Custom File
+---
+title: Scraping Custom File
+---
 
 In this tutorial you'll scrape the currency conversion rates from a JSON file that comes from [this api](https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json).
 

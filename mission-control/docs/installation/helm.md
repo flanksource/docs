@@ -1,4 +1,6 @@
-# Self-Hosted Install With Helm
+---
+title: Self-Hosted Install With Helm
+---
 
 :::info Prerequisites
 To install and run Mission Control you need to have the following prerequisites:

@@ -1,4 +1,6 @@
-# Custom Scrapers
+---
+title: Custom Scrapers
+---
 
 Custom scrapers allow you to scrape from sources that are not well defined eg: scraping a [File](/config-db/scrapers/file) sitting on disk, inside a [Kubernetes Pod](/config-db/scrapers/kubernetes-file) or from a [SQL](/config-db/scrapers/sql) query.
 

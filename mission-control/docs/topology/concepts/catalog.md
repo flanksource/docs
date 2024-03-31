@@ -1,4 +1,6 @@
-# Catalog
+---
+title: Catalog
+---
 
 You can link components with configs. The linked config items appears in the component page in the right hand side panel.
 

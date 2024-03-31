@@ -1,4 +1,6 @@
-# Properties
+---
+title: Properties
+---
 
 A topology view can be customized using properties.
 

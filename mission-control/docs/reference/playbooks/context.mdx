@@ -1,0 +1,81 @@
+---
+title: Playbook Context
+---
+
+
+### CEL Expressions
+
+The following variables can be used within the [CEL](/reference/scripting/cel) expressions of `filter`,  `if`,  `delays` and `parameters.default`:
+
+| Field       | Description                              | Schema                                       |
+| ----------- | ---------------------------------------- | -------------------------------------------- |
+| `config`    | Config passed to the playbook            | [`ConfigItem`](/reference/config-db/config-item) |
+| `component` | Component passed to the playbook         | [`Component`](/reference/topology/components)    |
+| `check`     | Canary Check passed to the playbook      | [`Check`](/reference/canary-checker/check)            |
+| `params`    | User provided parameters to the playbook | `map[string]string`                          |
+| `env`    | Environment variables defined on the playbook | `map[string]string`                          |
+| `user.name`    | Name of the user who invoked the action | `string`                          |
+| `user.email`    | Email of the user who invoked the action | `string`                          |
+
+<details summary="Conditionally Running Actions">
+<div>
+Playbook actions can be selectively executed based on CEL expressions. These expressions must either return
+
+- a boolean value (`true` indicating run the action & skip the action otherwise)
+- or a special function among the ones listed below
+
+| Function    | Description                                                 |
+| ----------- | ----------------------------------------------------------- |
+| `always()`  | run no matter what; even if the playbook is cancelled/fails |
+| `failure()` | run if any of the previous actions failed                   |
+| `skip()`    | skip running this action                                    |
+| `success()` | run only if all previous actions succeeded (default)        |
+| `timeout()` | run only if any of the previous actions timed out           |
+```yaml title="delete-kubernetes-pod.yaml" file=../../../modules/mission-control/fixtures/playbooks/exec-filter.yaml
+```
+</div>
+</details>
+
+<details summary="Defaulting Parameters">
+<div>
+```yaml title="delete-kubernetes-pod.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: edit
+spec:
+  title: 'Edit Kustomize Resource'
+  icon: flux
+  parameters:
+    //highligh-next-line
+    - default: 'chore: update $(.config.type)/$(.config.name)'
+      name: commit_message
+```
+</div>
+</details>
+
+### Go Templating
+
+When templating `actions` with [Go Templates](/reference/scripting/gotemplate), the context variables are available as fields of the template's context object `.` eg `.config`, `.user.email`
+
+<details summary="Templating Actions">
+<div>
+```yaml title="delete-kubernetes-pod.yaml" file=../../../modules/mission-control/fixtures/playbooks/scale-deployment.yaml {16}
+```
+</div>
+</details>
+
+### Functions
+
+| Function       | Description                              | Return                                       |
+| ----------- | ---------------------------------------- | -------------------------------------------- |
+|`getLastAction()` |	Returns the result of the action that just run	| Action Specific |
+|`getAction({action})` |	Return the result of a specific action	 |Action Specific |
+
+
+<details summary="Reusing Action Results">
+<div>
+```yaml title="action-results.yaml" file=../../../modules/mission-control/fixtures/playbooks/action-result.yaml
+```
+</div>
+</details>

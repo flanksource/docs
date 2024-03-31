@@ -1,5 +1,7 @@
 
-# Architecture
+---
+title: Architecture
+---
 
 
 

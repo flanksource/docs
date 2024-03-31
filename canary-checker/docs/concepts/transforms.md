@@ -1,8 +1,7 @@
 ---
-title: Transforms
+title: Transformation
 ---
 
-# Transformation
 
 The `transform` can be used to convert one canary check into multiple checks programmatically.
 

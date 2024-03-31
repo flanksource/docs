@@ -1,4 +1,7 @@
-# Webhook Triggers
+---
+title: Webhook Triggers
+sidebar_position: 4
+---
 
 Playbooks can also be triggered via webhooks. When a webhook is configured, mission-control listens on the specified endpoint and any calls to the endpoint triggers the playbook.
 By default, the webhook calls are not protected via authentication. However, there are various authentication methods available.

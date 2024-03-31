@@ -1,11 +1,11 @@
-# Azure
+---
+title: Azure
+---
 
-
+# <Icon name="azure"/> Azure
 
 :::tip Registry
-
 The registry has an [Azure](/registry/azure) Helm chart that provides a pre-configured Scraper with some common defaults
-
 :::
 
 

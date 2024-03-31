@@ -1,4 +1,6 @@
-# Slack Notification
+---
+title: Slack Notification
+---
 
 In this example, we will walk through the process of creating a health check alert notification on slack starting from creating the Slack bot token.
 

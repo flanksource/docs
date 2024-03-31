@@ -1,4 +1,6 @@
-# Troubleshooting
+---
+title: Troubleshooting
+---
 
 ## Increase the log verbosity of a Canary using `trace` annotation
 

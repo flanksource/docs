@@ -1,4 +1,6 @@
-# Approval
+---
+title: Approval
+---
 
 Authorization safeguards can be applied to playbook runs, ensuring their execution is limited to specific individuals or teams who grant approval.
 

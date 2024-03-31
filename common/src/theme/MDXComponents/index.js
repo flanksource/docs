@@ -3,7 +3,7 @@ import MDXHead from '@theme/MDXComponents/Head'
 import MDXCode from '@theme/MDXComponents/Code'
 import MDXA from '@theme/MDXComponents/A'
 import MDXPre from '@theme/MDXComponents/Pre'
-import MDXDetails from '@theme/MDXComponents/Details'
+import Details from '@theme/Details'
 import MDXHeading from '@theme/MDXComponents/Heading'
 import MDXUl from '@theme/MDXComponents/Ul'
 import MDXImg from '@theme/MDXComponents/Img'
@@ -18,6 +18,9 @@ import {
   SkipOSS,
   SkipCommercial
 } from '@site/src/components/Badges'
+import Action from '@site/src/components/Action'
+import ShadowBox from '@site/src/components/ShadowBox'
+import Fields from '@site/src/components/Fields'
 import Step from '@site/src/components/Step'
 import Highlight from '@site/src/components/Highlight'
 import { FullImage } from '@site/src/components/Badges'
@@ -43,7 +46,11 @@ const MDXComponents = {
   code: MDXCode,
   a: MDXA,
   pre: MDXPre,
-  details: MDXDetails,
+  details: Details,
+  ShadowBox: ShadowBox,
+  Details: Details,
+  Action: Action,
+  Fields: Fields,
   ul: MDXUl,
   img: MDXImg,
   h1: (props) => <MDXHeading as="h1" {...props} />,

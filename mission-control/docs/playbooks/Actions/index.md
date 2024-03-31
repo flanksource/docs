@@ -1,4 +1,6 @@
-# Actions
+---
+title: Actions
+---
 
 Actions are the fundamental tasks executed by a playbook. A playbook can comprise multiple actions, which are executed sequentially. If any action encounters an error and fails, the execution of the playbook is halted.
 

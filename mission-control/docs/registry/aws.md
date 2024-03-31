@@ -1,4 +1,6 @@
-# AWS
+---
+title: AWS
+---
 
 The AWS helm chart installs a [catalog scraper](/config-db/scrapers/aws)
 

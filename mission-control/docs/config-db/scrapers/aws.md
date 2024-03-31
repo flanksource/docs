@@ -1,4 +1,8 @@
-# AWS
+---
+title: AWS
+---
+
+# <Icon name="aws"/> AWS
 
 This config type is used to scrape information about your AWS infrastructure.
 

@@ -1,4 +1,6 @@
-# Artifacts
+---
+title: Artifacts
+---
 
 ## Filestores
 

@@ -1,4 +1,6 @@
-# Delay Actions
+---
+title: Delayed Actions
+---
 
 ```yaml title="delay-deletion.yaml"
 apiVersion: mission-control.flanksource.com/v1

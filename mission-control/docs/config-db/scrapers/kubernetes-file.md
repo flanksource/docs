@@ -1,4 +1,8 @@
-# Kubernetes File
+---
+title: Kubernetes File
+---
+
+# <Icon name="k8s-pod"/> Kubernetes File
 
 The KubernetesFile config type is used to scrape configurations contained in your specified resource e.g Pod.
 

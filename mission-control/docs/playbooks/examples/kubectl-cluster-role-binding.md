@@ -1,4 +1,6 @@
-# ClusterRoleBinding with delayed cleanup
+---
+title: JIT Access With Expiry
+---
 
 ```yaml title="test-cluster-role-binding.yaml"
 apiVersion: mission-control.flanksource.com/v1

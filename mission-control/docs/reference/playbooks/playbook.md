@@ -1,4 +1,6 @@
-# Playbooks
+---
+title: Playbooks
+---
 
 | Field         | Description                                                  | Scheme                                               |
 | ------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
@@ -8,51 +10,43 @@
 | `on.component` | Run a playbook when a component becomes heathy/unhealthy | [`EventTrigger`](./events#component) |
 | `on.config` | Run a playbook when a config item is created/updated/deleted or changes state | [`EventTrigger`](./events#config) |
 | `on.webhook`   | Run a playbook when a webhook is called | [`Webhook`](./webhooks)    |
-| `runsOn`      | Specify the [runners](./runners.md) that can run this playbook. One will be chosen on random. When empty, the playbook will run on the main instance itself |[`[]Agent`](/reference/types#agent)                                         |
-| `templatesOn` | Specify where the templating of the action spec should occur | `host` or `agent`                                      |
-| `checks`      | Specify selectors for checks that can be run on the Playbook. | [`[]ResourceSelector`](/reference/resource-selector) |
-| `configs`     | Specify selectors for config items that can be run on the Playbook. | [`[]ResourceSelector`](/reference/resource-selector) |
-| `components`  | Specify selectors for component items that can be run on the Playbook. | [`[]ResourceSelector`](/reference/resource-selector) |
-| `parameters`  | Accept user input | [`[]Parameter`](./parameters)                          |
-| `actions`     | 1 or more actions to run    | [`[]Action`](#action)                                |
+| `runsOn`      | Which [runner](/playbooks/concepts/runners) (agent) to run the playbook on|[`[]Agent`](/reference/types#agent)                                         |
+| `templatesOn` | Where the templating of actions should occur  <br/> For `host` the templating occurs on the mission control instance before being passed to the agent <br/> For `agent` the templating occurs on the agent/runner where there might be secrets not accessible by the primary instance. | `host` or `agent`                                      |
+| `checks`      | Which health checks can this playbook run on | [`[]ResourceSelector`](/reference/resource-selector) |
+| `configs`     | Which config items can this playbook run on | [`[]ResourceSelector`](/reference/resource-selector) |
+| `components`  | Which components can this playbook run on | [`[]ResourceSelector`](/reference/resource-selector) |
+| `env` | Variables to lookup, available as `env` map in templating/filters | [[]EnvVar](/reference/env-var) |
+| `parameters`  | Variables to be supplied by the user, Do not use parameters for sensitive values. | [`[]Parameter`](./parameters)                          |
+| `actions`     | Individual actions or steps to perform   | [`[]Action`](#action)                                |
 | `approval`    | Optional approvals required before a playbooks runs | [`Approval`](#approval)                    |
 
 
-## Action
+## Actions
 
 | Field          | Description                                                  | Scheme                                                | Required |
 | -------------- | ------------------------------------------------------------ | ----------------------------------------------------- | -------- |
-| `name`         | Name of action.                                              | `string`                                              | `true`   |
-| `runsOn`       | Where a playbook runs. If more than 1 agent is specified the playbook will run on all specified runners | [`[]Agent`](/reference/types#agent)                  |          |
+| **`name`**         | Step Name                                              | `string`                                              | `true`   |
+| `runsOn`       | Which [runner](/playbooks/concepts/runners) (agent) to run the action on| [`[]Agent`](/reference/types#agent)                  |          |
 | `templatesOn`  | Where templating (and secret management) of actions should occur | `host` or `agent`                                     |          |
 | `delay`        | A delay before running the action e.g. `8h`                  | [`Duration`](/reference/types#duration)  or  [CEL](/reference/scripting/cel) with [Playbook Context](./context) |          |
-| `filter`       |                                                              | [CEL](/reference/scripting/cel) with [Playbook Context](./context)               |          |
+| `filter`       | Conditionally run an action                                                              | [CEL](/reference/scripting/cel) with [Playbook Context](./context)               |          |
 | `timeout`      | Timeout on this action.                                      | [`Duration`](/reference/types#duration)                                            |          |
-| `azureDevopsPipeline` |                                                              | [AzureDevops](/playbooks/actions/azure_devops_pipeline)                |          |
+| `azureDevopsPipeline` |   Trigger a pipeline run                                                           | [AzureDevops](/playbooks/actions/azure_devops_pipeline)                |          |
 | `exec`         | Run a script e.g. to use `kubectl` or `aws` CLI's            | [Exec](/playbooks/actions/exec.md)                  |          |
+| `github` |   Trigger Github Action                                                         | [Github Action](/playbooks/actions/github)                |          |
 | `gitops`       | Update a git repository (directly or via pull request)       | [Gitops](/playbooks/actions/gitops.md)              |          |
 | `http`         | Call an HTTP Endpoint                                        | [Http](/playbooks/actions/http.md)                  |          |
 | `sql`          | Execute a SQL query                                          | [Sql](/playbooks/actions/sql.md)                    |          |
 | `pod`          | Run a kubernetes pod.                                        | [Pod](/playbooks/actions/pod.md)                    |          |
 | `notification` | Specify notification of action.                              | [Notification](/playbooks/actions/notification.md)  |          |
 
+> Only 1 action should be specified per step
 
-## Approval
+## Approvals
 
-Authorization safeguards can be applied to playbook runs, ensuring their execution is limited to specific individuals or teams who grant approval.
+Approvals allow requiring one or more people to approve before a playbook runs.
 
-```yaml title="approve-kubernetes-scaling.yaml"
-#...
-kind: Playbook
-spec:
-  #...
-  approval:
-    type: any
-    approvers:
-      people:
-        - admin@local
-      teams:
-        - DevOps
+```yaml title="scale-deployment.yaml" {10-14} file=../../../modules/mission-control/fixtures/playbooks/delete-pv.yaml
 ```
 
 | Field       | Description                    | Scheme       | Required |

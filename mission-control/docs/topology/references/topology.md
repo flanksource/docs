@@ -1,4 +1,6 @@
-# Topology
+---
+title: Topology
+---
 
 This page defines the specification for Topology. There are few samples in the examples section.
 

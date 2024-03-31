@@ -1,8 +1,8 @@
 ---
 pagination_next: registry/overview
 pagination_prev: canary-checker/health-checks
+title: Notifications
 ---
-# Notifications
 
 Notification allows you to receive alerts on a preferred channel when a particular set of events occur.
 
