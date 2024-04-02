@@ -1,4 +1,6 @@
-# Self host Mission Control using Kind
+---
+title: Self host Mission Control using Kind
+---
 
 ## Prerequisites
 
@@ -21,7 +23,7 @@ nodes:
         kind: InitConfiguration
         nodeRegistration:
           kubeletExtraArgs:
-            node-labels: "ingress-ready=true"        
+            node-labels: "ingress-ready=true"
     extraPortMappings:
       - containerPort: 80
         hostPort: 8080
@@ -56,11 +58,6 @@ Add the Flanksource repository to helm:
 
 ```bash
 helm repo add flanksource https://flanksource.github.io/charts
-```
-
-then fetch the latest chart list with
-
-```bash
 helm repo update
 ```
 

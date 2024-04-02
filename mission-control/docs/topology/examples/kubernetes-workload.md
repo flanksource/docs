@@ -1,4 +1,6 @@
-# Kubernetes Workload
+---
+title: Kubernetes Workload
+---
 This example demonstrates creating a component from the ABP Microservice Demo
 
 ```yaml

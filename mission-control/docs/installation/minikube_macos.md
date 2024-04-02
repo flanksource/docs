@@ -1,4 +1,6 @@
-# Self host Mission Control using Minikube  
+---
+title: Self host Mission Control using Minikube
+---
 
 ## Env details/prerequisites
 
@@ -29,7 +31,7 @@
 
 1. `helm repo add flanksource [https://flanksource.github.io/charts](https://flanksource.github.io/charts)`
 2. `helm repo update`
-3. `helm install flanksource flanksource/mission-control -n flanksource -v 0.1.21` 
+3. `helm install flanksource flanksource/mission-control -n flanksource -v 0.1.21`
 [Check the latest chart release here.](https://github.com/flanksource/mission-control-chart/releases?page=1)
 4. Create another local-values.yaml file with the following values:
 
@@ -52,13 +54,13 @@ flanksource-ui:
 
 ## Access Mission Control UI
 
-1. Add line similar to the following one to the bottom of the `/etc/hosts` file on your computer (you will need administrator access) 
+1. Add line similar to the following one to the bottom of the `/etc/hosts` file on your computer (you will need administrator access)
 
    `127.0.0.1        incident-manager-ui.local`
 
 2. `minikube tunnel`
 3. [https://incident-manager-ui.local/login](https://incident-manager-ui.local/login)
-4. Username: **admin@local**  
+4. Username: **admin@local**
 Pass: **admin**
 
 ## Validation steps

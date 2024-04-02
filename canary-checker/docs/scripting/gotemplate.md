@@ -70,9 +70,9 @@ All keys are converted to strings.
 
 This function is equivalent to [Sprig's `dict`](http://masterminds.github.io/sprig/dicts.html#dict) function, as used in [Helm templates](https://docs.helm.sh/chart_template_guide#template-functions-and-pipelines).
 
-For creating more complex maps, see [`data.JSON`](../data/#data-json) or [`data.YAML`](../data/#data-yaml).
+For creating more complex maps, see [`data.JSON`](#json) or [`data.YAML`](#yaml).
 
-For creating arrays, see [`coll.Slice`](#coll-slice).
+For creating arrays, see [`coll.Slice`](#slice).
 
 
 
@@ -86,7 +86,7 @@ For creating arrays, see [`coll.Slice`](#coll-slice).
 
 ```
 ```go
-{{ define "T1" }}Hello {{ .thing }}!{{ end -}} 
+{{ define "T1" }}Hello {{ .thing }}!{{ end -}}
 {{ template "T1" (dict "thing" "world")}}
 {{ template "T1" (dict "thing" "everybody")}}
 
@@ -174,7 +174,7 @@ Return a list of keys in one or more maps.
 
 The keys will be ordered first by map position (if multiple maps are given), then alphabetically.
 
-See also [`coll.Values`](#coll-values).
+See also [`coll.Values`](#values).
 
 
 ```go
@@ -189,7 +189,7 @@ Return a list of values in one or more maps.
 
 The values will be ordered first by map position (if multiple maps are given), then alphabetically by key.
 
-See also [`coll.Keys`](#coll-keys).
+See also [`coll.Keys`](#keys).
 
 
 
@@ -305,13 +305,11 @@ _Note that this function does not modify the input._
 // map[foo:1 bar:5 baz:4]
 ```
 
+### Pick
 
 Given a map, returns a new map with any entries that have the given keys.
 
 All keys are converted to strings.
-
-This is the inverse of [`coll.Omit`](#coll-omit).
-
 _Note that this function does not modify the input._
 
 
@@ -323,11 +321,12 @@ _Note that this function does not modify the input._
 // map[baz:3 foo:1]
 ```
 
+### Omit
+
 Given a map, returns a new map without any entries that have the given keys.
 
 All keys are converted to strings.
 
-This is the inverse of [`coll.Pic`](#coll-pick).
 
 _Note that this function does not modify the input._
 
@@ -344,7 +343,7 @@ _Note that this function does not modify the input._
 
 ### bool
 
-**Note:** See also [`conv.ToBool`](#conv-tobool) for a more flexible variant.
+**Note:** See also [`conv.ToBool`](#tobool) for a more flexible variant.
 
 Converts a true-ish string to a boolean. Can be used to simplify conditional statements based on environment variables or other text input.
 
@@ -358,7 +357,7 @@ Converts a true-ish string to a boolean. Can be used to simplify conditional sta
 
 Provides a default value given an empty input. Empty inputs are `0` for numeric types, `""` for strings, `false` for booleans, empty arrays/maps, and `nil`.
 
-Note that this will not provide a default for the case where the input is undefined (i.e. referencing things like `.foo` where there is no `foo` field of `.`), but [`conv.Has`](#conv-has) can be used for that.
+Note that this will not provide a default for the case where the input is undefined (i.e. referencing things like `.foo` where there is no `foo` field of `.`), but [`conv.Has`](#has) can be used for that.
 
 
 
@@ -376,9 +375,9 @@ All keys are converted to strings.
 
 This function is equivalent to [Sprig's `dict`](http://masterminds.github.io/sprig/dicts.html#dict) function, as used in [Helm templates](https://docs.helm.sh/chart_template_guide#template-functions-and-pipelines).
 
-For creating more complex maps, see [`data.JSON`](../data/#data-json) or [`data.YAML`](../data/#data-yaml).
+For creating more complex maps, see [`data.JSON`](#json) or [`data.YAML`](#yaml).
 
-For creating arrays, see [`conv.Slice`](#conv-slice).
+For creating arrays, see [`conv.Slice`](#slice).
 
 
 
@@ -400,7 +399,7 @@ Creates a slice (like an array or list). Useful when needing to `range` over a b
 
 
 ```go
-{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }} 
+{{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }}
 // Hello, Bart
 // Hello, Lisa
 // Hello, Maggie
@@ -450,7 +449,7 @@ Any of `url.URL`'s methods can be called on the result.
 
 ### ParseInt
 
-_**Note:**_ See [`conv.ToInt64`](#conv-toint64) instead for a simpler and more flexible variant of this function.
+_**Note:**_ See [`conv.ToInt64`](#toint64) instead for a simpler and more flexible variant of this function.
 
 Parses a string as an int64. Equivalent to [strconv.ParseInt](https://golang.org/pkg/strconv/#ParseInt)
 
@@ -467,7 +466,7 @@ The value in decimal is {{ $val }}
 
 ### ParseFloat
 
-_**Note:**_ See [`conv.ToFloat`](#conv-tofloat) instead for a simpler and more flexible variant of this function.
+_**Note:**_ See [`conv.ToFloat`](#`tofloat) instead for a simpler and more flexible variant of this function.
 
 Parses a string as an float64 for later use. Equivalent to [strconv.ParseFloat](https://golang.org/pkg/strconv/#ParseFloat)
 
@@ -533,12 +532,12 @@ Floating-point numbers (with decimal points) are truncated.
 
 ### ToInt
 
-Converts the input to an `int` (signed integer, 32- or 64-bit depending on platform). This is similar to [`conv.ToInt64`](#conv-toint64) on 64-bit platforms, but is useful when input to another function must be provided as an `int`.
+Converts the input to an `int` (signed integer, 32- or 64-bit depending on platform). This is similar to [`conv.ToInt64`](#`toint64) on 64-bit platforms, but is useful when input to another function must be provided as an `int`.
 
 On 32-bit systems, given a number that is too large to fit in an `int`, the result is `-1`. This is done to protect against
 [CWE-190](https://cwe.mitre.org/data/definitions/190.html) and [CWE-681](https://cwe.mitre.org/data/definitions/681.html).
 
-See also [`conv.ToInt64`](#conv-toint64).
+See also [`conv.ToInt64`](#`toint64).
 
 
 
@@ -552,10 +551,6 @@ See also [`conv.ToInt64`](#conv-toint64).
 
 Converts the inputs to an array of `int64`s.
 
-This delegates to [`conv.ToInt64`](#conv-toint64) for each input argument.
-
-
-
 ```go
 {{ conv.ToInt64s true 0x42 "123,456.99" "1.2345e+3"}} // [1 66 123456 1234]
 ```
@@ -563,8 +558,6 @@ This delegates to [`conv.ToInt64`](#conv-toint64) for each input argument.
 ### ToInts
 
 Converts the inputs to an array of `int`s.
-
-This delegates to [`conv.ToInt`](#conv-toint) for each input argument.
 
 
 
@@ -589,7 +582,7 @@ This function attempts to convert most types of input (strings, numbers, and boo
 
 Converts the inputs to an array of `float64`s.
 
-This delegates to [`conv.ToFloat64`](#conv-tofloat64) for each input argument.
+This delegates to [`conv.ToFloat64`](#`tofloat64) for each input argument.
 
 
 
@@ -614,9 +607,6 @@ The input will always be represented in _some_ way.
 ### ToStrings
 
 Converts the inputs (of any type) to an array of `string`s
-
-This delegates to [`conv.ToString`](#conv-tostring) for each input argument.
-
 
 
 ```go
@@ -648,7 +638,7 @@ _Warning: SHA-1 is cryptographically broken and should not be used for secure ap
 
 Converts a JSON string into an object. Works for JSON Objects, but will also parse JSON Arrays. Will not parse other valid JSON types.
 
-For more explict JSON Array support, see [`data.JSONArray`](#data-jsonarray).
+For more explict JSON Array support, see [`data.JSONArray`](#jsonarray).
 
 
 ```go
@@ -661,7 +651,7 @@ For more explict JSON Array support, see [`data.JSONArray`](#data-jsonarray).
 Converts a JSON string into a slice. Only works for JSON Arrays.
 
 
-```go 
+```go
 {{ ('[ "you", "world" ]' | jsonArray) 1 }} // world
 ```
 
@@ -670,7 +660,7 @@ Converts a JSON string into a slice. Only works for JSON Arrays.
 
 Converts a YAML string into an object. Works for YAML Objects but will also parse YAML Arrays. This can be used to access properties of YAML objects.
 
-For more explict YAML Array support, see [`data.JSONArray`](#data-yamlarray).
+For more explict YAML Array support, see [`data.JSONArray`](#yamlarray).
 
 
 ```go
@@ -749,7 +739,7 @@ COBOL has 357 keywords.
 
 ### csvByColumn
 
-Like [`csvByRow`](#csvByRow), except that the data is presented as a columnar (column-oriented) map.
+Like [`csvByRow`](#csvbyrow), except that the data is presented as a columnar (column-oriented) map.
 
 
 ```
@@ -772,7 +762,7 @@ COBOL
 
 ### toJSON
 
-Converts an object to a JSON document. Input objects may be the result of `json`, `yaml`, `jsonArray`, or `yamlArray` functions, or they could be provided by a `datasource`.
+Converts an object to a JSON document. Input objects may be the result of `json`, `yaml`, `jsonArray`, or `yamlArray` functions
 
 
 
@@ -784,7 +774,7 @@ Converts an object to a JSON document. Input objects may be the result of `json`
 
 ### toJSONPretty
 
-Converts an object to a pretty-printed (or _indented_) JSON document. Input objects may be the result of functions like `data.JSON`, `data.YAML`, `data.JSONArray`, or `data.YAMLArray` functions, or they could be provided by a [`datasource`](../general/datasource).
+Converts an object to a pretty-printed (or _indented_) JSON document. Input objects may be the result of functions like `data.JSON`, `data.YAML`, `data.JSONArray`, or `data.YAMLArray` functions.
 
 The indent string must be provided as an argument.
 
@@ -800,7 +790,7 @@ The indent string must be provided as an argument.
 
 ### toYAML
 
-Converts an object to a YAML document. Input objects may be the result of `data.JSON`, `data.YAML`, `data.JSONArray`, or `data.YAMLArray` functions, or they could be provided by a [`datasource`](../general/datasource).
+Converts an object to a YAML document. Input objects may be the result of `data.JSON`, `data.YAML`, `data.JSONArray`, or `data.YAMLArray` functions.
 
 
 
@@ -825,9 +815,9 @@ Converts an object to a [TOML](https://github.com/toml-lang/toml) document.
 
 ### toCSV
 
-Converts an object to a CSV document. The input object must be a 2-dimensional array of strings (a `[][]string`). Objects produced by [`data.CSVByRow`](#conv-csvbyrow) and [`data.CSVByColumn`](#conv-csvbycolumn) cannot yet be converted back to CSV documents.
+Converts an object to a CSV document. The input object must be a 2-dimensional array of strings (a `[][]string`). Objects produced by [`data.CSVByRow`](#csvbyrow) and [`data.CSVByColumn`](#csvbycolumn) cannot yet be converted back to CSV documents.
 
-**Note:** With the exception that a custom delimiter can be used, `data.ToCSV` outputs according to the [RFC 4180](https://tools.ietf.org/html/rfc4180) format, which means that line terminators are `CRLF` (Windows format, or `\r\n`). If you require `LF` (UNIX format, or `\n`), the output can be piped through [`strings.ReplaceAll`](../strings/#strings-replaceall) to replace `"\r\n"` with `"\n"`.
+**Note:** With the exception that a custom delimiter can be used, `data.ToCSV` outputs according to the [RFC 4180](https://tools.ietf.org/html/rfc4180) format, which means that line terminators are `CRLF` (Windows format, or `\r\n`). If you require `LF` (UNIX format, or `\n`), the output can be piped through [`strings.ReplaceAll`](#replaceall) to replace `"\r\n"` with `"\n"`.
 
 
 ```go
@@ -987,7 +977,7 @@ A wrapper for Go's [`filepath.VolumeName`](https://golang.org/pkg/path/filepath/
 
 ```go
 {{ filepath.VolumeName "C:/foo/bar" }} //  C:
-{{ filepath.VolumeName "/foo/bar" }} // 
+{{ filepath.VolumeName "/foo/bar" }} //
 ```
 
 
@@ -1022,7 +1012,7 @@ Returns the least integer value greater than or equal to a given floating-point 
 
 
 ```go
-{{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}ceil {{ printf "%#v" . }} = {{ math.Ceil . }}{{"\n"}}{{ end }} 
+{{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}ceil {{ printf "%#v" . }} = {{ math.Ceil . }}{{"\n"}}{{ end }}
 
 // ceil 5.1 = 6
 // ceil 42 = 42
@@ -1053,7 +1043,7 @@ Returns the greatest integer value less than or equal to a given floating-point 
 
 
 ```go
-{{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}floor {{ printf "%#v" . }} = {{ math.Floor . }}{{"\n"}}{{ end }} 
+{{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}floor {{ printf "%#v" . }} = {{ math.Floor . }}{{"\n"}}{{ end }}
 
 // floor 5.1 = 4
 // floor 42 = 42
@@ -1073,7 +1063,7 @@ Returns whether or not the given number can be interpreted as a floating-point l
 
 
 ```go
-{{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsFloat .) }}{{.}} is a float{{"\n"}}{{ end }}{{end}} 
+{{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsFloat .) }}{{.}} is a float{{"\n"}}{{ end }}{{end}}
 
 // 1 is a float
 // -1.0 is a float
@@ -1090,7 +1080,7 @@ Returns whether or not the given number is an integer.
 
 
 ```go
-{{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsInt .) }}{{.}} is an integer{{"\n"}}{{ end }}{{end}} 
+{{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsInt .) }}{{.}} is an integer{{"\n"}}{{ end }}{{end}}
 
 // 42 is an integer
 // 0xFF is an integer
@@ -1172,7 +1162,7 @@ Returns the nearest integer, rounding half away from zero.
 
 
 ```go
-{{ range (slice -6.5 5.1 42.9 "3.5" 6.5) }}round {{ printf "%#v" . }} = {{ math.Round . }}{{"\n"}}{{ end }} 
+{{ range (slice -6.5 5.1 42.9 "3.5" 6.5) }}round {{ printf "%#v" . }} = {{ math.Round . }}{{"\n"}}{{ end }}
 
  // round -6.5 = -7
 // round 5.1 = 5
@@ -1479,7 +1469,7 @@ Splits `input` into sub-strings, separated by the expression.
 
 This can be called with 2 or 3 arguments. When called with 2 arguments, the `n` argument (number of matches) will be set to `-1`, causing all sub-strings to be returned.
 
-This is equivalent to [`strings.SplitN`](../strings/#strings-splitn), except that regular expressions are supported.
+This is equivalent to [`strings.SplitN`](#splitn), except that regular expressions are supported.
 
 This function provides the same behaviour as Go's [`regexp.Split`](https://golang.org/pkg/regexp/#Regexp.Split) function.
 
@@ -1496,7 +1486,7 @@ This function provides the same behaviour as Go's [`regexp.Split`](https://golan
 
 Abbreviates a string using `...` (ellipses). Takes an optional offset from the beginning of the string, and a maximum final width (including added ellipses).
 
-_Also see [`strings.Trunc`](#strings-trunc)._
+_Also see [`strings.Trunc`](#trunc)._
 
 
 
@@ -1566,7 +1556,7 @@ foo:
 ```
 
 ### Sort _(deprecated)_
-**Deprecation Notice:** Use [`coll.Sort`](../coll/#coll-sort) instead
+**Deprecation Notice:** Use [`coll.Sort`](#sort) instead
 
 Returns an alphanumerically-sorted copy of a given string list.
 
@@ -1751,7 +1741,7 @@ This wraps Go's [`strings.TrimSuffix`](https://golang.org/pkg/strings/#TrimSuffi
 
 Returns a string truncated to the given length.
 
-_Also see [`strings.Abbrev`](#strings-abbrev)._
+_Also see [`strings.Abbrev`](#abbrev)._
 
 
 ```go
@@ -1829,7 +1819,7 @@ This wraps Go's [`utf8.RuneCountInString`](https://golang.org/pkg/unicode/utf8/#
 
 
 ```go
-{{ range (slice "\u03a9" "\u0030" "\u1430") }}{{ printf "%s is %d bytes and %d runes\n" . (len .) (strings.RuneCount .) }}{{ end }} 
+{{ range (slice "\u03a9" "\u0030" "\u1430") }}{{ printf "%s is %d bytes and %d runes\n" . (len .) (strings.RuneCount .) }}{{ end }}
 // Ω is 2 bytes and 1 runes
 // 0 is 1 bytes and 1 runes
 // ᐰ is 3 bytes and 1 runes
@@ -1837,7 +1827,7 @@ This wraps Go's [`utf8.RuneCountInString`](https://golang.org/pkg/unicode/utf8/#
 
 ### contains
 
-**See [`strings.Contains`](#strings-contains) for a pipeline-compatible version**
+**See [`strings.Contains`](#contains) for a pipeline-compatible version**
 
 Contains reports whether the second string is contained within the first. Equivalent to [strings.Contains](https://golang.org/pkg/strings#Contains)
 
@@ -1849,7 +1839,7 @@ Contains reports whether the second string is contained within the first. Equiva
 
 ### HasPrefix
 
-**See [`strings.HasPrefix`](#strings-hasprefix) for a pipeline-compatible version**
+**See [`strings.HasPrefix`](#hasprefix) for a pipeline-compatible version**
 
 Tests whether the string begins with a certain substring. Equivalent to [strings.HasPrefix](https://golang.org/pkg/strings#HasPrefix)
 
@@ -1863,7 +1853,7 @@ Tests whether the string begins with a certain substring. Equivalent to [strings
 
 ### HasSuffix
 
-**See [`strings.HasSuffix`](#strings-hassuffix) for a pipeline-compatible version**
+**See [`strings.HasSuffix`](#hassuffix) for a pipeline-compatible version**
 
 Tests whether the string ends with a certain substring. Equivalent to [strings.HasSuffix](https://golang.org/pkg/strings#HasSuffix)
 
@@ -1877,7 +1867,7 @@ Tests whether the string ends with a certain substring. Equivalent to [strings.H
 
 ### split
 
-**See [`strings.Split`](#strings-split) for a pipeline-compatible version**
+**See [`strings.Split`](#split) for a pipeline-compatible version**
 
 Creates a slice by splitting a string on a given delimiter. Equivalent to [strings.Split](https://golang.org/pkg/strings#Split)
 
@@ -1895,7 +1885,7 @@ Hello, {{ . }}
 
 ### splitN
 
-**See [`strings.SplitN`](#strings-splitn) for a pipeline-compatible version**
+**See [`strings.SplitN`](#splitn) for a pipeline-compatible version**
 
 Creates a slice by splitting a string on a given delimiter. The count determines the number of substrings to return. Equivalent to [strings.SplitN](https://golang.org/pkg/strings#SplitN)
 
@@ -1911,7 +1901,7 @@ Creates a slice by splitting a string on a given delimiter. The count determines
 
 ### Trim
 
-**See [`strings.Trim`](#strings-trim) for a pipeline-compatible version**
+**See [`strings.Trim`](#trim) for a pipeline-compatible version**
 
 Trims a string by removing the given characters from the beginning and end of the string. Equivalent to [strings.Trim](https://golang.org/pkg/strings/#Trim)
 
@@ -1946,7 +1936,7 @@ See [the Go `reflect` source code](https://github.com/golang/go/blob/36fcde1676a
 
 In addition, the special kind `number` is accepted by this function, to represent _any_ numeric kind (whether `float32`, `uint8`, or whatever). This is useful when the specific numeric type is unknown.
 
-See also [`test.Kind`](test-kind).
+See also [`test.Kind`](#kind).
 
 
 ```go
@@ -1976,7 +1966,7 @@ Got a number: {{ $object }}
 Report the _kind_ of the given argument. This differs from the _type_ of the argument in specificity; for example, while a slice of strings may have a type of `[]string`, the _kind_ of that slice will simply be `slice`.
 If you need to know the precise type of a value, use `printf "%T" $value`.
 
-See also [`test.IsKind`](test-iskind).
+See also [`test.IsKind`](#iskind)
 
 
 
@@ -1989,7 +1979,7 @@ See also [`test.IsKind`](test-iskind).
 
 ### ternary
 
-Returns one of two values depending on whether the third is true. Note that the third value does not have to be a boolean - it is converted first by the [`conv.ToBool`](../conv/#conv-tobool) function (values like `true`, `1`, `"true"`, `"Yes"`, etc... are considered true).
+Returns one of two values depending on whether the third is true. Note that the third value does not have to be a boolean - it is converted first by the [`conv.ToBool`](#tobool) function (values like `true`, `1`, `"true"`, `"Yes"`, etc... are considered true).
 
 This is effectively a short-form of the following template:
 
@@ -2075,7 +2065,7 @@ time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 
 ### ParseLocal
 
-Same as [`time.Parse`](#time-parse), except that in the absence of a time zone indicator, the timestamp wil be parsed in the local timezone.
+Same as [`time.Parse`](#parse), except that in the absence of a time zone indicator, the timestamp wil be parsed in the local timezone.
 
 
 Usage with [`Format`](https://golang.org/pkg/time/#Time.Format):
@@ -2086,7 +2076,7 @@ Usage with [`Format`](https://golang.org/pkg/time/#Time.Format):
 
 ### ParseInLocation
 
-Same as [`time.Parse`](#time-parse), except that the time is parsed in the given location's time zone.
+Same as [`time.Parse`](#parse), except that the time is parsed in the given location's time zone.
 
 This wraps [`time.ParseInLocation`](https://golang.org/pkg/time/#ParseInLocation).
 
@@ -2162,7 +2152,7 @@ Return the local system's time zone offset, in seconds east of UTC.
 
 Create a version 1 UUID (based on the current MAC address and the current date/time).
 
-Use [`uuid.V4`](#uuid-v4) instead in most cases.
+Use [`uuid.V4`](#v4) instead in most cases.
 
 
 

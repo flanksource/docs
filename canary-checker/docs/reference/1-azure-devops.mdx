@@ -1,0 +1,50 @@
+---
+title: Azure DevOps
+---
+
+# <Icon name="azure-devops" /> Azure Devops
+
+Azure Devops checks for healthy pipeline runs.
+
+
+```yaml title="azure-devops.yaml" file=../../../modules/canary-checker/fixtures/azure/devops.yaml
+```
+
+<HealthCheck name="azureDevops" edition="standard" rows={[
+  {
+    field: "organization",
+    description: "Name of the Azure Organization",
+    required: true
+  }, {
+    field: "project",
+    description: "The name or ID of the project",
+    required: true
+  }, {
+    field: "pipeline",
+    description: "Name/Regexp to select the interested pipeline.",
+    required: true
+  },
+
+  {
+    field: "variables",
+    description: "Only match those runs that match these variables",
+    scheme: "map[string]string"
+  },
+  {
+    field: "branch",
+    description: "Only match those runs that are run on these branch.",
+    scheme: "[]string"
+  },
+  {
+    field: "thresholdMillis",
+    description: "Maximum duration of a run after which it's considered unhealthy",
+    scheme: 'int'
+  },
+  {
+    field: "personalAccessToken",
+    description: "See [Creating ADO PAT's](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=Windows)",
+    scheme: "EnvVar",
+    required: true
+  }
+
+]}/>

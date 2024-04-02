@@ -1,0 +1,63 @@
+---
+title: Alertmanager
+sidebar_class_name: popular
+---
+
+# <Icon name="prometheus"/> Alertmanager
+
+Checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/) for any firing alerts.
+
+The following example [transforms](../concepts/transforms) the list of alerts so that each alert becomes a single check result. Without the transform the health check will fail if any alerts are firing.
+
+```yaml title="alert-manager-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/alertmanager_mix.yaml
+apiVersion: canaries.flanksource.com/v12
+kind: Canary
+metadata:
+  name: alertmanager-check
+spec:
+  schedule: "*/5 * * * *"
+  alertmanager:
+    - url: alertmanager.monitoring.svc
+      alerts:
+        - .*
+      ignore:
+        - KubeScheduler.*
+        - Watchdog
+      transform:
+        expr: |
+          results.alerts.map(r, {
+            'name': r.name + r.fingerprint,
+            'namespace': 'namespace' in r.labels ? r.labels.namespace : '',
+            'labels': r.labels,
+            'icon': 'alert',
+            'message': r.message,
+            'description': r.message,
+          }).toJSON()
+```
+
+<HealthCheck name="alertmanager" rows={[
+  {
+    field: "url",
+    description: "The URL of the Prometheus Alertmanager instance",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "alerts",
+    description: "A list of alert prefix names to include",
+    scheme: '[]string'
+  },
+
+  {
+    field: "ignore",
+    description: "A list of alert prefix names to exclude",
+    scheme: '[]string'
+  },
+  {
+    field: "filters",
+    description: "A map of label to value prefixes to find alerts on",
+    scheme: "map[string]string"
+  }
+
+]}/>
+

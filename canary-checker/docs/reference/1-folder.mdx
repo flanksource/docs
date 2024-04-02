@@ -1,0 +1,198 @@
+---
+title: Folder
+---
+
+# <Icon name="smb" /> Folder
+
+Checks the contents of a folder for size, age and count. Folder based checks are useful in a number of scenarios:
+
+* Verifying that backups have been uploaded and are the appropriate size
+* Checking that logs or other temporary files are being cleaned up
+* For batch processes:
+  * Checking if files are being processed (and/or produced)
+  * Checking the size of queue processing backlog
+  * Checking if any error (`.err` or `.log`) files have been produced.
+
+```yaml title="folder-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: folder-check
+spec:
+  interval: 30
+  folder:
+    - path: /etc/
+      name: folder-check-min
+      description: Checks if there are at least 10 files in the folder
+      minCount: 10
+```
+
+
+
+<HealthCheck name="folder" edition="standard" rows={[
+  {
+    field: 'path',
+    description: "A local folder path or a remote folder `smb://`, `sftp://`, `s3://` or `gcs://`",
+    required: true
+  },
+  {    field: 'sftpConnection',description: "Connection details", scheme: "[SFTP](#sftp)"  },
+  { field: "gcpConnection", description: "Connection details for GCP", scheme: "[GCP](#gcp)" },
+{field: "awsConnection", description: "AWS Access credentials", scheme: "[AWS](#aws)" },
+  {field: "smbConnection", description: "SMB connection details", scheme: "[SMB](#smb)"},
+  {field: "filter", description: "Filter objects out before checking if they are valid", scheme: "[FolderFilter](#folderfilter)"},
+  {field: "minCount", description: "The minimum number of files inside the `path`", scheme: "int"},
+  {field: "maxCount", description: "The maximum number of files inside the `path`, can be used in conjunction with `filter.regex` to detect error files", scheme: "int"},
+  {field: "minAge", description: "The youngest age a file can be", scheme: "Duration"},
+  {field: "maxAge", description: "The oldest age a file can be, often used to check for unprocessed files or filess that have not been cleaned up", scheme: "Duration"},
+  {field: "minSize", description: "The minimum file size, can be used to detect backups that did not upload successfully", scheme: "Size"},
+  {field: "maxSize", description: "The maximim file size", scheme: "Size"}
+
+]}/>
+
+
+## FolderFilter
+
+| Field     | Description                                                 | Scheme                                               | Required |
+| --------- | ----------------------------------------------------------- | ---------------------------------------------------- | -------- |
+| `maxAge`  | MaxAge the latest object should be younger than defined age | [Duration](/reference/types#duration)                          |          |
+| `maxSize` | MaxSize of the files inside the searchPath                  | [Size](/reference/types#size)                                     |          |
+| `minAge`  | MinAge the latest object should be older than defined age   | [Duration](/reference/types#duration)                           |          |
+| `minSize` | MinSize of the files inside the searchPath                  | [Size](/reference/types#size)                                        |          |
+| `regex`   | Filter files based on regular expression                    | *[regex](https://github.com/google/re2/wiki/Syntax)* |          |
+
+e.g. to verify that database backups are being performed
+
+```yaml title="postgres-backup-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: folder-check
+spec:
+  interval: 30
+  folder:
+    - path: /data/backups
+      filter:
+        regex: "pg-backups-.*.zip"
+      maxAge: 1d # require a daily backup
+      minSize: 10mb # the backup should be at least 10mb
+```
+
+## Result Variables
+
+The following fields are available in `test`, `display` and `transform` [expressions](../concepts/expressions)
+
+| Field                 | Scheme                                             |
+| --------------------- | -------------------------------------------------- |
+| `Oldest`                | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `Newest`                | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `MinSize`               | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `MaxSize`               | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `SupportsTotalSize` (Only true for SMB folders) | bool                                               |
+| `SupportsAvailableSize` (Only true for SMB folders) | bool                                               |
+| `TotalSize`             | int64                                              |
+| `AvailableSize`         | int64                                              |
+| `Files`                 | [[]os.FileInfo](https://pkg.go.dev/io/fs#FileInfo) |
+
+### FolderFilter
+
+| Field     | Description | Scheme                  | Required |
+| --------- | ----------- | ----------------------- | -------- |
+| `minAge`  |             | [`Duration`](/reference/types#duration) |          |
+| `maxAge`  |             | [`Duration`](/reference/types#duration) |          |
+| `minSize` |             | [`Size`](/reference/types#size)         |          |
+| `maxSize` |             | [`Size`](/reference/types#size)         |          |
+| `regex`   |             | `string`                |          |
+
+
+## Connection Types
+
+### SFTP
+
+<Fields connection="sftp"/>
+
+<details summary="SFTP Check">
+<div>
+```yaml title="exec_artifact.yaml"  file=../../../modules/canary-checker/fixtures/datasources/SFTP/sftp_pass.yaml
+```
+
+</div>
+</details>
+
+
+
+### S3
+
+<Fields connection="aws"/>
+
+
+```yaml title="s3-check.yaml"
+        # ...
+kind: Canary
+spec:
+  folder:
+    //highlight-next-line
+    - path: s3://bucket/folder
+      awsConnection:
+        # ...
+```
+
+<div className="mt-5"/>
+<details summary="S3 Bucket"  >
+<div>
+```yaml title="exec_artifact.yaml"  file=../../../modules/canary-checker/fixtures/datasources/s3_bucket_pass.yaml
+```
+
+</div>
+</details>
+
+
+### SMB
+
+<Fields connection="smb"/>
+
+```yaml title="smb-check.yaml"
+# ...
+kind: Canary
+spec:
+  folder:
+    //highlight-next-line
+    - path: smb:\\192.168.1.9\Some Public Folder\somedir
+      smbConnection:
+           #...
+```
+
+<Fields connection="smb"/>
+
+<div className="mt-5"/>
+<details summary="SMB / CIFS" >
+<div>
+```yaml title="smb.yaml"  file=../../../modules/canary-checker/fixtures/quarantine/smb_pass.yaml
+```
+
+</div>
+</details>
+
+
+### GCS
+
+<Fields connection="gcp"/>
+
+```yaml title="gcs-check.yaml"
+# ...
+kind: Canary
+spec:
+  folder:
+  //highlight-next-line
+  - path: gcs://bucket/folder
+    gcpConnection:
+      # ...
+```
+<div className="mt-5"/>
+<details summary="GCS Check" >
+<div>
+```yaml title="gcs.yaml"  file=../../../modules/canary-checker/fixtures/datasources/GCP/folder_pass.yaml
+```
+
+</div>
+</details>
+

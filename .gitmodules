@@ -1,0 +1,12 @@
+[submodule "mission-control/modules/canary-checker"]
+	path = mission-control/modules/canary-checker
+	url = https://github.com/flanksource/canary-checker.git
+[submodule "mission-control/modules/config-db"]
+	path = mission-control/modules/config-db
+	url = https://github.com/flanksource/config-db.git
+[submodule "mission-control/modules/mission-control"]
+	path = mission-control/modules/mission-control
+	url = https://github.com/flanksource/mission-control.git
+[submodule "mission-control/canary-checker/canary-checker"]
+	path = mission-control/canary-checker/canary-checker
+	url = https://github.com/flanksource/canary-checker

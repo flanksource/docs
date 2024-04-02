@@ -1,4 +1,6 @@
-# Add cluster role binding via gitops
+---
+title: JIT Access via GitOps
+---
 
 ```yaml title="gitops-k8s-cluster-role-binding.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -69,19 +71,19 @@ spec:
 
 ### 1. Triggering playbook manully from a Cluster component
 
-![Playbook option on the component page](../../images/playbook-eg-gitops-playbook-on-cluster-component.png)
+![Playbook option on the component page](/img/playbook-eg-gitops-playbook-on-cluster-component.png)
 _Fig: Playbook option on the component page_
 
-![Playbook trigger popup on the component](../../images/playbook-eg-self-service-cluster-role-gitops-playbook.png)
+![Playbook trigger popup on the component](/img/playbook-eg-self-service-cluster-role-gitops-playbook.png)
 
 _Fig: Playbook trigger popup on the component_
 
 ### 2. Created PullRequest on Github
 
-![Created PullRequest on Github](../../images/playbooks-eg-gitops-pr-cluster-role-binding.png)
+![Created PullRequest on Github](/img/playbooks-eg-gitops-pr-cluster-role-binding.png)
 _Fig: Created PullRequest on Github_
 
 ### 3. Playbook action logs
 
-![Playbook action logs](../../images/playbook-eg-gitops-cluster-role-binding-action-logs.png)
+![Playbook action logs](/img/playbook-eg-gitops-cluster-role-binding-action-logs.png)
 _Fig: Playbook action logs_

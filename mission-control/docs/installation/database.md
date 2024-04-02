@@ -1,11 +1,11 @@
 ---
+title: Database
 description: Alternative methods for connecting to the db used for persistence
 ---
-# Database
 
 Mission Control stores all state in a Postgres Database, by default a Postgres StatefulSet is created.
 
-## Update the Postgres Statefulset
+## Configuring the Default Statefulset
 
 ```yaml title="values.yaml"
 db:
@@ -14,9 +14,6 @@ db:
   secretKeyRef: # auto-generated if it doesn't exist
     name: incident-commander-postgres
     key: DB_URL
-  jwtSecretKeyRef: # auto generated key for postgrest to validate tokens from users
-    name: incident-commander-postgrest-jwt
-    key: PGRST_JWT_SECRET
   storageClass: # optional storage class for PVC volume
   storage: 20Gi
   shmVolume: 256Mi # size of shm memory file to be mounted
@@ -33,7 +30,7 @@ kubectl get secret incident-commander-postgres -o json | jq -r '.data.POSTGRES_P
 
 :::info Connecting
 
-If you ever need to connect to the embedded database, you can do so by forwarding the port:
+If you ever need to connect to the database, you can do so by forwarding the port:
 
 ```shell
 kubectl port-forward svc/postgres 5432:5432
@@ -41,7 +38,7 @@ psql -U postgres localhost -p 5432 mission_control
 ```
 :::
 
-## Connecting to an external db
+## Using an External Database
 
 In order to connect to an existing Postgres server, a database must be created on the server, along with a user that has administrator permissions for the database.
 

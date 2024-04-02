@@ -1,0 +1,156 @@
+---
+slug: /playbooks
+title: Playbooks
+sidebar_position: 1
+hide_title: true
+# hide_table_of_contents: true
+pagination_prev: config-db/index
+pagination_next: topology/index
+---
+
+Playbooks automate common workflows and processes by defining reusable templates of actions that can be triggered on-demand by users, when specific events happen or through webhooks.
+
+<img src="/img/playbooks.svg" width="800px"/>
+
+Some key benefits include:
+
+* **Accelerated GitOps Adoption** - Use  _"ClickOps"_ to make changes to resources but have them being applied as Git pull requests in the background, enabling non-technical teams to leverage GitOps workflows.
+* **Consistency** - Provide easy to discover and reusable templates for common tasks, preventing the complexity of doing the same thing multiple ways.
+* **Self-Service** - Enable developers/operators to provision and manage their own resources without involving a central DevOps/Platform team.
+* **Compliance** - Improve compliance and security by limiting the need for elevated privileges.
+* **Cost Efficiency** - Optimize costs with on-demand environments that spin down after a fixed duration.
+* **Portability** - A consistent interface for performing operations irrespective of the underlying infrastructure and/or environment
+
+
+<hr/>
+
+
+## Use cases
+
+
+### Provisioning
+
+
+
+### Day 2 Operations
+
+Day 2 operations can be added onto existing resources using `configs`, `components` or health `checks` using [resource selectors](/reference/resource-selector).
+
+For example Restarting a Kubernetes Deployment is only applicable to config items of type: `Kubernetes::Deployment`
+
+```yaml title="scale-deployment.yaml"
+#...
+kind: Playbook
+spec:
+  configs:
+    - types:
+        - Kubernetes::Deployment
+   #....
+```
+
+Before running a playbook, users can provide input using [`parameters`](/reference/playbooks/parameters)
+```yaml title="parameters.yaml"
+#...
+kind: Playbook
+spec:
+  # user input
+  parameters:
+    - name: replicas
+  # ...
+
+```
+
+### Just In Time Access
+
+### AIOps
+
+
+
+```
+
+
+## Parameters
+
+Playbooks have 2 types of parameters:
+
+
+
+
+```yaml title="restrict-to-deployment.yaml"
+#...
+kind: Playbook
+spec:
+  # components: ...
+  # checks: ...
+  //highlight-next-line
+  configs:
+    - types:
+        - Kubernetes::Deployment
+```
+
+## Self-Service
+
+
+
+
+## Events
+
+## Webhooks
+
+
+## Actions
+
+Playbooks execute a sequence of actions (steps), these actions can update git repositories, invoke pipelines or run command line tools like `kubectl` and `aws`.
+
+### Templating
+
+The actions values can be templated using [Go Templates](/reference/scripting/gotemplate)
+
+```yaml title="restart-deployment.yaml"
+#...
+kind: Playbook
+spec:
+  configs:
+    - types:
+        - Kubernetes::Deployment
+  actions:
+    - name: 'Restart kubernetes deployment'
+      exec:
+        //highlight-next-line
+        script: kubectl rollout restart deployment {{.config.name}} -n {{.config.tags.namespace}}
+```
+
+The parameters to the playbooks are available in the [Context](reference/playbooks/context)
+
+
+![Playbook Action Logs](/img/playbook-action-logs.png)
+
+
+### Runners
+
+## Approvals
+
+Playbooks can require approval before execution by configuring an `approval` block:
+
+```yaml title="approve-kubernetes-scaling.yaml"
+#...
+kind: Playbook
+spec:
+  #...
+  approval:
+    type: any
+    approvers:
+      people:
+        - admin@local
+      teams:
+        - DevOps
+```
+
+| Field       | Description                    | Scheme       | Required |
+| ----------- | ------------------------------ | ------------ | -------- |
+| `type`      | How many approvals required. Defaults to `all`    | `any` or `all`     | `false`  |
+| `approvers.[]people` | Login or id of a person| `People` | `false`  |
+| `approvers.[]teams` | Name or id of a team | `Team` | `false`  |
+
+
+

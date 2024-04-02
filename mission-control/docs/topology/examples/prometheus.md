@@ -1,4 +1,6 @@
-# Prometheus
+---
+title: Prometheus
+---
 
 The following configuration creates a topology for Prometheus. The topology will have all the kubernetes pods in the "monitoring" namespace as its child components.
 

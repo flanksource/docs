@@ -1,9 +1,13 @@
-# Playbook Runners
+---
+title: Runners
+---
 
 Playbook runners offer the flexibility to designate where actions are executed. By default, actions run on the main instance, but a set of agents can also be provided and one of them will be chosen at random.
-This enables a playbook action to access environment specific information such as kubernetes secrets, connection details, environment variables, ... without having to share those to the main instance.
+This enables a playbook action to access environment specific information such as kubernetes secrets, connection details, environment variables, without having to share those to the main instance.
 
 Runners can be set at the playbook or action level.
+
+## Runs On
 
 ```yaml title='delete-namespace.yaml'
 apiVersion: mission-control.flanksource.com/v1
@@ -39,7 +43,7 @@ spec:
         title: Namespace {{.config.name}} deleted successfully
 ```
 
-## Templating on the agent
+## Templates On
 
 Actions are templated by the host before it's sent to the runner for execution. This setup permits the runner to execute actions that are templated with resources exclusively available on the host, such as config items or components, checks, ... etc.
 
@@ -51,9 +55,6 @@ kind: Playbook
 metadata:
   name: heartbeat
 spec:
-  runsOn:
-    - local # Main instance
-    - aws # agent
   parameters:
     - name: check_id
       type: config
@@ -61,21 +62,12 @@ spec:
         filter: heartbeat
   description: Call a heartbeat endpoint
   actions:
-    - name: send heartbeat
-      exec:
-        env:
-          - name: HEARTBEAT_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: canary-checker-heartbeat
-                key: token
-        script: |
-          curl -H "Authorization: $HEARTBEAT_TOKEN" -H "X-CHECK-ID: {{.params.check_id}}" https://httpbin.demo.aws.flanksource.com/bearer
     - name: send heartbeat from the agent
       runsOn:
         - 'aws'
       templatesOn: 'agent'
       exec:
+        # environment variables from cluster the agent is running on
         env:
           - name: HEARTBEAT_TOKEN
             valueFrom:
@@ -83,5 +75,5 @@ spec:
                 name: canary-checker-heartbeat
                 key: token
         script: |
-          curl -H "Authorization: $HEARTBEAT_TOKEN" -H "X-CHECK-ID: {{.params.check_id}}" https://httpbin.demo.aws.flanksource.com/bearer
+          curl -H "Authorization: $HEARTBEAT_TOKEN"  https://httpbin.demo.aws.flanksource.com/bearer
 ```

@@ -1,0 +1,46 @@
+---
+title: HTTP
+---
+
+# <Icon name="http" /> HTTP
+
+HTTP lookup queries an HTTP endpoint.
+
+```yaml title="users-topology.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: users
+  namespace: default
+spec:
+  schedule: '@every 30s'
+  components:
+    - name: Users
+      type: Employees
+      icon: person
+      // highlight-start
+      lookup:
+        http:
+          - url: https://jsonplaceholder.typicode.com/users
+            display:
+              expr: |
+                dyn(json).map(c, {
+                  'name': c.name,
+                  'type': 'person',
+                }).toJSON()
+      // highlight-end
+```
+
+This topology will create a root **"users"** component with all the users returned by the HTTP endpoint as its child components.
+
+![](/img/component-lookup-http.png)
+
+
+<Lookup name="http" connection="url"  rows={[
+  {field: "url", description: "HTTP URL", scheme: "string", required: true},
+  {field: "method", description: "HTTP Request method", default: "GET", scheme: "string"},
+  {field: "headers", description: "Header fields", scheme: "[]EnvVar"},
+  {field: "body", description: "Request Body Contents", scheme: "string"},
+  {field: "templateBody", description: "If true body will be templated", default: false, scheme: "bool"},
+]}/>
+

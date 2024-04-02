@@ -1,10 +1,12 @@
-# Catalog
+---
+title: Catalog
+---
 
 You can link components with configs. The linked config items appears in the component page in the right hand side panel.
 
 To establish this relationship, you need to specify which config items to link with using the `config` field.
 
-![Component Config relationship](../images/component-config-relationship.png)
+![Component Config relationship](/img/component-config-relationship.png)
 
 ```yaml title="kubernetes-cluster.yaml"
 apiVersion: canaries.flanksource.com/v1

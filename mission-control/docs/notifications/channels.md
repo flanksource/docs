@@ -1,4 +1,6 @@
-# Channels
+---
+title: Channels
+---
 
 Mission control uses [Shoutrrr](https://github.com/containrrr/shoutrrr/) under the hood to deliver notifications. Most of the services in the Shoutrrr are supported. Here's the complete list:
 

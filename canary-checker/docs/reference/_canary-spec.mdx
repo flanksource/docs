@@ -1,0 +1,44 @@
+---
+title: Canary Spec
+---
+
+| Field            | Description                                                                                   | Type                                                | Required |
+| ---------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------- |
+| `env`            | Environment variables.                                                                        | `map[string]`<CommonLink to="authentication">`EnvVar`</CommonLink>            |          |
+| `schedule`       | Schedule to run checks on.\Supports all cron expression.\Also supports golang duration. | `cron`                                            |          |
+| `icon`           | Icon to use for the check.                                                                    | `string`                                            |          |
+| `severity`       | Severity of the check.                                                                        | `string`                                            |          |
+| `resultmode`     | Result mode of the check.                                                                     | `string`                                            |          |
+| `alertmanager`   | List of AlertManager checks to run.                                                           | [`[]AlertManagerCheck`](alert-manager)         |          |
+| `awsConfig`      | List of AWS Config checks to run.                                                             | [`[]AwsConfigCheck`](aws-config)               |          |
+| `awsConfigRule`  | List of AWS Config Rule checks to run.                                                        | [`[]AwsConfigRuleCheck`](aws-config-rule)      |          |
+| `cloudwatch`     | List of CloudWatch checks to run.                                                             | [`[]CloudWatchCheck`](cloudwatch)              |          |
+| `configDB`       | List of config DB checks to run.                                                              | [`[]ConfigDBCheck`](configdb)                  |          |
+| `containerd`     | List of containerd pull checks to run.                                                        | [`[]ContainerdPullCheck`](containerd)     |          |
+| `containerdPush` | List of containerd push checks to run.                                                        | [`[]ContainerdPushCheck`](containerd)     |          |
+| `databaseBackup` | List of database backup checks to run.                                                        | [`[]DatabaseBackupCheck`](gcs-database-backup) |          |
+| `dns`            | List of DNS checks to run.                                                                    | [`[]DNSCheck`](dns)                            |          |
+| `ec2`            | List of EC2 checks to run.                                                                    | [`[]EC2Check`](ec2)                            |          |
+| `elasticsearch`  | List of ElasticSearch checks to run.                                                          | [`[]ElasticsearchCheck`](elasticsearch)        |          |
+| `exec`           | List of exec checks to run.                                                                   | [`[]ExecCheck`](exec)                          |          |
+| `folder`         | List of folder checks to run.                                                                 | [`[]FolderCheck`](folder)                      |          |
+| `git`         | List of GitHub checks to run.                                                                 | [`[]GitHubCheck`](git)                      |          |
+| `helm`           | List of Helm checks to run.                                                                   | [`[]HelmCheck`](helm)                          |          |
+| `http`           | List of HTTP checks to run.                                                                   | [`[]HTTPCheck`](http)                          |          |
+| `icmp`           | List of ICMP checks to run.                                                                   | [`[]ICMPCheck`](icmp)                          |          |
+| `jmeter`         | List of JMeter load test checks to run.                                                       | [`[]JmeterCheck`](jmeter)                      |          |
+| `junit`          | List of JUnit test result checks to run.                                                      | [`[]JunitCheck`](junit)                        |          |
+| `kubernetes`     | List of Kubernetes checks to run.                                                             | [`[]KubernetesCheck`](kubernetes)              |          |
+| `ldap`           | List of LDAP checks to run.                                                                   | [`[]LDAPCheck`](./ldap)                          |          |s
+| `mongodb`        | List of MongoDB checks to run.                                                                | [`[]MongoDBCheck`](./mongo)                      |          |
+| `mssql`          | List of MSSQL checks to run.                                                                  | [`[]MssqlCheck`](./sql)                        |          |
+| `mysql`          | List of MySQL checks to run.                                                                  | [`[]MysqlCheck`](./sql)                        |          |
+| `namespace`      | List of namespace checks to run.                                                              | [`[]NamespaceCheck`](./namespace)                |          |
+| `pod`            | List of pod checks to run.                                                                    | [`[]PodCheck`](./pod)                            |          |
+| `postgres`       | List of Postgres checks to run.                                                               | [`[]PostgresCheck`](./sql)                  |          |
+| `prometheus`     | List of Prometheus checks to run.                                                             | [`[]PrometheusCheck`](./prometheus)              |          |
+| `redis`          | List of Redis checks to run.                                                                  | [`[]RedisCheck`](./redis)                        |          |
+| `restic`         | List of restic backup checks to run.                                                          | [`[]ResticCheck`](./restic)                      |          |
+| `s3`             | List of S3 checks to run.                                                                     | [`[]S3Check`](s3-bucket)                              |          |
+| `tcp`            | List of TCP checks to run.                                                                    | [`[]TCPCheck`](./tcp)                            |          |
+

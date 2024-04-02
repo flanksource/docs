@@ -1,0 +1,54 @@
+---
+title: AWS
+---
+
+<Fields connection="aws"/>
+
+
+There are 3 options when connecting to AWS:
+
+<Step step={1} name="AWS Instance or Pod Identity" style="list">
+
+By using the AWS [Instance Profile](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html) or [Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-configuration.html) (the default if no `connection` or `accessKey` is specified)
+</Step>
+<Step step={2} name="Connection" style="list">
+
+Using a shared <CommonLink to="connection">Connection</CommonLink>
+```yaml title="aws-connection.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: cloudwatch-check
+spec:
+  interval: 30
+  cloudwatch:
+    - connection: connection://aws/internal
+      region: us-east-1 # optional if specified in the connection
+```
+</Step>
+<Step step={3} name="Inline" style="list">
+
+```yaml title="inline.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: cloudwatch-check
+spec:
+  interval: 30
+  cloudwatch:
+    - accessKey:
+        valueFrom:
+          secretKeyRef:
+            name: aws-credentials
+            key: AWS_ACCESS_KEY_ID
+      secretKey:
+        valueFrom:
+          secretKeyRef:
+            name: aws-credentials
+            key: AWS_SECRET_ACCESS_KEY
+      region: us-east-1
+```
+</Step>
+
+
+

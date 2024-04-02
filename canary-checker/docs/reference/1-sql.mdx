@@ -1,0 +1,93 @@
+---
+title: SQL
+---
+
+import { AzureSqlServer} from "@flanksource/icons/mi"
+
+# <AzureSqlServer/> SQL
+
+This check will try to connect to a specified Postgres database, run a query against it and verify the results.
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: postgres-check
+spec:
+  interval: 30
+  postgres: # or mysql, mssql
+    - name: postgres schemas check
+      url: "postgres://$(username):$(password)@postgres.default.svc:5432/postgres?sslmode=disable"
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: postgres-credentials
+            key: USERNAME
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: postgres-credentials
+            key: PASSWORD
+      query: SELECT current_schemas(true)
+      display:
+        template: |
+          {{- range $r := .results.rows }}
+          {{- $r.current_schemas}}
+          {{- end}}
+      results: 1
+```
+
+<HealthCheck name="postgres"  connection="url" rows={[
+  {field: "query", description: "Query to execute against the Postgres database", scheme: 'SQL', required: true},
+  {field: "results", description: "Number of expected rows in results", scheme: 'int'}
+
+]}/>
+
+
+## Result Variables
+
+| Name    | Description             | Scheme                     |
+| ------- | ----------------------- | -------------------------- |
+| `rows`  |                         | *[]map[string]interface{ }* |
+| `count` | Number of rows returned | *int*                      |
+
+
+## <Icon name="mssql" /> SQL Server
+
+```yaml title=canary-mssql.yaml
+# ...
+kind: Canary
+spec:
+  mssql:
+  //highlight-next-line
+   - url: "server=mssql.default.svc;user id=$(username);password=$(password);port=1433;database=master"
+      # ...
+```
+
+
+## <Icon name="mysql" /> MySQL
+
+
+
+```yaml title=lookup-mysql.yaml
+# ...
+kind: Canary
+spec:
+  mysql:
+    //highlight-next-line
+    - url: "$(username):$(password)@tcp(mysql.default.svc:3306)/mysqldb"
+    # ...
+```
+## <Icon name="postgres" /> Postgres
+
+
+```yaml title=canary-postgres.yaml
+# ...
+kind: Canary
+spec:
+   mysql:
+     //highlight-next-line
+    - url: "postgres://$(username):$(password)@postgres.default.svc:5432/postgres?sslmode=disable"
+        # ...
+```
+

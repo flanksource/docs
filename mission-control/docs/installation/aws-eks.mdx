@@ -1,0 +1,207 @@
+---
+title: Install Mission Control on AWS EKS cluster
+---
+
+
+:::info Prerequisites
+To install and run Mission Control you need to have the following prerequisites:
+
+- EKS 1.26+ with an Ingress Controller
+- 500-1000m of CPU and 2GB of Memory
+- Persistent Volumes with 20GB+ of storage or an external postgres database like RDS
+- (Optional) SMTP Server (For sending notifications and invites)
+:::
+
+
+<Step step={1} name="Install Helm Repository">
+
+```shell
+helm repo add flanksource https://flanksource.github.io/charts
+helm repo update
+```
+</Step>
+
+<Step step={2} name="Install Helm Chart">
+
+```yaml title="values.yaml"
+global:
+  ui:
+    host: "mission-control-ui.local" # hostname
+  serviceAccount:
+    annotations: # Any annotations required to attach custom IAM policies etc.
+
+adminPassword: admin # The default password for the admin@local user
+
+flanksource-ui:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+db:
+  storageClass: # e.g. gp3
+  storage: 50Gi
+```
+
+```bash
+helm install mission-control  \
+  flanksource/mission-control  \
+ -n mission-control \
+ --create-namespace \
+ --wait \
+ -f values.yaml
+```
+
+</Step>
+
+<Step step={3} name="(Optional) Create an IAM Role">
+
+
+(a) Create a role to allow mission-control to configuration of your AWS resources. Attach the following AWS managed policies to the role:
+
+1. ReadOnlyAccess
+2. AWSConfigUserAccess
+3. AWSQuicksightAthenaAccess
+
+<details summary="IAM Policy">
+<div>
+```json title="iam-policy.json"
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "mission-control-config-role",
+			"Effect": "Allow",
+			"Action": [
+				"acm:Describe*",
+				"acm:Get*",
+				"acm:List*",
+				"cloudtrail:LookupEvents",
+				"ec2:Describe*",
+				"ecr:Describe*",
+				"eks:ListClusters",
+				"eks:Describe*",
+				"rds:Describe*",
+				"elasticfilesystem:Describe*",
+				"elasticloadbalancing:Describe*",
+				"sts:GetCallerIdentity"
+				"config:BatchGetAggregateResourceConfig",
+				"config:BatchGetResourceConfig",
+				"config:Describe*",
+				"config:Get*",
+				"config:List*",
+				"config:SelectAggregateResourceConfig",
+				"config:SelectResourceConfig",
+				"guardduty:Describe*",
+				"guardduty:Get*",
+				"guardduty:List*",
+				"iam:GetAccountName",
+				"iam:GetAccountSummary",
+				"iam:GetGroup",
+				"iam:GetGroupPolicy",
+				"iam:GetInstanceProfile",
+				"iam:GetLoginProfile",
+				"iam:GetPolicy",
+				"iam:GetRole",
+				"iam:GetRolePolicy",
+				"iam:GetUser",
+				"iam:List*",
+				"lambda:List*",
+				"trustedadvisor:Describe*",
+				"trustedadvisor:DownloadRisk",
+				"trustedadvisor:Get*",
+				"trustedadvisor:List*",
+			],
+			"Resource": "*"
+		}
+	]
+}
+```
+</div>
+</details>
+
+
+
+(b) Modify the trust policy of the IAM role by changing the OIDC arn, OIDC endpoint and the namespace below.
+```json
+{
+	"Version": "2012-10-17",
+	"Statement": [
+			{
+					"Effect": "Allow",
+					"Principal": {
+							"Federated": "arn:aws:iam::7458xxxxxxxx:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx"
+					},
+					"Action": "sts:AssumeRoleWithWebIdentity",
+					"Condition": {
+							"StringEquals": {
+									"oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:config-db-sa",
+									"oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:mission-control-sa",
+									"oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:canary-checker-sa",
+									"oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:aud": "sts.amazonaws.com"
+							}
+					}
+			}
+	]
+}
+```
+
+
+(c) Annotate the service account
+
+```yaml title='values.yaml'
+# service account used by for scraping
+config-db:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: IAM Role ARN
+
+# service account used for notifications and playbooks
+serviceAccount:
+	annotations:
+		eks.amazonaws.com/role-arn: IAM Role ARN
+
+# service account used for notifications and playbooks
+serviceAccount:
+	annotations:
+		eks.amazonaws.com/role-arn: IAM Role ARN
+```
+
+</Step>
+
+<div id="cost-reporting"/>
+<Step step={4} name="Cost & Usage Reporting">
+
+
+Mission Control can read the cost and usage reports stored in the S3 bucket and map it to the resources it discovers in your AWS environment. To achieve this,
+1. Setup [Cost and Usage Reports](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) and integrate it with [Athena](https://docs.aws.amazon.com/cur/latest/userguide/use-athena-cf.html)
+
+2. Modify the config db IAM role used by the config scraper above to give Mission Control the permissions to read the cost reports. Attach a Customer managed policy to the role with [this json policy document](https://github.com/flanksource/docs/blob/main/mission-control/docs/installation/resources/iam-policy.json)
+
+3. We also need to allow athena query executions
+
+Sample IAM Policy required for cost reporting:
+```json title=athena-policy.json
+{
+	"Effect": "Allow",
+	"Action": [
+		"athena:GetQueryExecution",
+		"athena:GetQueryResults",
+		"athena:StartQueryExecution"
+	],
+	"Resource": "arn:aws:athena:eu-west-1:765618022540:workgroup/primary"
+},
+
+```
+
+
+
+- Upgrade the helm chart to apply the changes
+
+
+</Step>
+
+<Step step={5} name="Next Steps">
+
+Install the [AWS](/registry/aws) registry chart to configure the AWS Scraper
+</Step>

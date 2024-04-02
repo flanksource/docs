@@ -1,40 +1,19 @@
-# Kubernetes
+---
+title: Kubernetes
+sidebar_position: 4
+---
+
+# <Icon name="k8s"/> Kubernetes
+
+:::tip Registry
+
+The registry has an [Kuebrnetes](/registry/kubernetes) Helm chart that provides a pre-configured Scraper and Topology with some common defaults
+
+:::
 
 The `kubernetes` config type scrapes the configurations of your Kubernetes resources as specified with the fields; `namespace`, `selector`, `fieldSelector` and more.
 
-```yaml title='kubernetes-scraper.yaml'
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: kubernetes-scraper
-spec:
-  kubernetes:
-    - clusterName: local-kind-cluster
-      exclusions:
-        - Secret
-        - ReplicaSet
-        - APIService
-        - endpoints.discovery.k8s.io
-        - endpointslices.discovery.k8s.io
-        - leases.coordination.k8s.io
-        - podmetrics.metrics.k8s.io
-        - nodemetrics.metrics.k8s.io
-        - customresourcedefinition
-        - controllerrevision
-        - certificaterequest
-        - orders.acme.cert-manager.io
-      event:
-        exclusions:
-          - SuccessfulCreate
-          - Created
-          - DNSConfigForming
-        severityKeywords:
-          error:
-            - failed
-            - error
-          warn:
-            - backoff
-            - nodeoutofmemory
+```yaml title='kubernetes-scraper.yaml' file=../../../modules/config-db/fixtures/kubernetes.yaml
 ```
 
 ## Scraper
@@ -50,28 +29,22 @@ spec:
 
 | Field             | Description                                                                                      | Scheme                                           | Required |
 | ----------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------ | -------- |
-| `allowIncomplete` | Show partial results when fetching of API resources fails                                        | `bool`                                           |          |
 | `clusterName`     | Specify cluster name                                                                             | `string`                                         |          |
 | `event`           | Specify configuration to handle Kubernetes events.                                               | [`Event`](#events)                               |          |
 | `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                        | `[]string`                                       |          |
 | `fieldSelector`   | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running`        | `string`                                         |          |
 | **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                         | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
-| `maxInFlight`     | restrict parallelism to X inflight requests                                                      | `int64`                                          |          |
 | `namespace`       | Specify namespace for scraping of Kubernetes resources                                           | `string`                                         |          |
 | `relationships`   | Create relationships between kubernetes objects.                                                 | [`[]Relationship`](#kubernetes-relationship)     |          |
 | `scope`           | Specify scope for scrape. e.g `cluster` for scraping at Cluster level                            | `string`                                         |          |
 | `selector`        | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels`                       | `string`                                         |          |
 | `since`           | Set time constraint for scraping resources within the set period                                 | `string`                                         |          |
-| `useCache`        | Specify boolean value to toggle fetching results from Kube-apiserver or fetch response from etcd | `bool`                                           |          |
-| `properties`      | Custom templatable properties for the scraped config items.                                      | [`[]ConfigProperty`](../../reference/property)   |          |
-| `transform`       | Field to transform result                                                                        | [`Transform`](#transform)                        |          |
+| `properties`      | Custom templatable properties for the scraped config items.                                      | [`[]ConfigProperty`](/reference/config-db/properties)   |          |
+| `transform`       | Field to transform result                                                                        | [`Transform`](/config-db/concepts/transform)                        |          |
 | `tags`            | set custom tags on the scraped config items                                                      | `map[string]string`                              |          |
 
-#### Transform
 
-<ConfigTransform></ConfigTransform>
-
-#### Events
+## Events
 
 `Config DB` maps Kubernetes Event objects to config changes unlike other objects that are mapped to config items. This configuration allows you to exclude or include the Kubernetes Event objects based on the reason.
 

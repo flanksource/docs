@@ -1,4 +1,7 @@
-# Secret Management
+---
+title: Env Vars
+sidebar_position: 1
+---
 
 Canary checker uses the Kubernetes ValuesFrom pattern to retrieve sensitive values like usernames, password and access keys.
 
@@ -11,6 +14,10 @@ Whenever a field uses the `EnvVar` object type you have the option of specifying
 1. From a service account using `serviceAccount`
 
 ## Static Values
+
+:::warning
+Avoid inlining secrets, use `valueFrom` and <CommonLink to="authentication">EnvVar</CommonLink>
+:::
 
 Using a HTTP health check as an example for static values:
 

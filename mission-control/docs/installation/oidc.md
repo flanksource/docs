@@ -1,4 +1,6 @@
-# Single Sign On (SSO)
+---
+title: Single Sign On (SSO)
+---
 
 Mission Control uses [kratos](https://www.ory.sh/kratos/) for identity management. Login via email/password is the default flow but any OIDC provider supported by Kratos can be used
 
@@ -6,17 +8,27 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
 
 ## Microsoft Entra (Azure AD)
 
-1. Create a new [Azure AD App Registration](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps)
-   * Record the `Client ID` (Application ID) in the Overview page
-   * Add an allowed redirect URI of `https://ingress/api/.ory/self-service/methods/oidc/callback/microsoft`
-   * Token Configuration
-     * Add the email optional claim
-     * Add a `groups claim` if you want to map Azure AD Group Membership to roles in Mission Control
-   * Certificates & Secrets
-     * Create a new `client secret`
-1. Get the `Tenant ID` (Directory ID`) from [Directories](https://portal.azure.com/#settings/directory)
 
-1. Create a Jsonnet claims mapper
+<Step step={1} name="Create a new Azure Entra App Registration">
+
+
+* Add a new app from [Azure AD App Registration](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps)
+* Record the `Client ID` (Application ID) in the Overview page
+* Add an allowed redirect URI of `https://ingress/api/.ory/self-service/methods/oidc/callback/microsoft`
+* Token Configuration
+  * Add the email optional claim
+  * Add a `groups claim` if you want to map Azure AD Group Membership to roles in Mission Control
+* Certificates & Secrets
+  * Create a new `client secret`
+
+</Step>
+
+<Step step={2} name="Get The Tenant ID">
+
+Get the `Tenant ID` (Directory ID) from [Directories](https://portal.azure.com/#settings/directory)
+</Step>
+
+<Step step={3} name="Create a Jssonet claims mapper">
 
 Jsonnet is used to [map](https://www.ory.sh/docs/kratos/social-signin/data-mapping) the claims provided by Azure AD, to the Kratos [Identity Schema](https://github.com/flanksource/mission-control-chart/blob/main/chart/files/kratos-identity-schema.json)
 
@@ -40,9 +52,12 @@ local claims = std.extVar('claims');
 }
 ```
 
-4. Create the `mapper_url` by Base64 encoding the jsonnet file and prefixing it with `base64://`
+See [MS Entra ID Tokens](https://learn.microsoft.com/en-us/entra/identity-platform/id-token-claims-reference)
+</Step>
 
-5. Update the helm values
+<Step step={4} name="Update the helm values">
+
+Create the `mapper_url` by Base64 encoding the jsonnet file and prefixing it with `base64://`
 
 ```yaml title="values.yaml"
 kratos:
@@ -65,6 +80,5 @@ kratos:
                                     - openid
                                     - profile
 ```
-
-See [MS Entra ID Tokens](https://learn.microsoft.com/en-us/entra/identity-platform/id-token-claims-reference)
+</Step>
 

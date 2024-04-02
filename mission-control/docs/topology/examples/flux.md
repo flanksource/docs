@@ -1,4 +1,6 @@
-# Flux
+---
+title: Flux
+---
 
 The following configuration creates a topology for Flux CD. The topology will have all the the following 5 direct child components
 

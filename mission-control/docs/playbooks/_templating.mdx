@@ -1,0 +1,11 @@
+
+## Templating
+
+The action parameters can be used
+
+| Field       | Description                              | Schema                                       |
+| ----------- | ---------------------------------------- | -------------------------------------------- |
+| `config`    | Config passed to the playbook            | [`ConfigItem`](./reference/config-db) |
+| `component` | Component passed to the playbook         | [`Component`](../references/component)    |
+| `check`     | Canary Check passed to the playbook      | [`Check`](/reference/canary-checker/checl)            |
+| `params`    | User provided parameters to the playbook | `map[string]string`                          |

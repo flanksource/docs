@@ -1,4 +1,6 @@
-# Self host Mission Control using Minikube
+---
+title: Self host Mission Control using Minikube
+---
 
 ## Env details/prerequisites
 

@@ -1,0 +1,42 @@
+---
+title: Elasticsearch
+---
+
+# <Icon name="elasticsearch" /> ElasticSearch
+
+This check will try to connect to a specified ElasticSearch database, run a query against it and verify the results.
+
+:::info Opensearch
+To connect to Opensearch use `opensearch` field instead of `elasticsearch`
+:::
+
+
+```yaml title="elasticsearch.yaml"  file=../../../modules/canary-checker/fixtures/elasticsearch/elasticsearch_pass.yaml
+```
+
+
+<HealthCheck name="elasticsearch"  connection="url"  rows={[
+
+{
+  field: "url",
+  description: "Elasticsearch URL",
+  required: true
+},
+{
+  field: "index",
+  description: "Index against which query should be ran",
+  required: true,
+}, {
+  field: "query",
+  description: "Query that needs to be executed on the server",
+  scheme: 'JSON',
+  required: true,
+
+},
+{
+  field: "results",
+  description: "Number of expected hits",
+  scheme: 'int',
+}
+]}/>
+

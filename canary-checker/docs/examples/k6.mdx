@@ -1,0 +1,92 @@
+---
+title: K6
+---
+
+# <Icon name="k6" /> K6
+
+K6 check runs the [k6 load testing](https://k6.io/) suite and ingests the junit exported result in a container at a specified path as defined in `testResults`.
+
+```yaml title="k6-junit"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: k6-junit
+spec:
+  interval: 120
+  junit:
+    - testResults: "/tmp/"
+      name: k6-junit
+      display:
+        template: |
+          ✅ {{.results.passed}} ❌ {{.results.failed}} in 🕑 {{.results.duration}}
+          {{  range $r := .results.suites}}
+          {{- if gt (conv.ToInt $r.failed)  0 }}
+            {{$r.name}} ✅ {{$r.passed}} ❌ {{$r.failed}} in 🕑 {{$r.duration}}
+          {{- end }}
+          {{- end }}
+      spec:
+        containers:
+          - name: k6
+            image: ghcr.io/flanksource/canary-k6:latest
+            command: ["/start.sh"]
+```
+
+Using the [k6-junit](https://github.com/l-ross/k6-junit) utility to export JUnit results to the `testResults` folder, canary-checker will pick up the results and make then available display formating and health evaluation.
+
+```bash title="start.sh"
+mkdir -p /tmp/junit-results
+k6 -q run script.js
+cp /tmp/*.xml /tmp/junit-results/
+touch /tmp/junit-results/done
+```
+
+```javascript title="script.js"
+import { check } from "k6";
+import * as http from "k6/http";
+import { Rate } from "k6/metrics";
+import { jUnit } from "./node_modules/k6-junit/index.js";
+
+export const errors = new Rate("errors");
+
+export const options = {
+    iterations: 20,
+    thresholds: {
+        checks: ["rate<2"],
+    }
+};
+
+let i = 1;
+
+export default function() {
+    const res = http.get(`http://jsonplaceholder.typicode.com/users/${i++}`);
+    const result = check(res, {
+        "is status 200": r => r.status === 201,
+        "not empty": r => Object.keys(r.json()).length > 0
+    });
+    errors.add(result ? 0 : 1);
+}
+
+export function handleSummary(data) {
+    return {
+        "/tmp/junit.xml": jUnit(data)
+    };
+}
+```
+
+For a complete working example, see **[canary-checker-examples/k6](https://github.com/flanksource/canary-checker-examples/tree/main/k6)**
+
+<HealthCheck name="junit" edition="standard"  rows={[
+  {field: "spec", description: "Pod specification", scheme: '[Spec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) ', required: true},
+  {field: "testResults", description: "Path to JUnit test results", scheme: 'string', required: true},
+  {field: "timeout", description: " Timeout in minutes to wait for specified container to finish its job", scheme: 'int', default: '5'},
+  {
+  field: "artifacts",
+  description: "Specify what files/folders created in the pod need to be archived",
+  scheme: "[`[]Artifact`](#artifact)",
+},
+]}/>
+
+
+## Test Result Variables
+
+See [JUnit Test Results](/canary-checker/reference/junit#test-result-variables) for the schema that is ingested and can be used for evaluating health or formatting the display.
