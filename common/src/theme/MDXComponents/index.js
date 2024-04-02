@@ -20,6 +20,7 @@ import {
 } from '@site/src/components/Badges'
 import Action from '@site/src/components/Action'
 import HealthCheck from '@site/src/components/HealthCheck'
+import Lookup from '@site/src/components/Lookup'
 import ShadowBox from '@site/src/components/ShadowBox'
 import Fields from '@site/src/components/Fields'
 import Step from '@site/src/components/Step'
@@ -50,6 +51,7 @@ const MDXComponents = {
   pre: MDXPre,
   details: Details,
   ShadowBox: ShadowBox,
+  Lookup: Lookup,
   Details: Details,
   Action: Action,
   Fields: Fields,

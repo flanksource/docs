@@ -62,9 +62,9 @@ will be setup on the host running the script.
 
 | Field   | Description      | Type                                                    | Required |
 | ------- | ---------------- | ------------------------------------------------------- | -------- |
-| `aws`   | AWS connection   | [`AWSConnection`](./connections.mdx#aws-connection)     |          |
-| `gcp`   | GCP connection   | [`GCPConnection`](./connections.mdx#gcp-connection)     |          |
-| `azure` | Azure connection | [`AzureConnection`](./connections.mdx#azure-connection) |          |
+| `aws`   | AWS connection   | [`AWSConnection`](/reference/connections/aws)     |          |
+| `gcp`   | GCP connection   | [`GCPConnection`](/reference/connections/gcp)     |          |
+| `azure` | Azure connection | [`AzureConnection`](/reference/connections/azure) |          |
 
 
 <details summary="Exec with a Connection">
@@ -103,13 +103,7 @@ See [artifacts](../concepts/artifacts)
 </div>
 </details>
 
-For authentication, either provide the connection name or the basic auth or the certificate.
+<Fields connection="git" rows={[
+  {field: "destination", description: "Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL will be used as the dir name", type: "string"},
+]}/>
 
-| Field                           | Description                                                                                                                                                    | Type                                                               | Required |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | -------- |
-| `url`                           | Git repository URL.                                                                                                                                            | `string`                                                           | `true`   |
-| <SkipOSS>`connection`</SkipOSS> | <SkipOSS>Specify the connection name to use for git authentication (if required)</SkipOSS>                                                                     | <SkipOSS> <CommonLink to="secrets">_EnvVar_</CommonLink></SkipOSS> |          |
-| `username`                      | Git auth username.                                                                                                                                             | <CommonLink to="secrets">_EnvVar_</CommonLink>                     |          |
-| `password`                      | Git auth password.                                                                                                                                             | <CommonLink to="secrets">_EnvVar_</CommonLink>                     |          |
-| `certificate`                   | Git auth certificate.                                                                                                                                          | <CommonLink to="secrets">_EnvVar_</CommonLink>                     |          |
-| `destination`                   | Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL will be used as the dir name. | `string`                                                           |          |

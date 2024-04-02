@@ -75,7 +75,7 @@ export default async function createConfigAsync() {
     // ],
 
     customFields: {
-      oss: true,
+      oss: false,
       productName: 'Mission Control',
       links: {
         authentication: '/reference/env-var',

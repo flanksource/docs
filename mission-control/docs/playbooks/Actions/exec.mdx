@@ -37,7 +37,7 @@ will be setup on the host running the script.
 
 ### Artifacts
 
-```yaml title="scale-deployment.yaml" file=../../../modules/mission-control/fixtures/playbooks/exec-artifact.yaml
+```yaml title="exec-artifact.yaml" file=../../../modules/mission-control/fixtures/playbooks/exec-artifact.yaml
 
 ```
 
@@ -46,18 +46,13 @@ will be setup on the host running the script.
 | `path` | Path or glob. | `string` | `true`   |
 
 ### Git Checkout
-```yaml title="scale-deployment.yaml" file=../../../modules/mission-control/fixtures/playbooks/exec-checkout.yaml
+```yaml title="exec-checkout.yaml" file=../../../modules/mission-control/fixtures/playbooks/exec-checkout.yaml
 ```
 
-| Field         | Description                                                  | Type                                                  | Required |
-| ------------- | ------------------------------------------------------------ | ----------------------------------------------------- | -------- |
-| `url`         | Git repository URL.                                          | `string`                                              | `true`   |
-| `connection`  | Specify the connection name to use for git authentication (if required) | <CommonLink to="connection">*Connection*</CommonLink> |          |
-| `username`    | Git auth username.                                           | <CommonLink to="secrets">*EnvVar*</CommonLink>        |          |
-| `password`    | Git auth password.                                           | <CommonLink to="secrets">*EnvVar*</CommonLink>        |          |
-| `certificate` | Git auth certificate.                                        | <CommonLink to="secrets">*EnvVar*</CommonLink>        |          |
-| `destination` | Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL will be used as the dir name. | `string`                                              |          |
-> Specify either a `connection`, `username` and `password` OR a `certificate` for authentication. If no authentication is provided, the repository will be treated as public.
+<Fields connection="git" rows={[
+  {field: "destination", description: "Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL will be used as the dir name", type: "string"},
+]}/>
+
 
 ### Action Result
 

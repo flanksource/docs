@@ -44,20 +44,18 @@ touch /tmp/junit-results/done
 
 For a complete working example, see **[canary-checker-examples/newman](https://github.com/flanksource/canary-checker-examples/tree/main/newman)**
 
-| Field | Description | Scheme | Required |
-| ----- | ----------- | ------ | -------- |
-| **`spec`** | Pod specification | [*v1.PodSpec*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) | Yes |
-| **`testResults`** | Directory where the results will be published | *string* | Yes |
-| `timeout` | Timeout in minutes to wait for specified container to finish its job. Defaults to 5 minutes | *int* |  |
-| **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
-| `description` | Description for the check                                   | `string`                                     |          |
-| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
-| `labels`      | Labels for check                                            | `map[string]string`                          |          |
-| `test`        | Evaluate whether a check is healthy                         | [`Expression`](../concepts/health-evaluation)  |          |
-| `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/display-formatting) |          |
-| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/transforms)          |          |
-| `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics-exporter)    |          |
+<HealthCheck name="junit" edition="standard"  rows={[
+  {field: "spec", description: "Pod specification", scheme: '[Spec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) ', required: true},
+  {field: "testResults", description: "Path to JUnit test results", scheme: 'string', required: true},
+  {field: "timeout", description: " Timeout in minutes to wait for specified container to finish its job", scheme: 'int', default: '5'},
+  {
+  field: "artifacts",
+  description: "Specify what files/folders created in the pod need to be archived",
+  scheme: "[`[]Artifact`](#artifact)",
+},
+]}/>
+
 
 ## Test Result Variables
 
-See [JUnit Test Results](./junit##test-result-variables) for the schema that is ingested and can be used for evaluating health or formatting the display.
+See [JUnit Test Results](/canary-checker/reference/junit#test-result-variables) for the schema that is ingested and can be used for evaluating health or formatting the display.

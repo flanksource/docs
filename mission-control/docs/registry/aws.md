@@ -55,9 +55,9 @@ The following table lists the configurable parameters and their default values:
 
 | Parameter | Description | Schema | Default |
 | --- | --- | --- | --- |
-| `connectionDetails.connection` | AWS connection details. | string | "" |
-| `connectionDetails.accessKey` | Name of the access key. | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
-| `connectionDetails.secretKey` | Name of the secret key. | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
+| `connectionDetails.connection` | AWS connection details. | [Connection](/reference/connections/aws) | "" |
+| `connectionDetails.accessKey` | Name of the access key. | [EnvVar](/reference/env-var) | "" |
+| `connectionDetails.secretKey` | Name of the secret key. | [EnvVar](/reference/env-var) | "" |
 | `connectionDetails.region` | AWS region. | string | "" |
 | `connectionDetails.endpoint` | AWS endpoint. | string | "" |
 | `connectionDetails.skipTLSVerify` | Skip TLS verification.| bool | false |

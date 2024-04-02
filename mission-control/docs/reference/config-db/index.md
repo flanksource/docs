@@ -1,5 +1,6 @@
 ---
 title: Config DB
+sidebar_position: 4
 ---
 
 | Field             | Description                            | Scheme              |               |

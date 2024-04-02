@@ -54,10 +54,10 @@ spec:
 
 | Field     | Description                                                 | Scheme                                               | Required |
 | --------- | ----------------------------------------------------------- | ---------------------------------------------------- | -------- |
-| `maxAge`  | MaxAge the latest object should be younger than defined age | [Duration](/reference/common-types#Duration)                          |          |
-| `maxSize` | MaxSize of the files inside the searchPath                  | [Size](/reference/common-types#Size)                                     |          |
-| `minAge`  | MinAge the latest object should be older than defined age   | [Duration](/reference/common-types#Duration)                           |          |
-| `minSize` | MinSize of the files inside the searchPath                  | [Size](/reference/common-types#Size)                                        |          |
+| `maxAge`  | MaxAge the latest object should be younger than defined age | [Duration](/reference/types#duration)                          |          |
+| `maxSize` | MaxSize of the files inside the searchPath                  | [Size](/reference/types#size)                                     |          |
+| `minAge`  | MinAge the latest object should be older than defined age   | [Duration](/reference/types#duration)                           |          |
+| `minSize` | MinSize of the files inside the searchPath                  | [Size](/reference/types#size)                                        |          |
 | `regex`   | Filter files based on regular expression                    | *[regex](https://github.com/google/re2/wiki/Syntax)* |          |
 
 e.g. to verify that database backups are being performed
@@ -97,10 +97,10 @@ The following fields are available in `test`, `display` and `transform` [express
 
 | Field     | Description | Scheme                  | Required |
 | --------- | ----------- | ----------------------- | -------- |
-| `minAge`  |             | [`Duration`](#duration) |          |
-| `maxAge`  |             | [`Duration`](#duration) |          |
-| `minSize` |             | [`Size`](#size)         |          |
-| `maxSize` |             | [`Size`](#size)         |          |
+| `minAge`  |             | [`Duration`](/reference/types#duration) |          |
+| `maxAge`  |             | [`Duration`](/reference/types#duration) |          |
+| `minSize` |             | [`Size`](/reference/types#size)         |          |
+| `maxSize` |             | [`Size`](/reference/types#size)         |          |
 | `regex`   |             | `string`                |          |
 
 

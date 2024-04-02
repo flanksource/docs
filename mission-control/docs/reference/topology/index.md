@@ -1,5 +1,6 @@
 ---
 title: Topology
+sidebar_position: 6
 ---
 
 This page defines the specification for Topology. There are few samples in the examples section.

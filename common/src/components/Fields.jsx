@@ -13,7 +13,7 @@ const schemes = {
   "Size": "[Size](/reference/types#size)",
   "Agent": "[Agent](/reference/types#agent)",
   "ResourceSelector": "[ResourceSelector](/reference/resource-selector)",
-  "Connection": "[Connection](/reference/connection)",
+  "Connection": "[Connection](/reference/connections)",
   "string": "`string`",
   "Icon": "[Icon](/reference/types#icon)",
   "bool": "`boolean`",
@@ -27,12 +27,71 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
 
   const oss = siteConfig.customFields.oss;
 
+
+  rows = rows.filter(row => row.field != null &&
+    (row.field != "artifacts" || !oss));
+
+
+  var fieldSorter = function (a, b) {
+    if (a.required && !b.required) {
+      return -1;
+    }
+    if (!a.required && b.required) {
+      return 1;
+    }
+    return a.field.localeCompare(b.field)
+  }
+  rows = rows.concat(common.filter(row => row.required))
+  rows.sort(fieldSorter);
+  common = common.filter(row => !row.required)
+  common.sort(fieldSorter)
+  rows = rows.concat(common)
+
+
   if (connection == "url") {
     rows = rows.concat([
       {
         field: oss ? null : "connection",
         description: "The connection to use, mutually exclusive with `username` and `password`",
         scheme: "Connection",
+      },
+      {
+        field: !oss && rows.filter(i => i.field == "url").length == 0 ? "url" : null,
+        description: "If `connection` is specified and it also includes a `url`, this field will take precedence",
+        scheme: "string",
+      },
+      {
+        field: oss && rows.filter(i => i.field == "url").length == 0 ? "url" : null,
+        scheme: "string",
+      },
+      {
+        field: "username",
+        scheme: "EnvVar",
+      },
+      {
+        field: "password",
+        scheme: "EnvVar",
+      }
+    ])
+  } else if (connection == "git") {
+    rows = rows.concat([
+      {
+        field: oss ? null : "connection",
+        description: "The connection to use, mutually exclusive with `username` and `password`",
+        scheme: "Connection",
+      },
+      {
+        field: !oss && rows.filter(i => i.field == "url").length == 0 ? "url" : null,
+        description: "If `connection` is specified and it also includes a `url`, this field will take precedence",
+        scheme: "string",
+      },
+      {
+        field: oss && rows.filter(i => i.field == "url").length == 0 ? "url" : null,
+        scheme: "string",
+      },
+      {
+        field: "certificate",
+        scheme: "EnvVar",
       },
       {
         field: "username",
@@ -179,26 +238,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       }
     ])
   }
-
-  rows = rows.filter(row => row.field != null &&
-    (row.field != "artifacts" || !oss));
-
-
-  var fieldSorter = function (a, b) {
-    if (a.required && !b.required) {
-      return -1;
-    }
-    if (!a.required && b.required) {
-      return 1;
-    }
-    return a.field.localeCompare(b.field)
-  }
-  rows = rows.concat(common.filter(row => row.required))
-  rows.sort(fieldSorter);
-  common = common.filter(row => !row.required)
-  common.sort(fieldSorter)
-  rows = rows.concat(common)
-
+  rows = rows.filter(i => i.field != null)
 
   return (
     <>

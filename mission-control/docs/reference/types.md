@@ -1,7 +1,7 @@
 ---
 hide_title: true
 title: Common Types
-sidebar_position: 100
+sidebar_position: 2
 ---
 ## Agent
 

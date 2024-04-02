@@ -1,5 +1,6 @@
 ---
 title: Resource Selectors
+sidebar_position: 2
 ---
 
 Resource Selectors are used in multiple places including:

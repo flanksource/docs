@@ -84,11 +84,11 @@ spec:
 
 | Field        | Description                                                    | Scheme                                                       | Required |
 | ------------ | -------------------------------------------------------------- | ------------------------------------------------------------ | -------- |
-| `components` | Create sub-components for each component                       | [`[]Component`](../references/components)                 |          |
-| `properties` | Create or lookup properties for each component                 | [`[]Property`](./properties)                              |          |
+| `components` | Create sub-components for each component                       | [`[]Component`](/reference/topology/components)                 |          |
+| `properties` | Create or lookup properties for each component                 | [`[]Property`](/reference/topology/properties)                              |          |
 | `configs`    | Link configuration items for each component                    | [`[]ConfigSelector`](./catalog.md#config-selector)           |          |
 | `checks`     | Create or link health checks for each component                | [`[]CheckSelector`](./health-checks.md#check)                |          |
-| `selectors`  | Select existing components to be used as the child components. | [`[]ResourceSelector`](../../reference/resource-selector) |          |
+| `selectors`  | Select existing components to be used as the child components. | [`[]ResourceSelector`](/reference/resource-selector) |          |
 
 ### Templating
 
@@ -96,6 +96,6 @@ All the fields in forEach are templatable. They receive the following context
 
 | Field        | Description                | Scheme                                       |
 | ------------ | -------------------------- | -------------------------------------------- |
-| `component`  | Component from the lookup  | [`[]Component`](../references/components) |
+| `component`  | Component from the lookup  | [`[]Component`](/reference/topology/components) |
 | `properties` | The component's properties | `map[string]any`                             |
 
