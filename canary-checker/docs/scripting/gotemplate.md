@@ -1556,7 +1556,7 @@ foo:
 ```
 
 ### Sort _(deprecated)_
-**Deprecation Notice:** Use [`coll.Sort`](../coll/#coll-sort) instead
+**Deprecation Notice:** Use [`coll.Sort`](#sort) instead
 
 Returns an alphanumerically-sorted copy of a given string list.
 
