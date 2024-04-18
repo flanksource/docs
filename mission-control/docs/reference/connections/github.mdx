@@ -1,0 +1,20 @@
+---
+title: Github
+---
+
+Github connection can be used for playbook's GitOps actions and Health Checks
+
+
+```
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: github
+spec:
+  type: github
+  password:
+    valueFrom:
+      secretKeyRef:
+        name: secret-name
+        key: secret-key
+```
