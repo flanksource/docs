@@ -29,7 +29,7 @@ Example: If a Namespace manifest is provided then this check will delete that na
       required: true
     },
     {
-      field: 'static resources',
+      field: 'staticresources',
       description:
         'Static resources are like `resources` but preserved between checks. They are only deleted when the canary is deleted.',
       scheme: '`[]KubernetesManifest`'
@@ -91,7 +91,7 @@ Example: If a Namespace manifest is provided then this check will delete that na
       field: 'expr',
       description: `CEL expression that determines whether all the resources are in their desired state before running checks on them. 
         It receives a \`resources\` array of the static and non-static resources.
-        The default behavior is to wait until all the resources are healthy \`dyn(resources).all(r, k8s.isHealthy(r))\`.`,
+        The default behavior is to wait until all the resources are ready \`dyn(resources).all(r, k8s.isReady(r))\`.`,
       scheme: 'CEL'
     },
     {
@@ -123,9 +123,18 @@ Example: If a Namespace manifest is provided then this check will delete that na
 
 ### Templating
 
-The static and non static resources can be templated. This is helpful to create resources with random names. Example:
-you can setup a resource to create a pod with random name on each check run. This way you don't have to wait for the pod to be deleted on every check.
+The `resources` and  `staticResources` fields can be templated using <CommonLink to="gotemplate">Go Templates</CommonLink>.
+This is helpful in creating resources with random names. 
+Example: you can setup a resource to create a pod with random name on each check run. This way you don't have to wait for the pod to be deleted on every check.
 
 :::info
 Templating the **Group**, **Version**, **Kind** & **Namespace** however isn't allowed.
 :::
+
+<details summary="Templating resources">
+  <div>
+  ```yaml title="pod_exit_code_check.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes_resource_pod_exit_code_pass.yaml
+  ```
+  </div>
+</details>
+
