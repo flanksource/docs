@@ -6,5 +6,7 @@ We provide ready to use helm charts for setting up:
 
 - [Kubernetes](/registry/kubernetes)
 - [AWS](/registry/aws)
-- Azure
+- [Azure](/registry/azure)
 - Prometheus
+- [FluxCD](/registry/fluxcd)
+- [ArgoCD](/registry/argocd)
