@@ -59,7 +59,16 @@ const sidebars = {
           id: 'canary-checker/concepts/grafana',
           label: 'Grafana'
         },
-
+        {
+          type: 'doc',
+          id: 'canary-checker/concepts/check-namespace',
+          label: 'Inserting Checks Into Different Namespaces'
+        },
+        {
+          type: 'doc',
+          id: 'canary-checker/concepts/kubernetes-resource-permission',
+          label: 'Granting Permission To Kubernetes Resources'
+        },
         {
           type: 'category',
           label: 'Expressions',
