@@ -67,7 +67,16 @@ module.exports = {
           id: 'concepts/secret-management',
           label: 'Secret Management'
         },
-
+        {
+          type: 'doc',
+          id: 'concepts/check-namespace',
+          label: 'Inserting Checks Into Different Namespaces'
+        },
+        {
+          type: 'doc',
+          id: 'concepts/kubernetes-resource-permission',
+          label: 'Granting Permission To Kubernetes Resources'
+        },
         {
           type: 'category',
           label: 'Expressions',
