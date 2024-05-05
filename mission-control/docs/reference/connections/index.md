@@ -6,6 +6,7 @@ sidebar_position: 2
 Connections are an easy way to authenticate against sources. It can be created via a CRD or by adding it in the settings page
 
 A sample connection CRD looks like:
+
 ```yaml
 apiVersion: mission-control.flanksource.com/v1
 kind: Connection
@@ -66,6 +67,7 @@ spec:
         name: opensearch-credentials
         key: OPENSEARCH_URL
 ```
+
 :::
 
 ## Schema

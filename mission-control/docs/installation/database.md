@@ -36,6 +36,7 @@ If you ever need to connect to the database, you can do so by forwarding the por
 kubectl port-forward svc/postgres 5432:5432
 psql -U postgres localhost -p 5432 mission_control
 ```
+
 :::
 
 ## Using an External Database

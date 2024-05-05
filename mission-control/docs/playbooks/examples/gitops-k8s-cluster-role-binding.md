@@ -69,7 +69,7 @@ spec:
 
 ## Screenshots
 
-### 1. Triggering playbook manully from a Cluster component
+### 1. Triggering playbook manually from a Cluster component
 
 ![Playbook option on the component page](/img/playbook-eg-gitops-playbook-on-cluster-component.png)
 _Fig: Playbook option on the component page_

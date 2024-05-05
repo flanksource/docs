@@ -28,7 +28,7 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
 Get the `Tenant ID` (Directory ID) from [Directories](https://portal.azure.com/#settings/directory)
 </Step>
 
-<Step step={3} name="Create a Jssonet claims mapper">
+<Step step={3} name="Create a JSONNET claims mapper">
 
 Jsonnet is used to [map](https://www.ory.sh/docs/kratos/social-signin/data-mapping) the claims provided by Azure AD, to the Kratos [Identity Schema](https://github.com/flanksource/mission-control-chart/blob/main/chart/files/kratos-identity-schema.json)
 
@@ -80,5 +80,6 @@ kratos:
                                     - openid
                                     - profile
 ```
+
 </Step>
 

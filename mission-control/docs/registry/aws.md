@@ -67,6 +67,7 @@ The following table lists the configurable parameters and their default values:
 If you have setup IAM Roles for Service Account, you do not have to do anything else. If you do not have that setup, you can use AWS Access and Secret Keys as well
 
 Example:
+
 ```yaml title="values.yaml"
 connectionDetails:
   accessKey:

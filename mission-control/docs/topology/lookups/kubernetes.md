@@ -49,8 +49,8 @@ spec:
 | Field         | Description                                                               | Scheme   | Required |
 | ------------- | ------------------------------------------------------------------------- | -------- | -------- |
 | name          | Name of Kubernetes resource                                               | _string_ |          |
-| labelSelector | Select Kubernetes resource based on label. e.g. app, canary.              | _string_ |
-| fieldSelector | Select Kubernetes resource based on the value of specified resource field | _string_ |
+| labelSelector | Select Kubernetes resource based on label. e.g. app, canary.              | _string_ | |
+| fieldSelector | Select Kubernetes resource based on the value of specified resource field | _string_ | |
 
 ## Results
 

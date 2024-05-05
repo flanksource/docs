@@ -81,7 +81,7 @@ spec:
 | `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
 | `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
-| `sql`       | Specifies the list of SQL configurations to scrape.                                | [`[]SQL`](#sql-1)                            |          |
+| `sql`       | Specifies the list of SQL configurations to scrape.                                | [`[]SQL`](#sql)                            |          |
 
 ### SQL
 

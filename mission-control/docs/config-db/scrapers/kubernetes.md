@@ -7,7 +7,7 @@ sidebar_position: 4
 
 :::tip Registry
 
-The registry has an [Kuebrnetes](/registry/kubernetes) Helm chart that provides a pre-configured Scraper and Topology with some common defaults
+The registry has an [Kubernetes](/registry/kubernetes) Helm chart that provides a pre-configured Scraper and Topology with some common defaults
 
 :::
 
@@ -23,7 +23,7 @@ The `kubernetes` config type scrapes the configurations of your Kubernetes resou
 | `logLevel`   | Specify the level of logging.                                                | `string`                                     |          |
 | `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                     |          |
 | `retention`  | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/config-db/concepts/retention) |          |
-| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                   | [`[]Kubernetes`](#kubernetes-1)              |          |
+| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                   | [`[]Kubernetes`](#kubernetes)              |          |
 
 ### Kubernetes
 
@@ -55,7 +55,7 @@ In addition, you can also specify keywords used to identify the severity of the 
 | `exclusions`       | A list of keywords used to exclude event objects based on the reason                       | `[]string`                              |          |
 | `severityKeywords` | Specify keywords used to identify the severity of the Kubernetes Event based on the reason | [`SeverityKeywords`](#severitykeywords) |          |
 
-#### SeverityKeywords
+### SeverityKeywords
 
 | Field   | Description                                                                                                                                                            | Scheme     | Required |
 | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------- |

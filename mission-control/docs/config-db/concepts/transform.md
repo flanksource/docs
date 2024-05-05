@@ -4,8 +4,6 @@ title: Transform
 
 Transformations allows you to transform the scraped configs before they are saved to config db.
 
-
-
 | Field                       | Description                                                  | Scheme                                                       |
 | --------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | `transform.exclude`         | Remove fields from a scraped `config`                        | [[]Exclude](#field-exclusions)                               |
@@ -14,8 +12,6 @@ Transformations allows you to transform the scraped configs before they are save
 | `transform.changes.mapping` | Categorize changes                                           | [Mapping](#mapping)                                          |
 | `transform.expr`            |                                                              | [CEL](/reference/scripting/cel)                              |
 | `transform.relationship`    | Create relationships between items                           | [Relationships](./relationships)                             |
-
-
 
 ## Config Items
 
@@ -40,14 +36,10 @@ spec:
        //highlight-end
 ```
 
-
-
 | Field      | Description                                                  | Scheme                                            | Required |
 | ---------- | ------------------------------------------------------------ | ------------------------------------------------- | -------- |
 | `jsonpath` | All matching elements will be removed from the `config`      | <CommonLink to="jsonpath">`jsonpath`</CommonLink> | `true`   |
 | `types`    | Only run exclusion rules for these config types, if empty apply to all | `[]string`                                        |          |
-
-
 
 ### Masking
 
@@ -68,7 +60,7 @@ spec:
         mask:
           - selector: config.name == 'Config1'
             jsonpath: $.password
-            value: md5sum # Change detection will pick up that a change has occured, but not what the change was
+            value: md5sum # Change detection will pick up that a change has occurred, but not what the change was
           - selector: config.name == 'Config1'
             jsonpath: $.secret
             value: '***' # Replace the secret with a fixed mask, no change detection will be possible
@@ -86,9 +78,6 @@ spec:
 :::info
 Masks are applied in the order they are specified in the configuration file.
 :::
-
-
-
 
 ## Changes
 
@@ -114,8 +103,6 @@ spec:
 				//highlight-end
 ```
 
-
-
 ### Mapping
 
 When you encounter a diff change, unlike an event based change, it can sometimes appear cryptic. The summary of the change may not immediately indicate what the change is about. For example, the change 'status.images' might not be self-explanatory. To address this issue, we can assign types to these diff changes using mapping.
@@ -130,7 +117,7 @@ spec:
     - clusterName: local-kind-cluster
       transform:
         changes:
-              	//highlight-start
+              //highlight-start
           mapping:
             - filter: >
                 change.change_type == 'diff' && change.summary == "status.containerStatuses" &&
@@ -151,19 +138,13 @@ spec:
 | `type`    | New change type                                              | `string`                                                     |
 | `summary` | New summary of the change                                    | [Go Template](/reference/scripting/template)                 |
 
-
-
 ## Scripting
 
 Scripting allows you to modify the scraped configuration using CEL before saving it to the database. This is useful for data normalization, default value population, sensitive field masking etc.
 
-
-
 | Field  | Description             | Scheme                                                       | Context                                                      |
 | ------ | ----------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | `expr` | Transform a config item | <CommonLink to="cel">CEL</CommonLink> that returns [[]ScrapeResult](/reference/config-db/scrape-result) | `config`  `JSON`<br/>`result` [Scrape Result](/reference/config-db/scrape-result) |
-
-
 
 ```yaml title="file-scraper.yaml"
 apiVersion: configs.flanksource.com/v1

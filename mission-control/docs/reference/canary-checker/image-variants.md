@@ -5,6 +5,7 @@ title: Image Variants
 Canary checker comes with 2 image variants:
 
 ## [Minimal](https://github.com/flanksource/canary-checker/blob/master/build/minimal/Dockerfile)
+
 * [arkade](https://github.com/alexellis/arkade)
 * kubectl
 * stern

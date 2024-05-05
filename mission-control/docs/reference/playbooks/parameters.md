@@ -75,7 +75,7 @@ When running the playbook on a `Deployment` named `mysql` the following will be 
 
 | Field      | Description                               | Schema   |
 | ---------- | ----------------------------------------- | -------- |
-| `language` | Langauge name e.g. yaml, json, toml, etc. | `string` |
+| `language` | e.g. `yaml`, `json`, `toml`, etc. | `string` |
 
 ### people
 
@@ -87,7 +87,7 @@ When running the playbook on a `Deployment` named `mysql` the following will be 
 
 | Field       | Description                                             | Schema    |
 | ----------- | ------------------------------------------------------- | --------- |
-| `multiline` | Whether the text field should be rendered as a text are | `boolean` |
+| `multiline` | Render a multiline textarea | `boolean` |
 
 ### list
 

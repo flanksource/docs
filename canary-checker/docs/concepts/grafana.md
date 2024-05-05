@@ -10,8 +10,6 @@ Default grafana dashboards are available. After you deploy Grafana, these dashbo
 
 ![](/img/grafana-dashboard.png)
 
-
-
 ### Prometheus
 
 The helm chart can install a `ServiceMonitor` for the prometheus operator, by enabling the serviceMonitor flag

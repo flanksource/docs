@@ -34,11 +34,12 @@ spec:
       - name: Kubernetes::Pod
         deletedAge: 7d # keep deleted pods around for 7 days
       - name: Kubernetes::Replicaset
-      	deletedAge: 60m # we don't care about replicasets remove then quickly
+        deletedAge: 60m # we don't care about replicasets remove then quickly
   // highlight-end
   kubernetes:
     clusterName: local
 ```
+
 ### Stale Config Items
 
 With some scrapers (particularly custom scrapers), there is no defined event or field update to mark an item as deleted, in these cases `stateItemAge` will cleanup items that have not been scraped for specified period
@@ -62,8 +63,6 @@ spec:
 Changes can quickly accumulate and grow large over time. While it's important to retain some changes, others can be discarded after a period.
 
 
-
-
 | Field   | Description                                             | Scheme                                | Required |
 | ------- | ------------------------------------------------------- | ------------------------------------- | -------- |
 | `name`  | Name of the change type                                 | `string`                              | `true`   |
@@ -79,8 +78,8 @@ spec:
   retention:
   // highlight-start
     changes:
-      - name: PullSuceeded
-        age: 7d # Only keep one week of PullSuceeded changes
+      - name: PullSucceeded
+        age: 7d # Only keep one week of PullSucceeded changes
   // highlight-end
   kubernetes:
     clusterName: local

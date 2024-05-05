@@ -18,8 +18,8 @@ sidebar_position: 6
 | `components`  | Which components can this playbook run on | [`[]ResourceSelector`](/reference/resource-selector) |
 | `env` | Variables to lookup, available as `env` map in templating/filters | [[]EnvVar](/reference/env-var) |
 | `parameters`  | Variables to be supplied by the user, Do not use parameters for sensitive values. | [`[]Parameter`](./parameters)                          |
-| `actions`     | Individual actions or steps to perform   | [`[]Action`](#action)                                |
-| `approval`    | Optional approvals required before a playbooks runs | [`Approval`](#approval)                    |
+| `actions`     | Individual actions or steps to perform   | [`[]Action`](#actions)                                |
+| `approval`    | Optional approvals required before a playbooks runs | [`Approval`](#approvals)                    |
 
 
 ## Actions

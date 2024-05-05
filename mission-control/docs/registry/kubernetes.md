@@ -36,7 +36,7 @@ On clicking the topology, you can access nodes, namespaces and pods
 
 And we also have added a catalog scraper which populated our catalog
 
-![Kuberenetes Catalog](/img/kubernetes-registry-catalog-scraper.png)
+![Kubernetes Catalog](/img/kubernetes-registry-catalog-scraper.png)
 
 ## Values
 
@@ -85,8 +85,8 @@ To use this, the Kustomization file must have [originAnnotations](https://kubect
 
 | Parameter | Description | Schema | Default |
 | --- | --- | --- | --- |
-| `playbooks.edit_kubernetes_manifests.enabled` | Enable this to have a playbook to edit and commit flux resources back to git | bool | `false`
-| `playbooks.edit_kubernetes_manifests.git_connection` | Connection string to be used with git credentials | [Connection](/reference/connections/git) | `""`
+| `playbooks.edit_kubernetes_manifests.enabled` | Enable this to have a playbook to edit and commit flux resources back to git | bool | `false` |
+| `playbooks.edit_kubernetes_manifests.git_connection` | Connection string to be used with git credentials | [Connection](/reference/connections/git) | `""` |
 
 After enabling the playbook, you can see a `Edit Kustomize Resource` option in playbooks for any catalog item that is linked to flux
 

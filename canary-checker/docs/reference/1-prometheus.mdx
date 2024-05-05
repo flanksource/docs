@@ -8,7 +8,7 @@ sidebar_class_name: popular
 The Prometheus Check connects to the Prometheus host, performs the desired query, and displays the results.
 
 
-```yaml title="promtheus.yaml"  file=../../../modules/canary-checker/fixtures/datasources/prometheus.yaml
+```yaml title="prometheus.yaml"  file=../../../modules/canary-checker/fixtures/datasources/prometheus.yaml
 ```
 <HealthCheck name="prometheus" connection="url" rows={[
   {field: "url", description: "Prometheus instance, if not specified in installation it is required", required: true},

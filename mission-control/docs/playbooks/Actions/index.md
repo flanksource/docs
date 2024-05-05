@@ -25,8 +25,6 @@ Actions are the fundamental tasks executed by a playbook. A playbook can compris
 Specify one or more actions; but at least one.
 :::
 
-
-
 ## Templating
 
 Templating allows your playbook actions to work in context of a config, health check or a component.
@@ -48,7 +46,6 @@ spec:
       exec:
         script: kubectl scale --replicas={{.params.replicas}} --namespace={{.config.tags.namespace}} deployment {{.config.name}}
 ```
-
 
 ### Accessing results of another action
 

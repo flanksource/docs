@@ -19,6 +19,7 @@ To install and run Mission Control you need to have the following prerequisites:
 helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
 ```
+
 </Step>
 <Step step={2} name="Install Helm Chart">
 

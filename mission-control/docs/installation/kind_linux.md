@@ -32,6 +32,7 @@ nodes:
         hostPort: 8443
         protocol: TCP
 ```
+
 A single node cluster will be provisioned, hosting both the control plane and workloads.  Configure the hostPort bindings onto free ports, in this case 8080 and 8443 are used.
 
 Provision the kind cluster with
@@ -79,14 +80,15 @@ flanksource-ui:
       - "127.0.0.1.nip.io"
 ```
 
-for a full list of configuration options, see https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml
+for a full list of configuration options, see <https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml>
 
 This configuration sets the storage for the database to use the kind default local-path storage, and sets the ingress address to use [nip.io](nip.io)'s dummy DNS response to return localhost.  Save the configuration to a `kind-values.yaml` file, then deploy using
 
 ```bash
 helm upgrade -i mission-control-demo flanksource/mission-control -f kind-values.yaml
 ```
-Monitor that the deployment has application has successfully intialised by checking `kubectl get pods`, it may take some time for the database to initialise for the first time after installation.
+
+Monitor that the deployment has application has successfully initialized by checking `kubectl get pods`, it may take some time for the database to initialize for the first time after installation.
 
 ## Verify UI
 
@@ -99,7 +101,7 @@ password: admin
 
 ## Create example checks
 
-Create a file containing canary defintions, for example:
+Create a file containing canary definitions, for example:
 
 ```yaml title=canaries.yaml
 apiVersion: canaries.flanksource.com/v1
@@ -124,7 +126,7 @@ spec:
   interval: 30
   dns:
     - server: 8.8.8.8
-      name: "DNS healthly"
+      name: "DNS healthy"
       port: 53
       query: "flanksource.com"
       querytype: "A"

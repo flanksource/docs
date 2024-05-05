@@ -1,5 +1,5 @@
-#  Go Templates
-
+# Go Templates
+<!-- // cspell:ignore conv, strconv,Ints -->
 `template` expressions use the [Go Text Template](https://pkg.go.dev/text/template) library with some additional functions provided by the [gomplate](https://docs.gomplate.ca/) library.
 In this example we get the current exchange rate:
 
@@ -16,7 +16,6 @@ spec:
         template: "$1 = €{{.json.rates.EUR}}, £{{.json.rates.GBP}}, ₪{{.json.rates.ILS}}"
 ```
 
-
 ## Escaping
 
 In case you might need to pass in a template variable without templating it, then you can put the template inside a string.
@@ -32,7 +31,7 @@ To send `{{ .secret }}` as it is do this
 {{`{{ .secret }}`}}
 ```
 
-##  Encoding
+## Encoding
 
 ### Encode
 
@@ -50,17 +49,18 @@ Decode a Base64 string. This supports both standard ([RFC4648 &sect;4](https://t
 This function outputs the data as a string, so it may not be appropriate for decoding binary data. Use [`base64.DecodeBytes`](#base64.DecodeBytes)
 for binary data.
 
-
-
 ```go
 {{ base64.Decode "aGVsbG8gd29ybGQ=" }} // hello world
 {{ "aGVsbG8gd29ybGQ=" | base64.Decode }} // hello world
 ```
 
-##### Implementation Note
-For the functions that return an array, a Go `[]interface{}` is returned, regardless of whether or not the input was a different type.
 
-##  Collection
+:::note
+
+For the functions that return an array, a Go `[]interface{}` is returned, regardless of whether or not the input was a different type.
+:::
+
+## Collection
 
 ### dict
 
@@ -74,8 +74,6 @@ For creating more complex maps, see [`data.JSON`](#json) or [`data.YAML`](#yaml)
 
 For creating arrays, see [`coll.Slice`](#slice).
 
-
-
 ```go
 {{ coll.Dict "name" "Frank" "age" 42 | data.ToYAML }}
 
@@ -85,6 +83,7 @@ For creating arrays, see [`coll.Slice`](#slice).
 {{ dict 1 2 3 | toJSON }} // {"1":2,"3":""}
 
 ```
+
 ```go
 {{ define "T1" }}Hello {{ .thing }}!{{ end -}}
 {{ template "T1" (dict "thing" "world")}}
@@ -99,8 +98,6 @@ For creating arrays, see [`coll.Slice`](#slice).
 
 Creates a slice (like an array or list). Useful when needing to `range` over a bunch of variables.
 
-
-
 ```go
 {{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }}
 
@@ -109,12 +106,9 @@ Creates a slice (like an array or list). Useful when needing to `range` over a b
 // Hello, Maggie
 ```
 
-
 ### has
 
 Reports whether a given object has a property with the given key, or whether a given array/slice contains the given value. Can be used with `if` to prevent the template from trying to access a non-existent property in an object.
-
-
 
 ```go
 {{ $l := slice "foo" "bar" "baz" }}there is {{ if has $l "bar" }}a{{else}}no{{end}} bar // there is a bar
@@ -127,23 +121,20 @@ Reports whether a given object has a property with the given key, or whether a g
 
 ```
 
-
 ### jsonpath
 
 Extracts portions of an input object or list using a [JSONPath][] expression.
 
 Any object or list may be used as input. The output depends somewhat on the expression; if multiple items are matched, an array is returned.
 
-JSONPath expressions can be validated at https://jsonpath.com
+JSONPath expressions can be validated at <https://jsonpath.com>
 
 [JSONPath]: https://goessner.net/articles/JsonPath
-
 
 ```go
 {{ .books | jsonpath `$..works[?( @.edition_count > 400 )].title` }} // [Alice's Adventures in Wonderland Gulliver's Travels]
 
 ```
-
 
 ### jq
 
@@ -151,22 +142,21 @@ Filters an input object or list using the [jq](https://stedolan.github.io/jq/) l
 
 Any JSON datatype may be used as input (NOTE: strings are not JSON-parsed but passed in as is). If the expression results in multiple items (no matter if streamed or as an array) they are wrapped in an array. Otherwise a single item is returned (even if resulting in an array with a single contained element).
 
-JQ filter expressions can be tested at https://jqplay.org/
+JQ filter expressions can be tested at <https://jqplay.org/>
 
 See also:
 
 - [jq manual](https://stedolan.github.io/jq/manual/)
 - [gojq differences to jq](https://github.com/itchyny/gojq#difference-to-jq)
 
+Where books is from <https://openlibrary.org/subjects/fantasy.json>
 
-Where books is from https://openlibrary.org/subjects/fantasy.json
 ```go
 {{ .books | jq `[.works[]|{"title":.title,"authors":[.authors[].name],"published":.first_publish_year}][0]` }}
 
 // map[authors:[Lewis Carroll] published:1865 title:Alice's Adventures in Wonderland]
 
 ```
-
 
 ### Keys
 
@@ -176,12 +166,10 @@ The keys will be ordered first by map position (if multiple maps are given), the
 
 See also [`coll.Values`](#values).
 
-
 ```go
 {{ coll.Keys (dict "foo" 1 "bar" 2) }} // [bar foo]
 
 ```
-
 
 ### Values
 
@@ -191,14 +179,10 @@ The values will be ordered first by map position (if multiple maps are given), t
 
 See also [`coll.Keys`](#keys).
 
-
-
-
 ```go
 {{ coll.Values (dict "foo" 1 "bar" 2) }} // [2 1]
 
 ```
-
 
 ### append
 
@@ -206,19 +190,15 @@ Append a value to the end of a list.
 
 _Note that this function does not change the given list; it always produces a new one._
 
-
 ```go
 {{ slice 1 1 2 3 | append 5 }} // [1 1 2 3 5]
 ```
-
 
 ### prepend
 
 Prepend a value to the beginning of a list.
 
 _Note that this function does not change the given list; it always produces a new one._
-
-
 
 ```go
 {{ slice 4 3 2 1 | prepend 5 }} // [5 4 3 2 1]
@@ -230,12 +210,9 @@ Remove any duplicate values from the list, without changing order.
 
 _Note that this function does not change the given list; it always produces a new one._
 
-
-
 ```go
 {{ slice 1 2 3 2 3 4 1 5 | uniq }} // [1 2 3 4 5]
 ```
-
 
 ### flatten
 
@@ -243,13 +220,10 @@ Flatten a nested list. Defaults to completely flattening all nested lists, but c
 
 _Note that this function does not change the given list; it always produces a new one._
 
-
-
 ```go
 {{ "[[1,2],[],[[3,4],[[[5],6],7]]]" | jsonArray | flatten }} // [1 2 3 4 5 6 7]
 {{ coll.Flatten 2 ("[[1,2],[],[[3,4],[[[5],6],7]]]" | jsonArray) }} // [1 2 3 4 [[5] 6] 7]
 ```
-
 
 ### reverse
 
@@ -257,12 +231,9 @@ Reverse a list.
 
 _Note that this function does not change the given list; it always produces a new one._
 
-
-
 ```go
 {{ slice 4 3 2 1 | reverse }} // [1 2 3 4]
 ```
-
 
 ### Sort
 
@@ -272,14 +243,13 @@ Maps and structs can be sorted by a named key.
 
 _Note that this function does not modify the input._
 
-
 ```go
 {{ slice "foo" "bar" "baz" | coll.Sort }} // [bar baz foo]
 ```
+
 ```go
 {{ sort (slice 3 4 1 2 5) }} // [1 2 3 4 5]
 ```
-
 
 ### Merge
 
@@ -288,7 +258,6 @@ map can be configured the "overrides". Many source maps can be provided. Precede
 
 _Note that this function does not modify the input._
 
-
 ```go
 {{ $default := dict "foo" 1 "bar" 2}}
 {{ $config := dict "foo" 8 }}
@@ -296,6 +265,7 @@ _Note that this function does not modify the input._
 
 // map[bar:2 foo:8]
 ```
+
 ```go
 {{ $dst := dict "foo" 1 "bar" 2 }}
 {{ $src1 := dict "foo" 8 "baz" 4 }}
@@ -312,7 +282,6 @@ Given a map, returns a new map with any entries that have the given keys.
 All keys are converted to strings.
 _Note that this function does not modify the input._
 
-
 ```go
 {{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
 {{ $pickedData := coll.Pick "foo" "baz" $data }}
@@ -327,9 +296,7 @@ Given a map, returns a new map without any entries that have the given keys.
 
 All keys are converted to strings.
 
-
 _Note that this function does not modify the input._
-
 
 ```go
 {{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
@@ -339,14 +306,13 @@ _Note that this function does not modify the input._
 // map[bar:2]
 ```
 
-##  Convert
+## Convert
 
 ### bool
 
 **Note:** See also [`conv.ToBool`](#tobool) for a more flexible variant.
 
 Converts a true-ish string to a boolean. Can be used to simplify conditional statements based on environment variables or other text input.
-
 
 ```go
 {{ $FOO := true }}
@@ -358,8 +324,6 @@ Converts a true-ish string to a boolean. Can be used to simplify conditional sta
 Provides a default value given an empty input. Empty inputs are `0` for numeric types, `""` for strings, `false` for booleans, empty arrays/maps, and `nil`.
 
 Note that this will not provide a default for the case where the input is undefined (i.e. referencing things like `.foo` where there is no `foo` field of `.`), but [`conv.Has`](#has) can be used for that.
-
-
 
 ```go
 {{ "" | default "foo" }} // foo
@@ -379,8 +343,6 @@ For creating more complex maps, see [`data.JSON`](#json) or [`data.YAML`](#yaml)
 
 For creating arrays, see [`conv.Slice`](#slice).
 
-
-
 ```go
 {{ $dict := conv.Dict "name" "Frank" "age" 42 }}
 {{ $yaml := data.ToYAML $dict }}
@@ -396,8 +358,6 @@ For creating arrays, see [`conv.Slice`](#slice).
 
 Creates a slice (like an array or list). Useful when needing to `range` over a bunch of variables.
 
-
-
 ```go
 {{ range slice "Bart" "Lisa" "Maggie" }}Hello, {{ . }}{{ end }}
 // Hello, Bart
@@ -409,32 +369,28 @@ Creates a slice (like an array or list). Useful when needing to `range` over a b
 
 Reports whether a given object has a property with the given key, or whether a given array/slice contains the given value. Can be used with `if` to prevent the template from trying to access a non-existent property in an object.
 
-
-
 ```go
 {{ $l := slice "foo" "bar" "baz" }}there is {{ if has $l "bar" }}a{{else}}no{{end}} bar // there is a bar
 ```
+
 ```go
 {{ $o := dict "foo" "bar" }} // Defining a map with keys and values
 {{ if has $o "foo" }}{{ index $o "foo" }}{{ else }}THERE IS NO FOO{{ end }} // bar
 ```
+
 ```go
 {{ $o := dict "baz" "quix" }}
 {{ if has $o "foo" }}{{ index $o "foo" }}{{ else }}THERE IS NO FOO{{ end }} // THERE IS NO FOO
 
 ```
 
-
 ### join
 
 Concatenates the elements of an array to create a string. The separator string `sep` is placed between elements in the resulting string.
 
-
-
 ```go
 {{ $a := slice 1 2 3 }}{{ join $a "-" }} // 1-2-3
 ```
-
 
 ### urlParse
 
@@ -453,8 +409,6 @@ _**Note:**_ See [`conv.ToInt64`](#toint64) instead for a simpler and more flexib
 
 Parses a string as an int64. Equivalent to [strconv.ParseInt](https://golang.org/pkg/strconv/#ParseInt)
 
-
-
 ```go
 {{ $hexVal := "7C0" }} {{/* Equivalent to 1984 in decimal */}}
 {{ $val := int64 0 }} {{/* Initialize $val to ensure it's of the right type for ParseInt */}}
@@ -466,11 +420,9 @@ The value in decimal is {{ $val }}
 
 ### ParseFloat
 
-_**Note:**_ See [`conv.ToFloat`](#`tofloat) instead for a simpler and more flexible variant of this function.
+_**Note:**_ See [`conv.ToFloat`](#tofloat) instead for a simpler and more flexible variant of this function.
 
 Parses a string as an float64 for later use. Equivalent to [strconv.ParseFloat](https://golang.org/pkg/strconv/#ParseFloat)
-
-
 
 ```go
 {{ $pi := "3.14159265359" }}
@@ -485,8 +437,6 @@ pi is greater than 3
 ### ParseUint
 
 Parses a string as an uint64 for later use. Equivalent to [strconv.ParseUint](https://golang.org/pkg/strconv/#ParseUint)
-
-
 
 ```go
 {{ $BIG := "FFFFFFFFFFFFFFFF" }}
@@ -508,7 +458,6 @@ Converts the input to a boolean value. Possible `true` values are: `1` or the st
 
 Converts a list of inputs to an array of boolean values. Possible `true` values are: `1` or the strings `"t"`, `"true"`, or `"yes"` (any capitalizations). All other values are considered `false`.
 
-
 ```go
 {{ conv.ToBools "yes" true "0x01" }} // [true true true]
 {{ conv.ToBools false "blah" 0 }} // [false false false]
@@ -518,11 +467,9 @@ Converts a list of inputs to an array of boolean values. Possible `true` values 
 
 Converts the input to an `int64` (64-bit signed integer).
 
-This function attempts to convert most types of input (strings, numbers, and booleans), but behaviour when the input can not be converted is undefined and subject to change. Unconvertable inputs may result in errors, or `0` or `-1`.
+This function attempts to convert most types of input (strings, numbers, and booleans), but behavior when the input can not be converted is undefined and subject to change. Unconvertible inputs may result in errors, or `0` or `-1`.
 
 Floating-point numbers (with decimal points) are truncated.
-
-
 
 ```go
 {{conv.ToInt64 "9223372036854775807"}} // 9223372036854775807
@@ -532,14 +479,12 @@ Floating-point numbers (with decimal points) are truncated.
 
 ### ToInt
 
-Converts the input to an `int` (signed integer, 32- or 64-bit depending on platform). This is similar to [`conv.ToInt64`](#`toint64) on 64-bit platforms, but is useful when input to another function must be provided as an `int`.
+Converts the input to an `int` (signed integer, 32- or 64-bit depending on platform). This is similar to [`conv.ToInt64`](#toint64) on 64-bit platforms, but is useful when input to another function must be provided as an `int`.
 
 On 32-bit systems, given a number that is too large to fit in an `int`, the result is `-1`. This is done to protect against
 [CWE-190](https://cwe.mitre.org/data/definitions/190.html) and [CWE-681](https://cwe.mitre.org/data/definitions/681.html).
 
-See also [`conv.ToInt64`](#`toint64).
-
-
+See also [`conv.ToInt64`](#toint64).
 
 ```go
 {{conv.ToInt "9223372036854775807"}} // 9223372036854775807
@@ -559,8 +504,6 @@ Converts the inputs to an array of `int64`s.
 
 Converts the inputs to an array of `int`s.
 
-
-
 ```go
 {{ conv.ToInts true 0x42 "123,456.99" "1.2345e+3"}} // [1 66 123456 1234]
 ```
@@ -569,9 +512,7 @@ Converts the inputs to an array of `int`s.
 
 Converts the input to a `float64`.
 
-This function attempts to convert most types of input (strings, numbers, and booleans), but behaviour when the input can not be converted is undefined and subject to change. Unconvertable inputs may result in errors, or `0` or `-1`.
-
-
+This function attempts to convert most types of input (strings, numbers, and booleans), but behavior when the input can not be converted is undefined and subject to change. Unconvertible inputs may result in errors, or `0` or `-1`.
 
 ```go
 {{ conv.ToFloat64 "8.233e-1"}} // 0.8233
@@ -582,9 +523,7 @@ This function attempts to convert most types of input (strings, numbers, and boo
 
 Converts the inputs to an array of `float64`s.
 
-This delegates to [`conv.ToFloat64`](#`tofloat64) for each input argument.
-
-
+This delegates to [`conv.ToFloat64`](#tofloat64) for each input argument.
 
 ```go
 {{ conv.ToFloat64s true 0x42 "123,456.99" "1.2345e+3"}} // [1 66 123456.99 1234.5]
@@ -596,8 +535,6 @@ Converts the input (of any type) to a `string`.
 
 The input will always be represented in _some_ way.
 
-
-
 ```go
 {{ conv.ToString 0xFF }} // 255
 {{ dict "foo" "bar" | conv.ToString}} // map[foo:bar]
@@ -608,16 +545,13 @@ The input will always be represented in _some_ way.
 
 Converts the inputs (of any type) to an array of `string`s
 
-
 ```go
 {{ conv.ToStrings nil 42 true 0xF (slice 1 2 3) }} // [nil 42 true 15 [1 2 3]]
 ```
 
-
-##  Cryptography
+## Cryptography
 
 ### crypto.SHA1
-
 
 Compute a checksum with a SHA-1 or SHA-2 algorithm as defined in [RFC 3174](https://tools.ietf.org/html/rfc3174) (SHA-1) and [FIPS 180-4](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf) (SHA-2).
 
@@ -625,49 +559,41 @@ These functions output the binary result as a hexadecimal string.
 
 _Warning: SHA-1 is cryptographically broken and should not be used for secure applications._
 
-
 ```go
 {{ crypto.SHA1 "foo" }} // f1d2d2f924e986ac86fdf7b36c94bcdf32beec15
 {{ crypto.SHA512 "bar" }} // cc06808cbbee0510331aa97974132e8dc296aeb795be229d064bae784b0a87a5cf4281d82e8c99271b75db2148f08a026c1a60ed9cabdb8cac6d24242dac4063
 ```
 
-
-##  Data
+## Data
 
 ### json
 
 Converts a JSON string into an object. Works for JSON Objects, but will also parse JSON Arrays. Will not parse other valid JSON types.
 
-For more explict JSON Array support, see [`data.JSONArray`](#jsonarray).
-
+For more explicit JSON Array support, see [`data.JSONArray`](#jsonarray).
 
 ```go
 {{  ('{"hello":"world"}' | json).hello }} // world
 ```
 
-
 ### jsonArray
 
 Converts a JSON string into a slice. Only works for JSON Arrays.
-
 
 ```go
 {{ ('[ "you", "world" ]' | jsonArray) 1 }} // world
 ```
 
-
 ### yaml
 
 Converts a YAML string into an object. Works for YAML Objects but will also parse YAML Arrays. This can be used to access properties of YAML objects.
 
-For more explict YAML Array support, see [`data.JSONArray`](#yamlarray).
-
+For more explicit YAML Array support, see [`data.JSONArray`](#yamlarray).
 
 ```go
 {{ $FOO := "hello: world" }}
 Hello {{ (yaml $FOO).hello }} // Hello world
 ```
-
 
 ### yamlArray
 
@@ -677,7 +603,6 @@ Converts a YAML string into a slice. Only works for YAML Arrays.
 {{ $FOO := "hello: world" }}
 Hello {{ (yaml $FOO).hello }} // Hello world
 ```
-
 
 ### toml
 
@@ -689,13 +614,11 @@ hello = "world"` }}
 Hello {{ (toml $t).data.hello }} //Hello world
 ```
 
-
 ### csv
 
 Converts a CSV-format string into a 2-dimensional string array.
 
 By default, the [RFC 4180](https://tools.ietf.org/html/rfc4180) format is supported, but any single-character delimiter can be specified.
-
 
 ```
 {{ $c := `C,32
@@ -736,11 +659,9 @@ Go has 25 keywords.
 COBOL has 357 keywords.
 ```
 
-
 ### csvByColumn
 
 Like [`csvByRow`](#csvbyrow), except that the data is presented as a columnar (column-oriented) map.
-
 
 ```
 {{ $c := `C;32
@@ -759,18 +680,13 @@ Go
 COBOL
 ```
 
-
 ### toJSON
 
 Converts an object to a JSON document. Input objects may be the result of `json`, `yaml`, `jsonArray`, or `yamlArray` functions
 
-
-
 ```go
 {{ (`{"foo":{"hello":"world"}}` | json).foo | toJSON }} // {"hello":"world"}
 ```
-
-
 
 ### toJSONPretty
 
@@ -792,33 +708,25 @@ The indent string must be provided as an argument.
 
 Converts an object to a YAML document. Input objects may be the result of `data.JSON`, `data.YAML`, `data.JSONArray`, or `data.YAMLArray` functions.
 
-
-
 _This is obviously contrived - `data.JSON` is used to create an object._
-
 
 ```go
 {{ (`{"foo":{"hello":"world"}}` | data.JSON).foo | data.ToYAML }} // hello: world
 ```
 
-
 ### toTOML
 
 Converts an object to a [TOML](https://github.com/toml-lang/toml) document.
 
-
-
 ```go
 {{ `{"foo":"bar"}` | data.JSON | data.ToTOML }} // foo = "bar"
 ```
-
 
 ### toCSV
 
 Converts an object to a CSV document. The input object must be a 2-dimensional array of strings (a `[][]string`). Objects produced by [`data.CSVByRow`](#csvbyrow) and [`data.CSVByColumn`](#csvbycolumn) cannot yet be converted back to CSV documents.
 
 **Note:** With the exception that a custom delimiter can be used, `data.ToCSV` outputs according to the [RFC 4180](https://tools.ietf.org/html/rfc4180) format, which means that line terminators are `CRLF` (Windows format, or `\r\n`). If you require `LF` (UNIX format, or `\n`), the output can be piped through [`strings.ReplaceAll`](#replaceall) to replace `"\r\n"` with `"\n"`.
-
 
 ```go
 {{ $rows := (jsonArray `[["first","second"],["1","2"],["3","4"]]`) -}}
@@ -831,17 +739,13 @@ first,second
 3,4
 ```
 
-
-
-##  filepath
+## filepath
 
 ### Base
 
 Returns the last element of path. Trailing path separators are removed before extracting the last element. If the path is empty, Base returns `.`. If the path consists entirely of separators, Base returns a single separator.
 
 A wrapper for Go's [`filepath.Base`](https://golang.org/pkg/path/filepath/#Base) function.
-
-
 
 ```go
 {{ filepath.Base "/tmp/foo" }} // foo
@@ -853,8 +757,6 @@ Clean returns the shortest path name equivalent to path by purely lexical proces
 
 A wrapper for Go's [`filepath.Clean`](https://golang.org/pkg/path/filepath/#Clean) function.
 
-
-
 ```go
 {{ filepath.Clean "/tmp//foo/../" }} // /tmp
 ```
@@ -864,8 +766,6 @@ A wrapper for Go's [`filepath.Clean`](https://golang.org/pkg/path/filepath/#Clea
 Returns all but the last element of path, typically the path's directory.
 
 A wrapper for Go's [`filepath.Dir`](https://golang.org/pkg/path/filepath/#Dir) function.
-
-
 
 ```go
 {{ filepath.Dir "/tmp/foo" }} // /tmp
@@ -877,8 +777,6 @@ Returns the file name extension used by path.
 
 A wrapper for Go's [`filepath.Ext`](https://golang.org/pkg/path/filepath/#Ext) function.
 
-
-
 ```go
 {{ filepath.Ext "/tmp/foo.csv" }} // .csv
 ```
@@ -888,8 +786,6 @@ A wrapper for Go's [`filepath.Ext`](https://golang.org/pkg/path/filepath/#Ext) f
 Returns the result of replacing each slash (`/`) character in the path with the platform's separator character.
 
 A wrapper for Go's [`filepath.FromSlash`](https://golang.org/pkg/path/filepath/#FromSlash) function.
-
-
 
 ```go
 {{ filepath.FromSlash "/foo/bar" }} // /foo/bar
@@ -901,8 +797,6 @@ Reports whether the path is absolute.
 
 A wrapper for Go's [`filepath.IsAbs`](https://golang.org/pkg/path/filepath/#IsAbs) function.
 
-
-
 ```go
 {{ (filepath.IsAbs "/tmp/foo.csv") }} // true
 ```
@@ -912,8 +806,6 @@ A wrapper for Go's [`filepath.IsAbs`](https://golang.org/pkg/path/filepath/#IsAb
 Joins any number of path elements into a single path, adding a separator if necessary.
 
 A wrapper for Go's [`filepath.Join`](https://golang.org/pkg/path/filepath/#Join) function.
-
-
 
 ```go
 {{ filepath.Join "/tmp" "foo" "bar" }} // /tmp/foo/bar
@@ -925,8 +817,6 @@ Reports whether name matches the shell file name pattern.
 
 A wrapper for Go's [`filepath.Match`](https://golang.org/pkg/path/filepath/#Match) function.
 
-
-
 ```go
 {{ filepath.Match "*.csv" "foo.csv" }} // true
 ```
@@ -936,8 +826,6 @@ A wrapper for Go's [`filepath.Match`](https://golang.org/pkg/path/filepath/#Matc
 Returns a relative path that is lexically equivalent to targetpath when joined to basepath with an intervening separator.
 
 A wrapper for Go's [`filepath.Rel`](https://golang.org/pkg/path/filepath/#Rel) function.
-
-
 
 ```go
 {{ filepath.Rel "/a" "/a/b/c" }} // b/c
@@ -951,7 +839,6 @@ The function returns an array with two values, the first being the diretory, and
 
 A wrapper for Go's [`filepath.Split`](https://golang.org/pkg/path/filepath/#Split) function.
 
-
 ```go
 {{ $p := filepath.Split "/tmp/foo" }}{{ $dir := index $p 0 }}{{ $file := index $p 1 }}dir is {{$dir}}, file is {{$file}} // dir is /tmp/, file is foo
 ```
@@ -961,7 +848,6 @@ A wrapper for Go's [`filepath.Split`](https://golang.org/pkg/path/filepath/#Spli
 Returns the result of replacing each separator character in path with a slash (`/`) character.
 
 A wrapper for Go's [`filepath.ToSlash`](https://golang.org/pkg/path/filepath/#ToSlash) function.
-
 
 ```go
 {{ filepath.ToSlash "/foo/bar" }} // /foo/bar
@@ -973,31 +859,22 @@ Returns the leading volume name. Given `C:\foo\bar` it returns `C:` on Windows. 
 
 A wrapper for Go's [`filepath.VolumeName`](https://golang.org/pkg/path/filepath/#VolumeName) function.
 
-
-
 ```go
 {{ filepath.VolumeName "C:/foo/bar" }} //  C:
 {{ filepath.VolumeName "/foo/bar" }} //
 ```
 
-
-
-##  math
+## math
 
 Returns the absolute value of a given number. When the input is an integer, the result will be an `int64`, otherwise it will be a `float64`.
-
-
 
 ```go
 {{ math.Abs -3.5 }} {{ math.Abs 3.5 }} {{ math.Abs -42 }} // 3.5 3.5 42
 ```
 
-
 ### Add
 
 Adds all given operators. When one of the inputs is a floating-point number, the result will be a `float64`, otherwise it will be an `int64`.
-
-
 
 ```go
 {{ math.Add 1 2 3 4 }} {{ math.Add 1.5 2 3 }} // 10 6.5
@@ -1008,8 +885,6 @@ Adds all given operators. When one of the inputs is a floating-point number, the
 Returns the least integer value greater than or equal to a given floating-point number. This wraps Go's [`math.Ceil`](https://golang.org/pkg/math/#Ceil).
 
 **Note:** the return value of this function is a `float64` so that the special-cases `NaN` and `Inf` can be returned appropriately.
-
-
 
 ```go
 {{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}ceil {{ printf "%#v" . }} = {{ math.Ceil . }}{{"\n"}}{{ end }}
@@ -1023,12 +898,9 @@ Returns the least integer value greater than or equal to a given floating-point 
 // ceil "-0" = 0
 ```
 
-
 ### Div
 
 Divide the first number by the second. Division by zero is disallowed. The result will be a `float64`.
-
-
 
 ```go
 {{ math.Div 8 2 }} {{ math.Div 3 2 }} // 4 1.5
@@ -1039,8 +911,6 @@ Divide the first number by the second. Division by zero is disallowed. The resul
 Returns the greatest integer value less than or equal to a given floating-point number. This wraps Go's [`math.Floor`](https://golang.org/pkg/math/#Floor).
 
 **Note:** the return value of this function is a `float64` so that the special-cases `NaN` and `Inf` can be returned appropriately.
-
-
 
 ```go
 {{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}floor {{ printf "%#v" . }} = {{ math.Floor . }}{{"\n"}}{{ end }}
@@ -1060,8 +930,6 @@ Returns whether or not the given number can be interpreted as a floating-point l
 
 **Note:** If a decimal point is part of the input number, it will be considered a floating-point number, even if the decimal is `0`.
 
-
-
 ```go
 {{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsFloat .) }}{{.}} is a float{{"\n"}}{{ end }}{{end}}
 
@@ -1077,8 +945,6 @@ Returns whether or not the given number can be interpreted as a floating-point l
 
 Returns whether or not the given number is an integer.
 
-
-
 ```go
 {{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsInt .) }}{{.}} is an integer{{"\n"}}{{ end }}{{end}}
 
@@ -1091,8 +957,6 @@ Returns whether or not the given number is an integer.
 
 Returns whether the given input is a number. Useful for `if` conditions.
 
-
-
 ```go
 {{ math.IsNum "foo" }}  // false
 {{ math.IsNum 0xDeadBeef }}  // true
@@ -1102,8 +966,6 @@ Returns whether the given input is a number. Useful for `if` conditions.
 
 Returns the largest number provided. If any values are floating-point numbers, a `float64` is returned, otherwise an `int64` is returned. The same special-cases as Go's [`math.Max`](https://golang.org/pkg/math/#Max) are followed.
 
-
-
 ```go
 {{ math.Max 0 8.0 4.5 "-1.5e-11" }} // 8
 ```
@@ -1112,29 +974,21 @@ Returns the largest number provided. If any values are floating-point numbers, a
 
 Returns the smallest number provided. If any values are floating-point numbers, a `float64` is returned, otherwise an `int64` is returned. The same special-cases as Go's [`math.Min`](https://golang.org/pkg/math/#Min) are followed.
 
-
-
 ```go
 {{ math.Min 0 8 4.5 "-1.5e-11" }} // -1.5e-11
 ```
-
 
 ### Mul
 
 Multiply all given operators together.
 
-
-
 ```go
 {{ math.Mul 8 8 2 }} // 128
 ```
 
-
 ### Pow
 
 Calculate an exponent - _b<sup>n</sup>_. This wraps Go's [`math.Pow`](https://golang.org/pkg/math/#Pow). If any values are floating-point numbers, a `float64` is returned, otherwise an `int64` is returned.
-
-
 
 ```go
 {{ math.Pow 10 2 }} // 100
@@ -1142,11 +996,9 @@ Calculate an exponent - _b<sup>n</sup>_. This wraps Go's [`math.Pow`](https://go
 {{ math.Pow 1.5 2 }} // 2.2
 ```
 
-
 ### Rem
 
 Return the remainder from an integer division operation.
-
 
 ```go
 {{ math.Rem 5 3 }} // 2
@@ -1158,8 +1010,6 @@ Return the remainder from an integer division operation.
 Returns the nearest integer, rounding half away from zero.
 
 **Note:** the return value of this function is a `float64` so that the special-cases `NaN` and `Inf` can be returned appropriately.
-
-
 
 ```go
 {{ range (slice -6.5 5.1 42.9 "3.5" 6.5) }}round {{ printf "%#v" . }} = {{ math.Round . }}{{"\n"}}{{ end }}
@@ -1176,8 +1026,6 @@ Returns the nearest integer, rounding half away from zero.
 Return a sequence from `start` to `end`, in steps of `step`. Can handle counting down as well as up, including with negative numbers.
 Note that the sequence _may_ not end at `end`, if `end` is not divisible by `step`.
 
-
-
 ```go
 {{ range (math.Seq 5) }}{{.}} {{end}} // 1 2 3 4 5
 {{ conv.Join (math.Seq 10 -3 2) ", " }} // 10, 8, 6, 4, 2, 0, -2
@@ -1187,19 +1035,17 @@ Note that the sequence _may_ not end at `end`, if `end` is not divisible by `ste
 
 Subtract the second from the first of the given operators.  When one of the inputs is a floating-point number, the result will be a `float64`, otherwise it will be an `int64`.
 
-
 ```go
 {{ math.Sub 3 1 }} // 2
 ```
 
-##  Path
+## Path
+
 ### Base
 
 Returns the last element of path. Trailing slashes are removed before extracting the last element. If the path is empty, Base returns `.`. If the path consists entirely of slashes, Base returns `/`.
 
 A wrapper for Go's [`path.Base`](https://golang.org/pkg/path/#Base) function.
-
-
 
 ```go
 {{ path.Base "/tmp/foo" }} // foo
@@ -1211,8 +1057,6 @@ Clean returns the shortest path name equivalent to path by purely lexical proces
 
 A wrapper for Go's [`path.Clean`](https://golang.org/pkg/path/#Clean) function.
 
-
-
 ```go
 {{ path.Clean "/tmp//foo/../" }} // /tmp
 ```
@@ -1223,8 +1067,6 @@ Returns all but the last element of path, typically the path's directory.
 
 A wrapper for Go's [`path.Dir`](https://golang.org/pkg/path/#Dir) function.
 
-
-
 ```go
 {{ path.Dir "/tmp/foo" }} // /tmp
 ```
@@ -1232,7 +1074,6 @@ A wrapper for Go's [`path.Dir`](https://golang.org/pkg/path/#Dir) function.
 ### Ext
 
 Returns the file name extension used by path.
-
 
 ```go
 {{ path.Ext "/tmp/foo.csv" }} // .csv
@@ -1243,7 +1084,6 @@ Returns the file name extension used by path.
 Reports whether the path is absolute.
 
 A wrapper for Go's [`path.IsAbs`](https://golang.org/pkg/path/#IsAbs) function.
-
 
 ```go
 {{  (path.IsAbs "/tmp/foo.csv") }} // true
@@ -1256,8 +1096,6 @@ Joins any number of path elements into a single path, adding a separating slash 
 
 A wrapper for Go's [`path.Join`](https://golang.org/pkg/path/#Join) function.
 
-
-
 ```go
 {{ path.Join "/tmp" "foo" "bar" }} // /tmp/foo/bar
 ```
@@ -1267,8 +1105,6 @@ A wrapper for Go's [`path.Join`](https://golang.org/pkg/path/#Join) function.
 Reports whether name matches the shell file name pattern.
 
 A wrapper for Go's [`path.Match`](https://golang.org/pkg/path/#Match) function.
-
-
 
 ```go
 {{ path.Match "*.csv" "foo.csv" }} // true
@@ -1282,17 +1118,15 @@ The function returns an array with two values, the first being the directory, an
 
 A wrapper for Go's [`path.Split`](https://golang.org/pkg/path/#Split) function.
 
-
 ```go
 {{ index (path.Split "/tmp/foo") }} // tmp
 ```
 
-##  Random
+## Random
+
 ### ASCII
 
 Generates a random string of a desired length, containing the set of printable characters from the 7-bit [ASCII](https://en.wikipedia.org/wiki/ASCII) set. This includes _space_ (' '), but no other whitespace characters.
-
-
 
 ```go
 {{ random.ASCII 8 }} // _woJ%D&K
@@ -1302,8 +1136,6 @@ Generates a random string of a desired length, containing the set of printable c
 
 Generates a random alphabetical (`A-Z`, `a-z`) string of a desired length.
 
-
-
 ```go
 {{ random.Alpha 42 }} // oAqHKxHiytYicMxTMGHnUnAfltPVZDhFkVkgDvatJK
 ```
@@ -1311,8 +1143,6 @@ Generates a random alphabetical (`A-Z`, `a-z`) string of a desired length.
 ### AlphaNum
 
 Generates a random alphanumeric (`0-9`, `A-Z`, `a-z`) string of a desired length.
-
-
 
 ```go
 {{ random.AlphaNum 16 }} // 4olRl9mRmVp1nqSm
@@ -1328,8 +1158,6 @@ A different set of characters can be specified with a regular expression, or by 
 
 When given a range of Unicode code-points, `random.String` will discard non-printable characters from the selection. This may result in a much smaller set of possible characters than intended, so check the [Unicode character code charts](http://www.unicode.org/charts/) to verify the correct code-points.
 
-
-
 ```go
 {{ random.String 8 }} // FODZ01u_
 {{ random.String 16 `[[:xdigit:]]` }} // B9e0527C3e45E1f3
@@ -1341,8 +1169,6 @@ When given a range of Unicode code-points, `random.String` will discard non-prin
 
 Pick an element at a random from a given slice or array.
 
-
-
 ```go
 {{ random.Item (seq 0 5) }} // 4
 {{'["red", "green", "blue"]' | jsonArray | random.Item }} // blue
@@ -1353,8 +1179,6 @@ Pick an element at a random from a given slice or array.
 Pick a random integer. By default, a number between `0` and `100` (inclusive) is chosen, but this range can be overridden.
 
 Note that the difference between `min` and `max` can not be larger than a 63-bit integer (i.e. the unsigned portion of a 64-bit signed integer). The result is given as an `int64`.
-
-
 
 ```go
 {{ random.Number }} // 55
@@ -1368,23 +1192,20 @@ Pick a random decimal floating-point number. By default, a number between `0.0` 
 
 The result is given as a `float64`.
 
-
-
 ```go
 {{ random.Float }} // 0.2029946480303966
 {{ random.Float 100 }}   // 71.28595374161743
 {{ random.Float -100 200 }} // 105.59119437834909
 ```
 
-##  regexp
+## regexp
+
 ### Find
 
 Returns a string holding the text of the leftmost match in `input` of the regular expression `expression`.
 
-This function provides the same behaviour as Go's
+This function provides the same behavior as Go's
 [`regexp.FindString`](https://golang.org/pkg/regexp/#Regexp.FindString) function.
-
-
 
 ```go
 {{ regexp.Find "[a-z]{3}" "foobar"}} // foo
@@ -1398,9 +1219,8 @@ Returns a list of all successive matches of the regular expression.
 
 This can be called with 2 or 3 arguments. When called with 2 arguments, the `n` argument (number of matches) will be set to `-1`, causing all matches to be returned.
 
-This function provides the same behaviour as Go's
+This function provides the same behavior as Go's
 [`regexp.FindAllString`](https://golang.org/pkg/regexp/#Regexp.FindAllString) function.
-
 
 ```go
 {{ regexp.FindAll "[a-z]{3}" "foobar" | toJSON}} // ["foo", "bar"]
@@ -1414,8 +1234,6 @@ Returns `true` if a given regular expression matches a given input.
 
 This returns a boolean which can be used in an `if` condition, for example.
 
-
-
 ```go
 {{ "hairyhenderson"| regexp.Match `^h`) }} // true
 ```
@@ -1424,10 +1242,8 @@ This returns a boolean which can be used in an `if` condition, for example.
 
 Escapes all regular expression metacharacters in the input. The returned string is a regular expression matching the literal text.
 
-This function provides the same behaviour as Go's
+This function provides the same behavior as Go's
 [`regexp.QuoteMeta`](https://golang.org/pkg/regexp/#Regexp.QuoteMeta) function.
-
-
 
 ```go
 {{ `{hello}` | regexp.QuoteMeta }} // \{hello\}
@@ -1439,8 +1255,7 @@ Replaces matches of a regular expression with the replacement string.
 
 The replacement is substituted after expanding variables beginning with `$`.
 
-This function provides the same behaviour as Go's [`regexp.ReplaceAllString`](https://golang.org/pkg/regexp/#Regexp.ReplaceAllString) function.
-
+This function provides the same behavior as Go's [`regexp.ReplaceAllString`](https://golang.org/pkg/regexp/#Regexp.ReplaceAllString) function.
 
 ```go
 {{ regexp.Replace "(foo)bar" "$1" "foobar"}} // foo
@@ -1454,8 +1269,7 @@ Replaces matches of a regular expression with the replacement string.
 The replacement is substituted directly, without expanding variables
 beginning with `$`.
 
-This function provides the same behaviour as Go's [`regexp.ReplaceAllLiteralString`](https://golang.org/pkg/regexp/#Regexp.ReplaceAllLiteralString) function.
-
+This function provides the same behavior as Go's [`regexp.ReplaceAllLiteralString`](https://golang.org/pkg/regexp/#Regexp.ReplaceAllLiteralString) function.
 
 ```go
 {{ regexp.ReplaceLiteral "(foo)bar" "$1" "foobar"}} // $1
@@ -1471,24 +1285,20 @@ This can be called with 2 or 3 arguments. When called with 2 arguments, the `n` 
 
 This is equivalent to [`strings.SplitN`](#splitn), except that regular expressions are supported.
 
-This function provides the same behaviour as Go's [`regexp.Split`](https://golang.org/pkg/regexp/#Regexp.Split) function.
+This function provides the same behavior as Go's [`regexp.Split`](https://golang.org/pkg/regexp/#Regexp.Split) function.
 
 ```go
 {{ regexp.Split `[\s,.]` "foo bar,baz.qux" | toJSON}} // ["foo","bar","baz","qux"]
 {{ "foo bar.baz,qux" | regexp.Split `[\s,.]` 3 | toJSON}} // ["foo","bar","baz"]
 ```
 
-
-##  Strings
-
+## Strings
 
 ### Abbrev
 
 Abbreviates a string using `...` (ellipses). Takes an optional offset from the beginning of the string, and a maximum final width (including added ellipses).
 
 _Also see [`strings.Trunc`](#trunc)._
-
-
 
 ```go
 {{ "foobarbazquxquux" | strings.Abbrev 9 }} // foobar...
@@ -1499,16 +1309,13 @@ _Also see [`strings.Trunc`](#trunc)._
 
 Reports whether a substring is contained within a string.
 
-
 ```go
 {{  "foo" | strings.Contains "f" }} // true
 ```
 
-
 ### HasPrefix
 
 Tests whether a string begins with a certain prefix.
-
 
 ```go
 {{ "http://example.com" | strings.HasSuffix "http://")}} // true
@@ -1518,8 +1325,6 @@ Tests whether a string begins with a certain prefix.
 
 Tests whether a string ends with a certain suffix.
 
-
-
 ```go
 {{if not ("http://example.com" | strings.HasSuffix ":80")}}:80{{end}} // :80
 ```
@@ -1528,14 +1333,11 @@ Tests whether a string ends with a certain suffix.
 http://example.com:80
 ```
 
-
 ### Indent
 
 Indents a string. If the input string has multiple lines, each line will be indented.
 
-
 This function can be especially useful when adding YAML snippets into other YAML documents, where indentation is important:
-
 
 ```
 foo:
@@ -1556,11 +1358,10 @@ foo:
 ```
 
 ### Sort _(deprecated)_
+
 **Deprecation Notice:** Use [`coll.Sort`](#sort) instead
 
 Returns an alphanumerically-sorted copy of a given string list.
-
-
 
 ```go
 {{ (slice "foo" "bar" "baz") | strings.Sort }} // [bar baz foo]
@@ -1570,13 +1371,14 @@ Returns an alphanumerically-sorted copy of a given string list.
 
 Creates a slice by splitting a string on a given delimiter.
 
-
 Use on its own to produce an array:
+
 ```go
 {{ "Bart,Lisa,Maggie" | strings.Split "," }} // [Bart Lisa Maggie]
 ```
 
 Use in combination with `range` to iterate over all items:
+
 ```go
 {{range ("Bart,Lisa,Maggie" | strings.Split ",") }}Hello, {{.}}{{end}}
 // Hello, Bart
@@ -1585,10 +1387,10 @@ Use in combination with `range` to iterate over all items:
 ```
 
 Use in combination with `index` function to pick a specific value from the resulting array
+
 ```go
 {{index ("Bart,Lisa,Maggie" | strings.Split ",") 0 }} // Bart
 ```
-
 
 ### SplitN
 
@@ -1600,11 +1402,9 @@ Creates a slice by splitting a string on a given delimiter. The count determines
 // bar:baz
 ```
 
-
 ### Quote
 
 Surrounds an input string with double-quote characters (`"`). If the input is not a string, converts first. `"` characters in the input are first escaped with a `\` character.
-
 
 ```go
 {{ "in" | quote }} // "in"
@@ -1619,12 +1419,9 @@ It errors if `count` is negative or if the length of `input` multiplied by `coun
 
 This wraps Go's [`strings.Repeat`](https://golang.org/pkg/strings/#Repeat).
 
-
-
 ```go
 {{ "hello " | strings.Repeat 5 }} // hello hello hello hello hello
 ```
-
 
 ### ReplaceAll
 
@@ -1639,7 +1436,6 @@ Replaces all occurrences of a given string with another.
 
 Creates a a "slug" from a given string - supports Unicode correctly. This wraps the [github.com/gosimple/slug](https://github.com/gosimple/slug) package. See [the github.com/gosimple/slug docs](https://godoc.org/github.com/gosimple/slug) for more information.
 
-
 ```go
 {{ "Hello, world!" | strings.Slug }} // hello-world
 ```
@@ -1649,16 +1445,15 @@ Creates a a "slug" from a given string - supports Unicode correctly. This wraps 
 Given a string, emits a version of that string that will evaluate to its literal data when expanded by any POSIX-compliant shell.
 Given an array or slice, emit a single string which will evaluate to a series of shell words, one per item in that array or slice.
 
-
 ```go
 {{ slice "one word" "foo='bar baz'" | shellQuote }}
 // 'one word' 'foo='"'"'bar baz'"'"''
 ```
+
 ```go
 {{ strings.ShellQuote "it's a banana" }}
 // 'it'"'"'s a banana'
 ```
-
 
 ### squote
 
@@ -1670,7 +1465,6 @@ Surrounds an input string with a single-quote (apostrophe) character (`'`). If t
 {{ "in" | squote }} // 'in'
 {{ "it's a banana" | squote }} // 'it''s a banana'
 ```
-
 
 ### Title
 
@@ -1711,17 +1505,14 @@ Returns a string without the provided leading prefix string, if the prefix is pr
 
 This wraps Go's [`strings.TrimPrefix`](https://golang.org/pkg/strings/#TrimPrefix).
 
-
 ```go
 {{ "hello, world" | strings.TrimPrefix "hello, " }} // world
 ```
-
 
 ### TrimSpace
 
 Trims a string by removing whitespace from the beginning and end of
 the string.
-
 
 ```go
 {{ "  \n\t foo" | strings.TrimSpace }} // foo
@@ -1743,7 +1534,6 @@ Returns a string truncated to the given length.
 
 _Also see [`strings.Abbrev`](#abbrev)._
 
-
 ```go
 {{ "hello, world" | strings.Trunc 5 }} // hello
 ```
@@ -1755,7 +1545,6 @@ Converts a sentence to CamelCase, i.e. `The quick brown fox` becomes `TheQuickBr
 All non-alphanumeric characters are stripped, and the beginnings of words are upper-cased. If the input begins with a lower-case letter, the result will also begin with a lower-case letter.
 
 See [CamelCase on Wikipedia](https://en.wikipedia.org/wiki/Camel_case) for more details.
-
 
 ```go
 {{ "Hello, World!" | strings.CamelCase }} // HelloWorld
@@ -1771,8 +1560,6 @@ All non-alphanumeric characters are stripped, and spaces are replaced with an un
 
 See [Snake Case on Wikipedia](https://en.wikipedia.org/wiki/Snake_case) for more details.
 
-
-
 ```go
 {{ "Hello, World!" | strings.SnakeCase }} // Hello_world
 {{ "hello jello" | strings.SnakeCase }} // hello_jello
@@ -1782,8 +1569,6 @@ See [Snake Case on Wikipedia](https://en.wikipedia.org/wiki/Snake_case) for more
 
 Converts a sentence to kebab-case, i.e. `The quick brown fox` becomes `The-quick-brown-fox`. All non-alphanumeric characters are stripped, and spaces are replaced with a hyphen (`-`). If the input begins with a lower-case letter, the result will also begin with a lower-case letter.
 See [Kebab Case on Wikipedia](https://en.wikipedia.org/wiki/Kebab_case) for more details.
-
-
 
 ```go
 {{ "Hello, World!" | strings.KebabCase }} // Hello-world
@@ -1796,11 +1581,11 @@ Inserts new line breaks into the input string so it ends up with lines that are 
 
 The line-break sequence defaults to `\n` (i.e. the LF/Line Feed character), regardless of OS.
 
-
 ```go
 {{ "Hello, World!" | strings.WordWrap 7 }} // Hello,
 World!
 ```
+
 ```go
 {{ strings.WordWrap 20 "\\\n" "a string with a long url http://example.com/a/very/long/url which should not be broken" }} // a string with a long
 url
@@ -1817,7 +1602,6 @@ Inputs will first be converted to strings, and multiple inputs are concatenated.
 
 This wraps Go's [`utf8.RuneCountInString`](https://golang.org/pkg/unicode/utf8/#RuneCountInString) function.
 
-
 ```go
 {{ range (slice "\u03a9" "\u0030" "\u1430") }}{{ printf "%s is %d bytes and %d runes\n" . (len .) (strings.RuneCount .) }}{{ end }}
 // Ω is 2 bytes and 1 runes
@@ -1831,7 +1615,6 @@ This wraps Go's [`utf8.RuneCountInString`](https://golang.org/pkg/unicode/utf8/#
 
 Contains reports whether the second string is contained within the first. Equivalent to [strings.Contains](https://golang.org/pkg/strings#Contains)
 
-
 ```go
 {{ $FOO := "foo" }}
 {{ if contains $FOO "f" }}yes{{ else }}no{{ end }} // yes
@@ -1842,9 +1625,6 @@ Contains reports whether the second string is contained within the first. Equiva
 **See [`strings.HasPrefix`](#hasprefix) for a pipeline-compatible version**
 
 Tests whether the string begins with a certain substring. Equivalent to [strings.HasPrefix](https://golang.org/pkg/strings#HasPrefix)
-
-
-
 
 ```go
 {{ $URL := "http://example.com" }}
@@ -1857,9 +1637,6 @@ Tests whether the string begins with a certain substring. Equivalent to [strings
 
 Tests whether the string ends with a certain substring. Equivalent to [strings.HasSuffix](https://golang.org/pkg/strings#HasSuffix)
 
-
-
-
 ```go
 {{ $URL := "http://example.com" }}
 {{ $URL }}{{ if not (hasSuffix $URL ":80") }}:80{{ end }} // http://example.com:80
@@ -1870,8 +1647,6 @@ Tests whether the string ends with a certain substring. Equivalent to [strings.H
 **See [`strings.Split`](#split) for a pipeline-compatible version**
 
 Creates a slice by splitting a string on a given delimiter. Equivalent to [strings.Split](https://golang.org/pkg/strings#Split)
-
-
 
 ```go
 {{ range split "Bart,Lisa,Maggie" "," }}
@@ -1888,7 +1663,6 @@ Hello, {{ . }}
 **See [`strings.SplitN`](#splitn) for a pipeline-compatible version**
 
 Creates a slice by splitting a string on a given delimiter. The count determines the number of substrings to return. Equivalent to [strings.SplitN](https://golang.org/pkg/strings#SplitN)
-
 
 ```go
 {{ range splitN "foo:bar:baz" ":" 2 }}
@@ -1909,7 +1683,7 @@ Trims a string by removing the given characters from the beginning and end of th
 {{trim "  world " " "}} // world
 ```
 
-##  Test
+## Test
 
 ### Fail
 
@@ -1938,13 +1712,13 @@ In addition, the special kind `number` is accepted by this function, to represen
 
 See also [`test.Kind`](#kind).
 
-
 ```go
 {{ $data := "hello world" }}
 {{ if isKind "string" $data }}{{ $data }} is a string{{ end }}
 
 // hello world is a string
 ```
+
 ```go
 {{ $object := dict "key1" true "key2" "foobar" }}
 {{ if test.IsKind "map" $object }}
@@ -1968,14 +1742,10 @@ If you need to know the precise type of a value, use `printf "%T" $value`.
 
 See also [`test.IsKind`](#iskind)
 
-
-
 ```go
 {{ kind "hello world" }} // string
 {{ dict "key1" true "key2" "foobar" | test.Kind }} // map
 ```
-
-
 
 ### ternary
 
@@ -1989,14 +1759,13 @@ This is effectively a short-form of the following template:
 
 Keep in mind that using an explicit `if`/`else` block is often easier to understand than ternary expressions!
 
-
-
 ```go
 {{ ternary "FOO" "BAR" false }} // BAR
 {{ ternary "FOO" "BAR" "yes" }} // FOO
 ```
 
-##  Time
+## Time
+
 ### Now
 
 Returns the current local time, as a `time.Time`. This wraps [`time.Now`](https://golang.org/pkg/time/#Now).
@@ -2041,7 +1810,6 @@ Just like [`time.Now`](#time-now), this is usually used in conjunction with othe
 
 _Note: In the absence of a time zone indicator, `time.Parse` returns a time in UTC._
 
-
 Usage with [`Format`](https://golang.org/pkg/time/#Time.Format):
 
 ```go
@@ -2056,8 +1824,6 @@ A duration string is a possibly signed sequence of decimal numbers, each with
 optional fraction and a unit suffix, such as `300ms`, `-1.5h` or `2h45m`. Valid
 time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 
-
-
 ```go
 {{ (time.Now).Format time.Kitchen }} // 12:43AM
 {{ ((time.Now).Add (time.ParseDuration "2h30m")).Format time.Kitchen }} // 3:13AM
@@ -2066,7 +1832,6 @@ time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 ### ParseLocal
 
 Same as [`time.Parse`](#parse), except that in the absence of a time zone indicator, the timestamp wil be parsed in the local timezone.
-
 
 Usage with [`Format`](https://golang.org/pkg/time/#Time.Format):
 
@@ -2080,9 +1845,8 @@ Same as [`time.Parse`](#parse), except that the time is parsed in the given loca
 
 This wraps [`time.ParseInLocation`](https://golang.org/pkg/time/#ParseInLocation).
 
-
-
 Usage with [`Format`](https://golang.org/pkg/time/#Time.Format):
+
 ```go
 {{ (time.ParseInLocation time.Kitchen "Africa/Luanda" "6:00AM").Format "15:04 MST" }} // 06:00 LMT
 ```
@@ -2101,13 +1865,14 @@ It is shorthand for `time.Now.Sub t`.
 
 Returns the local `Time` corresponding to the given Unix time, in seconds since January 1, 1970 UTC. Note that fractional seconds can be used to denote milliseconds, but must be specified as a string, not a floating point number.
 
-
 _with whole seconds:_
+
 ```go
 {{ (time.Unix 42).UTC.Format time.Stamp}} // Jan  1, 00:00:42
 ```
 
 _with fractional seconds:_
+
 ```go
 {{ (time.Unix "123456.789").UTC.Format time.StampMilli}} // Jan  2 10:17:36.789
 ```
@@ -2123,6 +1888,7 @@ It is shorthand for `$t.Sub time.Now`.
 ```
 
 Or, less precise:
+
 ```go
 {{ $t := time.Parse time.RFC3339 "2020-01-01T00:00:00Z" }}only {{ (time.Until $t).Round (time.Hour 1) }} to go... // only 14923h0m0s to go...
 ```
@@ -2130,8 +1896,6 @@ Or, less precise:
 ### ZoneName
 
 Return the local system's time zone's name.
-
-
 
 ```go
 {{time.ZoneName}} // EDT
@@ -2141,20 +1905,17 @@ Return the local system's time zone's name.
 
 Return the local system's time zone offset, in seconds east of UTC.
 
-
-
 ```go
 {{time.ZoneOffset}} // -14400
 ```
 
-##  UUID
+## UUID
+
 ### V1
 
 Create a version 1 UUID (based on the current MAC address and the current date/time).
 
 Use [`uuid.V4`](#v4) instead in most cases.
-
-
 
 ```go
 {{ uuid.V1 }} // 4d757e54-446d-11e9-a8fa-72000877c7b0
@@ -2166,8 +1927,6 @@ Create a version 4 UUID (randomly generated).
 
 This function consumes entropy.
 
-
-
 ```go
 {{ uuid.V4 }} // 40b3c2d2-e491-4b19-94cd-461e6fa35a60
 ```
@@ -2177,8 +1936,6 @@ This function consumes entropy.
 Returns the _nil_ UUID, that is, `00000000-0000-0000-0000-000000000000`,
 mostly for testing scenarios.
 
-
-
 ```go
 {{ uuid.Nil }} // 00000000-0000-0000-0000-000000000000
 ```
@@ -2186,7 +1943,6 @@ mostly for testing scenarios.
 ### IsValid
 
 Checks that the given UUID is in the correct format. It does not validate whether the version or variant are correct.
-
 
 ```go
 {{ if uuid.IsValid "totally invalid" }}valid{{ else }}invalid{{ end }} // invalid
@@ -2200,7 +1956,6 @@ Parse a UUID for further manipulation or inspection.
 This function returns a `UUID` struct, as defined in the [github.com/google/uuid](https://godoc.org/github.com/google/uuid#UUID) package. See the docs for examples of functions or fields you can call.
 
 Both the standard UUID forms of `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` and `urn:uuid:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` are decoded as well as the Microsoft encoding `{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}` and the raw hex encoding (`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`).
-
 
 ```go
 {{ $u := uuid.Parse uuid.V4 }}{{ $u.Version }}, {{ $u.Variant}} // VERSION_4, RFC4122

@@ -1,18 +1,10 @@
-
 ---
 title: Architecture
 ---
 
-
-
 ![](/img/architecture.svg)
 
-
-
-
-
 Mission Control has a micro-service architecture with a shared data source with multiple deployment models.
-
 
 
 1. CLI
@@ -32,7 +24,6 @@ Communication between services happen in 3 ways:
 Postgres is the only data store used by Mission Control and relies heavily on JSON and queuing support in Postgres. This limits the dependencies and complexity especially when self-hosting.
 
 All services use a shared database and model via the [duty](https://github.com/flanksource/duty) project, this provides the following benefits:
-
 
 
 * Limit RPC calls improving latency and performance

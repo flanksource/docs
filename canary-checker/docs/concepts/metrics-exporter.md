@@ -140,6 +140,7 @@ metadata:
 ```
 
 This snippet will retrieve the `last_result.results.max` value from the last execution ensuring data is not duplicated or missed
+
 ```go
  "@timestamp" : {
                     {{-  if last_result.results.max }}
@@ -183,7 +184,7 @@ The max value is saved in the `transform` section using:
 | `valueExpr` | An expression to derive the header value from          | `Expression`        |          |
 | `labels`    | Labels for prometheus metric (values can be templated) | `map[string]string` |          |
 
-Expresions can make use of the following variables:
+Expressions can make use of the following variables:
 
 ### **Expression Variables**
 
@@ -194,7 +195,7 @@ Expresions can make use of the following variables:
 | `check.name`              | Check name                                 | `string`                                  |
 | `check.description`       | Check description                          | `string`                                  |
 | `check.labels`            | Dynamic labels attached to the check       | `map[string]string`                       |
-| `check.endpoint`          | Endpoint (usally a URL)                    | `string`                                  |
+| `check.endpoint`          | Endpoint (usually a URL)                    | `string`                                  |
 | `check.duration`          | Duration in milliseconds                   | `int64`                                   |
 | `canary.name`             | Canary name                                | `string`                                  |
 | `canary.namespace`        | Canary namespace                           | `string`                                  |
