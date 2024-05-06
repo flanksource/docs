@@ -295,6 +295,34 @@ Examples:
 [(1, 2, 3)].map(x, x > 1, x + 1) // [3, 4]
 ```
 
+### or
+
+If the value on the left-hand side is none-type, the optional value on the right hand side is returned. If the value on the left-hand set is valued, then it is returned. This operation is short-circuiting and will only evaluate as many links in the `or` chain as are needed to return a non-empty optional value.
+
+```javascript
+obj.?field.or(m[?key]) // if obj.field is none, m.key is returned
+
+l[?index].or(obj.?field.subfield).or(obj.?other) // first non-none of l[index], obj.field.subfield, obj.other is returned
+
+```
+
+### orValue
+
+When creating map or list, if a field may be optionally set based on its presence, then placing a `?` before the field name or key will ensure the type on the right-hand side must be optional(T) where T is the type of the field or key-value.
+
+```javascript
+// The following returns a map with the key expression set only if the subfield is present, otherwise a default value is returned
+
+{'a': 'x', 'b': 'y', 'c': 'z'}.?c.orValue('empty')  // Returns z since `c` exists
+
+{'a': 'x', 'b': 'y'}.?c.orValue('empty')  // Returns 'empty' since `c` does not exist
+
+// We can use the same for list types
+[1, 2, 3][?2].orValue(5) // Return 3 since 2nd index has a value
+
+[1, 2][?2].orValue(5) // Return 5 since 2nd index  does not exist
+```
+
 ### size
 
 `size` function determines the number of elements in a collection or the number of Unicode characters in a string.
