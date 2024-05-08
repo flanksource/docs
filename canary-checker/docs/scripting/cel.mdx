@@ -37,6 +37,28 @@ Values in CEL represent any of the following:
 
 ---
 
+## Handling null types and missing keys
+
+When dealing with CEL objects, we might get errors where a key does not exist or if you're chaining keys, then one of the keys in the middle will be missing
+
+```javascript
+// Assume we have an obj with value: {'a': {'b': 'c'}}
+
+o.a.b => c
+
+// But this will yield an error
+o.a.d   // Error, attribute 'd' does not exist
+
+// To handle these, we can use the `or` or `orValue` directives
+
+o.a.?d.orValue('fallback value') => 'fallback value'
+
+// And if d exists, its value is returned
+
+```
+
+You can read more about [or](#or) and [orValue](#orvalue) below
+
 ## aws
 
 ### aws.arnToMap
