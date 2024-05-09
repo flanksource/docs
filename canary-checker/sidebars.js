@@ -147,7 +147,7 @@ module.exports = {
         },
         {
           type: 'doc',
-          id: 'reference/cloudwatch',
+          id: 'reference/aws-cloudwatch',
           label: 'AWS Cloud Watch'
         },
         {
@@ -168,23 +168,8 @@ module.exports = {
         },
         {
           type: 'doc',
-          id: 'reference/gcs-bucket',
-          label: 'GCS Bucket'
-        },
-        {
-          type: 'doc',
-          id: 'reference/s3-bucket',
-          label: 'S3 Bucket'
-        },
-        {
-          type: 'doc',
-          id: 'reference/sftp',
-          label: 'SFTP'
-        },
-        {
-          type: 'doc',
-          id: 'reference/smb',
-          label: 'SMB/CIFS'
+          id: 'reference/s3-protocol',
+          label: 'S3 Protocol'
         },
         {
           type: 'doc',
@@ -216,7 +201,7 @@ module.exports = {
         },
         {
           type: 'doc',
-          id: 'reference/catalog',
+          id: 'reference/configdb',
           label: 'Flanksource Catalog'
         },
         {
@@ -241,18 +226,8 @@ module.exports = {
         },
         {
           type: 'doc',
-          id: 'reference/mssql',
-          label: 'MSSQL'
-        },
-        {
-          type: 'doc',
-          id: 'reference/mysql',
-          label: 'MySQL'
-        },
-        {
-          type: 'doc',
-          id: 'reference/postgres',
-          label: 'Postgres'
+          id: 'reference/sql',
+          label: 'SQL'
         },
         {
           type: 'doc',
@@ -279,6 +254,11 @@ module.exports = {
           type: 'doc',
           id: 'reference/azure-devops',
           label: 'Azure DevOps'
+        },
+        {
+          type: 'doc',
+          id: 'reference/jmeter',
+          label: 'JMeter'
         }
       ]
     },
@@ -298,7 +278,7 @@ module.exports = {
         },
         {
           type: 'doc',
-          id: 'reference/ec2',
+          id: 'reference/aws-ec2',
           label: 'EC2'
         },
         {
@@ -319,24 +299,29 @@ module.exports = {
       items: [
         {
           type: 'doc',
-          id: 'reference/k6',
+          id: 'examples/k6',
           label: 'K6'
         },
         {
           type: 'doc',
-          id: 'reference/newman',
+          id: 'examples/newman',
           label: 'Newman / Postman'
         },
         {
           type: 'doc',
-          id: 'reference/playwright',
+          id: 'examples/playwright',
           label: 'Playwright'
         },
         {
           type: 'doc',
-          id: 'reference/jmeter',
-          label: 'JMeter'
-        }
+          id: 'examples/sftp',
+          label: 'SFTP'
+        },
+        {
+          type: 'doc',
+          id: 'examples/smb',
+          label: 'SMB/CIFS'
+        },
       ]
     },
     {

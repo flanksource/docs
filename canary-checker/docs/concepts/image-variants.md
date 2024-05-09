@@ -1,0 +1,1 @@
+../../../mission-control/docs/reference/canary-checker/image-variants.md
