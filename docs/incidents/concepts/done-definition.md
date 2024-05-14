@@ -6,7 +6,7 @@ Incidents can be programatically resolved using done definition. When an evidenc
 
 Done definitions are checked periodically every 5 minutes.
 
-## Examples:
+## Examples
 
 ### A. Using config analysis
 

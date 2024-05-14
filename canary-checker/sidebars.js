@@ -200,7 +200,7 @@ module.exports = {
         },
         {
           type: 'doc',
-          id: 'reference/configdb',
+          id: 'reference/catalog',
           label: 'Flanksource Catalog'
         },
         {

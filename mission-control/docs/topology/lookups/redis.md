@@ -35,7 +35,7 @@ spec:
 | **`addr`** | host:port address                                                             | string                                            | Yes      |
 | **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">*EnvVar*</CommonLink> | Yes      |
 | **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">*EnvVar*</CommonLink> | Yes      |
-| **`db`**   | Database to be selected after connecting to the server                        | _int_                                             | Yes      |
+| **`db`**   | Database to be selected after connecting to the server                        | *int*                                             | Yes      |
 
 ## Authentication
 

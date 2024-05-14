@@ -42,10 +42,10 @@ Result variables can be used in `test`, `display` and `transform` [expressions](
 
 | Name      | Description                                                                 | Scheme              |
 | --------- | --------------------------------------------------------------------------- | ------------------- |
-| `code`    | HTTP response code                                                          | _int_               |
-| `headers` | HTTP response headers                                                       | _map[string]string_ |
-| `elapsed` | HTTP Request duration                                                       | _time.Duration_     |
-| `sslAge`  | Time until SSL certificate expires                                          | _time.Duration_     |
+| `code`    | HTTP response code                                                          | `int`               |
+| `headers` | HTTP response headers                                                       | `map[string]string` |
+| `elapsed` | HTTP Request duration                                                       | `time.Duration`     |
+| `sslAge`  | Time until SSL certificate expires                                          | `time.Duration`     |
 | `content` | HTTP Response body                                                          | string              |
 | `json`    | If `Content-Type=application/json` response body converted into JSON object | `JSON`              |
 
@@ -107,7 +107,7 @@ See <CommonLink to="gotemplate" anchor="escaping">Escaping variables</CommonLink
 | **HTTP Check Metrics**                                        |         |                                         |
 | ------------------------------------------------------------- | ------- | --------------------------------------- |
 | `canary_check_http_response_status{status, statusClass, url}` | Counter | Response code counter for each endpoint |
-| `canary_check_http_ssl_expiry{url}`                           | Guage   |                                         |
+| `canary_check_http_ssl_expiry{url}`                           | Gauge   |                                         |
 
 Status class is one of `1xx`, `2xx`, `3xx`, `4xx`, `5xx`
 
@@ -120,7 +120,7 @@ Status class is one of `1xx`, `2xx`, `3xx`, `4xx`, `5xx`
 </details>
 
 
-<details summary="Transformings metrics into individual checks">
+<details summary="Transforming metrics into individual checks">
 
 <div>
 ```yaml title="metrics.yaml"   file=../../../modules/canary-checker/fixtures/minimal/metrics-transformed.yaml

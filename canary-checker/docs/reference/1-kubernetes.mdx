@@ -7,8 +7,8 @@ sidebar_class_name: popular
 
 The Kubernetes check performs requests on Kubernetes resources such as Pods to get the desired information.
 
-```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes-minimal_pass.yaml
 
+```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes-minimal_pass.yaml
 ```
 
 <HealthCheck name="kubernetes" edition="standard" connection="kubeconfig"  rows={[
@@ -67,8 +67,6 @@ dyn(results).all(x, k8s.isReady(x))
 <div>
 
 ```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/certmanager.yaml
-
 ```
-
 </div>
 </details>

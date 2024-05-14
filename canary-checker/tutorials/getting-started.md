@@ -161,7 +161,7 @@ CREATE TABLE users(
 insert into users (id, username) values (1, 'admin')
 ```
 
-Now, running the Canary again, you see the expected behaviour occurs - and our data is validated as expected.
+Now, running the Canary again, you see the expected behavior occurs - and our data is validated as expected.
 
 ```bash
 canary-checker run ../postgres-canaries/postgres-canary-local-does-admin-user-exist.yaml

@@ -6,7 +6,7 @@ title: Redis
 
 The Redis check connects to a specified Redis database instance to check its availability.
 
-```yaml title="promtheus.yaml"  file=../../../modules/canary-checker/fixtures/datasources/redis_pass.yaml
+```yaml title="redis.yaml"  file=../../../modules/canary-checker/fixtures/datasources/redis_pass.yaml
 ```
 <HealthCheck name="redis" connection="url" rows={[
   {field: "url", description: "Redis instance", required: true},

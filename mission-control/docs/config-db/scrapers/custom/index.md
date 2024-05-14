@@ -52,19 +52,21 @@ Custom scrapers need to define the id, type & class for each items that are scra
 
 ## Formats
 
-#### JSON
+### JSON
+
 Config items are stored as `jsonb` fields in PostgreSQL.
 
  The JSON used is typically returned by resource provider e.g.  `kubectl get -o json` or `aws --output=json`
 
 The UI will convert from JSON to YAML when showing the config.
 
-#### XML / Properties / etc.
+### XML / Properties
+
 [**Custom**](./concepts/custom-scraper) scrapers can ingest non-JSON config which is represented as:
 
 ```yaml
 {
-	"format": "xml",
+ "format": "xml",
   "content": "<root>..</root>"
 }
 ```
@@ -84,7 +86,7 @@ kind: ScrapeConfig
 metadata:
   name: file-scraper
 spec:
-	full: true
+  full: true
   file:
     - type: Car
       id: $.reg_no

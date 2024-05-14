@@ -186,7 +186,7 @@ rules:
 
 :::
 
-# Recommendations
+## Recommendations
 
 Kubernetes Secrets are, by default, stored unencrypted in the API server's underlying data store (etcd). Anyone with API access can retrieve or modify a Secret, and so can anyone with access to etcd. With this in mind, it is recommended to implement some level of security to prevent unauthorized access to your Kubernetes secrets.
 You may consider the following for your encryption and security needs:

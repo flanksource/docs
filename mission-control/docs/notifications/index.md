@@ -27,7 +27,7 @@ spec:
 | Field      | Description                                                        | Scheme                    | Required | Templatable |
 | ---------- | ------------------------------------------------------------------ | ------------------------- | -------- | ----------- |
 | `events`   | [List of events](./events/) that trigger this notification.        | `[]string`                | `true`   |
-| `to`       | Specify the receipients.                                           | [`Recipient`](#recipient) | `true`   |
+| `to`       | Specify the recipients.                                           | [`Recipient`](#recipient) | `true`   |
 | `title`    | Title of the notification. [See templating](./concepts/templating) | `string`                  |          | `true`      |
 | `template` | Body of the notification. [See templating](./concepts/templating)  | `string`                  |          | `true`      |
 | `filter`   | Filter of notification.                                            | `string`                  |          |             |

@@ -22,6 +22,9 @@ helm repo update
 </Step>
 <Step step={2} name="Install Helm Chart">
 
+</Step>
+<Step step={2} name="Install Helm Chart">
+
 To set custom values file for your mission-control helm chart installation to override existing values in [`mission-control-chart`](https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml).
 
 ```yaml title="values.yaml"

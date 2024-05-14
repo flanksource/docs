@@ -35,17 +35,17 @@ The Azure scrapers scrapes your azure account to fetch all the resources & save 
 | `tenantID`       | Azure tenant ID                                                            | `string`                                       |          |
 | `clientID`       | Microsoft Entra ID app client id                                           | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
 | `clientSecret`   | Microsoft Entra ID app client secret                                       | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
-| `exclusions`     | Specifies the Azure projects to scrape                                     | [`Exclusion`](#azure-exclusion)                |          |
+| `exclusions`     | Specifies the Azure projects to scrape                                     | [`Exclusion`](#exclusion)                |          |
 | `properties`     | Custom templatable properties for the scraped config items.                | [`[]ConfigProperty`](/reference/config-db/properties) |          |
 | `transform`       | Field to transform result                                                                        | [`Transform`](/config-db/concepts/transform)                        |          |
 | `tags`           | Set custom tags on the scraped config items                                | `map[string]string`                            |          |
 
 :::note
-Either the connection name or the credentials (clientID, clientSecret & tenatnID) are required
+Either the `connection` name or the credentials (`clientID`, `clientSecret` & `tenantID`) are required
 :::
 
 
-#### Azure Exclusion
+#### Exclusion
 
 | Field          | Description                                        | Scheme     | Required |
 | -------------- | -------------------------------------------------- | ---------- | -------- |

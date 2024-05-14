@@ -56,15 +56,13 @@ POST `/playbook/list?component_id={component_id}`
 
 ### Query Parameters
 
-!!! info "Info"
-
-    Should provide exactly one of the parameters.
-
 | Parameter      | Description              | Type     |
 | -------------- | ------------------------ | -------- |
 | `config_id`    | ID of the config item    | `string` |
 | `check_id`     | ID of the Check          | `string` |
 | `component_id` | ID of the component item | `string` |
+
+> Provide only 1 parameter
 
 ### Response
 

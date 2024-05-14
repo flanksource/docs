@@ -53,5 +53,3 @@ spec:
                return currencyCodes[currency] + rate;
           }).join(", ");
 ```
-
-##

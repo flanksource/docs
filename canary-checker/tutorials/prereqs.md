@@ -15,7 +15,9 @@ To ensure you are getting metrics run:
 ```
 kubectl get --raw /metrics
 ```
+
 The command will give display metrics something like this:
+
 ```shell
 workqueue_work_duration_seconds_bucket{name="open_api_aggregation_controller",le="0.01"} 966
 workqueue_work_duration_seconds_bucket{name="open_api_aggregation_controller",le="0.1"} 966
@@ -71,6 +73,7 @@ You should then be able to see custom resources, `servicemonitors` by running:
 ```
 kubectl get crd
 ```
+
 And see there is a `servicemonitors.monitoring.coreos.com` custom resource definition.
 
 Once that is defined you can install the rest of the monitoring components:
