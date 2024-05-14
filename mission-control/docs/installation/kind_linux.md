@@ -80,7 +80,7 @@ flanksource-ui:
       - "127.0.0.1.nip.io"
 ```
 
-for a full list of configuration options, see <https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml>
+for a full list of configuration options, see [values.yaml](https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml)
 
 This configuration sets the storage for the database to use the kind default local-path storage, and sets the ingress address to use [nip.io](nip.io)'s dummy DNS response to return localhost.  Save the configuration to a `kind-values.yaml` file, then deploy using
 

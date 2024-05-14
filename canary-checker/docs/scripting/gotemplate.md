@@ -123,13 +123,10 @@ Reports whether a given object has a property with the given key, or whether a g
 
 ### jsonpath
 
-Extracts portions of an input object or list using a [JSONPath][] expression.
+Extracts portions of an input object or list using a [JSONPath](https://goessner.net/articles/JsonPath) expression.
 
 Any object or list may be used as input. The output depends somewhat on the expression; if multiple items are matched, an array is returned.
 
-JSONPath expressions can be validated at <https://jsonpath.com>
-
-[JSONPath]: https://goessner.net/articles/JsonPath
 
 ```go
 {{ .books | jsonpath `$..works[?( @.edition_count > 400 )].title` }} // [Alice's Adventures in Wonderland Gulliver's Travels]
@@ -142,14 +139,14 @@ Filters an input object or list using the [jq](https://stedolan.github.io/jq/) l
 
 Any JSON datatype may be used as input (NOTE: strings are not JSON-parsed but passed in as is). If the expression results in multiple items (no matter if streamed or as an array) they are wrapped in an array. Otherwise a single item is returned (even if resulting in an array with a single contained element).
 
-JQ filter expressions can be tested at <https://jqplay.org/>
+JQ filter expressions can be tested at [jqplay](https://jqplay.org/)
 
 See also:
 
 - [jq manual](https://stedolan.github.io/jq/manual/)
 - [gojq differences to jq](https://github.com/itchyny/gojq#difference-to-jq)
 
-Where books is from <https://openlibrary.org/subjects/fantasy.json>
+Where books is from [fantasy.json](https://openlibrary.org/subjects/fantasy.json)
 
 ```go
 {{ .books | jq `[.works[]|{"title":.title,"authors":[.authors[].name],"published":.first_publish_year}][0]` }}
