@@ -39,7 +39,6 @@ spec:
   kubernetes:
     clusterName: local
 ```
-
 ### Stale Config Items
 
 With some scrapers (particularly custom scrapers), there is no defined event or field update to mark an item as deleted, in these cases `stateItemAge` will cleanup items that have not been scraped for specified period

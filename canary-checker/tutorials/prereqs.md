@@ -56,7 +56,6 @@ Find the appropriate release for your version of Kubernetes in the table.  For e
 cd kube-prometheus
 git branch -a
 ```
-
 Here we see all the branch names.  To switch to the release branch run:
 
 ```

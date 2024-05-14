@@ -728,6 +728,8 @@ Converts an object to a CSV document. The input object must be a 2-dimensional a
 
 **Note:** With the exception that a custom delimiter can be used, `data.ToCSV` outputs according to the [RFC 4180](https://tools.ietf.org/html/rfc4180) format, which means that line terminators are `CRLF` (Windows format, or `\r\n`). If you require `LF` (UNIX format, or `\n`), the output can be piped through [`strings.ReplaceAll`](#replaceall) to replace `"\r\n"` with `"\n"`.
 
+**Note:** With the exception that a custom delimiter can be used, `data.ToCSV` outputs according to the [RFC 4180](https://tools.ietf.org/html/rfc4180) format, which means that line terminators are `CRLF` (Windows format, or `\r\n`). If you require `LF` (UNIX format, or `\n`), the output can be piped through [`strings.ReplaceAll`](#replaceall) to replace `"\r\n"` with `"\n"`.
+
 ```go
 {{ $rows := (jsonArray `[["first","second"],["1","2"],["3","4"]]`) -}}
 {{ data.ToCSV ";" $rows }}
@@ -1358,7 +1360,6 @@ foo:
 ```
 
 ### Sort _(deprecated)_
-
 **Deprecation Notice:** Use [`coll.Sort`](#sort) instead
 
 Returns an alphanumerically-sorted copy of a given string list.

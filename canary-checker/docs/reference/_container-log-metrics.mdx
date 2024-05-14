@@ -7,17 +7,7 @@ metadata:
   schedule: "@every 5m"
   http:
     - name: containerlogvolume
-      endpoint: "https://vpc-oma-oipa-nonprod-hfmac7vkv4k5sdhyt3mnzr7xsy.eu-west-1.es.amazonaws.com/logstash-*/_search"
-      username:
-        valueFrom:
-          secretKeyRef:
-            name: elastic
-            key: ES_USERNAME
-      password:
-        valueFrom:
-          secretKeyRef:
-            name: elastic
-            key: ES_PASSWORD
+      url: "https://opensearch/logstash-*/_search"
       headers:
         - name: Content-Type
           value: application/json

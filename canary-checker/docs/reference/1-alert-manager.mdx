@@ -47,7 +47,6 @@ spec:
     description: "A list of alert prefix names to include",
     scheme: '[]string'
   },
-
   {
     field: "ignore",
     description: "A list of alert prefix names to exclude",
@@ -58,6 +57,104 @@ spec:
     description: "A map of label to value prefixes to find alerts on",
     scheme: "map[string]string"
   }
-
 ]}/>
+
+## Relationships
+
+<Fields
+  rows={[
+    {
+      field: 'config',
+      description: 'Select all the configs to link to this check',
+      scheme: '[Lookup](#lookup)'
+    },
+    {
+      field: 'components',
+      description: 'Select all the components to link to this check',
+      scheme: '[Lookup](#lookup)'
+    }
+  ]}
+/>
+
+### Lookup
+
+<Fields
+  rows={[
+    {
+      field: 'name',
+      description: 'Initial delay before the checks are run',
+      scheme: '[Lookup Selector](#lookup-selector)'
+    },
+    {
+      field: 'namespace',
+      description: 'Timeout for the check',
+      scheme: '[Lookup Selector](#lookup-selector)'
+    },
+    {
+      field: 'type',
+      description: 'Timeout for the check',
+      scheme: '[Lookup Selector](#lookup-selector)'
+    }
+  ]}
+/>
+
+#### Lookup selector
+
+Lookup specifies the type of lookup to perform.
+
+<Fields
+  rows={[
+    {
+      field: 'expr',
+      description: 'Expr is a cel-expression',
+      scheme: 'string'
+    },
+    {
+      field: 'value',
+      description: 'Value is the static value to use',
+      scheme: 'string'
+    },
+    {
+      field: 'value',
+      description: 'Label specifies the key to lookup on the label',
+      scheme: 'string'
+    }
+  ]}
+/>
+
+## Inserting checks into different namespaces
+
+You can specify different namespaces for checks using the `namespace` field. This is helpful when checks are dynamically generated via transformation
+and need to be assigned their respective namespace.
+
+```yaml title="alertmanager.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: alertmanager
+spec:
+  interval: 30
+  alertmanager:
+    - url: https://alertmanager.demo.aws.flanksource.com
+      name: alertmanager-check
+      alerts:
+        - .*
+      ignore:
+        - KubeScheduler.*
+      exclude_filters:
+        namespace: elastic-system
+      transform:
+        expr: |
+          results.alerts.map(r, {
+            'name': r.name + r.fingerprint,
+            // highlight-next-line
+            'namespace': 'namespace' in r.labels ? r.labels.namespace : '',
+            'labels': r.labels,
+            'icon': 'alert',
+            'message': r.message,
+            'description': r.message,
+          }).toJSON()
+```
+
+The above alertmanager canary can reside on any namespace and the check it generates are assigned the correct namespace derived from the alerts.
 
