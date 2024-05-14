@@ -67,7 +67,6 @@ module.exports = {
           id: 'concepts/secret-management',
           label: 'Secret Management'
         },
-
         {
           type: 'category',
           label: 'Expressions',

@@ -7,8 +7,8 @@ sidebar_class_name: popular
 
 The Kubernetes check performs requests on Kubernetes resources such as Pods to get the desired information.
 
-
 ```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes-minimal_pass.yaml
+
 ```
 
 <HealthCheck name="kubernetes" edition="standard" connection="kubeconfig"  rows={[
@@ -22,10 +22,9 @@ The Kubernetes check performs requests on Kubernetes resources such as Pods to g
 
 ]}/>
 
-## Ready
+## Healthy
 
-Using `ready: true` is functionally equivalent to:
-
+Using `healthy: true` is functionally equivalent to the test expression above:
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
@@ -38,6 +37,8 @@ spec:
     - namespace: kube-system
       name: kube-system
       kind: Pod
+      //highlight-next-line
+      healthy: true
       resource:
         labelSelector: k8s-app=kube-dns
       namespaceSelector:
@@ -48,16 +49,26 @@ spec:
           map(i, i.Object).
           filter(i, !k8s.isHealthy(i)).
           map(i, "%s/%s -> %s".format([i.metadata.namespace, i.metadata.name, k8s.getHealth(i).message])).join('\n')
-      test:
-        expr: dyn(results).all(x, k8s.isHealthy(x))
 ```
 
-See the CEL <CommonLink to="cel" anchor="kubernetes">*Kubernetes*</CommonLink> docs for more details on the `k8s.isHealthy` and other functions available
+See the CEL <CommonLink to="cel" anchor="kubernetes">_Kubernetes_</CommonLink> docs for more details on the `k8s.isHealthy` and other functions available
+
+## Ready
+
+Similar to the `healthy` flag, there's also a `ready` flag which is functionally equivalent to having the following test expression
+
+```
+dyn(results).all(x, k8s.isReady(x))
+```
+
+---
 
 <details summary="Checking for certificate readiness">
 <div>
 
 ```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/certmanager.yaml
+
 ```
+
 </div>
 </details>
