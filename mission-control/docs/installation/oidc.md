@@ -80,5 +80,6 @@ kratos:
                                     - openid
                                     - profile
 ```
+
 </Step>
 

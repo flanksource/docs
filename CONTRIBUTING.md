@@ -13,12 +13,12 @@ Use the [Google Technical Docs Style Guide](https://developers.google.com/style/
 
 # Formatting
 
-1. Use **Menu** → **Submenu** 
+1. Use **Menu** → **Submenu**
 
 # Sections
 
 1. Use short section / step titles .e.g. `Install the slack app` rather than `Install the slack app to your Slack workspace`
-2. Don't add header numbers/letters use markdown headers for hierachy 
+2. Don't add header numbers/letters use markdown headers for hierarchy
 
 # Screenshots
 
@@ -26,7 +26,7 @@ Use the [Google Technical Docs Style Guide](https://developers.google.com/style/
   * Use Chrome -> Inspect -> Right Click Capture Node Screenshot
 2. Never include the browser frame
 3. The screenshot should have good quality / realistic data - If necessary modify the html before taking a screenshot
-4. Infer the screenshot in the sentance before, e.g. In the **Add Health Check modal** you will see
+4. Infer the screenshot in the sentence before, e.g. In the **Add Health Check modal** you will see
 
 # Code blocks
 
