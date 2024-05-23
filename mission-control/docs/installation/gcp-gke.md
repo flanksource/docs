@@ -1,4 +1,4 @@
-# Install Mission Control on GCP GKE cluster
+# Install Mission Control on GKE cluster
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@
 
 ## Deploy the k8s bundle
 
-To quickly get the catalog of all the resources in your k8s cluster, deploy the k8s bundle helm chart
+To quickly get the catalog of all the resources in your gke k8s cluster, deploy the k8s bundle helm chart
 
 1. `helm repo add flanksource https://flanksource.github.io/charts`
 2. `helm repo update`
@@ -75,7 +75,7 @@ db:
 
 ## Monitoring Multiple Clusters
 
-When you want to monitor more than one k8s cluster in a centralized manner, you must create a secret containing the kubeconfig of the child cluster. This secret must be created in the parent cluster where Mission Control is deployed:
+The cluster where Mission Control is deployed gets catalogued by default. To monitor more than one k8s cluster in a centralized manner, you must create a secret containing the kubeconfig of the child cluster. This secret must be created in the parent cluster where Mission Control is deployed:
 
 ```
 apiVersion: v1
@@ -100,14 +100,14 @@ kubeconfig: |
       cluster: child-cluster
       user: child-cluster-user
 
-  users:                                                                                                                                     
+  users:          
   - name: child-cluster-user
     user:
       exec:
         apiVersion: client.authentication.k8s.io/v1beta1
         command: gke-gcloud-auth-plugin
         args: [] # Add any required arguments here
-        installHint: "Install gke-gcloud-auth-plugin for use with kubectl by following https://cloud.google.com/kubernetes-engine/docs/how-to cluster-access-for-kubectl#install_plugin"                                                                                                  
+        installHint: "Install gke-gcloud-auth-plugin for use with kubectl by following https://cloud.google.com/kubernetes-engine/docs/how-to cluster-access-for-kubectl#install_plugin"
         provideClusterInfo: true                                                                                                           
 ```
 

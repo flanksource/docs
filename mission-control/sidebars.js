@@ -1036,6 +1036,11 @@ const sidebars = {
               type: 'doc',
               id: 'installation/aws-eks',
               label: 'AWS EKS'
+            },
+            {
+              type: 'doc',
+              id: 'installation/gcp-gke',
+              label: 'GCP GKE'
             }
           ]
         },
