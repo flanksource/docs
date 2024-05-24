@@ -1,31 +1,41 @@
 ---
-title: Self host Mission Control using Minikube
+title: Minikube (Linux)
+description: Run Mission Control on Minikube
+slug: installation/minikube
 ---
 
-## Env details/prerequisites
+:::info Prerequisites
+To install and run Mission Control you need to have the following prerequisites:
 
-1. Docker
-2. Helm
-3. kubectl
-4. Install Minikube: [https://minikube.sigs.k8s.io/docs/start/](https://minikube.sigs.k8s.io/docs/start/)
-5. Install `mkcert` using `brew install mkcert`  or [https://github.com/FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
-
-## Start Minikube
-
-1. `minikube start`
+- [minikube](https://minikube.sigs.k8s.io/docs/start/) installed and running
+- [mkcert](https://github.com/FiloSottile/mkcert) and [helm](https://helm.sh/docs/intro/install/) installed
+- 500-1000m of CPU and 2GB of Memory free
+- Persistent Volumes with 20GB+ of storage or an external postgres database
+- (Optional) SMTP Server (For sending notifications and invites)
+:::
 
 ## Create Flanksource namespace & Secret
 
 1. `kubectl create namespace flanksource`
 2. `kubectl -n flanksource create secret generic incident-commander-smtp`
 
-## [Custom TLS certificate with ingress addon](https://minikube.sigs.k8s.io/docs/tutorials/custom_cert_ingress/)
+##
 
-1. `mkcert -install`
-2. `mkcert incident-manager-ui.local localhost 127.0.0.1`
-3. `kubectl -n flanksource create secret tls mission-control-tls --key incident-manager-ui.local-key.pem --cert incident-manager-ui.local.pem`
-4. `minikube addons configure ingress`
-5. `minikube addons enable ingress`
+<Step step={1}  name="Configure Ingress">
+```bash
+mkcert -install
+mkcert incident-manager-ui.local localhost 127.0.0.1
+kubectl -n flanksource create secret tls mission-control-tls --key incident-manager-ui.local-key.pem --cert incident-manager-ui.local.pem
+minikube addons configure ingress
+minikube addons enable ingress
+```
+
+See [Custom TLS certificate with ingress addon](https://minikube.sigs.k8s.io/docs/tutorials/custom_cert_ingress/)
+</Step>
+
+<Step step={2}  name="Install Mission Control">
+
+</Step >
 
 ## Install Mission Control
 

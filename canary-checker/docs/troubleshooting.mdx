@@ -1,0 +1,136 @@
+---
+title: Troubleshooting
+---
+
+import Install from './snippets/install.mdx'
+
+
+## Run a Canary from the CLI
+
+
+The easiest method of troubleshooting is to run the `canary-checker run` command with a copy of the canary resource locally.  This increases velocity of troubleshooting iteration, and also prevents the possibility of sensitive information in verbose output being leaked to logging systems by the canary pod.
+
+<Step step={1} name="Install the canary-checker CLI">
+
+<Install/>
+
+
+
+<details summary="Configuring the environment">
+<div>
+The local canary-checker execution may need to be provided with the permissions required to run the check.
+Depending on the check this might include:
+
+- The ability to read secrets or other objects in the cluster
+- Access to cloud APIs, such as AWS, GCP or Azure API interfaces
+- Locally installed binaries invoked by `exec` scripts
+
+The following local settings will affect the permissions available for use by the canary-checker executable:
+
+- The active kubectl context as specified in `KUBECONFIG`
+- The AWS profile specified in `AWS_DEFAULT_PROFILE` or `AWS_PROFILE`, or the AWS credentials specified by `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+- The GCP credentials configured through `gcloud auth application-default login`
+- The `$PATH` configuration
+</div>
+</details>
+
+</Step>
+
+<Step step={2} name="Get the YAML for an existing canary">
+
+```bash
+kubectl get canary test-canary -n test-namespace -o yaml \
+    | yq '.metadata.annotations.trace = "true"' > test-canary.yaml
+```
+
+</Step>
+<Step step={3} name="Run the canary locally">
+
+```bash
+canary-checker run -v test-canary.yaml
+```
+</Step>
+
+## Trigger a run fom the CLI
+
+
+To run a canary outside of its normal schedule add the `next-runtime` annotation:
+
+```bash
+ kubectl annotate canary <canary> next-runtime=$(date -Iseconds)
+ ```
+
+## Pausing a canary
+
+To pause a canary from running add a `suspend: true` annotation or set the `schedule` to `0` or `@never`
+
+```bash
+ kubectl annotate canary <canary> supend=true
+ ```
+
+
+## Logging
+
+To add detailed debug information related to a specific Canary to the log output, add a `debug: true` or `trace: true` annotation to the Canary resource:
+
+```yaml title="trace.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-check
+  annotations:
+    trace: "true"
+spec:
+  http:
+    - url: https://httpbin.demo.aws.flanksource.com/headers
+```
+
+which results in an output similar to the below:
+
+![](/img/trace-screenshot.png)
+
+:::danger Sensitive Data & Excessive Logging
+Trace level logging will return the HTTP response body which may contain sensitive data (The authorization headers will be sanitized)
+:::
+
+**Trace Levels**
+
+| Level   | Logs                                                                                |
+| ------- | ----------------------------------------------------------------------------------- |
+| `debug` | - HTTP Request and Response Header                                                  |
+| `trace` | - HTTP Request and Response Header <br/>- HTTP Response Body <br />- Custom Metrics |
+
+
+
+## Global Logging Levels
+
+Logging levels can be set on the command line using `-v` `--db-log-level`  e.g. `-vvv` which is equivalent to `-v=3` or using the `canary-checker.logLevel: -vvv" helm value.
+
+| Level       | Description                                      |
+| :---------- | :----------------------------------------------- |
+| `info` (0)  | Startup and informational messages               |
+| `debug` (1) |                                                  |
+| `trace` (2) |                                                  |
+| `trace` (3) | Prints all canary failures                       |
+| `trace` (4) | Prints all canary passes                         |
+| `trace` (5) | Enables canary level debug for all canaries      |
+| `trace` (6) | Enables canary level trace for all canaries      |
+| `trace` (7) | Kubernetes API calls                             |
+| `trace` (8) | Kubernetes API calls with responses              |
+| `trace` (9) | Kubernetes API calls with requests and responses |
+
+Database level logging can be enabled using `--db-log-level`
+
+| Level       | Description                             |
+| :---------- | :-------------------------------------- |
+| `debug` (1) | Print SQL statements without parameters |
+| `trace` (2) | Print SQL statements with parameters    |
+
+And Kubernetes Operator loggined with `--k8s-log-level`
+
+| Level       | Description                             |
+| :---------- | :-------------------------------------- |
+| `warn` (-1) | Print SQL statements without parameters |
+| `info` (0)  | Prints events                           |
+| `debug` (1) |                                         |
+| `trace` (2) |                                         |

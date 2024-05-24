@@ -2,7 +2,12 @@
 title: AWS
 ---
 
-The AWS helm chart installs a [catalog scraper](/config-db/scrapers/aws)
+The AWS bundle installs a [catalog scraper](/config-db/scrapers/aws) that:
+
+- Scrapes AWS Resources and detects changes in the resource definition
+- Ingests changes from CloudTrail
+- Ingests cost data from AWS Cost & Usage Reporting
+- Links AWS EKS resources to the corresponding Kubernetes resources
 
 ## Setup
 
@@ -12,18 +17,6 @@ helm repo update
 helm install mission-control-aws flanksource/mission-control-aws
 ```
 
-After running `helm install` you should get a success message:
-
-```sh
-NAME: mission-control-aws
-LAST DEPLOYED: Thu Feb 14 19:00:32 2024
-NAMESPACE: default
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-AWS scraper added
-```
 
 When you go to the catalog now, you can now see all the AWS Resources
 
@@ -62,6 +55,22 @@ The following table lists the configurable parameters and their default values:
 | `connectionDetails.endpoint` | AWS endpoint. | string | "" |
 | `connectionDetails.skipTLSVerify` | Skip TLS verification.| bool | false |
 | `connectionDetails.assumeRole` | Assume AWS role. | string | "" |
+| `cloudtrail.maxAge` | Maximum age for CloudTrail. | "" |  |
+| `cloudtrail.exclude` | List of excluded items for CloudTrail. | [] |  |
+| `compliance` | Enable or disable compliance. | true |  |
+|  | |  |  |
+| `costReporting.enabled` | Enable or disable cost reporting. | false |  |
+| `costReporting.database` | Cost reporting database. | "" |  |
+| `costReporting.region` | Cost reporting region. | "" |  |
+| `costReporting.s3BucketPath` | S3 bucket path for cost reporting. | "" |  |
+| `costReporting.table` | Table for cost reporting. | "" |  |
+|  | |  |  |
+|  | |  |  |
+|                                   |                                        |                                          |         |
+| regions |  |  |  |
+| `includeResources` | List of resources to include. | [] |  |
+| `excludeResources` | List of resources to exclude. | [] |  |
+|  |  |  |  |
 
 :::info
 If you have setup IAM Roles for Service Account, you do not have to do anything else. If you do not have that setup, you can use AWS Access and Secret Keys as well
@@ -85,69 +94,17 @@ connectionDetails:
 :::
 
 
-### Cloudtrail
 
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `cloudtrail.maxAge` | Maximum age for CloudTrail. | "" |
-| `cloudtrail.exclude` | List of excluded items for CloudTrail. | [] |
+<Step step={6} name="Cost & Usage Reporting" anchor="cur">
 
-### Compliance
+:::info Prerequisites
+- [Cost and Usage Reports](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) are configured with an [Athena](https://docs.aws.amazon.com/cur/latest/userguide/use-athena-cf.html) table
+- The `AWSQuicksightAthenaAccess` policy or similar is attached to config-db IAM role
+:::
 
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `compliance` | Enable or disable compliance. | true |
 
-### Cost Reporting
-
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `costReporting.enabled` | Enable or disable cost reporting. | false |
-| `costReporting.database` | Cost reporting database. | "" |
-| `costReporting.region` | Cost reporting region. | "" |
-| `costReporting.s3BucketPath` | S3 bucket path for cost reporting. | "" |
-| `costReporting.table` | Table for cost reporting. | "" |
+</Step>
 
 
 
-### Inventory
-
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `inventory` | Enable or disable inventory. | true |
-
-### Patch Details
-
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `patchDetails` | Enable or disable patch details. | true |
-
-### Patch States
-
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `patchStates` | Enable or disable patch states. | true |
-
-### Trusted Advisor Check
-
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `trustedAdvisorCheck` | Enable or disable Trusted Advisor check. | false |
-
-### AWS Regions
-
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `regions` | List of AWS regions to pull from. | [] |
-
-### Include Resources
-
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `includeResources` | List of resources to include. | [] |
-
-### Exclude Resources
-
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `excludeResources` | List of resources to exclude. | [] |
+### 

@@ -151,7 +151,6 @@ spec:
 ```
 
 :::note
-
 For service account token issuing the canary-checker service account `canary-checker-sa` will need to be granted permissions to issue tokens using:
 
 ```yaml

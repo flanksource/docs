@@ -1,7 +1,9 @@
 ---
-title: Install Mission Control on AWS EKS cluster
+title: AWS EKS
+slug: installation/eks
 ---
 
+# Self Hosted Installation on AWS EKS
 
 :::info Prerequisites
 To install and run Mission Control you need to have the following prerequisites:
@@ -57,7 +59,7 @@ helm install mission-control  \
 <Step step={3} name="(Optional) Create an IAM Role">
 
 
-(a) Create a role to allow mission-control to configuration of your AWS resources. Attach the following AWS managed policies to the role:
+(a) Create a role to allow mission-control to scrape your AWS resources. Attach the following AWS managed policies to the role:
 
 1. ReadOnlyAccess
 2. AWSConfigUserAccess
@@ -125,24 +127,22 @@ helm install mission-control  \
 (b) Modify the trust policy of the IAM role by changing the OIDC arn, OIDC endpoint and the namespace below.
 ```json
 {
-	"Version": "2012-10-17",
-	"Statement": [
-			{
-					"Effect": "Allow",
-					"Principal": {
-							"Federated": "arn:aws:iam::7458xxxxxxxx:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx"
-					},
-					"Action": "sts:AssumeRoleWithWebIdentity",
-					"Condition": {
-							"StringEquals": {
-									"oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:config-db-sa",
-									"oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:mission-control-sa",
-									"oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:canary-checker-sa",
-									"oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:aud": "sts.amazonaws.com"
-							}
-					}
-			}
-	]
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Principal": {
+      "Federated": "arn:aws:iam::7458xxxxxxxx:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx"
+		},
+		"Action": "sts:AssumeRoleWithWebIdentity",
+		"Condition": {
+      "StringEquals": {
+        "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:config-db-sa",
+        "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:mission-control-sa",
+        "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:canary-checker-sa",
+        "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:aud": "sts.amazonaws.com"
+      }
+		}
+	}]
 }
 ```
 
@@ -154,17 +154,19 @@ helm install mission-control  \
 config-db:
   serviceAccount:
     annotations:
+    eks.amazonaws.com/role-arn: IAM Role ARN
+
+# service account used by for health checks
+canary-checker:
+  serviceAccount:
+    annotations:
       eks.amazonaws.com/role-arn: IAM Role ARN
 
 # service account used for notifications and playbooks
 serviceAccount:
-	annotations:
-		eks.amazonaws.com/role-arn: IAM Role ARN
+  annotations:
+    eks.amazonaws.com/role-arn: IAM Role ARN
 
-# service account used for notifications and playbooks
-serviceAccount:
-	annotations:
-		eks.amazonaws.com/role-arn: IAM Role ARN
 ```
 
 </Step>

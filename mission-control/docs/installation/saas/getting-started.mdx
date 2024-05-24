@@ -1,0 +1,55 @@
+---
+title: Getting Started
+sidebar_position: 1
+---
+
+import Agent from './agent.mdx'
+
+export const toc = [{
+        value: "Signup",
+        id: "signup",
+        level: 2,
+    },
+    {
+        value: "Agent Installation",
+        id: "agent",
+        level: 2,
+    },
+
+       {
+        value: "Technology Bundles",
+        id: "registry",
+        level: 2,
+    }
+
+]
+
+When using the Mission Control SaaS the agent based approach is recommended for ingesting data, The agent is headless installation of mission-control that caches data locally in a postgres database and replicates it to the SaaS.
+
+<img src="/img/deployment-saas.svg" style={{"margin-left": "10%",  "width": "80%"}} />
+
+The agent based approach has the following benefits:
+
+1. **Least privilege**, as the agent runs within your infrastructure there is no network access or credentials required to be configured on the SaaS.
+2. **CRD Based Configuration** of [health checks](/canary-checker/) and [scrape configs](/config-db) co-located with your IaC/App without the need to push any config to the SaaS.
+3. **Local Playbook Execution** on agents, reusing existing secrets or IAM roles.
+
+
+See [Deployment Models](/installation/deployment-models) for [Self Hosted](/installation/self-hosted/) and [Fully Hosted](/installation/saas/fully-hosted) options
+
+
+### Signup
+
+a. Goto [app.flanksource.com/signup](https://accounts.flanksource.com/sign-up) to signup
+
+<Screenshot img="/img/signup.png" size="350px"/>
+
+b. Choose an organisation name and logo<br/>
+c. Invite your team members
+
+> Organization details and members can be changed by going to [accounts.flanksource.com/organization](https://accounts.flanksource.com/organization) or Clicking on **Manage Organization** when logged in
+
+### Agent Installation
+
+<Agent/>
+

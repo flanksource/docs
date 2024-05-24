@@ -21,7 +21,7 @@ import {
 import Action from '@site/src/components/Action'
 import HealthCheck from '@site/src/components/HealthCheck'
 import Lookup from '@site/src/components/Lookup'
-import ShadowBox from '@site/src/components/ShadowBox'
+import Screenshot from '@site/src/components/ShadowBox'
 import Fields from '@site/src/components/Fields'
 import Step from '@site/src/components/Step'
 import Highlight from '@site/src/components/Highlight'
@@ -50,7 +50,7 @@ const MDXComponents = {
   a: MDXA,
   pre: MDXPre,
   details: Details,
-  ShadowBox: ShadowBox,
+  Screenshot: Screenshot,
   Lookup: Lookup,
   Details: Details,
   Action: Action,

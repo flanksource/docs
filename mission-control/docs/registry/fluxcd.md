@@ -6,7 +6,7 @@ title: FluxCD
 
 The FluxCD helm chart installs a [topology](/topology) for FluxCD
 
-```sh
+```bash
 helm repo add flanksource https://flanksource.github.io/charts
 helm repo update
 helm install mission-control-flux flanksource/mission-control-flux

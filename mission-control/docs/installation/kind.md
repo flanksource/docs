@@ -1,5 +1,7 @@
 ---
-title: Self host Mission Control using Kind
+title: Kind
+description: Run Mission Control in a Kind Cluster
+slug: installation/kind
 ---
 
 ## Prerequisites

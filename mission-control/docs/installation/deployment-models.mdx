@@ -1,0 +1,78 @@
+---
+title: Deployment Models
+sidebar_position: 1
+---
+
+export const toc = [{
+        value: "Agent",
+        id: "agent",
+        level: 2,
+    },
+    {
+        value: "Self Hosted",
+        id: "self-hosted",
+        level: 2,
+    },
+
+       {
+        value: "Hosted",
+        id: "hosted",
+        level: 2,
+    }
+
+]
+
+
+<Step step={1} name="Agent (Hybrid)"  anchor="agent">
+
+<Screenshot img="/img/deployment-model-agent.svg" size="600px" shadow={false}/>
+
+**Pros**
+- Cloud credentials and secrets never leave your infrastructure
+- Fully integrated into your GitOps flow
+- Reuse health checks with Flux/Argo
+
+**Cons**
+- Requires a Kubernetes cluster (Can still use Kind or Microk8s)
+
+</Step>
+
+
+<Step step={2} name="Self Hosted"  anchor="self-hosted">
+
+Mission Control is designed as self-hosted first -
+
+<Screenshot img="/img/deployment-model-self-hosted.svg" size="400px" shadow={false}/>
+
+**Pros**
+- Fully hosted on your Infrastructure
+-  Only dependency is a Postgres DB (bundled into the Helm chart by default)
+- Automatic upgrades using Helm Semantic Versioning
+
+**Cons**
+- Single Signon setup required
+- Postgres database management required
+
+</Step>
+
+
+
+<Step step={3} name="Fully Hosted"  anchor="hosted">
+
+The fully hosted deployment model does not require any changes to your infrastructure, but will require connections to be setup and configured on Mission Control to connect to your existing infrastructure and is therefore not recommended for production.
+
+<Screenshot img="/img/deployment-model-hosted.svg" size="600px" shadow={false}/>
+
+**Pros**
+-  Fastest to setup
+
+**Cons**
+- Requires public network access to your infrastructure
+- Credentials and secrets are stored in the Flanksource Mission Control Cloud
+
+:::warning Non Production Only
+While Flanksource takes the necessary steps to protect all credentials saved in our cloud, sharing credentials with 3rd parties is never a recommended security practise, we therefore do not recommend the full hosted option for production environments.
+:::
+
+</Step>
+

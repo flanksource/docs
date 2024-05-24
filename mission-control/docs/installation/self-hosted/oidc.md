@@ -1,5 +1,6 @@
 ---
 title: Single Sign On (SSO)
+slug: installation/sso
 ---
 
 Mission Control uses [kratos](https://www.ory.sh/kratos/) for identity management. Login via email/password is the default flow but any OIDC provider supported by Kratos can be used
@@ -14,7 +15,7 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
 
 * Add a new app from [Azure AD App Registration](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps)
 * Record the `Client ID` (Application ID) in the Overview page
-* Add an allowed redirect URI of `https://ingress/api/.ory/self-service/methods/oidc/callback/microsoft`
+* Add an allowed redirect URI of `https://<ingress>/api/.ory/self-service/methods/oidc/callback/microsoft` where `<ingress>` is the `global.ui.host` value specified during setup
 * Token Configuration
   * Add the email optional claim
   * Add a `groups claim` if you want to map Azure AD Group Membership to roles in Mission Control
@@ -61,24 +62,22 @@ Create the `mapper_url` by Base64 encoding the jsonnet file and prefixing it wit
 
 ```yaml title="values.yaml"
 kratos:
-    kratos:
-        config:
-            selfservice:
-                methods:
-                    oidc:
-                        enabled: true
-                        config:
-                            providers:
-                                - id: microsoft
-                                  provider: microsoft
-                                  microsoft_tenant: # The Azure AD Tenant Id
-                                  client_id: #...
-                                  client_secret: #...
-                                  mapper_url: base64:// #base64 encoded mapper_url
-                                  scope:
-                                    - email
-                                    - openid
-                                    - profile
+    selfservice:
+        methods:
+            oidc:
+                enabled: true
+                config:
+                    providers:
+                        - id: microsoft
+                          provider: microsoft
+                          microsoft_tenant: # The Azure AD Tenant Id
+                          client_id: #...
+                          client_secret: #...
+                          mapper_url: base64:// #base64 encoded mapper_url
+                          scope:
+                            - email
+                            - openid
+                            - profile
 ```
 
 </Step>

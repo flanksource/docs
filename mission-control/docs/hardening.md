@@ -1,6 +1,9 @@
-# Fine tuning permission
-
-## Canary Checker
+---
+title: Hardening
+sidebar_position: 100
+slug: security/hardening
+---
+## Service Account RBAC
 
 Canary Checker, by default, uses a highly permissive service account.
 You can configure the permissions on that service account via the helm values.

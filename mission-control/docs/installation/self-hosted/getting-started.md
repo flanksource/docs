@@ -1,13 +1,16 @@
 ---
-title: Self-Hosted Install With Helm
+title: Installation
+sidebar_position: 0
 ---
 
 :::info Prerequisites
-To install and run Mission Control you need to have the following prerequisites:
+To install and run Mission Control you need the following:
 
 - Kubernetes 1.26+ with an Ingress Controller
-- 500-1000m of CPU and 2GB of Memory
+- [cert-manager.io](https://cert-manager.io/docs/) or an existing TLS secret for ingress
+- 1 - 2 CPUs and 4GB of Memory
 - Persistent Volumes with 20GB+ of storage or an external postgres database
+- (Optional) [prometheus operator](https://prometheus-operator.dev/)
 - (Optional) SMTP Server (For sending notifications and invites)
 :::
 
@@ -31,19 +34,20 @@ global:
     host: "mission-control-ui.local" # hostname
   serviceAccount:
     annotations: # Any annotations required to attach custom IAM policies etc.
+```
 
-adminPassword: admin # The default password for the admin@local user
-
+<details title="Auto Generate Certificates with Cert-Manager">
+You can add annotations to the ingress to have cert-manager generate the TLS certificates:
+```yaml
 flanksource-ui:
   ingress:
-    enabled: true
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
-db:
-  storageClass: # e.g. gp3
-  storage: 50Gi
 ```
+</details>
+
+
 
 ```bash
 helm install mission-control  \
@@ -54,7 +58,7 @@ helm install mission-control  \
  -f values.yaml
 ```
 
-See [mission-control-chart/values.yaml](https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml)  or `helm show values flanksource/mission-control` for a full list of configuration options
+See [values.yaml](https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml)  or `helm show values flanksource/mission-control` for a full list of configuration options.
 
 </Step>
 
@@ -90,6 +94,6 @@ See [SSO](./oidc) for OIDC.
 
 <Step step={5} name="External Database">
 
-See [Database](./database) for using an external database like AWS RDS or for tweaking postgres settings.
+See [Database](./database) for using an external database like AWS RDS or Google Cloud SQL or for fine-tuning the bundled postgres settings.
 
 </Step>

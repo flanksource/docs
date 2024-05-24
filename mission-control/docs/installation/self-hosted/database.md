@@ -1,11 +1,12 @@
 ---
 title: Database
 description: Alternative methods for connecting to the db used for persistence
+slug: installation/database
 ---
 
 Mission Control stores all state in a Postgres Database, by default a Postgres StatefulSet is created.
 
-## Configuring the Default Statefulset
+## Configuring the default Statefulset
 
 ```yaml title="values.yaml"
 db:
@@ -39,24 +40,26 @@ psql -U postgres localhost -p 5432 mission_control
 
 :::
 
+### Updating postgres.conf settings
+
 ## Using an External Database
 
-In order to connect to an existing Postgres server, a database must be created on the server, along with a user that has administrator permissions for the database.
+In order to connect to an existing database a secret needs to be created with the following key:
+
+- `DB_URL`
+
+The following keys are required for kratos:
+
+- `DB_HOST`
+- `DB_NAME`
+- `DB_USERNAME`
+- `DB_PASSWORD`
+
 
 ```yaml title="values.yaml"
 db:
-  create: true
-  conf: # override postgres.conf settings
+  create: false
   secretKeyRef: # auto-generated if it doesn't exist
-    name: incident-commander-postgres
+    name: mission-control-postgres
     key: DB_URL
-  jwtSecretKeyRef: # auto generated key for postgrest to validate tokens from users
-    name: incident-commander-postgrest-jwt
-    key: PGRST_JWT_SECRET
-  storageClass: # optional storage class for PVC volume
-  storage: 20Gi
-  shmVolume: 256Mi # size of shm memory file to be mounted
-  resources: # resources to assign to the postgres database pod
-    requests:
-      memory: 4Gi
 ```

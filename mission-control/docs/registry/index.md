@@ -1,5 +1,6 @@
 ---
 title: Registry
+sidebar_position: 1
 ---
 
 We provide ready to use helm charts for setting up:

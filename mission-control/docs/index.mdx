@@ -24,6 +24,25 @@ With Mission Control you can:
 * [Notify People and Systems](./notifications/overview) about changes in health and configuration.
 
 
+### When not to use Mission Control
+
+Mission Control is best suited for medium to large teams with complex infrastructure and applications. If you have a simple setup with just a few servers, tools like Ansible, Terraform and Prometheus may be enough.
+
+* **Your primary concern is Develop**_**ment**_ **Experience & Maturity**. Mission Control is focused on improving the **operational experience for develop*ers***, enabling them to quickly understand, troubleshoot and operate on complex systems.
+* **You prefer ClickOps to GitOps**. Mission Control is built on a GitOps first principle, and configured using Kubernetes Custom Resource Defintions. While there is a configuration UI, it is primarily for rapid prototyping and testing.
+* **Your application / team has no dependencies across multiple teams or services**. Mission Control is best suited for distributed systems with dependencies across teams and services that need to be visualized and tracked.
+
+:::tip
+While YAML is preferred for configuration, Mission Control does provide highly optimized UI for viewing, navigating and operating on the catalogs and playbooks defined in YAML/CRDs.
+:::
+
+* Your system is very simple with few applications, dependencies and changes.
+
+
+## Getting Started
+
+
+
 
 ## Getting Help
 

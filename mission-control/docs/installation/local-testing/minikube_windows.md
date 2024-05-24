@@ -1,5 +1,5 @@
 ---
-title: Self host Mission Control using Minikube
+title: Minikube (Windows)
 ---
 
 ## Env details/prerequisites
