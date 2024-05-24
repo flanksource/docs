@@ -1,0 +1,88 @@
+```yaml title="container-logs.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: "container-log-counts"
+  namespace: observability
+  schedule: "@every 5m"
+  http:
+    - name: containerlogvolume
+      url: "https://opensearch/logstash-*/_search"
+      headers:
+        - name: Content-Type
+          value: application/json
+      responseCodes: [200]
+      description: Increase in number of log entries generated per namespace
+      templateBody: true
+      test:
+        expr: json.?aggregations.logs.doc_count.orValue(0) > 0
+      body: >-
+        {
+          "size": 0,
+          "aggs": {
+            "logs": {
+              "filter": {
+                "range": {
+                  "@timestamp" : {
+                    {{-  if last_result.results.max }}
+                    "gte": "{{ last_result.results.max }}"
+                    {{- else }}
+                    "gte": "now-5m"
+                    {{- end }}
+                  }
+                }
+              },
+              "aggs": {
+                "age": {
+                  "max": {
+                    "field": "@timestamp"
+                  }
+                },
+                "labels": {
+                  "multi_terms": {
+                    "terms": [
+                      { "field": "kubernetes_namespace_name.keyword"},
+                      { "field": "kubernetes_container_name.keyword"},
+                      { "field": "kubernetes_pod_name.keyword"}
+                    ],
+                    "size": 1000
+                  }
+                }
+              }
+            }
+          }
+        }
+      display:
+        expr: |
+          'count=' + string(json.?aggregations.logs.doc_count.orValue('error')) + ', max=' + json.aggregations.?logs.age.value_as_string.orValue('')
+      transform:
+        expr: |
+          json.orValue(null) != null ?
+          [{
+            'detail': { 'max': string(json.?aggregations.logs.age.value_as_string.orValue(last_result().?results.max.orValue(time.Now()))) },
+            'metrics': json.?aggregations.logs.labels.buckets.orValue([]).map(k,  {
+              'name': "namespace_log_count",
+              'type': "counter",
+              'value': double(k.doc_count),
+              'labels': {
+                "namespace": k.key[0],
+                "container": k.key[1],
+                "pod": k.key[2]
+              }
+            })
+          }].toJSON()
+          : '{}'
+
+```
+
+
+```go
+  "@timestamp" : {
+    {{-  if last_result.results.max }}
+    "gte": "{{ last_result.results.max }}"
+    {{- else }}
+    "gte": "now-5m"
+    {{- end }}
+  }
+```
+

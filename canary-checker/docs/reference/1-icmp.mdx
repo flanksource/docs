@@ -1,0 +1,40 @@
+---
+title: ICMP
+---
+
+# <Icon name="icmp" /> ICMP
+
+Performs ICMP (ping) requests for information on ICMP packet loss, duration and response.
+
+:::info
+Canary checker supports both `privileged` and `unprivileged` ping modes using the `PING_MODE` environment variable or `pingMode` helm value.
+
+When using `unprivileged` you need to run:
+```shell
+sudo sysctl -w net.ipv4.ping_group_range="0 2147483647"
+```
+:::
+
+
+
+```yaml title="icmp.yaml"  file=../../../modules/canary-checker/fixtures/quarantine/icmp_pass.yaml
+```
+
+
+<HealthCheck name="icmp"  rows={[
+  {    field: "endpoint", description: "Host to ping", scheme: 'string', required: true  },
+  { field: "packetCount", description: "Total number of packets to send per check", default: '5', scheme: 'int'},
+  { field: "packetLossThreshold", description: "Percent of total packets that are allowed to be lost", scheme: 'int64'},
+  {
+    field: "thresholdMillis",
+    description: "Threshold response time from DNS server",
+    scheme: 'int'
+  }
+
+]}/>
+
+## Metrics
+
+| **Metric**                                       |       |                                      |
+| ------------------------------------------------ | ----- | ------------------------------------ |
+| canary_check_icmp_packetloss{'{'}endpoint = "", ip = ""{'}'} | Gauge | Packet loss percentage in ICMP check |

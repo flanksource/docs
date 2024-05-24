@@ -1,4 +1,6 @@
-# Slack Notification
+---
+title: Slack Notification
+---
 
 In this example, we will walk through the process of creating a health check alert notification on slack starting from creating the Slack bot token.
 
@@ -8,13 +10,13 @@ In this example, we will walk through the process of creating a health check ale
 
 Visit https://api.slack.com/apps and create a new app. Use the "From an app manifest" option.
 
-![App Creation](../../images/slack-app-creation.png)
+![App Creation](/img/slack-app-creation.png)
 
 ### Set up OAuth permission
 
 After creating the app, you should be navigated to the app's homepage. On the left panel menu, go to Features->OAuth & Permissions. Scroll down and you should see the **"Scopes"** section
 
-![](../../images/slack-app-oauth-scope.png)
+![](/img/slack-app-oauth-scope.png)
 
 Set `chat:write` permission
 
@@ -22,11 +24,11 @@ Set `chat:write` permission
 
 While still on the same page, scroll up to the "OAuth Tokens for Your Workspace" section. Install the newly created app on your Slack workspace.
 
-![](../../images/slack-app-install-to-workspace.png)
+![](/img/slack-app-install-to-workspace.png)
 
 Once you install the app you should see the OAuth token
 
-![](../../images/slack-bot-user-oauth-token.png)
+![](/img/slack-bot-user-oauth-token.png)
 
 ## Set up the notification
 

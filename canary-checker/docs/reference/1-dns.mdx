@@ -1,0 +1,62 @@
+---
+title: DNS
+---
+
+# <Icon name="dns" /> DNS
+
+Performs queries to a DNS server, typical use cases include:
+
+* Checking the latency of the DNS server in a Kubernetes cluster
+* Verifying that there are serving records for a DNS based load balancer.
+
+```yaml title="dns.yaml"  file=../../../modules/canary-checker/fixtures/minimal/dns_pass.yaml
+```
+
+
+<HealthCheck name="dns"  rows={[
+  {
+    field: "server" ,
+    description: "Address of DNS server to query e.g. `8.8.8.8`",
+    scheme: 'string',
+    required: true
+
+  },
+  {
+    field: "port",
+    description: "Port to query DNS server on",
+    default: "53"
+  },
+  {
+    field: "query",
+    description: "Domain name to lookup",
+    scheme: 'string',
+    required: true
+  },
+  {
+    field: "querytype",
+    description: "Record type to query e.g. `A`, `CNAME`, `TXT`, `SRV`",
+    scheme: 'string',
+    default: "A",
+  },
+  {
+    field: "exactreply",
+    description: "Expected exact match result(s)",
+    scheme: '[]string'
+  },
+  {
+    field: "minrecords",
+    description: "Minimum number of records expected in response",
+    scheme: 'int'
+  },
+  {
+    field: "thresholdMillis",
+    description: "Threshold response time from DNS server",
+    scheme: 'int'
+  },
+  {
+    field: "timeout",
+    description: "Timeout in seconds",
+    scheme: 'int'
+  }
+
+]}/>

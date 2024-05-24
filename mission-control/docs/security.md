@@ -1,4 +1,6 @@
-# Security
+---
+title: Security
+---
 
 At Flanksource, security isn't just a feature; it's the foundation of the design that went into the Mission Control platform. We've meticulously designed every aspect of our internal developer platform to meet the stringent requirements of security teams.
 
@@ -28,7 +30,7 @@ All the code for Mission Control self-hosted is publicly available and free to u
 
 ## Security Dashboard
 
-| Project              | Description                                      | License                                             | Scorecard                                                    | CII Best Practises                                  |
+| Project              | Description                                      | License                                             | Scorecard                                                    | CII Best Practices                                  |
 | -------------------- | ------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Mission Control      | Primary microservice and orchestrator | <img alt="Static Badge" src="https://img.shields.io/badge/Free%20for%20Non%20Prod-8A2BE2?link=https%3A%2F%2Fraw.githubusercontent.com%2Fflanksource%2Fmission-control%2Fmain%2FLICENSE"/> | [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/flanksource/mission-control/badge)](https://securityscorecards.dev/viewer/?uri=github.com/flanksource/mission-control) |  |
 | Canary Checker       | Health checks and topology scanning | <img alt="GitHub License" src="https://img.shields.io/github/license/flanksource/canary-checker?label=%22%22"/> | [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/flanksource/canary-checker/badge)](https://securityscorecards.dev/viewer/?uri=github.com/flanksource/canary-checker) | <img alt="CII Best Practices" src="https://img.shields.io/cii/level/8335?label=%22%22"/> |
@@ -38,7 +40,7 @@ All the code for Mission Control self-hosted is publicly available and free to u
 | Gomplate | Go and CEL templating library | <img alt="GitHub License" src="https://img.shields.io/github/license/flanksource/gomplate?label=%22%22"/> | ![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/flanksource/gomplate/badge) |  |
 | Flanksource UI       | Dashboard | <img alt="Static Badge" src="https://img.shields.io/badge/Free%20for%20Non%20Prod-8A2BE2?link=https%3A%2F%2Fraw.githubusercontent.com%2Fflanksource%2Fmission-control%2Fmain%2FLICENSE"/> | [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/flanksource/flanksource-ui/badge)](https://securityscorecards.dev/viewer/?uri=github.com/flanksource/flanksource-ui) |  |
 | **External Dependencies** |  |  |  |  |
-| PostgREST | REST API for Daytabase | <img alt="GitHub License" src="https://img.shields.io/github/license/postgrest/postgrest?label=%22%22"/> | [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/PostgREST/postgrest/badge)](https://securityscorecards.dev/viewer/?uri=github.com/PostgREST/postgrest) |  |
+| PostgREST | REST API for Database | <img alt="GitHub License" src="https://img.shields.io/github/license/postgrest/postgrest?label=%22%22"/> | [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/PostgREST/postgrest/badge)](https://securityscorecards.dev/viewer/?uri=github.com/PostgREST/postgrest) |  |
 | Kratos (Self-Hosted) | 3rd Party Application for Authentication | <img alt="GitHub License" src="https://img.shields.io/github/license/ory/kratos?label=%22%22"/> | [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/ory/kratos/badge)](https://securityscorecards.dev/viewer/?uri=github.com/ory/kratos) |  |
 | Clerk (SaaS) | 3rd Party Service for Authentication |  | [Docs](https://clerk.com/docs/security/overview) |  |
 

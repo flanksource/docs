@@ -1,4 +1,6 @@
-# ClusterRoleBinding with delayed cleanup
+---
+title: JIT Access With Expiry
+---
 
 ```yaml title="test-cluster-role-binding.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -20,7 +22,7 @@ spec:
           kubectl create clusterrolebinding demo-playbook-cluster-role-binding --clusterrole=demo-playbook-clusterrole --serviceaccount=default:demo-playbook-sa
           kubectl auth can-i get pods --as=system:serviceaccount:default:demo-playbook-sa
     - name: Cleanup
-      delay: 5s
+      delay: 8h
       exec:
         script: |
           kubectl delete clusterrolebinding demo-playbook-cluster-role-binding
@@ -30,5 +32,5 @@ spec:
 
 ## Screenshots
 
-![Playbook Logs](../../images/playbook-eg-cluster-role-binding.png)
+![Playbook Logs](/img/playbook-eg-cluster-role-binding.png)
 _Fig: Playbook Logs_

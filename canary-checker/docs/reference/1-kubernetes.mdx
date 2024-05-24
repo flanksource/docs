@@ -1,0 +1,72 @@
+---
+title: Kubernetes
+sidebar_class_name: popular
+---
+
+# <Icon name="k8s" /> Kubernetes
+
+The Kubernetes check performs requests on Kubernetes resources such as Pods to get the desired information.
+
+
+```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes-minimal_pass.yaml
+```
+
+<HealthCheck name="kubernetes" edition="standard" connection="kubeconfig"  rows={[
+  {field: "kind", description: "Kubernetes object kind", scheme: 'string', required: true},
+  {field: "resource", description: " Queries resources related to specified Kubernetes object ", scheme: 'ResourceSelector'},
+  {field: "namespaceSelector", description: "Namespace of the Kubernetes object",scheme: 'ResourceSelector'},
+  {field: "namespace", description: "Failing checks will be placed in this namespace, useful if you have shared namespaces"},
+  {field: "ignore", description: "Ignore the specified resources from the fetched resources. Can be a glob pattern.", scheme: '[]glob'},
+  {field: "healthy", description: "Fail the check if any resources are unhealthy", scheme: 'bool'},
+  {field: "ready", description: "Fail the check if any resources are not ready", scheme: 'bool'},
+
+]}/>
+
+## Healthy
+
+Using `healthy: true` is functionally equivalent to the test expression above:
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: kube-system-checks
+spec:
+  interval: 30
+  kubernetes:
+    - namespace: kube-system
+      name: kube-system
+      kind: Pod
+      //highlight-next-line
+      healthy: true
+      resource:
+        labelSelector: k8s-app=kube-dns
+      namespaceSelector:
+        name: kube-system
+      display:
+        expr: |
+          dyn(results).
+          map(i, i.Object).
+          filter(i, !k8s.isHealthy(i)).
+          map(i, "%s/%s -> %s".format([i.metadata.namespace, i.metadata.name, k8s.getHealth(i).message])).join('\n')
+```
+
+See the CEL <CommonLink to="cel" anchor="kubernetes">_Kubernetes_</CommonLink> docs for more details on the `k8s.isHealthy` and other functions available
+
+## Ready
+
+Similar to the `healthy` flag, there's also a `ready` flag which is functionally equivalent to having the following test expression
+
+```
+dyn(results).all(x, k8s.isReady(x))
+```
+
+---
+
+<details summary="Checking for certificate readiness">
+<div>
+
+```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/certmanager.yaml
+```
+</div>
+</details>

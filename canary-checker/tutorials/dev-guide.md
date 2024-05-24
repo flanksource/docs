@@ -15,7 +15,7 @@ In this guide we'll be working with [kind](https://kind.sigs.k8s.io/).
 
 ### Install Metrics Server and Prometheus
 
-For installing and configuring metrics server and Prometheus please see the [prereqs](prereqs.md).
+For installing and configuring metrics server and Prometheus please see the [prereqs](prereqs).
 
 ## Install Node
 

@@ -1,0 +1,18 @@
+---
+title: Redis
+---
+
+# <Icon name="redis" /> Redis
+
+The Redis check connects to a specified Redis database instance to check its availability.
+
+```yaml title="redis.yaml"  file=../../../modules/canary-checker/fixtures/datasources/redis_pass.yaml
+```
+<HealthCheck name="redis" connection="url" rows={[
+  {field: "url", description: "Redis instance", required: true},
+  {field: "db", description: "Database to be selected after connecting to the server", scheme: 'int', required: true},
+
+]}/>
+
+
+

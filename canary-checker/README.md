@@ -140,7 +140,7 @@ Metrics exposed by. anary-checler
 
 | Metric                                         | Type      | Description                                 |
 | ---------------------------------------------- | --------- | ------------------------------------------- |
-| canary_check                                   | Guage     | Set to 0 when passing and 1 when failing    |
+| canary_check                                   | Gauge     | Set to 0 when passing and 1 when failing    |
 | canary_check_success_count                     | Counter   |                                             |
 | canary_check_failed_count                      | Counter   |                                             |
 | canary_check_info                              | Info      |                                             |

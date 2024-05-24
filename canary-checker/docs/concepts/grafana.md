@@ -1,4 +1,6 @@
-# Grafana
+---
+title: Grafana
+---
 
 Default grafana dashboards are available. After you deploy Grafana, these dashboards can be installed with
 
@@ -7,8 +9,6 @@ Default grafana dashboards are available. After you deploy Grafana, these dashbo
 ```
 
 ![](/img/grafana-dashboard.png)
-
-
 
 ### Prometheus
 

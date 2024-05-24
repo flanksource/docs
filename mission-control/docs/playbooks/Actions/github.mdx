@@ -1,0 +1,35 @@
+---
+title: Github
+---
+import Templating from "../../reference/playbooks/context.mdx"
+
+# <Icon name="github"/> Github Action
+
+Github Action allows you to invoke GitHub workflows from the playbooks.
+
+:::note
+You must configure your GitHub Actions workflow to run when the [workflow_dispatch](https://docs.github.com/en/webhooks/webhook-events-and-payloads#workflow_dispatch) webhook event occurs
+:::
+
+```yaml title="invoke-release-workflow.yaml"  file=../../../modules/mission-control/fixtures/playbooks/github.yaml
+```
+
+<Action rows={[
+  {field: "username", description: "The account owner of the repository (case insensitive)", scheme: "string", required: true},
+  {field: "repo", description: "The name of the repository without the `.git` extension", scheme: "string", required: true},
+  {field: "token", description: "Github personal access token", scheme: "[EnvVar](/reference/env-var)", required: true},
+  {field: "workflows", description: "List of workflows to invoke", scheme: "[`[]Workflow`](#github-workflow)", required: true}
+
+]}/>
+
+### Github Workflow
+
+| Field   | Description                                             | Type     | Required | Templatable |
+| ------- | ------------------------------------------------------- | -------- | -------- | ----------- |
+| `id`    | Workflow id or the workflow file name (eg release.yaml) | `string` | `true`   |             |
+| `ref`   | Branch name of the tag name                             | `string` |          | `true`      |
+| `input` | Azure connection                                        | `json`   |          | `true`      |
+
+## Templating
+
+<Templating/>

@@ -4,17 +4,18 @@ hide:
 title: CLI
 description: Troubleshooting and/or running from CI/CD pipeline
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 
 # Installation
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import ReactMarkdown from 'react-markdown';
+<Step step={1} name="Install the CLI">
 
 <Tabs>
 <TabItem value="linux-amd64" label="Linux (amd64)" default>
 
-```shell-session
+```bash
 wget  https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_linux_amd64   \
   -O /usr/bin/canary-checker && \
   chmod +x /usr/bin/canary-checker
@@ -50,7 +51,7 @@ wget https://github.com/flanksource/canary-checker/releases/latest/download/cana
   </TabItem>
   <TabItem value="makefile" label="Makefile">
 
-```Makefile
+```bash
 OS = $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH = $(shell uname -m | sed 's/x86_64/amd64/')
 wget -nv -nc https://github.com/flanksource/canary-checker/releases/latest/download/canary-checker_$(OS)_$(ARCH)  \\
@@ -68,7 +69,9 @@ wget -nv -nc -O https://github.com/flanksource/canary-checker/releases/latest/do
   </TabItem>
 </Tabs>
 
-# Run
+</Step>
+<Step step={2} name="Create a canary definition">
+
 
 ```yaml title="canary.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -85,8 +88,13 @@ spec:
 
 ```
 
-```shell-session
+</Step>
+<Step step={3} name="Run the check locally">
+
+```bash
 canary-checker run canary.yaml
 ```
 
 <Asciinema id="594517"/>
+
+</Step>

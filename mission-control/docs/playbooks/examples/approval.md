@@ -1,4 +1,6 @@
-# Playbook Approval
+---
+title: Playbook Approval
+---
 
 ```yaml title="approval.yaml"
 apiVersion: mission-control.flanksource.com/v1

@@ -1,0 +1,20 @@
+---
+title: LDAP
+---
+
+# <Icon name="ldap" /> LDAP
+
+The LDAP check:
+
+* Binds using the provided username and password to the LDAP host. It supports LDAP/LDAPS protocols.
+* Searches an object type in the provided `bindDN`.
+
+
+```yaml title="icmp.yaml"  file=../../../modules/canary-checker/fixtures/ldap/ldap_pass.yaml
+```
+<HealthCheck name="ldap" connection="ldap" rows={[
+  {field: "bindDN", description: "BindDN to use in query", scheme: 'string', required: true},
+  {field: "userSearch", description: "UserSearch to use in query", scheme: 'string', required: true},
+
+]}/>
+

@@ -1,0 +1,31 @@
+---
+title: AWS Cloud Watch
+---
+
+# <Icon name="aws-cloudwatch" /> CloudWatch
+
+Cloudwatch checks for all active alarms
+
+```yaml title="cloudwatch.yaml"  file=../../../modules/canary-checker/fixtures/aws/cloudwatch_pass.yaml
+```
+
+<HealthCheck name="cloudwatch" connection="aws" rows={[
+  {
+    field: "actionPrefix" ,
+    description: "Use to filter the results of the operation to only those alarms that use a certain alarm action. Fr example you could specify the ARN of an SNS topic to find all alarms that send notifications to that topic"
+  },
+  {
+    field: "alarmPrefix",
+    description: "Specify to receive information about all alarms that have names that start with this prefix."
+  },
+  {
+    field: "state",
+    description: "Specify to retrieve state value of alarm",
+  },
+  {
+    field: "alarms",
+    description: "Set field to retrieve information about alarm",
+  }
+]}/>
+
+

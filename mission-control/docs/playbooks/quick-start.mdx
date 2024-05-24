@@ -1,0 +1,83 @@
+---
+title: Quick Start
+sidebar_position: 2
+---
+
+import Plus from '/img/icons/blue-plus.svg'
+
+In this walkthrough, we'll create and run a playbook that scales a Kubernetes deployment.
+The only prerequisites are
+
+:::info Prerequisites
+- Mission Control is installed and configured
+- The `mission-control-sa` service account has relevant permissions
+- `kubectl` is installed and connected
+:::
+<Step step={1} name="Create a playbook spec">
+
+```yaml title="restart-deployment.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: restart-deployment
+spec:
+  description: Restart deployment
+  configs:
+    - types:
+        - Kubernetes::Deployment
+  actions:
+    - name: kubectl rollout restart deployment
+      exec:
+        script: kubectl rollout restart deployment {{.config.name}} -n {{.config.tags.namespace}}
+```
+
+See [Playbook](/reference/playbooks/playbook) for the full specification.
+
+
+</Step>
+<Step step={2} name="Apply the playbook">
+
+```bash
+kubectl apply -f restart-deployment.yaml
+```
+
+:::warning
+This is for development purposes, for production use a GitOps tool like Flux or Argo to apply the spec.
+:::
+
+<details summary="Add playbook from UI">
+<div className='white'>
+
+a. Navigate to the **Playbooks** page <br/>
+b. Click on the <Plus color="#005be2" height={25} width={25}/> icon to add a new playbook <br/>
+c. Add the `spec` from the YAML file above <br/>
+
+<img src= "/img/playbook-create.png" width="500px"/>
+
+
+</div>
+</details>
+
+</Step>
+<Step step={3} name="Run the playbook">
+
+
+a. Navigate to a Deployment in the **Catalog** <br/>
+b. Select **Restart Deployment** from the Playbooks menu<br/>
+c. Click **Run**<br/>
+
+<img src="/img/restart-deployment.png" width="500px"/>
+
+> See [Event Triggers](/playbooks/events) to run the playbook on event (e.g. pod crashlooping) <br/>
+> See [Webhooks](/playbooks/webhooks) to run the playbook from a webhook (e.g. on Git push)
+
+
+
+
+</Step>
+<Step step={4} name="See the Results">
+
+<img src="/img/restart-deployment-run.png" width="900px"/>
+
+
+</Step>

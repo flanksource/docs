@@ -1,4 +1,6 @@
-# Dashboard
+---
+title: Dashboard
+---
 
 Canary checker comes with a built-in dashboard for displaying canary results, it can be turned off using
 

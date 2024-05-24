@@ -1,0 +1,22 @@
+---
+title: TCP
+---
+
+# <Icon name="network" /> TCP
+
+Checks if a network port is reachable.
+
+
+```yaml title="tcp.yaml"  file=../../../modules/canary-checker/fixtures/minimal/tcp.yaml
+```
+
+<HealthCheck name="tcp"  rows={[
+  {    field: "endpoint", description: "Host to ping", scheme: 'string', required: true  },
+  {
+    field: "thresholdMillis",
+    description: "Threshold response time from DNS server",
+    scheme: 'int'
+  }
+
+]}/>
+

@@ -1,8 +1,6 @@
 ---
-description: Display Formatting
+title: Display Formatting
 ---
-
-# Display Formatting
 
 Canary checker can format the results of checks using the `display` field. All expressions must return a string (or a Go struct with a `.String()` method)
 

@@ -1,4 +1,6 @@
-# Health Checks
+---
+title: Health Checks
+---
 
 Components can be associated with health checks. This association allows you to check the health of a component. When the health checks associated to the component become unhealthy, the component will also become unhealthy & vice-versa.
 
@@ -11,8 +13,8 @@ Health checks can be associated in 2 ways:
 
 | Field      | Description                      | Scheme                                                         | Required |
 | ---------- | -------------------------------- | -------------------------------------------------------------- | -------- |
-| `inline`   | Define a new health check inline | [`CanarySpec`](../../canary-checker/reference/canary-spec.mdx) |          |
-| `selector` | Select an existing health check  | [`[]ResourceSelector`](../../reference/resource_selector)      |          |
+| `inline`   | Define a new health check inline | [`CanarySpec`](/reference/canary-checker) |          |
+| `selector` | Select an existing health check  | [`[]ResourceSelector`](/reference/resource-selector)      |          |
 
 ### Selector
 
@@ -68,4 +70,4 @@ spec:
       name: inline-canary
 ```
 
-The inline object can specify any [Check](../../canary-checker/reference/canary-spec.md)
+The inline object can specify any [Check](/reference/canary-checker)

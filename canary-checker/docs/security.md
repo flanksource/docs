@@ -4,15 +4,9 @@ title: Security
 
 
 
-Canary checker is essentially a remote command execution platform, which from a security perspective can be challengin
+Canary checker is essentially a remote command execution platform, which from a security perspective can be challenging
 
 ## Threat Model
-
-
-
-
-
-
 
 ## Hardening
 
@@ -22,9 +16,8 @@ You can  take following steps to harden your installation.
 
 | Path                       | Value   | Impact                                                       |
 | -------------------------- | ------- | ------------------------------------------------------------ |
-| `image.type`               | miminal | The full image includes a java installation and other test execution frameworks |
+| `image.type`               | minimal | The full image includes a java installation and other test execution frameworks |
 | `dockerSocket`             | false   | Attaching to the host docker socket gives access to all containers running on the machine |
 | `containerSocket`          | false   |                                                              |
 | `ingress.enabled`          | false   | If possible disable the ingress to limit any attach surface  |
 | `allowPrivilegeEscalation` | false   |                                                              |
-

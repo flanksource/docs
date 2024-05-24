@@ -1,0 +1,26 @@
+---
+title: Git
+---
+# <Icon name="git" /> Git
+
+    <Standard />
+
+Execute as SQL style query against a github repo using [mergestat-lite](https://github.com/mergestat/mergestat-lite).
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: github-check
+spec:
+  schedule: "@every 1m"
+  github:
+    - githubToken: <token>
+      query: SELECT count(*) FROM commits WHERE author_email = 'user@email.com'
+```
+
+<HealthCheck name="github" rows={[
+  {field: "githubToken", description: "Github Personal Access Token", scheme: 'EnvVar', required: true},
+  {field: "query", description: "Query to be executed. See [mergestat-lite](https://github.com/mergestat/mergestat-lite) for syntax", scheme: 'string', required: true},
+
+]}/>

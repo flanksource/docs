@@ -23,21 +23,21 @@ export function SkipOSS({ children }) {
   if (siteConfig.customFields.oss) {
     return null
   }
-  // if (Array.isArray(children)) {
-  //   if (children.length == 0) {
-  //     return null
-  //   }
-  //   return <>
-  //     {
-  //       children.forEach(i => {
-  //         { i }
-  //       })
-  //     }
-  //   </>
-  // }
+
   return <> {children} </>
 
 }
+
+export function SkipCommercial({ children }) {
+  const { siteConfig, siteMetadata } = useDocusaurusContext();
+  if (!siteConfig.customFields.oss) {
+    return null
+  }
+
+  return <> {children} </>
+
+}
+
 
 
 export function Commercial({ color }) {

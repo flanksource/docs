@@ -8,7 +8,7 @@ This guide involves the following steps:
 
 !!! note
 
-    This guide assumes that you have already installed `apm-hub`. If you haven't, please follow the [installation guide](./tutorials/install.md).
+    This guide assumes that you have already installed `apm-hub`. If you haven't, please follow the [installation guide](./tutorials/install).
 
 ### 1. Prepare configuration file
 
@@ -52,7 +52,7 @@ curl -d '{"limit": 10, "labels":{"app" :"nginx"}}' \
 -H "Content-Type: application/json" localhost:8080/search
 ```
 
-If you notice, the `labels` in the body of the request match the `labels` in the configuration file. This is how apm-hub knows whether the file backend should serve the search query or not. This feature of selecting backends for each queries is called [Routing](./concepts/routing.md).
+If you notice, the `labels` in the body of the request match the `labels` in the configuration file. This is how apm-hub knows whether the file backend should serve the search query or not. This feature of selecting backends for each queries is called [Routing](./concepts/routing).
 
 ```json
 {

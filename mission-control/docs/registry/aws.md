@@ -1,4 +1,6 @@
-# AWS
+---
+title: AWS
+---
 
 The AWS helm chart installs a [catalog scraper](/config-db/scrapers/aws)
 
@@ -53,9 +55,9 @@ The following table lists the configurable parameters and their default values:
 
 | Parameter | Description | Schema | Default |
 | --- | --- | --- | --- |
-| `connectionDetails.connection` | AWS connection details. | string | "" |
-| `connectionDetails.accessKey` | Name of the access key. | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
-| `connectionDetails.secretKey` | Name of the secret key. | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
+| `connectionDetails.connection` | AWS connection details. | [Connection](/reference/connections/aws) | "" |
+| `connectionDetails.accessKey` | Name of the access key. | [EnvVar](/reference/env-var) | "" |
+| `connectionDetails.secretKey` | Name of the secret key. | [EnvVar](/reference/env-var) | "" |
 | `connectionDetails.region` | AWS region. | string | "" |
 | `connectionDetails.endpoint` | AWS endpoint. | string | "" |
 | `connectionDetails.skipTLSVerify` | Skip TLS verification.| bool | false |
@@ -65,6 +67,7 @@ The following table lists the configurable parameters and their default values:
 If you have setup IAM Roles for Service Account, you do not have to do anything else. If you do not have that setup, you can use AWS Access and Secret Keys as well
 
 Example:
+
 ```yaml title="values.yaml"
 connectionDetails:
   accessKey:

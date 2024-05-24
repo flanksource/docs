@@ -1,15 +1,13 @@
 ---
 title: Connections
 ---
-# Authentication
-
 Mission Control uses the Kubernetes ValuesFrom pattern to retrieve sensitive values like usernames, password and access keys.
 
 Whenever a field uses the `EnvVar` object type you have the option of specifying the value in 3 ways:
 
 1. Statically in the `value` field
-1. Via a Kubernetes Config Map via the `configMapKeyRef` field
-1. Via a Kubernetes Secret via the `secretKeyRef` field
+2. Via a Kubernetes Config Map via the `configMapKeyRef` field
+3. Via a Kubernetes Secret via the `secretKeyRef` field
 
 ### Static Values
 

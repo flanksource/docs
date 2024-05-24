@@ -1,4 +1,6 @@
-# Scaling Canaries up/down
+---
+title: Scaling Canaries up/down
+---
 
 Canaries can be scaled up or down just like other kubernetes resources. However, scaling to more than one replica is identical to having just one replica. In other words, scaling a canary can be thought of as a mechanism to turn on/off the canary.
 

@@ -1,9 +1,6 @@
 # Canary-Checker vs Prometheus blackbox exporter
 
-
-
 [Prometheus Blackbox Exporter](https://github.com/prometheus/blackbox_exporter) is a prometheus exporter for probing HTTP, HTTPS, DNS, TCP, ICMP and gRPC.
-
 
 |                     | Blackbox Exporter                                            | Canary Checker                                               |
 | ------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -22,8 +19,7 @@
 | Secrets             | Via [Probe](https://prometheus-operator.dev/docs/operator/api/#monitoring.coreos.com/v1.Probe) |                                                              |
 | **Check Types**     |                                                              |                                                              |
 | Synthetic           | No                                                           | Builtin check types for any test exporting JUnit test results e.g.  (k6, playwright, robot, postman, etc) |
-| Infrastructre       | No                                                           | Verify the ability to launch new pods, create new EC2 instances or push and pull from docker / helm / git repositories |
+| Infrastructure       | No                                                           | Verify the ability to launch new pods, create new EC2 instances or push and pull from docker / helm / git repositories |
 | Backup              | No                                                           | Check backups via Restic, S3, SMB, SFTP, GCS                 |
 | Compliance          | No                                                           | AWS Config Rules, Flanksource Config DB                      |
 | Alert Aggregation   | No                                                           | Alert Manager, AWS Cloudwatch, Dynatrace                     |
-

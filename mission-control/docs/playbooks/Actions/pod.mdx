@@ -1,0 +1,31 @@
+---
+title: Pod
+---
+import Templating from "../../reference/playbooks/context.mdx"
+
+# <Icon name="pod"/> Pod Action
+
+Pod action allows you to run an arbitrary pod on your kubernetes cluster.
+
+```yaml title="ping-database-from-pod.yaml" file=../../../modules/mission-control/fixtures/playbooks/pod.yaml
+```
+
+
+<Action  rows={[
+  {field: "spec", description: "Full pod specification", scheme: "[PodSpec](https://pkg.go.dev/k8s.io/api@v0.28.2/core/v1#PodSpec)", required: true},
+  {field: "maxLength", description: "Maximum length of the logs to show", scheme: "integer", default: "3kb"},
+  {field: "artifacts", description: "File generated in the pod that need to be saved", scheme: "[[]Artifact](#artifact)"}
+]}/>
+
+## Artifact
+
+| Field  | Description   | Type     | Required |
+| ------ | ------------- | -------- | -------- |
+| `path` | Path or glob. | `string` | `true`   |
+
+See [Artifacts](../concepts/artifacts)
+
+
+## Templating
+
+<Templating/>

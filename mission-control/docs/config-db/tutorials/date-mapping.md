@@ -1,4 +1,6 @@
-# Date Mapping
+---
+title: Date Mapping
+---
 
 In this tutorial, you'll use the config-db CLI to scrape a file that consists of a list of virtual machines.
 
@@ -53,4 +55,4 @@ spec:
 
 The `createFields` in the above scrape config instructs config-db to first look at the `installed_on` field to get the creation date of the config and then try the `deployed_at` field if it's empty. Specifying the timestampFormat is important because the timestamps in the VM configuration are not in the expected default format.
 
-![](../../images/tutorial-vm-scraper-creation-date.png)
+![](/img/tutorial-vm-scraper-creation-date.png)

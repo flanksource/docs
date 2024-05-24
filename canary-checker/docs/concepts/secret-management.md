@@ -1,4 +1,7 @@
-# Secret Management
+---
+title: Env Vars
+sidebar_position: 1
+---
 
 Canary checker uses the Kubernetes ValuesFrom pattern to retrieve sensitive values like usernames, password and access keys.
 
@@ -11,6 +14,10 @@ Whenever a field uses the `EnvVar` object type you have the option of specifying
 1. From a service account using `serviceAccount`
 
 ## Static Values
+
+:::warning
+Avoid inlining secrets, use `valueFrom` and <CommonLink to="authentication">EnvVar</CommonLink>
+:::
 
 Using a HTTP health check as an example for static values:
 
@@ -179,7 +186,7 @@ rules:
 
 :::
 
-# Recommendations
+## Recommendations
 
 Kubernetes Secrets are, by default, stored unencrypted in the API server's underlying data store (etcd). Anyone with API access can retrieve or modify a Secret, and so can anyone with access to etcd. With this in mind, it is recommended to implement some level of security to prevent unauthorized access to your Kubernetes secrets.
 You may consider the following for your encryption and security needs:

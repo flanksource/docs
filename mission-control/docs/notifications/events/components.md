@@ -1,4 +1,6 @@
-# Components
+---
+title: Components
+---
 
 Component status updates emit the following events
 
@@ -13,7 +15,7 @@ Component status updates emit the following events
 | Field       | Description                   | Schema                    | Optional |
 | ----------- | ----------------------------- | ------------------------- | -------- |
 | `component` | The component object          | [`Component`](#component) |          |
-| `agent`     | Agent details (if applicable) | [`Agent`](#check)         | `true`   |
+| `agent`     | Agent details (if applicable) | [`Agent`](#agent)         | `true`   |
 | `permalink` | A link to the health check    | `string`                  |          |
 
 ### Component
