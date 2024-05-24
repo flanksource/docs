@@ -5,10 +5,7 @@ title: GCP
 
 <Fields connection="gcp"/>
 
-
-
-
-There are 3 options when connecting to GCP:
+## There are 3 options when connecting to GCP
 
 <Step step={1} name="GKE Workload Identity"  style="list">
 
@@ -55,3 +52,113 @@ spec:
 </Step>
 
 
+## Using the GCP Cloud SQL Instance instead of the default Postgres Statefulset
+
+The `flanksource/mission-control` chart deploys a postgres statefulset in the cluster by default. Instead you can choose a cloud SQL instance and connect to it using a cloud sql proxy. The cloud sql proxy uses a GCP service account to authenticate to cloud SQL instance using IAM authentication. To disable the postgres statefulset and deploy the cloud sql proxy instead, follow these steps: 
+
+<Step step={1} name="Create Postgres DB"  style="list">
+[Create a postgres db](https://cloud.google.com/sql/docs/postgres/create-manage-databases) `mission_control` in GCP Cloud SQL Instance
+</Step>
+
+<Step step={2} name="Add Instance User"  style="list">
+Enable [IAM Authentication](https://cloud.google.com/sql/docs/postgres/create-edit-iam-instances#configure_existing_instances_for) in the cloud postgresSQL instance and [add a service account as a user](https://cloud.google.com/sql/docs/postgres/add-manage-iam-users#creating-a-database-user)
+</Step>
+
+<Step step={3} name="Create GCP Service Account"  style="list">
+Create a GCP service account `mission-control-sa`
+</Step>
+
+<Step step={4} name="Attach roles to GCP Service Account"  style="list">
+Attach the role `cloudsql.instanceUser` and `cloudsql.client` to the GCP service account
+</Step>
+
+<Step step={5} name="Deploy Cloud SQL Proxy"  style="list">
+Annotate the SA to allow WIF. Here is a sample template for reference to deploy cloud sql proxy. This template is not a part of the Mission Control helm chart.
+
+```
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mission-control-cloud-sql-proxy
+  annotations:
+    iam.gke.io/gcp-service-account: mission-control-sa@gcp-project-id.iam.gserviceaccount.com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mission-control-cloud-sql-proxy
+spec:
+  selector:
+    app: mission-control-cloud-sql-proxy
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mission-control-cloud-sql-proxy
+spec:
+  selector:
+    matchLabels:
+      app: mission-control-cloud-sql-proxy
+  template:
+    metadata:
+      labels:
+        app: mission-control-cloud-sql-proxy
+    spec:
+      serviceAccountName: mission-control-cloud-sql-proxy
+      containers:
+      - name: cloud-sql-proxy
+        image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0
+        ports:
+        - containerPort: 5432
+        args:
+          - "--address=0.0.0.0"
+          - "--port=5432"
+          - "{{ .Values.gcpProject }}:{{ .Values.cloudSqlProxy.sqlInstanceRegion }}:{{ .Values.sqlInstanceName }}"
+          - --auto-iam-authn
+        securityContext:
+          runAsNonRoot: true
+```
+</Step>
+
+<Step step={6} name="Create k8s Secret"  style="list">
+Create the secret with a connection string to allow mission control microservices to connect to Cloud SQL Instance via cloud sql proxy.
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mission-control-postgres-connection
+  namespace: flanksource
+type: Opaque
+stringData:
+  DB_URL: {{ (printf "postgres://mission-control-sa%40<gcp-project-id>.iam@mission-control-cloud-sql-proxy.%s.svc.cluster.local/mission_control?sslmode=disable" (include "chart.urlencodePostgresUser" .) .Release.Namespace ) }} # Note that '@' has been replaced with '%40'
+```
+The format of the connection string is: `postgres://<iam user email without gserviceaccount.com>@<cloud sql proxy svc name>.<namespace of svc>.svc.cluster.local/<db>?sslmode=disable`
+</Step>
+
+<Step step={7} name="Deploy Mission Control"  style="list">
+Now deploy `flanksource/mission-control` chart with the following values
+
+```cloudSqlProxy.yaml
+db:
+    create: false
+    secretKeyRef:
+        name: mission-control-postgres-connection
+canary-checker:
+  db:
+    external:
+      secretKeyRef:
+        name: mission-control-postgres-connection
+        key: DB_URL
+config-db:
+  db:
+    external:
+      secretKeyRef:
+        name: mission-control-postgres-connection
+        key: DB_URL
+```
+</Step>
