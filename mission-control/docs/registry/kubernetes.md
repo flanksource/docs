@@ -38,6 +38,90 @@ And we also have added a catalog scraper which populated our catalog
 
 ![Kubernetes Catalog](/img/kubernetes-registry-catalog-scraper.png)
 
+### Monitoring Multiple Clusters
+The cluster where Mission Control is deployed gets catalogued by default. You can monitor more than one k8s cluster in a centralized manner
+
+<Step step={1} name="Create Kubeconfig secret"  style="list">
+Create a secret containing the kubeconfig of the child cluster. This secret must be created in the parent cluster where Mission Control is deployed:
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: child-cluster-kubeconfig
+  namespace: flanksource
+type: Opaque
+data:
+kubeconfig: |
+  apiVersion: v1
+  kind: Config
+  preferences: {}
+
+  clusters:
+  - cluster:
+    name: child-cluster
+
+  contexts:
+  - name: child-cluster
+    context:
+      cluster: child-cluster
+      user: child-cluster-user
+
+  users:          
+  - name: child-cluster-user
+    user:
+      exec:
+        apiVersion: client.authentication.k8s.io/v1beta1
+        command: gke-gcloud-auth-plugin
+        args: [] # Add any required arguments here
+        installHint: "Install gke-gcloud-auth-plugin for use with kubectl by following https://cloud.google.com/kubernetes-engine/docs/how-to cluster-access-for-kubectl#install_plugin"
+        provideClusterInfo: true                                                                                                           
+```
+</Step>
+
+<Step step={2} name="Create GCP Service Account for Config-db"  style="list">
+Create GCP Service Account for the config-db microservice in the central GCP project. Give `container.viewer` permissions and the child GCP project as the resource.
+</Step>
+
+<Step step={3} name="Annotate Config-db K8s Service Account"  style="list">
+Annotate the config-db k8s service account and use the email of the GSA created in the previous step and update Mission control helm chart
+
+```values.yaml
+config-db:
+  serviceAccount:
+    annotations:
+      iam.gke.io/gcp-service-account: config-db-sa@gcp-project-id.iam.gserviceaccount.com
+```
+</Step>
+
+<Step step={4} name="Create Bundle for Child Cluster"  style="list">
+To get the catalog of all the resources in your child gke k8s cluster, deploy the k8s bundle helm chart with the custom values
+
+```sh
+helm repo add flanksource https://flanksource.github.io/charts
+helm repo update
+helm install child-cluster-k8s-bundle flanksource/mission-control-kubernetes -n flanksource -f custom-values.yaml
+```
+
+```
+# custom-values.yaml
+
+clusterName: child-cluster
+kubeconfig:
+    name: child-cluster
+    valueFrom:
+      secretKeyRef:
+        name: child-cluster-kubeconfig
+        key: kubeconfig
+topology:
+  name: child-cluster
+scraper:
+  name: child-cluster
+  retention:
+    staleItemAge: 1d
+```
+</Step>
+
 ## Values
 
 This document provides an overview of configurable values for deploying the Kubernetes Scraper component using Helm.

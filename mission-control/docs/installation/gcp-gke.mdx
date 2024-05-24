@@ -1,0 +1,61 @@
+---
+title: Install Mission Control on GKE cluster
+---
+
+:::info Prerequisites
+To install and run Mission Control you need:
+
+- EKS 1.26+ with an Ingress Controller
+- 500-1000m of CPU and 2GB of Memory
+- Persistent Volumes with 20GB+ of storage or an external postgres database like GCP Cloud SQL
+- (Optional) SMTP Server for sending notifications and invites
+:::
+
+
+<Step step={1} name="Install Helm Repository">
+
+```shell
+helm repo add flanksource https://flanksource.github.io/charts
+helm repo update
+```
+</Step>
+
+<Step step={2} name="Install Helm Chart">
+
+```yaml title="values.yaml"
+global:
+  ui:
+    host: "mission-control-ui.local" # hostname
+  serviceAccount:
+    annotations: # Any annotations required to attach custom IAM policies etc.
+
+adminPassword: admin # The default password for the admin@local user
+
+flanksource-ui:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+db:
+  storageClass: #FIXME
+  storage: 20Gi
+```
+```bash
+helm install mission-control  \
+ flanksource/mission-control  \
+ -n mission-control \
+ --create-namespace \
+ --wait \
+ -f values.yaml
+```
+
+</Step>
+
+To set custom values file for your mission-control helm chart installation, override existing values in [mission-control-chart](https://github.com/flanksource/mission-control-chart/tree/main/chart). Some common values that can be changed can be found [here](https://docs.flanksource.com/#install-chart)
+
+<Step step={3} name="(Optional) Use GCP Cloud SQL Instance">
+
+[Using a GCP Cloud SQL Instance instead of the default Postgres Statefulset](../reference/connections/gcp#using-the-gcp-cloud-sql-instance-instead-of-the-default-postgres-statefulset)
+
+</Step>
