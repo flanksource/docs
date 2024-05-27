@@ -3,7 +3,7 @@ title: Custom Scrapers
 sidebar_position: 100
 ---
 
-Custom scrapers allow you to scrape from sources that are not well defined eg: scraping a [File](./file) sitting on disk, inside a [Kubernetes Pod](./kubernetes-file) or from a [SQL](./sql) query.
+Custom scrapers allow you to scrape from sources that are not well-defined. For example, you can scrape a [file](./file) sitting on disk, a file inside a [Kubernetes Pod](./kubernetes-file), or data from a [SQL](./sql) query.
 
 
 ```yaml title="file-scraper.yaml"
@@ -33,7 +33,8 @@ spec:
 
 ## Mapping
 
-Custom scrapers need to define the id, type & class for each items that are scraped. For example: if you're scraping a file with a JSON Array where each element on the array is to be scraped as a config item, you need to define what the id, type & config class of the items should be. This can be done using mappings.
+Custom scrapers require defining the `id`, `type`, and `class` for each scraped item. For example, when scraping a file containing a JSON array, where each array element represents a config item, you need to specify the `id`, `type`, and config `class` for these items. Achieve this by utilizing mappings in your custom scraper configuration.
+
 
 | Field             | Description                                                                                                                                                                                  | Scheme                                              | Required |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------- |
@@ -56,9 +57,9 @@ Custom scrapers need to define the id, type & class for each items that are scra
 
 Config items are stored as `jsonb` fields in PostgreSQL.
 
- The JSON used is typically returned by resource provider e.g.  `kubectl get -o json` or `aws --output=json`
+The JSON used is typically returned by a resource provider. e.g. `kubectl get -o json` or `aws --output=json`.
 
-The UI will convert from JSON to YAML when showing the config.
+When displaying the config, the UI will automatically convert the JSON data to YAML for improved readability.
 
 ### XML / Properties
 

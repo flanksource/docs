@@ -36,22 +36,22 @@ export default function HealthCheck({ name, edition, rows, ...props }) {
     {
       field: "test",
       description: "Evaluate whether a check is healthy",
-      scheme: "[`Expression`](../concepts/health-evaluation)"
+      scheme: "[`Expression`](../concepts/expressions/health-evaluation)"
     },
     {
       field: "display",
       description: "Expression to change the formatting of the display",
-      scheme: "[`Expression`](../concepts/display-formatting)"
+      scheme: "[`Expression`](../concepts/expressions/display-formatting )"
     },
     {
       field: "transform",
       description: "Transform data from a check into multiple individual checks",
-      scheme: "[`Expression`](../concepts/transforms)"
+      scheme: "[`Expression`](../concepts/expressions/transforms)"
     },
     {
       field: "metrics",
       description: "Metrics to export from",
-      scheme: "[`[]Metrics`](../concepts/metrics-exporter)"
+      scheme: "[`[]Metrics`](../concepts/metrics/custom-metrics)"
     }
 
   ]

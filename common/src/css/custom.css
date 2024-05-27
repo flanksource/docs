@@ -5,6 +5,14 @@
   --docsearch-hit-active-color: blue;
 }
 
+.step-anchor{
+  display:block;
+  height:63px; /* this is the height of your header */
+  margin-top:-63px; /* this is again negative value of the height of your header */
+  visibility:hidden;
+}
+
+
 [data-theme='light'] img[src$='#gh-dark-mode-only'],
 [data-theme='dark'] img[src$='#gh-light-mode-only'] {
   display: none;

@@ -9,7 +9,7 @@ title: Exec
 Executes a bash (linux) or powershell (windows) script. The check is considered passing if the script exits with `0`
 
 :::tip Docker Image variants
-See [image-variants](../concepts/image-variants)
+See [image-variants](/reference/canary-checker/image-variants)
 :::
 
 ```yaml title="exec.yaml"  file=../../../modules/canary-checker/fixtures/minimal/exec_pass.yaml
@@ -81,7 +81,7 @@ will be setup on the host running the script.
 | ------ | ------------- | -------- | -------- |
 | `path` | Path or glob. | `string` | `true`   |
 
-See [artifacts](../concepts/artifacts)
+See [artifacts](/installation/artifacts)
 
 <details summary="Exec with an Artifact">
 <div>

@@ -1,39 +1,68 @@
 ---
 title: Deployment Models
+hide_title: true
 sidebar_position: 1
 ---
 
-export const toc = [{
-        value: "Agent",
-        id: "agent",
+export const toc = [
+    {
+        value: "Deployment Model",
+        id: "deployment-model",
         level: 2,
+    },
+    {
+        value: "SaaS + Agent (Hybrid)",
+        id: "agent",
+        level: 3,
     },
     {
         value: "Self Hosted",
         id: "self-hosted",
+        level: 3,
+    },
+
+       {
+        value: "SaaS Only",
+        id: "hosted",
+        level:3,
+    },
+     {
+        value: "Ingestion Model",
+        id: "ingestion-model",
         level: 2,
     },
 
        {
-        value: "Hosted",
-        id: "hosted",
-        level: 2,
-    }
+        value: "Hub and Spoke",
+        id: "hub-and-spoke",
+        level:3,
+    },
+
+    {
+        value: "Multi Agent",
+        id: "multi-agent",
+        level:3,
+    },
 
 ]
 
+## Deployment Model
 
-<Step step={1} name="Agent (Hybrid)"  anchor="agent">
+
+<Step step={1} name="SaaS + Agent (Hybrid)"  anchor="agent">
 
 <Screenshot img="/img/deployment-model-agent.svg" size="600px" shadow={false}/>
 
 **Pros**
-- Cloud credentials and secrets never leave your infrastructure
-- Fully integrated into your GitOps flow
-- Reuse health checks with Flux/Argo
+- Keeps cloud credentials and secrets within the infrastructure
+- Fits into a GitOps flow
+- Allows reuse of health checks with Flux or Argo
 
 **Cons**
-- Requires a Kubernetes cluster (Can still use Kind or Microk8s)
+- Requires a Kubernetes cluster (e.g., Kind or Microk8s)
+
+
+See [Getting Started](/installation/saas/getting-started)
 
 </Step>
 
@@ -45,34 +74,74 @@ Mission Control is designed as self-hosted first -
 <Screenshot img="/img/deployment-model-self-hosted.svg" size="400px" shadow={false}/>
 
 **Pros**
-- Fully hosted on your Infrastructure
--  Only dependency is a Postgres DB (bundled into the Helm chart by default)
+- Hosted on your infrastructure (On-Premise, AWS, Google, Azure, etc..)
+- Only dependency is a Postgres DB (bundled into the Helm chart by default)
 - Automatic upgrades using Helm Semantic Versioning
 
 **Cons**
-- Single Signon setup required
+- Single Sign-On setup required
 - Postgres database management required
+
+
+
+See [Self-Hosted](/installation/self-hosted/getting-started)
 
 </Step>
 
 
 
-<Step step={3} name="Fully Hosted"  anchor="hosted">
+<Step step={3} name="SaaS Only"  anchor="hosted">
 
 The fully hosted deployment model does not require any changes to your infrastructure, but will require connections to be setup and configured on Mission Control to connect to your existing infrastructure and is therefore not recommended for production.
 
 <Screenshot img="/img/deployment-model-hosted.svg" size="600px" shadow={false}/>
-
 **Pros**
--  Fastest to setup
+- Fastest to set up
 
 **Cons**
 - Requires public network access to your infrastructure
 - Credentials and secrets are stored in the Flanksource Mission Control Cloud
 
 :::warning Non Production Only
-While Flanksource takes the necessary steps to protect all credentials saved in our cloud, sharing credentials with 3rd parties is never a recommended security practise, we therefore do not recommend the full hosted option for production environments.
+While Flanksource takes the necessary steps to protect all credentials saved in our cloud, sharing credentials with third parties is not a recommended security practice. Therefore, we do not recommend the fully hosted option for production environments.
+
 :::
 
 </Step>
+
+## Ingestion Model
+
+All deployment models can support different way of ingesting data, this is relevant in particular to multi-cluster, multi-account setups.
+
+### Hub and Spoke
+
+With the hub and spoke model, your primary instance (whether that is an agent or SaaS) connects to multiple accounts and clusters
+
+
+<Screenshot img="/img/hub-and-spoke.svg" size="550px" shadow={false}/>
+
+**Pros**
+- Lower overhead during setup, especially if secrets containing the `kubeconfig` or other access credentials are already available.
+
+**Cons**
+- Reduced performance, particularly if clusters are in different regions or have costly authentication processes.
+- Reduced security, as maintaining credentials in one location can facilitate lateral movement by attackers.
+- Inbound network access is required.
+
+
+
+### Multi-Agent
+
+In the multi-agent setup an agent is installed in each cluster, and 1 agent per account/region is designated for scraping cloud resources:
+
+<Screenshot img="/img/multi-agent.svg" size="550px" shadow={false}/>
+
+**Pros**
+- High security, agents do not need to have inbound network access, and the use of local RBAC limits their privilege.
+- Increased performance, scraping and watching resources closer to their API endpoints is faster, and with most filtering and transformation being applied by the agent, the scalability of the central instance is improved.
+- Suitable for deployment into customer enviroments by software vendors or managed service providers.
+
+**Cons**
+- Slightly higher operational overhead
+
 

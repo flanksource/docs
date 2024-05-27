@@ -1,6 +1,6 @@
 ---
 title: Single Sign On (SSO)
-slug: installation/sso
+slug: sso
 ---
 
 Mission Control uses [kratos](https://www.ory.sh/kratos/) for identity management. Login via email/password is the default flow but any OIDC provider supported by Kratos can be used

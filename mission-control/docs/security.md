@@ -65,17 +65,17 @@ Thank you for your contribution to the security of this project!
 
 **In Scope**
 
-* Web applications and APIs under [app.flanksource.com](app.flanksource.com) and [beta.flanksource.io](beta.flanksource.com)
+* Web applications and APIs under [app.flanksource.com](https://app.flanksource.com) and [beta.flanksource.io](https://beta.flanksource.com)
 * Infrastructure components such as servers, databases, and network devices directly managed by Flanksource
 * Potential vulnerabilities in third-party services used by Flanksource, if they impact the security of our systems.
-* Any repository in [github.com/flanksource](github.com/flanksource) with a `SECURITY.md` file
+* Any repository in [github.com/flanksource](https://github.com/flanksource) with a `SECURITY.md` file
 * Self-Hosted installations of [mission-control](https://docs.flanksource.com/installation/self-hosted)
 
 **Out of Scope**
 
 * DKIM / SPF and other email relates issues.
 * Marketing sites and landing pages.
-* Authenticated access to [app.flanksource.com](app.flanksource.com) and [beta.flanksource.io](beta.flanksource.com), If you would like to perform authenticated testing in SaaS, please email us with a request for a temporary environment.
+* Authenticated access to [app.flanksource.com](https://app.flanksource.com) and [beta.flanksource.io](https://beta.flanksource.com), If you would like to perform authenticated testing in SaaS, please email us with a request for a temporary environment.
 * Any systems or services not directly owned or operated by Flanksource.
 * Vulnerabilities in third-party applications or services unless they pose a direct risk to Flanksource.
 * Physical security controls unless they can be directly exploited to compromise our systems.

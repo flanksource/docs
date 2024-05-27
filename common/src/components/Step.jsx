@@ -3,8 +3,10 @@ import React from 'react';
 import MDXContent from '@theme/MDXContent';
 
 export default function Step({ name, step, children, style = "tutorial", anchor }) {
-  return <MDXContent>
-    <span id={anchor} class="flex flex-row items-center gap-2 my-2 p-2 rounded-md bg-zinc-100 step-container">
+  return <MDXContent >
+
+    <span className="step-anchor" id={anchor} />
+    <span class="flex flex-row items-center gap-2 my-2 p-2 rounded-md bg-zinc-100 step-container">
       <span class="flex flex-row items-center gap-2">
         <img
           src={`/img/icons/circled-${step}.svg`}
@@ -19,6 +21,7 @@ export default function Step({ name, step, children, style = "tutorial", anchor 
     <div className="pl-8 ">
       {children}
     </div>
+
   </MDXContent >
 }
 

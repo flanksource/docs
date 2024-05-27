@@ -2,7 +2,13 @@
 title: Transform
 ---
 
-Transformations allows you to transform the scraped configs before they are saved to config db.
+Transformations allows you to transform the scraped config items before they are saved, common use cases include:
+
+- Linking configuration items
+- Removing extraneous or overly verbose fields
+- Masking sensitive data
+- Excluding duplicate changes or changes with a high rate
+
 
 | Field                       | Description                                                  | Scheme                                                       |
 | --------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |

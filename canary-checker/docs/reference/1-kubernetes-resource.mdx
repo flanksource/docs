@@ -24,7 +24,7 @@ check would be to see if a service is accessible via the ingress as shown in the
       required: true
     },
     {
-      field: 'staticresources',
+      field: 'staticResources',
       description:
         'Static resources are like `resources` but preserved between checks. They are only deleted when the canary is deleted.',
       scheme: '`[]KubernetesManifest`'
@@ -43,7 +43,7 @@ check would be to see if a service is accessible via the ingress as shown in the
     {
       field: 'clearResources',
       scheme: 'bool',
-      description: `When set to true, resources from previous checks will be deleted before every run. 
+      description: `When set to true, resources from previous checks will be deleted before every run.
         Even though the resources are deleted at the end of a check, setting this to \`true\` will guarantee that
         there are no remains from a previous failed run.`
     },
@@ -84,7 +84,7 @@ check would be to see if a service is accessible via the ingress as shown in the
   rows={[
     {
       field: 'expr',
-      description: `CEL expression that determines whether all the resources are in their desired state before running checks on them. 
+      description: `CEL expression that determines whether all the resources are in their desired state before running checks on them.
         It receives a \`resources\` array of the static and non-static resources.
         The default behavior is to wait until all the resources are ready \`dyn(resources).all(r, k8s.isReady(r))\`.`,
       scheme: 'CEL'

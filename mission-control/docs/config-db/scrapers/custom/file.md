@@ -2,7 +2,9 @@
 title: File
 ---
 
-The file config type is set to scrape configurations or configurations in common with the related elements that can be specified in the fields; `type`, and `id`. The paths to the configuration(s) to be scraped is set with the field `path` as a list.
+The `file` scraper is used to create config items from files in a local folder (or git). This can be used to track changes in files like `/etc/hosts` or `/etc/passwd`, or for service metadata stored in git.
+
+See [Kubernetes Files](./kubernetes-file) for scraping files inside running kubernetes pods.
 
 ```yaml title='file-scraper.yaml' file=../../../../modules/config-db/fixtures/file-git.yaml
 apiVersion: configs.flanksource.com/v1

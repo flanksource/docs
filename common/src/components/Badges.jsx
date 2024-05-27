@@ -12,7 +12,7 @@ export function FullImage({ color }) {
         marginLeft: "3px",
         padding: '0.3rem',
       }}>
-      <a href="/concepts/image-variants" style={{ color: "white" }}>Full Image Variant Required</a>
+      <a href="/reference/canary-checker/image-variants" style={{ color: "white" }}>Full Image Variant Required</a>
     </span >
   );
 }

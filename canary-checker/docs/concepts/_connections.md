@@ -31,7 +31,7 @@ spec:
 
 ### Kubernetes Configmaps
 
-To use a configmap, we first need to create the configmap:
+Create a configmap:
 
 ```bash
 kubectl create configmap basic-auth --from-literal=user=hello --from-literal=pass=world -n default
@@ -61,7 +61,7 @@ spec:
 
 ### Kubernetes Secrets
 
-To use a secret, first we create the secret:
+Create secret:
 
 ```bash
 kubectl create secret generic basic-auth --from-literal=user=hello --from-literal=pass=world -n default

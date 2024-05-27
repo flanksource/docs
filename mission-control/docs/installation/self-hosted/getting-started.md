@@ -1,7 +1,10 @@
 ---
-title: Installation
+title: Getting Started
+show_title: false
 sidebar_position: 0
 ---
+This tutorial guides you through setting up and configuring a self-hosted Mission Control environment.
+
 
 :::info Prerequisites
 To install and run Mission Control you need the following:
@@ -26,8 +29,6 @@ helm repo update
 </Step>
 <Step step={2} name="Install Helm Chart">
 
-To set custom values file for your mission-control helm chart installation to override existing values in [`mission-control-chart`](https://github.com/flanksource/mission-control-chart/blob/main/chart/values.yaml).
-
 ```yaml title="values.yaml"
 global:
   ui:
@@ -36,8 +37,9 @@ global:
     annotations: # Any annotations required to attach custom IAM policies etc.
 ```
 
-<details title="Auto Generate Certificates with Cert-Manager">
-You can add annotations to the ingress to have cert-manager generate the TLS certificates:
+<details summary="Auto Generate Certificates with Cert-Manager">
+You can add annotations to the ingress to have cert-manager generate the TLS certificate:
+
 ```yaml
 flanksource-ui:
   ingress:
@@ -64,9 +66,9 @@ See [values.yaml](https://github.com/flanksource/mission-control-chart/blob/main
 
 ## Optional Steps
 
-<Step step={3} name="Configure SMTP">
+<Step step={3} name="Configure Email (SMTP)">
 
-An SMTP server is required for sending notifications, user invites and password resets.
+An SMTP server is required for sending notifications, approvals,  user invites and password resets.
 
 The format of `connection_uri` is `smtp://hostname:port`
 
@@ -88,12 +90,13 @@ Kratos also supports [HTTP Webhooks](https://www.ory.sh/docs/kratos/self-hosted/
 </Step>
 <Step step={4} name="Single Sign On">
 
-See [SSO](./oidc) for OIDC.
+See [SSO](./sso)
 
 </Step>
 
 <Step step={5} name="External Database">
 
-See [Database](./database) for using an external database like AWS RDS or Google Cloud SQL or for fine-tuning the bundled postgres settings.
+See [Database](./database) to configure an external database such as AWS RDS or Google Cloud SQL, or to optimize the bundled PostgreSQL settings.
+
 
 </Step>

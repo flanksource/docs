@@ -16,12 +16,12 @@ export default function Lookup({ name, edition, rows, ...props }) {
       field: "display",
       required: true,
       description: "Expression to change the formatting of the display",
-      scheme: "[`Expression`](../concepts/display-formatting)"
+      scheme: "[`Expression`](../concepts/expressions/display-formatting )"
     },
     {
       field: "transform",
       description: "Transform data from a check into multiple individual checks",
-      scheme: "[`Expression`](../concepts/transforms)"
+      scheme: "[`Expression`](../concepts/expressions/transforms)"
     },
 
 

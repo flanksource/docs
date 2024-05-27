@@ -7,7 +7,7 @@ sidebar_class_name: popular
 
 Checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/) for any firing alerts.
 
-The following example [transforms](../concepts/transforms) the list of alerts so that each alert becomes a single check result. Without the transform the health check will fail if any alerts are firing.
+The following example [transforms](../concepts/expressions/transforms) the list of alerts so that each alert becomes a single check result. Without the transform the health check will fail if any alerts are firing.
 
 ```yaml title="alert-manager-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/alertmanager_mix.yaml
 apiVersion: canaries.flanksource.com/v12

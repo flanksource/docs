@@ -15,11 +15,11 @@ Relationships come in 2 types:
 
 **Hard Links** represent a physical relationship, e.g. A pod is always a child of namespace, hard links are created automatically by the relevant scraper or can be created by specifying `Parent Type` and `ID` in custom scrapers.
 
-**Soft Links** represent logical relationships and can have directionality. e.g. Node is related to a pod that runs on it, and a pod is related to an Persistent Volume that is attached the pod. Soft Links are created automatically by some scrapers e.g. Using `ownerRef` in kubernetes  and `subnet-id` in AWS. Custom soft links can be created using a [Relationship](./relationship) transformation.
+**Soft Links** represent logical relationships and can have directionality. e.g. Node is related to a pod that runs on it, and a pod is related to an Persistent Volume that is attached the pod. Soft Links are created automatically by some scrapers e.g. Using `ownerRef` in kubernetes  and `subnet-id` in AWS. Custom soft links can be created using a `relationship` transform:
 
 In the example below, `Kubernetes::Services` are linked to `Kubernetes::Pod` using a soft link based on the service selector name
 
-```yaml title="kubernetes-scraper.yaml"
+```yaml title="relate-services-to-pods.yaml"
 apiVersion: configs.flanksource.com/v1
 kind: ScrapeConfig
 metadata:
@@ -55,7 +55,7 @@ You can see changes on the incoming relationships (and their parents) by choosin
 
 | Field    | Description                                            | Scheme                                                       | Required |
 | -------- | ------------------------------------------------------ | ------------------------------------------------------------ | -------- |
-| `filter` | Which config items to form relationships with          | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](../references/scrape-result) | `true`   |
+| `filter` | Which config items to form relationships with          | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](/reference/config-db/scrape-result) | `true`   |
 | `id`     | The ID or Alias (External ID) of the config to link to | [Lookup](#lookup)                                            |          |
 | `name`   |                                                        | [Lookup](#lookup)                                            |          |
 | `type`   | Config Type                                            | [Lookup](#lookup)                                            |          |
@@ -68,7 +68,7 @@ RelationshipLookup offers different ways to specify a lookup value
 
 | Field   | Description                                   | Scheme                                | Variables                                     |
 | ------- | --------------------------------------------- | ------------------------------------- | --------------------------------------------- |
-| `expr`  | An expression that returns a value to be used | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](../references/scrape-result) | [`ScrapeResult`](../references/scrape-result) |
+| `expr`  | An expression that returns a value to be used | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](/reference/config-db/scrape-result) | [`ScrapeResult`](/reference/config-db/scrape-result) |
 | `value` | A static value to use in the lookup                     | `string`                              |                                               |
 | `label` | Get the value to use from an existing label         | `label name`                              |                                               |
 
@@ -81,7 +81,7 @@ Sometimes the logic for when to a form a relationship is complex, a CEL expressi
 
 | Field  | Description                                                  | Scheme                                | Variables                                     |
 | ------ | ------------------------------------------------------------ | ------------------------------------- | --------------------------------------------- |
-| `expr` | An expression that returns a list of  [ResourceSelectors](/reference/resource-selector) | <CommonLink to="cel">CEL</CommonLink> | [`ScrapeResult`](../references/scrape-result) |
+| `expr` | An expression that returns a list of  [ResourceSelectors](/reference/resource-selector) | <CommonLink to="cel">CEL</CommonLink> | [`ScrapeResult`](/reference/config-db/scrape-result) |
 
 
 ```yaml title=link-pvc-to-pod.yaml
