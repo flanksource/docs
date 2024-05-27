@@ -1125,7 +1125,7 @@ A wrapper for Go's [`path.Split`](https://golang.org/pkg/path/#Split) function.
 
 ### ASCII
 
-Generates a random string of a desired length, containing the set of printable characters from the 7-bit [ASCII](https://en.wikipedia.org/wiki/ASCII) set. This includes _space_ (' '), but no other whitespace characters.
+Generates a random string of a desired length, containing the set of printable characters from the 7-bit [ASCII](https://en.wikipedia.org/wiki/ASCII) set. This includes _space_ (' '), but no other space characters.
 
 ```go
 {{ random.ASCII 8 }} // _woJ%D&K
@@ -1509,8 +1509,7 @@ This wraps Go's [`strings.TrimPrefix`](https://golang.org/pkg/strings/#TrimPrefi
 
 ### TrimSpace
 
-Trims a string by removing whitespace from the beginning and end of
-the string.
+Trims a string by removing space from the beginning and end.
 
 ```go
 {{ "  \n\t foo" | strings.TrimSpace }} // foo
@@ -1575,7 +1574,7 @@ See [Kebab Case on Wikipedia](https://en.wikipedia.org/wiki/Kebab_case) for more
 
 ### WordWrap
 
-Inserts new line breaks into the input string so it ends up with lines that are at most `width` characters wide. The line-breaking algorithm is _naïve_ and _greedy_: lines are only broken between words (i.e. on whitespace characters), and no effort is made to "smooth" the line endings. When words that are longer than the desired width are encountered (e.g. long URLs), they are not broken up. Correctness is valued above line length.
+Inserts new line breaks into the input string so it ends up with lines that are at most `width` characters wide. The line-breaking algorithm is _naïve_ and _greedy_: lines are only broken between words (i.e. on space characters), and no effort is made to "smooth" the line endings. When words that are longer than the desired width are encountered (e.g. long URLs), they are not broken up. Correctness is valued above line length.
 
 The line-break sequence defaults to `\n` (i.e. the LF/Line Feed character), regardless of OS.
 
