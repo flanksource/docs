@@ -10,3 +10,6 @@
 [submodule "mission-control/modules/canary-checker"]
 	path = mission-control/modules/canary-checker
 	url = https://github.com/flanksource/canary-checker
+[submodule "docs-vale-package"]
+	path = docs-vale-package
+	url = https://github.com/flanksource/docs-vale-package
