@@ -5,7 +5,7 @@ Health checks emit 2 events
 1. `check.passed`
 2. `check.failed`
 
-## Environment variables
+## Variables
 
 | Field       | Description                   | Schema                         | Optional |
 | ----------- | ----------------------------- | ------------------------------ | -------- |

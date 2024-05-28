@@ -3,6 +3,8 @@ title: AWS EKS
 slug: installation/eks
 ---
 
+import AwsIam from "../_aws_iam.mdx"
+
 # Self Hosted Installation on AWS EKS
 
 :::info Prerequisites
@@ -56,120 +58,8 @@ helm install mission-control  \
 
 </Step>
 
-<Step step={3} name="(Optional) Create an IAM Role">
+<AwsIam/>
 
-
-(a) Create a role to allow mission-control to scrape your AWS resources. Attach the following AWS managed policies to the role:
-
-1. ReadOnlyAccess
-2. AWSConfigUserAccess
-3. AWSQuicksightAthenaAccess
-
-<details summary="IAM Policy">
-<div>
-```json title="iam-policy.json"
-{
-	"Version": "2012-10-17",
-	"Statement": [
-		{
-			"Sid": "mission-control-config-role",
-			"Effect": "Allow",
-			"Action": [
-				"acm:Describe*",
-				"acm:Get*",
-				"acm:List*",
-				"cloudtrail:LookupEvents",
-				"ec2:Describe*",
-				"ecr:Describe*",
-				"eks:ListClusters",
-				"eks:Describe*",
-				"rds:Describe*",
-				"elasticfilesystem:Describe*",
-				"elasticloadbalancing:Describe*",
-				"sts:GetCallerIdentity"
-				"config:BatchGetAggregateResourceConfig",
-				"config:BatchGetResourceConfig",
-				"config:Describe*",
-				"config:Get*",
-				"config:List*",
-				"config:SelectAggregateResourceConfig",
-				"config:SelectResourceConfig",
-				"guardduty:Describe*",
-				"guardduty:Get*",
-				"guardduty:List*",
-				"iam:GetAccountName",
-				"iam:GetAccountSummary",
-				"iam:GetGroup",
-				"iam:GetGroupPolicy",
-				"iam:GetInstanceProfile",
-				"iam:GetLoginProfile",
-				"iam:GetPolicy",
-				"iam:GetRole",
-				"iam:GetRolePolicy",
-				"iam:GetUser",
-				"iam:List*",
-				"lambda:List*",
-				"trustedadvisor:Describe*",
-				"trustedadvisor:DownloadRisk",
-				"trustedadvisor:Get*",
-				"trustedadvisor:List*",
-			],
-			"Resource": "*"
-		}
-	]
-}
-```
-</div>
-</details>
-
-
-
-(b) Modify the trust policy of the IAM role by changing the OIDC arn, OIDC endpoint and the namespace below.
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [{
-    "Effect": "Allow",
-    "Principal": {
-      "Federated": "arn:aws:iam::7458xxxxxxxx:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx"
-		},
-		"Action": "sts:AssumeRoleWithWebIdentity",
-		"Condition": {
-      "StringEquals": {
-        "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:config-db-sa",
-        "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:mission-control-sa",
-        "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:sub": "system:serviceaccount:namespace:canary-checker-sa",
-        "oidc.eks.us-east-1.amazonaws.com/id/4D3C9C8xxxx:aud": "sts.amazonaws.com"
-      }
-		}
-	}]
-}
-```
-
-
-(c) Annotate the service account
-
-```yaml title='values.yaml'
-# service account used by for scraping
-config-db:
-  serviceAccount:
-    annotations:
-    eks.amazonaws.com/role-arn: IAM Role ARN
-
-# service account used by for health checks
-canary-checker:
-  serviceAccount:
-    annotations:
-      eks.amazonaws.com/role-arn: IAM Role ARN
-
-# service account used for notifications and playbooks
-serviceAccount:
-  annotations:
-    eks.amazonaws.com/role-arn: IAM Role ARN
-
-```
-
-</Step>
 
 <div id="cost-reporting"/>
 <Step step={4} name="Cost & Usage Reporting">

@@ -72,7 +72,7 @@ The following table lists the configurable parameters and their default values:
 | `scraper.severityKeywords.error` | Keywords indicating error severity. | `["failed", "error"]` |
 | `scraper.severityKeywords.warn` | Keywords indicating warning severity. | `["backoff", "nodeoutofmemory"]` |
 | `scraper.retention.changes` | Retention changes. | `[{"name": "ReconciliationSucceeded", "count": 10}]` |
-| `scraper.relationships` | Kubernetes Relationships to create via name, namespace and kind. [Kubernetes Relationships](/config-db/scrapers/kubernetes#kubernetesrelationships) | Helm and Argo |
+| `scraper.relationships` | Kubernetes Relationships to create via name, namespace and kind. [Kubernetes Relationships](/config-db/scrapers/kubernetes#relationships) | Helm and Argo |
 
 
 ### Playbooks

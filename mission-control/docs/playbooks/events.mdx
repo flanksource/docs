@@ -8,15 +8,28 @@ For example: you can trigger a Playbook to run when a component goes unhealthy.
 
 Multiple playbooks could be listening to the same event and likewise a playbook can be listening to multiple events. If a playbook is listening on multiple events then it is triggered when any of those events occur.
 
-## Event Spec
-
 Filters can give you fine-grained control over the events that can trigger the playbook.
 
-| Field    | Description                                                                                   | Scheme              | Required |
-| -------- | --------------------------------------------------------------------------------------------- | ------------------- | -------- |
-| `event`  | Event to listen for.                                                                          | `string`            | `true`   |
-| `filter` | CEL expression for additional event filtering. ([See Expressions](../concepts/expression)) | `string`            | `true`   |
-| `labels` | Labels specifies the key-value pairs that the associated event's resource must match.         | `map[string]string` | `false`  |
+<Fields
+  rows={[
+    {
+      field: 'event',
+      description: 'Initial delay before the checks are run',
+      scheme: '[Event](#types)'
+    },
+
+      {
+      field: 'filter',
+      scheme: 'CEL'
+    },
+    {
+      field: "labels",
+      description: "Labels specifies the key-value pairs that the associated event's resource must match.",
+      scheme: 'map[string]string',
+
+    }
+    ]}
+    />
 
 ## Types
 
@@ -62,7 +75,7 @@ Component events relate to activities on Topology components.
 | `warning`   | when a component has warning       |
 | `error`     | when a component has error         |
 
-#### Example
+
 
 ```yaml title="notify-unhealthy-database-component.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -95,7 +108,6 @@ Config events relate to activities on config items.
 | `updated` | when a config item is updated |
 | `deleted` | when a config item is deleted |
 
-#### Example
 
 ```yaml title="notify-newly-scraped-pod.yaml"
 apiVersion: mission-control.flanksource.com/v1

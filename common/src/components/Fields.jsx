@@ -9,7 +9,12 @@ const schemes = {
   "EnvVar": "[EnvVar](/reference/env-var)",
   "[]EnvVar": "[[]EnvVar](/reference/env-var)",
   "CEL": "[CEL](/reference/scripting/cel)",
+  "Javascript": "[Javascript](/reference/scripting/javascript)",
+  "Gotemplate": "[Go Template](/reference/scripting/gotemplate)",
   "Duration": "[Duration](/reference/types#duration)",
+  "JSONPathOrString": "`string` or [JSONPath](https://jsonpath.com/)",
+  "[]JSONPathOrString": "`[]string` or [[]JSONPath](https://jsonpath.com/)",
+  "JSONPath": "[JSONPath](https://jsonpath.com/)",
   "Size": "[Size](/reference/types#size)",
   "Agent": "[Agent](/reference/types#agent)",
   "ResourceSelector": "[ResourceSelector](/reference/resource-selector)",
@@ -17,9 +22,9 @@ const schemes = {
   "string": "`string`",
   "Icon": "[Icon](/reference/types#icon)",
   "bool": "`boolean`",
-  "NotificationURL": "[url](/reference/notifications/channels)",
-  "NotificationConnection": "[Connection](/reference/connection)",
-  "NotificationProperties": "[map[string]string](/reference/notifications/channels#properties)",
+  "NotificationURL": "[Notification](/reference/notifications)",
+  "NotificationConnection": "[Connection](/reference/connections)",
+  "NotificationProperties": "[map[string]string](/reference/notifications#properties)",
 }
 export default function Fields({ common = [], rows = [], oneOf, anyOf, connection }) {
 
@@ -52,7 +57,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     rows = rows.concat([
       {
         field: oss ? null : "connection",
-        description: "The connection to use, mutually exclusive with `username` and `password`",
+        description: "The connection url to use, mutually exclusive with `username` and `password`",
         scheme: "Connection",
       },
       {
@@ -73,11 +78,38 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
         scheme: "EnvVar",
       }
     ])
+  }
+
+  if (connection == "sql") {
+    rows = rows.concat([
+      {
+        field: oss ? null : "connection",
+        description: "The connection url or name to use`",
+        scheme: "Connection",
+      },
+      {
+        field: !oss && rows.filter(i => i.field == "url").length == 0 ? "url" : null,
+        description: "If `connection` is specified and it also includes a `url`, this field will take precedence",
+        scheme: "string",
+      },
+      {
+        field: oss && rows.filter(i => i.field == "url").length == 0 ? "url" : null,
+        scheme: "string",
+      },
+      {
+        field: "auth.username",
+        scheme: "EnvVar",
+      },
+      {
+        field: "auth.password",
+        scheme: "EnvVar",
+      }
+    ])
   } else if (connection == "git") {
     rows = rows.concat([
       {
         field: oss ? null : "connection",
-        description: "The connection to use, mutually exclusive with `username` and `password`",
+        description: "The connection url to use, mutually exclusive with `username` and `password`",
         scheme: "Connection",
       },
       {
@@ -106,7 +138,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     rows = rows.concat([
       {
         field: oss ? null : "connection",
-        description: "The connection to use, mutually exclusive with `accessKey` and `secretKey`",
+        description: "The connection url to use, mutually exclusive with `accessKey` and `secretKey`",
         scheme: "Connection",
       },
       {
@@ -136,7 +168,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     rows = rows.concat([
       {
         field: oss ? null : "connection",
-        description: "The connection to use, mutually exclusive with `credentials`",
+        description: "The connection url to use, mutually exclusive with `credentials`",
         scheme: "Connection",
       },
       {
@@ -149,7 +181,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     rows = rows.concat([
       {
         field: oss ? null : "connection",
-        description: "The connection to use, mutually exclusive with `host` and `port`",
+        description: "The connection url to use, mutually exclusive with `host` and `port`",
         scheme: "Connection",
       },
       {
@@ -175,7 +207,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     rows = rows.concat([
       {
         field: oss ? null : "connection",
-        description: "The connection to use, mutually exclusive with `host`, `share`, and `credentials`",
+        description: "The connection url to use, mutually exclusive with `host`, `share`, and `credentials`",
         scheme: "Connection",
       },
       {
@@ -212,7 +244,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     rows = rows.concat([
       {
         field: oss ? null : "connection",
-        description: "The connection to use, mutually exclusive with `tenantId`, `subscriptionId`, `clientId`, and `clientSecret`",
+        description: "The connection url to use, mutually exclusive with `tenantId`, `subscriptionId`, `clientId`, and `clientSecret`",
         scheme: "Connection",
       },
       {
@@ -273,9 +305,15 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
         </blockquote>
       }
       {
-        oneOf &&
+        oneOf && oneOf.length == 2 &&
         <blockquote style={{ borderLeft: "2px solid var(--ifm-color-warning-light)" }}>
           <p>You must specify <code>{oneOf[0]}</code> or <code>{oneOf[1]}</code> but not both</p>
+        </blockquote>
+      }
+      {
+        oneOf && oneOf.length == 3 &&
+        <blockquote style={{ borderLeft: "2px solid var(--ifm-color-warning-light)" }}>
+          <p>You must specify one of <code>{oneOf[0]}</code>, <code>{oneOf[1]}</code> or <code>{oneOf[2]}</code></p>
         </blockquote>
       }
     </>

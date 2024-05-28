@@ -164,7 +164,6 @@ export default async function createConfigAsync() {
             showReadingTime: true
           },
           theme: {
-
             customCss: './src/css/out.css'
           }
         })

@@ -7,16 +7,14 @@ sidebar_position: 4
 
 :::tip Registry
 
-The registry has an [Kubernetes](/registry/kubernetes) Helm chart that provides a pre-configured Scraper and Topology with some common defaults
+The registry has a [Kubernetes](/registry/kubernetes) Helm chart that provides a pre-configured Scraper and Topology with some common defaults
 
 :::
 
-The `kubernetes` config type scrapes the configurations of your Kubernetes resources as specified with the fields; `namespace`, `selector`, `fieldSelector` and more.
+The `kubernetes` scraper collects all of the resources and events in a Kubernetes cluster, and then watches for changes.
 
 ```yaml title='kubernetes-scraper.yaml' file=../../../modules/config-db/fixtures/kubernetes.yaml
 ```
-
-## Scraper
 
 | Field        | Description                                                                  | Scheme                                       | Required |
 | ------------ | ---------------------------------------------------------------------------- | -------------------------------------------- | -------- |
@@ -31,24 +29,23 @@ The `kubernetes` config type scrapes the configurations of your Kubernetes resou
 | ----------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------ | -------- |
 | `clusterName`     | Specify cluster name                                                                             | `string`                                         |          |
 | `event`           | Specify configuration to handle Kubernetes events.                                               | [`Event`](#events)                               |          |
-| `exclusions`      | Specify Kubernetes resources to be excluded from scraping                                        | `[]string`                                       |          |
-| `fieldSelector`   | Specify Kubernetes resource based on value of resource fields. e.g `status.Phase=Running`        | `string`                                         |          |
-| **`kubeconfig`**  | Specify kubeconfig for access to your Kubernetes Cluster                                         | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
-| `namespace`       | Specify namespace for scraping of Kubernetes resources                                           | `string`                                         |          |
-| `relationships`   | Create relationships between kubernetes objects.                                                 | [`[]Relationship`](#kubernetes-relationship)     |          |
+| `exclusions`      | Resources to be excluded from scraping                                        | `[]string`                                       |          |
+| `fieldSelector`   | Resources to be included e.g `status.Phase=Running`        | `string`                                         |          |
+| **`kubeconfig`**  | Kubeconfig to connect to the cluster                                         | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
+| `namespace`       | Include resources only from this namespace                                         | `string`                                         |          |
+| `relationships`   | Create relationships between kubernetes objects.                                                 | [`[]Relationship`](#relationships)     |          |
 | `scope`           | Specify scope for scrape. e.g `cluster` for scraping at Cluster level                            | `string`                                         |          |
-| `selector`        | Specify Kubernetes resource to scrape based on selector. e.g `matchLabels`                       | `string`                                         |          |
+| `selector`        | Include resources matching this selector only e.g `matchLabels`                       | `string`                                         |          |
 | `since`           | Set time constraint for scraping resources within the set period                                 | `string`                                         |          |
-| `properties`      | Custom templatable properties for the scraped config items.                                      | [`[]ConfigProperty`](/reference/config-db/properties)   |          |
-| `transform`       | Field to transform result                                                                        | [`Transform`](/config-db/concepts/transform)                        |          |
-| `tags`            | set custom tags on the scraped config items                                                      | `map[string]string`                              |          |
+| `properties`      | Custom properties to be added for each item                                     | [`[]ConfigProperty`](/reference/config-db/properties)   |          |
+| `transform`       | Custom transformations to apply                                                                       | [`Transform`](/config-db/concepts/transform)                        |          |
+| `tags`            | Tags to set on each config item. `cluster` and `namespace` are set by default                                                     | `map[string]string`                              |          |
 
 
 ## Events
 
-`Config DB` maps Kubernetes Event objects to config changes unlike other objects that are mapped to config items. This configuration allows you to exclude or include the Kubernetes Event objects based on the reason.
+`Kubernetes::Event` resources are mapped to config changes. Events can be very verbose so they can be excluded or their severity level changed:
 
-In addition, you can also specify keywords used to identify the severity of the Kubernetes Event based on the reason.
 
 | Field              | Description                                                                                | Scheme                                  | Required |
 | ------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------- | -------- |
@@ -59,13 +56,16 @@ In addition, you can also specify keywords used to identify the severity of the 
 
 | Field   | Description                                                                                                                                                            | Scheme     | Required |
 | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `warn`  | A list of keywords used to identify a warning severity from the reason. It could also be a match pattern: example "\*" to match all or "!badword" to exclude "badword" | `[]string` |          |
+| `warn`  | A list of keywords used to identify a warning severity from the reason. It could also be a match pattern: e.g. `*` to match all or `!badword` to exclude `badword` | `[]string` |          |
 | `error` | Same as `warn` but used to map to error severity.                                                                                                                      | `[]string` |          |
 
-#### Kubernetes Relationship
+## Relationships
 
-You can create relationships between kubernetes objects on the basis of `kind`, `name` and `namespace`.
-Kubernetes scraper offers a more tailored relationship selector in addition to the [general relationship selector](../concepts/transform.md#relationshipconfig).
+You can create relationships between kubernetes objects on the basis of
+
+:::info
+[Relationships](../concepts/relationships) can also be defined under `transform.relationships`, however by defining them under `kubernetes.relationships` is simpler with specific support for `kind`, `name` and `namespace` fields.
+:::
 
 ```yaml title="kubernetes-relationship.yaml"
 kubernetes:
@@ -98,13 +98,13 @@ kubernetes:
 
 | Field       | Description                      | Scheme                                       | Required |
 | ----------- | -------------------------------- | -------------------------------------------- | -------- |
-| `kind`      | `kind` of Kubernetes Object      | [`RelationshipLookup`](#relationship-lookup) | `true`   |
-| `name`      | `name` of Kubernetes Object      | [`RelationshipLookup`](#relationship-lookup) | `true`   |
-| `namespace` | `namespace` of Kubernetes Object | [`RelationshipLookup`](#relationship-lookup) | `true`   |
+| `kind`      | `kind` of Kubernetes Object      | [`Lookup`](#lookup) | `true`   |
+| `name`      | `name` of Kubernetes Object      | [`Lookup`](#lookup) | `true`   |
+| `namespace` | `namespace` of Kubernetes Object | [`Lookup`](#lookup) | `true`   |
 
-##### Relationship Lookup
+##### Lookup
 
-RelationshipLookup offers different ways to specify a lookup value
+There are 3 different ways to specify which value to use when finding related configs:
 
 | Field   | Description                        | Scheme   | Required |
 | ------- | ---------------------------------- | -------- | -------- |

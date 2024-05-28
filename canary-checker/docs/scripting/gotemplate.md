@@ -31,7 +31,7 @@ To send `{{ .secret }}` as it is do this
 {{`{{ .secret }}`}}
 ```
 
-## Encoding
+## base64
 
 ### Encode
 
@@ -46,8 +46,6 @@ Encode data as a Base64 string. Specifically, this uses the standard Base64 enco
 
 Decode a Base64 string. This supports both standard ([RFC4648 &sect;4](https://tools.ietf.org/html/rfc4648#section-4)) and URL-safe ([RFC4648 &sect;5](https://tools.ietf.org/html/rfc4648#section-5)) encodings.
 
-This function outputs the data as a string, so it may not be appropriate for decoding binary data. Use [`base64.DecodeBytes`](#base64.DecodeBytes)
-for binary data.
 
 ```go
 {{ base64.Decode "aGVsbG8gd29ybGQ=" }} // hello world
@@ -56,7 +54,6 @@ for binary data.
 
 
 :::note
-
 For the functions that return an array, a Go `[]interface{}` is returned, regardless of whether or not the input was a different type.
 :::
 
@@ -417,7 +414,7 @@ The value in decimal is {{ $val }}
 
 ### ParseFloat
 
-_**Note:**_ See [`conv.ToFloat`](#tofloat) instead for a simpler and more flexible variant of this function.
+_**Note:**_ See [`conv.ToFloat`](#tofloat64) instead for a simpler and more flexible variant of this function.
 
 Parses a string as an float64 for later use. Equivalent to [strconv.ParseFloat](https://golang.org/pkg/strconv/#ParseFloat)
 
@@ -1803,7 +1800,7 @@ Parses a timestamp defined by the given layout. This wraps [`time.Parse`](https:
 A number of pre-defined layouts are provided as constants, defined
 [here](https://golang.org/pkg/time/#pkg-constants).
 
-Just like [`time.Now`](#time-now), this is usually used in conjunction with other functions.
+Just like [`time.Now`](#now), this is usually used in conjunction with other functions.
 
 _Note: In the absence of a time zone indicator, `time.Parse` returns a time in UTC._
 

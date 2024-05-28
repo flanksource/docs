@@ -103,22 +103,7 @@ const sidebars = {
       id: 'notifications/index',
       label: 'Overview'
     },
-    {
-      type: 'category',
-      label: 'Concepts',
-      items: [
-        {
-          type: 'doc',
-          id: 'notifications/concepts/filtering',
-          label: 'Filtering'
-        },
-        {
-          type: 'doc',
-          id: 'notifications/concepts/templating',
-          label: 'Templating'
-        }
-      ]
-    },
+
     {
       type: 'category',
       label: 'Events',

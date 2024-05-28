@@ -5,7 +5,8 @@ sidebar_position: 4
 
 import Parameters from '../reference/playbooks/parameters.md'
 
-Playbooks can be manually triggered on a component, config item or a check. If any of the [playbook's resource filters](../concepts/playbook.md#resourcefilter) matches the type and tags of the component, config or a check then a playbook run dropdown can be seen on that item.
+Playbooks can be manually triggered on a component, config item or  check.
+
 ```yaml title="restart-deployment.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Playbook
@@ -13,6 +14,7 @@ metadata:
   name: restart-deployment
 spec:
   description: Restart deployment
+  # only allow the playbook to run on Kubernetes::Deployment config items
   configs:
     - types:
         - Kubernetes::Deployment
@@ -22,20 +24,38 @@ spec:
         script: kubectl rollout restart deployment {{.config.name}} -n {{.config.tags.namespace}}
 ```
 
+To run the playbook:
+
+a. Navigate to a Deployment in the **Catalog** <br/>
+b. Select **Restart Deployment** from the Playbooks menu<br/>
+c. Click **Run**<br/>
 
 
-<img src="/img/restart-deployment.png" width="500px"/>
+<Screenshot img="/img/restart-deployment.png" size="500px"/>
 
 
-<Screenshot img="/img/test.png" width="500px"/>
+## Resource Filters
+
+Playbooks can be restricted to run on specific `config`, `check` and `components` using [resource selectors](/reference/resource-selector)
 
 
+```yaml title="restart-deployment.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+spec:
+  //highlight-start
+  configs: # Only applicable to config items
+    - types:
+        - Kubernetes::Deployment # of this type
+  //highlight-end
+```
 ## Parameters
 
 <Parameters/>
 
-![Playbook on a config item](/img/playbook-on-a-eks-cluster-config-item.png)
-**Fig: Playbook on a config item**
+
+<Screenshot img="/img/playbook-on-a-eks-cluster-config-item.png"/>
+
 
 ![Playbook parameters](/img/playbook-on-a-eks-cluster-config-item-popup.png)
 **Fig: Playbook parameters**

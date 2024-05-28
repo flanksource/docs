@@ -4,17 +4,15 @@ title: Components
 
 Component status updates emit the following events
 
-- `component.healthy`
-- `component.unhealthy`
-- `component.warning`
-- `component.error`
-- `component.info`
+- `config.healthy`
+- `config.unhealthy`
+- `config.warning`
 
 ## Variables
 
 | Field       | Description                   | Schema                    | Optional |
 | ----------- | ----------------------------- | ------------------------- | -------- |
-| `component` | The component object          | [`Component`](#component) |          |
+| `config` | The component object          | [`Component`](#component) |          |
 | `agent`     | Agent details (if applicable) | [`Agent`](#agent)         | `true`   |
 | `permalink` | A link to the health check    | `string`                  |          |
 
@@ -59,7 +57,7 @@ Component status updates emit the following events
 
 ```
 # Title
-Component {{.component.name}} status updated to {{.component.status}}
+Config {{.config.name}} status updated to {{.config.status}}
 
 # Body
 [Reference]({{.permalink}})

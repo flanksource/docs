@@ -28,14 +28,15 @@ spec:
         key: POSTGRES_PASSWORD
 ```
 
+## Referencing Connections
+
 Eventually, the URL that gets templated is used for establishing connections. This can be used for any datasource that authenticates via URL (PostgreSQL, MySQL, MSSQL, Redis, Opensearch, Elasticsearch etc.)
 
-A connection string can be represented in the form of `type/connection_name` or `type/namespace/connection_name`
+A connection string can be represented in the form of `namespace/connection_name`
 
-It can then be used in Health Checks via `connection` attribute or during Topology creation in `component.lookup`
+It can then be used in Health Checks, Playbooks, Notifications etc via the  `connection` field.
 
 ```yaml
-
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
@@ -43,16 +44,14 @@ metadata:
 spec:
   postgres:
     - name: postgres schemas check
-      connection: connection://postgres/payments-database
+      connection: connection://default/payments-database
       query: SELECT COUNT(*) FROM payments where state = 'pending'
 ```
 
 This allows us a safe and reusable way to handle authentication
 
 :::tip
-
 If the entire URL is in the secrets and cannot be constructed like `scheme://$(username):$(password)@<host>:<port>` you can fetch that directly like
-
 ```yaml
 kind: Connection
 metadata:

@@ -1,0 +1,69 @@
+---
+title: Kubernetes File
+---
+
+# <Icon name="k8s-pod"/> Kubernetes File
+
+The KubernetesFile config type is used to scrape configurations contained in your specified resource e.g Pod.
+
+```yaml title='k8s-file-scraper.yaml'
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: k8s-file-scraper
+spec:
+  kubernetesFile:
+    - selector:
+        namespace: demo
+        kind: Statefulset
+        name: postgresql
+    files:
+      - path:
+          - /var/lib/postgresql/data/pgdata/postgresql.conf
+        format: properties
+```
+
+## Scraper
+
+| Field            | Description                                                                        | Scheme                                       | Required |
+| ---------------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| `logLevel`       | Specify the level of logging.                                                      | `string`                                     |          |
+| `schedule`       | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
+| `full`           | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
+| `retention`      | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/config-db/concepts/retention) |          |
+| `kubernetesFile` | Specifies the list of Kubernetes File configurations to scrape.                    | [`[]KubernetesFile`](#kubernetesfile)        |          |
+
+
+
+### KubernetesFile
+
+<CustomScraper rows={[
+
+  {
+    "field": "selector",
+    "description": "Pods to extract files from",
+    "scheme": "ResourceSelector",
+    "required": true,
+  },
+    {
+    "field": "container",
+    "description": "Name of container",
+
+  },
+  {
+    "field": "files",
+    "description": "List of files inside the pod to scrape",
+    "scheme": "[[]File](#file)",
+    "required": "true"
+  },
+
+]}/>
+
+
+### File
+
+| Field    | Description                       | Scheme     | Required |
+| -------- | --------------------------------- | ---------- | -------- |
+| `path`   | Set path to file contained in Pod | `[]string` |          |
+| `format` | Specify format of file            | `string`   |          |
+

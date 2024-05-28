@@ -33,12 +33,28 @@ Components are the building blocks of a Topology. The component specification pr
 
 ### ID
 
-| Field        | Description                                | Scheme   | Required |
-| ------------ | ------------------------------------------ | -------- | -------- |
-| `expr`       | Specify expression for ID                  | `string` |          |
-| `javascript` | Specify javascript syntax to generate ID   | `string` |          |
-| `jsonPath`   | Specify path to JSON element for use in ID | `string` |          |
-| `template`   | Specify Go template for use in ID          | `string` |          |
+<Fields
+oneOf={["expr", "javascript", "template"]}
+  rows={[
+    {
+      field: 'expr',
+      description: '',
+      scheme: 'CEL'
+    },
+      {
+      field: 'javascript',
+      description: '',
+      scheme: 'Javascript'
+    },
+      {
+      field: 'template',
+      description: '',
+      scheme: 'Gotemplate'
+    }
+
+  ]}
+  />
+
 
 ### RelationshipSpec
 

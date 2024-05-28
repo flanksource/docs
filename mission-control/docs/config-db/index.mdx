@@ -1,6 +1,7 @@
 ---
 slug: /config-db
 hide_title: true
+title: Overview
 hide_table_of_contents: true
 pagination_next: playbooks/index
 pagination_prev:
@@ -34,7 +35,7 @@ Under the hood the catalog is powered by [github.com/flanksource/config-db](http
 The catalog is comprised of:
 
 * **Config Items** are individual resources e.g. `Pod`, `EBS`, `IAM Role`, `postgres.conf` scraped from external sources like  [AWS](/config-db/scrapers/aws), [Kubernetes](/config-db/scrapers/kubernetes), [Azure](/config-db/scrapers/azure), [Azure Devops](/config-db/scrapers/azure-devops) , [Github](/config-db/scrapers/github)
-* **Changes** recorded against config items either through automatic change detection (diffs) or from sources like [Cloud Trail](/config-db/scrapers/aws#cloud-trail) or [Kubernetes Events](/config-db/scrapers/kubernetes#events)
+* **Changes** recorded against config items either through automatic change detection (diffs) or from sources like [Cloud Trail](/config-db/scrapers/aws#cloudtrail) or [Kubernetes Events](/config-db/scrapers/kubernetes#events)
 * **Insights** recorded against config items from external sources like [AWS Trusted Advisor](/config-db/scrapers/aws#trusted-advisor) or [Trivy](/config-db/scrapers/trivy)
 * **Relationships** between configuration items
 

@@ -2,12 +2,21 @@
 title: AWS
 ---
 
-The AWS bundle installs a [catalog scraper](/config-db/scrapers/aws) that:
+import AwsIam from "../installation/_aws_iam.mdx"
+
+
+The AWS bundle installs a catalog [scraper](/config-db/scrapers/aws) that:
 
 - Scrapes AWS Resources and detects changes in the resource definition
 - Ingests changes from CloudTrail
 - Ingests cost data from AWS Cost & Usage Reporting
 - Links AWS EKS resources to the corresponding Kubernetes resources
+
+
+:::info Prerequisites
+- IAM Role for scraping AWS API's
+- Mission Control configured to use Pod Identity/IRSA or an AWS access key
+:::
 
 ## Setup
 
@@ -20,22 +29,12 @@ helm install mission-control-aws flanksource/mission-control-aws
 
 When you go to the catalog now, you can now see all the AWS Resources
 
-![AWS Catalog](/img/aws-registry-catalog-scraper.png)
+<Screenshot img="/img/aws-registry-catalog-scraper.png"/>
 
 
-## Prerequisites
+<AwsIam/>
 
-1. Connection to AWS must be authenticated via IAM Roles for Service Accounts or AWS Access and Secret Key. [Click Here to see how to configure AWS](/installation/aws-eks)
-
-2. The role should have permissions to fetch the AWS Resources
-
-3. Cost Reporting should also be setup if you want to associate costs to each resource. [Check the guide here](/installation/aws-eks#cost-reporting)
-
-### Values
-
-This document provides an overview of configurable values for deploying Mission Control Registry on AWS using Helm.
-
-## Configuration
+## values.yaml
 
 The following table lists the configurable parameters and their default values:
 
@@ -44,7 +43,6 @@ The following table lists the configurable parameters and their default values:
 | `labels` | Additional labels to apply to resources. | {} |
 | `scraper.name` | Name of the AWS scraper. | "aws" |
 
-### Connection Details
 
 | Parameter | Description | Schema | Default |
 | --- | --- | --- | --- |
@@ -58,41 +56,14 @@ The following table lists the configurable parameters and their default values:
 | `cloudtrail.maxAge` | Maximum age for CloudTrail. | "" |  |
 | `cloudtrail.exclude` | List of excluded items for CloudTrail. | [] |  |
 | `compliance` | Enable or disable compliance. | true |  |
-|  | |  |  |
 | `costReporting.enabled` | Enable or disable cost reporting. | false |  |
 | `costReporting.database` | Cost reporting database. | "" |  |
 | `costReporting.region` | Cost reporting region. | "" |  |
 | `costReporting.s3BucketPath` | S3 bucket path for cost reporting. | "" |  |
 | `costReporting.table` | Table for cost reporting. | "" |  |
-|  | |  |  |
-|  | |  |  |
-|                                   |                                        |                                          |         |
 | regions |  |  |  |
 | `includeResources` | List of resources to include. | [] |  |
 | `excludeResources` | List of resources to exclude. | [] |  |
-|  |  |  |  |
-
-:::info
-If you have setup IAM Roles for Service Account, you do not have to do anything else. If you do not have that setup, you can use AWS Access and Secret Keys as well
-
-Example:
-
-```yaml title="values.yaml"
-connectionDetails:
-  accessKey:
-    valueFrom:
-      secretKeyRef:
-        name: aws-credentials
-        key: AWS_ACCESS_KEY
-  secretKey:
-    valueFrom:
-      secretKeyRef:
-        name: aws-credentials
-        key: AWS_SECRET_KEY
-```
-
-:::
-
 
 
 <Step step={6} name="Cost & Usage Reporting" anchor="cur">
@@ -105,6 +76,3 @@ connectionDetails:
 
 </Step>
 
-
-
-### 

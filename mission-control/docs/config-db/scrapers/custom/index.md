@@ -63,14 +63,16 @@ When displaying the config, the UI will automatically convert the JSON data to Y
 
 ### XML / Properties
 
-[**Custom**](./concepts/custom-scraper) scrapers can ingest non-JSON config which is represented as:
+Non JSON files are stored as JSON using:
 
 ```yaml
 {
  "format": "xml",
-  "content": "<root>..</root>"
+ "content": "<root>..</root>"
 }
 ```
+
+Non JSON content can still be accessed in scripts using `config.content`
 
 The UI will format and render XML appropriately.
 

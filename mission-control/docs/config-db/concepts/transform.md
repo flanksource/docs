@@ -2,7 +2,7 @@
 title: Transform
 ---
 
-Transformations allows you to transform the scraped config items before they are saved, common use cases include:
+Transformations allows you to modify scraped config items before they are saved, common use cases include:
 
 - Linking configuration items
 - Removing extraneous or overly verbose fields
@@ -49,7 +49,8 @@ spec:
 
 ### Masking
 
-Masking allows replacing sensitive fields with a hash or static string.
+Masking replaces sensitive fields with a hash or static string. A hash can be used to determine if a field changed without revealing original values.
+
 
 ```yaml title="file-mask-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -88,10 +89,10 @@ Masks are applied in the order they are specified in the configuration file.
 ## Changes
 
 ### Exclusions
+Some configurations can change frequently and may not be relevant. For example, a `Kubernetes::Node` configuration changes often as pods launched and stopped. From the node's perspective, these image changes are irrelevant.
 
-Some configs can have changes in high volume that may not be relevant. Example: A kubernetes Node config changes frequently as the pods in the cluster update their images. From the node's perspective the image changes are irrelevant.
+This is where exclusions become useful. Here's an example that ignores all image changes in a `Kubernetes::Node` configuration:
 
-This is where exclusions can become handy. Here's an example that ignore all image changes in a kubernetes node config:
 
 ```yaml title="kubernetes-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -111,7 +112,7 @@ spec:
 
 ### Mapping
 
-When you encounter a diff change, unlike an event based change, it can sometimes appear cryptic. The summary of the change may not immediately indicate what the change is about. For example, the change 'status.images' might not be self-explanatory. To address this issue, we can assign types to these diff changes using mapping.
+When you encounter a diff change, unlike an event-based change, it can sometimes appear unclear. The summary of the change may not immediately indicate its purpose. For example, the change 'status.images' might not be self-explanatory. To clarify this, you can assign types to these diff changes using mapping.
 
 ```yaml title="kubernetes-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -142,11 +143,11 @@ spec:
 | `filter`  | Selects changes to apply the mapping                         | <CommonLink to="cel">CEL</CommonLink> with [Change Context](/reference/config-db/changes) |
 | `action`  | What action to take on the change, if `delete` then the corresponding config item is marked as deleted | `delete` or `ignore`                                         |
 | `type`    | New change type                                              | `string`                                                     |
-| `summary` | New summary of the change                                    | [Go Template](/reference/scripting/template)                 |
+| `summary` | New summary of the change                                    | <CommonLink to="gotemplate">Go Template</CommonLink> with [Change Context](/reference/config-db/changes)                |
 
 ## Scripting
 
-Scripting allows you to modify the scraped configuration using CEL before saving it to the database. This is useful for data normalization, default value population, sensitive field masking etc.
+Scripting modifies the scraped configuration using CEL before saving it to the database. This process is beneficial for data normalization, default value population, and sensitive field masking.
 
 | Field  | Description             | Scheme                                                       | Context                                                      |
 | ------ | ----------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |

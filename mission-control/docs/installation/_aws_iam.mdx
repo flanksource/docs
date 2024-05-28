@@ -1,0 +1,175 @@
+
+<Step step={1} name="Create an IAM Role">
+
+Create a role to allow mission-control to scrape your AWS resources. Attach the following AWS managed policies to the role:
+
+- `ReadOnlyAccess`
+- `AWSConfigUserAccess`
+- `AWSQuicksightAthenaAccess`
+
+<details summary="Create new IAM Policy (Alternative)">
+<div>
+```json title="iam-policy.json"
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "mission-control-config-role",
+			"Effect": "Allow",
+			"Action": [
+				"acm:Describe*",
+				"acm:Get*",
+				"acm:List*",
+				"cloudtrail:LookupEvents",
+				"config:BatchGetAggregateResourceConfig",
+				"config:BatchGetResourceConfig",
+				"config:Describe*",
+				"config:Get*",
+				"config:List*",
+				"config:SelectAggregateResourceConfig",
+				"config:SelectResourceConfig",
+				"ec2:Describe*",
+				"ecr:Describe*",
+				"eks:Describe*",
+				"eks:ListClusters",
+				"elasticfilesystem:Describe*",
+				"elasticloadbalancing:Describe*",
+				"guardduty:Describe*",
+				"guardduty:Get*",
+				"guardduty:List*",
+				"iam:GetAccountName",
+				"iam:GetAccountSummary",
+				"iam:GetGroup",
+				"iam:GetGroupPolicy",
+				"iam:GetInstanceProfile",
+				"iam:GetLoginProfile",
+				"iam:GetPolicy",
+				"iam:GetRole",
+				"iam:GetRolePolicy",
+				"iam:GetUser",
+				"iam:List*",
+				"lambda:List*",
+				"rds:Describe*",
+				"sts:GetCallerIdentity"
+				"trustedadvisor:Describe*",
+				"trustedadvisor:DownloadRisk",
+				"trustedadvisor:Get*",
+				"trustedadvisor:List*",
+			],
+			"Resource": "*"
+		}
+	]
+}
+```
+</div>
+</details>
+
+</Step>
+<Tabs>
+
+<TabItem label="IAM Roles for Service Accounts" value="IRSA">
+
+<Step step={2} name="Add a trust relationship">
+
+a) Get the `OIDC ID` from your EKS Cluster in the **Overview** page:
+
+![](/img/eks-oidc.png)
+
+b) Update the trust policy of the IAM role by changing the OIDC arn, OIDC endpoint and the namespace below.
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Principal": {
+      "Federated":
+					"arn:aws:iam::<AWS Account ID>:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/<Your OIDC ID>"
+		},
+		"Action": "sts:AssumeRoleWithWebIdentity",
+		"Condition": {
+      "StringEquals": {
+        "oidc.eks.<Region>:amazonaws.com/id/<Your OIDC ID>:sub": "system:serviceaccount:mission-control:config-db-sa",
+        "oidc.eks.<Region>.amazonaws.com/id/<Your OIDC ID>:sub": "system:serviceaccount:mission-control:mission-control-sa",
+        "oidc.eks.<Region>.amazonaws.com/id/<Your OIDC ID>:sub": "system:serviceaccount:mission-control:canary-checker-sa",
+				"oidc.eks.<Region>.amazonaws.com/id/<Your OIDC ID>:sub": "sts.amazonaws.com",
+      }
+		}
+	}]
+}
+```
+</Step>
+
+</TabItem>
+
+
+<TabItem label="Pod Identity" value="pod">
+
+:::info Prerequisites
+- [Pod Identity Agent](https://docs.aws.amazon.com/eks/latest/userguide/pod-id-agent-setup.html) is installed and configured
+:::
+
+<Step step={2} name="Add a trust relationship">
+
+ a) Modify the trust policy of the IAM role
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowEksAuthToAssumeRoleForPodIdentity",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "pods.eks.amazonaws.com"
+            },
+            "Action": [
+                "sts:AssumeRole",
+                "sts:TagSession"
+            ]
+        }
+    ]
+}
+```
+
+b) Create the Pod Identity Association
+
+```bash
+for role in mission-control-sa canary-checker-sa config-db-sa; do
+	echo aws eks create-pod-identity-association \
+		--cluster-name <CLUSTER_NAME> \
+		--namespace mission-control \
+		--service-account $role \
+		--role-arn <IAM_ROLE_ARN>
+done
+```
+</Step>
+
+</TabItem>
+
+
+</Tabs>
+
+
+
+<Step step={3} name="Associate the role with Mission Control">
+
+Update the `values.yaml` to annotate the service accounts:
+
+```yaml title="values.yaml"
+# service account used by for scraping
+config-db:
+  serviceAccount:
+    annotations:
+	    eks.amazonaws.com/role-arn: <IAM Role ARN>
+
+# service account used by for health checks
+canary-checker:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: <IAM Role ARN>
+
+# service account used for notifications and playbooks
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: <IAM Role ARN>
+```
+</Step>

@@ -1,0 +1,61 @@
+---
+pagination_next: registry/index
+pagination_prev: canary-checker/health-checks
+title: Notifications
+---
+import Notification from "../reference/notifications/_notification.mdx"
+
+Notifications can be sent based on different type of events occuring including:
+
+- Health check failing (`check.failed`)
+- Aggregated health of a topology failing (`component.unhealthy`)
+- A scraped config item health (`config.unhealthy`)
+
+
+```yaml title="http-check.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: http-check
+  namespace: default
+spec:
+  events:
+    - check.passed
+  filter: check.type == 'http'
+  to:
+    email: alerts@acme.com
+```
+
+<Notification/>
+
+## Templating
+
+Notification title and bodies can be templated using <CommonLink to="gotemplate">Go Templates</CommonLink>
+```yaml title="template-title.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+spec:
+  // highlight-next-line
+  title: Check {{.check.name}} is {{.check.health}}
+```
+
+## Filtering
+
+Notifications can be filtered using <CommonLink to="cel">CEL</CommonLink> expressions. The filters have access to same [variables](./events) that can be used in the templates.
+
+```yaml title="filter-http.yaml"
+---
+# Only send a notification for HTTP checks
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: http-alerts
+spec:
+  events:
+    - check.failed
+  // highlight-next-line
+  filter: check.type == 'http'
+  to:
+    connection: connection://slack/flanksource
+  title: Check {{.check.name}} is {{.check.health}}
+```

@@ -82,10 +82,9 @@ metadata:
   namespace: default
 spec:
   events:
-    - check.passed
     - check.failed
   to:
     # use the slack connection as the recipient for this notification
-    connection: connection://slack/flanksource
+    connection: connection://flanksource
   filter: check.type == 'http'
 ```

@@ -29,6 +29,9 @@ import { FullImage } from '@site/src/components/Badges'
 import { CommonLink } from '@site/src/components/Link'
 import { ConfigTransform } from '@site/src/components/ConfigTransform'
 import { CustomField } from '@site/src/components/Badges'
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { Scraper, CustomScraper } from '@site/src/components/Scraper'
 
 const MDXComponents = {
   Icon: Icon,
@@ -48,6 +51,10 @@ const MDXComponents = {
   head: MDXHead,
   code: MDXCode,
   a: MDXA,
+  Tabs: Tabs,
+  Scraper: Scraper,
+  CustomScraper: CustomScraper,
+  TabItem: TabItem,
   pre: MDXPre,
   details: Details,
   Screenshot: Screenshot,

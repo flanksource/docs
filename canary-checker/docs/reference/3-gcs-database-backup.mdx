@@ -1,5 +1,6 @@
 ---
 title: GCS Database Backup
+sidebar_class_name: beta
 ---
 
 # <Icon name="database2" /> Google Cloud SQL Backups
@@ -42,10 +43,10 @@ Durations are strings with an optional fraction and unit e.g. `300ms`, `1.5h` or
 
 | Field          | Description                                                                                                                   | Scheme                                                 | Required |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------- |
-| `project`      | GCP project\ name                                                                                                             | _string_                                               | Yes      |
+| `project`      | GCP project name                                                                                                             | _string_                                               | Yes      |
 | `instance`     | Google CloudSQL instance name                                                                                                 | _string_                                               | Yes      |
 | **Connection** |                                                                                                                               |                                                        |          |
-| `connection`   | Path of an existing connection e.g. `connection://aws/instance`/. Mutually exclusive with `credentials` <br /> <Commercial /> | <CommonLink to="connection">_Connections_</CommonLink> |          |
+| `connection`   | Path of an existing connection e.g. `connection://gcp`/. Mutually exclusive with `credentials` <br /> <Commercial /> | <CommonLink to="connection">_Connections_</CommonLink> |          |
 | `credentials`  | GCP Access Token File. <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                | <CommonLink to="authentication">_EnvVar_</CommonLink>  | Yes      |
 
 ### Connecting to GCP
@@ -72,7 +73,7 @@ spec:
 
 3. `accessKey` and `secretKey` <CommonLink to="authentication">_EnvVar_</CommonLink> with the credentials stored in a secret.
 
-```yaml title="aws.yaml"
+```yaml title="gcs-database-backup.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
