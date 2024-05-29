@@ -3,6 +3,11 @@
 
 :root {
   --docsearch-hit-active-color: blue;
+  --docusaurus-highlighted-code-line-bg: rgb(229, 229, 229);
+}
+
+[data-theme='dark'] {
+  --docusaurus-highlighted-code-line-bg: rgb(53, 53, 53);
 }
 
 .step-anchor{

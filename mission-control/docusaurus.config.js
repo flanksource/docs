@@ -51,8 +51,8 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// import PrismLight from './src/prismLight';
-// import PrismDark from './src/prismDark';
+import PrismLight from './src/prismLight.ts';
+import PrismDark from './src/prismDark.ts';
 
 /** @type {import('@docusaurus/types').Config} */
 export default async function createConfigAsync() {
@@ -265,16 +265,10 @@ export default async function createConfigAsync() {
           style: 'dark',
           copyright: `Copyright © ${new Date().getFullYear()} Flanksource Inc.`
         },
-
-        // prism: {
-        //   theme: PrismLight,
-        //   darkTheme: PrismDark,
-        // },
-        // prism: {
-        //   additionalLanguages: ['powershell'],
-        //   // darkTheme: themes.palenight,
-        //   // theme: themes.dracula
-        // }
+        prism: {
+          theme: PrismLight,
+          darkTheme: PrismDark,
+        },
       })
   }
 }
