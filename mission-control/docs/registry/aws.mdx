@@ -46,13 +46,13 @@ The following table lists the configurable parameters and their default values:
 
 | Parameter | Description | Schema | Default |
 | --- | --- | --- | --- |
-| `connectionDetails.connection` | AWS connection details. | [Connection](/reference/connections/aws) | "" |
-| `connectionDetails.accessKey` | Name of the access key. | [EnvVar](/reference/env-var) | "" |
-| `connectionDetails.secretKey` | Name of the secret key. | [EnvVar](/reference/env-var) | "" |
-| `connectionDetails.region` | AWS region. | string | "" |
-| `connectionDetails.endpoint` | AWS endpoint. | string | "" |
-| `connectionDetails.skipTLSVerify` | Skip TLS verification.| bool | false |
-| `connectionDetails.assumeRole` | Assume AWS role. | string | "" |
+| `connection` | AWS connection details. | [Connection](/reference/connections/aws) | "" |
+| `accessKey` | Name of the access key. | [EnvVar](/reference/env-var) | "" |
+| `secretKey` | Name of the secret key. | [EnvVar](/reference/env-var) | "" |
+| `regions` | AWS regions to pull from | []string | [] |
+| `endpoint` | AWS endpoint. | string | "" |
+| `skipTLSVerify` | Skip TLS verification.| bool | false |
+| `assumeRole` | Assume AWS role. | string | "" |
 | `cloudtrail.maxAge` | Maximum age for CloudTrail. | "" |  |
 | `cloudtrail.exclude` | List of excluded items for CloudTrail. | [] |  |
 | `compliance` | Enable or disable compliance. | true |  |
@@ -61,7 +61,6 @@ The following table lists the configurable parameters and their default values:
 | `costReporting.region` | Cost reporting region. | "" |  |
 | `costReporting.s3BucketPath` | S3 bucket path for cost reporting. | "" |  |
 | `costReporting.table` | Table for cost reporting. | "" |  |
-| regions |  |  |  |
 | `includeResources` | List of resources to include. | [] |  |
 | `excludeResources` | List of resources to exclude. | [] |  |
 
