@@ -53,9 +53,9 @@ The following table lists the configurable parameters and their default values:
 
 | Parameter | Description | Schema | Default |
 | --- | --- | --- | --- |
-| `connectionDetails.connection` | Azure connection details. | string | "" |
-| `connectionDetails.clientID` | Azure Client ID | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
-| `connectionDetails.clientSecret` | Azure Client Secret | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
+| `connection` | Azure connection details. | string | "" |
+| `clientID` | Azure Client ID | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
+| `clientSecret` | Azure Client Secret | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
 
 :::info
 If you have setup Workload Identity Roles for Service Account, you do not have to do anything else. If you do not have that setup, you can use Client ID and Client Secret

@@ -31,7 +31,6 @@ const config = {
   favicon: 'img/canary-checker-icon.svg',
   organizationName: 'flanksource',
   projectName: 'canary-checker',
-  plugins: ['my-loaders', 'tailwind-loader'],
   presets: [
     [
       '@docusaurus/preset-classic',
