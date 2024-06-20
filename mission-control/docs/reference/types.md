@@ -3,6 +3,7 @@ hide_title: true
 title: Common Types
 sidebar_position: 2
 ---
+
 ## Agent
 
 An agent can be specified using:
@@ -10,7 +11,7 @@ An agent can be specified using:
 - `local` - The primary mission control instance
 - `uuid` of an agent
 - `name` of and agent
-- `all`  match all/any agents
+- `all` match all/any agents
 
 ## Cron
 
@@ -35,8 +36,6 @@ An agent can be specified using:
 | `@daily` (or `@midnight`)      | Run once a day at midnight                                 | `0 0 * * *` |
 | `@hourly`                      | Run once an hour at the beginning of the hour              | `0 * * * *` |
 
-
-
 ## Duration
 
 Valid time units are "s", "m", "h", "d", "w", "y". Eg:
@@ -52,7 +51,6 @@ Valid time units are "s", "m", "h", "d", "w", "y". Eg:
 
 Sizes are string with a unit suffix e.g. `100` / `100b`, `10mb`, Valid size units are `kb`, `mb`, `gb`, `tb`
 
-
 ## Icon
 
 One of the icons in the [flanksource-icons](https://github.com/flanksource/flanksource-icons/tree/main/svg) project
@@ -63,3 +61,12 @@ e.g.
 - `Kubernetes::Pod`
 - `argo`
 - `aws-ebs-volume`
+
+## Match Pattern
+
+Pattern matching suports the following operations
+
+- Use `*` to exclude all.
+- Prefix matching. Example: `Added*,Deleted*`
+- Suffix matching. Example: `*Terminated`
+- Negation will match everything but the pattern: Example: `!PodCrashLooping`

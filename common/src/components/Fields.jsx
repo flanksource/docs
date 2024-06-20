@@ -7,6 +7,7 @@ import clsx from 'clsx'
 
 const schemes = {
   "EnvVar": "[EnvVar](/reference/env-var)",
+  "MatchPattern": "[MatchPattern](/reference/types#match-pattern)",
   "[]EnvVar": "[[]EnvVar](/reference/env-var)",
   "CEL": "[CEL](/reference/scripting/cel)",
   "Javascript": "[Javascript](/reference/scripting/javascript)",
