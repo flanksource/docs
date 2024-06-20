@@ -117,18 +117,59 @@ There are 3 different ways to specify which value to use when finding related co
 
 Kubernetes resources can be annotated with some special annotations that can direct the scraper to certain behaviors.
 
-| Annotation                                                    | Description                                                                |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `config-db.flanksource.com/tags: "key1:val1,key2:val2"`       | Attach custom tags to the object. A config can have as many as `5` tags, so keep the custom tags limited.                                          |
-| `config-db.flanksource.com/ignore: true`                      | Exclude the object from being scraped along with all of its changes.       |
-| `config-db.flanksource.com/ignore-changes: <pattern>`         | Exclude changes by type for the given object that matches the pattern.     |
-| `config-db.flanksource.com/ignore-change-severity: <pattern>` | Exclude changes by severity for the given object that matches the pattern. |
+<Fields
+  rows={[
+    {
+      field: 'config-db.flanksource.com/tags',
+      description: 'Attach custom tags to the object. A config can have as many as `5` tags, so keep the custom tags limited.',
+      scheme: '`key1:val1,key2:val2`'
+    },
+    {
+      field: 'config-db.flanksource.com/ignore',
+      description: 'Exclude the object from being scraped along with all of its changes.',
+      scheme: 'bool'
+    },
+    {
+      field: 'config-db.flanksource.com/ignore-changes',
+      description: 'Exclude changes by type for the given object that matches the pattern.',
+      scheme: 'MatchPattern'
+    },
+    {
+      field: 'config-db.flanksource.com/ignore-change-severity',
+      description: 'Exclude changes by severity for the given object that matches the pattern.',
+      scheme: 'MatchPattern'
+    }
+  ]}
+/>
 
-### Pattern matching
+### Examples
 
-Pattern matching suports the following operations
+#### Exclude verbose changes from argo application
 
-- Use `*` to exclude all.
-- Prefix matching. Example: `Added*,Deleted*`
-- Suffix matching. Example: `*Terminated`
-- Negation will match everything but the pattern: Example: `!PodCrashLooping`
+```yaml title="argo-application.yaml"
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sock-shop
+  namespace: argo
+  annotations:
+    config-db.flanksource.com/ignore-changes: ReconciliationSucceeded
+    config-db.flanksource.com/ignore-change-severity: low
+spec:
+  ...
+```
+
+#### Excluding a particular secret from being scraped
+
+```yaml title="secret.yaml"
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations:
+    config-db.flanksource.com/ignore: true
+  name: slack
+  namespace: default
+type: Opaque
+data:
+  token: ...
+```
