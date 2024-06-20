@@ -64,7 +64,7 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
 You can create relationships between kubernetes objects on the basis of
 
 :::info
-[Relationships](../concepts/relationships) can also be defined under `transform.relationships`, however by defining them under `kubernetes.relationships` is simpler with specific support for `kind`, `name` and `namespace` fields.
+[Relationships](../concepts/relationships) can also be defined under `transform.relationships`, however defining them under `kubernetes.relationships` is simpler with specific support for `kind`, `name` and `namespace` fields.
 :::
 
 ```yaml title="kubernetes-relationship.yaml"
@@ -111,3 +111,24 @@ There are 3 different ways to specify which value to use when finding related co
 | `expr`  | Use an expression to get the value | `string` |          |
 | `value` | Specify a static value             | `string` |          |
 | `label` | Get the value from a label         | `string` |          |
+
+
+## Special annotations
+
+Kubernetes resources can be annotated with some special annotations that can direct the scraper to certain behaviors.
+
+| Annotation                                                    | Description                                                                |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `config-db.flanksource.com/tags: "key1:val1,key2:val2"`       | Attach custom tags to the object. A config can have as many as `5` tags, so keep the custom tags limited.                                          |
+| `config-db.flanksource.com/ignore: true`                      | Exclude the object from being scraped along with all of its changes.       |
+| `config-db.flanksource.com/ignore-changes: <pattern>`         | Exclude changes by type for the given object that matches the pattern.     |
+| `config-db.flanksource.com/ignore-change-severity: <pattern>` | Exclude changes by severity for the given object that matches the pattern. |
+
+### Pattern matching
+
+Pattern matching suports the following operations
+
+- Use `*` to exclude all.
+- Prefix matching. Example: `Added*,Deleted*`
+- Suffix matching. Example: `*Terminated`
+- Negation will match everything but the pattern: Example: `!PodCrashLooping`
