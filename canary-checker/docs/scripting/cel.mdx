@@ -1187,6 +1187,44 @@ k8s.getStatus(service) // "Active" if the service is active
 k8s.getStatus(deployment) // "Deployed" if the deployment is successful
 ```
 
+### k8s.getResourcesLimit
+
+`k8s.getResourcesLimit` retrieves the resource (cpu/memory) limit of a Kubernetes resource.
+
+Syntax:
+
+    k8s.getResourcesLimit(pod, resource)
+
+Where:
+
+- `pod` is the pod object
+- `resource` is either 'cpu' or 'memory'
+
+```javascript
+// Retrieving the status of a pod:
+k8s.getResourcesLimit(pod, "cpu") // 2
+k8s.getResourcesLimit(pod, "memory") // 200
+```
+
+### k8s.getResourcesRequests
+
+`k8s.getResourcesRequests` retrieves the status of a Kubernetes resource as a string. It provides detailed information about the current state of the resource.
+
+Syntax:
+
+    k8s.getResourcesRequests(pod, resource)
+
+Where:
+
+- `pod` is the pod object
+- `resource` is either 'cpu' or 'memory'
+
+```javascript
+// Retrieving the status of a pod:
+k8s.getResourcesRequests(pod, "cpu") // 2
+k8s.getResourcesRequests(pod, "memory") // 200
+```
+
 ### k8s.isHealthy
 
 `k8s.isHealthy` determine if a Kubernetes resource is healthy. It returns a boolean value indicating the health status of the resource.
@@ -1206,6 +1244,21 @@ k8s.isHealthy(service) // false if the service is not healthy
 k8s.isHealthy(deployment) // true if the deployment is healthy
 ```
 
+### k8s.labels
+
+`k8s.labels` takes in a kubernetes object & returns a map of all the labels.
+
+:::tip
+- The namespace is also returned as a label for namespaced objects.
+
+- Any labels ending with `-hash` are removed from the map.
+:::
+
+```javascript
+// Checking if a pod is healthy:
+k8s.labels(pod) // {"namespace": "kube-system", "app": "kube-dns"}
+```
+
 ### k8s.memoryAsBytes
 
 `k8s.memoryAsBytes` converts the memory string to bytes.
@@ -1217,6 +1270,37 @@ k8s.memoryAsBytes("10Ki") // 10240
 ```javascript
 k8s.memoryAsBytes("1.234gi") // 1324997410
 ```
+
+### k8s.nodeProperties
+
+`k8s.nodeProperties` is a helper function that takes in a kubernetes Node object and returns a map of the following node's properties 
+
+- ephemeral-storage (in bytes)
+- cpu
+- memory
+- zone (extracted from topology.kubernetes.io/zone)
+
+```javascript
+// Checking if a pod is healthy:
+k8s.nodeProperties(pod) // {"cpu": 2, "memory": 200, ephemeral-storage": 100000, zone": "us-east-1a"}
+```
+
+### k8s.podProperties
+
+`k8s.podProperties` is a helper function that takes in a kubernetes pod object and returns a map of the following pod's properties 
+
+- image
+- cpu
+- memory
+- node
+- created-at
+- namespace
+
+```javascript
+// Checking if a pod is healthy:
+k8s.podProperties(pod) // {"image": "postgres:14", "node": "saka", ...}
+```
+
 
 ---
 
