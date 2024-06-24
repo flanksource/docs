@@ -110,6 +110,124 @@ base64.decode("aGVsbG8=") // return b'hello'
 
 ## collections
 
+### .keys
+
+The `keys` method on a map returns a list of keys..
+
+Syntax:
+
+```javascript
+e.keys()
+
+// Where:
+//   `e` is a map .
+```
+
+Examples:
+
+```javascript
+{"first": "John", "last": "Doe"}.keys() // ["first", "last"]
+```
+
+### .merge
+
+The `merge` method on a map takes in a second map to merge with.
+
+Syntax:
+
+```javascript
+e.merge(x)
+
+// Where:
+//   `e` is the map you want to merge to.
+//   `x` is the second map to merge from.
+```
+
+Examples:
+
+```javascript
+{"first": "John"}.merge({"last": "Doe"}) // {"first": "John", "last": "Doe"}
+```
+
+### .omit
+
+The `omit` method on a map takes a list of keys to omit from the map.
+
+Syntax:
+
+```javascript
+e.omit(x)
+
+// Where:
+//   `e` is a list .
+//   `x` is a list of keys to omit.
+```
+
+Examples:
+
+```javascript
+{"first": "John", "last": "Doe"}.omit(["first"]) // {"last": "Doe"}
+```
+
+### .sort
+
+The `sort` method on a list returns the reversed list.
+
+Syntax:
+
+```javascript
+e.sort()
+
+// Where:
+//   `e` is a list .
+```
+
+Examples:
+
+```javascript
+[3, 2, 1].sort() // [1, 2, 3]
+['c', 'b', 'a'].sort() // ['a', 'b', 'c']
+```
+
+### .uniq
+
+The `uniq` method on a list returns a list of the unique elements.
+
+Syntax:
+
+```javascript
+e.uniq()
+
+// Where:
+//   `e` is a list .
+```
+
+Examples:
+
+```javascript
+[1,2,3,3,3,].uniq().sum() // 10
+["a", "b", "b"].uniq().join() // "ab"
+```
+
+### .values
+
+The `values` method on a map returns a list of values.
+
+Syntax:
+
+```javascript
+e.values()
+
+// Where:
+//   `e` is a map .
+```
+
+Examples:
+
+```javascript
+{'a': 1, 'b': 2}.values().sum() // 3
+```
+
 ### all
 
 The `all` macro tests whether a predicate holds for **all** elements of a list `e` or keys of a map `e`. It returns a boolean value based on the evaluation.
@@ -1069,6 +1187,44 @@ k8s.getStatus(service) // "Active" if the service is active
 k8s.getStatus(deployment) // "Deployed" if the deployment is successful
 ```
 
+### k8s.getResourcesLimit
+
+`k8s.getResourcesLimit` retrieves the resource (cpu/memory) limit of a Kubernetes resource.
+
+Syntax:
+
+    k8s.getResourcesLimit(pod, resource)
+
+Where:
+
+- `pod` is the pod object
+- `resource` is either 'cpu' or 'memory'
+
+```javascript
+// Retrieving the status of a pod:
+k8s.getResourcesLimit(pod, "cpu") // 2
+k8s.getResourcesLimit(pod, "memory") // 200
+```
+
+### k8s.getResourcesRequests
+
+`k8s.getResourcesRequests` retrieves the status of a Kubernetes resource as a string. It provides detailed information about the current state of the resource.
+
+Syntax:
+
+    k8s.getResourcesRequests(pod, resource)
+
+Where:
+
+- `pod` is the pod object
+- `resource` is either 'cpu' or 'memory'
+
+```javascript
+// Retrieving the status of a pod:
+k8s.getResourcesRequests(pod, "cpu") // 2
+k8s.getResourcesRequests(pod, "memory") // 200
+```
+
 ### k8s.isHealthy
 
 `k8s.isHealthy` determine if a Kubernetes resource is healthy. It returns a boolean value indicating the health status of the resource.
@@ -1088,6 +1244,21 @@ k8s.isHealthy(service) // false if the service is not healthy
 k8s.isHealthy(deployment) // true if the deployment is healthy
 ```
 
+### k8s.labels
+
+`k8s.labels` takes in a kubernetes object & returns a map of all the labels.
+
+:::tip
+- The namespace is also returned as a label for namespaced objects.
+
+- Any labels ending with `-hash` are removed from the map.
+:::
+
+```javascript
+// Checking if a pod is healthy:
+k8s.labels(pod) // {"namespace": "kube-system", "app": "kube-dns"}
+```
+
 ### k8s.memoryAsBytes
 
 `k8s.memoryAsBytes` converts the memory string to bytes.
@@ -1099,6 +1270,37 @@ k8s.memoryAsBytes("10Ki") // 10240
 ```javascript
 k8s.memoryAsBytes("1.234gi") // 1324997410
 ```
+
+### k8s.nodeProperties
+
+`k8s.nodeProperties` is a helper function that takes in a kubernetes Node object and returns a map of the following node's properties 
+
+- ephemeral-storage (in bytes)
+- cpu
+- memory
+- zone (extracted from topology.kubernetes.io/zone)
+
+```javascript
+// Checking if a pod is healthy:
+k8s.nodeProperties(pod) // {"cpu": 2, "memory": 200, ephemeral-storage": 100000, zone": "us-east-1a"}
+```
+
+### k8s.podProperties
+
+`k8s.podProperties` is a helper function that takes in a kubernetes pod object and returns a map of the following pod's properties 
+
+- image
+- cpu
+- memory
+- node
+- created-at
+- namespace
+
+```javascript
+// Checking if a pod is healthy:
+k8s.podProperties(pod) // {"image": "postgres:14", "node": "saka", ...}
+```
+
 
 ---
 
