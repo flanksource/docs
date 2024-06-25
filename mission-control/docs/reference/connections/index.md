@@ -12,25 +12,27 @@ apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
   name: payments-database
+  namespace: default
 spec:
-  type: postgres
-  url:
-    value: 'postgres://$(username):$(password)@postgres.host.com/payments'
-  username:
-    valueFrom:
-      secretKeyRef:
-        name: payments-database-credentials
-        key: POSTGRES_USER
-  password:
-    valueFrom:
-      secretKeyRef:
-        name: payments-database-credentials
-        key: POSTGRES_PASSWORD
+  postgres:
+    database:
+      value: payments
+    host:
+      value: postgres.host.com
+    insecureTLS: true
+    username:
+      valueFrom:
+        secretKeyRef:
+          name: payments-database-credentials
+          key: POSTGRES_USER
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: payments-database-credentials
+          key: POSTGRES_PASSWORD
 ```
 
 ## Referencing Connections
-
-Eventually, the URL that gets templated is used for establishing connections. This can be used for any datasource that authenticates via URL (PostgreSQL, MySQL, MSSQL, Redis, Opensearch, Elasticsearch etc.)
 
 A connection string can be represented in the form of `namespace/connection_name`
 
@@ -49,6 +51,10 @@ spec:
 ```
 
 This allows us a safe and reusable way to handle authentication
+
+:::tip
+The connection string can also be found in the `status.ref` field of the connection kubernetes object.
+:::
 
 :::tip
 If the entire URL is in the secrets and cannot be constructed like `scheme://$(username):$(password)@<host>:<port>` you can fetch that directly like
