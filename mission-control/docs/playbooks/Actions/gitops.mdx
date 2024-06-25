@@ -126,12 +126,16 @@ GitOps action receives a set of commonly used [env vars](../../reference/playboo
 They are
 
 <Fields rows={[
-  {field: "git.file", description: `Name of the file that created the config resource the playbook is run against. It is extracted from the \`config.kubernetes.io/origin\` annotation. The annotation
-  must be present in the config resource. You can set \`buildMetadata: [originAnnotations]\` in the kustomization file.`, scheme: "string"},
+  {field: "git.file", description: `Name of the file that created the config resource the playbook is run against.`, scheme: "string"},
   {field: "git.url", description: "URL of the git repository", scheme: "string"},
   {field: "git.branch", description: "The primary branch", scheme: "string"},
   {field: "kustomize.path", description: "Path of the kustomization file that created the config resource the playbook is run against. This comes from the spec of the kustomization.", scheme: "string"},
 ]}/>
+
+<details summary="Origin Annotation">
+
+In order for `git.file` to work, the `config.kubernetes.io/origin` annotation must be present in the config resource. You can set `buildMetadata: [originAnnotations]` in the kustomization file and the kustomization will
+add the annotation with the correct path.
 
 ```yaml title='kustomization.yaml'
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -139,10 +143,21 @@ kind: Kustomization
 // highlight-next-line
 buildMetadata: [originAnnotations]
 resources:
-  - namespaces
-  - helmrepositories
-  - kustomizations
+  - monitoring
 ```
+
+The above kustomization would add the following annotation to the config resource:
+
+```yaml title="monitoring/alertmanager.yaml"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    config.kubernetes.io/origin: |
+      path: monitoring/alertmanager.yaml
+  ...
+```
+</details>
 
 ## Templating
 
