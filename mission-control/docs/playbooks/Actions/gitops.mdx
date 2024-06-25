@@ -125,20 +125,13 @@ Files create or delete existing files on the git repo.
 GitOps action receives a set of commonly used [env vars](../../reference/playbooks/env-vars). These env vars are extracted by traversing up the Flux Kustomization & Git Repository that created the config resource the playbook is running against. 
 They are
 
-| Field       | description                            |
-| ----------- | -------------------------------------- |
-| `git`       | [GitEnvVar](#git-env-vars)             |
-| `kustomize` | [KustomizeEnvVar](#kustomize-env-vars) |
-
-### Git Env Var
-
 <Fields rows={[
-  {field: "file", description: `Name of the file that created the config resource the playbook is run against. It is extracted from the \`config.kubernetes.io/origin\` annotation. The annotation
+  {field: "git.file", description: `Name of the file that created the config resource the playbook is run against. It is extracted from the \`config.kubernetes.io/origin\` annotation. The annotation
   must be present in the config resource. You can set \`buildMetadata: [originAnnotations]\` in the kustomization file.`, scheme: "string"},
-  {field: "url", description: "URL of the git repository", scheme: "string"},
-  {field: "branch", description: "The primary branch", scheme: "string"},
+  {field: "git.url", description: "URL of the git repository", scheme: "string"},
+  {field: "git.branch", description: "The primary branch", scheme: "string"},
+  {field: "kustomize.path", description: "Path of the kustomization file that created the config resource the playbook is run against. This comes from the spec of the kustomization.", scheme: "string"},
 ]}/>
-
 
 ```yaml title='kustomization.yaml'
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -150,12 +143,6 @@ resources:
   - helmrepositories
   - kustomizations
 ```
-
-### Kustomize Env Var
-
-<Fields rows={[
-  {field: "path", description: "Path of the kustomization file that created the config resource the playbook is run against. This comes from the spec of the kustomization.", scheme: "string"},
-]}/>
 
 ## Templating
 
