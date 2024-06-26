@@ -23,6 +23,7 @@ const schemes = {
   "string": "`string`",
   "Icon": "[Icon](/reference/types#icon)",
   "bool": "`boolean`",
+  "int": "`integer`",
   "NotificationURL": "[Notification](/reference/notifications)",
   "NotificationConnection": "[Connection](/reference/connections)",
   "NotificationProperties": "[map[string]string](/reference/notifications#properties)",

@@ -22,19 +22,55 @@ spec:
       maxSSLExpiry: 7
 ```
 
-
 <HealthCheck name="http" connection="url"  rows={[
   {field: "url", description: "HTTP URL", scheme: "string", required: true},
   {field: "method", description: "HTTP Request method", default: "GET", scheme: "string"},
   {field: "headers", description: "Header fields", scheme: "[]EnvVar"},
   {field: "body", description: "Request Body Contents", scheme: "string"},
+  {field: "body", description: "Request Body Contents", scheme: "string"},
+  {field: "tlsConfig", description: "TLS Config", scheme: "[TLSConfig](#tls-config)"},
   {field: "templateBody", description: "If true body will be templated", default: false, scheme: "bool"},
   {field: "responseCodes", description: "Expected response codes", scheme: "[]int"},
   {field: "responseContent", description: "Expected response content", scheme: "string"},
   {field: "thresholdMillis", description: "Request timeout", default: 5000, scheme: "int"},
   {field: "maxSSLExpiry", description: "Max SSL expiry days", scheme: "int"}
-
 ]}/>
+
+### TLS Config
+
+<Fields rows={[
+  {field: "ca", description: "PEM encoded certificate of the CA to verify the server certificate", scheme: "EnvVar"},
+  {field: "cert", description: "PEM encoded client certificate", scheme: "EnvVar"},
+  {field: "key", description: "PEM encoded client private key", scheme: "EnvVar"},
+  {field: "handshakeTimeout", description: "Timeout for SSL Handshake (defaults to 10 seconds)", scheme: "int"},
+  {field: "insecureSkipVerify", description: "Controls whether a client verifies the server's certificate chain and host name", scheme: "bool"}
+]}/>
+
+<blockquote style={{ borderLeft: "2px solid var(--ifm-color-warning-light)" }}>
+  <p>You can specify either the <code>ca</code> or the pair of <code>cert</code> & <code>key</code></p>
+</blockquote>
+
+<details summary="Example">
+
+```yaml title=http-check.yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-check
+spec:
+  interval: 30
+  http:
+    - name: http pass response 200 status code
+      url: https://httpbin.demo.aws.flanksource.com/status/200
+      tlsConfig:
+        ca:
+          valueFrom:
+            secretKeyRef:
+              name: ca-cert
+              key: ca.pem
+```
+
+</details>
 
 ### Result Variables
 
@@ -75,9 +111,7 @@ spec:
 </div>
 </details>
 
-
 ### OAuth
-
 
 ### Template Body Variables
 
@@ -103,7 +137,6 @@ See <CommonLink to="gotemplate" anchor="escaping">Escaping variables</CommonLink
 
 ## Metrics
 
-
 | **HTTP Check Metrics**                                        |         |                                         |
 | ------------------------------------------------------------- | ------- | --------------------------------------- |
 | `canary_check_http_response_status{status, statusClass, url}` | Counter | Response code counter for each endpoint |
@@ -119,7 +152,6 @@ Status class is one of `1xx`, `2xx`, `3xx`, `4xx`, `5xx`
 </div>
 </details>
 
-
 <details summary="Transforming metrics into individual checks">
 
 <div>
@@ -127,5 +159,3 @@ Status class is one of `1xx`, `2xx`, `3xx`, `4xx`, `5xx`
 ```
 </div>
 </details>
-
-
