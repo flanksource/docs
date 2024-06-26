@@ -7,21 +7,53 @@ sidebar_class_name: popular
 
 The Prometheus Check connects to the Prometheus host, performs the desired query, and displays the results.
 
-
 ```yaml title="prometheus.yaml"  file=../../../modules/canary-checker/fixtures/datasources/prometheus.yaml
+
 ```
-<HealthCheck name="prometheus" connection="url" rows={[
-  {field: "url", description: "Prometheus instance, if not specified in installation it is required", required: true},
-  {field: "query", description: "PromQL query to execute", required: true},
 
+<HealthCheck
+  name="prometheus"
+  rows={[
+    {
+      field: 'url',
+      description:
+        'Prometheus instance, if not specified in installation it is required',
+      required: true
+    },
+    { field: 'query', description: 'PromQL query to execute', required: true },
+    {
+      field: 'username',
+      description: 'PromQL query to execute',
+      scheme: 'EnvVar'
+    },
+    {
+      field: 'password',
+      description: 'PromQL query to execute',
+      scheme: 'EnvVar'
+    },
+    {
+      field: 'bearer',
+      description: 'PromQL query to execute',
+      scheme: 'EnvVar'
+    },
+    { field: 'oauth', description: 'PromQL query to execute', scheme: '[oAuth](#oauth)' },
+  ]}
+/>
+
+## OAuth
+
+<Fields rows={[
+  {field: "clientID", description: "Client ID", scheme: "EnvVar"},
+  {field: "clientSecret", description: "Client Secret", scheme: "EnvVar"},
+  {field: "scope", description: "oAuth Scopes", scheme: "`[]string`"},
+  {field: "tokenURL", description: "Token URL", scheme: "string"},
+  {field: "params", description: "Endpoint parameters", scheme: "`map[string]string`"},
 ]}/>
-
-
 
 ## Result Variables
 
-| Name         | Description             | Scheme                     |
-| ------------ | ----------------------- | -------------------------- |
-| `value`      |                         | *float*                    |
-| `firstValue` | Number of rows returned | *int*                      |
-| `results`    | A list of results       | *[]map[string]interface{ }* |
+| Name         | Description             | Scheme                      |
+| ------------ | ----------------------- | --------------------------- |
+| `value`      |                         | _float_                     |
+| `firstValue` | Number of rows returned | _int_                       |
+| `results`    | A list of results       | _[]map[string]interface{ }_ |
