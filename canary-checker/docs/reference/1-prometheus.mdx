@@ -17,38 +17,44 @@ The Prometheus Check connects to the Prometheus host, performs the desired query
     {
       field: 'url',
       description:
-        'Prometheus instance, if not specified in installation it is required',
+        'Prometheus instance, defaults to `--prometheus` command line argument',
       required: true
     },
     { field: 'query', description: 'PromQL query to execute', required: true },
     {
       field: 'username',
-      description: 'PromQL query to execute',
+      description: 'Username for basic auth',
       scheme: 'EnvVar'
     },
     {
       field: 'password',
-      description: 'PromQL query to execute',
+      description: 'Password for basic auth',
       scheme: 'EnvVar'
     },
     {
       field: 'bearer',
-      description: 'PromQL query to execute',
+      description: 'Bearer token to use for authentication',
       scheme: 'EnvVar'
     },
-    { field: 'oauth', description: 'PromQL query to execute', scheme: '[oAuth](#oauth)' },
+    { field: 'oauth', scheme: '[OAuth](#oauth)' }
   ]}
 />
 
 ## OAuth
 
-<Fields rows={[
-  {field: "clientID", description: "Client ID", scheme: "EnvVar"},
-  {field: "clientSecret", description: "Client Secret", scheme: "EnvVar"},
-  {field: "scope", description: "oAuth Scopes", scheme: "`[]string`"},
-  {field: "tokenURL", description: "Token URL", scheme: "string"},
-  {field: "params", description: "Endpoint parameters", scheme: "`map[string]string`"},
-]}/>
+<Fields
+  rows={[
+    { field: 'clientID', description: 'Client ID', scheme: 'EnvVar' },
+    { field: 'clientSecret', description: 'Client Secret', scheme: 'EnvVar' },
+    { field: 'scope', description: 'Scopes to request', scheme: '`[]string`' },
+    { field: 'tokenURL', description: 'Token URL', scheme: 'string' },
+    {
+      field: 'params',
+      description: 'OAuth parameters when requesting a token',
+      scheme: '`map[string]string`'
+    }
+  ]}
+/>
 
 ## Result Variables
 
