@@ -1,5 +1,5 @@
 ---
-title: Playbooks
+title: Playbook
 sidebar_position: 6
 ---
 
@@ -21,6 +21,53 @@ sidebar_position: 6
 | `actions`     | Individual actions or steps to perform   | [`[]Action`](#actions)                                |
 | `approval`    | Optional approvals required before a playbooks runs | [`Approval`](#approvals)                    |
 
+
+## Run
+
+<Fields
+  rows={[
+    {
+      field: 'id',
+      description: 'ID of the playbook run',
+      scheme: 'string',
+    },
+    {
+      field: 'playbook_id',
+      description: 'ID of the playbook',
+      scheme: 'string',
+    },
+    {
+      field: 'status',
+      description: 'Status of the playbook run',
+      scheme: 'string',
+    },
+    {
+      field: 'created_by',
+      description: 'ID of the user who created the playbook run',
+      scheme: 'string',
+    },
+    {
+      field: 'component_id',
+      description: 'ID of the component associated with the playbook run',
+      scheme: 'string',
+    },
+    {
+      field: 'check_id',
+      description: 'ID of the check associated with the playbook run',
+      scheme: 'string',
+    },
+    {
+      field: 'config_id',
+      description: 'ID of the config associated with the playbook run',
+      scheme: 'string',
+    },
+    {
+      field: 'agent_id',
+      description: 'ID of the agent that executed the playbook run',
+      scheme: 'string',
+    },
+  ]}
+/>
 
 ## Actions
 
