@@ -2,8 +2,12 @@
 title: CEL Expressions
 ---
 
-`expr` expressions in canary checker use the [Go Common Expression Language (CEL)](https://github.com/google/cel-go).
-See [Language Definition](https://github.com/google/cel-spec/blob/master/doc/langdef.md#overview)
+`expr` expressions use the [Common Expression Language (CEL)](https://cel.dev/)
+
+:::tip
+The [CEL playground](https://playcel.undistro.io/) lets you quickly test CEL expressions
+:::
+
 
 ```yaml title=http-check-expr.yaml
 apiVersion: canaries.flanksource.com/v1
@@ -950,7 +954,7 @@ urldecode("hello+world+%3F") // 'hello world ?'
 
 `filepath.Base` returns the last element of path.
 Trailing path separators are removed before extracting the last element.
-If the path is empty, Base returns ".".
+If the path is empty, Base returns `.`.
 If the path consists entirely of separators, Base returns a single separator.
 
 ```javascript
@@ -971,7 +975,7 @@ filepath.Clean("/foo/bar/../baz") // Evaluates /foo/baz
 `filepath.Dir` returns all but the last element of path, typically the path's directory.
 After dropping the final element, Dir calls Clean on the path and trailing
 slashes are removed.
-If the path is empty, Dir returns ".".
+If the path is empty, Dir returns `.`.
 If the path consists entirely of separators, Dir returns a single separator.
 The returned path does not end in a separator unless it is the root directory.
 
@@ -1008,7 +1012,7 @@ are ignored. The result is Cleaned. However, if the argument
 list is empty or all its elements are empty, Join returns
 an empty string.
 On Windows, the result will only be a UNC path if the first
-non-empty element is a UNC path.
+non-empty element is a UNC path addict.
 
 ```javascript
 filepath.Join(["/home/flanksource", "projects", "gencel"]; // /home/flanksource/projects/gencel

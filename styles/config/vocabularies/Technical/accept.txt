@@ -288,7 +288,6 @@ Knative
 Kourier
 [Kk]ratos
 KSOPS
-Kube
 kubeadm
 kubeconfig|KUBECONFIG
 kubelet
@@ -328,7 +327,8 @@ Namecheap
 NAT[s]?
 netfilter
 Netplan
-nodemetrics
+[Nn]ode[Mm]etrics
+
 nodeoutofmemory
 npm
 NSSM
@@ -362,7 +362,7 @@ Plesk
 plpgsql
 PNG|png
 podinfo
-podmetrics
+[Pp]od[mM]etrics
 POSIX
 Postgre(s|SQL)
 postgrest|PostgREST
@@ -379,7 +379,7 @@ pydo
 q
 qcow
 querytype
-rabbitmq
+[Rr]abbit[Mm][Qq]
 Rackspace
 Razer
 readyTimeout
@@ -391,7 +391,7 @@ relname
 [Rr]eplicaset
 repo(s|'s)?
 resolver's
-resourcefilter
+resourcefilter|ResourceFilter
 reviewdog
 [Rr]ocketchat
 rolebinding
@@ -480,7 +480,6 @@ wget
 ikidata
 WordPress
 workqueue
-X
 Xeon
 xrdp
 Zombieload
