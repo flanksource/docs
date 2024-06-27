@@ -80,5 +80,5 @@ Thank you for your contribution to the security of this project!
 * Vulnerabilities in third-party applications or services unless they pose a direct risk to Flanksource.
 * Physical security controls unless they can be directly exploited to compromise our systems.
 * Social engineering attacks, phishing attempts, or spamming activities.
-* Denial of service attacks or brute-force attacks againstFlanksource infrastructure.
+* Denial of service attacks or brute-force attacks.
 * Any activity that violates laws or regulations, or that disrupts the normal operation of Flanksource services.

@@ -66,7 +66,8 @@ e.g.
 
 Pattern matching suports the following operations
 
-- Use `*` to exclude all.
-- Prefix matching. Example: `Added*,Deleted*`
-- Suffix matching. Example: `*Terminated`
-- Negation will match everything but the pattern: Example: `!PodCrashLooping`
+- `*`  - Match anything
+- `Added,Deleted` - Match either `Added` or `Deleted`
+- `Added*` Match anything starting with `Added`
+- `*Terminated` Match anything ending with `Added`
+- `!PodCrashLooping` - Match everthing except `PodCrashLooping`

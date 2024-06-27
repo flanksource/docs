@@ -8,6 +8,8 @@ pagination_prev: null
 ---
 
 
+import { SlClose, SlCheck } from "react-icons/sl"
+
 Flanksource Mission Control is an Internal Developer Platform that helps teams improve developer productivity and operational resilience.
 
 ![](/img/how-it-works.svg)
@@ -24,19 +26,52 @@ With Mission Control you can:
 * [Notify People and Systems](./notifications) about changes in health and configuration.
 
 
-### When not to use Mission Control
 
-Mission Control is best suited for medium to large teams with complex infrastructure and applications. If you have a simple setup with just a few servers, tools like Ansible, Terraform and Prometheus may be enough.
 
-* **Your primary concern is Develop**_**ment**_ **Experience & Maturity**. Mission Control is focused on improving the **operational experience for develop*ers***, enabling them to quickly understand, troubleshoot and operate on complex systems.
-* **You prefer ClickOps to GitOps**. Mission Control is built on a GitOps first principle, and configured using Kubernetes Custom Resource Defintions. While there is a configuration UI, it is primarily for rapid prototyping and testing.
-* **Your application / team has no dependencies across multiple teams or services**. Mission Control is best suited for distributed systems with dependencies across teams and services that need to be visualized and tracked.
+<div className="flex flex-col gap-8 my-10 md:flex-row">
+  <div className="rounded-lg bg-primary-300 p-4 pt-6 pb-8 text-black md:w-1/2" style={{
+    border: "1px solid #0c63db"
+  }}>
 
-:::tip
-While YAML is preferred for configuration, Mission Control does provide highly optimized UI for viewing, navigating and operating on the catalogs and playbooks defined in YAML/CRDs.
-:::
+    <div className=" w-full justify-center flex mb-4">
+    <SlCheck  size="48px" style={{strokeWidth: "1px"}} color="#0c63db"  />
+    </div>
+    <h2 className="mb-6 text-center font-basier text-2xl font-semibold">When to use Mission Control?</h2>
+    <ul className="ml-4 flex list-disc flex-col gap-y-2 ">
+      <li>You prefer GitOps and Kubernetes</li>
+      <li>You want to adopt GitOps and IDP's incrementally</li>
+      <li>You prefer self-hosted</li>
+      <li>You have a mix of on-premise, cloud and legacy</li>
+    </ul>
+  </div>
+  <div className="rounded-lg border-gray-500 border p-4 pt-6  md:w-1/2" style={{
+    border: "1px solid #cbd5e1"
+  }}>
 
-* Your system is very simple with few applications, dependencies and changes.
+    <div className="w-full justify-center flex  mb-4">
+  <SlClose   size="48px"   color="#64748b"   />
+  </div>
+
+    <h2 className="mb-6 text-center font-basier text-2xl font-semibold">When NOT to use Mission Control?</h2>
+    <ul className="ml-4  flex list-disc flex-col gap-y-2 ">
+      <li>You prefer ClickOps to GitOps</li>
+      <li>You have dedicated full-stack Platform Engineers</li>
+      <li>You are mostly serverless</li>
+      <li>You want to track team/app maturity</li>
+    </ul>
+  </div>
+</div>
+
+## Unified Catalog
+
+Mission Control automatically builds a comprehensive view of your infrastructure, spanning across cloud providers and technologies. It goes beyond simple discovery by collecting detailed service metadata from various sources. This dynamic catalog is enriched with real-time events, change tracking, and insights from leading security and cost management tools. A powerful graph visualization further enhances understanding by revealing dependencies and system health at a glance.
+
+## GitOps Orchestrator / Playbooks
+
+Mission Control makes it easy to adopt GitOps incrementally. With its intuitive web console, you can edit resources managed by Flux, Argo, Terraform while submitting changes as Git Pull Requests - all without writing a single Git command or pipline. This lets you benefit from GitOps without the steep learning curve.
+
+Mission Control also enables you to build meta control planes by reacting to changes in health and state and then running playbooks that commit changes back to git.
+
 
 
 ## Getting Started

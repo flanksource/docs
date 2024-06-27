@@ -1,6 +1,43 @@
 
 @tailwind utilities;
 
+.number {
+  @apply bg-gray-200;
+  display: inline-block;
+  border-radius: 50%;
+  font-weight: 600;
+  height: 1.7em;
+  line-height: 1.6em;
+  padding: 0;
+  text-align: center;
+  margin-right: 3px;
+  width: 1.7em;
+}
+
+.number-dark-gray {
+  @apply number;
+  @apply bg-gray-600;
+  @apply text-white;
+}
+
+.number-red {
+  @apply number;
+  @apply bg-red-400;
+  @apply text-white;
+}
+
+.number-green {
+  @apply number;
+  @apply bg-green-400;
+  @apply text-white;
+}
+
+.number-blue {
+  @apply number;
+  @apply bg-blue-400;
+  @apply text-white;
+}
+
 :root {
   --docsearch-hit-active-color: blue;
   --docusaurus-highlighted-code-line-bg: rgb(229, 229, 229);

@@ -4,7 +4,7 @@ title: Date Mapping
 
 In this tutorial, you'll use the config-db CLI to scrape a file that consists of a list of virtual machines.
 
-## 1. Create the config files
+## Create the config files
 
 ```json title="web-server.json"
 {
