@@ -32,8 +32,12 @@ import { CustomField } from '@site/src/components/Badges'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import { Scraper, CustomScraper } from '@site/src/components/Scraper'
+import Helm from "@site/src/components/Helm"
+import { Advanced } from '@site/src/components/Badges'
 
 const MDXComponents = {
+  Advanced: Advanced,
+  Helm: Helm,
   Icon: Icon,
   CommonLink: CommonLink,
   ConfigTransform: ConfigTransform,

@@ -1,0 +1,54 @@
+import Container  from './_properties_container.mdx'
+
+
+The Mission Control Agent is a customized self-hosted installation that replicates all data to the SaaS - it has the following differences to the normal Self-Hosted Installation:
+
+* No Ingress or Accessible UI is deployed - outbound connections to the SaaS only.
+* No authentication on service endpoints (Kratos is not included)
+* Smaller default DB size
+* Smaller retention window for deleted items and changes
+
+
+| value                                     | default                                  |
+| ----------------------------------------- | ---------------------------------------- |
+| **upstream.agentName**                        |                             The tag to be added to all resources created by this Agent. Use short concise names             |
+| **upstream.host**                             | The URL of the SaaS Instance                                         |
+| **upstream.username**                         |  `TOKEN`                                        |
+| **upstream.password**                         | An [Access Token](/installation/saas/agent#token) for the agent                                        |
+| image.pullPolicy                          |  Defaults to `IfNotPresent`                             |
+| image.tag                                 | Defaults to `v0.0.495`                                 |
+| resources.limits.cpu                      | Defaults to `500m`                                     |
+| resources.limits.memory                   |  Defaults to`1024Mi`                                   |
+| resources.requests.cpu                    |  Defaults to `100m`                                     |
+| resources.requests.memory                 |  Defaults to `768Mi`                                    |
+| serviceAccount.annotations                | {}                                       |
+| upstream.createSecret                     | `true`                                     |
+| upstream.secretName                       | `upstream`                                 |
+
+
+
+###  Canary Checker
+<Container prefix="canary-checker." sa="canary-checker-sa"/>
+
+### Config DB
+<Container prefix="config-db." sa="config-db-sa"/>
+
+### Database
+
+:::info Persistence
+Mission Control uses a per-agent PostgreSQL database to track all configuration, topologies, changes and insights disovered by an agent. This data is then replicated to the SaaS either in batches using the `Reconcile All` background job that tracks the `is_pushed` column in all tables.
+
+Mission control uses *deterministic* ID's so that in most cases losing an agent database does not result in duplication of catalog items, event/audit trail changes and insights, but may result in duplicate and/or false positive `diff` changes.
+:::
+
+| value                                     | default                                  |
+| ----------------------------------------- | ---------------------------------------- |
+| db.conf.shared_buffers                    | 1GB                                      |
+| db.conf.work_mem                          | 10MB                                     |
+| db.create                                 | true                                     |
+| db.resources.requests.memory              | 2Gi                                      |
+| db.secretKeyRef.key                       | DB_URL                                   |
+| db.secretKeyRef.name                      | incident-commander-postgres              |
+| db.shmVolume                              | 256Mi                                    |
+| db.storage                                | 20Gi                                     |
+| db.storageClass                           | default                                  |

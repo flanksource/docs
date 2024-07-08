@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CloudFormation template for Mission Control IAM Role using EKS Pod Identities
+
+Parameters:
+  Cluster:
+    Type: String
+    Description: Name of the EKS cluster
+  Namespace:
+    Type: String
+    Default: "mission-control"
+    Description: Kubernetes namespace
+  PolicyArn:
+    Type: String
+    Default: "arn:aws:iam::aws:policy/ReadOnlyAccess"
+    Description: ARN of the IAM policy to attach to the role
+
+Resources:
+  MissionControlRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "MissionControlRole"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "eks.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+              - "sts:TagSession"
+
+  MissionControlRolePolicyAttachment:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "MissionControlPolicy"
+      Roles:
+        - Ref: "MissionControlRole"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "*"
+            Resource: "*"
+
+  MissionControlServiceAccount:
+    Type: "AWS::EKS::PodIdentityAssociation"
+    Properties:
+      ClusterName: !Ref "Cluster"
+      Namespace: !Ref "Namespace"
+      RoleArn: !GetAtt MissionControlRole.Arn
+      ServiceAccount: mission-control-sa
+
+CanaryCheckerServiceAccount:
+    Type: "AWS::EKS::PodIdentityAssociation"
+    Properties:
+      ClusterName: !Ref "Cluster"
+      Namespace: !Ref "Namespace"
+      RoleArn: !GetAtt MissionControlRole.Arn
+      ServiceAccount: canary-checker-sa
+
+  ConfigDBServiceAccount:
+    Type: "AWS::EKS::PodIdentityAssociation"
+    Properties:
+      ClusterName: !Ref "Cluster"
+      Namespace: !Ref "Namespace"
+      RoleArn: !GetAtt MissionControlRole.Arn
+      ServiceAccount: config-db-sa
+

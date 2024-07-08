@@ -116,6 +116,28 @@ By using nip you will be able to access mission-control without any further netw
 global:
   ui:
     host: 127.0.0.1.nip.io
+resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+db:
+  conf:
+    shared_buffers: 128Mi
+    work_mem: 10MB
+  resources:
+    requests:
+      cpu: 10m
+      memory: 256Mi
+canary-checker:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 128Mi
+config-db:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 128Mi
 ```
 
 ```bash

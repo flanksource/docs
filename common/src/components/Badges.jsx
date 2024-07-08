@@ -90,3 +90,22 @@ export function Enterprise({ color }) {
     </span>
   );
 }
+
+
+
+export function Advanced({ color, children }) {
+  return (
+    <span
+      title={children}
+      style={{
+        backgroundColor: 'gray',
+        fontSize: '0.7rem',
+        borderRadius: '5px',
+        color: 'white',
+        padding: '0.3rem',
+        marginBottom: "5px"
+      }}>
+      Advanced
+    </span>
+  );
+}

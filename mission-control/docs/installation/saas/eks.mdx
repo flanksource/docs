@@ -5,8 +5,9 @@ slug: installation/eks
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-
+import HelmInstall from '../_helm_install.mdx'
 import AwsIam from "../_aws_iam.mdx"
+import Helm from "@site/src/components/Helm"
 
 # Install Mission Control on AWS EKS cluster
 
@@ -19,22 +20,19 @@ To install and run Mission Control you need to have the following prerequisites:
 - (Optional) SMTP Server (For sending notifications and invites)
 :::
 
-<AwsIam/>
+<AwsIam chart="mission-control-agent" values={{
+  "upstream.agent": "YOUR_LOCAL_NAME",
+  "upstream.username": "token",
+  "upstream.password": "",
+  "upstream.host": ""
+}}/>
+
+
 
 
 
 <Step step={4} name="Install Mission Control with Helm">
-
-```bash
-helm repo add flanksource https://flanksource.github.io/charts
-helm repo update
-helm install mission-control  \
-  flanksource/mission-control  \
- -n mission-control \
- --create-namespace \
- --wait \
- -f values.yaml
-```
+<HelmInstall/>
 
 </Step>
 

@@ -1,14 +1,20 @@
 
+import Domain from '../partials/_domain.mdx'
+
 <Step step={1} name="Create an IAM Role">
 
-Create a role to allow mission-control to scrape your AWS resources. Attach the following AWS managed policies to the role:
+Depending on how you want to use Mission Control you need to create an IAM role for mission control to use:
 
-- `ReadOnlyAccess`
-- `AWSConfigUserAccess`
-- `AWSQuicksightAthenaAccess`
+| Use Case                                     | Role                                      |
+| -------------------------------------------- | ----------------------------------------- |
+| Read Only Scraping                           | `arn:aws:iam::aws:policy/ReadOnlyAccess`  |
+| Playbooks to create and update AWS Resources | `arn:aws:iam::aws:policy/PowerUserAccess` |
 
 <details summary="Create new IAM Policy (Alternative)">
 <div>
+
+You can also create a new policy with just the permissions required by Mission Control
+
 ```json title="iam-policy.json"
 {
 	"Version": "2012-10-17",
@@ -64,112 +70,268 @@ Create a role to allow mission-control to scrape your AWS resources. Attach the 
 </div>
 </details>
 
+
 </Step>
+
+<Step step={2} name="Configure IAM Roles for Mission Control">
 <Tabs>
 
 <TabItem label="IAM Roles for Service Accounts" value="IRSA">
 
-<Step step={2} name="Add a trust relationship">
+<Tabs>
+<TabItem label="eksctl" value="cli">
+2. Setup variables
+	```bash
+	# The name of the EKS cluster mission control is being deployed to
+	export CLUSTER= <CLUSTER_NAME>
+	# the default namespace the mission-control helm chart uses
+	export NAMESPACE=mission-control
+	export ACCOUNT=$(aws sts get-caller-identity  --query 'Account' --output text)
+	```
+	<p/>
 
-a) Get the `OIDC ID` from your EKS Cluster in the **Overview** page:
+1. Enable [EKS IAM Roles for Service Accounts](https://eksctl.io/usage/iamserviceaccounts/)
+	```bash
+	eksctl utils associate-iam-oidc-provider --cluster=$CLUSTER
+	```
+	<p/>
 
-![](/img/eks-oidc.png)
+2. Create the IAM Role mappings
 
-b) Update the trust policy of the IAM role by changing the OIDC arn, OIDC endpoint and the namespace below.
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [{
-    "Effect": "Allow",
-    "Principal": {
-      "Federated":
-					"arn:aws:iam::<AWS Account ID>:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/<Your OIDC ID>"
-		},
-		"Action": "sts:AssumeRoleWithWebIdentity",
-		"Condition": {
-      "StringEquals": {
-        "oidc.eks.<Region>:amazonaws.com/id/<Your OIDC ID>:sub": "system:serviceaccount:mission-control:config-db-sa",
-        "oidc.eks.<Region>.amazonaws.com/id/<Your OIDC ID>:sub": "system:serviceaccount:mission-control:mission-control-sa",
-        "oidc.eks.<Region>.amazonaws.com/id/<Your OIDC ID>:sub": "system:serviceaccount:mission-control:canary-checker-sa",
-				"oidc.eks.<Region>.amazonaws.com/id/<Your OIDC ID>:sub": "sts.amazonaws.com",
-      }
-		}
-	}]
-}
-```
-</Step>
+	```yaml title="eksctl.yaml"
+	iam:
+		withOIDC: true
+		serviceAccounts:
+		- metadata:
+				name: mission-control-sa
+				namespace: mission-control
+			roleName: MissionControlRole
+			roleOnly: true
+			attachPolicyARNs:
+			- "arn:aws:iam::aws:policy/ReadOnlyAccess"
+		- metadata:
+				name: canary-checker-sa
+				namespace: mission-control
+			roleName: CanaryCheckerRole
+			roleOnly: true
+			attachPolicyARNs:
+			- "arn:aws:iam::aws:policy/ReadOnlyAccess"
+		- metadata:
+				name: config-db-sa
+				namespace: mission-control
+			roleName: ConfigDBRole
+			roleOnly: true
+			attachPolicyARNs:
+			- "arn:aws:iam::aws:policy/ReadOnlyAccess"
+
+	```
+	```bash
+	eksctl create iamserviceaccount --cluster $CLUSTER -c eksctl.yaml
+	```
+
+1. <Domain/>
+
+1. Install Mission Control
+
+	<Helm chart={props.chart} values={props.values} valueFile={
+	`
+	serviceAccount:
+	    annotations:
+					# used by mission control for notifications / playbooks
+		      eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/MissionControlRole
+
+	canary-checker:
+		  serviceAccount:
+			  annotations:
+					# used for cloudwatch, S3 and other AWS health checks
+				  eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/CanaryCheckerRole
+
+	config-db:
+		  serviceAccount:
+			  annotations:
+  				# used to scrape AWS resources, change history via AWS CloudTrail and cost via Athena
+				  eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/ConfigDBRole
+				`}
+	/>
 
 </TabItem>
-
-
-<TabItem label="Pod Identity" value="pod">
-
-:::info Prerequisites
-- [Pod Identity Agent](https://docs.aws.amazon.com/eks/latest/userguide/pod-id-agent-setup.html) is installed and configured
-:::
-
-<Step step={2} name="Add a trust relationship">
-
- a) Modify the trust policy of the IAM role
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "AllowEksAuthToAssumeRoleForPodIdentity",
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "pods.eks.amazonaws.com"
-            },
-            "Action": [
-                "sts:AssumeRole",
-                "sts:TagSession"
-            ]
-        }
-    ]
-}
-```
-
-b) Create the Pod Identity Association
-
-```bash
-for role in mission-control-sa canary-checker-sa config-db-sa; do
-	echo aws eks create-pod-identity-association \
-		--cluster-name <CLUSTER_NAME> \
-		--namespace mission-control \
-		--service-account $role \
-		--role-arn <IAM_ROLE_ARN>
-done
-```
-</Step>
-
-</TabItem>
-
-
 </Tabs>
 
 
 
-<Step step={3} name="Associate the role with Mission Control">
+</TabItem>
 
-Update the `values.yaml` to annotate the service accounts:
 
-```yaml title="values.yaml"
-# service account used by for scraping
-config-db:
-  serviceAccount:
-    annotations:
-	    eks.amazonaws.com/role-arn: <IAM Role ARN>
+<TabItem label="Pod Identity" value="pod" default>
 
-# service account used by for health checks
-canary-checker:
-  serviceAccount:
-    annotations:
-      eks.amazonaws.com/role-arn: <IAM Role ARN>
 
-# service account used for notifications and playbooks
-serviceAccount:
-  annotations:
-    eks.amazonaws.com/role-arn: <IAM Role ARN>
-```
+
+<Tabs>
+<TabItem label="eksctl" value="cli">
+
+1. Ensure the [AWS Pod Identity Agent](https://docs.aws.amazon.com/eks/latest/userguide/pod-id-agent-setup.html) is configured and running
+
+1. Create a mapping file for `eksctl`
+
+	```yaml title="eksctl.yaml"
+	podIdentityAssociations:
+		- namespace: mission-control
+			serviceAccountName:  mission-control-sa
+			permissionPolicyARNs: arn:aws:iam::aws:policy/ReadOnlyAccess
+
+		- namespace: mission-control
+			serviceAccountName:  config-db-sa
+			permissionPolicyARNs: arn:aws:iam::aws:policy/ReadOnlyAccess
+
+		- namespace: mission-control
+			serviceAccountName:  canary-checker-sa
+			permissionPolicyARNs: arn:aws:iam::aws:policy/ReadOnlyAccess
+	iam:
+		# note withOIDC is not required for Pod Identity
+		serviceAccounts:
+		# used by mission control for notifications / playbooks
+		- metadata:
+				name: mission-control-sa
+				namespace: mission-control
+			attachPolicyARNs:
+			- "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  	# used for cloudwatch, S3 and other AWS health checks
+		- metadata:
+				name: canary-checker-sa
+				namespace: mission-control
+			attachPolicyARNs:
+			- "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  	# used to scrape resources, AWS CloudTrail and AWS Cost & Usage Reports
+		- metadata:
+				name: config-db-sa
+				namespace: mission-control
+			attachPolicyARNs:
+			- "arn:aws:iam::aws:policy/ReadOnlyAccess"
+	```
+	<p/>
+
+	<details summary="Using an existing IAM Role" className="mt-10">
+	<span className="bg-white">
+	<p>If you are using a pre-existing IAM role when creating a pod identity association, you must configure the role to trust the newly introduced EKS service principal (`pods.eks.amazonaws.com`)</p>
+	```json title="iam-trust-policy.json"
+	{
+			"Version": "2012-10-17",
+			"Statement": [
+					{
+							"Effect": "Allow",
+							"Principal": {
+									"Service": "pods.eks.amazonaws.com"
+							},
+							"Action": [
+									"sts:AssumeRole",
+									"sts:TagSession"
+							]
+					}
+			]
+	}
+	```
+	</span>
+
+	</details>
+
+1. Apply the Pod Identities using `eksctl`
+
+	```bash
+	eksctl create podidentityassociation  -c eksctl.yaml
+	```
+	<p/>
+1. <Domain/>
+
+1. Install Mission Control
+	<Helm chart={props.chart} values={props.values}/>
+
+</TabItem>
+<TabItem label="Terraform" value="terraform">
+1. Ensure the [AWS Pod Identity Agent](https://docs.aws.amazon.com/eks/latest/userguide/pod-id-agent-setup.html) is configured and running
+
+2. Create `main.tf`
+	```hcl title="main.tf"  file=../partials/_pod_identity.tf
+	```
+
+2. Apply the terraform
+	```bash
+	TF_VAR_role=$CLUSTER  terraform apply
+	```
+3. Install Mission Control
+	<Helm chart={props.chart} values={props.values}/>
+</TabItem>
+
+<TabItem label="Cloudformation" value="cloudformation">
+
+1. Associate Pod Identities
+	```yaml title="mission-control-iam-cloudformation.yaml"  file=../partials/_pod_identity.yaml
+	```
+3. Install Mission Control
+	<Helm chart={props.chart}/>
+
+</TabItem>
+</Tabs>
+
+
+</TabItem>
+
+<TabItem label="Access Key" value="accessKey">
+
+:::warning Security Warning
+Using Access Keys and Secrets is not recommended from a security perspective
+:::
+
+
+First we create a secret called `aws` containing the access key and secret, This secret is not s
+
+1. Create a new IAM User and Access Key
+
+	```bash
+	USER_NAME="mission-control-sa"
+
+	aws iam create-user --user-name $USER_NAME
+
+	aws iam attach-user-policy --user-name $USER_NAME --policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess
+
+	key=$(aws iam create-access-key --user-name $USER_NAME)
+	```
+
+2. Create a new secret `aws` containing the access and secret key
+
+	```bash
+	kubectl create secret  generic aws \
+		--from-literal=AWS_ACCESS_KEY_ID=$(echo $key | jq -r '.AccessKey.AccessKeyId') \
+		--from-literal=AWS_SECRET_ACCESS_KEY=$(echo $key | jq -r '.AccessKey.SecretAccessKey')
+	```
+
+3.   Create a new connection to use bundles
+	```yaml title="aws-connection.yaml"
+	apiVersion: mission-control.flanksource.com/v1
+	kind: Connection
+	metadata:
+		name: aws
+	spec:
+		region: eu-west-1
+		accessKey:
+			valueFrom:
+				secretKeyRef:
+					name: aws
+					key: AWS_ACCESS_KEY_ID
+		secretKey:
+			valueFrom:
+				secretKeyRef:
+					name: aws
+					key: AWS_ACCESS_KEY_ID
+
+		```
+
+			```bash
+	kubectl create secret  generic aws \
+		--from-literal=AWS_ACCESS_KEY_ID=$(echo $key | jq -r '.AccessKey.AccessKeyId') \
+		--from-literal=AWS_SECRET_ACCESS_KEY=$(echo $key | jq -r '.AccessKey.SecretAccessKey')
+	```
+
+</TabItem>
+
+</Tabs>
 </Step>

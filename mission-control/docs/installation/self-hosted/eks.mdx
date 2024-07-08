@@ -1,64 +1,37 @@
 ---
 title: AWS EKS
-slug: installation/eks
 ---
 
 import AwsIam from "../_aws_iam.mdx"
+import Helm from "@site/src/components/Helm"
+import AdminPassword from '@site/docs/partials/_admin-password.mdx'
+import HelmInstall from '../_helm_install.mdx'
 
 # Self Hosted Installation on AWS EKS
 
 :::info Prerequisites
 To install and run Mission Control you need to have the following prerequisites:
 
-- EKS 1.26+ with an Ingress Controller
-- 500-1000m of CPU and 2GB of Memory
+- EKS 1.28+ with an Ingress Controller
+- 500m - 2000m of CPU and 6 - 8GB of Memory (2 - 4GB if using an external DB)
 - Persistent Volumes with 20GB+ of storage or an external postgres database like RDS
 - (Optional) SMTP Server (For sending notifications and invites)
 :::
 
+<AwsIam values={{
+  "global.ui.host": "DOMAIN"
+}}/>
 
-<Step step={1} name="Install Helm Repository">
 
-```shell
-helm repo add flanksource https://flanksource.github.io/charts
-helm repo update
-```
-</Step>
+<Step step={2} name="Install Helm Charts">
 
-<Step step={2} name="Install Helm Chart">
+<HelmInstall/>
 
-```yaml title="values.yaml"
-global:
-  ui:
-    host: "mission-control-ui.local" # hostname
-  serviceAccount:
-    annotations: # Any annotations required to attach custom IAM policies etc.
 
-adminPassword: admin # The default password for the admin@local user
-
-flanksource-ui:
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
-db:
-  storageClass: # e.g. gp3
-  storage: 50Gi
-```
-
-```bash
-helm install mission-control  \
-  flanksource/mission-control  \
- -n mission-control \
- --create-namespace \
- --wait \
- -f values.yaml
-```
 
 </Step>
 
-<AwsIam/>
+
 
 
 <div id="cost-reporting"/>
