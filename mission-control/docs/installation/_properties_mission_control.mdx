@@ -1,0 +1,27 @@
+import Container  from './_properties_container.mdx'
+
+
+| Value                                        | Description                                        |
+| -------------------------------------------- | -------------------------------------------------- |
+| **global.ui.host**                           | The domain to be used for ingress Defaults to `mission-control-ui.local`                                                    |
+| global.otel.collector                        | OpenTelemetry Endpoint to send internal traces                                                    |
+| global.registry                    |     Defaults to  `docker.io/flanksource`                                              |
+| extraArgs                                    | Extra arguments to mission-control                 |
+| image.pullPolicy                             | Defaults to `IfNotPresent`                         |
+| image.tag                                    |                                                    |
+| otel.serviceName                             | Defaults to `mission-control`                      |
+| properties.incidents.disable                 | Defaults to `{}`                                   |
+| properties.logs.disable                      | Defaults to `true`                                 |
+| replicas                                     | Defaults to `1`                                    |
+| resources.limits.cpu                         | Defaults to `500m`                                 |
+| resources.limits.memory                      | Defaults to `1024Mi`                               |
+| resources.requests.cpu                       | Defaults to `100m`                                 |
+| resources.requests.memory                    | Defaults to `768Mi`                                |
+
+
+
+###  Canary Checker
+<Container prefix="canary-checker." sa="canary-checker-sa"/>
+
+### Config DB
+<Container prefix="config-db." sa="config-db-sa"/>

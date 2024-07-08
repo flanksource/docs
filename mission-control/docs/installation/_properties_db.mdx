@@ -1,0 +1,123 @@
+### Database
+
+| Value                        | Description                               |
+| ---------------------------- | ----------------------------------------- |
+| db.create                    | Defaults to `true`                        |
+| db.conf                      | `postgres.conf` settings                  |
+| db.resources.requests.memory | Defaults to `4Gi`                         |
+| db.shmVolume                 | Defaults to `256Mi`                       |
+| db.storage                   | Defaults to `20Gi`                        |
+| db.storageClass              |                                           |
+| db.secretKeyRef.key          | Defaults to `DB_URL`                      |
+| db.secretKeyRef.name         | Defaults to `incident-commander-postgres` |
+
+
+### Using an external database
+
+
+In order to connect to an existing database the secret referenced by `db.secretKeyRef.name` needs to be created.
+
+1. Create a new secret
+    ```bash
+    kubectl create secret generic incident-commander-postgres \
+      --from-literal=DB_URL=postgres://postgres:postgres@db/mission_control
+      --from-literal=DB_HOST=db
+      --from-literal=DB_NAME=mission_control
+      --from-literal=DB_USERNAME=postgres
+      --from-literal=DB_PASSWORD=postgres
+    ```
+    <p/>
+    See [Postgres Connection Strings](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING) for a full list of parameters
+    <p/>
+1. Update the helm values to disable db creation
+    ```yaml title="values.yaml"
+    db:
+      create: false
+    ```
+
+### Updating postgres.conf settings
+
+The defaults settings applied to installed Postgres database can be configured under the `db.conf` value.
+
+:::info Updating Memory Usage
+
+In order to increase (or decrease) memory usage - The `db.conf`, `db.resources` and `db.shmVolume` values need to be updated.
+
+```yaml title="reduce-db-resources.yaml"
+db:
+  shmVolume: 64Mi
+  resources:
+    requests:
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+  conf:
+    shared_buffers: 128MB
+    max_connections: 30
+    effective_cache_size: 256MB
+    work_mem: 4MB
+```
+
+:::
+
+
+| Value                       | Description                                    |
+| --------------------------- | ---------------------------------------------- |
+| max_connections             | Defaults to `200`                              |
+| shared_buffers              | Defaults to `1GB`                              |
+| effective_cache_size        | Defaults to `3GB`                              |
+| maintenance_work_mem        | Defaults to `256MB`                            |
+| wal_buffers                 | Defaults to `16MB`                             |
+| effective_io_concurrency    | Defaults to `200`                              |
+| work_mem                    | Defaults to `10MB`                             |
+| max_wal_size                | Defaults to `4GB`                              |
+| log_autovacuum_min_duration | Defaults to `0`                                |
+| log_connections             | Defaults to `on`                               |
+| log_destination             | Defaults to `stderr`                           |
+| log_directory               | Defaults to `/var/log/postgresql`              |
+| log_file_mode               | Defaults to `0644`                             |
+| log_filename                | Defaults to `postgresql.log`                   |
+| log_line_prefix             | Defaults to `%m [%p] %q[user=%u,db=%d,app=%a]` |
+| log_lock_waits              | Defaults to `on`                               |
+| log_min_duration_statement  | Defaults to `1s`                               |
+| log_rotation_age            | Defaults to `0`                                |
+| log_rotation_size           | Defaults to `0`                                |
+| log_statement               | Defaults to `"all"`                            |
+| log_temp_files              | Defaults to `0`                                |
+| log_timezone                | Defaults to `UTC`                              |
+| logging_collector           | Defaults to `on`                               |
+| ssl                         | Defaults to `off`                              |
+| timezone                    | Defaults to `UTC`                              |
+| password_encryption         | Defaults to `scram-sha-256`                    |
+| db_user_namespace           | Defaults to `off`                              |
+| extra_float_digits          | Defaults to `0`                                |
+
+
+### Pganalyze collector
+
+<Advanced>You are unlikely to need to change these values</Advanced>
+
+A [pganalyze.com](Pganalyze.com) collector can be installed using:
+
+| Value                       | Description                                    |
+| --------------------------- | ---------------------------------------------- |
+| db.pganalyze.enabled         | Defaults to `false`                       |
+| db.pganalyze.secretName      | Defaults to `pganalyze` Secret container pganalyze API token                   |
+| db.pganalyze.systemID        | Defaults to `mission-control`             |
+
+### Postgrest
+
+<Advanced>You are unlikely to need to change these values</Advanced>
+
+Mission Control uses [postgrest](https://github.com/PostgREST/postgres) to provide a REST API over the database,
+this is setup is automatic and connects to either the internal or external DB.
+
+| Value                        | Description                  |
+| ---------------------------- | ---------------------------- |
+| externalPostgrest.imageName  |                              |
+| externalPostgrest.enable     | Defaults to `true`           |
+| externalPostgrest.dbAnonRole | Defaults to `postgrest_anon` |
+| externalPostgrest.dbScema    | Defaults to `public`         |
+| externalPostgrest.logLevel   | Defaults to `info`           |
+| externalPostgrest.maxRows    | Defaults to `2000`           |
+| externalPostgrest.tag        | Postgrest version            |

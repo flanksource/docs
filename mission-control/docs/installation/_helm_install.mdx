@@ -1,0 +1,112 @@
+import CodeBlock from '@theme/CodeBlock'
+import CopyButton from '@theme/CodeBlock/CopyButton'
+import Properties from './_properties.mdx'
+
+<Tabs>
+
+<TabItem value="helm" label="Helm">
+
+<>
+  <pre>
+    <code className="language-bash">
+      helm repo add flanksource  https://flanksource.github.io/charts \
+      helm repo update \
+      helm install mission-control flanksource/mission-control \
+      --set global.ui.host=<Placeholder name="domain" />
+      -n mission-control
+      --create-namespace
+      --wait
+    </code>
+  </pre>
+</>
+
+
+ <CodeBlock className="language-bash">
+  {"helm repo add flanksource\n  https://flanksource.github.io/charts  \n      helm repo update  \n      helm install mission-control flanksource/mission-control \n  "}
+     <Placeholder name="domain" />
+      {"    -n mission-control      --create-namespace       --wait"}
+    </CodeBlock>
+
+
+```bash
+helm repo add flanksource https://flanksource.github.io/charts
+helm repo update
+helm install {mission-control} \
+ flanksource/mission-control \
+ --set global.ui.host=DOMAIN NAME <Placeholder name="domain" />
+-n mission-control \
+ --create-namespace \
+ --wait
+```
+
+</TabItem>
+<TabItem value="flux" label="Flux" default>
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mission-control-agent
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: flanksource
+  namespace: mission-control-agent
+spec:
+  interval: 5m0s
+  url: https://flanksource.github.io/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mission-control
+  namespace: mission-control-agent
+spec:
+  chart:
+    spec:
+      chart: mission-control-agent
+      sourceRef:
+        kind: HelmRepository
+        name: flanksource
+        namespace: mission-control-agent
+      interval: 1m
+  values:
+    upstream:
+      createSecret: true
+      host: https://app.flanksource.com
+      username: token
+      agentName: non-prod
+      password: #----------------
+```
+
+</TabItem>
+</Tabs>
+
+The default username is `admin@local` and the password can be retrived with:
+
+```bash
+kubectl get secret  mission-control-admin-password \
+  -n mission-control \
+  --template='{{.data.password | base64decode}}'
+```
+
+<details summary="Cert-Manager Integration" style={{marginTop:"10px"}}>
+You can add annotations to the ingress to have cert-manager generate  TLS certificates:
+
+```yaml
+flanksource-ui:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'true'
+```
+
+</details>
+
+<details summary="values.yaml" style={{marginTop:"10px"}}>
+You can add annotations to the ingress to have cert-manager generate  TLS certificates:
+
+<Properties section="ingress" />
+
+</details>

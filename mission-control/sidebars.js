@@ -251,16 +251,12 @@ const sidebars = {
             },
 
             {
-              type: 'category',
-              label: 'Cloud Providers',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'installation/self-hosted/eks',
-                  label: 'AWS EKS'
-                }
-              ]
-            },
+              type: 'doc',
+              id: 'installation/self-hosted/eks',
+              label: 'AWS EKS'
+            }
+
+
           ]
         },
 

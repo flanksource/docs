@@ -2,6 +2,8 @@
 title: Agent Installation
 ---
 
+import
+
 :::info Prerequisites
 To install and run the Mission Control agent you need to have the following prerequisites:
 
@@ -11,83 +13,22 @@ To install and run the Mission Control agent you need to have the following prer
 :::
 
 
-<Step step={1} name="Create a new agent"  anchor="agent">
 
 
-a) Click on **Settings** → **Agents** in the sidebar.<br/>
-<div class="flex flow-row space-x-2"><div>b) Click on&nbsp;</div><div class="mt-3"><img src="/img/agents-add.png" height="25px" /></div></div>
 
-<Screenshot img="/img/create_agent.png" size="800px"/>
+<Helm chart="mission-control-agent"/>
 
-c) Enter an agent name - This can a cluster name, or an account name (for hub-spoke clusters). <br/>
-> Keep the agent name short and unique as it is used as a tag when displaying resources from this agent in the UI.
-
-d) Click on **Next**
-
-</Step>
+  <Screenshot img="/img/agent_settings.png" size="800px"/>
 
 
-<Step step={2} name="Install the agent">
 
-The wizard will create a new agent token with instructions for installation via Helm CLI or FluxCD manifests.
+<Helm chart="mission-control-agent"
+values={{
+  "upstream.agent": "YOUR_LOCAL_NAME",
+  "upstream.username": "token",
+  "upstream.password": "",
+  "upstream.host": ""
+}}
 
-<Screenshot img="/img/agent_settings.png" size="800px"/>
+/>
 
-<details summary="Flux Installation">
-```yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name:  mission-control-agent
----
-apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: HelmRepository
-metadata:
-  name: flanksource
-  namespace: mission-control-agent
-spec:
-  interval: 5m0s
-  url: https://flanksource.github.io/charts
----
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
-kind: HelmRelease
-metadata:
-  name: mission-control
-  namespace: mission-control-agent
-spec:
-  chart:
-    spec:
-      chart: mission-control-agent
-      sourceRef:
-        kind: HelmRepository
-        name: flanksource
-        namespace: mission-control-agent
-      interval: 1m
-  values:
-    upstream:
-      createSecret: true
-      host:  https://app.flanksource.com
-      username: token
-      agentName: non-prod
-      password:----------------
-```
-:::tip Encrypt the token
-It is highly recommended to encrypt the token and reference it as a secret:
-
-```yaml
-...
-spec:
-  valuesFrom:
-    - kind: Secret
-      name: mc-token
-      valuesKey: password
-      targetPath: upstream.password
-```
-:::
-</details>
-</Step>
-
-
-<Step step={3} name="Install technology bundles"  anchor="registry">
-
-</Step>

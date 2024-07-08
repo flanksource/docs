@@ -1,0 +1,124 @@
+---
+title: Getting Started
+show_title: true
+sidebar_position: 0
+---
+
+import AdminPassword from '@site/docs/partials/_admin-password.mdx'
+import Helm from "@site/src/components/Helm"
+
+export const toc = [
+  {
+    value: 'Prerequisites',
+    id: 'prerequisites',
+    level: 2
+  },
+  {
+    value: 'Step 1: Install Helm Repository',
+    id: 'step-1-install-helm-repository',
+    level: 2
+  },
+  {
+    value: 'Step 2: Install Helm Chart',
+    id: 'helm-chart',
+    level: 2
+  },
+  {
+    value: 'Cert Manager',
+    id: 'cert-manager',
+    level: 3
+  },
+  {
+    value: 'Optional Steps',
+    id: 'optional-steps',
+    level: 2
+  },
+  {
+    value: 'Step 3: Configure Email (SMTP)',
+    id: 'smtp',
+    level: 3
+  },
+  {
+    value: 'Step 4: Single Sign On',
+    id: 'sso',
+    level: 3
+  },
+  {
+    value: 'Step 5: External Database',
+    id: '-database',
+    level: 3
+  }
+]
+
+
+
+This tutorial guides you through setting up and configuring a self-hosted Mission Control environment.
+
+:::info Prerequisites
+To install and run Mission Control you need the following:
+
+- Kubernetes 1.26+ with an Ingress Controller
+- [cert-manager.io](https://cert-manager.io/docs/) or an existing TLS secret for ingress
+- 1 - 2 CPUs and 6-8GB of Memory (2-4GB if using an external DB)
+- Persistent Volumes with 20GB+ of storage or an external postgres database
+- (Optional) [prometheus operator](https://prometheus-operator.dev/)
+- (Optional) SMTP Server (For sending notifications and invites)
+  :::
+
+1. Choose a routable `DOMAIN` for Mission Control
+    > See [Ingress](/reference/helm/mission-control#ingress) for more options on configuring the ingress including generating certs with cert-manager
+    > <p>See [Local Testing](../local-testing) for testing using a kind or minikube without a routable domain</p>
+
+1. Install Mission Control
+
+  :::tip
+  If you are installing on EKS and plan to scrape AWS resources use the method described in [EKS](./eks) instead
+  :::
+
+    <Helm values={{
+      "global.ui.host": "DOMAIN"
+    }} />
+    <p/>
+
+2. Login @ https://DOMAIN/
+   <AdminPassword/>
+
+## Optional Steps
+
+<Step step={3} name="Configure Email (SMTP)" anchor="smtp">
+
+An SMTP server is required for sending notifications, approvals, user invites and password resets.
+
+The format of `connection_uri` is `smtp://hostname:port`
+
+```yaml title="values.yaml"
+kratos:
+  kratos:
+    config:
+      courier:
+        smtp:
+          connection_uri: # smtp://localhost:25
+          from_address: noreply@
+          from_name: Mission Control
+          # These headers will be passed in the SMTP conversation
+          # e.g. when using the AWS SES SMTP interface for cross-account sending.
+          headers: {}
+          # Identifier used in the SMTP HELO/EHLO command.
+          # Some SMTP relays require a unique identifier.
+          local_name:
+```
+
+See also [HTTP Webhooks](https://www.ory.sh/docs/kratos/self-hosted/email-http) for sending emails.
+
+</Step>
+<Step step={4} name="Single Sign On" anchor="sso">
+
+See [SSO](./sso)
+
+</Step>
+
+<Step step={5} name="External Database" anchor="database">
+
+See [Database](./database) to configure an external database such as AWS RDS or Google Cloud SQL, or to optimize the bundled PostgreSQL settings.
+
+</Step>

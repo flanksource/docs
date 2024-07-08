@@ -1,0 +1,20 @@
+
+### Authentication
+
+See [SSO](/installation/self-hosted/sso)
+
+| Value                                            | Description                             |
+| ------------------------------------------------ | --------------------------------------- |
+| identityRoleMapper.configMap.key                 |                                         |
+| identityRoleMapper.configMap.mountPath           | Defaults to `/etc/identity-role-mapper` |
+| identityRoleMapper.configMap.name                |                                         |
+| identityRoleMapper.script                        |                                         |
+| kratos.enabled                                   | Defaults to `true`                      |
+| kratos.kratos.config.courier.smtp.connection_uri |                                         |
+| kratos.deployment.resources                      | {"{}"}                                  |
+| kratos.kratos.config.log.level                   | Defaults to `warning`                   |
+| kratos.kratos.config.secrets.default             |                                         |
+| kratos.kratos.config.session.lifespan            | Defaults to `336h`                      |
+| smtp.secretRef.name                              | Defaults to `incident-commander-smtp`   |
+
+See [kratos/values.yaml](https://artifacthub.io/packages/helm/ory/kratos?modal=values) for all options.

@@ -1,0 +1,13 @@
+import Auth from './_properties_auth.mdx'
+import Security from './_properties_security.mdx'
+import MissionControl from './_properties_mission_control.mdx'
+import Db from './_properties_db.mdx'
+import Agent from './_agent_properties.mdx'
+import Ingress from './_properties_ingress.mdx'
+
+{(!props.section || props.section == "mission-control") && <MissionControl/>}
+{( props.section == "agent") && <Agent/>}
+{(!props.section || props.section == "ingress") && <Ingress/>}
+{(!props.section || props.section == "db") && <Db/>}
+{(!props.section || props.section == "auth") && <Auth/>}
+{(!props.section || props.section == "agent" || props.section == "security") && <Security/>}
