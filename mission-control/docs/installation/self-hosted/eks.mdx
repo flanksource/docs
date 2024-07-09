@@ -5,7 +5,6 @@ title: AWS EKS
 import AwsIam from "../_aws_iam.mdx"
 import Helm from "@site/src/components/Helm"
 import AdminPassword from '@site/docs/partials/_admin-password.mdx'
-import HelmInstall from '../_helm_install.mdx'
 
 # Self Hosted Installation on AWS EKS
 
@@ -23,50 +22,7 @@ To install and run Mission Control you need to have the following prerequisites:
 }}/>
 
 
-<Step step={2} name="Install Helm Charts">
 
-<HelmInstall/>
-
-
-
-</Step>
-
-
-
-
-<div id="cost-reporting"/>
-<Step step={4} name="Cost & Usage Reporting">
-
-
-Mission Control can read the cost and usage reports stored in the S3 bucket and map it to the resources it discovers in your AWS environment. To achieve this,
-1. Setup [Cost and Usage Reports](https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html) and integrate it with [Athena](https://docs.aws.amazon.com/cur/latest/userguide/use-athena-cf.html)
-
-2. Modify the config db IAM role used by the config scraper above to give Mission Control the permissions to read the cost reports. Attach a Customer managed policy to the role with [this json policy document](https://github.com/flanksource/docs/blob/main/mission-control/docs/installation/resources/iam-policy.json)
-
-3. We also need to allow athena query executions
-
-Sample IAM Policy required for cost reporting:
-```json title=athena-policy.json
-{
-	"Effect": "Allow",
-	"Action": [
-		"athena:GetQueryExecution",
-		"athena:GetQueryResults",
-		"athena:StartQueryExecution"
-	],
-	"Resource": "arn:aws:athena:eu-west-1:765618022540:workgroup/primary"
-},
-
-```
-
-
-
-- Upgrade the helm chart to apply the changes
-
-
-</Step>
-
-<Step step={5} name="Next Steps">
+## Next Steps
 
 Install the [AWS](/registry/aws) registry chart to configure the AWS Scraper
-</Step>
