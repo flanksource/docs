@@ -1,5 +1,4 @@
 [build]
-  base = "mission-control"
-  command = "make sync && npm run build"
-  publish = "build"
-  environment = { NODE_VERSION = "v18.18.2" }
+command = "make sync && cd mission-control && npm run build"
+publish = "mission-control/build"
+environment = { NODE_VERSION = "v18.18.2" }
