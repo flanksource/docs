@@ -7,3 +7,4 @@ site/
 .docusaurus
 node_modules
 .vscode
+modules/

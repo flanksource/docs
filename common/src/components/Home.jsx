@@ -11,13 +11,13 @@ function Home() {
   const { withBaseUrl } = useBaseUrlUtils();
   const { colorMode } = useColorMode();
 
-  React.useEffect(() => {
-    if (colorMode === 'dark') {
-      document.querySelector('html').classList.add('dark');
-    } else {
-      document.querySelector('html').classList.remove('dark');
-    }
-  }, [colorMode]);
+  // React.useEffect(() => {
+  //   if (colorMode === 'dark') {
+  //     document.querySelector('html').classList.add('dark');
+  //   } else {
+  //     document.querySelector('html').classList.remove('dark');
+  //   }
+  // }, [colorMode]);
 
   function Header() {
     return (
@@ -83,12 +83,12 @@ function Home() {
             </div>
 
             <div className="pt-16">
-              <ul className="lg:grid lg:grid-cols-3 lg:col-gap-8 lg:row-gap-10">
+              <ul className="lg:grid lg:grid-cols-3 lg:col-gap-8 lg:row-gap-10 unstyled">
                 <li>
                   <div className="flex">
                     <div className="flex-shrink-0">
                       <div className="flex items-center justify-center h-12 w-12 rounded-md  text-white">
-                        <Icon name="console" />
+                        <Icon name="console" height={32} />
                       </div>
                     </div>
                     <div className="ml-4">
@@ -105,7 +105,8 @@ function Home() {
                   <div className="flex">
                     <div className="flex-shrink-0">
                       <div className="flex items-center justify-center h-12 w-12 rounded-md text-white">
-                        <Icon name="passive-check" />
+
+                        <img src="/img/icons/passive-check.svg" />
                       </div>
                     </div>
                     <div className="ml-4">
@@ -122,7 +123,7 @@ function Home() {
                   <div className="flex">
                     <div className="flex-shrink-0">
                       <div className="flex items-center justify-center h-12 w-12 rounded-md text-white">
-                        <Icon name="kubernetes" /> <Icon name="aws" />
+                        <Icon name="aws" height={40} />
                       </div>
                     </div>
                     <div className="ml-4">
@@ -158,10 +159,10 @@ function Home() {
           image="canary.png"
           url="/getting-started">
           Canaries are regular Kubernetes Custom Resource Definitions with conformant status conditions, making it suitable to use as Flux, ArgoCD or Helm health check.
-          <div>
-            <Icon name="helm" url="https://helm.sh/docs/topics/charts_hooks/" />
-            <Icon name="flux" url="https://fluxcd.io/flux/components/kustomize/kustomizations/#health-checks" />
-            <Icon name="argo" url="https://argo-cd.readthedocs.io/en/stable/operator-manual/health/#custom-health-checks" />
+          <div className='mt-5'>
+            <Icon name="helm" url="https://helm.sh/docs/topics/charts_hooks/" height={32} />
+            <Icon name="flux" url="https://fluxcd.io/flux/components/kustomize/kustomizations/#health-checks" height={32} />
+            <Icon name="argo" url="https://argo-cd.readthedocs.io/en/stable/operator-manual/health/#custom-health-checks" height={32} />
           </div >
         </Feature >
 
@@ -227,8 +228,9 @@ function Home() {
           image="display-format.png"
           url="/concepts/display-formatting">
           Evaluate the health of checks using scripts in CEL, Javascript or Go Templating. Templates can also be used to format the output of checks.
-          <div >
-            <Icon name="cel" />     <Icon name="javascript" /> <Icon name="go" />
+          <div className='space-x-2' >
+
+            <img className="my-auto" src="/img/icons/cel.svg" />      <img src="/img/icons/javascript.svg" />  <img src="/img/icons/go.svg" />
           </div>
         </Feature>
 
@@ -240,8 +242,8 @@ function Home() {
           image="exec-check.png"
           url="/reference/exec">
           When the builtin integrations are not enough, run scripts using bash or powershell.
-          <div>
-            <Icon name="bash" />     <Icon name="powershell" /></div>
+          <div className='mt-3'>
+            <Icon name="console" height={32} />     <Icon name="powershell" height={32} /></div>
         </Feature>
 
         <Feature
@@ -250,12 +252,10 @@ function Home() {
           image="infrastructure-check.png"
           url="/concepts/scripting">
           Proactive infrastructure checks ensure your control plane has ample buffer/ or capacity. These checks validate the ability to schedule new pods, launch EC2 instances, and  push/pull to docker and helm repositories.
-          <div className='pt-2' >
-            <Icon name="k8s" url="/reference/pod" />
-            <Icon name="aws-ec2-instance" url="/reference/ec2" />
-            <Icon name="s3" url="/reference/s3-protocol" />
-            <Icon name="docker" url="/reference/containerd" />
-            <Icon name="helm" url="/reference/helm" />
+          <div className='pt-2 spacing-x-2' >
+            <Icon name="k8s" url="/reference/kubernetes-resource" height={32} />
+            <Icon name="docker" url="/reference/containerd" height={32} />
+            <Icon name="helm" url="/reference/helm" height={32} />
           </div>
         </Feature>
 
@@ -269,9 +269,11 @@ function Home() {
           image="exec-check.png"
           url="/concepts/scripting">
           Evaluate the health of checks using scripts in CEL, Javascript or Go Templating. Templates can also be used to format the output of checks.
-          <div>
-            <Icon name="cel" />     <Icon name="javascript" /> <Icon name="go" />
+          <div className='space-x-2' >
+
+            <img className="my-auto" src="/img/icons/cel.svg" />      <img src="/img/icons/javascript.svg" />  <img src="/img/icons/go.svg" />
           </div>
+
         </Feature>
 
 
@@ -321,7 +323,7 @@ function Home() {
                     </svg>
                     SaaS
                   </dt>
-                  <dd class="mt-2">Hosted Platform on either AWS or Azure</dd>
+                  <span class="mt-2">Hosted Platform on either AWS or Azure</span>
                 </div>
                 <div class="relative pl-9">
                   <dt class="font-semibold text-gray-900">
@@ -330,7 +332,7 @@ function Home() {
                     </svg>
                     On Premise
                   </dt>
-                  <dd class="mt-2">Run inside your own data center or Bring Your Own Cloud</dd>
+                  <span class="mt-2">Run inside your own data center or Bring Your Own Cloud</span>
                 </div>
                 <div class="relative pl-9">
                   <dt class="font-semibold text-gray-900">
@@ -339,7 +341,7 @@ function Home() {
                     </svg>
                     Resource Catalog & Change Tracking
                   </dt>
-                  <dd class="mt-2">Track both application and infrastructure resources across multiple clouds. </dd>
+                  <span class="mt-2">Track both application and infrastructure resources across multiple clouds. </span>
                 </div>
                 <div class="relative pl-9">
                   <dt class="font-semibold text-gray-900">
@@ -348,7 +350,7 @@ function Home() {
                     </svg>
                     Playbooks
                   </dt>
-                  <dd class="mt-2">Run automated playbooks based on canary checker health changes</dd>
+                  <span class="mt-2">Run automated playbooks based on canary checker health changes</span>
                 </div>
                 <div class="relative pl-9">
                   <dt class="font-semibold text-gray-900">
@@ -357,7 +359,7 @@ function Home() {
                     </svg>
                     Notifications
                   </dt>
-                  <dd class="mt-2">Send notifications to 10+ different targets when canaries fail</dd>
+                  <span class="mt-2">Send notifications to 10+ different targets when canaries fail</span>
                 </div>
                 <div class="relative pl-9">
                   <dt class="font-semibold text-gray-900">
@@ -366,7 +368,7 @@ function Home() {
                     </svg>
                     Topology
                   </dt>
-                  <dd class="mt-2">Map your complex system in multiple dimensions </dd>
+                  <span class="mt-2">Map your complex system in multiple dimensions </span>
                 </div>
 
               </dl>

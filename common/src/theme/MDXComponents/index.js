@@ -12,6 +12,10 @@ import Mermaid from '@theme/Mermaid'
 import Icon from '@site/src/components/Icon'
 import { Asciinema } from '@site/src/components/Asciinema'
 import {
+  Health,
+  Unhealthy,
+  Healthy,
+  Warning,
   Commercial,
   Standard,
   Enterprise,
@@ -36,6 +40,10 @@ import Helm from "@site/src/components/Helm"
 import { Advanced } from '@site/src/components/Badges'
 
 const MDXComponents = {
+  Health: Health,
+  Unhealthy: Unhealthy,
+  Healthy: Healthy,
+  Warning: Warning,
   Advanced: Advanced,
   Helm: Helm,
   Icon: Icon,
