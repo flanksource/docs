@@ -4,4 +4,24 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  safelist: [
+    {
+      pattern: /bg-zinc/,
+    },
+    {
+      pattern: /bg-gray/,
+    },
+    {
+      pattern: /bg-blue/,
+    },
+    {
+      pattern: /bg-red/,
+    },
+    {
+      pattern: /text-gray/,
+    },
+    {
+      pattern: /text-zinc/,
+    },
+  ],
 };

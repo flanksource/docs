@@ -1,9 +1,10 @@
 ---
 title: Alertmanager
+hide_title: true
 sidebar_class_name: popular
 ---
 
-# <Icon name="prometheus"/> Alertmanager
+# <Icon name="prometheus">Alertmanager</Icon>
 
 Checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/) for any firing alerts.
 
@@ -59,6 +60,7 @@ spec:
   }
 ]}/>
 
+<SkipOSS>
 ## Relationships
 
 <Fields
@@ -122,6 +124,7 @@ Lookup specifies the type of lookup to perform.
   ]}
 />
 
+</SkipOSS>
 ## Inserting checks into different namespaces
 
 You can specify different namespaces for checks using the `namespace` field. This is helpful when checks are dynamically generated via transformation

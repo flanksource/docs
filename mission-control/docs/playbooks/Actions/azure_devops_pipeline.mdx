@@ -1,15 +1,16 @@
 ---
 title: Azure DevOps Pipeline
 ---
-import Templating from "../../reference/playbooks/context.mdx"
+
+import Templating from '../../reference/playbooks/context.mdx'
 
 # <Icon name="azure-devops"/> Azure DevOps Pipeline Action
 
 This action allows you to invoke pipelines in your Azure DevOps project.
 
 ```yaml title="invoke-azure-devops-pipeline.yaml" file=../../../modules/mission-control/fixtures/playbooks/azure-devops.yaml
-```
 
+```
 
 <Action rows={[
   {field: "org", scheme: "string", description: "Azure DevOps org name", required: true},
@@ -38,4 +39,4 @@ This action allows you to invoke pipelines in your Azure DevOps project.
 
 ## Templating
 
-<Templating/>
+<Templating />

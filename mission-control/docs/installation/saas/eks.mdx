@@ -3,29 +3,30 @@ title: AWS EKS
 slug: installation/eks
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import AwsIam from "../_aws_iam.mdx"
-import Helm from "@site/src/components/Helm"
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+import AwsIam from '../_aws_iam.mdx'
+import Helm from '@site/src/components/Helm'
 
-# Install Mission Control on AWS EKS cluster
+# Install Mission Control Agent on an AWS EKS cluster
 
 :::info Prerequisites
 To install and run Mission Control you need to have the following prerequisites:
 
-- EKS 1.26+ with an Ingress Controller
-- 500-1000m of CPU and 2GB of Memory
+- EKS 1.28+ with an Ingress Controller
+- 500-1000m of CPU and 4GB of Memory
 - Persistent Volumes with 20GB+ of storage or an external postgres database like RDS
-- (Optional) SMTP Server (For sending notifications and invites)
-:::
+  :::
 
-<AwsIam chart="mission-control-agent" values={{
-  "upstream.agent": "YOUR_LOCAL_NAME",
-  "upstream.username": "token",
-  "upstream.password": "",
-  "upstream.host": ""
-}}/>
-
+<AwsIam
+  chart="mission-control-agent"
+  values={{
+    'upstream.agent': 'YOUR_LOCAL_NAME',
+    'upstream.username': 'token',
+    'upstream.password': '',
+    'upstream.host': ''
+  }}
+/>
 
 ## Next Steps
 

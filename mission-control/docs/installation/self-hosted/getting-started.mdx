@@ -63,17 +63,19 @@ To install and run Mission Control you need the following:
 - Persistent Volumes with 20GB+ of storage or an external postgres database
 - (Optional) [prometheus operator](https://prometheus-operator.dev/)
 - (Optional) SMTP Server (For sending notifications and invites)
-  :::
+:::
+
+---
 
 1. Choose a routable `DOMAIN` for Mission Control
     > See [Ingress](/reference/helm/mission-control#ingress) for more options on configuring the ingress including generating certs with cert-manager
     > <p>See [Local Testing](../local-testing) for testing using a kind or minikube without a routable domain</p>
 
 1. Install Mission Control
-
-  :::tip
-  If you are installing on EKS and plan to scrape AWS resources use the method described in [EKS](./eks) instead
-  :::
+    <p/>
+    :::tip
+    If you are installing on EKS and plan to scrape AWS resources use the method described in [EKS](./eks) instead
+    :::
 
     <Helm values={{
       "global.ui.host": "DOMAIN"

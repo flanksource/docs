@@ -59,10 +59,11 @@ The registry has an [AWS](/registry/aws) Helm chart that provides a pre-configur
 - CloudTrail
 - Config Rules
 - Cost & Usage Reporting
-
 - EBS
 - EC2
 - ECR
+- ECS
+- Lambda
 - EFS
 - EKS
 - IAM
