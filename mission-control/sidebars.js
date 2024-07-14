@@ -197,22 +197,27 @@ const sidebars = {
       id: 'index',
       label: 'Overview'
     },
+    {
+      type: 'doc',
+      id: 'how-it-works',
+    },
 
     {
       type: 'category',
       label: 'Installation',
-      link: {
-        type: 'doc',
-        id: 'installation/deployment-models'
 
-      },
       items: [
         // {
         //   type: 'doc',
         //   label: 'SaaS',
         //   id: 'installation/saas'
         // },
+        {
+          type: 'doc',
+          label: 'Deployment Models',
+          id: 'installation/deployment-models'
 
+        },
 
         {
           type: 'category',
@@ -228,20 +233,14 @@ const sidebars = {
 
             {
               type: 'doc',
-              id: 'installation/saas/agent',
-              label: 'Agent'
+              id: 'installation/saas/eks',
+              label: 'AWS EKS'
             },
 
             {
-              type: 'category',
-              label: 'Cloud Providers',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'installation/saas/eks',
-                  label: 'AWS EKS'
-                }
-              ]
+              type: 'doc',
+              id: 'installation/saas/agent',
+              label: 'Agent'
             },
 
           ]

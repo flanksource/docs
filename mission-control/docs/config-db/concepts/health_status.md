@@ -2,55 +2,14 @@
 title: Health & Status
 ---
 
-A config item has two key attributes associated with it: health and status. These attributes are assigned by the scrapers by evaluating the config.
+Each config item has attributes used to quickly determine the health and status of an item.
 
-The health attribute represents the overall condition or well-being of the config item. It can have one of the following values: healthy, unhealthy, unknown, or warning. This attribute provides a high-level indication of whether the config item is functioning as expected or if there are any issues that need attention.
+- `health` can be one of `healthy`, `unhealthy`,`unknown`, `warning` and correspondes with RAG (Red, Amber, Green) status that will be associated with an item
+- `status` is a config type specific short description of the current running state e.g. `Running`, `Terminating`, `in-use`
+- `ready` indicates whether an item is still progressing
 
-The status attribute, on the other hand, provides more granular information about the current state or phase of the config item. The possible values for the status attribute can vary widely depending on the type of config item being monitored. For example, a Kubernetes Pod config could have statuses like "Running", "Pending", "Terminating", and so on.
+:::note Health is orthagonal to readiness
+A config item could have a state of `heath: unhealthy, status: failed, ready: true` - this indicates that the item will unlikely change its state, while an item of `health: health, status: rolling-out, ready: false` indicates a healthy item that has not yet finished rolling out.
+:::
 
-To illustrate with an example, consider an AWS EC2 instance that is currently in the process of shutting down. In this case, the scrapers would assign an "Unknown" health and a "Deleting" status to this config item.
-
-## Health
-
-- healthy
-- unhealthy
-- unknown
-- warning
-
-## Status
-
-Here's a list of all the possible statuses (subject to change):
-
-- Completed
-- CrashLoopBackOff
-- Creating
-- Degraded
-- Deleted
-- Deleting
-- Error
-- Healthy
-- Inaccesible
-- Info
-- Maintenance
-- Missing
-- Pending
-- Progressing
-- Restarting
-- Rolling Out
-- Rollout Failed
-- Running
-- Scaled to Zero
-- Scaling
-- Scaling Down
-- Scaling Up
-- Starting
-- Stopped
-- Stopping
-- Suspended
-- Terminating
-- Unhealthy
-- Unknown
-- Unschedulable
-- Updating
-- UpgradeFailed
-- Warning
+The [github.com/flanksource/is-healthy](https://github.com/flanksource/is-healthy) is used to derive these conditions.

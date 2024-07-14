@@ -6,12 +6,12 @@ title: Folder
 
 Checks the contents of a folder for size, age and count. Folder based checks are useful in a number of scenarios:
 
-* Verifying that backups have been uploaded and are the appropriate size
-* Checking that logs or other temporary files are being cleaned up
-* For batch processes:
-  * Checking if files are being processed (and/or produced)
-  * Checking the size of queue processing backlog
-  * Checking if any error (`.err` or `.log`) files have been produced.
+- Verifying that backups have been uploaded and are the appropriate size
+- Checking that logs or other temporary files are being cleaned up
+- For batch processes:
+  - Checking if files are being processed (and/or produced)
+  - Checking the size of queue processing backlog
+  - Checking if any error (`.err` or `.log`) files have been produced.
 
 ```yaml title="folder-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -26,8 +26,6 @@ spec:
       description: Checks if there are at least 10 files in the folder
       minCount: 10
 ```
-
-
 
 <HealthCheck name="folder" edition="standard" rows={[
   {
@@ -49,16 +47,15 @@ spec:
 
 ]}/>
 
-
 ## FolderFilter
 
 | Field     | Description                                                 | Scheme                                               | Required |
 | --------- | ----------------------------------------------------------- | ---------------------------------------------------- | -------- |
-| `maxAge`  | MaxAge the latest object should be younger than defined age | [Duration](/reference/types#duration)                          |          |
-| `maxSize` | MaxSize of the files inside the searchPath                  | [Size](/reference/types#size)                                     |          |
-| `minAge`  | MinAge the latest object should be older than defined age   | [Duration](/reference/types#duration)                           |          |
-| `minSize` | MinSize of the files inside the searchPath                  | [Size](/reference/types#size)                                        |          |
-| `regex`   | Filter files based on regular expression                    | *[regex](https://github.com/google/re2/wiki/Syntax)* |          |
+| `maxAge`  | MaxAge the latest object should be younger than defined age | [Duration](/reference/types#duration)                |          |
+| `maxSize` | MaxSize of the files inside the searchPath                  | [Size](/reference/types#size)                        |          |
+| `minAge`  | MinAge the latest object should be older than defined age   | [Duration](/reference/types#duration)                |          |
+| `minSize` | MinSize of the files inside the searchPath                  | [Size](/reference/types#size)                        |          |
+| `regex`   | Filter files based on regular expression                    | _[regex](https://github.com/google/re2/wiki/Syntax)_ |          |
 
 e.g. to verify that database backups are being performed
 
@@ -72,7 +69,7 @@ spec:
   folder:
     - path: /data/backups
       filter:
-        regex: "pg-backups-.*.zip"
+        regex: 'pg-backups-.*.zip'
       maxAge: 1d # require a daily backup
       minSize: 10mb # the backup should be at least 10mb
 ```
@@ -81,34 +78,33 @@ spec:
 
 The following fields are available in `test`, `display` and `transform` [expressions](../concepts/expressions)
 
-| Field                 | Scheme                                             |
-| --------------------- | -------------------------------------------------- |
-| `Oldest`                | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
-| `Newest`                | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
-| `MinSize`               | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
-| `MaxSize`               | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
-| `SupportsTotalSize` (Only true for SMB folders) | bool                                               |
+| Field                                               | Scheme                                             |
+| --------------------------------------------------- | -------------------------------------------------- |
+| `Oldest`                                            | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `Newest`                                            | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `MinSize`                                           | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `MaxSize`                                           | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
+| `SupportsTotalSize` (Only true for SMB folders)     | bool                                               |
 | `SupportsAvailableSize` (Only true for SMB folders) | bool                                               |
-| `TotalSize`             | int64                                              |
-| `AvailableSize`         | int64                                              |
-| `Files`                 | [[]os.FileInfo](https://pkg.go.dev/io/fs#FileInfo) |
+| `TotalSize`                                         | int64                                              |
+| `AvailableSize`                                     | int64                                              |
+| `Files`                                             | [[]os.FileInfo](https://pkg.go.dev/io/fs#FileInfo) |
 
 ### FolderFilter
 
-| Field     | Description | Scheme                  | Required |
-| --------- | ----------- | ----------------------- | -------- |
+| Field     | Description | Scheme                                  | Required |
+| --------- | ----------- | --------------------------------------- | -------- |
 | `minAge`  |             | [`Duration`](/reference/types#duration) |          |
 | `maxAge`  |             | [`Duration`](/reference/types#duration) |          |
 | `minSize` |             | [`Size`](/reference/types#size)         |          |
 | `maxSize` |             | [`Size`](/reference/types#size)         |          |
-| `regex`   |             | `string`                |          |
-
+| `regex`   |             | `string`                                |          |
 
 ## Connection Types
 
 ### SFTP
 
-<Fields connection="sftp"/>
+<Fields connection="sftp" />
 
 <details summary="SFTP Check">
 <div>
@@ -118,12 +114,9 @@ The following fields are available in `test`, `display` and `transform` [express
 </div>
 </details>
 
-
-
 ### S3
 
-<Fields connection="aws"/>
-
+<Fields connection="aws" />
 
 ```yaml title="s3-check.yaml"
         # ...
@@ -145,10 +138,9 @@ spec:
 </div>
 </details>
 
-
 ### SMB
 
-<Fields connection="smb"/>
+<Fields connection="smb" />
 
 ```yaml title="smb-check.yaml"
 # ...
@@ -161,7 +153,7 @@ spec:
            #...
 ```
 
-<Fields connection="smb"/>
+<Fields connection="smb" />
 
 <div className="mt-5"/>
 <details summary="SMB / CIFS" >
@@ -172,10 +164,9 @@ spec:
 </div>
 </details>
 
-
 ### GCS
 
-<Fields connection="gcp"/>
+<Fields connection="gcp" />
 
 ```yaml title="gcs-check.yaml"
 # ...
@@ -187,6 +178,7 @@ spec:
     gcpConnection:
       # ...
 ```
+
 <div className="mt-5"/>
 <details summary="GCS Check" >
 <div>
@@ -195,4 +187,3 @@ spec:
 
 </div>
 </details>
-

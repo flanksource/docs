@@ -6,6 +6,9 @@ title: Architecture
 
 Mission Control has a micro-service architecture with a shared data source with multiple deployment models.
 
+import EnvVarTypes from './partials/_envVarTypes.mdx'
+
+
 
 1. CLI
 2. Kubernetes (Helm Chart)
@@ -31,8 +34,5 @@ All services use a shared database and model via the [duty](https://github.com/f
 * Library updates happen automatically using dependabot
 
 
-## Kubernetes & Gitops
 
-Mission control is kubernetes-native with all configuration being possible by Custom Resource Definition (CRD's)
 
-The single source of truth is still the database, the operators only function is to synchronize CRD's into the database and update the CRD status periodically.

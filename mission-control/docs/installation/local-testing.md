@@ -12,6 +12,7 @@ import TabItem from '@theme/TabItem';
 - kubectl
 - [helm](https://helm.sh/docs/intro/install/) v3+
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/) or [minikube](https://minikube.sigs.k8s.io/docs/start/)
+- 20GB+ free space for docker volumes
 :::
 
 <Tabs>
