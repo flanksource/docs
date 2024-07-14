@@ -1,0 +1,60 @@
+---
+slug: /overview
+title: Health Checks
+id: health-checks
+---
+
+<img src="/img/health-checks.svg" style={{width: "900px"}}/>
+
+
+Canary Checker is a Kubernetes native health check platform that periodically runs different types of tests:
+
+
+1. Synthetic
+
+   Synthetic checks are periodically run by canary checker to directly test services/applications by generating requests using http, sql, mongo, redis, ldap, etc.
+
+1. Passive
+
+   Passive checks consolidate alerts from monitoring systems like Prometheus, Datadog, Dynatrace, CloudWatch and ElasticSearch
+
+1. Infrastructure
+
+   Active infrastructure checks provision infrastructure (e.g. EC2 Instances, Kubernetes Pods) and then run synthetic checks against them to verify the ability to provision infrastructure. This allows detecting issues in infrastructure provisioning processes.
+
+1. Integration
+
+   Integration checks run automated test suites using tools like Playwright, JUnit, Newman and K6 to validate end-to-end functionality across services and infrastructure.
+
+
+### Metrics Exporter
+
+In addition to returning a pass/fail status, health checks can export metrics to Prometheus, replacing the need for many custom prometheus exporters.
+
+### Scripting
+
+Evaluate the health of checks using scripts in CEL, Javascript or Go Templating. Scripts can also be used to filter and transform alerts from external systems.
+
+
+## Dashboard
+
+<Step step={1} name="Dashboard" style="list">
+The health checks page provides a high level view of the overall health of all services, infrastructure and applications. It surfaces recent failures and provides a high level latency and reliability metrics.
+
+![](./images/canary-dashboard.png)
+</Step>
+
+
+<Step step={1} name="Prometheus" style="list">
+
+[Prometheus](canary-checker/concepts/metrics) metrics are exposed from health checks to provide high level visibility into latency, error rates and other metrics. This allows monitoring the health of services and applications using existing Prometheus alerts and [Grafana](canary-checker/concepts/metrics/grafana) dashboards.
+
+</Step>
+
+<Step step={1} name="Synthetic" style="list">
+Synthetic checks are periodically run by canary checker to directly test services/applications by generating requests using http, sql, mongo, redis, ldap, etc.
+
+</Step>
+
+
+

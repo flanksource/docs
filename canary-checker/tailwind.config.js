@@ -1,12 +1,31 @@
 module.exports = {
-  purge: ['./src/**/*.html', './src/**/*.js', './src/**/*.tsx'],
-  corePlugins: { preflight: false },
-  // important: '#tailwind',
+  content: ["./src/**/*.{js,jsx,ts,tsx}", "./docs/**.{md,mdx}"],
   theme: {
     extend: {
       maxWidth: {
         xxs: '18rem'
       }
-    }
-  }
-}
+    },
+  },
+  plugins: [],
+  safelist: [
+    {
+      pattern: /bg-zinc/,
+    },
+    {
+      pattern: /bg-gray/,
+    },
+    {
+      pattern: /bg-blue/,
+    },
+    {
+      pattern: /bg-red/,
+    },
+    {
+      pattern: /text-gray/,
+    },
+    {
+      pattern: /text-zinc/,
+    },
+  ],
+};

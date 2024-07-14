@@ -110,17 +110,17 @@ export default async function createConfigAsync() {
 
         }],
 
-      async function myPlugin(context, options) {
-        return {
-          name: "docusaurus-tailwindcss",
-          configurePostCss(postcssOptions) {
-            // Appends TailwindCSS and AutoPrefixer.
-            postcssOptions.plugins.push(require("tailwindcss"));
-            postcssOptions.plugins.push(require("autoprefixer"));
-            return postcssOptions;
-          },
-        };
-      },
+      // async function myPlugin(context, options) {
+      //   return {
+      //     name: "docusaurus-tailwindcss",
+      //     configurePostCss(postcssOptions) {
+      //       // Appends TailwindCSS and AutoPrefixer.
+      //       postcssOptions.plugins.push(require("tailwindcss"));
+      //       postcssOptions.plugins.push(require("autoprefixer"));
+      //       return postcssOptions;
+      //     },
+      //   };
+      // },
 
       async function resolveSymlinkPlgugin(context, options) {
         return {
@@ -151,13 +151,20 @@ export default async function createConfigAsync() {
         ({
           docs: {
             routeBasePath: '/',
-
+            exclude: [
+              "**/*.canary.mdx",
+              "**/_*.mdx",
+              "**/modules/**",
+              "**/_*.md"
+            ],
             sidebarPath: './sidebars.js',
             // Please change this to your repo.
             // Remove this to remove the "edit this page" links.
             editUrl: 'https://github.com/flanksource/docs/tree/main/',
             remarkPlugins: [codeImport],
-            // beforeDefaultRehypePlugins: [rehypeShikiPlugin]
+
+            // rehypePlugins: [rehypeExpressiveCode],
+            // beforeDefaultRehypePlugins: [[rehypeExpressiveCode, { plugins: [pluginCollapsibleSections] }]]
             // rehypePlugins: [rehypeKatex],
           },
           blog: {

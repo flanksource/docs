@@ -1,5 +1,27 @@
 import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { GoDotFill } from "react-icons/go";
+import clsx from 'clsx'
+
+export function Health({ color, children }) {
+  return <span className='rounded rounded-sm bg-zinc-100' style={{
+    fontSize: '0.85rem',
+    borderRadius: '5px',
+    marginLeft: "3px",
+    padding: '0.3rem',
+  }}> <GoDotFill className={clsx(color, "my-auto")} />{children}</span>
+}
+export function Unhealthy({ children }) {
+  return <Health color="fill-red-400">{children}</Health>
+
+}
+export function Healthy({ children }) {
+  return <Health color="fill-green-400">{children}</Health>
+
+}
+export function Warning({ children }) {
+  return <Health color="fill-orange-400">{children}</Health>
+}
 
 export function FullImage({ color }) {
   return (
