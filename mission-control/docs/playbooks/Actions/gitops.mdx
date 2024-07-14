@@ -249,6 +249,7 @@ spec:
                 .metadata.name=="$(.config.config | jq `.metadata.name`)"
               ) |= $(.params.yamlInput | yaml | toJSON)
 ```
+
 </TabItem>
 
 <TabItem label="With origin annotation" value="with-origin-annotation">
@@ -266,7 +267,7 @@ spec:
       label: Commit Message
       name: commit_message
     - default: $(.config.config | toJSON | neat | json | toYAML)
-      label: ""
+      label: ''
       name: yamlInput
       properties:
         size: large

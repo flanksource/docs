@@ -113,30 +113,30 @@ There are 3 different ways to specify which value to use when finding related co
 | `label` | Get the value from a label         | `string` |          |
 
 
-## Special annotations
+## Annotations
 
-Kubernetes resources can be annotated with some special annotations that can direct the scraper to certain behaviors.
+Kubernetes resources can be annotated with  annotations that can direct the scraper to certain behaviors.
 
 <Fields
   rows={[
     {
       field: 'config-db.flanksource.com/tags',
-      description: 'Attach custom tags to the object. A config can have as many as `5` tags, so keep the custom tags limited.',
+      description: 'Add custom tags.  Config items can only have up to `5` tags, so keep the custom tags limited.',
       scheme: '`key1:val1,key2:val2`'
     },
     {
       field: 'config-db.flanksource.com/ignore',
-      description: 'Exclude the object from being scraped along with all of its changes.',
+      description: 'Ignore config items',
       scheme: 'bool'
     },
     {
       field: 'config-db.flanksource.com/ignore-changes',
-      description: 'Exclude changes by type for the given object that matches the pattern.',
+      description: 'Ignore changes by change type',
       scheme: 'MatchPattern'
     },
     {
       field: 'config-db.flanksource.com/ignore-change-severity',
-      description: 'Exclude changes by severity for the given object that matches the pattern.',
+      description: 'Ignore changes by severity ',
       scheme: 'MatchPattern'
     }
   ]}

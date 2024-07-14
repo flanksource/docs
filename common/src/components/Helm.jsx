@@ -1,11 +1,8 @@
 import CodeBlock from '@theme/CodeBlock'
-import CopyButton from '@theme/CodeBlock/CopyButton'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Link from '@docusaurus/Link';
 import { useState, useRef } from "react"
-import Details from '@theme/Details';
-import Properties from '@site/docs/installation/_properties.mdx'
 
 
 function generateCli(
@@ -48,7 +45,6 @@ function generateCli(
   if (wait) {
     s += " --wait \n"
   }
-  console.log('generate', s, values)
   return s
 
 }
@@ -71,8 +67,6 @@ export default function Helm({
   const [state, setState] = useState(values)
   const [cli, setCli] = useState(generateCli(
     repo, repoName, chart, namespace, createNamespace, createRepo, wait, state, valueFile, args))
-
-  console.log(values)
 
   return <>
 
@@ -130,7 +124,7 @@ export default function Helm({
     <Tabs>
 
       <TabItem value="helm" label="Helm">
-        <CodeBlock language="bash" forwardRef={bash}>
+        <CodeBlock language="bash">
           {cli}
         </CodeBlock>
 
