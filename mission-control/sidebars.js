@@ -139,6 +139,16 @@ const sidebars = {
       type: 'category',
       label: 'Examples',
       items: [
+         {
+          type: 'doc',
+          id: 'notifications/examples/kube-podcrashlooping',
+          label: 'PodCrashLooping'
+        },
+        {
+          type: 'doc',
+          id: 'notifications/examples/kube-job-failing',
+          label: 'Kubernetes Job Failing'
+        },
         {
           type: 'doc',
           id: 'notifications/examples/slack',
