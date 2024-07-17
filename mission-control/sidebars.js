@@ -149,6 +149,12 @@ const sidebars = {
           id: 'notifications/examples/kube-job-failing',
           label: 'Kubernetes Job Failing'
         },
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Tutorials',
+      items: [
         {
           type: 'doc',
           id: 'notifications/examples/slack',

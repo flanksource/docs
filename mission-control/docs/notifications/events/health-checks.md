@@ -2,8 +2,8 @@
 
 Health checks emit 2 events
 
-1. `check.passed`
-2. `check.failed`
+- `check.passed`
+- `check.failed`
 
 ## Variables
 
