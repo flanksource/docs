@@ -1,22 +1,20 @@
-
-| Field      | Description                                                        | Scheme                    | Required | Templatable |
-| ---------- | ------------------------------------------------------------------ | ------------------------- | -------- | ----------- |
-| `events`   |      | [][Event](./events)                | `true`   ||
-| `to`       | Notification recipient                                   | [`Recipient`](#recipient) | `true`   ||
-| `title`    | Channel dependant e.g. subject for email | <CommonLink to="gotemplate">Go Template </CommonLink> |          | `true`      |
-| `template` |Channel dependant e.g. email body for email  | <CommonLink to="gotemplate">Go Template </CommonLink> |          | `true`      |
-| `filter`   | Filter out unwanted notifications                                         | <CommonLink to="cel">CEL</CommonLink>                 |          |             |
-
+| Field      | Description                                                                                         | Scheme                                                | Required | Templatable |
+| ---------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | -------- | ----------- |
+| `events`   |                                                                                                     | [[]Event](./events)                                   | `true`   |             |
+| `to`       | Notification recipient                                                                              | [`Recipient`](#recipient)                             | `true`   |             |
+| `title`    | Channel dependant e.g. subject for email                                                            | <CommonLink to="gotemplate">Go Template </CommonLink> |          | `true`      |
+| `template` | Channel dependant e.g. email body for email                                                         | <CommonLink to="gotemplate">Go Template </CommonLink> |          | `true`      |
+| `filter`   | Filter out events. If the filter evaluates to true, the notification is processed - else discarded. | <CommonLink to="cel">CEL</CommonLink>                 |          |             |
 
 ### Recipient
 
-| Field        | Description                                                      | Schema              |
-| ------------ | ---------------------------------------------------------------- | ------------------- |
-| `person`     |                                    | `UUID` or `email` of a person             |
-| `team`       | Every member of the team with an email will receive a notification                                           | `UUID` or `name` of team            |
-| `email`      | Send an email to an external user                                          | `email`            |
-| `connection` | Connection to external service                       | `connection`            |
-| `url`        | Custom notification URL                              | [Channel](./channels)            |
-| `properties` | *Only applicable if `url` is specified* | `map[string]string` |
+| Field        | Description                                                        | Schema                        |
+| ------------ | ------------------------------------------------------------------ | ----------------------------- |
+| `person`     |                                                                    | `UUID` or `email` of a person |
+| `team`       | Every member of the team with an email will receive a notification | `UUID` or `name` of team      |
+| `email`      | Send an email to an external user                                  | `email`                       |
+| `connection` | Connection to external service                                     | `connection`                  |
+| `url`        | Custom notification URL                                            | [Channel](./channels)         |
+| `properties` | _Only applicable if `url` is specified_                            | `map[string]string`           |
 
 > Only one recipient can be specified

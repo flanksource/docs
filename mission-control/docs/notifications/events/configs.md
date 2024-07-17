@@ -1,49 +1,54 @@
 ---
-title: Components
+title: Configs
 ---
 
-Component status updates emit the following events
+Configs emit events when their health changes or when they are created, modified, or removed.
+
+**Health events**
 
 - `config.healthy`
 - `config.unhealthy`
 - `config.warning`
+- `config.unknown`
+
+**State events**
+
+- `config.created`
+- `config.updated`
+- `config.deleted`
 
 ## Variables
 
-| Field       | Description                   | Schema                    | Optional |
-| ----------- | ----------------------------- | ------------------------- | -------- |
-| `config` | The component object          | [`Component`](#component) |          |
-| `agent`     | Agent details (if applicable) | [`Agent`](#agent)         | `true`   |
-| `permalink` | A link to the health check    | `string`                  |          |
+| Field       | Description                   | Schema              | nullable |
+| ----------- | ----------------------------- | ------------------- | -------- |
+| `config`    | The config object             | [`Config`](#config) |          |
+| `agent`     | Agent details (if applicable) | [`Agent`](#agent)   | `true`   |
+| `permalink` | A link to the config item     | `string`            |          |
 
-### Component
+### Config
 
-| Field             | Description                                  | Schema              | Optional |
-| ----------------- | -------------------------------------------- | ------------------- | -------- |
-| `id`              | The id of the component                      | `uuid`              |          |
-| `description`     | The description of the component             | `string`            |          |
-| `external_id`     | The external id of the component             | `string`            |          |
-| `hidden`          | Whether the component is hidden              | `bool`              |          |
-| `labels`          | The labels of the component                  | `map[string]string` | `true`   |
-| `name`            | The name of the component                    | `string`            |          |
-| `namespace`       | The namespace of the component               | `string`            |          |
-| `parent_id`       | The id of the parent component               | `uuid`              | `true`   |
-| `properties`      | The properties of the component              | `map[string]string` | `true`   |
-| `silenced`        | Whether the component is silenced            | `bool`              |          |
-| `status_reason`   | The status reason of the component           | `string`            |          |
-| `status`          | The status of the component                  | `string`            |          |
-| `summary`         | The summary of the component                 | `map[string]string` | `true`   |
-| `text`            | The text of the component                    | `string`            |          |
-| `topology_type`   | The type of the topology                     | `string`            |          |
-| `type`            | The type of the component                    | `string`            |          |
-| `cost_per_minute` | The cost per minute of the component         | `float64`           |          |
-| `cost_total_1d`   | The cost total 1d of the component           | `float64`           |          |
-| `cost_total_7d`   | The cost total 7d of the component           | `float64`           |          |
-| `cost_total_30d`  | The cost total 30d of the component          | `float64`           |          |
-| `created_by`      | Id of the person that created this component | `uuid`              |          |
-| `created_at`      | Created timestamp                            | `time.Time`         |          |
-| `updated_at`      | Updated timestamp                            | `time.Time`         |          |
-| `deleted_at`      | Deleted timestamp                            | `time.Time`         | `true`   |
+| Field           | Description                      | Schema          | nullable |
+| --------------- | -------------------------------- | --------------- | -------- |
+| `id`            | ID of the config item            | `uuid`          |          |
+| `agent_id`      | ID of the agent                  | `uuid`          | `true`   |
+| `config_class`  | Class of the config item         | `string`        |          |
+| `config`        | Configuration                    | `string`        | `true`   |
+| `created_at`    | Creation timestamp               | `time.Time`     |          |
+| `delete_reason` | Reason for deletion              | `string`        | `true`   |
+| `deleted_at`    | Deletion timestamp               | `time.Time`     | `true`   |
+| `description`   | Description                      | `string`        | `true`   |
+| `external_id`   | External IDs                     | `[]string`      | `true`   |
+| `health`        | Health                           | `Health`        | `true`   |
+| `labels`        | Labels                           | `JSONStringMap` | `true`   |
+| `name`          | Name                             | `string`        | `true`   |
+| `properties`    | Properties                       | `Properties`    | `true`   |
+| `ready`         | Whether the config item is ready | `bool`          |          |
+| `scraper_id`    | ID of the scraper                | `string`        | `true`   |
+| `source`        | Source                           | `string`        | `true`   |
+| `status`        | Status                           | `string`        | `true`   |
+| `tags`          | Tags                             | `JSONStringMap` |          |
+| `type`          | Type                             | `string`        |          |
+| `updated_at`    | Update timestamp                 | `time.Time`     | `true`   |
 
 ### Agent
 
@@ -55,9 +60,21 @@ Component status updates emit the following events
 
 ## Notification Defaults
 
+**Health events**
+
 ```
 # Title
-Config {{.config.name}} status updated to {{.config.status}}
+Config {{.config.name}} health updated to {{.config.health}}
+
+# Body
+[Reference]({{.permalink}})
+```
+
+**State events**
+
+```
+# Title
+Config {{.config.name}} was <new-state>
 
 # Body
 [Reference]({{.permalink}})
