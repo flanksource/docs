@@ -7,8 +7,7 @@ Component status updates emit the following events
 - `component.healthy`
 - `component.unhealthy`
 - `component.warning`
-- `component.error`
-- `component.info`
+- `component.unknown`
 
 ## Variables
 

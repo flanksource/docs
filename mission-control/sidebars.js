@@ -115,6 +115,11 @@ const sidebars = {
       items: [
         {
           type: 'doc',
+          id: 'notifications/events/configs',
+          label: 'Configs'
+        },
+        {
+          type: 'doc',
           id: 'notifications/events/components',
           label: 'Components'
         },
@@ -123,11 +128,6 @@ const sidebars = {
           id: 'notifications/events/health-checks',
           label: 'Health Checks'
         },
-        // {
-        //   type: 'doc',
-        //   id: 'notifications/events/incidents',
-        //   label: 'Incidents'
-        // }
       ]
     },
     {
