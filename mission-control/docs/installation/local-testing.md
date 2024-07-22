@@ -122,7 +122,7 @@ resources:
     memory: 100Mi
 db:
   conf:
-    shared_buffers: 128Mi
+    shared_buffers: 128MB
     work_mem: 10MB
   resources:
     requests:
