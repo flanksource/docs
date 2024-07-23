@@ -46,6 +46,22 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     if (!a.required && b.required) {
       return 1;
     }
+    if (a.priority && !b.priority) {
+      return -1
+    }
+
+    if (!a.priority && b.priority) {
+      return 1
+    }
+    if (a.priority && b.priority && a.priority > b.priority) {
+      return -1
+    }
+
+
+    if (a.priority && b.priority && a.priority < b.priority) {
+      return 1
+    }
+
     return a.field.localeCompare(b.field)
   }
   rows = rows.concat(common.filter(row => row.required))
@@ -292,9 +308,16 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
               </td>
               <td><ReactMarkdown>{(row.description ? row.description : "") + (row.default ? `. Defaults to \`${row.default}\`` : '')}</ReactMarkdown></td>
               <td>
-                <ReactMarkdown>
-                  {schemes[row.scheme] || (row.scheme ? row.scheme : 'string')}
-                </ReactMarkdown>
+                {row.anyOf &&
+                  <code>{row.anyOf.join(' | ')}</code>
+                }
+                {!row.anyOf &&
+                  <ReactMarkdown>
+                    {
+                      schemes[row.scheme] || (row.scheme ? row.scheme : 'string')
+                    }
+                  </ReactMarkdown>
+                }
               </td>
             </tr>
           ))}

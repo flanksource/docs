@@ -3,7 +3,6 @@ title: Kubernetes Job Failing
 ---
 
 ```yaml title="cronjob-alerts.yaml"
----
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
 metadata:
@@ -12,7 +11,8 @@ metadata:
 spec:
   events:
     - config.unhealthy
-  to:
-    connection: connection://flanksource-slack
+  //highlight-next-line
   filter: config.type == 'Kubernetes::CronJob'
+  to:
+    email: alerts@acme.com
 ```

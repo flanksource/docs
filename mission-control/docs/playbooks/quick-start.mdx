@@ -12,68 +12,66 @@ In this walkthrough, we'll create and run a playbook that scales a Kubernetes de
 - The `mission-control-sa` service account has relevant permissions
 - `kubectl` is installed and connected
 :::
-<Step step={1} name="Create a playbook spec">
 
-```yaml title="restart-deployment.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Playbook
-metadata:
-  name: restart-deployment
-spec:
-  description: Restart deployment
-  configs:
-    - types:
-        - Kubernetes::Deployment
-  actions:
-    - name: kubectl rollout restart deployment
-      exec:
-        script: kubectl rollout restart deployment {{.config.name}} -n {{.config.tags.namespace}}
-```
+1. Create a playbook spec
 
-See [Playbook](/reference/playbooks) for the full specification.
+    ```yaml title="restart-deployment.yaml"
+    apiVersion: mission-control.flanksource.com/v1
+    kind: Playbook
+    metadata:
+      name: restart-deployment
+    spec:
+      description: Restart deployment
+      configs:
+        - types:
+            - Kubernetes::Deployment
+      actions:
+        - name: kubectl rollout restart deployment
+          exec:
+            script: kubectl rollout restart deployment {{.config.name}} -n {{.config.tags.namespace}}
+    ```
 
-
-</Step>
-<Step step={2} name="Apply the playbook">
-
-```bash
-kubectl apply -f restart-deployment.yaml
-```
-<p/>
+    See [Playbook](/reference/playbooks) for the full specification.
 
 
+2. Apply the playbook
 
-<details summary="Add playbook from UI">
-<div className='white'>
-
-:::warning
-This is for development purposes, for production use a GitOps tool like Flux or Argo to apply the spec.
-:::
-
-1. Navigate to the **Playbooks** page
-2. Click on the <Plus color="#005be2" height={25} width={25}/> icon to add a new playbook
-3. Add the `spec` from the YAML file above
-
-    <img src= "/img/playbook-create.png" width="500px"/>
+    ```bash
+    kubectl apply -f restart-deployment.yaml
+    ```
+    <p/>
 
 
-</div>
-</details>
 
-</Step>
-<Step step={3} name="Run the playbook">
+    <details summary="Add playbook from UI">
+    <div className='white'>
+
+    :::warning
+    This is for development purposes, for production use a GitOps tool like Flux or Argo to apply the spec.
+    :::
+
+    1. Navigate to the **Playbooks** page
+    2. Click on the <Plus color="#005be2" height={25} width={25}/> icon to add a new playbook
+    3. Add the `spec` from the YAML file above
+
+        <Screenshot img= "/img/playbook-create.png" size="500px"/>
+
+
+    </div>
+    </details>
+
+3. Run the playbook
 
 
 1. Navigate to a Deployment in the **Catalog**
 2. Select **Restart Deployment** from the Playbooks menu
 3. Click **Run**<br/>
 
-    <Screenshot src="/img/restart-deployment.png" width="500px"/>
+    <Screenshot img="/img/restart-deployment.png" size="500px"/>
 
     > See [Event Triggers](/playbooks/events) to run the playbook on event (e.g. pod crashlooping) <br/>
     > See [Webhooks](/playbooks/webhooks) to run the playbook from a webhook (e.g. on Git push)
-1. View the playbook progress
+4. View the playbook progress
 
-    <Screenshot src="/img/restart-deployment-run.png" width="900px"/>
+  <Screenshot img="/img/restart-deployment-run.png" width="900px"/>
 
-</Step>

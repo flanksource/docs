@@ -31,7 +31,6 @@ An agent can be specified using:
   0 * * * *
 ```
 
-
 | Shortcut                       | Description                                                | Equivalent  |
 | ------------------------------ | ---------------------------------------------------------- | ----------- |
 | `@every` [Duration](#duration) | e.g., `@every 5m`                                           |             |
