@@ -2,8 +2,31 @@
 
 Health checks emit 2 events
 
-- `check.passed`
-- `check.failed`
+* **`check.passed`**:
+    * **Title:** `Check {{.check.name}} has passed`
+    * **Body:**
+        ```
+        Canary: {{.canary.name}}
+        {{if .agent}}Agent: {{.agent.name}}{{end}}
+        {{if .status.message}}Message: {{.status.message}} {{end}}
+        ### Labels:
+        {{range $k, $v := .check.labels}}**{{$k}}**: {{$v}}
+        {{end}}
+        [Reference]({{.permalink}})
+        ```
+
+* **`check.failed`**:
+    * **Title:** `Check {{.check.name}} has failed`
+    * **Body:**
+        ```
+        Canary: {{.canary.name}}
+        {{if .agent}}Agent: {{.agent.name}}{{end}}
+        Error: {{.status.error}}
+        ### Labels:
+        {{range $k, $v := .check.labels}}**{{$k}}**: {{$v}}
+        {{end}}
+        [Reference]({{.permalink}})
+        ```
 
 ## Variables
 
@@ -92,26 +115,4 @@ Health checks emit 2 events
 
 ## Notification Template Defaults
 
-### `check.passed`
 
-```
-# Title
-Check {{.check.name}} has passed
-
-# Body
-Canary: {{.canary.name}}
-{{if .agent}}Agent: {{.agent.name}}{{end}}
-{{if .status.message}}Message: {{.status.message}}{{end}}
-```
-
-### `check.failed`
-
-```
-# Title
-Check {{.check.name}} has failed
-
-# Body
-Canary: {{.canary.name}}
-{{if .agent}}Agent: {{.agent.name}}{{end}}
-Error: {{.status.error}}
-```

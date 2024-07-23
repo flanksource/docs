@@ -1,0 +1,68 @@
+---
+title: Webhook
+---
+
+
+import TransformFields from '../concepts/expressions/_transform_fields.mdx'
+
+# <Icon name="webhook" /> Webhook
+
+Webhooks allow you to create and update checks by sending HTTP POST or GET requests to endpoint.
+
+```yaml title="webhook.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: webhook
+spec:
+  webhook:
+    # webhook names must be unique,
+    name: webhook-endpoint-1
+    transform:
+      expr: |
+        [{
+          'name': 'Webhook/' +  results.json.name,
+          'pass':   results.json.status == "healthy",
+        }].toJSON()
+```
+
+This example:
+1. Defines a webhook named `webhook-endpoint-1` accessible via `http://<host>/webhooks/webhook-endpoint-1`
+2. Transforms the incoming JSON into [check](#output)
+
+This webhook can be called with:
+
+```bash
+curl --header "Content-Type: application/json" \
+    --request POST \
+    --data '{"name":"sample-webhook","status":"healthy"}' \
+    http://localhost/webhooks/webhook-endpoint-1
+```
+
+
+## Input
+
+The request is available to the transformation function with these fields:
+
+<Fields rows={[
+  {
+    field: 'results.json',
+        description: 'If `Content-Type: application/json` unmarshalls the request body to a JSON ',
+    scheme: '`JSON Object|Array`'
+  },
+    {
+    field: 'results.headers',
+
+    scheme: "`map[string]string`"
+  },  {
+    field: 'results.content',
+    description: 'Request body text, See [YAML](/reference/scripting/cel#yaml), [CSV](/reference/scripting/cel#csv)',
+    scheme: 'string'
+  }
+]}/>
+
+## Output
+
+The return value is a list of checks
+
+<TransformFields/>

@@ -1,0 +1,132 @@
+<Fields rows={[
+  {
+    field: "start",
+    description: "The time the check or event logically started (e.g if coming from an external source)",
+    scheme: "time.Time",
+     priority: 1,
+    required: false
+  },
+  {
+    field: "pass",
+    description: "Set to true if the health check is passing",
+    scheme: "bool",
+    priority: 2,
+    required: true
+  },
+  {
+    field: "invalid",
+    description: "Set to true if the check is not configured correctly, and can never pass",
+    scheme: "bool",
+      priority: 2,
+    required: false
+  },
+    {
+    field: "error",
+    description: "An error message to be shown, if non-empty sets `pass: false` automatically",
+    scheme: "string",
+        priority: 1,
+    required: false
+  },
+
+  {
+    field: "deletedAt",
+    description: "The time the check or event logically ended",
+    scheme: "time.Time",
+      priority: 1,
+    required: false
+  },
+  {
+    field: "duration",
+    description: "Time in ms to use for the duration of the check",
+    scheme: "int64",
+    priority: 2,
+    required: false
+  },
+
+  {
+    field: "message",
+    description: "Informational message to be shown to users",
+    scheme: "string",
+        priority: 1,
+    required: false
+  },
+
+  {
+    field: "name",
+    description: "Name of the check to use, the name will be used to lookup existing checks to update",
+    priority: 2,
+    scheme: "string",
+    required: true
+  },
+    {
+    field: "namespace",
+    description: null,
+           priority: 1,
+    scheme: "string",
+    required: false
+  },
+    {
+    field: "description",
+    description: null,
+    scheme: "string",
+    required: false
+  },
+    {
+    field: "type",
+    description: null,
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "labels",
+           priority: 1,
+    description: null,
+    scheme: "map[string]string",
+    required: false
+  },
+
+  {
+    field: "detail",
+    description: null,
+    scheme: "interface{}",
+    required: false
+  },
+  {
+    field: "data",
+    description: null,
+    scheme: "map[string]interface{}",
+    required: false
+  },
+  {
+    field: "metrics",
+    description: "Add custom metrics to be exported",
+    scheme: "[[]Metric](../metrics/custom-metrics#metric)",
+    required: false
+  },
+  {
+    field: "icon",
+    description: null,
+        priority: 1,
+    scheme: "Icon",
+    required: false
+  },
+
+  {
+    field: "endpoint",
+    description: null,
+    scheme: "string",
+    required: false
+  },
+    {
+    field: "displayType",
+    description: null,
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "transformDeleteStrategy",
+    description: "How to handle checks that were returned in a previous transformation, but not in the current ",
+    anyOf: ["MarkHealthy", "MarkUnhealthy", "Ignore"],
+    required: false
+  }
+]}/>

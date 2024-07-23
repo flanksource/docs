@@ -2,13 +2,14 @@
 title: Approval
 ---
 
-Authorization safeguards can be applied to playbook runs, ensuring their execution is limited to specific individuals or teams who grant approval.
+Approval mechanisms ensure that only authorized individuals or teams can execute playbook runs. This safeguard helps maintain control and security over critical operations.
+
+To implement approval in a playbook, define the `approval` field:
 
 ```yaml title="approve-kubernetes-scaling.yaml"
-#...
+# This playbook scales a Kubernetes deployment and requires approval before execution.
 kind: Playbook
-spec:
-  #...
+  # snipped
   approval:
     type: any
     approvers:
@@ -18,8 +19,8 @@ spec:
         - DevOps
 ```
 
-| Field       | Description                    | Scheme       | Required |
-| ----------- | ------------------------------ | ------------ | -------- |
-| `type`      | How many approvals required. Defaults to `all`    | `any` or `all`     | `false`  |
-| `approvers.[]people` | Login or id of a person| `People` | `false`  |
-| `approvers.[]teams` | Name or id of a team | `Team` | `false`  |
+| Field                | Description                                           | Scheme       | Required |
+|----------------------|-------------------------------------------------------|--------------|----------|
+| `type`      | Specifies the number of approvals required. Defaults to `all`.    | `any` or `all`     | `false`  |
+| `approvers.[]people` | List of individuals who can approve the playbook run. | `People` | `false`  |
+| `approvers.[]teams` | List of teams who can approve the playbook run. | `Team` | `false`  |
