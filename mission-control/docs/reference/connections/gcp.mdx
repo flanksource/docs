@@ -15,6 +15,29 @@ There are 3 options when connecting to GCP:
 GKE [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) (the default if no `connection` or `credentials` is specified)
 </Step>
 
+## Example
+
+This example demonstrates how to configure a GCP connection using a YAML file.
+
+```yaml title="gcp-connection-example.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: example-gcp-connection
+spec:
+  interval: 60
+  folder:
+    - name: gcs auth test
+      path: gcs://example-bucket
+      gcpConnection:
+        connection: connection://gcp/example
+```
+
+This example:
+1. Configures a GCP connection to a bucket named `example-bucket`.
+2. Uses the `connection://gcp/example` connection string.
+3. Sets the interval to 60 seconds.
+
 <Step step={2} name="Connection" style="list">
 
 ```yaml title="gcs-connection.yaml"

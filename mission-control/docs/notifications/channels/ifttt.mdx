@@ -1,0 +1,40 @@
+# IFTTT
+
+
+:::info URL Format
+    ifttt://__`key`__/?events=__`event1`__[,__`event2`__,...]&value1=__`value1`__&value2=__`value2`__&value3=__`value3`__
+:::
+
+import Fields from '@site/src/components/Fields'
+
+
+<Fields rows={[
+  {
+    "field": "webHookID",
+    "required": true,
+    "description": "WebHookID"
+  },
+  {
+    "field": "events",
+    "required": true,
+    "description": "Events"
+  },
+  {
+    "field": "title",
+    "description": "Notification title, optionally set by the sender"
+  },
+  {
+    "field": "useMessageAsValue",
+    "default": "2",
+    "description": "Sets the corresponding value field to the notification message"
+  },
+  {
+    "field": "useTitleAsValue",
+    "default": "0",
+    "description": "Sets the corresponding value field to the notification title"
+  },
+    {
+    "field": "[value1]",
+    "description": "Custom values to pass through to IFTTT"
+  }
+]} />

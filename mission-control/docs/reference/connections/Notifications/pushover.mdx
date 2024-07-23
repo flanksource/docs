@@ -1,0 +1,45 @@
+---
+title: Pushover
+---
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: pushover-connection
+  namespace: default
+spec:
+  pushover:
+    token:
+      value: your-pushover-token
+    user: your-user-key
+```
+
+<Fields rows={[
+{
+    "field": "token",
+    "description": "API Token/Key",
+    "scheme": "envvar",
+    "required": true
+  },
+  {
+    "field": "user",
+    "description": "User Key",
+    "scheme": "envvar",
+    "required": true
+  },
+  {
+    "field": "devices",
+    "scheme": "string",
+        "required": true
+  },
+  {
+    "field": "priority",
+    "description": "Default: `0`",
+    "scheme": "int between `-1` and `1`"
+  },
+  {
+    "field": "title",
+    "scheme": "string"
+  }
+]}/>

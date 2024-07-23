@@ -6,27 +6,27 @@ import ReactMarkdown from 'react-markdown'
 import clsx from 'clsx'
 
 const schemes = {
-  "EnvVar": "[EnvVar](/reference/env-var)",
-  "MatchPattern": "[MatchPattern](/reference/types#match-pattern)",
-  "[]EnvVar": "[[]EnvVar](/reference/env-var)",
-  "CEL": "[CEL](/reference/scripting/cel)",
-  "Javascript": "[Javascript](/reference/scripting/javascript)",
-  "Gotemplate": "[Go Template](/reference/scripting/gotemplate)",
-  "Duration": "[Duration](/reference/types#duration)",
-  "JSONPathOrString": "`string` or [JSONPath](https://jsonpath.com/)",
-  "[]JSONPathOrString": "`[]string` or [[]JSONPath](https://jsonpath.com/)",
-  "JSONPath": "[JSONPath](https://jsonpath.com/)",
-  "Size": "[Size](/reference/types#size)",
-  "Agent": "[Agent](/reference/types#agent)",
-  "ResourceSelector": "[ResourceSelector](/reference/resource-selector)",
-  "Connection": "[Connection](/reference/connections)",
+  "envvar": "[EnvVar](/reference/env-var)",
+  "matchpattern": "[MatchPattern](/reference/types#match-pattern)",
+  "[]envvar": "[[]EnvVar](/reference/env-var)",
+  "cel": "[CEL](/reference/scripting/cel)",
+  "javascript": "[Javascript](/reference/scripting/javascript)",
+  "gotemplate": "[Go Template](/reference/scripting/gotemplate)",
+  "duration": "[Duration](/reference/types#duration)",
+  "jsonpathorstring": "`string` or [JSONPath](https://jsonpath.com/)",
+  "[]jsonpathorstring": "`[]string` or [[]JSONPath](https://jsonpath.com/)",
+  "jsonpath": "[JSONPath](https://jsonpath.com/)",
+  "size": "[Size](/reference/types#size)",
+  "agent": "[Agent](/reference/types#agent)",
+  "resourceselector": "[ResourceSelector](/reference/resource-selector)",
+  "connection": "[Connection](/reference/connections)",
   "string": "`string`",
-  "Icon": "[Icon](/reference/types#icon)",
+  "icon": "[Icon](/reference/types#icon)",
   "bool": "`boolean`",
   "int": "`integer`",
-  "NotificationURL": "[Notification](/reference/notifications)",
-  "NotificationConnection": "[Connection](/reference/connections)",
-  "NotificationProperties": "[map[string]string](/reference/notifications#properties)",
+  "notificationurl": "[Notification](/reference/notifications)",
+  "notificationconnection": "[Connection](/reference/connections)",
+  "notificationproperties": "[map[string]string](/reference/notifications#properties)",
 }
 export default function Fields({ common = [], rows = [], oneOf, anyOf, connection }) {
 
@@ -311,10 +311,10 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
                 {row.anyOf &&
                   <code>{row.anyOf.join(' | ')}</code>
                 }
-                {!row.anyOf &&
+                {!row.anyOf && row.scheme &&
                   <ReactMarkdown>
                     {
-                      schemes[row.scheme] || (row.scheme ? row.scheme : 'string')
+                      schemes[row.scheme.toLowerCase()] || (row.scheme ? row.scheme : 'string')
                     }
                   </ReactMarkdown>
                 }

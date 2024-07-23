@@ -2,3 +2,46 @@
 title: SFTP
 ---
 <Fields connection="sftp"/>
+
+## Example
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sftp-connection
+type: Opaque
+data:
+  host: c3RlcC5leGFtcGxlLmNvbQ== # base64 encoded value of "step.example.com"
+  username: dXNlcm5hbWU= # base64 encoded value of "username"
+  password: cGFzc3dvcmQ= # base64 encoded value of "password"
+---
+apiVersion: mission-control/v1
+kind: Connection
+metadata:
+  name: example-sftp
+spec:
+  sftp:
+    host: 
+      valueFrom:
+        secretKeyRef:
+          name: sftp-connection
+          key: host
+    username: 
+      valueFrom:
+        secretKeyRef:
+          name: sftp-connection
+          key: username
+    password: 
+      valueFrom:
+        secretKeyRef:
+          name: sftp-connection
+          key: password
+    port: 22
+    path: /upload
+```
+
+This example:
+1. Creates a Kubernetes Secret to store the SFTP connection details.
+2. Defines a Connection resource that references the secret for the SFTP connection.
+3. Specifies the SFTP server's host, username, password, port, and path.

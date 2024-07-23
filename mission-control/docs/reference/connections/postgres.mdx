@@ -1,0 +1,52 @@
+---
+title: Postgres
+---
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: payments-database
+  namespace: default
+spec:
+  postgres:
+    database:
+      value: payments
+    host:
+      value: postgres.host.com
+    insecureTLS: true
+    username:
+      valueFrom:
+        secretKeyRef:
+          name: payments-database-credentials
+          key: POSTGRES_USER
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: payments-database-credentials
+          key: POSTGRES_PASSWORD
+```
+
+<Fields rows={[
+  {
+    field: 'database',
+    scheme: 'envvar',
+  },
+    {
+    field: 'host',
+    scheme: 'envvar',
+  },
+  {
+    field: 'username',
+    scheme: 'envvar',
+  },
+  {
+    field: 'password',
+    scheme: 'envvar',
+  },
+  {
+    field: 'insecureTLS',
+    scheme: 'bool',
+  },
+
+]}/>

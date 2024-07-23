@@ -1,5 +1,6 @@
 ---
 title: Components
+description: Events that fire on topology/component changes
 ---
 
 Component status updates emit the following events

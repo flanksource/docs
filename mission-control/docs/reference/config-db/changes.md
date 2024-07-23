@@ -1,5 +1,6 @@
 ---
 title: Changes
+description: Fields available during change filtering / mapping
 ---
 
 | Field                | Description                             | Scheme           |

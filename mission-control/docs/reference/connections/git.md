@@ -5,8 +5,6 @@ title: Git
 Git connections are used for [GitOps](/playbooks/actions/gitops) playbook actions and [Health Checks](/canary-checker/reference/git)
 
 
-## Git
-
 ```yaml
 apiVersion: mission-control.flanksource.com/v1
 kind: Connection

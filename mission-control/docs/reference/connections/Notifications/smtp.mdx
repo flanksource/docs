@@ -1,0 +1,82 @@
+---
+title: SMTP
+---
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: smtp-connection
+  namespace: default
+spec:
+  smtp:
+    host: your-smtp-host
+    username:
+      value: your-username
+    password:
+      value: your-password
+    insecureTLS: true
+    encryption: auto
+    port: 587
+    fromAddress: your-from-address
+    toAddresses:
+      - recipient1@example.com
+      - recipient2@example.com
+    subject: your-email-subject
+    auth: Plain
+```
+
+<Fields rows={[
+  {
+    field: 'host',
+    scheme: 'string',
+    description: 'SMTP server host'
+  },
+  {
+    field: 'username',
+    scheme: 'envvar',
+    description: 'Username for SMTP authentication'
+  },
+  {
+    field: 'password',
+    scheme: 'envvar',
+    description: 'Password for SMTP authentication'
+  },
+  {
+    field: 'insecureTLS',
+    scheme: 'bool',
+    description: 'If true, TLS will not be verified'
+  },
+  {
+    field: 'encryption',
+    scheme: 'string',
+    anyOf: ["None", "ExplicitTLS", "ImplicitTLS", "Auto"],
+    description: 'Encryption method'
+  },
+  {
+    field: 'port',
+    scheme: 'int',
+    description: 'SMTP server port (default: 587)'
+  },
+  {
+    field: 'fromAddress',
+    scheme: 'string',
+    description: 'Email address that the mail is sent from'
+  },
+  {
+    field: 'toAddresses',
+    scheme: 'string[]',
+    description: 'List of recipient email addresses'
+  },
+  {
+    field: 'subject',
+    scheme: 'string',
+    description: 'Subject of the sent email'
+  },
+  {
+    field: 'auth',
+    scheme: 'string',
+    description: 'SMTP authentication method',
+    anyOf: ["None", "Plain", "CRAMMD5", "Unknown", "OAuth2"]
+  },
+]}/>

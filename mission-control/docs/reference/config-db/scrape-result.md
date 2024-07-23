@@ -1,5 +1,6 @@
 ---
 title: Scrape Result
+description: Fields available during scrape transform
 ---
 
 | Field          | Description                                            | Scheme             |

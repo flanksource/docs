@@ -1,0 +1,104 @@
+# Email
+
+
+:::note URL Format
+smtp://`username`:`password`@`host`:`port`/?from=`fromAddress`&to=`recipient1`[,`recipient2`,...]
+:::
+
+<Fields rows={[{
+  field: "username",
+  description: "SMTP server username",
+  default: "",
+  required: false,
+  urlPart: "username"
+},
+{
+  field: "password",
+  description: "SMTP server password or hash (for OAuth2)",
+  default: "",
+  required: false,
+  urlPart: "password"
+},
+{
+  field: "host",
+  description: "SMTP server hostname or IP address",
+  default: "",
+  required: true,
+  urlPart: "host"
+},
+{
+  field: "port",
+  description: "SMTP server port, common ones are 25, 465, 587 or 2525",
+  default: "25",
+  urlPart: "port"
+},
+{
+  field: "fromAddress",
+  description: "E-mail address that the mail are sent from",
+  aliases: [
+    "from"
+  ],
+  default: "",
+  required: true
+},
+{
+  field: "auth",
+  description: "SMTP authentication method",
+  default: "Unknown",
+  oneOf: [
+    "None",
+    "Plain",
+    "CRAMMD5",
+    "Unknown",
+    "OAuth2"
+  ],
+  required: false
+},
+{
+  field: "clientHost",
+  description: "The client host name sent to the SMTP server during HELLO phase. If set to \"auto\" it will use the OS hostname",
+  default: "localhost",
+  required: false
+},
+{
+  field: "encryption",
+  description: "Encryption method",
+  default: "Auto",
+  oneOf: [
+    "None",
+    "ExplicitTLS",
+    "ImplicitTLS",
+    "Auto"
+  ],
+  required: false
+},
+{
+  field: "fromName",
+  description: "Name of the sender",
+  default: "",
+  required: false
+},
+{
+  field: "subject",
+  description: "The subject of the sent mail",
+  aliases: [
+    "title"
+  ],
+  default: "Shoutrrr Notification",
+  required: false
+},
+{
+  field: "useHTML",
+  description: "Whether the message being sent is in HTML",
+  default: false,
+  required: false
+},
+{
+  field: "useStartTLS",
+  description: "Whether to use StartTLS encryption",
+  aliases: [
+    "starttls"
+  ],
+  default: true,
+  required: false
+}]}/>
