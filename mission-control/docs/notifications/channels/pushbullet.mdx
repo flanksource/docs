@@ -1,0 +1,25 @@
+# Pushbullet
+
+:::info URL Format
+    pushbullet://__`api-token`__[/__`device`__/#__`channel`__/__`email`__]
+:::
+
+
+import Fields from '@site/src/components/Fields';
+
+### URL Fields
+
+<Fields rows={[
+  {
+    field: "token",
+    required: true,
+  },
+  {
+    field: "targets",
+    required: true,
+  },
+  {
+    field: "title",
+    required: true
+  },
+]} />

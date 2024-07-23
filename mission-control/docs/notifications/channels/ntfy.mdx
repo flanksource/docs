@@ -1,0 +1,102 @@
+# Ntfy
+
+Upstream docs: https://docs.ntfy.sh/publish/
+
+
+import Fields from '@site/src/components/Fields';
+
+<Fields rows={[
+  {
+    field: "username",
+    description: "Auth username",
+    scheme: "string",
+  },
+  {
+    field: "password",
+    description: "Auth password",
+    scheme: "string",
+  },
+  {
+    field: "host",
+    description: "Server hostname and port",
+    default: "ntfy.sh",
+    scheme: "string",
+  },
+  {
+    field: "topic",
+    description: "Target topic name",
+    required: true,
+    scheme: "string",
+  },
+  {
+    field: "actions",
+    description: "Custom user action buttons for notifications",
+    scheme: "[Action](https://docs.ntfy.sh/publish/#action-buttons)",
+  },
+  {
+    field: "attach",
+    description: "URL of an attachment, see attach via URL",
+    scheme: "string",
+  },
+  {
+    field: "cache",
+    description: "Cache messages",
+    default: "yes",
+    scheme: "bool",
+  },
+  {
+    field: "click",
+    description: "Website opened when notification is clicked",
+    scheme: "string",
+  },
+  {
+    field: "delay",
+    description: "Timestamp or duration for delayed delivery, see ",
+    aliases: ["at", "in"],
+    scheme: "[Delay](https://docs.ntfy.sh/publish/#scheduled-delivery)",
+  },
+  {
+    field: "email",
+    description: "E-mail address for e-mail notifications",
+    scheme: "string",
+  },
+  {
+    field: "filename",
+    description: "File name of the attachment",
+    scheme: "string",
+  },
+  {
+    field: "firebase",
+    description: "Send to firebase",
+    default: "yes",
+    scheme: "bool",
+  },
+  {
+    field: "icon",
+    description: "URL to use as notification icon",
+    scheme: "string",
+  },
+  {
+    field: "priority",
+    description: "Message priority with 1=min, 3=default and 5=max",
+    default: "Default",
+    scheme: "string",
+    enum: ["Min", "Low", "Default", "High", "Max"],
+  },
+  {
+    field: "scheme",
+    description: "Server protocol, http or https",
+    default: "https",
+    scheme: "string",
+  },
+  {
+    field: "tags",
+    description: "List of tags that may or not map to emojis",
+    scheme: "string",
+  },
+  {
+    field: "title",
+    description: "Message title",
+    scheme: "string",
+  },
+]} />

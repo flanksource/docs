@@ -10,3 +10,6 @@
 [submodule "docs-vale-package"]
 	path = docs-vale-package
 	url = https://github.com/flanksource/docs-vale-package
+[submodule "modules/duty"]
+	path = modules/duty
+	url = https://github.com/flanksource/duty.git

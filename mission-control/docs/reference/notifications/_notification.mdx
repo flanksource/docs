@@ -1,20 +1,54 @@
-| Field      | Description                                                                                         | Scheme                                                | Required | Templatable |
-| ---------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | -------- | ----------- |
-| `events`   |                                                                                                     | [[]Event](./events)                                   | `true`   |             |
-| `to`       | Notification recipient                                                                              | [`Recipient`](#recipient)                             | `true`   |             |
-| `title`    | Channel dependant e.g. subject for email                                                            | <CommonLink to="gotemplate">Go Template </CommonLink> |          | `true`      |
-| `template` | Channel dependant e.g. email body for email                                                         | <CommonLink to="gotemplate">Go Template </CommonLink> |          | `true`      |
-| `filter`   | Filter out events. If the filter evaluates to true, the notification is processed - else discarded. | <CommonLink to="cel">CEL</CommonLink>                 |          |             |
+<Fields rows={[
+  {
+    field: "events",
+    required: true,
+    scheme: '[[]Event](./events)'
+  },
+{
+    field: "to.person",
+    description: "Send an email to the person",
+    scheme: "`UUID` or `email` of a person"
+  },
+  {
+    field: "to.team",
+    description: "Send an email to every person in the team",
+    scheme: "`UUID` or `name` of team"
+  },
+  {
+    field: "to.email",
+    description: "Send an email to an external email address",
+    scheme: "`email`"
+  },
+  {
+    field: "to.connection",
+    description: "Connection to external service",
+    scheme: "`connection`"
+  },
+  {
+    field: "to.url",
+    description: "Custom notification URL",
+    scheme: "[Channel](./channels)"
+  },
+  {
+    field: "to.properties",
+    description: "_Only applicable if `url` is specified_",
+    scheme: "`map[string]string`"
+  },
+  {
+    field: "title",
+    description: "Channel dependant e.g. subject for email",
+    scheme: "GoTemplate"
+  },
+    {
+    field: "body",
+    description: "Channel dependant e.g. email body for email",
+    scheme: "GoTemplate"
+  },  {
+    field: "filter",
+    description: "Filter for which events to send notifications on, must return `true` ",
+    scheme: "CEL"
+  }
 
-### Recipient
-
-| Field        | Description                                                        | Schema                        |
-| ------------ | ------------------------------------------------------------------ | ----------------------------- |
-| `person`     |                                                                    | `UUID` or `email` of a person |
-| `team`       | Every member of the team with an email will receive a notification | `UUID` or `name` of team      |
-| `email`      | Send an email to an external user                                  | `email`                       |
-| `connection` | Connection to external service                                     | `connection`                  |
-| `url`        | Custom notification URL                                            | [Channel](./channels)         |
-| `properties` | _Only applicable if `url` is specified_                            | `map[string]string`           |
+]}/>
 
 > Only one recipient can be specified

@@ -1,6 +1,7 @@
 ---
 title: Config
 sidebar_position: 4
+description: Fields available during lookup and transformation
 ---
 
 | Field             | Description                            | Scheme              |               |

@@ -1,5 +1,6 @@
 ---
 title: Configs
+description: Events that fire on config changes and health
 ---
 
 Configs emit events when their health changes or when they are created, modified, or removed.

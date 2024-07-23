@@ -1,4 +1,7 @@
-# Health Checks
+---
+description: Events that fire when health checks pass or fail
+title: Health Checks
+---
 
 Health checks emit 2 events
 

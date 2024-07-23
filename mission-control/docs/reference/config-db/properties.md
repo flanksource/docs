@@ -1,5 +1,7 @@
 ---
 title: Property
+description: Property fields for config items
+
 ---
 
 | Field          | Description                                                                   | Scheme                                  | Required   |

@@ -4,3 +4,23 @@ title: Azure
 
 
 <Fields connection="azure"/>
+
+## Example
+
+This example demonstrates how to configure an Azure connection in Mission Control:
+
+```yaml title="azure-connection.yaml"
+apiVersion: v1
+kind: Connection
+metadata:
+  name: azure-connection
+spec:
+  azure:
+    clientID:
+      value: your-client-id
+    clientSecret:
+      value: your-client-secret
+    tenantID: your-tenant-id
+    subscriptionId: subscription-id
+```
+

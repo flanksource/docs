@@ -1,0 +1,62 @@
+# Telegram
+
+
+Telegram messages are sent with `parseMode=MarkdownV2`
+
+
+:::info URL Format
+    telegram://__`token`__@telegram?chats=__`channel-1`__[,__`chat-id-1`__,...][&notification=no[&preview=false][&parseMode=html]
+:::
+
+import Fields from '@site/src/components/Fields';
+
+<Fields rows={[
+    {
+        "field": "token",
+        "required": true
+    },
+    {
+        "field": "chats",
+        "description": "Chat IDs or Channel names",
+        "scheme": "`@channel-name` or `chat-id`",
+        "required": true,
+        "aliases": "channels"
+    },
+    {
+        "field": "notification",
+        "description": "If disabled, sends Message silently",
+        "default": "Yes"
+    },
+    {
+        "field": "parseMode",
+        "description": "How the text Message should be parsed",
+        "default": "MarkdownV2",
+        "enum": [
+            "None",
+            "Markdown",
+            "HTML",
+            "MarkdownV2"
+        ]
+    },
+    {
+        "field": "preview",
+        "description": "If disabled, no web page preview will be displayed for URLs",
+        "default": "Yes"
+    },
+    {
+        "field": "title",
+        "description": "Notification title, optionally set by the sender"
+    }
+]} />
+
+
+:::info
+    `preview` and `notification` are inverted in regards to their API counterparts (`disable_web_page_preview` and `disable_notification`)
+:::
+
+
+## Getting a token for Telegram
+
+1. Talk to [the botfather](https://core.telegram.org/bots#6-botfather).
+2. See [getting a chat id](https://github.com/GabrielRF/telegram-id).
+

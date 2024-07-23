@@ -1,18 +1,20 @@
 ---
 pagination_next: registry/index
 pagination_prev: canary-checker/health-checks
-title: Notifications
+title: Overview
+sidebar_position: 1
 ---
+
 import Notification from "../reference/notifications/_notification.mdx"
 
-Notifications can be sent based on different type of events occuring including:
+# Notifications
 
-- Health check failing (`check.failed`)
-- Aggregated health of a topology failing (`component.unhealthy`)
-- A scraped config item health (`config.unhealthy`)
+Mission Control provides a flexible, event-based notification system that enables filtering and templating of notifications via email, push, slack, teams, etc.
+
+Notifications are triggered by events. An event is a specific occurrence or change in state within the system. For example, notifications can be granular such as a health check failing or a pod crashlooping - or high level based on the health of the system as a whole.
 
 
-```yaml title="http-check.yaml"
+```yaml title="check-failed.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
 metadata:
@@ -20,32 +22,45 @@ metadata:
   namespace: default
 spec:
   events:
-    - check.passed
-  filter: check.type == 'http'
+    - check.failed
   to:
     email: alerts@acme.com
 ```
+
+This notification will send an email to `alerts@acme.com` whenever a health check fails.
 
 <Notification/>
 
 ## Templating
 
-Notification title and bodies can be templated using <CommonLink to="gotemplate">Go Templates</CommonLink>
-```yaml title="template-title.yaml"
+You can use Go Templates to customize the content of notification titles and bodies. This allows you to include dynamic information from the event that triggered the notification.
+
+For example, the following notification definition uses a Go Template to include the name and health status of the check in the notification title:
+
+```yaml title="notification-template"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
 spec:
-  // highlight-next-line
   title: Check {{.check.name}} is {{.check.health}}
 ```
 
-## Filtering
+In this example `{{.check.name}}` and `{{.check.health}}` are placeholders that will be replaced with the actual values of the `name` and `health` fields from the [check](/reference/canary-checker/check) object associated with the event.
 
-Notifications can be filtered using <CommonLink to="cel">CEL</CommonLink> expressions. The filters have access to same [variables](./events) that can be used in the templates.
+
+:::tip Markdown
+All notification templates in Mission Control are defined in markdown, and depending on the support of the notification channel in use it will either be converted to HTML or plain text.
+:::
+
+
+## Filtering Events
+
+Mission Control allows you to fine-tune your notification delivery by filtering events using <CommonLink to="cel">CEL</CommonLink>. This enables you to specify precise conditions that dictate when a notification should be triggered. For instance, you can configure notifications to be sent only for specific event types, specific resources, or when certain conditions are met.
+
+The CEL filters you define have access to the same set of variables as the templates, providing flexibility in defining your filtering criteria. These variables, representing various attributes and properties of the events, empower you to create highly targeted notifications.
+
+To illustrate, consider a scenario where you want to receive notifications exclusively for failed HTTP checks. The following example demonstrates how to achieve this using a CEL filter:
 
 ```yaml title="filter-http.yaml"
----
-# Only send a notification for HTTP checks
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
 metadata:
@@ -53,9 +68,16 @@ metadata:
 spec:
   events:
     - check.failed
+  # Filter for events where the check type is 'http'
   // highlight-next-line
   filter: check.type == 'http'
   to:
-    connection: connection://slack/flanksource
-  title: Check {{.check.name}} is {{.check.health}}
+    email: alerts@acme.com
+```
+
+In this example:
+
+- The `filter` field specifies the CEL expression `check.type == 'http'`.
+- This expression evaluates to true only when the `type` attribute of the [check](/reference/canary-checker/check) object is equal to `'http'`.
+- Consequently, notifications will be sent only for events that satisfy this condition, ensuring that you are alerted specifically for failed HTTP checks.
 ```

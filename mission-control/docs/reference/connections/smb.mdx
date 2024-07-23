@@ -3,4 +3,21 @@ title: SMB / CIFS
 ---
 
 
+```yaml
+apiVersion: v1
+kind: Connection
+metadata:
+  name: example-smb-connection
+spec:
+  smb:
+    server: "smb.example.com"
+    username: "exampleUser"
+    password: "examplePassword"
+    port: 445
+    share: "exampleShare"
+```
+
+
 <Fields connection="smb"/>
+
+

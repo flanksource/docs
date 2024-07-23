@@ -1,0 +1,30 @@
+---
+title: Telegram
+---
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: telegram-connection
+  namespace: default
+spec:
+  telegram:
+    token:
+      value: your-telegram-token
+    chats:
+      value: your-chat-id
+```
+
+<Fields rows={[
+  {
+    field: 'token',
+        required: true,
+    scheme: 'envvar',
+  },
+  {
+    field: 'chats',
+        required: true,
+    scheme: 'envvar',
+  },
+]}/>

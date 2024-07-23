@@ -1,0 +1,32 @@
+# Rocket.chat
+
+:::note URL Format
+    rocketchat://[__`username`__@]__`rocketchat-host`__/__`token`__[/__`channel`&#124;`@recipient`__]*
+:::
+
+
+
+## Creating a Webhook in Rocket.chat
+
+1. Open up the chat Administration by clicking on *Administration* menu
+![Screenshot 1](rocketchat/1.png)
+
+2. Open *Integrations* and then click *New*
+![Screenshot 2](rocketchat/2.png)
+
+3. Fill in the information for the webhook and click *Save*. Please don't forget to Enable your integration.
+![Screenshot 3](rocketchat/3.png)
+
+5. If you did everything correctly, Rocket.chat will give you the *URL* and *Token* to your newly created webhook.
+![Screenshot 4](rocketchat/4.png)
+
+6. Format the service URL
+    ```
+    rocketchat://your-domain.com/8eGdRzc9r4YYNyvge/2XYQcX9NBwJBKfQnphpebPcnXZcPEi32Nt4NKJfrnbhsbRfX
+                                └────────────────────────────────────────────────────────────────┘
+                                                            token
+    ```
+
+
+
+See [official guide](https://docs.rocket.chat/guides/administrator-guides/integrations).

@@ -8,3 +8,5 @@ site/
 node_modules
 .vscode
 modules/
+.aider*
+.venv/
