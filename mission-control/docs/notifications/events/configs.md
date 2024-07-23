@@ -11,11 +11,33 @@ Configs emit events when their health changes or when they are created, modified
 - `config.warning`
 - `config.unknown`
 
+The default notification template for health events is:
+
+  * **Title:** `{{.config.type}} {{.config.name}} is {{.config.health}}`
+  * **Body:**
+      ```
+      ### Labels:
+      {{range $k, $v := .config.labels}}**{{$k}}**: {{$v}}
+      {{end}}
+      [Reference]({{.permalink}})
+      ```
 **State events**
 
 - `config.created`
 - `config.updated`
 - `config.deleted`
+
+The default notification template for state events is:
+
+  * **Title:** `{{.config.type}} {{.config.name}} was [created/updated/deleted]`
+  * **Body:**
+      ```
+      ### Labels:
+      {{range $k, $v := .config.labels}}**{{$k}}**: {{$v}}
+      {{end}}
+      [Reference]({{.permalink}})
+      ```
+
 
 ## Variables
 
@@ -60,22 +82,5 @@ Configs emit events when their health changes or when they are created, modified
 
 ## Notification Defaults
 
-**Health events**
 
-```
-# Title
-Config {{.config.name}} health updated to {{.config.health}}
 
-# Body
-[Reference]({{.permalink}})
-```
-
-**State events**
-
-```
-# Title
-Config {{.config.name}} was <new-state>
-
-# Body
-[Reference]({{.permalink}})
-```

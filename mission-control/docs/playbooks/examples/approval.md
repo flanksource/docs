@@ -2,6 +2,10 @@
 title: Playbook Approval
 ---
 
+# Introduction
+
+This example demonstrates how to create a playbook that requires approval before execution. The playbook scales a Kubernetes deployment to a specified number of replicas. The approval process ensures that either an admin or a member of the DevOps team approves the action before it runs.
+
 ```yaml title="approval.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Playbook
@@ -29,6 +33,8 @@ spec:
         script: kubectl scale --replicas={{.params.replicas}} --namespace={{.config.tags.namespace}} deployment {{.config.name}}
 ```
 
-This playbook is designed to be triggered manually as it isn't listening on any automated triggers .i.e. events or webhooks. It scales the given deployment to the desired number of replicas; where the replicas come from the parameters.
+## Explanation
 
-The notable thing here is the `approval` spec which enforces that playbook is approved by either the admin or any person from the the DevOps team before it runs.
+This playbook is designed to be triggered manually. It does not listen for automated triggers such as events or webhooks. The playbook scales the specified deployment to the desired number of replicas, which are provided as parameters.
+
+The `approval` section specifies that the playbook requires approval before execution. The approval can be granted by either the admin or any member of the DevOps team.

@@ -9,6 +9,19 @@ Component status updates emit the following events
 - `component.warning`
 - `component.unknown`
 
+
+The default notification template used is:
+    * **Title:** `Component {{.component.name}} is {{.component.health}}`
+    * **Body:**
+        ```
+        ### Labels:
+        {{range $k, $v := .component.labels}}**{{$k}}**: {{$v}}
+        {{end}}
+        [Reference]({{.permalink}})
+        ```
+
+The notification title and body can be changed using the variables below:
+
 ## Variables
 
 | Field       | Description                   | Schema                    | Optional |
@@ -54,12 +67,4 @@ Component status updates emit the following events
 | `name`        | The name of the agent          | `string` |          |
 | `description` | Short description of the agent | `string` |          |
 
-## Notification Defaults
 
-```
-# Title
-Component {{.component.name}} status updated to {{.component.status}}
-
-# Body
-[Reference]({{.permalink}})
-```
