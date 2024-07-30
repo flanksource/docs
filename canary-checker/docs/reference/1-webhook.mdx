@@ -7,36 +7,52 @@ import TransformFields from '../concepts/expressions/_transform_fields.mdx'
 
 # <Icon name="webhook" /> Webhook
 
-Webhooks allow you to create and update checks by sending HTTP POST or GET requests to endpoint.
+Webhooks allow you to create and update checks by sending HTTP POST requests to an endpoint.
 
-```yaml title="webhook.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: webhook
-spec:
-  webhook:
-    # webhook names must be unique,
-    name: webhook-endpoint-1
-    transform:
-      expr: |
-        [{
-          'name': 'Webhook/' +  results.json.name,
-          'pass':   results.json.status == "healthy",
-        }].toJSON()
+```yaml title="github-webhook.yaml" file=../../../modules/canary-checker/fixtures/external/github-webhook.yaml
 ```
 
 This example:
-1. Defines a webhook named `webhook-endpoint-1` accessible via `http://<host>/webhooks/webhook-endpoint-1`
+1. Defines a webhook named `Github` accessible via `http://<host>/webhook/Github`
 2. Transforms the incoming JSON into [check](#output)
 
 This webhook can be called with:
 
 ```bash
-curl --header "Content-Type: application/json" \
-    --request POST \
-    --data '{"name":"sample-webhook","status":"healthy"}' \
-    http://localhost/webhooks/webhook-endpoint-1
+curl -s -X POST 'http://localhost/webhook/Github' --json '{
+  "meta": {
+    "unsubscribe": "http://www.githubstatus.com/?unsubscribe=mv95chy3sdq7",
+    "documentation": "https://help.statuspage.io/knowledge_base/topics/webhook-notifications",
+    "generated_at": "2024-07-19T04:47:30.290Z"
+  },
+  "page": {
+    "id": "kctbh9vrtdwd",
+    "status_indicator": "none",
+    "status_description": "All Systems Operational"
+  },
+  "component": {
+    "status": "operational",
+    "name": "Copilot",
+    "created_at": "2021-08-11T16:02:09.505Z",
+    "updated_at": "2024-07-19T04:47:22.288Z",
+    "position": 10,
+    "description": "Orchestration and Compute for GitHub Copilot",
+    "showcase": false,
+    "start_date": "2021-08-11T00:00:00.000Z",
+    "id": "h2ftsgbw7kmk",
+    "page_id": "kctbh9vrtdwd",
+    "group_id": null
+  },
+  "component_update": {
+    "old_status": "partial_outage",
+    "new_status": "operational",
+    "created_at": "2024-07-19T04:47:22.293Z",
+    "component_type": "Component",
+    "state": "sn_created",
+    "id": "zm5p6v0wb9ts",
+    "component_id": "h2ftsgbw7kmk"
+  }
+}'
 ```
 
 
