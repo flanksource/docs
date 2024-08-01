@@ -17,32 +17,102 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
 
 ```
 
-| Field        | Description                                                                  | Scheme                                       | Required |
-| ------------ | ---------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `logLevel`   | Specify the level of logging.                                                | `string`                                     |          |
-| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                     |          |
-| `retention`  | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/config-db/concepts/retention) |          |
-| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                   | [`[]Kubernetes`](#kubernetes)                |          |
+| Field        | Description                                                                  | Scheme                                       |
+| ------------ | ---------------------------------------------------------------------------- | -------------------------------------------- |
+| `logLevel`   | Specify the level of logging.                                                | `string`                                     |
+| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                     |
+| `retention`  | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/config-db/concepts/retention) |
+| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                   | [`[]Kubernetes`](#kubernetes)                |
 
-### Kubernetes
+## Kubernetes
 
-| Field            | Description                                                                   | Scheme                                                | Required |
-| ---------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------- | -------- |
-| `clusterName`    | Specify cluster name                                                          | `string`                                              |          |
-| `event`          | Specify configuration to handle Kubernetes events.                            | [`Event`](#events)                                    |          |
-| `exclusions`     | Resources to be excluded from scraping                                        | `[]string`                                            |          |
-| `fieldSelector`  | Resources to be included e.g `status.Phase=Running`                           | `string`                                              |          |
-| **`kubeconfig`** | Kubeconfig to connect to the cluster                                          | <CommonLink to="secrets">[]_EnvVar_</CommonLink>      |          |
-| `namespace`      | Include resources only from this namespace                                    | `string`                                              |          |
-| `relationships`  | Create relationships between kubernetes objects.                              | [`[]Relationship`](#relationships)                    |          |
-| `scope`          | Specify scope for scrape. e.g `cluster` for scraping at Cluster level         | `string`                                              |          |
-| `selector`       | Include resources matching this selector only e.g `matchLabels`               | `string`                                              |          |
-| `since`          | Set time constraint for scraping resources within the set period              | `string`                                              |          |
-| `properties`     | Custom properties to be added for each item                                   | [`[]ConfigProperty`](/reference/config-db/properties) |          |
-| `transform`      | Custom transformations to apply                                               | [`Transform`](/config-db/concepts/transform)          |          |
-| `tags`           | Tags to set on each config item. `cluster` and `namespace` are set by default | `map[string]string`                                   |          |
+<Scraper
+  rows={[
+    {
+      field: 'clusterName',
+      description: 'A unique name for the cluster config.',
+      scheme: 'string',
+      required: true
+    },
+    {
+      field: 'namespace',
+      description: 'Include resources only from this namespace',
+      scheme: 'string'
+    },
+    {
+      field: 'useCache',
+      description:
+        'Whether to use cache or not when fetching resources. Default: false',
+      scheme: 'bool'
+    },
+    {
+      field: 'allowIncomplete',
+      description:
+        "whether to fail scrape if all api resources weren't fetched successfully",
+      scheme: 'bool'
+    },
+    {
+      field: 'scope',
+      description:
+        'Specify scope for scrape. Allowed: `namespaced`, `cluster` (default)',
+      scheme: 'string'
+    },
+    {
+      field: 'since',
+      description:
+        'Set time constraint for scraping resources within the set period',
+      scheme: 'duration'
+    },
+    {
+      field: 'selector',
+      description:
+        'Include resources matching this selector only e.g `matchLabels`',
+      scheme: 'string'
+    },
+    {
+      field: 'fieldSelector',
+      description: 'Resources to be included e.g `status.Phase=Running`',
+      scheme: 'string'
+    },
+    {
+      field: 'maxInflight',
+      description:
+        'Concurrency level when resources are fetched one at a time.`',
+      scheme: 'int'
+    },
+    {
+      field: 'kubeconfig',
+      description: 'Kubeconfig to connect to the cluster',
+      scheme: '_EnvVar_'
+    },
+    {
+      field: 'watch',
+      description: 'Kubeconfig to connect to the cluster',
+      scheme: '[`[]WatchSelector`]()'
+    },
+    {
+      field: 'event',
+      description: 'Specify configuration to handle Kubernetes events',
+      scheme: '[Event](#events)'
+    },
+    {
+      field: 'exclusions',
+      description: 'Resources to be excluded from scraping',
+      scheme: '[Exclusion](#exclusion)'
+    },
+    {
+      field: 'relationships',
+      description: 'Create relationships between kubernetes objects',
+      scheme: '[`[]Relationship`](#relationships)'
+    }
+  ]}
+/>
 
-## Events
+### Watch Events & Resources
+
+Use property `watch.disable` to disable watching events & resources.
+
+#### Events
 
 `Kubernetes::Event` resources are mapped to config changes. Events can be very verbose so they can be excluded or their severity level changed:
 
@@ -51,16 +121,35 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
 | `exclusions`       | A list of keywords used to exclude event objects based on the reason                       | `[]string`                              |          |
 | `severityKeywords` | Specify keywords used to identify the severity of the Kubernetes Event based on the reason | [`SeverityKeywords`](#severitykeywords) |          |
 
-### SeverityKeywords
+##### SeverityKeywords
 
 | Field   | Description                                                                                                                                                        | Scheme     | Required |
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | -------- |
 | `warn`  | A list of keywords used to identify a warning severity from the reason. It could also be a match pattern: e.g. `*` to match all or `!badword` to exclude `badword` | `[]string` |          |
 | `error` | Same as `warn` but used to map to error severity.                                                                                                                  | `[]string` |          |
 
-## Relationships
+#### Watch Selector
 
-You can create relationships between kubernetes objects on the basis of
+<Fields
+  rows={[
+    {
+      field: 'apiVersion',
+      description: 'API version of the Kubernetes resource to watch',
+      scheme: 'string',
+      required: true
+    },
+    {
+      field: 'kind',
+      description: 'Kind of the Kubernetes resource to watch',
+      scheme: 'string',
+      required: true
+    }
+  ]}
+/>
+
+### Relationships
+
+You can create relationships between kubernetes objects on the basis of kind, name & namespace.
 
 :::info
 [Relationships](../concepts/relationships) can also be defined under `transform.relationships`, however defining them under `kubernetes.relationships` is simpler with specific support for `kind`, `name` and `namespace` fields.
@@ -101,7 +190,7 @@ kubernetes:
 | `name`      | `name` of Kubernetes Object      | [`Lookup`](#lookup) | `true`   |
 | `namespace` | `namespace` of Kubernetes Object | [`Lookup`](#lookup) | `true`   |
 
-##### Lookup
+###### Lookup
 
 There are 3 different ways to specify which value to use when finding related configs:
 
@@ -110,6 +199,35 @@ There are 3 different ways to specify which value to use when finding related co
 | `expr`  | Use an expression to get the value | `string` |          |
 | `value` | Specify a static value             | `string` |          |
 | `label` | Get the value from a label         | `string` |          |
+
+### Exclusion
+
+excludes certain kubernetes objects from being scraped
+
+<Fields
+  rows={[
+    {
+      field: 'names',
+      description: 'names of kubernetes objects to exclude',
+      type: 'string[]'
+    },
+    {
+      field: 'kinds',
+      description: 'kinds of kubernetes objects to exclude',
+      type: 'string[]'
+    },
+    {
+      field: 'namespaces',
+      description: 'namespaces of kubernetes objects to exclude',
+      type: 'string[]'
+    },
+    {
+      field: 'labels',
+      description: 'labels of kubernetes objects to exclude',
+      type: 'map[string]string'
+    }
+  ]}
+/>
 
 ## Annotations
 
@@ -170,4 +288,79 @@ metadata:
 type: Opaque
 data:
   token: ...
+```
+
+## Scraping remote clusters
+
+A single config-db instance can scrape multiple clusters when provided with a kubeconfig. Either the kubeconfig itself or the path to the kubeconfig can be provided.
+
+### Local path to kubeconfig
+
+```yaml title="remote-cluster.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: azure-scraper
+spec:
+  schedule: '@every 5h'
+  kubernetes:
+    - clusterName: 'azure production cluster'
+      kubeconfig:
+        value: /home/flanksource/.kube/azure_config
+```
+
+### Kubeconfig
+
+```yaml title="remote-cluster.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-scraper
+spec:
+spec:
+  schedule: '@every 5h'
+  kubernetes:
+    - clusterName: 'aws cluster'
+      kubeconfig:
+        value: |
+          apiVersion: v1
+          clusters:
+              - cluster:
+                  certificate-authority-data: xxxxx
+                  server: https://xxxxx.sk1.eu-west-1.eks.amazonaws.com
+                name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+          contexts:
+              - context:
+                  cluster: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                  namespace: mission-control
+                  user: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+          current-context: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+          kind: Config
+          preferences: {}
+          users:
+              - name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                user:
+                  exec:
+                      ....
+
+```
+
+or, a kubeconfig inside a secret can be referenced as follows:
+
+```yaml title="remote-cluster.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-scraper
+spec:
+spec:
+  schedule: '@every 5h'
+  kubernetes:
+    - clusterName: 'aws cluster'
+      kubeconfig:
+        valueFrom:
+          secretKeyRef:
+            name: aws-kubeconfig
+            key: kubeconfig
 ```
