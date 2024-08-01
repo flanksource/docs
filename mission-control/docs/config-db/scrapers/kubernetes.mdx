@@ -14,6 +14,7 @@ The registry has a [Kubernetes](/registry/kubernetes) Helm chart that provides a
 The `kubernetes` scraper collects all of the resources and events in a Kubernetes cluster, and then watches for changes.
 
 ```yaml title='kubernetes-scraper.yaml' file=../../../modules/config-db/fixtures/kubernetes.yaml
+
 ```
 
 | Field        | Description                                                                  | Scheme                                       | Required |
@@ -21,31 +22,29 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
 | `logLevel`   | Specify the level of logging.                                                | `string`                                     |          |
 | `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                     |          |
 | `retention`  | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/config-db/concepts/retention) |          |
-| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                   | [`[]Kubernetes`](#kubernetes)              |          |
+| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                   | [`[]Kubernetes`](#kubernetes)                |          |
 
 ### Kubernetes
 
-| Field             | Description                                                                                      | Scheme                                           | Required |
-| ----------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------ | -------- |
-| `clusterName`     | Specify cluster name                                                                             | `string`                                         |          |
-| `event`           | Specify configuration to handle Kubernetes events.                                               | [`Event`](#events)                               |          |
-| `exclusions`      | Resources to be excluded from scraping                                        | `[]string`                                       |          |
-| `fieldSelector`   | Resources to be included e.g `status.Phase=Running`        | `string`                                         |          |
-| **`kubeconfig`**  | Kubeconfig to connect to the cluster                                         | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
-| `namespace`       | Include resources only from this namespace                                         | `string`                                         |          |
-| `relationships`   | Create relationships between kubernetes objects.                                                 | [`[]Relationship`](#relationships)     |          |
-| `scope`           | Specify scope for scrape. e.g `cluster` for scraping at Cluster level                            | `string`                                         |          |
-| `selector`        | Include resources matching this selector only e.g `matchLabels`                       | `string`                                         |          |
-| `since`           | Set time constraint for scraping resources within the set period                                 | `string`                                         |          |
-| `properties`      | Custom properties to be added for each item                                     | [`[]ConfigProperty`](/reference/config-db/properties)   |          |
-| `transform`       | Custom transformations to apply                                                                       | [`Transform`](/config-db/concepts/transform)                        |          |
-| `tags`            | Tags to set on each config item. `cluster` and `namespace` are set by default                                                     | `map[string]string`                              |          |
-
+| Field            | Description                                                                   | Scheme                                                | Required |
+| ---------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------- | -------- |
+| `clusterName`    | Specify cluster name                                                          | `string`                                              |          |
+| `event`          | Specify configuration to handle Kubernetes events.                            | [`Event`](#events)                                    |          |
+| `exclusions`     | Resources to be excluded from scraping                                        | `[]string`                                            |          |
+| `fieldSelector`  | Resources to be included e.g `status.Phase=Running`                           | `string`                                              |          |
+| **`kubeconfig`** | Kubeconfig to connect to the cluster                                          | <CommonLink to="secrets">[]_EnvVar_</CommonLink>      |          |
+| `namespace`      | Include resources only from this namespace                                    | `string`                                              |          |
+| `relationships`  | Create relationships between kubernetes objects.                              | [`[]Relationship`](#relationships)                    |          |
+| `scope`          | Specify scope for scrape. e.g `cluster` for scraping at Cluster level         | `string`                                              |          |
+| `selector`       | Include resources matching this selector only e.g `matchLabels`               | `string`                                              |          |
+| `since`          | Set time constraint for scraping resources within the set period              | `string`                                              |          |
+| `properties`     | Custom properties to be added for each item                                   | [`[]ConfigProperty`](/reference/config-db/properties) |          |
+| `transform`      | Custom transformations to apply                                               | [`Transform`](/config-db/concepts/transform)          |          |
+| `tags`           | Tags to set on each config item. `cluster` and `namespace` are set by default | `map[string]string`                                   |          |
 
 ## Events
 
 `Kubernetes::Event` resources are mapped to config changes. Events can be very verbose so they can be excluded or their severity level changed:
-
 
 | Field              | Description                                                                                | Scheme                                  | Required |
 | ------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------- | -------- |
@@ -54,10 +53,10 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
 
 ### SeverityKeywords
 
-| Field   | Description                                                                                                                                                            | Scheme     | Required |
-| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| Field   | Description                                                                                                                                                        | Scheme     | Required |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | -------- |
 | `warn`  | A list of keywords used to identify a warning severity from the reason. It could also be a match pattern: e.g. `*` to match all or `!badword` to exclude `badword` | `[]string` |          |
-| `error` | Same as `warn` but used to map to error severity.                                                                                                                      | `[]string` |          |
+| `error` | Same as `warn` but used to map to error severity.                                                                                                                  | `[]string` |          |
 
 ## Relationships
 
@@ -96,8 +95,8 @@ kubernetes:
           label: helm.toolkit.fluxcd.io/namespace
 ```
 
-| Field       | Description                      | Scheme                                       | Required |
-| ----------- | -------------------------------- | -------------------------------------------- | -------- |
+| Field       | Description                      | Scheme              | Required |
+| ----------- | -------------------------------- | ------------------- | -------- |
 | `kind`      | `kind` of Kubernetes Object      | [`Lookup`](#lookup) | `true`   |
 | `name`      | `name` of Kubernetes Object      | [`Lookup`](#lookup) | `true`   |
 | `namespace` | `namespace` of Kubernetes Object | [`Lookup`](#lookup) | `true`   |
@@ -112,16 +111,16 @@ There are 3 different ways to specify which value to use when finding related co
 | `value` | Specify a static value             | `string` |          |
 | `label` | Get the value from a label         | `string` |          |
 
-
 ## Annotations
 
-Kubernetes resources can be annotated with  annotations that can direct the scraper to certain behaviors.
+Kubernetes resources can be annotated with annotations that can direct the scraper to certain behaviors.
 
 <Fields
   rows={[
     {
       field: 'config-db.flanksource.com/tags',
-      description: 'Add custom tags.  Config items can only have up to `5` tags, so keep the custom tags limited.',
+      description:
+        'Add custom tags.  Config items can only have up to `5` tags, so keep the custom tags limited.',
       scheme: '`key1:val1,key2:val2`'
     },
     {
@@ -155,8 +154,7 @@ metadata:
   annotations:
     config-db.flanksource.com/ignore-changes: ReconciliationSucceeded
     config-db.flanksource.com/ignore-change-severity: low
-spec:
-  ...
+spec: ...
 ```
 
 #### Excluding a particular secret from being scraped
