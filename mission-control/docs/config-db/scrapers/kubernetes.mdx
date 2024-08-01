@@ -110,9 +110,12 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
 
 ### Watch Events & Resources
 
-Use property `watch.disable` to disable watching events & resources.
+While the kubernetes scraper runs on a schedule you've specified, it can also watch for changes to resources and events in real-time.
+This allows near-real-time updates to your kubernetes catalogs with the flexibility of performing full scrape on a larger interval.
 
-#### Events
+This feature is enabled by default but can be disabled by setting the property `watch.disable=true`.
+
+#### Event Exclusions
 
 `Kubernetes::Event` resources are mapped to config changes. Events can be very verbose so they can be excluded or their severity level changed:
 
@@ -146,6 +149,19 @@ Use property `watch.disable` to disable watching events & resources.
     }
   ]}
 />
+
+The following resource types are "watched" by default.
+
+| apiVersion | kind          |
+| ---------- | ------------- |
+| `apps/v1`  | `DaemonSet`   |
+| `apps/v1`  | `Deployment`  |
+| `apps/v1`  | `ReplicaSet`  |
+| `apps/v1`  | `StatefulSet` |
+| `batch/v1` | `CronJob`     |
+| `batch/v1` | `Job`         |
+| `v1`       | `Node`        |
+| `v1`       | `Pod`         |
 
 ### Relationships
 
