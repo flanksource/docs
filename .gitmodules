@@ -7,6 +7,7 @@
 [submodule "modules/canary-checker"]
 	path = modules/canary-checker
 	url = https://github.com/flanksource/canary-checker.git
+	commit = 8897c67d86a15ce1afcdec26ada3ccf29133c34a
 [submodule "docs-vale-package"]
 	path = docs-vale-package
 	url = https://github.com/flanksource/docs-vale-package
