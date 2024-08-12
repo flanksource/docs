@@ -108,14 +108,7 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
   ]}
 />
 
-### Watch Events & Resources
-
-While the kubernetes scraper runs on a schedule you've specified, it can also watch for changes to resources and events in real-time.
-This allows near-real-time updates to your kubernetes catalogs with the flexibility of performing full scrape on a larger interval.
-
-This feature is enabled by default but can be disabled by setting the property `watch.disable=true`.
-
-#### Event Exclusions
+### Event
 
 `Kubernetes::Event` resources are mapped to config changes. Events can be very verbose so they can be excluded or their severity level changed:
 
@@ -124,14 +117,33 @@ This feature is enabled by default but can be disabled by setting the property `
 | `exclusions`       | A list of keywords used to exclude event objects based on the reason                       | `[]string`                              |          |
 | `severityKeywords` | Specify keywords used to identify the severity of the Kubernetes Event based on the reason | [`SeverityKeywords`](#severitykeywords) |          |
 
-##### SeverityKeywords
+#### SeverityKeywords
 
 | Field   | Description                                                                                                                                                        | Scheme     | Required |
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | -------- |
 | `warn`  | A list of keywords used to identify a warning severity from the reason. It could also be a match pattern: e.g. `*` to match all or `!badword` to exclude `badword` | `[]string` |          |
 | `error` | Same as `warn` but used to map to error severity.                                                                                                                  | `[]string` |          |
 
+### Watch Events & Resources
+
+While the kubernetes scraper runs on a schedule you've specified, it can also watch for changes to resources and events in real-time.
+This allows near-real-time updates to your kubernetes catalogs with the flexibility of performing full scrape on a larger interval.
+
+This feature is enabled by default but can be disabled by setting the property `watch.disable=true`.
+
 #### Watch Selector
+
+```yaml title="custom-watch-resources.yaml"
+kubernetes:
+  - clusterName: 'eks'
+    watch:
+      - apiVersion: v1
+        kind: Pod
+      - apiVersion: apps
+        kind: Deployment
+      - apiVersion: batch/v1
+        kind: CronJob
+```
 
 <Fields
   rows={[
