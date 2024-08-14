@@ -31,6 +31,26 @@ Health checks emit 2 events
         [Reference]({{.permalink}})
         ```
 
+Sample notification:
+```
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: api-http-fail-alert
+  namespace: default
+spec:
+  events:
+    - check.failed
+  filter: check.type == 'http'
+  title: API HTTP Check {{.check.name}} failing
+  body: |
+    ## Check Failed
+    Error: {{.status.error}}
+    Failed at {{.status.created_at}}
+  to:
+    email: alerts@acme.com
+```
+
 ## Variables
 
 | Field       | Description                   | Schema                         | Optional |

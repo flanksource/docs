@@ -21,6 +21,26 @@ The default notification template used is:
         [Reference]({{.permalink}})
         ```
 
+Sample notification:
+```
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: web-api-component-alert
+  namespace: default
+spec:
+  events:
+    - component.unhealthy
+  filter: component.type == 'WebAPI'
+  title: WebAPI {{.component.name}} failing
+  body: |
+    ## Component Failed
+    Status: {{.component.status}} | {{.component.status_reason}}
+    Last updated: {{.component.updated_at}}
+  to:
+    email: alerts@acme.com
+```
+
 The notification title and body can be changed using the variables below:
 
 ## Variables
@@ -67,5 +87,4 @@ The notification title and body can be changed using the variables below:
 | `id`          | The id of the agent            | `uuid`   |          |
 | `name`        | The name of the agent          | `string` |          |
 | `description` | Short description of the agent | `string` |          |
-
 

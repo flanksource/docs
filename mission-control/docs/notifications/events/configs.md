@@ -39,6 +39,25 @@ The default notification template for state events is:
       [Reference]({{.permalink}})
       ```
 
+Sample notification:
+```
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: ec2-instance-create-alert
+  namespace: default
+spec:
+  events:
+    - config.created
+  filter: config.type == 'AWS::EC2::Instance'
+  title: New EC2 instance {{.config.name}} created
+  body: |
+    Region: {{.config.tags['region']}}
+    Zone: {{.config.tags['zone']}}
+    Account: {{.config.tags['account']}}
+  to:
+    email: alerts@acme.com
+```
 
 ## Variables
 
