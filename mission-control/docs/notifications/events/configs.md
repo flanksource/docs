@@ -40,7 +40,7 @@ The default notification template for state events is:
       ```
 
 Sample notification:
-```
+```yaml title="notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
 metadata:

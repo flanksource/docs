@@ -22,7 +22,7 @@ The default notification template used is:
         ```
 
 Sample notification:
-```
+```yaml title="notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
 metadata:
