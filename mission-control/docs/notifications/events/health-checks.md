@@ -32,7 +32,7 @@ Health checks emit 2 events
         ```
 
 Sample notification:
-```
+```yaml title="notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
 metadata:
