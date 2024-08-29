@@ -24,6 +24,62 @@ Exec action allows you to executes a command or a script file on the target host
 ]}/>
 
 
+:::note Powershell
+Shebang lines are supported to choose a different shell (`python`, `bash` and `pwsh` are included in the base image)
+```yaml
+   exec:
+        script: |
+          #! pwsh
+          Get-Items | ConvertTo-JSON
+```
+:::
+
+::: note Multiline
+If you are using YAML multiline string use `|` and not `>` which will strip newlines
+
+
+Instead of:
+```
+exec:
+  script: >
+    //highlight-nextline
+    #! pwsh
+    Get-Items | ConvertTo-JSON
+```
+
+Do this:
+```
+exec:
+  //highlight-nextline
+  script: |
+    #! pwsh
+    Get-Items | ConvertTo-JSON
+```
+:::
+
+
+## Templating
+
+Scripts are templatable with [Go Templates](/reference/script/gotemplate)
+
+```yaml
+exec:
+        script: kubectl rollout release deployment -n $(.config.tags.namespace) $(.conf
+```
+
+The template delimiters can be changed from the defaults of `$()` and `{{}}` with `gotemplate` comments
+
+```yaml
+exec:
+  script: |
+    #! pwsh
+    # gotemplate: left-delim=$[[ right-delim=]]
+    $message = "$[[.config.name]]"
+    Write-Host "{{  $message }}"
+    Write-Host  @{ Number = 1; Shape = "Square"; Color = "Blue"} | ConvertTo-JSON
+```
+
+
 ###  Connections
 
 Exec connections allow you to specify credentials for a list of CLI tools that are needed by your scripts. Eg: You can specify the AWS connection name and the credential files along with the necessary environment variables

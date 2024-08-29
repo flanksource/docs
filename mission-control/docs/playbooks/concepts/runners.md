@@ -43,6 +43,21 @@ spec:
         title: Namespace {{.config.name}} deleted successfully
 ```
 
+### Running playbooks on the agent that created a config item
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: delete-namespace
+spec:
+  configs:
+     types:
+        - Kubernetes::Pod
+  runsOn:
+    - "{{- if .agent }}{{.agent.id}}{{ else }}local{{ end }}"
+```
+
 ## Templates On
 
 Actions are templated by the host before it's sent to the runner for execution. This setup permits the runner to execute actions that are templated with resources exclusively available on the host, such as config items or components, checks, ... etc.
