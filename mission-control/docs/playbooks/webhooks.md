@@ -54,27 +54,26 @@ rows={[
 {
 field: 'url',
 description: `Endpoint of the webhook. Example \`/playbook/webhook/my-webhook\``,
-      scheme: 'string'
-    },
-    {
-      field: 'headers',
-      description: `Headers sent on the webhook request`,
-      scheme: '`map[string]string`'
-    },
-    {
-      field: 'params',
-      description: `Query parameters sent on the webhook request`,
-      scheme: '`map[string]string`'
-    },
-    {
-      field: 'content',
-      description: `Content sent on the webhook request`,
-      scheme: 'string'
-    },
-    {
-      field: 'json',
-      description: `JSON content if the webhook content is JSON`,
-      scheme: '`map[string]any`',
+    scheme: 'string'
+  },
+  {
+    field: 'headers',
+    description: `Headers sent on the webhook request`,
+    scheme: '`map[string]string`'
+  },
+  {
+    field: 'params',
+    description: `Query parameters sent on the webhook request`,
+    scheme: '`map[string]string`'
+  },
+  {
+    field: 'content',
+    description: `Content sent on the webhook request`,
+    scheme: 'string'
+  },
+  {
+    field: 'json',
+    description: `JSON content if the webhook content is JSON`,
+    scheme: '`map[string]any`',
 }
-]}
-/>
+]} />

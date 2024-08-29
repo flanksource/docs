@@ -52,10 +52,10 @@ metadata:
   name: delete-namespace
 spec:
   configs:
-     types:
-        - Kubernetes::Pod
+    types:
+      - Kubernetes::Pod
   runsOn:
-    - "{{- if .agent }}{{.agent.id}}{{ else }}local{{ end }}"
+    - '{{- if .agent }}{{.agent.id}}{{ else }}local{{ end }}'
 ```
 
 ## Templates On
