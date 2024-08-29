@@ -23,17 +23,17 @@ spec:
 ```
 
 <HealthCheck name="http" connection="url"  rows={[
-  {field: "url", description: "HTTP URL", scheme: "string", required: true},
+  {field: "endpoint", description: "HTTP URL", scheme: "string", required: true},
   {field: "method", description: "HTTP Request method", default: "GET", scheme: "string"},
-  {field: "headers", description: "Header fields", scheme: "[]EnvVar"},
-  {field: "body", description: "Request Body Contents", scheme: "string"},
+  {field: "headers", description: "Header fields", scheme: "map[string]string"},
   {field: "body", description: "Request Body Contents", scheme: "string"},
   {field: "tlsConfig", description: "TLS Config", scheme: "[TLSConfig](#tls-config)"},
   {field: "templateBody", description: "If true body will be templated", default: false, scheme: "bool"},
   {field: "responseCodes", description: "Expected response codes", scheme: "[]int"},
   {field: "responseContent", description: "Expected response content", scheme: "string"},
   {field: "thresholdMillis", description: "Request timeout", default: 5000, scheme: "int"},
-  {field: "maxSSLExpiry", description: "Max SSL expiry days", scheme: "int"}
+  {field: "maxSSLExpiry", description: "Max SSL expiry days", scheme: "int"},
+  {field: "insecureSkipVerify", description: "Skip TLS verification", scheme: "bool"}
 ]}/>
 
 ### TLS Config

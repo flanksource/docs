@@ -4,8 +4,45 @@ title: How It Works
 
 import { GoDotFill } from "react-icons/go";
 
-## Terms
 
+## Configuration Approach
+
+Mission Control manages configuration primarily through Custom Resource Definitions (CRDs). While a postgres database serves as the ultimate source of truth, Kubernetes operators ensure continuous synchronization between the CRDs and the database.  By using the database as the source of truth Mission Control provides the best of both worlds.
+
+CRD's are great for:
+
+* GitOps
+* Decentralizing configuration, reducing the need for teams to coordinate
+* Bundling health checks, topologies into application Helm charts
+* Secure lookup of secret values
+
+Layering the database on top enables:
+
+* High performance - ETCD is optimized for consistency over performance, while mission control works well with eventually consistent configuration
+* Escape hatches to create configuration via a UI/API
+
+:::warning Mixing CRDs and UI Editing
+Configuration created by CRD's is readonly from the UI/API. You can mix and match at the configuration item level, but cannot change the mode once created.
+:::
+
+
+<Screenshot img="/img/architecture-flow.svg" shadow={false}/>
+
+
+Mission Control uses Kubernetes Custom Resources Definitions as the underlying configuration method. The CRD's include:
+
+| Resource                                                                                                                | Description                                           | Output                               |
+| ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------ |
+| <a href="/config-db"><div class="flex flex-row"><Icon name="k8s-customresourcedefinition" size={22}/>ScrapeConfig</div> </a> | Configures scrapers to run periodically               | Config items, analysis, change, cost |
+| <a href="/canary-checker"><Icon  name="k8s-customresourcedefinition">Canary</Icon> </a>            | Runs health checks using HTTP, SQL, S3, kubectl, etc. | 1 or more checks (Health)            |
+| <a href="/notifications"><Icon name="k8s-customresourcedefinition">Notification</Icon>  </a>      | Sends notifications based on events                   | Email, Slack, etc                    |
+| <a href="/playbooks"><Icon  name="k8s-customresourcedefinition">Playbook</Icon>  </a>              | Defines playbooks that can be run on config items, health checks and componets                              | Pull Request, CLI,  Webhook          |
+ <a href="/reference/connections"><Icon  name="k8s-customresourcedefinition">Connection</Icon>   </a>                | Re-usable connections with secure external lookup to Kuebrnetes secrets, configmaps, service accounts and Helm values | URL, username, password, etc        |
+  <a href="/topology"><Icon name="k8s-customresourcedefinition">Topology</Icon>  </a>           | Combines configs, health checks and lookups to form cards  | Component       |
+
+
+
+## Glossary
 
 <dl>
  <dt>Config Item</dt>
@@ -15,66 +52,36 @@ import { GoDotFill } from "react-icons/go";
  <dt>Insights</dt>
   <dd>Recommendations and analysis provided by third parties through scanning and AI </dd>
  <dt>Relationships</dt>
-  <dd>Links between config items based upon how they are logically created and categorized</dd>
+  <dd>Links between config items based upon how they are logically related and categorized</dd>
 
- <dt>Component</dt>
-<dd>A logical thing that often corresponds 1-1 with a config item, but not always e.g. `Pod`, `Finance Application`</dd>
+<dt>Component</dt>
+<dd>A logical entity that often corresponds 1-1 with a config item, but not always e.g. `Pod`, `Finance Application`</dd>
 
-  <dt>Health</dt>
-    <dd>The RAG status of a component or config item e.g. <Healthy>Healthy</Healthy>, <Unhealthy>Unhealthy</Unhealthy>, <Warning>Warning</Warning></dd>
-  <dt>Scrape</dt>
-    <dd>Connecting to an external API and ingesting data from it</dd>
-  <dt>Playbook</dt>
-  <dd>A sequence of automated steps performed on a config item or component</dd>
-  <dt>Canary</dt>
-    <dd>A definition for how to perform a health check, Canaries produce 1 or more checks</dd>
+<dt>Health</dt>
+<dd>The RAG (Red, Amber, Green) status of a component or config item e.g. <Healthy>Healthy</Healthy>, <Unhealthy>Unhealthy</Unhealthy>, <Warning>Warning</Warning></dd>
 
-    <dt>Check</dt>
+<dt>Scrape</dt>
+<dd>Connecting to an external API and ingesting data from it</dd>
 
+<dt>Playbook</dt>
+<dd>A sequence of automated steps performed on a config item or component</dd>
 
-  <dd>The output of a Canary (Health Check) that includes Health, Latency and other runtime details</dd>
-    <dt>Health</dt>
-  <dd>Ceiling</dd>
-    <dt>Health</dt>
-  <dd>Ceiling</dd>
-  <dt>Topology</dt>
-  <dd>Ceiling</dd>
-    <dt>Playbook</dt>
-  <dd>Ceiling</dd>
-  <dt>Webhook </dt>
-  <dd>Ceiling</dd>
-    <dt>Custom Resource Defintion (CRD) </dt>
-  <dd>Ceiling</dd>
+<dt>Canary</dt>
+<dd>A definition for how to perform a health check, Canaries produce one or more checks</dd>
+
+<dt>Check</dt>
+<dd>The output of a Canary (Health Check) that includes Health, Latency, and other runtime details</dd>
+
+<dt>Topology</dt>
+<dd>The arrangement and interconnection of various components and config items within the system</dd>
+
+<dt>Webhook</dt>
+<dd>An HTTP-based callback that allows real-time updates</dd>
+
+<dt>Custom Resource Definition (CRD)</dt>
+<dd>An extension mechanism in Kubernetes that enables users to define their own object types</dd>
+
+<dt>GitOps</dt>
+<dd>Method for operating software declaratively using Git with automatic pulling and continuous reconciliation</dd>
 </dl>
-
-
-
-
-
-## Kubernetes & Gitops
-
-Mission control is kubernetes-native with all configuration being possible by Custom Resource Definition (CRD's)
-
-The single source of truth is still the database, the operators only function is to synchronize CRD's into the database and update the CRD status periodically.
-
-
-
-
-
-<Screenshot img="/img/architecture-flow.svg" shadow={false}/>
-
-
-
-
-Mission Control uses Kubernetes Custom Resources Definitions as the underlying configuration method. The CRD's include:
-
-
-| Resource                                                                | Description                                                                                     | Output |
-| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------ |
-| <Icon className="font-bold" name="k8s-customresourcedefinition" size={22}>ScrapeConfig</Icon> | Configures scrapers to run periodically | Config items, analysis, change, cost       |
-| <Icon className="font-bold" name="k8s-customresourcedefinition">Canary</Icon>                 | Runs health checks using HTTP, SQL, S3, kubectl, etc.                                           | 1 or more checks (Health)        |
-| <Icon className="font-bold" name="k8s-customresourcedefinition">Notification</Icon>           | Sends notifications based on events | Email, Slack, etc       |
-| <Icon className="font-bold" name="k8s-customresourcedefinition">Playbook</Icon>               | Executable playbooks  | Pull Request, CLI,  Webhook        |
- <Icon className="font-bold" name="k8s-customresourcedefinition">Connection</Icon>             | Re-usable settings with secure external lookups | URL, username, password, etc        |
-  <Icon className="font-bold" name="k8s-customresourcedefinition">Topology</Icon>             | Combines configs, health checks and lookups to form cards  | Component       |
 

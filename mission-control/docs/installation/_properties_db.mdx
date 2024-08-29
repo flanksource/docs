@@ -14,17 +14,17 @@
 
 ### Using an external database
 
-
 In order to connect to an existing database the secret referenced by `db.secretKeyRef.name` needs to be created.
 
 1. Create a new secret
     ```bash
     kubectl create secret generic incident-commander-postgres \
       --from-literal=DB_URL=postgres://postgres:postgres@db/mission_control
-      --from-literal=DB_HOST=db
-      --from-literal=DB_NAME=mission_control
-      --from-literal=DB_USERNAME=postgres
-      --from-literal=DB_PASSWORD=postgres
+      --from-literal=SSLMODE=disable
+      --from-literal=POSTGRES_HOST=db
+      --from-literal=DATABASE=mission_control
+      --from-literal=POSTGRES_USER=postgres
+      --from-literal=POSTGRES_PASSWORD=postgres
     ```
     <p/>
     See [Postgres Connection Strings](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING) for a full list of parameters
