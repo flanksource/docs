@@ -3,17 +3,16 @@ title: Local Testing
 description: Run Mission Control Locally using minikube or kind
 ---
 
-
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-
 :::info Prerequisites
+
 - kubectl
 - [helm](https://helm.sh/docs/intro/install/) v3+
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/) or [minikube](https://minikube.sigs.k8s.io/docs/start/)
 - 20GB+ free space for docker volumes
-:::
+  :::
 
 <Tabs>
 
@@ -43,7 +42,7 @@ nodes:
         protocol: TCP
 ```
 
-A single node cluster will be provisioned, hosting both the control plane and workloads.  Configure the hostPort bindings onto free ports, in this case `8080` and `8443` are used.
+A single node cluster will be provisioned, hosting both the control plane and workloads. Configure the hostPort bindings onto free ports, in this case `8080` and `8443` are used.
 
 Provision the kind cluster with
 
@@ -82,7 +81,6 @@ kubectl get pods -n ingress-nginx
 <TabItem label="Minikube" value="minikube">
 <Step step={1} name="Create minikube cluster">
 
-
 ```
 minikube start
 ```
@@ -98,7 +96,6 @@ minikube addons enable ingress
 
 </Step>
 </TabItem>
-
 
 </Tabs>
 
@@ -154,7 +151,6 @@ helm install mission-control  \
 
 See [values.yaml](/installation/helm#self-hosted) for more options.
 
-
 </Step>
 
 <Step step={4} name="Login">
@@ -175,7 +171,6 @@ This example uses a self-signed certificate created by Nginx, We recommend using
 
 </Step>
 
-
 <Step step={5} name="Taking your first step, creating a health check">
 
 Create a file containing canary definitions, for example:
@@ -189,7 +184,7 @@ spec:
   interval: 30
   http:
     - url: https://httpstat.us/200
-      name: "httpstat healthy"
+      name: 'httpstat healthy'
 ```
 
 and apply to the cluster with:
@@ -201,4 +196,3 @@ kubectl apply -f canaries.yaml
 When you goto the [Health](https://127.0.0.1.nip.io:8443/health) tab you can then see the check running:
 
 </Step>
-

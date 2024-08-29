@@ -30,14 +30,14 @@ spec:
         query: INFO keyspace
 ```
 
-| Field      | Description                                                                   | Scheme                                            | Required |
-| ---------- | ----------------------------------------------------------------------------- | ------------------------------------------------- | -------- |
-| **`addr`** | host:port address                                                             | string                                            | Yes      |
-| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">*EnvVar*</CommonLink> | Yes      |
-| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">*EnvVar*</CommonLink> | Yes      |
-| **`db`**   | Database to be selected after connecting to the server                        | *int*                                             | Yes      |
+| Field          | Description                                                                     | Scheme                                         | Required |
+| -------------- | ------------------------------------------------------------------------------- | ---------------------------------------------- | -------- |
+| **`addr`**     | host:port address                                                               | string                                         | Yes      |
+| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">_EnvVar_</CommonLink> | Yes      |
+| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">_EnvVar_</CommonLink> | Yes      |
+| **`db`**       | Database to be selected after connecting to the server                          | _int_                                          | Yes      |
 
 ## Authentication
 
-| Field          | Description                                                                     | Scheme                                                                       | Required |
-| -------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | -------- |
+| Field | Description | Scheme | Required |
+| ----- | ----------- | ------ | -------- |

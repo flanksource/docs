@@ -16,10 +16,10 @@ Examples:
 
     Extracting the file name from a full path:
     filepath.Base("/path/to/file.txt")  // Evaluates to "file.txt"
-    
+
     Working with a relative path:
     filepath.Base("folder/file.txt")  // Evaluates to "file.txt"
-    
+
     When the path is a directory:
     filepath.Base("/path/to/directory/")  // Evaluates to "directory"
 
@@ -41,10 +41,10 @@ Examples:
 
     Cleaning a path with redundant elements:
     filepath.Clean("/path/./to/file.txt")  // Evaluates to "/path/to/file.txt"
-    
+
     Resolving parent directory references:
     filepath.Clean("folder/../file.txt")  // Evaluates to "file.txt"
-    
+
     Handling multiple slashes:
     filepath.Clean("//path/to//file.txt")  // Evaluates to "/path/to/file.txt"
 
@@ -66,10 +66,10 @@ Examples:
 
     Getting the directory of a file path:
     filepath.Dir("/path/to/file.txt")  // Evaluates to "/path/to"
-    
+
     Working with a relative file path:
     filepath.Dir("folder/file.txt")  // Evaluates to "folder"
-    
+
     When the path is a directory:
     filepath.Dir("/path/to/directory/")  // Evaluates to "/path/to"
 
@@ -91,10 +91,10 @@ Examples:
 
     Extracting the extension from a file path:
     filepath.Ext("/path/to/file.txt")  // Evaluates to ".txt"
-    
+
     Working with a file without an extension:
     filepath.Ext("/path/to/file")  // Evaluates to ""
-    
+
     When the path is a directory:
     filepath.Ext("/path/to/directory/")  // Evaluates to ""
 
@@ -116,10 +116,10 @@ Examples:
 
     Converting slashes on a UNIX system:
     filepath.FromSlash("/path/to/file.txt")  // Evaluates to "/path/to/file.txt"
-    
+
     Converting slashes on a Windows system:
     filepath.FromSlash("/path/to/file.txt")  // Evaluates to "\\path\\to\\file.txt"
-    
+
     Working with a relative path:
     filepath.FromSlash("folder/file.txt")  // System-dependent
 
@@ -141,10 +141,10 @@ Examples:
 
     Checking an absolute path:
     filepath.IsAbs("/path/to/file.txt")  // Evaluates to true
-    
+
     Checking a relative path:
     filepath.IsAbs("folder/file.txt")  // Evaluates to false
-    
+
     Working with a Windows-style absolute path:
     filepath.IsAbs("C:\\path\\to\\file.txt")  // Evaluates to true
 
@@ -166,10 +166,10 @@ Examples:
 
     Joining path elements:
     filepath.Join("/path", "to", "file.txt")  // Evaluates to "/path/to/file.txt"
-    
+
     Handling trailing and leading slashes:
     filepath.Join("/path/", "/to/", "file.txt")  // Evaluates to "/path/to/file.txt"
-    
+
     Working with relative paths:
     filepath.Join("folder", "subfolder", "file.txt")  // Evaluates to "folder/subfolder/file.txt"
 
@@ -192,10 +192,10 @@ Examples:
 
     Matching a file name with a pattern:
     filepath.Match("*.txt", "file.txt")  // Evaluates to true
-    
+
     A non-matching pattern:
     filepath.Match("*.jpg", "file.txt")  // Evaluates to false
-    
+
     Using character ranges in patterns:
     filepath.Match("[0-9].txt", "5.txt")  // Evaluates to true
 
@@ -218,10 +218,10 @@ Examples:
 
     Getting a relative path:
     filepath.Rel("/path/to", "/path/to/file.txt")  // Evaluates to "file.txt"
-    
+
     When the target is a subdirectory:
     filepath.Rel("/path", "/path/to/directory")  // Evaluates to "to/directory"
-    
+
     Handling different directory levels:
     filepath.Rel("/path/to", "/path/from/file.txt")  // Evaluates to "../from/file.txt"
 
@@ -243,10 +243,10 @@ Examples:
 
     Splitting a standard file path:
     filepath.Split("/path/to/file.txt")  // Evaluates to ["/path/to/", "file.txt"]
-    
+
     Working with a file in the root directory:
     filepath.Split("/file.txt")  // Evaluates to ["/", "file.txt"]
-    
+
     When the path is a directory:
     filepath.Split("/path/to/directory/")  // Evaluates to ["/path/to/directory/", ""]
 
@@ -268,10 +268,10 @@ Examples:
 
     Converting backslashes to slashes:
     filepath.ToSlash("\\path\\to\\file.txt")  // Evaluates to "/path/to/file.txt"
-    
+
     Working with an already slash-separated path:
     filepath.ToSlash("/path/to/file.txt")  // Evaluates to "/path/to/file.txt"
-    
+
     Handling mixed separators:
     filepath.ToSlash("\\path/to\\file.txt")  // Evaluates to "/path/to/file.txt"
 
@@ -293,16 +293,16 @@ Examples:
 
     Extracting the volume name on a Windows system:
     filepath.VolumeName("C:\\path\\to\\file.txt")  // Evaluates to "C:"
-    
+
     Working with a UNIX file path:
     filepath.VolumeName("/path/to/file.txt")  // Evaluates to ""
-    
+
     Handling a Windows UNC path:
     filepath.VolumeName("\\\\server\\share\\file.txt")  // Evaluates to "\\\\server\\share"
 
 ---
 
-## Path 
+## Path
 
 ### path.Base
 
@@ -320,10 +320,10 @@ Examples:
 
     Extracting the file name from a path:
     path.Base("/tmp/myfile.txt")  // Evaluates to "myfile.txt"
-    
+
     Getting the last directory in a path:
     path.Base("/home/user/docs")  // Evaluates to "docs"
-    
+
     When provided with an empty path:
     path.Base("")  // Evaluates to "."
 
@@ -345,10 +345,10 @@ Examples:
 
     Cleaning a path with dot segments:
     path.Clean("/home/../usr/bin")  // Evaluates to "/usr/bin"
-    
+
     Cleaning a path with multiple slashes:
     path.Clean("/tmp//myfile.txt")  // Evaluates to "/tmp/myfile.txt"
-    
+
     Cleaning a relative path:
     path.Clean("./docs")  // Evaluates to "docs"
 
@@ -370,10 +370,10 @@ Examples:
 
     Getting the directory for a file path:
     path.Dir("/tmp/myfile.txt")  // Evaluates to "/tmp"
-    
+
     Getting the parent directory:
     path.Dir("/home/user/docs")  // Evaluates to "/home/user"
-    
+
     When provided with a root path:
     path.Dir("/")  // Evaluates to "/"
 
@@ -395,10 +395,10 @@ Examples:
 
     Extracting the extension from a file path:
     path.Ext("/tmp/myfile.txt")  // Evaluates to ".txt"
-    
+
     When the file has no extension:
     path.Ext("/tmp/myfile")  // Evaluates to ""
-    
+
     Extracting extension from a hidden file:
     path.Ext("/tmp/.myfile")  // Evaluates to ""
 
@@ -420,10 +420,10 @@ Examples:
 
     Checking an absolute path:
     path.IsAbs("/tmp/myfile.txt")  // Evaluates to true
-    
+
     Checking a relative path:
     path.IsAbs("tmp/myfile.txt")  // Evaluates to false
-    
+
     Checking an empty path:
     path.IsAbs("")  // Evaluates to false
 
@@ -445,10 +445,10 @@ Examples:
 
     Joining path elements:
     path.Join("/home", "user", "docs")  // Evaluates to "/home/user/docs"
-    
+
     Joining elements with a relative path:
     path.Join("home", "user", "docs")  // Evaluates to "home/user/docs"
-    
+
     Joining elements with extra slashes:
     path.Join("/tmp/", "/myfile.txt")  // Evaluates to "/tmp/myfile.txt"
 
@@ -471,10 +471,10 @@ Examples:
 
     Matching a simple pattern:
     path.Match("*.txt", "myfile.txt")  // Evaluates to true
-    
+
     Pattern not matching:
     path.Match("*.txt", "myfile.doc")  // Evaluates to false
-    
+
     Matching with wildcard:
     path.Match("*file.txt", "myfile.txt")  // Evaluates to true
 
@@ -496,16 +496,16 @@ Examples:
 
     Splitting a standard file path:
     path.Split("/tmp/myfile.txt")  // Evaluates to ["/tmp/", "myfile.txt"]
-    
+
     Splitting a path ending with a slash:
     path.Split("/home/user/docs/")  // Evaluates to ["/home/user/docs", ""]
-    
+
     Splitting a relative path:
     path.Split("docs/myfile.txt")  // Evaluates to ["docs/", "myfile.txt"]
 
 ---
 
-### 
+###
 
 ## UUID
 
@@ -570,10 +570,10 @@ Examples:
 
     Validating a correct UUID format:
     uuid.IsValid("550e8400-e29b-41d4-a716-446655440000")  // Evaluates to true
-    
+
     Checking an incorrect UUID format:
     uuid.IsValid("invalid-uuid")  // Evaluates to false
-    
+
     Validating a nil UUID:
     uuid.IsValid("00000000-0000-0000-0000-000000000000")  // Evaluates to true
 
@@ -595,4 +595,3 @@ Examples:
 
     Parsing a valid UUID:
     uuid.Parse("550e8400-e29b-41d4-a716-446655440000")  // Evaluates to the same UUID if valid
-

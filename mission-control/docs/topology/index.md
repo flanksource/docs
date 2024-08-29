@@ -16,17 +16,15 @@ Some of the benefits include:
 - **Different Views** of the same resources based on use case e.g. Platform teams might want an infra focused view, while application teams want an app focused view
 - **Partial Views** enable publishing high-level details of a component without exposing internal or private data more widely.
 
-
 <img src="/img/topology.svg" width="900px" className="py-3"/>
-
 
 A topology is comprised of:
 
-* **Components** and sub-components that represent logical parts of the system. Components can be nested to represent hierarchy.
-* **Config Items** (and their associated changed/insights) that represent the underlying configuration or code of a component.
-* **Health Checks** (or SLO's) to determine the health of a component in a consistent way.
-* **Properties** and links to documentation or external consoles and dashboards
-* **Metrics** aggregated from external data sources
+- **Components** and sub-components that represent logical parts of the system. Components can be nested to represent hierarchy.
+- **Config Items** (and their associated changed/insights) that represent the underlying configuration or code of a component.
+- **Health Checks** (or SLO's) to determine the health of a component in a consistent way.
+- **Properties** and links to documentation or external consoles and dashboards
+- **Metrics** aggregated from external data sources
 
 ## Components
 
@@ -40,19 +38,18 @@ Components are represented as cards:
 One way to think about a component is as a mini dashboard that has provides a detailed RAG status that incorporates metrics and configuration from multiple sub-components and/or external systems.
 
 :::
+
 </div>
 
 ## Logical Views
 
 Components can be created to represent any logical view of a system, for example the below represents a FluxCD installation, mapping helm releases to pods and resources that they create.
 
-
 <img src="/img/flux-topology.svg" width="800px" className="py-3"/>
-
 
 ## Components vs Config Items
 
-Sometimes a logical resource is both a Component and a Config Item, for example a Kubernetes Namespace or Pod.  What distinguishes them is that config items are physical - they represent a resource or configuration that exists.
+Sometimes a logical resource is both a Component and a Config Item, for example a Kubernetes Namespace or Pod. What distinguishes them is that config items are physical - they represent a resource or configuration that exists.
 
 Components on the other hand are how people think about and model complex systems.
 

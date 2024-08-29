@@ -1,6 +1,7 @@
 ---
 title: Connections
 ---
+
 Mission Control uses the Kubernetes ValuesFrom pattern to retrieve sensitive values like usernames, password and access keys.
 
 Whenever a field uses the `EnvVar` object type you have the option of specifying the value in 3 ways:

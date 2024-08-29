@@ -1,33 +1,34 @@
 ## CLI Installation
 
 === "Linux (amd64)"
-    ```sh
+`sh
     wget https://github.com/flanksource/apm-hub/releases/latest/download/apm-hub_linux_amd64 \
       -O /usr/bin/apm-hub && \
       chmod +x /usr/bin/apm-hub
-    ```
+    `
 
 === "MacOS (amd64)"
-    ```sh
+`sh
     wget https://github.com/flanksource/apm-hub/releases/latest/download/apm-hub_darwin_amd64 \
       -O /usr/local/bin/apm-hub && \
       chmod +x /usr/local/bin/apm-hub
-    ```
+    `
 
 === "Windows"
-    ```sh
-    wget -nv -nc -O https://github.com/flanksource/apm-hub/releases/latest/download/apm-hub.exe
+
+````sh
+wget -nv -nc -O https://github.com/flanksource/apm-hub/releases/latest/download/apm-hub.exe
 
     // Move the downloaded exe file to a directory in your PATH
     ```
 
 === "Build locally"
-    ```sh
+`sh
     git clone https://github.com/flanksource/apm-hub
     cd apm-hub
     make build
     make install
-    ```
+    `
 
 ## Verify installation
 
@@ -46,4 +47,4 @@ https://echo.labstack.com
 ____________________________________O/_______
                                     O\
 ⇨ http server started on [::]:8080
-```
+````

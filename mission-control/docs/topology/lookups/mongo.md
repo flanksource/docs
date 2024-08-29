@@ -46,8 +46,8 @@ spec:
       // highlight-end
 ```
 
-| Field            | Description                                                                   | Scheme                                            | Required |
-| ---------------- | ----------------------------------------------------------------------------- | ------------------------------------------------- | -------- |
-| **`connection`** | Connection string to connect to the Mongo server                              | _string_                                          | Yes      |
-| **`password`** | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">_EnvVar_</CommonLink> | Yes      |
-| **`username`** | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">_EnvVar_</CommonLink> | Yes      |
+| Field            | Description                                                                     | Scheme                                         | Required |
+| ---------------- | ------------------------------------------------------------------------------- | ---------------------------------------------- | -------- |
+| **`connection`** | Connection string to connect to the Mongo server                                | _string_                                       | Yes      |
+| **`password`**   | Set password for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">_EnvVar_</CommonLink> | Yes      |
+| **`username`**   | Set username for authentication using string, configMapKeyRef, or SecretKeyRef. | <CommonLink to="secrets">_EnvVar_</CommonLink> | Yes      |

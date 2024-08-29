@@ -3,6 +3,7 @@ title: Hardening
 sidebar_position: 100
 slug: security/hardening
 ---
+
 ## Service Account RBAC
 
 Canary Checker, by default, uses a highly permissive service account.

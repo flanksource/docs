@@ -1,5 +1,7 @@
 # Go Templates
+
 <!-- // cspell:ignore conv, strconv,Ints -->
+
 `template` expressions use the [Go Text Template](https://pkg.go.dev/text/template) library with some additional functions provided by the [gomplate](https://docs.gomplate.ca/) library.
 In this example we get the current exchange rate:
 
@@ -13,7 +15,7 @@ spec:
     - name: USD
       url: https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,ILS,ZAR
       display:
-        template: "$1 = €{{.json.rates.EUR}}, £{{.json.rates.GBP}}, ₪{{.json.rates.ILS}}"
+        template: '$1 = €{{.json.rates.EUR}}, £{{.json.rates.GBP}}, ₪{{.json.rates.ILS}}'
 ```
 
 ## Escaping
@@ -46,12 +48,10 @@ Encode data as a Base64 string. Specifically, this uses the standard Base64 enco
 
 Decode a Base64 string. This supports both standard ([RFC4648 &sect;4](https://tools.ietf.org/html/rfc4648#section-4)) and URL-safe ([RFC4648 &sect;5](https://tools.ietf.org/html/rfc4648#section-5)) encodings.
 
-
 ```go
 {{ base64.Decode "aGVsbG8gd29ybGQ=" }} // hello world
 {{ "aGVsbG8gd29ybGQ=" | base64.Decode }} // hello world
 ```
-
 
 :::note
 For the functions that return an array, a Go `[]interface{}` is returned, regardless of whether or not the input was a different type.
@@ -123,7 +123,6 @@ Reports whether a given object has a property with the given key, or whether a g
 Extracts portions of an input object or list using a [JSONPath](https://goessner.net/articles/JsonPath) expression.
 
 Any object or list may be used as input. The output depends somewhat on the expression; if multiple items are matched, an array is returned.
-
 
 ```go
 {{ .books | jsonpath `$..works[?( @.edition_count > 400 )].title` }} // [Alice's Adventures in Wonderland Gulliver's Travels]
@@ -1029,7 +1028,7 @@ Note that the sequence _may_ not end at `end`, if `end` is not divisible by `ste
 
 ### Sub
 
-Subtract the second from the first of the given operators.  When one of the inputs is a floating-point number, the result will be a `float64`, otherwise it will be an `int64`.
+Subtract the second from the first of the given operators. When one of the inputs is a floating-point number, the result will be a `float64`, otherwise it will be an `int64`.
 
 ```go
 {{ math.Sub 3 1 }} // 2
@@ -1354,6 +1353,7 @@ foo:
 ```
 
 ### Sort _(deprecated)_
+
 **Deprecation Notice:** Use [`coll.Sort`](#sort) instead
 
 Returns an alphanumerically-sorted copy of a given string list.

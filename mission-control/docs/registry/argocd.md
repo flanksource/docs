@@ -37,10 +37,9 @@ This document provides an overview of configurable values for deploying ArgoCD t
 
 The following table lists the configurable parameters and their default values:
 
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `nameOverride` | Overrides the name of the chart. | "" |
-| `fullnameOverride` | Overrides the full name of the chart. | "" |
-| `labels` | Additional labels to apply to resources. | {} |
-| `argocd.namespace` | Namespace for argocd pods | "argocd" |
-
+| Parameter          | Description                              | Default  |
+| ------------------ | ---------------------------------------- | -------- |
+| `nameOverride`     | Overrides the name of the chart.         | ""       |
+| `fullnameOverride` | Overrides the full name of the chart.    | ""       |
+| `labels`           | Additional labels to apply to resources. | {}       |
+| `argocd.namespace` | Namespace for argocd pods                | "argocd" |

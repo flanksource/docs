@@ -46,34 +46,33 @@ This document provides an overview of configurable values for deploying the Kube
 
 The following table lists the configurable parameters and their default values:
 
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `nameOverride` | Overrides the name of the chart. | "" |
-| `fullnameOverride` | Overrides the full name of the chart. | "" |
-| `labels` | Additional labels to apply to resources. | {} |
+| Parameter          | Description                              | Default |
+| ------------------ | ---------------------------------------- | ------- |
+| `nameOverride`     | Overrides the name of the chart.         | ""      |
+| `fullnameOverride` | Overrides the full name of the chart.    | ""      |
+| `labels`           | Additional labels to apply to resources. | {}      |
 
 ### Topology
 
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `topology.name` | Topology name. | "cluster" |
+| Parameter           | Description        | Default     |
+| ------------------- | ------------------ | ----------- |
+| `topology.name`     | Topology name.     | "cluster"   |
 | `topology.schedule` | Topology schedule. | "@every 5m" |
 
 ### Scraper
 
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `scraper.name` | Scraper name. | "kubernetes" |
-| `scraper.clusterName` | Cluster name for scraping. | "kubernetes" |
-| `scraper.defaultScrapeExclusions` | Default scrape exclusions. | `["APIService", "PodMetrics", "NodeMetrics", "endpoints.discovery.k8s.io", "endpointslices.discovery.k8s.io", "leases.coordination.k8s.io", "podmetrics.metrics.k8s.io", "nodemetrics.metrics.k8s.io", "controllerrevision", "certificaterequest", "orders.acme.cert-manager.io"]` |
-| `scraper.scrapeExclusions` | Additional scrape exclusions. | `["Secret", "customresourcedefinition"]` |
-| `scraper.eventExclusions` | Event exclusions. | `["SuccessfulCreate", "Created", "DNSConfigForming"]` |
-| `scraper.transform.changes.exclude` | Transformation changes exclusions. | `["details.source.component == \"canary-checker\" && details.reason == \"Failed\"", "details.source.component == \"canary-checker\" && details.reason == \"Succeeded\""]` |
-| `scraper.severityKeywords.error` | Keywords indicating error severity. | `["failed", "error"]` |
-| `scraper.severityKeywords.warn` | Keywords indicating warning severity. | `["backoff", "nodeoutofmemory"]` |
-| `scraper.retention.changes` | Retention changes. | `[{"name": "ReconciliationSucceeded", "count": 10}]` |
-| `scraper.relationships` | Kubernetes Relationships to create via name, namespace and kind. [Kubernetes Relationships](/config-db/scrapers/kubernetes#relationships) | Helm and Argo |
-
+| Parameter                           | Description                                                                                                                               | Default                                                                                                                                                                                                                                                                            |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scraper.name`                      | Scraper name.                                                                                                                             | "kubernetes"                                                                                                                                                                                                                                                                       |
+| `scraper.clusterName`               | Cluster name for scraping.                                                                                                                | "kubernetes"                                                                                                                                                                                                                                                                       |
+| `scraper.defaultScrapeExclusions`   | Default scrape exclusions.                                                                                                                | `["APIService", "PodMetrics", "NodeMetrics", "endpoints.discovery.k8s.io", "endpointslices.discovery.k8s.io", "leases.coordination.k8s.io", "podmetrics.metrics.k8s.io", "nodemetrics.metrics.k8s.io", "controllerrevision", "certificaterequest", "orders.acme.cert-manager.io"]` |
+| `scraper.scrapeExclusions`          | Additional scrape exclusions.                                                                                                             | `["Secret", "customresourcedefinition"]`                                                                                                                                                                                                                                           |
+| `scraper.eventExclusions`           | Event exclusions.                                                                                                                         | `["SuccessfulCreate", "Created", "DNSConfigForming"]`                                                                                                                                                                                                                              |
+| `scraper.transform.changes.exclude` | Transformation changes exclusions.                                                                                                        | `["details.source.component == \"canary-checker\" && details.reason == \"Failed\"", "details.source.component == \"canary-checker\" && details.reason == \"Succeeded\""]`                                                                                                          |
+| `scraper.severityKeywords.error`    | Keywords indicating error severity.                                                                                                       | `["failed", "error"]`                                                                                                                                                                                                                                                              |
+| `scraper.severityKeywords.warn`     | Keywords indicating warning severity.                                                                                                     | `["backoff", "nodeoutofmemory"]`                                                                                                                                                                                                                                                   |
+| `scraper.retention.changes`         | Retention changes.                                                                                                                        | `[{"name": "ReconciliationSucceeded", "count": 10}]`                                                                                                                                                                                                                               |
+| `scraper.relationships`             | Kubernetes Relationships to create via name, namespace and kind. [Kubernetes Relationships](/config-db/scrapers/kubernetes#relationships) | Helm and Argo                                                                                                                                                                                                                                                                      |
 
 ### Playbooks
 
@@ -83,10 +82,10 @@ This feature allows you to edit any kustomize resource managed via flux in the U
 
 To use this, the Kustomization file must have [originAnnotations](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/buildmetadata/#origin-annotation).
 
-| Parameter | Description | Schema | Default |
-| --- | --- | --- | --- |
-| `playbooks.edit_kubernetes_manifests.enabled` | Enable this to have a playbook to edit and commit flux resources back to git | bool | `false` |
-| `playbooks.edit_kubernetes_manifests.git_connection` | Connection string to be used with git credentials | [Connection](/reference/connections/git) | `""` |
+| Parameter                                            | Description                                                                  | Schema                                   | Default |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------- | ------- |
+| `playbooks.edit_kubernetes_manifests.enabled`        | Enable this to have a playbook to edit and commit flux resources back to git | bool                                     | `false` |
+| `playbooks.edit_kubernetes_manifests.git_connection` | Connection string to be used with git credentials                            | [Connection](/reference/connections/git) | `""`    |
 
 After enabling the playbook, you can see a `Edit Kustomize Resource` option in playbooks for any catalog item that is linked to flux
 

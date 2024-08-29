@@ -1,6 +1,7 @@
 ---
 description: Alternative methods for connecting to the db used for persistence
 ---
+
 # Database
 
 To persist history, canary-checker has 3 options:
@@ -13,9 +14,9 @@ To persist history, canary-checker has 3 options:
 
 ```yaml title="values.yaml"
 db:
- embedded:
-  storageClass: # the name of a PV Storage Class
-  storage: 10Gi
+  embedded:
+    storageClass: # the name of a PV Storage Class
+    storage: 10Gi
 # ...
 ```
 
@@ -34,11 +35,11 @@ psql -U postgres localhost -p 6432 canary with password postgres #password will 
 
 ```yaml title="values.yaml"
 db:
- external:
-  enabled: true
-  create: true # creates a new postgres statefulset
-  storageClass: # the name of a PV Storage Class
-  storage: 10Gi
+  external:
+    enabled: true
+    create: true # creates a new postgres statefulset
+    storageClass: # the name of a PV Storage Class
+    storage: 10Gi
 # ...
 ```
 
@@ -52,11 +53,11 @@ In order to connect to an existing Postgres server, a database must be created o
 
 ```yaml title="values.yaml"
 db:
- external:
-  enabled: true
-  create: false
-  secretKeyRef:
-   name: postgres-connection # name of secret that contains a key containging the postgres connection URI
-   key: POSTGRES_URL   # name of the key in the secret that contains the postgres connection URI. The URI must be in the format 'postgresql://"$user":"$password"@"$host"/"$database"'
+  external:
+    enabled: true
+    create: false
+    secretKeyRef:
+      name: postgres-connection # name of secret that contains a key containging the postgres connection URI
+      key: POSTGRES_URL # name of the key in the secret that contains the postgres connection URI. The URI must be in the format 'postgresql://"$user":"$password"@"$host"/"$database"'
 # ...
 ```

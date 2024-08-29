@@ -21,6 +21,4 @@ External sources like Kubernetes Events and AWS CloudTrail provide these changes
 
 ![Event-based config changes of a Kubernetes Pod](/img/event-based-config-changes.png)
 
-
-
 See [Transformation Changes](./transform#changes).

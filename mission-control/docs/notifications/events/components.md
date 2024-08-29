@@ -10,18 +10,19 @@ Component status updates emit the following events
 - `component.warning`
 - `component.unknown`
 
-
 The default notification template used is:
-    * **Title:** `Component {{.component.name}} is {{.component.health}}`
-    * **Body:**
-        ```
-        ### Labels:
-        {{range $k, $v := .component.labels}}**{{$k}}**: {{$v}}
-        {{end}}
-        [Reference]({{.permalink}})
-        ```
+_ **Title:** `Component {{.component.name}} is {{.component.health}}`
+_ **Body:**
+
+```
+### Labels:
+{{range $k, $v := .component.labels}}**{{$k}}**: {{$v}}
+{{end}}
+[Reference]({{.permalink}})
+```
 
 Sample notification:
+
 ```yaml title="notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
@@ -87,4 +88,3 @@ The notification title and body can be changed using the variables below:
 | `id`          | The id of the agent            | `uuid`   |          |
 | `name`        | The name of the agent          | `string` |          |
 | `description` | Short description of the agent | `string` |          |
-

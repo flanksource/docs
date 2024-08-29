@@ -1,6 +1,7 @@
 ---
 title: Kubernetes Workload
 ---
+
 This example demonstrates creating a component from the ABP Microservice Demo
 
 ```yaml
@@ -11,7 +12,7 @@ metadata:
 spec:
   text: ABP Microservices
   icon: dotnet
-  schedule: "@every 10m"
+  schedule: '@every 10m'
   type: DotnetApplication
   properties:
     - icon: world
@@ -21,13 +22,13 @@ spec:
       text: eu-west-2
     - name: Products
       headline: true
-      text: "112"
+      text: '112'
     - name: Blogs
       headline: true
-      text: "15"
+      text: '15'
     - name: Visitors
       headline: true
-      text: "26"
+      text: '26'
       color: red
 
   components:
@@ -35,22 +36,22 @@ spec:
       icon: dotnet
       name: Auth Server
       selectors:
-        - labelSelector: "app=auth-server"
+        - labelSelector: 'app=auth-server'
     - type: Application
       icon: dotnet
       name: Backend Admin
       selectors:
-        - labelSelector: "app=backend-admin-app"
+        - labelSelector: 'app=backend-admin-app'
     - type: Application
       icon: dotnet
       name: Blogging Service
       selectors:
-        - labelSelector: "app=blogging-service"
+        - labelSelector: 'app=blogging-service'
     - type: Application
       icon: dotnet
       name: Identity Service
       selectors:
-        - labelSelector: "app=identity-service"
+        - labelSelector: 'app=identity-service'
     - type: Application
       icon: dotnet
       name: Product Service
@@ -58,24 +59,24 @@ spec:
       icon: dotnet
       name: Website
       selectors:
-        - labelSelector: "app=public-website"
+        - labelSelector: 'app=public-website'
 
     - type: Application
       icon: redis
       name: Redis
       selectors:
-        - labelSelector: "app=redis"
+        - labelSelector: 'app=redis'
 
     - type: Application
       icon: rabbitmq
       name: RabbitMQ
       selectors:
-        - labelSelector: "app=rabbitmq"
+        - labelSelector: 'app=rabbitmq'
     - type: Application
       icon: mongo
       name: Mongo
       selectors:
-        - labelSelector: "app=mongodb"
+        - labelSelector: 'app=mongodb'
     - type: Application
       icon: sqlserver
       name: SQL Server

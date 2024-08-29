@@ -5,34 +5,30 @@ collapsed: false
 ---
 
 :::tip Shoutrr
- Notifications in Mission Control are powered by [github.com/containrrr/shoutrrr](https://github.com/containrrr/shoutrrr)
+Notifications in Mission Control are powered by [github.com/containrrr/shoutrrr](https://github.com/containrrr/shoutrrr)
 :::
-
 
 When creating a notification you can either specify a connection or a custom URL
 
-
 ## Custom URLs
 
-
-| Service                           | URL format                                                                                                                                      |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Bark](./bark)                 | *bark://__`devicekey`__@__`host`__*                                                                                                             |
-| [Discord](./discord)           | *discord://__`token`__@__`id`__*                                                                                                                |
-| [Email](./email)               | *smtp://__`username`__:__`password`__@__`host`__:__`port`__/?from=__`fromAddress`__&to=__`recipient1`__[,__`recipient2`__,...]*                 |
-| [Google Chat](./googlechat)    | *googlechat://chat.googleapis.com/v1/spaces/FOO/messages?key=bar&token=baz*                                                                     |
-| [IFTTT](./ifttt)               | *ifttt://__`key`__/?events=__`event1`__[,__`event2`__,...]&value1=__`value1`__&value2=__`value2`__&value3=__`value3`__*                         |
-| [Join](./join)                 | *join://shoutrrr:__`api-key`__@join/?devices=__`device1`__[,__`device2`__, ...][&icon=__`icon`__][&title=__`title`__]*                          |
-| [Mattermost](./mattermost)     | *mattermost://[__`username`__@]__`mattermost-host`__/__`token`__[/__`channel`__]*                                                               |
-| [Matrix](./matrix)             | *matrix://__`username`__:__`password`__@__`host`__:__`port`__/[?rooms=__`!roomID1`__[,__`roomAlias2`__]]*                                       |
-| [Ntfy](./ntfy)                 | *ntfy://__`username`__:__`password`__@ntfy.sh/__`topic`__*                                                                                      |
-| [OpsGenie](./opsgenie)         | *opsgenie://__`host`__/token?responders=__`responder1`__[,__`responder2`__]*                                                                    |
-| [Pushbullet](./pushbullet)     | *pushbullet://__`api-token`__[/__`device`__/#__`channel`__/__`email`__]*                                                                        |
-| [Pushover](./pushover)         | *pushover://shoutrrr:__`apiToken`__@__`userKey`__/?devices=__`device1`__[,__`device2`__, ...]*                                                  |
-| [Rocketchat](./rocketchat)     | *rocketchat://[__`username`__@]__`rocketchat-host`__/__`token`__[/__`channel`&#124;`@recipient`__]*                                             |
-| [Slack](./slack)               | *slack://[__`botname`__@]__`token-a`__/__`token-b`__/__`token-c`__*                                                                             |
-| [Teams](./teams)               | *teams://__`group`__@__`tenant`__/__`altId`__/__`groupOwner`__?host=__`organization`__.webhook.office.com*                                      |
-| [Telegram](./telegram)         | *telegram://__`token`__@telegram?chats=__`@channel-1`__[,__`chat-id-1`__,...]*                                                                  |
-| [Zulip Chat](./zulip)          | *zulip://__`bot-mail`__:__`bot-key`__@__`zulip-domain`__/?stream=__`name-or-id`__&topic=__`name`__*                                             |
-| [Generic Webhook](./generic)   | Sends notifications directly to a webhook                                                                                                       |
-
+| Service                      | URL format                                                                                                                      |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| [Bark](./bark)               | _bark://**`devicekey`**@**`host`**_                                                                                             |
+| [Discord](./discord)         | _discord://**`token`**@**`id`**_                                                                                                |
+| [Email](./email)             | _smtp://**`username`**:**`password`**@**`host`**:**`port`**/?from=**`fromAddress`**&to=**`recipient1`**[,__`recipient2`__,...]_ |
+| [Google Chat](./googlechat)  | _googlechat://chat.googleapis.com/v1/spaces/FOO/messages?key=bar&token=baz_                                                     |
+| [IFTTT](./ifttt)             | _ifttt://**`key`**/?events=**`event1`**[,__`event2`__,...]&value1=**`value1`**&value2=**`value2`**&value3=**`value3`**_         |
+| [Join](./join)               | _join://shoutrrr:**`api-key`**@join/?devices=**`device1`**[,**`device2`**, ...][&icon=__`icon`__][&title=__`title`__]_          |
+| [Mattermost](./mattermost)   | _mattermost://[__`username`__@]**`mattermost-host`**/**`token`**[/__`channel`__]_                                               |
+| [Matrix](./matrix)           | _matrix://**`username`**:**`password`**@**`host`**:**`port`**/[?rooms=**`!roomID1`**[,__`roomAlias2`__]]_                       |
+| [Ntfy](./ntfy)               | _ntfy://**`username`**:**`password`**@ntfy.sh/**`topic`**_                                                                      |
+| [OpsGenie](./opsgenie)       | _opsgenie://**`host`**/token?responders=**`responder1`**[,__`responder2`__]_                                                    |
+| [Pushbullet](./pushbullet)   | _pushbullet://**`api-token`**[/__`device`__/#__`channel`__/__`email`__]_                                                        |
+| [Pushover](./pushover)       | _pushover://shoutrrr:**`apiToken`**@**`userKey`**/?devices=**`device1`**[,__`device2`__, ...]_                                  |
+| [Rocketchat](./rocketchat)   | _rocketchat://[__`username`__@]**`rocketchat-host`**/**`token`**[/__`channel`&#124;`@recipient`__]_                             |
+| [Slack](./slack)             | _slack://[__`botname`__@]**`token-a`**/**`token-b`**/**`token-c`**_                                                             |
+| [Teams](./teams)             | _teams://**`group`**@**`tenant`**/**`altId`**/**`groupOwner`**?host=**`organization`**.webhook.office.com_                      |
+| [Telegram](./telegram)       | _telegram://**`token`**@telegram?chats=**`@channel-1`**[,__`chat-id-1`__,...]_                                                  |
+| [Zulip Chat](./zulip)        | _zulip://**`bot-mail`**:**`bot-key`**@**`zulip-domain`**/?stream=**`name-or-id`**&topic=**`name`**_                             |
+| [Generic Webhook](./generic) | Sends notifications directly to a webhook                                                                                       |

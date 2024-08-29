@@ -90,7 +90,7 @@ As you can imagine, a single search query can possibly be served by numerous bac
 
 ![Non additive route](/img/non-additive-route.svg)
 
-````yaml
+```yaml
 backends:
   - kubernetes:
       routes:
@@ -98,4 +98,4 @@ backends:
           labels:
             app: !frontend
             env: dev,stage
-````
+```

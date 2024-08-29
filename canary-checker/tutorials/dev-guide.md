@@ -20,6 +20,7 @@ For installing and configuring metrics server and Prometheus please see the [pre
 ## Install Node
 
 The built-in dashboard of canary-checker uses node v12. Developers will need to install the compatible version:
+
 - Install [nvm](https://github.com/nvm-sh/nvm) to install and manage different versions of node.
 - After nvm is installed one can install node v12 by running `nvm install v12`.
 
@@ -28,6 +29,7 @@ The built-in dashboard of canary-checker uses node v12. Developers will need to 
 **Note**: The following commands needs to be run from the root of canary-checker repo.
 
 For most development work, it makes sense to build the binary and run the operator directly, rather than building and running a container image. With this in mind, this is how we can build and use the binary:
+
 - Based on your current distro build the binaries: `make linux|darwin-arm64|darwin-amd64|windows`
 - After building the binary one needs to apply the canary-checker CRD inside the cluster: `kubectl apply -f config/deploy/crd.yaml`
 - Once the CRDs are present in the cluster one can start the operator using the binary by: `./.bin/canary-checker-amd64 operator`

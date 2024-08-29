@@ -61,12 +61,11 @@ Playbook actions can be selectively executed based on CEL expressions. These exp
 
 Expressions have access to the following variables and functions
 
-| Field       | Description                              | Schema                                       |
-| ----------- | ---------------------------------------- | -------------------------------------------- |
-| `.config`    | Config passed to the playbook            | [`ConfigItem`](/reference/config-db) |
-| `.component` | Component passed to the playbook         | [`Component`](/reference/topology/components)    |
-| `.check`     | Canary Check passed to the playbook      | [`Check`](/reference/canary-checker/check)            |
-| `.params`    | User provided parameters to the playbook | `map[string]string`                          |
-| `.user.name`    | Name of the user who invoked the action | `string`                          |
-| `.user.email`    | Email of the user who invoked the action | `string`                          |
-
+| Field         | Description                              | Schema                                        |
+| ------------- | ---------------------------------------- | --------------------------------------------- |
+| `.config`     | Config passed to the playbook            | [`ConfigItem`](/reference/config-db)          |
+| `.component`  | Component passed to the playbook         | [`Component`](/reference/topology/components) |
+| `.check`      | Canary Check passed to the playbook      | [`Check`](/reference/canary-checker/check)    |
+| `.params`     | User provided parameters to the playbook | `map[string]string`                           |
+| `.user.name`  | Name of the user who invoked the action  | `string`                                      |
+| `.user.email` | Email of the user who invoked the action | `string`                                      |

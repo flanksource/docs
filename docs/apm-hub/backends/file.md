@@ -32,6 +32,6 @@ spec:
 
 | Field    | Description                                                                                                                          | Scheme                                    | Required   |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- | ---------- |
-| `routes` | Specify routes that would match this backend.<br /> _(Read more [Routing](../concepts/routing))_                                  | [`[]Route`](../concepts/routing.md#route) | `true`     |
+| `routes` | Specify routes that would match this backend.<br /> _(Read more [Routing](../concepts/routing))_                                     | [`[]Route`](../concepts/routing.md#route) | `true`     |
 | `labels` | A set of key value pairs that'll be attached to individual items in the search result                                                | `map[string]string`                       | `optional` |
 | `path`   | The list of source file paths for this backend. If a relative path is provided, it's parsed relative to the path of the config file. | `[]string`                                | `true`     |

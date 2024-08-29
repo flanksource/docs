@@ -38,22 +38,22 @@ responder_clients:
 
 ### Jira Client
 
-| Field      | Description   | Scheme                                                                        | Required |
-| ---------- | ------------- | ----------------------------------------------------------------------------- | -------- |
-| `url`      | Jira url      | `string`                                                                      | `true`   |
-| `username` | Jira username |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
-| `password` | Jira password |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
-| `defaults` | Jira defaults | `string`                                                                      | `option` |
-| `values`   | Jira values   | `string`                                                                      | `option` |
+| Field      | Description   | Scheme                                         | Required |
+| ---------- | ------------- | ---------------------------------------------- | -------- |
+| `url`      | Jira url      | `string`                                       | `true`   |
+| `username` | Jira username | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
+| `password` | Jira password | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
+| `defaults` | Jira defaults | `string`                                       | `option` |
+| `values`   | Jira values   | `string`                                       | `option` |
 
 ### MS Planner Client
 
-| Field       | Description          | Scheme                                                                        | Required |
-| ----------- | -------------------- | ----------------------------------------------------------------------------- | -------- |
-| `tenant_id` | MS Planner tenant id | `string`                                                                      | `true`   |
-| `client_id` | MS Planner client id | `string`                                                                      | `true`   |
-| `group_id`  | MS Planner group id  | `string`                                                                      | `true`   |
-| `username`  | MS Planner username  |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
-| `password`  | MS Planner password  |  <CommonLink to="secrets">*EnvVar*</CommonLink> | `true`   |
-| `defaults`  | MS Planner defaults  | `map[string]string`                                                           | `option` |
-| `values`    | MS Planner values    | `map[string]string`                                                           | `option` |
+| Field       | Description          | Scheme                                         | Required |
+| ----------- | -------------------- | ---------------------------------------------- | -------- |
+| `tenant_id` | MS Planner tenant id | `string`                                       | `true`   |
+| `client_id` | MS Planner client id | `string`                                       | `true`   |
+| `group_id`  | MS Planner group id  | `string`                                       | `true`   |
+| `username`  | MS Planner username  | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
+| `password`  | MS Planner password  | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
+| `defaults`  | MS Planner defaults  | `map[string]string`                            | `option` |
+| `values`    | MS Planner values    | `map[string]string`                            | `option` |

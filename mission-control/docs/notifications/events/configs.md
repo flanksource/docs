@@ -14,14 +14,16 @@ Configs emit events when their health changes or when they are created, modified
 
 The default notification template for health events is:
 
-  * **Title:** `{{.config.type}} {{.config.name}} is {{.config.health}}`
-  * **Body:**
-      ```
-      ### Labels:
-      {{range $k, $v := .config.labels}}**{{$k}}**: {{$v}}
-      {{end}}
-      [Reference]({{.permalink}})
-      ```
+- **Title:** `{{.config.type}} {{.config.name}} is {{.config.health}}`
+- **Body:**
+
+  ```
+  ### Labels:
+    {{range $k, $v := .config.labels}}**{{$k}}**: {{$v}}
+    {{end}}
+    [Reference]({{.permalink}})
+  ```
+
 **State events**
 
 - `config.created`
@@ -30,16 +32,18 @@ The default notification template for health events is:
 
 The default notification template for state events is:
 
-  * **Title:** `{{.config.type}} {{.config.name}} was [created/updated/deleted]`
-  * **Body:**
-      ```
-      ### Labels:
-      {{range $k, $v := .config.labels}}**{{$k}}**: {{$v}}
-      {{end}}
-      [Reference]({{.permalink}})
-      ```
+- **Title:** `{{.config.type}} {{.config.name}} was [created/updated/deleted]`
+- **Body:**
+
+  ```
+  ### Labels:
+  {{range $k, $v := .config.labels}}**{{$k}}**: {{$v}}
+  {{end}}
+  [Reference]({{.permalink}})
+  ```
 
 Sample notification:
+
 ```yaml title="notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
@@ -101,6 +105,3 @@ spec:
 | `description` | Short description of the agent | `string` |          |
 
 ## Notification Defaults
-
-
-
