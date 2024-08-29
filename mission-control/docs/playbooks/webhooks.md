@@ -50,10 +50,10 @@ By default, the webhook calls are not protected via authentication. However, the
 The following details of a webhook request is available on the playbook under `request`.
 
 <Fields
-  rows={[
-    {
-      field: 'url',
-      description: `Endpoint of the webhook. Example \`/playbook/webhook/my-webhook\``,
+rows={[
+{
+field: 'url',
+description: `Endpoint of the webhook. Example \`/playbook/webhook/my-webhook\``,
       scheme: 'string'
     },
     {
@@ -75,7 +75,6 @@ The following details of a webhook request is available on the playbook under `r
       field: 'json',
       description: `JSON content if the webhook content is JSON`,
       scheme: '`map[string]any`',
-    }
-  ]}
+}
+]}
 />
-

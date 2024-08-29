@@ -12,7 +12,7 @@ kind: Canary
 metadata:
   name: exchange-rates
 spec:
-  schedule: "every 1 @hour"
+  schedule: 'every 1 @hour'
   http:
     - name: exchange-rates
       url: https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,ILS
@@ -21,8 +21,8 @@ spec:
           type: gauge
           value: result.json.rates.GBP
           labels:
-            - name: "from"
-              value: "USD"
+            - name: 'from'
+              value: 'USD'
             - name: to
               value: GBP
 
@@ -30,8 +30,8 @@ spec:
           type: gauge
           value: result.json.rates.EUR
           labels:
-            - name: "from"
-              value: "USD"
+            - name: 'from'
+              value: 'USD'
             - name: to
               value: EUR
 
@@ -39,8 +39,8 @@ spec:
           type: gauge
           value: result.json.rates.ILS
           labels:
-            - name: "from"
-              value: "USD"
+            - name: 'from'
+              value: 'USD'
             - name: to
               value: ILS
         - name: exchange_rate_api
@@ -56,8 +56,6 @@ exchange_rate{from=USD, to=EUR} 0.949
 exchange_rate{from=USD, to=ILS} 3.849
 exchange_rate_api 260.000
 ```
-
-
 
 ## Result Variables
 
@@ -94,9 +92,8 @@ Expressions can make use of the following variables:
 | `check.name`              | Check name                                 | `string`                                  |
 | `check.description`       | Check description                          | `string`                                  |
 | `check.labels`            | Dynamic labels attached to the check       | `map[string]string`                       |
-| `check.endpoint`          | Endpoint (usually a URL)                    | `string`                                  |
+| `check.endpoint`          | Endpoint (usually a URL)                   | `string`                                  |
 | `check.duration`          | Duration in milliseconds                   | `int64`                                   |
 | `canary.name`             | Canary name                                | `string`                                  |
 | `canary.namespace`        | Canary namespace                           | `string`                                  |
 | `canary.labels`           | Labels attached to the canary CRD (if any) | `map[string]string`                       |
-

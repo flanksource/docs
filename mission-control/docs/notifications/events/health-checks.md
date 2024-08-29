@@ -5,33 +5,35 @@ title: Health Checks
 
 Health checks emit 2 events
 
-* **`check.passed`**:
-    * **Title:** `Check {{.check.name}} has passed`
-    * **Body:**
-        ```
-        Canary: {{.canary.name}}
-        {{if .agent}}Agent: {{.agent.name}}{{end}}
-        {{if .status.message}}Message: {{.status.message}} {{end}}
-        ### Labels:
-        {{range $k, $v := .check.labels}}**{{$k}}**: {{$v}}
-        {{end}}
-        [Reference]({{.permalink}})
-        ```
+- **`check.passed`**:
 
-* **`check.failed`**:
-    * **Title:** `Check {{.check.name}} has failed`
-    * **Body:**
-        ```
-        Canary: {{.canary.name}}
-        {{if .agent}}Agent: {{.agent.name}}{{end}}
-        Error: {{.status.error}}
-        ### Labels:
-        {{range $k, $v := .check.labels}}**{{$k}}**: {{$v}}
-        {{end}}
-        [Reference]({{.permalink}})
-        ```
+  - **Title:** `Check {{.check.name}} has passed`
+  - **Body:**
+    ```
+    Canary: {{.canary.name}}
+    {{if .agent}}Agent: {{.agent.name}}{{end}}
+    {{if .status.message}}Message: {{.status.message}} {{end}}
+    ### Labels:
+    {{range $k, $v := .check.labels}}**{{$k}}**: {{$v}}
+    {{end}}
+    [Reference]({{.permalink}})
+    ```
+
+- **`check.failed`**:
+  - **Title:** `Check {{.check.name}} has failed`
+  - **Body:**
+    ```
+    Canary: {{.canary.name}}
+    {{if .agent}}Agent: {{.agent.name}}{{end}}
+    Error: {{.status.error}}
+    ### Labels:
+    {{range $k, $v := .check.labels}}**{{$k}}**: {{$v}}
+    {{end}}
+    [Reference]({{.permalink}})
+    ```
 
 Sample notification:
+
 ```yaml title="notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
@@ -137,5 +139,3 @@ spec:
 | `created_at` | The created at of the check                     | `time.Time` |          |
 
 ## Notification Template Defaults
-
-

@@ -51,7 +51,7 @@ spec:
 
 | Field       | Description                                                                                                | Scheme                                    | Required   |
 | ----------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ---------- |
-| `routes`    | Specify routes that would match this backend.<br> _(Read more [Routing](../concepts/routing))_          | [`[]Route`](../concepts/routing.md#route) | `true`     |
+| `routes`    | Specify routes that would match this backend.<br> _(Read more [Routing](../concepts/routing))_             | [`[]Route`](../concepts/routing.md#route) | `true`     |
 | `labels`    | A set of key value pairs that'll be attached to individual items in the search result.                     | `map[string]string`                       | `optional` |
 | `address`   | Elastic search instance URL.                                                                               | `string`                                  | `true`     |
 | `query`     | The query for elastic search.<br>It's a go template which will receive the search param as it's view data. | `string`                                  | `true`     |

@@ -33,7 +33,7 @@ An agent can be specified using:
 
 | Shortcut                       | Description                                                | Equivalent  |
 | ------------------------------ | ---------------------------------------------------------- | ----------- |
-| `@every` [Duration](#duration) | e.g., `@every 5m`                                           |             |
+| `@every` [Duration](#duration) | e.g., `@every 5m`                                          |             |
 | `@yearly` (or `@annually`)     | Run once a year at midnight of 1 January                   | `0 0 1 1 *` |
 | `@monthly`                     | Run once a month at midnight of the first day of the month | `0 0 1 * *` |
 | `@weekly`                      | Run once a week at midnight on Sunday                      | `0 0 * * 0` |
@@ -70,7 +70,7 @@ e.g.
 
 Pattern matching supports the following operations:
 
-- `*`  - Match anything
+- `*` - Match anything
 - `Added,Deleted` - Match either `Added` or `Deleted`
 - `Added*`: Match anything starting with `Added`.
 - `*Terminated`: Match anything ending with `Terminated`.

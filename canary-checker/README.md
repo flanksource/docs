@@ -1,5 +1,3 @@
-
-
 <div align="center"> <img src="docs/canary-checker.png" height="64px"></img></div>
   <p align="center">Kubernetes operator for executing synthetic tests</p>
 <p align="center">
@@ -9,23 +7,20 @@
 <a href="https://canary-checker.docs.flanksource.com"> <img src="https://img.shields.io/badge/☰-Docs-lightgrey.svg"/> </a>
 </p>
 
-
-
 ---
-
 
 # Introduction
 
-Canary Checker is a Kubernetes native multi-tenant synthetic monitoring system.  To learn more,  see the [docs](https://docs.flanksource.com/canary-checker/overview/).
+Canary Checker is a Kubernetes native multi-tenant synthetic monitoring system. To learn more, see the [docs](https://docs.flanksource.com/canary-checker/overview/).
 
 # Features
 
-* Built-in UI/Dashboard
-* CRD based configuration and status reporting
-* Prometheus Integration
-* Runnable as a CLI for once-off checks or as a standalone server outside kubernetes
-* Junit formatting for CI/CD integration
-* Many built-in check types
+- Built-in UI/Dashboard
+- CRD based configuration and status reporting
+- Prometheus Integration
+- Runnable as a CLI for once-off checks or as a standalone server outside kubernetes
+- Junit formatting for CI/CD integration
+- Many built-in check types
 
 ## Getting started
 
@@ -39,7 +34,7 @@ wget  https://github.com/flanksource/canary-checker/releases/latest/download/can
   chmod +x /usr/bin/canary-checker
 ```
 
-2. Create a new  spec called `http.yaml`
+2. Create a new spec called `http.yaml`
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
@@ -52,7 +47,7 @@ spec:
     - endpoint: https://httpstat.us/200
       thresholdMillis: 3000
       responseCodes: [201, 200, 301]
-      responseContent: ""
+      responseContent: ''
       maxSSLExpiry: 7
 ```
 
@@ -64,19 +59,15 @@ canary-checker run http.yaml
 
 [![asciicast](https://asciinema.org/a/N3jELGSn8HoRQHPpCdeK7MDBV.svg)](https://asciinema.org/a/N3jELGSn8HoRQHPpCdeK7MDBV)
 
-
-
 ### Junit Formating
 
-Canary checker can export  JUnit formatted results for use in CI/CD pipelines
+Canary checker can export JUnit formatted results for use in CI/CD pipelines
 
 ```bash
 canary-checker run http.yaml -j -o results.xml
 ```
 
-
 ## Deploying as Kubernetes Operator
-
 
 1. Deploy the operator
 
@@ -96,11 +87,11 @@ flanksource-ui:
     host: canary-checker.127.0.0.1.nip.io
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
+      kubernetes.io/tls-acme: 'true'
     tls:
       - secretName: canary-checker-tls
         hosts:
-        - canary-checker.127.0.0.1.nip.io
+          - canary-checker.127.0.0.1.nip.io
 ```
 
 2. Install a canary
@@ -115,12 +106,10 @@ kubectl apply -f https://raw.githubusercontent.com/flanksource/canary-checker/ma
 kubectl get canary
 ```
 
-``` title="sample output"
+```title="sample output"
 NAME               INTERVAL   STATUS   LAST CHECK   UPTIME 1H        LATENCY 1H   LAST TRANSITIONED
 http-pass-single   30         Passed   13s          18/18 (100.0%)   480ms        13s
 ```
-
-
 
 ### Dashboard
 
@@ -128,13 +117,9 @@ Canary checker comes with a built-in dashboard for displaying canary results, it
 
 ![](https://github.com/flanksource/docs/blob/85bdd4875d0d3ded16b7aa6c132d423852fcad90/docs/images/dashboard-http-pass-canary.png?raw=true)
 
-
-
 ### Prometheus
 
 The helm chart by default will install a `ServiceMonitor` for the prometheus operator, it can be turned off using `--set serviceMonitor=false`
-
-
 
 Metrics exposed by. anary-checler
 

@@ -2,18 +2,17 @@
 title: Event Triggers
 ---
 
-Playbook can be triggered when specific occurs, e.g.  you can trigger a playbook to run when a component becomes unhealthy.
+Playbook can be triggered when specific occurs, e.g. you can trigger a playbook to run when a component becomes unhealthy.
 
 Multiple playbooks could be listening to the same event and likewise a playbook can be listening to multiple events. If a playbook is listening on multiple events then it is triggered when any of those events occur.
 
 Filters can give you fine-grained control over the events that can trigger the playbook.
 
-| Field    | Description                                                                                   | Scheme              | Required |
-| -------- | --------------------------------------------------------------------------------------------- | ------------------- | -------- |
-| `event`  | Event to listen for.                                                                          | `string`            | `true`   |
-| `filter` | Filter events to trigger on | [CEL](/reference/scripting/cel)            | `true`   |
-| `labels` | Labels specifies the key-value pairs that the associated event's resource must match.         | `map[string]string` | `false`  |
-
+| Field    | Description                                                                           | Scheme                          | Required |
+| -------- | ------------------------------------------------------------------------------------- | ------------------------------- | -------- |
+| `event`  | Event to listen for.                                                                  | `string`                        | `true`   |
+| `filter` | Filter events to trigger on                                                           | [CEL](/reference/scripting/cel) | `true`   |
+| `labels` | Labels specifies the key-value pairs that the associated event's resource must match. | `map[string]string`             | `false`  |
 
 ## Canary
 
@@ -23,7 +22,6 @@ Canary events relate to activities on health checks.
 | -------- | ------------------------------------- |
 | `passed` | When a previously failed check passes |
 | `failed` | When a previously passed check fails  |
-
 
 ```yaml title="notify-passing-http-checks.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -55,7 +53,6 @@ Component events relate to activities on Topology components.
 | `info`      | when a component has info          |
 | `warning`   | when a component has warning       |
 | `error`     | when a component has error         |
-
 
 ```yaml title="notify-unhealthy-database-component.yaml"
 apiVersion: mission-control.flanksource.com/v1

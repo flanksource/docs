@@ -19,8 +19,8 @@ kind: Playbook
         - DevOps
 ```
 
-| Field                | Description                                           | Scheme       | Required |
-|----------------------|-------------------------------------------------------|--------------|----------|
-| `type`      | Specifies the number of approvals required. Defaults to `all`.    | `any` or `all`     | `false`  |
-| `approvers.[]people` | List of individuals who can approve the playbook run. | `People` | `false`  |
-| `approvers.[]teams` | List of teams who can approve the playbook run. | `Team` | `false`  |
+| Field                | Description                                                    | Scheme         | Required |
+| -------------------- | -------------------------------------------------------------- | -------------- | -------- |
+| `type`               | Specifies the number of approvals required. Defaults to `all`. | `any` or `all` | `false`  |
+| `approvers.[]people` | List of individuals who can approve the playbook run.          | `People`       | `false`  |
+| `approvers.[]teams`  | List of teams who can approve the playbook run.                | `Team`         | `false`  |

@@ -8,7 +8,7 @@ This is pretty obvious, but first [install](https://github.com/flanksource/karin
 
 ## Metrics Server
 
-For many environments, Prometheus requires the [Kubernetes Metrics Server](https://github.com/kubernetes-sigs/metrics-server) to get metrics from the worker nodes. How this is deployed is slightly different for different Kubernetes environments. [Here is an example of how to install the Metrics Server on AWS EKS](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html).  If you are using GKE, you can skip this step as Prometheus is already installed using Stack Driver metrics.
+For many environments, Prometheus requires the [Kubernetes Metrics Server](https://github.com/kubernetes-sigs/metrics-server) to get metrics from the worker nodes. How this is deployed is slightly different for different Kubernetes environments. [Here is an example of how to install the Metrics Server on AWS EKS](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html). If you are using GKE, you can skip this step as Prometheus is already installed using Stack Driver metrics.
 
 To ensure you are getting metrics run:
 
@@ -41,7 +41,6 @@ workqueue_work_duration_seconds_sum{name="priority_and_fairness_config_queue"} 0
 workqueue_work_duration_seconds_count{name="priority_and_fairness_config_queue"} 1
 ```
 
-
 ## Prometheus Operator
 
 You can install the operator by cloning the [Prometheus Operator](https://github.com/prometheus-operator/kube-prometheus) repository with:
@@ -50,13 +49,14 @@ You can install the operator by cloning the [Prometheus Operator](https://github
 git clone https://github.com/prometheus-operator/kube-prometheus
 ```
 
-Find the appropriate release for your version of Kubernetes in the table.  For example, if you were using Kubernetes 1.17 (run `kubectl version` to see what you are running) you would see the [README](https://github.com/prometheus-operator/kube-prometheus/blob/master/README) shows I should be running `release-0.4`.  So to install we run:
+Find the appropriate release for your version of Kubernetes in the table. For example, if you were using Kubernetes 1.17 (run `kubectl version` to see what you are running) you would see the [README](https://github.com/prometheus-operator/kube-prometheus/blob/master/README) shows I should be running `release-0.4`. So to install we run:
 
 ```
 cd kube-prometheus
 git branch -a
 ```
-Here we see all the branch names.  To switch to the release branch run:
+
+Here we see all the branch names. To switch to the release branch run:
 
 ```
 git checkout remotes/origin/release-0.4

@@ -1,6 +1,4 @@
-
 # create superuser like privileges on a single database/scheme
-
 
 ```
 CREATE ROLE "canary-checker" LOGIN PASSWORD 'r03wYPFDSdMc3aaJ';
@@ -8,8 +6,8 @@ ALTER ROLE  "canary-checker"  SUPERUSER;
 GRANT CREATE, SELECT, UPDATE, DELETE, INSERT ON ALL TABLES IN SCHEMA public TO "canary-checker";
 GRANT CREATE ON SCHEMA public TO "canary-checker";
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT CREATE, SELECT, UPDATE, DELETE, INSERT ON TABLES TO "canary-checker";
- 
- 
+
+
 ALTER SCHEMA public OWNER TO "canary-checker";
 ```
 

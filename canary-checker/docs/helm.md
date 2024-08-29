@@ -3,6 +3,7 @@ title: Helm
 description: Recommended method for installing canary-checker
 image: /static/img/icons/helm.svg
 ---
+
 # Quick Start
 
 The recommended method for installing Canary Checker is using [helm](https://helm.sh/)
@@ -36,11 +37,11 @@ flanksource-ui:
     host: canary-checker.127.0.0.1.nip.io
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
+      kubernetes.io/tls-acme: 'true'
     tls:
       - secretName: canary-checker-tls
         hosts:
-        - canary-checker.127.0.0.1.nip.io
+          - canary-checker.127.0.0.1.nip.io
 ```
 
 ### Using Flux CD
@@ -80,11 +81,11 @@ spec:
         host: canary-checker.127.0.0.1.nip.io
         annotations:
           kubernetes.io/ingress.class: nginx
-          kubernetes.io/tls-acme: "true"
+          kubernetes.io/tls-acme: 'true'
         tls:
           - secretName: canary-checker-tls
             hosts:
-            - canary-checker.127.0.0.1.nip.io
+              - canary-checker.127.0.0.1.nip.io
 ```
 
 ```yaml title=canary-checker-kustomization.yaml
@@ -145,9 +146,9 @@ You can access the web dashboard by forwarding the port:
 ```bash
 kubectl  -n canary-checker port-forward  svc/canary-checker-ui 8080:80
 ```
+
 ![](./images/http-checks.png)
 [http://localhost:8080](http://localhost:8080)
-
 
 To deploy an ingress for the dashboard, update the `values.yaml`:
 
@@ -156,7 +157,7 @@ flanksource-ui:
   enabled: true
   ingress:
     annotations:
-      kubernetes.io/tls-acme: "true"
+      kubernetes.io/tls-acme: 'true'
     host: <DOMAIN>
     tls:
       - hosts:

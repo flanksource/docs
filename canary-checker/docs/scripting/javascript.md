@@ -24,16 +24,13 @@ spec:
             display += currency + " = " + currencyCodes[currency] + json.rates[currency] + ", "
           }
           "$1 = " + display
-````
-
-
+```
 
 :::tip Troubleshooting
 You can print to the console for rapid development e.g. `console.log(JSON.stringify(json))`, this will only be shown in the logs
 :::
 
 ### Underscore
-
 
 The [underscore](https://underscorejs.org/) library is automatically imported so you can do the following:
 

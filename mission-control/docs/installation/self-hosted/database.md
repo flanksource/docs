@@ -54,7 +54,6 @@ The following keys are required for kratos:
 - `DB_USERNAME`
 - `DB_PASSWORD`
 
-
 ```yaml title="values.yaml"
 db:
   create: false

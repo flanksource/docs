@@ -1,11 +1,8 @@
-
-
 Use the [Google Technical Docs Style Guide](https://developers.google.com/style/)
-
 
 # Tone
 
-* Use [second-person](https://developers.google.com/style/person) pronouns (you, your) with an [active](https://developers.google.com/style/voice) voice, in the [present](https://developers.google.com/style/tense) tense
+- Use [second-person](https://developers.google.com/style/person) pronouns (you, your) with an [active](https://developers.google.com/style/voice) voice, in the [present](https://developers.google.com/style/tense) tense
 
 # Duplicate
 
@@ -23,7 +20,9 @@ Use the [Google Technical Docs Style Guide](https://developers.google.com/style/
 # Screenshots
 
 1. Use Node Screenshots where possible (Or get as close up as possible)
-  * Use Chrome -> Inspect -> Right Click Capture Node Screenshot
+
+- Use Chrome -> Inspect -> Right Click Capture Node Screenshot
+
 2. Never include the browser frame
 3. The screenshot should have good quality / realistic data - If necessary modify the html before taking a screenshot
 4. Infer the screenshot in the sentence before, e.g. In the **Add Health Check modal** you will see

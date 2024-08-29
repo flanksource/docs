@@ -5,7 +5,6 @@ sidebar_position: 100
 
 Custom scrapers allow you to scrape from sources that are not well-defined. For example, you can scrape a [file](./file) sitting on disk, a file inside a [Kubernetes Pod](./kubernetes-file), or data from a [SQL](./sql) query.
 
-
 ```yaml title="file-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
 kind: ScrapeConfig
@@ -20,8 +19,6 @@ spec:
         - test*.json
 ```
 
-
-
 ```json title="config-file.json"
 {
   "Config": {
@@ -35,21 +32,18 @@ spec:
 
 Custom scrapers require defining the `id`, `type`, and `class` for each scraped item. For example, when scraping a file containing a JSON array, where each array element represents a config item, you need to specify the `id`, `type`, and config `class` for these items. Achieve this by utilizing mappings in your custom scraper configuration.
 
-
-| Field             | Description                                                                                                                                                                                  | Scheme                                              | Required |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------- |
-| `items`            |  A path pointing to an array, each item will be created as a a separate config item, all other JSONPath will be evaluated from the new items root                                                                                                                                                                  | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink> | `true`   |
-| `id`              | ID for the config item                                                                                                                                                                       | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink> | `true`   |
-| `type`            | Type for the config item                                                                                                                                                                     | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink> | `true`   |
-| `class`           | Class for the config item. _(Defaults to `type`)_                                                                                                                                            | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink> |          |
-| `name`            | Name for the config item                                                                                                                                                                     | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink> |          |
-| `format` | Format of the config source. Defaults to `json` | `json`, `xml` or `properties` See [Formats](#formats) | |
-| `createFields`    | Fields to use to determine the items created date, if not specified or the field is not found, defaults to scrape time| <CommonLink to="jsonpath">_`[]JSONPath`_</CommonLink> |          |
-| `deleteFields`    | Fields to use to determine when an item was deleted if not specified or the field is not found, defaults to scrape time of when the item was no longer detected| <CommonLink to="jsonpath">_`[]JSONPath`_</CommonLink> |          |
-| `timestampFormat` | Timestamp format of `createFields` and `deleteFields`. _(Default 2006-01-02T15:04:05Z07:00)_                                                                              | [`time.Format`](https://golang.org/pkg/time/#Time.Format)              |          |
-| `full` | Scrape result includes the full metadata of a config, including possible changes, See [Change Extraction](#change-extraction) | `bool` | |
-
-
+| Field             | Description                                                                                                                                                     | Scheme                                                    | Required |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | -------- |
+| `items`           | A path pointing to an array, each item will be created as a a separate config item, all other JSONPath will be evaluated from the new items root                | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       | `true`   |
+| `id`              | ID for the config item                                                                                                                                          | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       | `true`   |
+| `type`            | Type for the config item                                                                                                                                        | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       | `true`   |
+| `class`           | Class for the config item. _(Defaults to `type`)_                                                                                                               | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       |          |
+| `name`            | Name for the config item                                                                                                                                        | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       |          |
+| `format`          | Format of the config source. Defaults to `json`                                                                                                                 | `json`, `xml` or `properties` See [Formats](#formats)     |          |
+| `createFields`    | Fields to use to determine the items created date, if not specified or the field is not found, defaults to scrape time                                          | <CommonLink to="jsonpath">_`[]JSONPath`_</CommonLink>     |          |
+| `deleteFields`    | Fields to use to determine when an item was deleted if not specified or the field is not found, defaults to scrape time of when the item was no longer detected | <CommonLink to="jsonpath">_`[]JSONPath`_</CommonLink>     |          |
+| `timestampFormat` | Timestamp format of `createFields` and `deleteFields`. _(Default 2006-01-02T15:04:05Z07:00)_                                                                    | [`time.Format`](https://golang.org/pkg/time/#Time.Format) |          |
+| `full`            | Scrape result includes the full metadata of a config, including possible changes, See [Change Extraction](#change-extraction)                                   | `bool`                                                    |          |
 
 ## Formats
 
@@ -66,18 +60,12 @@ When displaying the config, the UI will automatically convert the JSON data to Y
 Non JSON files are stored as JSON using:
 
 ```yaml
-{
- "format": "xml",
- "content": "<root>..</root>"
-}
+{ 'format': 'xml', 'content': '<root>..</root>' }
 ```
 
 Non JSON content can still be accessed in scripts using `config.content`
 
 The UI will format and render XML appropriately.
-
-
-
 
 ## Change Extraction
 
@@ -130,4 +118,3 @@ and the following new config change would be registered for that particular conf
   "unrelated_stuff": 123
 }
 ```
-

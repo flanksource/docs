@@ -8,14 +8,14 @@ Metrics can be generated from time based data, e.g. logs per minute, logins per 
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
-  name: "container-log-counts"
+  name: 'container-log-counts'
   namespace: observability
   # The schedule can be as short or as long as you want, the query will always search for log
   # since the last query
-  schedule: "@every 5m"
+  schedule: '@every 5m'
   http:
     - name: container_log_volume
-      url: "https://elasticsearch/logstash-*/_search"
+      url: 'https://elasticsearch/logstash-*/_search'
       headers:
         - name: Content-Type
           value: application/json

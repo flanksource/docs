@@ -27,7 +27,6 @@ When you go to the catalog now, you can now see all the Azure Resources
 
 ![Azure Catalog](/img/azure-registry-catalog-scraper.png)
 
-
 ## Prerequisites
 
 1. Connection to Azure must be authenticated via Workload Identity for Service Accounts or Client ID and Secret.
@@ -42,25 +41,26 @@ This document provides an overview of configurable values for deploying Mission 
 
 The following table lists the configurable parameters and their default values:
 
-| Parameter | Description | Schema | Default |
-| --- | --- | --- | --- |
-| `labels` | Additional labels to apply to resources| map[string]string | {} |
-| `scraper.name` | Name of the Azure scraper | string | "azure" |
-| `subscriptionID` | Azure Subscription ID | string | "" |
-| `tenantID` | Azure Tenant ID | string | "" |
+| Parameter        | Description                             | Schema            | Default |
+| ---------------- | --------------------------------------- | ----------------- | ------- |
+| `labels`         | Additional labels to apply to resources | map[string]string | {}      |
+| `scraper.name`   | Name of the Azure scraper               | string            | "azure" |
+| `subscriptionID` | Azure Subscription ID                   | string            | ""      |
+| `tenantID`       | Azure Tenant ID                         | string            | ""      |
 
 ### Connection Details
 
-| Parameter | Description | Schema | Default |
-| --- | --- | --- | --- |
-| `connection` | Azure connection details. | string | "" |
-| `clientID` | Azure Client ID | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
-| `clientSecret` | Azure Client Secret | <CommonLink to="secrets">*EnvVar*</CommonLink> | "" |
+| Parameter      | Description               | Schema                                         | Default |
+| -------------- | ------------------------- | ---------------------------------------------- | ------- |
+| `connection`   | Azure connection details. | string                                         | ""      |
+| `clientID`     | Azure Client ID           | <CommonLink to="secrets">_EnvVar_</CommonLink> | ""      |
+| `clientSecret` | Azure Client Secret       | <CommonLink to="secrets">_EnvVar_</CommonLink> | ""      |
 
 :::info
 If you have setup Workload Identity Roles for Service Account, you do not have to do anything else. If you do not have that setup, you can use Client ID and Client Secret
 
 Example:
+
 ```yaml title="values.yaml"
 connectionDetails:
   clientID:
@@ -77,11 +77,10 @@ connectionDetails:
 
 :::
 
-
 ### Exclusions
 
 Certain items can be excluded from being scraped
 
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `exclusions.activityLogs` | List of activity logs resources to exclude (Example: `['Microsoft.ContainerService/managedClusters/listClusterAdminCredential/action']`) | [] |
+| Parameter                 | Description                                                                                                                              | Default |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `exclusions.activityLogs` | List of activity logs resources to exclude (Example: `['Microsoft.ContainerService/managedClusters/listClusterAdminCredential/action']`) | []      |

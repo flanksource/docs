@@ -2,6 +2,7 @@
 title: Windows
 description: Installing canary-checker on a windows os
 ---
+
 # Quick Start
 
 Installing Canary Checker as a Windows service.
@@ -25,7 +26,9 @@ You only need the powershell script below(assuming internet connectivity). Simpl
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri https://github.com/flanksource/canary-checker/blob/master/install-service.ps1 -OutFile install-service.ps1
 ```
+
 ### (Optional)
+
 If you require a [specific version of Canary Checker](https://github.com/flanksource/canary-checker/releases) or want to build your own to test, simply place the executable in the same folder as the required powershell script above. Otherwise, the powershell install script will simply download the latest release.
 
 ## 3. Create a canary
@@ -43,19 +46,23 @@ spec:
       url: https://httpbin.demo.aws.flanksource.com/status/200
 '@ | out-file -encoding ASCII $pwd\canary-checker.yaml
 ```
+
 ### (Optional)
+
 To test our canary config without installing it, use the below
 
 ```powershell
 .\canary-checker.exe run canary-checker.yaml
 ```
+
 ## 4. Install Canary Checker as a service
+
 The powershell install script is able to download all requirements , if the windows machine does not have internet accesss you will need to manually download the [prerequisites](/##-1.-check-prerequisites) and place them in the script folder.
 
 ```
 .\install-service.ps1 -configfile .\canary-checker.yaml -operation install
 ```
 
-Note: Add ```-httpPort 8081``` to change http port (default is 8080)
+Note: Add `-httpPort 8081` to change http port (default is 8080)
 
-Note: You can use the ```-operation uninstall``` to remove the service Or ```-operation reinstall``` to overwrite an exiting install
+Note: You can use the `-operation uninstall` to remove the service Or `-operation reinstall` to overwrite an exiting install
