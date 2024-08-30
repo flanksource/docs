@@ -1,0 +1,102 @@
+---
+title: Configs
+description: Events that fire on config changes and health
+---
+
+import {
+  ConfigDBStateEnv, CheckHealthEnv, ConfigHealthEnv, ComponentHealthEnv,
+  AgentEnv, ConfigItemEnv, ComponentEnv, CanaryEnv, CheckEnv, CheckStatus,
+  Uptime, Latency
+} from "../../reference/notifications/_env_vars.mdx"
+
+Configs emit events when their health changes or when they are created, modified, or removed.
+
+**Health events**
+
+- `config.healthy`
+- `config.unhealthy`
+- `config.warning`
+- `config.unknown`
+
+**State events**
+
+- `config.created`
+- `config.updated`
+- `config.deleted` _(Soft Delete)_
+
+```yaml title="ec2-instance-updates.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: ec2-instance-changes
+  namespace: default
+spec:
+  events:
+    - config.created
+    - config.updated
+    - config.deleted
+  filter: config.type == 'AWS::EC2::Instance'
+  to:
+    email: alerts@acme.com
+```
+
+```yaml title="ec2-health-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: ec2-instance-health-alerts
+  namespace: default
+spec:
+  events:
+    - config.unhealthy
+    - config.warning
+  filter: config.type == 'AWS::EC2::Instance'
+  to:
+    email: alerts@acme.com
+```
+
+## Default Templates
+
+The default notification template for health events is:
+
+### Health notifications
+
+#### Title
+
+```
+{{ if ne channel "slack"}}{{.config.type}} {{.config.name}} is {{.config.health}}{{end}}
+```
+
+#### Template
+
+```txt file=../../../modules/mission-control/notification/templates/config.health
+
+```
+
+### State change notifications
+
+#### Title
+
+```
+{{ if ne channel "slack"}}{{.config.type}} {{.config.name}} was {{.new_state}}{{end}}
+```
+
+#### Template
+
+```txt file=../../../modules/mission-control/notification/templates/config.db.update
+
+```
+
+## Template Variables
+
+### Config State Env
+<ConfigDBStateEnv />
+
+### Config Health Env
+<ConfigHealthEnv />
+
+### Config Item
+<ConfigItemEnv />
+
+### Agent
+<AgentEnv />

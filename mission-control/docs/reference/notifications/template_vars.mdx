@@ -2,7 +2,11 @@
 title: Template Variables
 ---
 
-import { ConfigDBStateEnv, CheckHealthEnv, ConfigHealthEnv, ComponentHealthEnv, AgentEnv, ConfigItemEnv, ComponentEnv, CanaryEnv } from "./_env_vars.mdx"
+import {
+  ConfigDBStateEnv, CheckHealthEnv, ConfigHealthEnv, ComponentHealthEnv,
+  AgentEnv, ConfigItemEnv, ComponentEnv, CanaryEnv, CheckEnv, CheckStatus,
+  Uptime, Latency
+} from "./_env_vars.mdx"
 
 ### Config State Env
 <ConfigDBStateEnv />
@@ -16,14 +20,26 @@ import { ConfigDBStateEnv, CheckHealthEnv, ConfigHealthEnv, ComponentHealthEnv, 
 ### Component Health Env
 <ComponentHealthEnv />
 
-#### Agent
+### Agent
 <AgentEnv />
 
-#### Config Item
+### Config Item
 <ConfigItemEnv />
 
-#### Component
+### Component
 <ComponentEnv />
 
-#### Canary
+### Canary
 <CanaryEnv />
+
+### Check
+<CheckEnv />
+
+### CheckStatus
+<CheckStatus />
+
+### Uptime
+<Uptime />
+
+### Latency
+<Latency />
