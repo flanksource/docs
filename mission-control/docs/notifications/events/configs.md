@@ -12,58 +12,76 @@ Configs emit events when their health changes or when they are created, modified
 - `config.warning`
 - `config.unknown`
 
-The default notification template for health events is:
-
-- **Title:** `{{.config.type}} {{.config.name}} is {{.config.health}}`
-- **Body:**
-
-  ```
-  ### Labels:
-    {{range $k, $v := .config.labels}}**{{$k}}**: {{$v}}
-    {{end}}
-    [Reference]({{.permalink}})
-  ```
-
 **State events**
 
 - `config.created`
 - `config.updated`
-- `config.deleted`
+- `config.deleted` _(Soft Delete)_
 
-The default notification template for state events is:
-
-- **Title:** `{{.config.type}} {{.config.name}} was [created/updated/deleted]`
-- **Body:**
-
-  ```
-  ### Labels:
-  {{range $k, $v := .config.labels}}**{{$k}}**: {{$v}}
-  {{end}}
-  [Reference]({{.permalink}})
-  ```
-
-Sample notification:
-
-```yaml title="notification.yaml"
+```yaml title="ec2-instance-updates.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
 metadata:
-  name: ec2-instance-create-alert
+  name: ec2-instance-changes
   namespace: default
 spec:
   events:
     - config.created
+    - config.updated
+    - config.deleted
   filter: config.type == 'AWS::EC2::Instance'
-  title: New EC2 instance {{.config.name}} created
-  body: |
-    Region: {{.config.tags['region']}}
-    Zone: {{.config.tags['zone']}}
-    Account: {{.config.tags['account']}}
   to:
     email: alerts@acme.com
 ```
 
-## Variables
+```yaml title="ec2-health-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: ec2-instance-health-alerts
+  namespace: default
+spec:
+  events:
+    - config.unhealthy
+    - config.warning
+  filter: config.type == 'AWS::EC2::Instance'
+  to:
+    email: alerts@acme.com
+```
+
+## Default Templates
+
+The default notification template for health events is:
+
+### Health notifications
+
+#### Title
+
+```
+{{ if ne channel "slack"}}{{.config.type}} {{.config.name}} is {{.config.health}}{{end}}
+```
+
+#### Template
+
+```txt file=../../../modules/mission-control/notification/templates/config.health
+
+```
+
+### State change notifications
+
+#### Title
+
+```
+{{ if ne channel "slack"}}{{.config.type}} {{.config.name}} was {{.new_state}}{{end}}
+```
+
+#### Template
+
+```txt file=../../../modules/mission-control/notification/templates/config.db.update
+
+```
+
+## Template Variables
 
 | Field       | Description                   | Schema              | nullable |
 | ----------- | ----------------------------- | ------------------- | -------- |
@@ -103,5 +121,3 @@ spec:
 | `id`          | The id of the agent            | `uuid`   |          |
 | `name`        | The name of the agent          | `string` |          |
 | `description` | Short description of the agent | `string` |          |
-
-## Notification Defaults

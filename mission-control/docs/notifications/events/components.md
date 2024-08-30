@@ -10,20 +10,7 @@ Component status updates emit the following events
 - `component.warning`
 - `component.unknown`
 
-The default notification template used is:
-_ **Title:** `Component {{.component.name}} is {{.component.health}}`
-_ **Body:**
-
-```
-### Labels:
-{{range $k, $v := .component.labels}}**{{$k}}**: {{$v}}
-{{end}}
-[Reference]({{.permalink}})
-```
-
-Sample notification:
-
-```yaml title="notification.yaml"
+```yaml title="unhelthy-component-notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
 metadata:
@@ -42,9 +29,25 @@ spec:
     email: alerts@acme.com
 ```
 
-The notification title and body can be changed using the variables below:
+## Default Templates
 
-## Variables
+The default notification template used is:
+
+### Title
+
+```
+{{ if ne channel "slack"}}Component {{.component.name}} is {{.component.health}}{{end}}
+```
+
+### Template
+
+```txt file=../../../modules/mission-control/notification/templates/component.health
+
+```
+
+## Template Variables
+
+The notification title and body can be changed using the variables below:
 
 | Field       | Description                   | Schema                    | Optional |
 | ----------- | ----------------------------- | ------------------------- | -------- |

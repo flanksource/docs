@@ -5,34 +5,8 @@ title: Health Checks
 
 Health checks emit 2 events
 
-- **`check.passed`**:
-
-  - **Title:** `Check {{.check.name}} has passed`
-  - **Body:**
-    ```
-    Canary: {{.canary.name}}
-    {{if .agent}}Agent: {{.agent.name}}{{end}}
-    {{if .status.message}}Message: {{.status.message}} {{end}}
-    ### Labels:
-    {{range $k, $v := .check.labels}}**{{$k}}**: {{$v}}
-    {{end}}
-    [Reference]({{.permalink}})
-    ```
-
-- **`check.failed`**:
-  - **Title:** `Check {{.check.name}} has failed`
-  - **Body:**
-    ```
-    Canary: {{.canary.name}}
-    {{if .agent}}Agent: {{.agent.name}}{{end}}
-    Error: {{.status.error}}
-    ### Labels:
-    {{range $k, $v := .check.labels}}**{{$k}}**: {{$v}}
-    {{end}}
-    [Reference]({{.permalink}})
-    ```
-
-Sample notification:
+- `check.passed`
+- `check.failed`
 
 ```yaml title="notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -53,7 +27,37 @@ spec:
     email: alerts@acme.com
 ```
 
-## Variables
+## Default Templates
+
+### check.passed
+
+#### Title
+
+```
+{{ if ne channel "slack"}}Check {{.check.name}} has passed{{end}}
+```
+
+#### Template
+
+```txt file=../../../modules/mission-control/notification/templates/check.passed
+
+```
+
+### check.failed
+
+#### Title
+
+```
+{{ if ne channel "slack"}}Check {{.check.name}} has failed{{end}}
+```
+
+#### Template
+
+```txt file=../../../modules/mission-control/notification/templates/check.failed
+
+```
+
+## Template Variables
 
 | Field       | Description                   | Schema                         | Optional |
 | ----------- | ----------------------------- | ------------------------------ | -------- |
