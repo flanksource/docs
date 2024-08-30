@@ -4,10 +4,10 @@ Use a shebang (`#!`) line to choose a different shell (`python`, `bash` and `pws
 
 ```yaml
 exec:
-    script: |
-      //highlight-next-line
-      #! pwsh
-      Get-Items | ConvertTo-JSON
+  script: |
+    //highlight-next-line
+    #! pwsh
+    Get-Items | ConvertTo-JSON
 ```
 
 </Details>
@@ -29,6 +29,7 @@ Alternatively [change the templating delimiters](#changing-templating-delimiters
 If you are using a YAML multiline string use `|` and not `>` which will strip newlines
 
 Instead of:
+
 ```yaml
 exec:
   //highlight-next-line
@@ -36,7 +37,9 @@ exec:
     #! pwsh
     Get-Items | ConvertTo-JSON
 ```
+
 Do this:
+
 ```yaml
 exec:
   //highlight-next-line
@@ -44,8 +47,8 @@ exec:
     #! pwsh
     Get-Items | ConvertTo-JSON
 ```
-</Details>
 
+</Details>
 
 <Details  summary="Changing templating delimiters">
 
@@ -61,4 +64,5 @@ exec:
     Write-Host "{{  $message }}"
     Write-Host  @{ Number = 1; Shape = "Square"; Color = "Blue"} | ConvertTo-JSON
 ```
+
 </Details>

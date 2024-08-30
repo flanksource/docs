@@ -172,7 +172,7 @@ See also [`coll.Keys`](#keys).
 
 Append a value to the end of a list.
 
-_Note that this function does not change the given list; it always produces a new one._
+_this function does not change the given list; it always produces a new one._
 
 ```go
 {{ slice 1 1 2 3 | append 5 }} // [1 1 2 3 5]
@@ -182,7 +182,7 @@ _Note that this function does not change the given list; it always produces a ne
 
 Prepend a value to the beginning of a list.
 
-_Note that this function does not change the given list; it always produces a new one._
+_this function does not change the given list; it always produces a new one._
 
 ```go
 {{ slice 4 3 2 1 | prepend 5 }} // [5 4 3 2 1]
@@ -192,7 +192,7 @@ _Note that this function does not change the given list; it always produces a ne
 
 Remove any duplicate values from the list, without changing order.
 
-_Note that this function does not change the given list; it always produces a new one._
+_this function does not change the given list; it always produces a new one._
 
 ```go
 {{ slice 1 2 3 2 3 4 1 5 | uniq }} // [1 2 3 4 5]
@@ -202,7 +202,7 @@ _Note that this function does not change the given list; it always produces a ne
 
 Flatten a nested list. Defaults to completely flattening all nested lists, but can be limited with `depth`.
 
-_Note that this function does not change the given list; it always produces a new one._
+_this function does not change the given list; it always produces a new one._
 
 ```go
 {{ "[[1,2],[],[[3,4],[[[5],6],7]]]" | jsonArray | flatten }} // [1 2 3 4 5 6 7]
@@ -213,7 +213,7 @@ _Note that this function does not change the given list; it always produces a ne
 
 Reverse a list.
 
-_Note that this function does not change the given list; it always produces a new one._
+_this function does not change the given list; it always produces a new one._
 
 ```go
 {{ slice 4 3 2 1 | reverse }} // [1 2 3 4]
@@ -225,7 +225,7 @@ Sort a given list. Uses the natural sort order if possible. For inputs that are 
 
 Maps and structs can be sorted by a named key.
 
-_Note that this function does not modify the input._
+_this function does not modify the input._
 
 ```go
 {{ slice "foo" "bar" "baz" | coll.Sort }} // [bar baz foo]
@@ -240,7 +240,7 @@ _Note that this function does not modify the input._
 Merge maps together by overriding src with dst. In other words, the src map can be configured the "default" map, whereas the dst
 map can be configured the "overrides". Many source maps can be provided. Precedence is in left-to-right order.
 
-_Note that this function does not modify the input._
+_this function does not modify the input._
 
 ```go
 {{ $default := dict "foo" 1 "bar" 2}}
@@ -264,7 +264,7 @@ _Note that this function does not modify the input._
 Given a map, returns a new map with any entries that have the given keys.
 
 All keys are converted to strings.
-_Note that this function does not modify the input._
+_this function does not modify the input._
 
 ```go
 {{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
@@ -280,7 +280,7 @@ Given a map, returns a new map without any entries that have the given keys.
 
 All keys are converted to strings.
 
-_Note that this function does not modify the input._
+_this function does not modify the input._
 
 ```go
 {{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
@@ -307,7 +307,7 @@ Converts a true-ish string to a boolean. Can be used to simplify conditional sta
 
 Provides a default value given an empty input. Empty inputs are `0` for numeric types, `""` for strings, `false` for booleans, empty arrays/maps, and `nil`.
 
-Note that this will not provide a default for the case where the input is undefined (i.e. referencing things like `.foo` where there is no `foo` field of `.`), but [`conv.Has`](#has) can be used for that.
+this will not provide a default for the case where the input is undefined (i.e. referencing things like `.foo` where there is no `foo` field of `.`), but [`conv.Has`](#has) can be used for that.
 
 ```go
 {{ "" | default "foo" }} // foo
@@ -852,7 +852,7 @@ A wrapper for Go's [`filepath.VolumeName`](https://golang.org/pkg/path/filepath/
 
 ## math
 
-Returns the absolute value of a given number. When the input is an integer, the result will be an `int64`, otherwise it will be a `float64`.
+Returns the absolute value of a given number. When the input is an integer, the result is `int64`, otherwise it will be a `float64`.
 
 ```go
 {{ math.Abs -3.5 }} {{ math.Abs 3.5 }} {{ math.Abs -42 }} // 3.5 3.5 42
@@ -860,7 +860,7 @@ Returns the absolute value of a given number. When the input is an integer, the 
 
 ### Add
 
-Adds all given operators. When one of the inputs is a floating-point number, the result will be a `float64`, otherwise it will be an `int64`.
+Adds all given operators. When one of the inputs is a floating-point number, the result will be a `float64`, otherwise it is `int64`.
 
 ```go
 {{ math.Add 1 2 3 4 }} {{ math.Add 1.5 2 3 }} // 10 6.5
@@ -1010,7 +1010,7 @@ Returns the nearest integer, rounding half away from zero.
 ### Seq
 
 Return a sequence from `start` to `end`, in steps of `step`. Can handle counting down as well as up, including with negative numbers.
-Note that the sequence _may_ not end at `end`, if `end` is not divisible by `step`.
+the sequence _may_ not end at `end`, if `end` is not divisible by `step`.
 
 ```go
 {{ range (math.Seq 5) }}{{.}} {{end}} // 1 2 3 4 5
@@ -1019,7 +1019,7 @@ Note that the sequence _may_ not end at `end`, if `end` is not divisible by `ste
 
 ### Sub
 
-Subtract the second from the first of the given operators. When one of the inputs is a floating-point number, the result will be a `float64`, otherwise it will be an `int64`.
+Subtract the second from the first of the given operators. When one of the inputs is a floating-point number, the result is a `float64`, otherwise it is `int64`.
 
 ```go
 {{ math.Sub 3 1 }} // 2
@@ -1164,7 +1164,7 @@ Pick an element at a random from a given slice or array.
 
 Pick a random integer. By default, a number between `0` and `100` (inclusive) is chosen, but this range can be overridden.
 
-Note that the difference between `min` and `max` can not be larger than a 63-bit integer (i.e. the unsigned portion of a 64-bit signed integer). The result is given as an `int64`.
+the difference between `min` and `max` can not be larger than a 63-bit integer (i.e. the unsigned portion of a 64-bit signed integer). The result is given as an `int64`.
 
 ```go
 {{ random.Number }} // 55
@@ -1734,7 +1734,7 @@ See also [`test.IsKind`](#iskind)
 
 ### ternary
 
-Returns one of two values depending on whether the third is true. Note that the third value does not have to be a boolean - it is converted first by the [`conv.ToBool`](#tobool) function (values like `true`, `1`, `"true"`, `"Yes"`, etc... are considered true).
+Returns one of two values depending on whether the third is true. the third value does not have to be a boolean - it is converted first by the [`conv.ToBool`](#tobool) function (values like `true`, `1`, `"true"`, `"Yes"`, etc... are considered true).
 
 This is effectively a short-form of the following template:
 
@@ -1848,7 +1848,7 @@ It is shorthand for `time.Now.Sub t`.
 
 ### Unix
 
-Returns the local `Time` corresponding to the given Unix time, in seconds since January 1, 1970 UTC. Note that fractional seconds can be used to denote milliseconds, but must be specified as a string, not a floating point number.
+Returns the local `Time` corresponding to the given Unix time, in seconds since January 1, 1970 UTC. fractional seconds can be used to denote milliseconds, but must be specified as a string, not a floating point number.
 
 _with whole seconds:_
 
