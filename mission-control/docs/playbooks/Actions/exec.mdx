@@ -2,7 +2,7 @@
 title: Exec
 ---
 import Templating from "../../reference/playbooks/context.mdx"
-
+import GoTemplate from '@site/docs/partials/_gotemplate.md'
 
 # <Icon name="console"/> Exec Action
 
@@ -23,61 +23,16 @@ Exec action allows you to executes a command or a script file on the target host
   {field: 'connections', scheme: '[Connections](#connections)', description: 'Connections used by the action'}
 ]}/>
 
-
-:::note Powershell
-Shebang lines are supported to choose a different shell (`python`, `bash` and `pwsh` are included in the base image)
-```yaml
-   exec:
-        script: |
-          #! pwsh
-          Get-Items | ConvertTo-JSON
-```
-:::
-
-::: note Multiline
-If you are using YAML multiline string use `|` and not `>` which will strip newlines
-
-
-Instead of:
-```
-exec:
-  script: >
-    //highlight-nextline
-    #! pwsh
-    Get-Items | ConvertTo-JSON
-```
-
-Do this:
-```
-exec:
-  //highlight-nextline
-  script: |
-    #! pwsh
-    Get-Items | ConvertTo-JSON
-```
-:::
-
-
 ## Templating
 
-Scripts are templatable with [Go Templates](/reference/script/gotemplate)
+Scripts are templatable with [Go Templates](/reference/scripting/gotemplate)
 
 ```yaml
 exec:
         script: kubectl rollout release deployment -n $(.config.tags.namespace) $(.conf
 ```
 
-The template delimiters can be changed from the defaults of `$()` and `{{}}` with `gotemplate` comments
-
-```yaml
-exec:
-  script: |
-    #! pwsh
-    # gotemplate: left-delim=$[[ right-delim=]]
-    $message = "$[[.config.name]]"
-    Write-Host "{{  $message }}"
-    Write-Host  @{ Number = 1; Shape = "Square"; Color = "Blue"} | ConvertTo-JSON
-```
+<GoTemplate/>
 
 
 ###  Connections

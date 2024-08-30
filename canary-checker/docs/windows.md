@@ -16,7 +16,7 @@ In order to run Canary Checker on windows please ensure the following
 2. You must be able to execute the powershell install script as a local administrator
 3. Canary Checker uses an embedded Postgress DB which requires [Microsoft Visual C++ 2015-2022 Redistributable (x64) - 14.38.33130](https://www.microsoft.com/en-us/Download/confirmation.aspx?id=52685)
 
-4. Canary checker uses port 8080 (can be changed) for the HTTP API and port 6432 for the embedded posgres sql server , ensure these ports are free
+4. Canary checker uses port 8080 (can be changed) for the HTTP API and port 6432 for the embedded postgresql server , ensure these ports are free
 
 ## 2. Downloading required files
 
@@ -56,8 +56,7 @@ To test our canary config without installing it, use the below
 ```
 
 ## 4. Install Canary Checker as a service
-
-The powershell install script is able to download all requirements , if the windows machine does not have internet accesss you will need to manually download the [prerequisites](/##-1.-check-prerequisites) and place them in the script folder.
+The powershell install script is able to download all requirements , if the windows machine does not have internet access you will need to manually download the [prerequisites](/##-1.-check-prerequisites) and place them in the script folder.
 
 ```
 .\install-service.ps1 -configfile .\canary-checker.yaml -operation install
@@ -65,4 +64,4 @@ The powershell install script is able to download all requirements , if the wind
 
 Note: Add `-httpPort 8081` to change http port (default is 8080)
 
-Note: You can use the `-operation uninstall` to remove the service Or `-operation reinstall` to overwrite an exiting install
+Note: You can use the ```-operation uninstall``` to remove the service Or ```-operation reinstall``` to overwrite an exiting install

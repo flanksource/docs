@@ -1,9 +1,10 @@
+import GoTemplate from '@site/docs/partials/_gotemplate.md'
+
 # Go Templates
 
-<!-- // cspell:ignore conv, strconv,Ints -->
-
 `template` expressions use the [Go Text Template](https://pkg.go.dev/text/template) library with some additional functions provided by the [gomplate](https://docs.gomplate.ca/) library.
-In this example we get the current exchange rate:
+
+In this example we print out the exchange rates returned by an HTTP API Call
 
 ```yaml title="display-with-gotemplate.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -18,20 +19,10 @@ spec:
         template: '$1 = €{{.json.rates.EUR}}, £{{.json.rates.GBP}}, ₪{{.json.rates.ILS}}'
 ```
 
-## Escaping
+<p/>
 
-In case you might need to pass in a template variable without templating it, then you can put the template inside a string.
-Example:
+<GoTemplate/>
 
-```
-{{ .secret }}
-```
-
-To send `{{ .secret }}` as it is do this
-
-```
-{{`{{ .secret }}`}}
-```
 
 ## base64
 
