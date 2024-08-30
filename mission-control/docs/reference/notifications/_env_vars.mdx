@@ -23,7 +23,7 @@ export function CheckHealthEnv() {
       },
       {
         "field": "agent",
-        "scheme": "[`Agent`](#agent-env)",
+        "scheme": "[`Agent`](#agent)",
         "description": "Details of the agent that created the config."
       }
     ]}
@@ -39,8 +39,13 @@ export function ComponentHealthEnv() {
         "description": "Link to the Component in mission control"
       },
       {
+        "field": "component",
+        "scheme": "[`Component`](#component)",
+        "description": "Link to the Component in mission control"
+      },
+      {
         "field": "agent",
-        "scheme": "[`Agent`](#agent-env)",
+        "scheme": "[`Agent`](#agent)",
         "description": "Details of the agent that created the Component."
       }
     ]}
@@ -52,7 +57,7 @@ export function ConfigHealthEnv() {
     rows={[
       {
         "field": "config",
-        "scheme": "TODO",
+        "scheme": "[`config`](#config)",
         "description": "Corresponding config item"
       },
       {
@@ -62,7 +67,7 @@ export function ConfigHealthEnv() {
       },
       {
         "field": "agent",
-        "scheme": "[`Agent`](#agent-env)",
+        "scheme": "[`Agent`](#agent)",
         "description": "Details of the agent that created the config."
       }
     ]}
@@ -74,7 +79,7 @@ export function ConfigDBStateEnv() {
     rows={[
       {
         "field": "config",
-        "scheme": "TODO",
+        "scheme": "[`config`](#config)",
         "description": "Corresponding config item."
       },
       {
@@ -89,7 +94,7 @@ export function ConfigDBStateEnv() {
       },
       {
         "field": "agent",
-        "scheme": "[`Agent`](#agent-env)",
+        "scheme": "[`Agent`](#agent)",
         "description": "Details of the agent that created the config."
       }
     ]}
@@ -123,24 +128,104 @@ export function ConfigItemEnv() {
   return <Fields
     rows={[
       {
-        "field": "config",
-        "scheme": "TODO",
-        "description": "Corresponding config item."
+        "field": "id",
+        "scheme": "uuid",
+        "description": "ID of the config item"
       },
       {
-        "field": "new_state",
-        "scheme": "`created`, `updated`, `deleted`",
-        "description": "The db state change that caused this event."
+        "field": "agent_id",
+        "scheme": "uuid",
+        "description": "ID of the agent"
       },
       {
-        "field": "permalink",
+        "field": "config_class",
         "scheme": "string",
-        "description": "Link to the Catalog in mission control"
+        "description": "Class of the config item"
       },
       {
-        "field": "agent",
-        "scheme": "[`Agent`](#agent-env)",
-        "description": "Details of the agent that created the config."
+        "field": "config",
+        "scheme": "string",
+        "description": "Configuration"
+      },
+      {
+        "field": "created_at",
+        "scheme": "time.Time",
+        "description": "Creation timestamp"
+      },
+      {
+        "field": "delete_reason",
+        "scheme": "string",
+        "description": "Reason for deletion"
+      },
+      {
+        "field": "deleted_at",
+        "scheme": "time.Time",
+        "description": "Deletion timestamp"
+      },
+      {
+        "field": "description",
+        "scheme": "string",
+        "description": "Description"
+      },
+      {
+        "field": "external_id",
+        "scheme": "[]string",
+        "description": "External IDs"
+      },
+      {
+        "field": "health",
+        "scheme": "Health",
+        "description": "Health"
+      },
+      {
+        "field": "labels",
+        "scheme": "JSONStringMap",
+        "description": "Labels"
+      },
+      {
+        "field": "name",
+        "scheme": "string",
+        "description": "Name"
+      },
+      {
+        "field": "properties",
+        "scheme": "Properties",
+        "description": "Properties"
+      },
+      {
+        "field": "ready",
+        "scheme": "bool",
+        "description": "Whether the config item is ready"
+      },
+      {
+        "field": "scraper_id",
+        "scheme": "string",
+        "description": "ID of the scraper"
+      },
+      {
+        "field": "source",
+        "scheme": "string",
+        "description": "Source"
+      },
+      {
+        "field": "status",
+        "scheme": "string",
+        "description": "Status"
+      },
+      {
+        "field": "tags",
+        "scheme": "JSONStringMap",
+        "description": "Tags"
+      },
+      {
+        "field": "type",
+        "scheme": "string",
+        "description": "Type"
+      },
+      {
+        "field": "updated_at",
+        "scheme": "time.Time",
+        "description": "Update timestamp"
       }
     ]}
   />
@@ -167,36 +252,135 @@ export function CanaryEnv() {
       },
       {
         "field": "agent",
-        "scheme": "[`Agent`](#agent-env)",
+        "scheme": "[`Agent`](#agent)",
         "description": "Details of the agent that created the config."
       }
     ]}
   />
 }
 
-
 export function ComponentEnv() {
   return <Fields
     rows={[
       {
-        "field": "config",
-        "scheme": "TODO",
-        "description": "Corresponding config item."
+        "field": "id",
+        "scheme": "uuid",
+        "description": "The id of the component"
       },
       {
-        "field": "new_state",
-        "scheme": "`created`, `updated`, `deleted`",
-        "description": "The db state change that caused this event."
-      },
-      {
-        "field": "permalink",
+        "field": "description",
         "scheme": "string",
-        "description": "Link to the Catalog in mission control"
+        "description": "The description of the component"
       },
       {
-        "field": "agent",
-        "scheme": "[`Agent`](#agent-env)",
-        "description": "Details of the agent that created the config."
+        "field": "external_id",
+        "scheme": "string",
+        "description": "The external id of the component"
+      },
+      {
+        "field": "hidden",
+        "scheme": "bool",
+        "description": "Whether the component is hidden"
+      },
+      {
+        "field": "labels",
+        "scheme": "map[string]string",
+        "description": "The labels of the component",
+      },
+      {
+        "field": "name",
+        "scheme": "string",
+        "description": "The name of the component"
+      },
+      {
+        "field": "namespace",
+        "scheme": "string",
+        "description": "The namespace of the component"
+      },
+      {
+        "field": "parent_id",
+        "scheme": "uuid",
+        "description": "The id of the parent component",
+      },
+      {
+        "field": "properties",
+        "scheme": "map[string]string",
+        "description": "The properties of the component",
+      },
+      {
+        "field": "silenced",
+        "scheme": "bool",
+        "description": "Whether the component is silenced"
+      },
+      {
+        "field": "status_reason",
+        "scheme": "string",
+        "description": "The status reason of the component"
+      },
+      {
+        "field": "status",
+        "scheme": "string",
+        "description": "The status of the component"
+      },
+      {
+        "field": "summary",
+        "scheme": "map[string]string",
+        "description": "The summary of the component",
+      },
+      {
+        "field": "text",
+        "scheme": "string",
+        "description": "The text of the component"
+      },
+      {
+        "field": "topology_type",
+        "scheme": "string",
+        "description": "The type of the topology"
+      },
+      {
+        "field": "type",
+        "scheme": "string",
+        "description": "The type of the component"
+      },
+      {
+        "field": "cost_per_minute",
+        "scheme": "float64",
+        "description": "The cost per minute of the component"
+      },
+      {
+        "field": "cost_total_1d",
+        "scheme": "float64",
+        "description": "The cost total 1d of the component"
+      },
+      {
+        "field": "cost_total_7d",
+        "scheme": "float64",
+        "description": "The cost total 7d of the component"
+      },
+      {
+        "field": "cost_total_30d",
+        "scheme": "float64",
+        "description": "The cost total 30d of the component"
+      },
+      {
+        "field": "created_by",
+        "scheme": "uuid",
+        "description": "Id of the person that created this component"
+      },
+      {
+        "field": "created_at",
+        "scheme": "time.Time",
+        "description": "Created timestamp"
+      },
+      {
+        "field": "updated_at",
+        "scheme": "time.Time",
+        "description": "Updated timestamp"
+      },
+      {
+        "field": "deleted_at",
+        "scheme": "time.Time",
+        "description": "Deleted timestamp",
       }
     ]}
   />

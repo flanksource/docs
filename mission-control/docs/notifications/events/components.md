@@ -3,7 +3,7 @@ title: Components
 description: Events that fire on topology/component changes
 ---
 
-Component status updates emit the following events
+Components updates emit the following events when its health changes
 
 - `component.healthy`
 - `component.unhealthy`

@@ -56,22 +56,6 @@ In this example `{{.check.name}}` and `{{.check.health}}` are placeholders that 
 All notification templates in Mission Control are defined in markdown, and depending on the support of the notification channel it will either be converted to HTML or plain text.
 :::
 
-
-### Template Variables
-
-#### Config DB State Env
-<ConfigDBStateEnv />
-
-#### Check Health Env
-<CheckHealthEnv />
-
-#### Config Health Env
-<ConfigHealthEnv />
-
-#### Component Health Env
-<ComponentHealthEnv />
-
-
 ## Filtering Events
 
 Mission Control allows you to fine-tune your notification delivery by filtering events using <CommonLink to="cel">CEL</CommonLink>. This enables you to specify precise conditions that dictate when a notification should be triggered. For instance, you can configure notifications to be sent only for specific event types, specific resources, or when certain conditions are met.
