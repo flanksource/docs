@@ -12,7 +12,7 @@ fmt:
 
 .PHONY: fmt-check
 fmt-check:
-	npx prettier --check "**/*.md"
+	npx prettier --check --log-level=debug "**/*.md"
 
 .PHONY:
 sync:

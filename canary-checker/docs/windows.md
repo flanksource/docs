@@ -20,7 +20,7 @@ To run Canary Checker on windows please ensure the following
 
 ## 2. Downloading required files
 
-You only need the powershell script below(assuming internet connectivity),  place it in the folder you wish to install Canary Checker in.
+You only need the powershell script below(assuming internet connectivity). Place it in the folder you wish to install Canary Checker in.
 
 ```powershell
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12

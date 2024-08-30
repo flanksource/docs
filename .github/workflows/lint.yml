@@ -13,4 +13,17 @@ jobs:
         with:
           node-version: '20.11.1'
 
-      - run: make fmt-check
+      - name: Run format check
+        run: make fmt-check
+        continue-on-error: true
+        id: fmt-check
+
+      - name: Run formatter and show diff if check failed
+        if: steps.fmt-check.outcome == 'failure'
+        run: |
+          make fmt
+          git diff
+
+      - name: Exit with error if format check failed
+        if: steps.fmt-check.outcome == 'failure'
+        run: exit 1
