@@ -6,6 +6,7 @@ sidebar_position: 1
 ---
 
 import Notification from "../reference/notifications/_notification.mdx"
+import { ConfigDBStateEnv, CheckHealthEnv, ConfigHealthEnv, ComponentHealthEnv } from "../reference/notifications/_env_vars.mdx"
 
 # Notifications
 
@@ -31,6 +32,7 @@ This notification will send an email to `alerts@acme.com` whenever a health chec
 
 <Notification/>
 
+
 ## Templating
 
 You can use Go Templates to customize the content of notification titles and bodies. This allows you to include dynamic information from the event that triggered the notification.
@@ -53,6 +55,21 @@ In this example `{{.check.name}}` and `{{.check.health}}` are placeholders that 
 :::tip Markdown
 All notification templates in Mission Control are defined in markdown, and depending on the support of the notification channel it will either be converted to HTML or plain text.
 :::
+
+
+### Template Variables
+
+#### Config DB State Env
+<ConfigDBStateEnv />
+
+#### Check Health Env
+<CheckHealthEnv />
+
+#### Config Health Env
+<ConfigHealthEnv />
+
+#### Component Health Env
+<ComponentHealthEnv />
 
 
 ## Filtering Events

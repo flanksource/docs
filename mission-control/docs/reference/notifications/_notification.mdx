@@ -1,11 +1,11 @@
-<Fields rows={[
+<Fields withTemplates="true" rows={[
   {
     field: "events",
     required: true,
     description: "A list of events that should trigger this notification",
     scheme: '[[]Event](./events)'
   },
-{
+  {
     field: "to.person",
     description: "Send an email to the person",
     scheme: "`UUID` or `email` of a person"
@@ -38,23 +38,39 @@
   {
     field: "title",
     description: "Channel dependent e.g. subject for email",
-    scheme: "GoTemplate"
+    scheme: "GoTemplate",
+    templateEnv: [
+      {"name": "CheckHealthEnv", "url": "#check-health-env"},
+      {"name": "ConfigHealthEnv", "url": "#check-health-env"},
+      {"name": "ConfigStateUpdateEnv", "url": "#check-health-env"},
+      {"name": "ComponentHealthEnv", "url": "#check-health-env"},
+    ],
   },
-    {
+  {
     field: "body",
     description: "Channel dependent e.g. email body for email",
-    scheme: "GoTemplate"
-  },  {
+    scheme: "GoTemplate",
+    templateEnv: [
+      {"name": "CheckHealthEnv", "url": "#check-health-env"},
+      {"name": "ConfigHealthEnv", "url": "#check-health-env"},
+      {"name": "ConfigStateUpdateEnv", "url": "#check-health-env"},
+      {"name": "ComponentHealthEnv", "url": "#check-health-env"},
+    ],
+  },  
+  {
     field: "filter",
     description: "Filter narrows down the event trigger. Example: `check.type == 'http'` filter on `check.failed` event will only send notification for failing http checks.",
     scheme: "CEL",
-    template: [{
-
-    }],
+    templateEnv: [
+      {"name": "CheckHealthEnv", "url": "#check-health-env"},
+      {"name": "ConfigHealthEnv", "url": "#check-health-env"},
+      {"name": "ConfigStateUpdateEnv", "url": "#check-health-env"},
+      {"name": "ComponentHealthEnv", "url": "#check-health-env"},
+    ],
   }
 
 ]}/>
 
-:::note Single Recipient
+:::info Single Recipient
 Only one recipient can be specified
 :::

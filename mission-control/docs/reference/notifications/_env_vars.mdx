@@ -1,0 +1,203 @@
+export function CheckHealthEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "check",
+        "scheme": "TODO",
+        "description": "Check"
+      },
+      {
+        "field": "canary",
+        "scheme": "TODO",
+        "description": "canary"
+      },
+      {
+        "field": "status",
+        "scheme": "TODO",
+        "description": "check status"
+      },
+      {
+        "field": "permalink",
+        "scheme": "string",
+        "description": "Link to the Catalog in mission control"
+      },
+      {
+        "field": "agent",
+        "scheme": "[`Agent`](#agent-env)",
+        "description": "Details of the agent that created the config."
+      }
+    ]}
+  />
+}
+
+export function ComponentHealthEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "permalink",
+        "scheme": "string",
+        "description": "Link to the Component in mission control"
+      },
+      {
+        "field": "agent",
+        "scheme": "[`Agent`](#agent-env)",
+        "description": "Details of the agent that created the Component."
+      }
+    ]}
+  />
+}
+
+export function ConfigHealthEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "config",
+        "scheme": "TODO",
+        "description": "Corresponding config item"
+      },
+      {
+        "field": "permalink",
+        "scheme": "string",
+        "description": "Link to the Catalog in mission control"
+      },
+      {
+        "field": "agent",
+        "scheme": "[`Agent`](#agent-env)",
+        "description": "Details of the agent that created the config."
+      }
+    ]}
+  />
+}
+
+export function ConfigDBStateEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "config",
+        "scheme": "TODO",
+        "description": "Corresponding config item."
+      },
+      {
+        "field": "new_state",
+        "scheme": "`created`, `updated`, `deleted`",
+        "description": "The db state change that caused this event."
+      },
+      {
+        "field": "permalink",
+        "scheme": "string",
+        "description": "Link to the Catalog in mission control"
+      },
+      {
+        "field": "agent",
+        "scheme": "[`Agent`](#agent-env)",
+        "description": "Details of the agent that created the config."
+      }
+    ]}
+  />
+}
+
+export function AgentEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "id",
+        "scheme": "uuid",
+        "description": "The id of the agent"
+      },
+      {
+        "field": "name",
+        "scheme": "string",
+        "description": "The name of the agent"
+      },
+      {
+        "field": "description",
+        "scheme": "string",
+        "description": "Short description of the agent"
+      }
+
+    ]}
+  />
+}
+
+export function ConfigItemEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "config",
+        "scheme": "TODO",
+        "description": "Corresponding config item."
+      },
+      {
+        "field": "new_state",
+        "scheme": "`created`, `updated`, `deleted`",
+        "description": "The db state change that caused this event."
+      },
+      {
+        "field": "permalink",
+        "scheme": "string",
+        "description": "Link to the Catalog in mission control"
+      },
+      {
+        "field": "agent",
+        "scheme": "[`Agent`](#agent-env)",
+        "description": "Details of the agent that created the config."
+      }
+    ]}
+  />
+}
+
+
+export function CanaryEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "config",
+        "scheme": "TODO",
+        "description": "Corresponding config item."
+      },
+      {
+        "field": "new_state",
+        "scheme": "`created`, `updated`, `deleted`",
+        "description": "The db state change that caused this event."
+      },
+      {
+        "field": "permalink",
+        "scheme": "string",
+        "description": "Link to the Catalog in mission control"
+      },
+      {
+        "field": "agent",
+        "scheme": "[`Agent`](#agent-env)",
+        "description": "Details of the agent that created the config."
+      }
+    ]}
+  />
+}
+
+
+export function ComponentEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "config",
+        "scheme": "TODO",
+        "description": "Corresponding config item."
+      },
+      {
+        "field": "new_state",
+        "scheme": "`created`, `updated`, `deleted`",
+        "description": "The db state change that caused this event."
+      },
+      {
+        "field": "permalink",
+        "scheme": "string",
+        "description": "Link to the Catalog in mission control"
+      },
+      {
+        "field": "agent",
+        "scheme": "[`Agent`](#agent-env)",
+        "description": "Details of the agent that created the config."
+      }
+    ]}
+  />
+}
