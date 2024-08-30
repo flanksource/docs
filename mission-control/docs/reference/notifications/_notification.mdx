@@ -2,6 +2,7 @@
   {
     field: "events",
     required: true,
+    description: "A list of events that should trigger this notification",
     scheme: '[[]Event](./events)'
   },
 {
@@ -16,13 +17,13 @@
   },
   {
     field: "to.email",
-    description: "Send an email to an external email address",
+    description: "Send an email to any email address",
     scheme: "`email`"
   },
   {
     field: "to.connection",
     description: "Connection to external service",
-    scheme: "`connection`"
+    scheme: "connection"
   },
   {
     field: "to.url",
@@ -31,24 +32,29 @@
   },
   {
     field: "to.properties",
-    description: "_Only applicable if `url` is specified_",
+    description: "Properties are channel dependent special directives to modify the notification message. Example: for email, `FromAddress=admin@flanksource.com` modifies the sender of the email. [Read more](https://containrrr.dev/shoutrrr/v0.8/)",
     scheme: "`map[string]string`"
   },
   {
     field: "title",
-    description: "Channel dependant e.g. subject for email",
+    description: "Channel dependent e.g. subject for email",
     scheme: "GoTemplate"
   },
     {
     field: "body",
-    description: "Channel dependant e.g. email body for email",
+    description: "Channel dependent e.g. email body for email",
     scheme: "GoTemplate"
   },  {
     field: "filter",
-    description: "Filter for which events to send notifications on, must return `true` ",
-    scheme: "CEL"
+    description: "Filter narrows down the event trigger. Example: `check.type == 'http'` filter on `check.failed` event will only send notification for failing http checks.",
+    scheme: "CEL",
+    template: [{
+
+    }],
   }
 
 ]}/>
 
-> Only one recipient can be specified
+:::note Single Recipient
+Only one recipient can be specified
+:::
