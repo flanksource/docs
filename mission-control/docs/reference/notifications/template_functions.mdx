@@ -1,0 +1,101 @@
+---
+title: Template Functions
+---
+
+Special Slack template functions are made available on notifications to complex block formation easier.
+
+**slackHealthEmoji:**
+<SlackHealthEmoji />
+
+**labelsFormat:**
+<LabelsFormat />
+
+**slackSectionLabels:**
+<SlackSectionLabels />
+
+**slackSectionTextFieldPlain:**
+<SlackSectionTextFieldPlain />
+
+**slackSectionTextFieldMD:**
+<SlackSectionTextFieldMD />
+
+**slackSectionTextMD:**
+<SlackSectionTextMD />
+
+**slackSectionTextPlain:**
+<SlackSectionTextPlain />
+
+**SlackURLAction:**
+<SlackURLAction />
+
+export function SlackHealthEmoji() {
+	return <>
+		<pre>
+			slackHealthEmoji(health): string
+		</pre>
+		<p>Returns a slack emoji based on the supplied health</p>
+	</>
+}
+
+export function LabelsFormat() {
+	return <>
+		<pre>
+			labelsFormat(map[string]any): string
+		</pre>
+		<p>Formats the given set of labels</p>
+	</>
+}
+
+export const SlackSectionLabels = () => (
+	<>
+		<pre>
+			slackSectionLabels(map[string]any): SlackSection
+		</pre>
+		<p>Formats the given set of labels into fields of a <a href="https://api.slack.com/reference/block-kit/blocks#section">slack section block</a></p>
+	</>
+)
+
+export const SlackSectionTextFieldPlain = () => (
+	<>
+		<pre>
+			slackSectionTextFieldPlain(text: string): string
+		</pre>
+		<p>Creates a plain text field for a Slack section block</p>
+	</>
+)
+
+export const SlackSectionTextFieldMD = () => (
+	<>
+		<pre>
+			slackSectionTextFieldMD(text: string): string
+		</pre>
+		<p>Creates a markdown text field for a Slack section block</p>
+	</>
+)
+
+export const SlackSectionTextMD = () => (
+	<>
+		<pre>
+			slackSectionTextMD(text: string): string
+		</pre>
+		<p>Creates a Slack section block with markdown text</p>
+	</>
+)
+
+export const SlackSectionTextPlain = () => (
+	<>
+		<pre>
+			slackSectionTextPlain(text: string): string
+		</pre>
+		<p>Creates a Slack section block with plain text</p>
+	</>
+)
+
+export const SlackURLAction = () => (
+	<>
+		<pre>
+			slackURLAction(name: string, url: string): string
+		</pre>
+		<p>Creates a Slack action block with a URL button</p>
+	</>
+)
