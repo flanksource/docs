@@ -40,10 +40,9 @@
     description: "Channel dependent e.g. subject for email",
     scheme: "GoTemplate",
     templateEnv: [
-      {"name": "CheckHealthEnv", "url": "/reference/notifications/template_vars#check-health-env"},
-      {"name": "ConfigHealthEnv", "url": "/reference/notifications/template_vars#config-health-env"},
-      {"name": "ConfigStateUpdateEnv", "url": "/reference/notifications/template_vars#config-state-env"},
-      {"name": "ComponentHealthEnv", "url": "/reference/notifications/template_vars#component-health-env"},
+      {"name": "CheckEvents", "url": "/reference/notifications/template_vars#check-health-env"},
+      {"name": "ConfigEvents", "url": "/reference/notifications/template_vars#config-health-env"},
+      {"name": "ComponentEvents", "url": "/reference/notifications/template_vars#component-health-env"},
     ],
   },
   {
@@ -51,10 +50,9 @@
     description: "Channel dependent e.g. email body for email",
     scheme: "GoTemplate",
     templateEnv: [
-      {"name": "CheckHealthEnv", "url": "/reference/notifications/template_vars#check-health-env"},
-      {"name": "ConfigHealthEnv", "url": "/reference/notifications/template_vars#config-health-env"},
-      {"name": "ConfigStateUpdateEnv", "url": "/reference/notifications/template_vars#config-state-env"},
-      {"name": "ComponentHealthEnv", "url": "/reference/notifications/template_vars#component-health-env"},
+      {"name": "CheckEvents", "url": "/reference/notifications/template_vars#check-health-env"},
+      {"name": "ConfigEvents", "url": "/reference/notifications/template_vars#config-health-env"},
+      {"name": "ComponentEvents", "url": "/reference/notifications/template_vars#component-health-env"},
     ],
   },  
   {
@@ -62,10 +60,9 @@
     description: "Filter narrows down the event trigger. Example: `check.type == 'http'` filter on `check.failed` event will only send notification for failing http checks.",
     scheme: "CEL",
     templateEnv: [
-      {"name": "CheckHealthEnv", "url": "/reference/notifications/template_vars#check-health-env"},
-      {"name": "ConfigHealthEnv", "url": "/reference/notifications/template_vars#config-health-env"},
-      {"name": "ConfigStateUpdateEnv", "url": "/reference/notifications/template_vars#config-state-env"},
-      {"name": "ComponentHealthEnv", "url": "/reference/notifications/template_vars#component-health-env"},
+      {"name": "CheckEvents", "url": "/reference/notifications/template_vars#check-health-env"},
+      {"name": "ConfigEvents", "url": "/reference/notifications/template_vars#config-health-env"},
+      {"name": "ComponentEvents", "url": "/reference/notifications/template_vars#component-health-env"},
     ],
   }
 

@@ -52,40 +52,18 @@ export function ComponentHealthEnv() {
   />
 }
 
-export function ConfigHealthEnv() {
+export function ConfigEventsTemplateVars() {
   return <Fields
     rows={[
       {
         "field": "config",
-        "scheme": "[`config`](#config)",
-        "description": "Corresponding config item"
-      },
-      {
-        "field": "permalink",
-        "scheme": "string",
-        "description": "Link to the Catalog in mission control"
-      },
-      {
-        "field": "agent",
-        "scheme": "[`Agent`](#agent)",
-        "description": "Details of the agent that created the config."
-      }
-    ]}
-  />
-}
-
-export function ConfigDBStateEnv() {
-  return <Fields
-    rows={[
-      {
-        "field": "config",
-        "scheme": "[`config`](#config)",
+        "scheme": "[`Config`](#config)",
         "description": "Corresponding config item."
       },
       {
         "field": "new_state",
         "scheme": "`created`, `updated`, `deleted`",
-        "description": "The db state change that caused this event."
+        "description": "The db state change that caused this event.\n\n*Only available on state events.*"
       },
       {
         "field": "permalink",
@@ -131,11 +109,6 @@ export function ConfigItemEnv() {
         "field": "id",
         "scheme": "`uuid`",
         "description": "ID of the config item"
-      },
-      {
-        "field": "agent_id",
-        "scheme": "`uuid`",
-        "description": "ID of the agent"
       },
       {
         "field": "config_class",
@@ -248,11 +221,6 @@ export function CanaryEnv() {
         "field": "namespace",
         "scheme": "string",
         "description": "The namespace of the canary"
-      },
-      {
-        "field": "agent_id",
-        "scheme": "string",
-        "description": "The agent id of the canary"
       },
       {
         "field": "labels",
