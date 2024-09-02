@@ -18,7 +18,6 @@ Configs emit events when their health changes or when they are created, modified
 - `config.warning`
 - `config.unknown`
 
-
 ```yaml title="ec2-health-notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
@@ -33,6 +32,9 @@ spec:
   to:
     email: alerts@acme.com
 ```
+
+![](./slack-notification-catalog-unhealthy.png)
+
 
 ### Default Template
 
@@ -72,6 +74,7 @@ spec:
     email: alerts@acme.com
 ```
 
+![](./slack-notification-catalog-updated.png)
 
 ### Default Template
 
