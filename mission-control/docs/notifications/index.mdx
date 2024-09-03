@@ -31,16 +31,20 @@ This notification will send an email to `alerts@acme.com` whenever a health chec
 
 <Notification/>
 
+
 ## Templating
 
 You can use Go Templates to customize the content of notification titles and bodies. This allows you to include dynamic information from the event that triggered the notification.
 
-For example, the following notification definition uses a Go Template to include the name and health status of the check in the notification title:
+**For example, the following notification definition** uses a Go Template to include the name and health status of the check in the notification title:
 
 ```yaml title="notification-template"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
 spec:
+  events:
+    - check.failed
+    - check.passed
   title: Check {{.check.name}} is {{.check.health}}
 ```
 
@@ -48,9 +52,8 @@ In this example `{{.check.name}}` and `{{.check.health}}` are placeholders that 
 
 
 :::tip Markdown
-All notification templates in Mission Control are defined in markdown, and depending on the support of the notification channel in use it will either be converted to HTML or plain text.
+All notification templates in Mission Control are defined in markdown, and depending on the support of the notification channel it will either be converted to HTML or plain text.
 :::
-
 
 ## Filtering Events
 

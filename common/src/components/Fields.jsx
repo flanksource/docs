@@ -28,8 +28,8 @@ const schemes = {
   "notificationconnection": "[Connection](/reference/connections)",
   "notificationproperties": "[map[string]string](/reference/notifications#properties)",
 }
-export default function Fields({ common = [], rows = [], oneOf, anyOf, connection }) {
 
+export default function Fields({ common = [], rows = [], oneOf, anyOf, connection, withTemplates }) {
   const { siteConfig, siteMetadata } = useDocusaurusContext();
 
   const oss = siteConfig.customFields.oss;
@@ -292,55 +292,85 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
 
   return (
     <>
-      <table className='fields'>
+      <table className="fields">
         <thead>
           <tr>
             <th>Field</th>
             <th>Description</th>
             <th>Scheme</th>
+            {withTemplates && <th>Template Env</th>}
           </tr>
         </thead>
         <tbody>
           {rows.map((row, index) => (
             <tr key={index}>
               <td>
-                <code className={row.required ? "font-bold" : ""}>{row.field}{row.required ? "*" : ""}</code>
+                <code className={row.required ? 'font-bold' : ''}>
+                  {row.field}
+                  {row.required ? '*' : ''}
+                </code>
               </td>
-              <td><ReactMarkdown>{(row.description ? row.description : "") + (row.default ? `. Defaults to \`${row.default}\`` : '')}</ReactMarkdown></td>
               <td>
-                {row.anyOf &&
-                  <code>{row.anyOf.join(' | ')}</code>
-                }
-                {!row.anyOf && row.scheme &&
-                  <ReactMarkdown>
-                    {
-                      schemes[row.scheme.toLowerCase()] || (row.scheme ? row.scheme : 'string')
-                    }
-                  </ReactMarkdown>
-                }
+                <ReactMarkdown>
+                  {(row.description ? row.description : '') +
+                    (row.default ? `. Defaults to \`${row.default}\`` : '')}
+                </ReactMarkdown>
               </td>
+              <td>
+                {row.anyOf && <code>{row.anyOf.join(' | ')}</code>}
+                {!row.anyOf && row.scheme && (
+                  <ReactMarkdown>
+                    {schemes[row.scheme.toLowerCase()] ||
+                      (row.scheme ? row.scheme : 'string')}
+                  </ReactMarkdown>
+                )}
+              </td>
+              {withTemplates && (
+                <td>
+                  {row.templateEnv &&
+                    row.templateEnv.map((v) => (
+                      <p>
+                        <a href={v.url}>
+                          <code>{v.name}</code>
+                        </a>
+                      </p>
+                    ))}
+                </td>
+              )}
             </tr>
           ))}
-
         </tbody>
-      </table >
-      {anyOf &&
-        <blockquote style={{ borderLeft: "2px solid var(--ifm-color-warning-light)" }}>
-          <p>You must specify <code>{anyOf[0]}</code> and/or  <code>{anyOf[1]}</code></p>
+      </table>
+      {anyOf && (
+        <blockquote
+          style={{ borderLeft: '2px solid var(--ifm-color-warning-light)' }}
+        >
+          <p>
+            You must specify <code>{anyOf[0]}</code> and/or{' '}
+            <code>{anyOf[1]}</code>
+          </p>
         </blockquote>
-      }
-      {
-        oneOf && oneOf.length == 2 &&
-        <blockquote style={{ borderLeft: "2px solid var(--ifm-color-warning-light)" }}>
-          <p>You must specify <code>{oneOf[0]}</code> or <code>{oneOf[1]}</code> but not both</p>
+      )}
+      {oneOf && oneOf.length == 2 && (
+        <blockquote
+          style={{ borderLeft: '2px solid var(--ifm-color-warning-light)' }}
+        >
+          <p>
+            You must specify <code>{oneOf[0]}</code> or <code>{oneOf[1]}</code>{' '}
+            but not both
+          </p>
         </blockquote>
-      }
-      {
-        oneOf && oneOf.length == 3 &&
-        <blockquote style={{ borderLeft: "2px solid var(--ifm-color-warning-light)" }}>
-          <p>You must specify one of <code>{oneOf[0]}</code>, <code>{oneOf[1]}</code> or <code>{oneOf[2]}</code></p>
+      )}
+      {oneOf && oneOf.length == 3 && (
+        <blockquote
+          style={{ borderLeft: '2px solid var(--ifm-color-warning-light)' }}
+        >
+          <p>
+            You must specify one of <code>{oneOf[0]}</code>,{' '}
+            <code>{oneOf[1]}</code> or <code>{oneOf[2]}</code>
+          </p>
         </blockquote>
-      }
+      )}
     </>
   )
 }

@@ -1,0 +1,593 @@
+export function CheckHealthEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "check",
+        "scheme": "[`check`](#check)",
+        "description": "Check"
+      },
+      {
+        "field": "canary",
+        "scheme": "[`canary`](#canary)",
+        "description": "canary"
+      },
+      {
+        "field": "status",
+        "scheme": "[`checkstatus`](#check-status)",
+        "description": "check status"
+      },
+      {
+        "field": "permalink",
+        "scheme": "string",
+        "description": "Link to the Catalog in mission control"
+      },
+      {
+        "field": "agent",
+        "scheme": "[`Agent`](#agent)",
+        "description": "Details of the agent that created the config."
+      }
+    ]}
+  />
+}
+
+export function ComponentHealthEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "permalink",
+        "scheme": "string",
+        "description": "Link to the Component in mission control"
+      },
+      {
+        "field": "component",
+        "scheme": "[`Component`](#component)",
+        "description": "Link to the Component in mission control"
+      },
+      {
+        "field": "agent",
+        "scheme": "[`Agent`](#agent)",
+        "description": "Details of the agent that created the Component."
+      }
+    ]}
+  />
+}
+
+export function ConfigEventsTemplateVars() {
+  return <Fields
+    rows={[
+      {
+        "field": "config",
+        "scheme": "[`Config`](#config)",
+        "description": "Corresponding config item."
+      },
+      {
+        "field": "new_state",
+        "scheme": "`created`, `updated`, `deleted`",
+        "description": "The db state change that caused this event.\n\n*Only available on state events.*"
+      },
+      {
+        "field": "permalink",
+        "scheme": "string",
+        "description": "Link to the Catalog in mission control"
+      },
+      {
+        "field": "agent",
+        "scheme": "[`Agent`](#agent)",
+        "description": "Details of the agent that created the config."
+      }
+    ]}
+  />
+}
+
+export function AgentEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "id",
+        "scheme": "`uuid`",
+        "description": "The id of the agent"
+      },
+      {
+        "field": "name",
+        "scheme": "string",
+        "description": "The name of the agent"
+      },
+      {
+        "field": "description",
+        "scheme": "string",
+        "description": "Short description of the agent"
+      }
+
+    ]}
+  />
+}
+
+export function ConfigItemEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "id",
+        "scheme": "`uuid`",
+        "description": "ID of the config item"
+      },
+      {
+        "field": "config_class",
+        "scheme": "string",
+        "description": "Class of the config item"
+      },
+      {
+        "field": "config",
+        "scheme": "string",
+        "description": "Configuration"
+      },
+      {
+        "field": "created_at",
+        "scheme": "`time.Time`",
+        "description": "Creation timestamp"
+      },
+      {
+        "field": "delete_reason",
+        "scheme": "string",
+        "description": "Reason for deletion"
+      },
+      {
+        "field": "deleted_at",
+        "scheme": "`time.Time`",
+        "description": "Deletion timestamp"
+      },
+      {
+        "field": "description",
+        "scheme": "string",
+        "description": "Description"
+      },
+      {
+        "field": "external_id",
+        "scheme": "`[]string`",
+        "description": "External IDs"
+      },
+      {
+        "field": "health",
+        "scheme": "`Health`",
+        "description": "`Health`"
+      },
+      {
+        "field": "labels",
+        "scheme": "`JSONStringMap`",
+        "description": "Labels"
+      },
+      {
+        "field": "name",
+        "scheme": "string",
+        "description": "Name"
+      },
+      {
+        "field": "properties",
+        "scheme": "`Properties`",
+        "description": "`Properties`"
+      },
+      {
+        "field": "ready",
+        "scheme": "bool",
+        "description": "Whether the config item is ready"
+      },
+      {
+        "field": "scraper_id",
+        "scheme": "string",
+        "description": "ID of the scraper"
+      },
+      {
+        "field": "source",
+        "scheme": "string",
+        "description": "Source"
+      },
+      {
+        "field": "status",
+        "scheme": "string",
+        "description": "Status"
+      },
+      {
+        "field": "tags",
+        "scheme": "`JSONStringMap`",
+        "description": "Tags"
+      },
+      {
+        "field": "type",
+        "scheme": "string",
+        "description": "Type"
+      },
+      {
+        "field": "updated_at",
+        "scheme": "`time.Time`",
+        "description": "Update timestamp"
+      }
+    ]}
+  />
+}
+
+export function CanaryEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "id",
+        "scheme": "`uuid`",
+        "description": "The id of the canary"
+      },
+      {
+        "field": "name",
+        "scheme": "string",
+        "description": "The name of the canary"
+      },
+      {
+        "field": "namespace",
+        "scheme": "string",
+        "description": "The namespace of the canary"
+      },
+      {
+        "field": "labels",
+        "scheme": "`map[string]string`",
+        "description": "The labels of the canary"
+      },
+      {
+        "field": "source",
+        "scheme": "string",
+        "description": "The source of the canary"
+      },
+      {
+        "field": "created_at",
+        "scheme": "string",
+        "description": "The created at of the canary"
+      },
+      {
+        "field": "updated_at",
+        "scheme": "string",
+        "description": "The updated at of the canary"
+      },
+      {
+        "field": "deleted_at",
+        "scheme": "string",
+        "description": "The deleted at of the canary"
+      }
+    ]}
+  />
+}
+
+export function ComponentEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "id",
+        "scheme": "`uuid`",
+        "description": "The id of the component"
+      },
+      {
+        "field": "description",
+        "scheme": "string",
+        "description": "The description of the component"
+      },
+      {
+        "field": "external_id",
+        "scheme": "string",
+        "description": "The external id of the component"
+      },
+      {
+        "field": "hidden",
+        "scheme": "bool",
+        "description": "Whether the component is hidden"
+      },
+      {
+        "field": "labels",
+        "scheme": "`map[string]string`",
+        "description": "The labels of the component",
+      },
+      {
+        "field": "name",
+        "scheme": "string",
+        "description": "The name of the component"
+      },
+      {
+        "field": "namespace",
+        "scheme": "string",
+        "description": "The namespace of the component"
+      },
+      {
+        "field": "parent_id",
+        "scheme": "`uuid`",
+        "description": "The id of the parent component",
+      },
+      {
+        "field": "properties",
+        "scheme": "`map[string]string`",
+        "description": "The properties of the component",
+      },
+      {
+        "field": "silenced",
+        "scheme": "bool",
+        "description": "Whether the component is silenced"
+      },
+      {
+        "field": "status_reason",
+        "scheme": "string",
+        "description": "The status reason of the component"
+      },
+      {
+        "field": "status",
+        "scheme": "string",
+        "description": "The status of the component"
+      },
+      {
+        "field": "summary",
+        "scheme": "`map[string]string`",
+        "description": "The summary of the component",
+      },
+      {
+        "field": "text",
+        "scheme": "string",
+        "description": "The text of the component"
+      },
+      {
+        "field": "topology_type",
+        "scheme": "string",
+        "description": "The type of the topology"
+      },
+      {
+        "field": "type",
+        "scheme": "string",
+        "description": "The type of the component"
+      },
+      {
+        "field": "cost_per_minute",
+        "scheme": "`float64`",
+        "description": "The cost per minute of the component"
+      },
+      {
+        "field": "cost_total_1d",
+        "scheme": "`float64`",
+        "description": "The cost total 1d of the component"
+      },
+      {
+        "field": "cost_total_7d",
+        "scheme": "`float64`",
+        "description": "The cost total 7d of the component"
+      },
+      {
+        "field": "cost_total_30d",
+        "scheme": "`float64`",
+        "description": "The cost total 30d of the component"
+      },
+      {
+        "field": "created_by",
+        "scheme": "`uuid`",
+        "description": "Id of the person that created this component"
+      },
+      {
+        "field": "created_at",
+        "scheme": "`time.Time`",
+        "description": "Created timestamp"
+      },
+      {
+        "field": "updated_at",
+        "scheme": "`time.Time`",
+        "description": "Updated timestamp"
+      },
+      {
+        "field": "deleted_at",
+        "scheme": "`time.Time`",
+        "description": "Deleted timestamp",
+      }
+    ]}
+  />
+}
+
+export function CheckEnv() {
+  return <Fields
+    rows={[
+      {
+        "field": "id",
+        "scheme": "`uuid`",
+        "description": "The id of the check"
+      },
+      {
+        "field": "type",
+        "scheme": "string",
+        "description": "The type of the check"
+      },
+      {
+        "field": "name",
+        "scheme": "string",
+        "description": "The name of the check"
+      },
+      {
+        "field": "labels",
+        "scheme": "`map[string]string`",
+        "description": "The labels of the check",
+      },
+      {
+        "field": "description",
+        "scheme": "string",
+        "description": "The description of the check"
+      },
+      {
+        "field": "status",
+        "scheme": "string",
+        "description": "Check status details"
+      },
+      {
+        "field": "severity",
+        "scheme": "string",
+        "description": "The severity of the check",
+      },
+      {
+        "field": "uptime",
+        "scheme": "[`Uptime`](#uptime)",
+        "description": "The past 1 hour uptime summary",
+      },
+      {
+        "field": "latency",
+        "scheme": "[`Latency`](#latency)",
+        "description": "The past 1 hour latency summary",
+      },
+      {
+        "field": "transformed",
+        "scheme": "bool",
+        "description": "Whether the check has been transformed"
+      },
+      {
+        "field": "last_runtime",
+        "scheme": "`time.Time`",
+        "description": "The last runtime of the check",
+      },
+      {
+        "field": "next_runtime",
+        "scheme": "`time.Time`",
+        "description": "The next runtime of the check",
+      },
+      {
+        "field": "last_transition_time",
+        "scheme": "`time.Time`",
+        "description": "The last transition time of the check",
+      },
+      {
+        "field": "created_at",
+        "scheme": "`time.Time`",
+        "description": "The created at of the check"
+      },
+      {
+        "field": "updated_at",
+        "scheme": "`time.Time`",
+        "description": "The updated at of the check"
+      },
+      {
+        "field": "deleted_at",
+        "scheme": "`time.Time`",
+        "description": "The deleted at of the check",
+      }
+    ]}
+  />
+}
+
+export function Uptime() {
+  return (
+    <Fields
+      rows={[
+        {
+          "field": "passed",
+          "scheme": "int",
+          "description": "The number of checks that passed"
+        },
+        {
+          "field": "failed",
+          "scheme": "int",
+          "description": "The number of checks that failed"
+        },
+        {
+          "field": "p100",
+          "scheme": "`float64`",
+          "description": "The percentage of checks that passed"
+        },
+        {
+          "field": "last_pass",
+          "scheme": "`time.Time`",
+          "description": "The last time a check passed",
+        },
+        {
+          "field": "last_fail",
+          "scheme": "`time.Time`",
+          "description": "The last time a check failed",
+        }
+      ]}
+    />
+  )
+}
+
+export function Latency() {
+  return (
+    <Fields
+      rows={[
+        {
+          "field": "p99",
+          "scheme": "`float64`",
+          "description": "The latency of the check",
+        },
+        {
+          "field": "p97",
+          "scheme": "`float64`",
+          "description": "The latency of the check",
+        },
+        {
+          "field": "p95",
+          "scheme": "`float64`",
+          "description": "The latency of the check",
+        },
+        {
+          "field": "rolling1h",
+          "scheme": "`float64`",
+          "description": "The latency of the check"
+        }
+      ]}
+    />
+  )
+}
+
+
+### Check Status
+
+| Field        | Description                                     | Schema      | Optional |
+| ------------ | ----------------------------------------------- | ----------- | -------- |
+| `check_id`   | The id of the check associated with this status | `uuid`      |          |
+| `status`     | The status of the check                         | `bool`      |          |
+| `invalid`    | Whether the check errored out                   | `bool`      |          |
+| `time`       | The time of the check                           | `string`    |          |
+| `duration`   | The duration of the check                       | `int`       |          |
+| `message`    | The success message of the check                | `string`    |          |
+| `error`      | The error of the check in case of failure       | `string`    |          |
+| `created_at` | The created at of the check                     | ``time.Time`` |          |
+
+
+export function CheckStatus() {
+  return (
+    <Fields
+      rows={[
+        {
+          "field": "check_id",
+          "scheme": "`uuid`",
+          "description": "The id of the check associated with this status",
+        },
+        {
+          "field": "status",
+          "scheme": "bool",
+          "description": "The status of the check",
+        },
+        {
+          "field": "invalid",
+          "scheme": "bool",
+          "description": "Whether the check errored out",
+        },
+        {
+          "field": "time",
+          "scheme": "string",
+          "description": "The time of the check",
+        },
+        {
+          "field": "duration",
+          "scheme": "int",
+          "description": "The duration of the check",
+        },
+        {
+          "field": "message",
+          "scheme": "string",
+          "description": "The success message of the check",
+        },
+        {
+          "field": "error",
+          "scheme": "string",
+          "description": "The error of the check in case of failure",
+        },
+        {
+          "field": "created_at",
+          "scheme": "`time.Time`",
+          "description": "The created at of the check",
+        }
+      ]}
+    />
+  )
+}
