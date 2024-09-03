@@ -36,6 +36,16 @@
     scheme: "`map[string]string`"
   },
   {
+    field: "repeatInterval",
+    description: "The waiting time to resend a notification after it has been succefully sent.",
+    scheme: "duration"
+  },
+  {
+    field: "repeatGroup",
+    description: "RepeatGroup allows notifications to be grouped by certain set of keys and only send one per group within the specified repeat interval. Valid group keys: `resource_id` & `source_event`.",
+    scheme: "`[]string`"
+  },
+  {
     field: "title",
     description: "Channel dependent e.g. subject for email",
     scheme: "GoTemplate",
@@ -57,7 +67,7 @@
   },  
   {
     field: "filter",
-    description: "Filter narrows down the event trigger. Example: `check.type == 'http'` filter on `check.failed` event will only send notification for failing http checks.",
+    description: "Filter narrows down the event trigger.\n\nExample: `check.type == 'http'` filter on `check.failed` event will only send notification for failing http checks.",
     scheme: "CEL",
     templateEnv: [
       {"name": "CheckEvents", "url": "/reference/notifications/template_vars#check-health-env"},
