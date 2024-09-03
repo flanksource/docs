@@ -2,100 +2,218 @@
 title: Template Functions
 ---
 
-Special Slack template functions are made available on notifications to complex block formation easier.
+Special template functions are made available on notifications to complex block formation easier.
 
-**slackHealthEmoji:**
-<SlackHealthEmoji />
+## labelsFormat
+Formats the given set of labels into a markdown string
 
-**labelsFormat:**
-<LabelsFormat />
+Syntax:
 
-**slackSectionLabels:**
-<SlackSectionLabels />
+```js
+labelsFormat(map[string]any): string
+```
 
-**slackSectionTextFieldPlain:**
-<SlackSectionTextFieldPlain />
+Example:
 
-**slackSectionTextFieldMD:**
-<SlackSectionTextFieldMD />
+```js
+labelsFormat(map[string]any{
+	"namespace": "default",
+	"cluster": "staging",
+})
+```
 
-**slackSectionTextMD:**
-<SlackSectionTextMD />
+```md
+### Labels
 
-**slackSectionTextPlain:**
-<SlackSectionTextPlain />
+**namespace**: default
+**cluster**: staging
+```
 
-**SlackURLAction:**
-<SlackURLAction />
+## Slack
 
-export function SlackHealthEmoji() {
-	return <>
-		<pre>
-			slackHealthEmoji(health): string
-		</pre>
-		<p>Returns a slack emoji based on the supplied health</p>
-	</>
+These slack helper functions will return a json string suitable for use in slack blocks/messages.
+
+### slackHealthEmoji
+Returns a slack emoji based on the supplied health
+
+Syntax:
+
+```js
+slackHealthEmoji(health): string
+```
+
+**Returns:**
+
+- `:large_green_circle:` for `healthy` health status
+- `:red_circle:` for `unhealthy` health status
+- `:large_orange_circle:` for `warning` health status
+- `:white_circle:` for any other health status
+
+### slackSectionLabels
+
+Formats the given set of labels into fields of a <a href="https://api.slack.com/reference/block-kit/blocks#section">slack section block</a>
+
+Syntax:
+
+```js
+slackSectionLabels(map[string]any): SlackSection
+```
+
+Example:
+
+```js
+slackSectionLabels(map[string]any{
+	"namespace": "default",
+	"cluster": "staging",
+})
+```
+
+```json
+{
+	"type": "section",
+	"text": {
+		"type": "mrkdwn",
+		"text": "*Labels*"
+	},
+	"fields": [
+		{
+			"type": "mrkdwn",
+			"text": "*namespace*: default",
+			"verbatim": true
+		},
+		{
+			"type": "mrkdwn",
+			"text": "*cluster*: staging",
+			"verbatim": true
+		}
+	]
 }
+```
 
-export function LabelsFormat() {
-	return <>
-		<pre>
-			labelsFormat(map[string]any): string
-		</pre>
-		<p>Formats the given set of labels</p>
-	</>
+### slackSectionTextFieldPlain
+
+Creates a plain text field for a Slack section block
+
+Syntax:
+
+```js
+slackSectionTextFieldPlain(text: string): string
+```
+
+Example:
+
+```js
+slackSectionTextFieldPlain("alert-manager")
+```
+
+```json
+{
+	"type": "plain_text",
+	"text": "alert-manager"
 }
+```
 
-export const SlackSectionLabels = () => (
-	<>
-		<pre>
-			slackSectionLabels(map[string]any): SlackSection
-		</pre>
-		<p>Formats the given set of labels into fields of a <a href="https://api.slack.com/reference/block-kit/blocks#section">slack section block</a></p>
-	</>
-)
+### slackSectionTextFieldMD
+Creates a markdown text field for a Slack section block
 
-export const SlackSectionTextFieldPlain = () => (
-	<>
-		<pre>
-			slackSectionTextFieldPlain(text: string): string
-		</pre>
-		<p>Creates a plain text field for a Slack section block</p>
-	</>
-)
+Syntax:
 
-export const SlackSectionTextFieldMD = () => (
-	<>
-		<pre>
-			slackSectionTextFieldMD(text: string): string
-		</pre>
-		<p>Creates a markdown text field for a Slack section block</p>
-	</>
-)
+```js
+slackSectionTextFieldMD(text: string): string
+```
 
-export const SlackSectionTextMD = () => (
-	<>
-		<pre>
-			slackSectionTextMD(text: string): string
-		</pre>
-		<p>Creates a Slack section block with markdown text</p>
-	</>
-)
+Example:
 
-export const SlackSectionTextPlain = () => (
-	<>
-		<pre>
-			slackSectionTextPlain(text: string): string
-		</pre>
-		<p>Creates a Slack section block with plain text</p>
-	</>
-)
+```js
+slackSectionTextFieldPlain("alert-manager")
+```
 
-export const SlackURLAction = () => (
-	<>
-		<pre>
-			slackURLAction(name: string, url: string): string
-		</pre>
-		<p>Creates a Slack action block with a URL button</p>
-	</>
-)
+```json
+{
+	"type": "mrkdwn",
+	"text": "alert-manager"
+}
+```
+
+### slackSectionTextMD
+Creates a Slack section block with markdown text
+
+Syntax:
+
+```js
+slackSectionTextMD(text: string): string
+```
+
+Example:
+
+```js
+slackSectionTextMD("alert-manager")
+```
+
+```json
+{
+	"type": "section",
+	"text": {
+		"type": "mrkdwn",
+		"text": "alert-manager"
+	}
+}
+```
+
+### slackSectionTextPlain
+Creates a Slack section block with plain text
+
+Syntax:
+
+```js
+slackSectionTextPlain(text: string): string
+```
+
+Example:
+
+```js
+slackSectionTextMD("alert-manager")
+```
+
+```json
+{
+	"type": "section",
+	"text": {
+		"type": "plain_text",
+		"text": "alert-manager"
+	}
+}
+```
+
+### SlackURLAction
+Creates a Slack action block with a URL button
+
+Syntax:
+
+```js
+slackURLAction(name: string, url: string): string
+```
+
+Example:
+
+```js
+slackURLAction("Grafana", "https://grafana.com")
+```
+
+```json
+{
+	"type": "actions",
+	"elements": [
+		{
+			"type": "button",
+			"text": {
+				"type": "plain_text",
+				"text": "Grafana",
+				"emoji": true
+			},
+			"url": "https://grafana.com",
+			"action_id": "Grafana"
+		}
+	]
+}
+```
