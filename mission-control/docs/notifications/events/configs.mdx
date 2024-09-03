@@ -3,6 +3,8 @@ title: Configs
 description: Events that fire on config changes and health
 ---
 
+import Config from "../../reference/config-db/config.md"
+
 Configs emit events when their health changes or when they are created, modified, or removed.
 
 **Health events**
@@ -73,28 +75,7 @@ spec:
 
 ### Config
 
-| Field           | Description                      | Schema          | nullable |
-| --------------- | -------------------------------- | --------------- | -------- |
-| `id`            | ID of the config item            | `uuid`          |          |
-| `agent_id`      | ID of the agent                  | `uuid`          | `true`   |
-| `config_class`  | Class of the config item         | `string`        |          |
-| `config`        | Configuration                    | `string`        | `true`   |
-| `created_at`    | Creation timestamp               | `time.Time`     |          |
-| `delete_reason` | Reason for deletion              | `string`        | `true`   |
-| `deleted_at`    | Deletion timestamp               | `time.Time`     | `true`   |
-| `description`   | Description                      | `string`        | `true`   |
-| `external_id`   | External IDs                     | `[]string`      | `true`   |
-| `health`        | Health                           | `Health`        | `true`   |
-| `labels`        | Labels                           | `JSONStringMap` | `true`   |
-| `name`          | Name                             | `string`        | `true`   |
-| `properties`    | Properties                       | `Properties`    | `true`   |
-| `ready`         | Whether the config item is ready | `bool`          |          |
-| `scraper_id`    | ID of the scraper                | `string`        | `true`   |
-| `source`        | Source                           | `string`        | `true`   |
-| `status`        | Status                           | `string`        | `true`   |
-| `tags`          | Tags                             | `JSONStringMap` |          |
-| `type`          | Type                             | `string`        |          |
-| `updated_at`    | Update timestamp                 | `time.Time`     | `true`   |
+<Config/>
 
 ### Agent
 
