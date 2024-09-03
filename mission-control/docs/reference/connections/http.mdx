@@ -1,0 +1,63 @@
+---
+title: HTTP
+---
+
+HTTP Connections are used to query data via any http/https compatible resource
+
+## Schema
+
+| Field        | Description     | Scheme                                         | Required |
+|--------------|-----------------|------------------------------------------------|----------|
+| `url`        | URL             | string                                         | `true`   |
+| `username`   | Username        | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
+| `password`   | Password        | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
+| `oauth`      | OAuth           | [OAuth](#oauth)                                |          |
+| `bearer`     | Bearer          | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
+| `tls`        | TLS Config      | [TLS](#tls)                                    |          |
+| `connection` | Connection Name | string                                         |          |
+
+:::info
+If connection is already created `connection` (Connection Name) can be used as a reference instead of redefining all fields. Read more on [connection referencing](/reference/connections/#referencing-connections)
+:::
+
+### OAuth
+
+| Field          | Description   | Scheme                                         | Required |
+|----------------|---------------|------------------------------------------------|----------|
+| `tokenURL`     | Token URL     | string                                         | `true`   |
+| `clientID`     | Client ID     | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
+| `clientSecret` | Client Secret | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
+| `scopes`       | Scopes        | []string                                       |          |
+| `params`       | Params        | map[string]string                              |          |
+
+### TLS
+
+| Field                | Description                                                                     | Scheme                                         | Required |
+|----------------------|---------------------------------------------------------------------------------|------------------------------------------------|----------|
+| `key`                | PEM encoded client private key                                                  | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
+| `ca`                 | PEM encoded certificate of the CA to verify the server certificate              | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
+| `cert`               | PEM encoded client certificate                                                  | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
+| `insecureSkipVerify` | controls whether a client verifies the server's certificate chain and host name | bool                                           |          |
+| `handshakeTimeout`   | Handshake timeout (Default: 10 seconds)                                         | time.Duration                                  |          |
+
+
+## Example
+
+This example demonstrates how to configure an HTTP connection in Mission Control:
+
+```yaml title="http-connection.yaml"
+apiVersion: v1
+kind: Connection
+metadata:
+  name: http-connection
+spec:
+  http:
+    url: https://example.com
+    username:
+      value: user
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: credentials
+          key: password
+```

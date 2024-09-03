@@ -1,0 +1,29 @@
+---
+title: Push
+---
+
+We can push the topologies we create to any mission control host. We just have to define a [HTTPConnection](/reference/connections/http)
+
+:::info
+This is different from using an agent as using this can push topologies anywhere even if those instances do not have an agent setup
+:::
+
+```yaml title="topology.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: Website
+spec:
+  push:
+    url: https://my-mission-control.company.com
+    username:
+      value: admin
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: credentials
+          key: password
+        
+  components:
+    - name: UI Server
+```
