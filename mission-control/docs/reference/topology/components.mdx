@@ -2,65 +2,133 @@
 title: Component
 ---
 
-import Lookup from '@site/docs/reference/topology/_lookup.md'
 
-import ForEach from '@site/docs/reference/topology/_forEach.md'
-
-Components are the building blocks of a Topology. The component specification provides a way for you to define the properties and characteristics of each Component in the Topology.
-
-# Component
-
-| Field           | Description                                                                                                                                                          | Scheme                                       | Required |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `checks`        | Specify checks based on `inline` and `selector`                                                                                                                      | [`[]Check`](#check)                          |          |
-| `components`    | RawMessage is a raw encoded JSON value. It implements Marshaler and Unmarshaler and can be used to delay JSON decoding or pre-compute a JSON encoding.               | [`[]Component`](#component)                  |          |
-| `configs`       | Specify selectors for config items that should be associated with this component.                                                                                    | [`[]Config`](#config-selector)               |          |
-| `forEach`       | Only applies when using lookup. When specified, the components and properties specified under ForEach will be templated using the components returned by the lookup. | [`ForEach`](#foreach)                        |          |
-| `icon`          | Specify icon for component                                                                                                                                           | `string`                                     |          |
-| `id`            | Specify unique ID for component                                                                                                                                      | [`ID`](./index.mdx#id-selector)              |          |
-| `labels`        | Labels for the component                                                                                                                                             | `map[string]string`                          |          |
-| `lifecycle`     | The lifecycle state of the component e.g. production, staging, dev, etc.                                                                                             | `string`                                     |          |
-| `lookup`        | Lookup component definitions from an external source, use the `forEach` property to iterate over the results to further enrich each component.                       | [`Lookup`](#lookup)                          |          |
-| `name`          | Set name for component                                                                                                                                               | `string`                                     |          |
-| `namespace`     | Set namespace for component                                                                                                                                          | `string`                                     |          |
-| `order`         | Set integer order value for component                                                                                                                                | `int`                                        |          |
-| `owner`         | Specify owner of component                                                                                                                                           | `string`                                     |          |
-| `properties`    | Customize component properties as to be visualized on Mission control UI                                                                                             | [`[]Property`](./properties)                 |          |
-| `relationships` | Specify relationship of component                                                                                                                                    | [`[]RelationshipSpec`](#relationshipspec)    |          |
-| `selectors`     | Specify component for topology based on `fieldSelector` and `labelSelector`                                                                                          | [`[]ResourceSelector`](../resource-selector) |          |
-| `tooltip`       | Set tooltip outlining information pertaining to the component                                                                                                        | `string`                                     |          |
-| `type`          | Set type of component e.g. service, API, website, library, database, etc.                                                                                            | `string`                                     |          |
-
-### RelationshipSpec
-
-| Field  | Description                                                                              | Scheme   | Required |
-| ------ | ---------------------------------------------------------------------------------------- | -------- | -------- |
-| `ref`  | Set reference for components relationship                                                | `string` |          |
-| `type` | Set the type of relationship, e.g. dependsOn, subcomponentOf, providesApis, consumesApis | `string` |          |
-
-### ForEach
-
-<ForEach />
-
-## Config Selector
-
-| Field         | Description                               | Scheme              | Required |
-| ------------- | ----------------------------------------- | ------------------- | -------- |
-| `id`          | Specify the name of the config item.      | `[]string`          |          |
-| `name`        | Specify the name of the config item.      | `string`            |          |
-| `namespace`   | Specify the namespace of the config item. | `string`            |          |
-| `type`        | Specify type of config item.              | `string`            |          |
-| `class`       | Specify type of config item.              | `string`            |          |
-| `external_id` | Specify type of config item.              | `string`            |          |
-| `tags`        | Specify tags of config item.              | `map[string]string` |          |
-
-## Check
-
-| Field      | Description                      | Scheme                                               | Required |
-| ---------- | -------------------------------- | ---------------------------------------------------- | -------- |
-| `inline`   | Define a new health check inline | [`CanarySpec`](/reference/canary-checker)            |          |
-| `selector` | Select an existing health check  | [`[]ResourceSelector`](/reference/resource-selector) |          |
-
-## Lookup
-
-<Lookup />
+<Fields
+    rows={[
+      {
+        "field": "id",
+        "scheme": "`uuid`",
+        "description": "The id of the component"
+      },
+      {
+        "field": "name",
+        "scheme": "string",
+        "description": "The name of the component"
+      },
+      {
+        "field": "namespace",
+        "scheme": "string",
+        "description": "The namespace of the component"
+      },
+      {
+        "field": "description",
+        "scheme": "string",
+        "description": "The description of the component"
+      },
+      {
+        "field": "external_id",
+        "scheme": "string",
+        "description": "The external id of the component"
+      },
+      {
+        "field": "hidden",
+        "scheme": "bool",
+        "description": "Whether the component is hidden"
+      },
+      {
+        "field": "labels",
+        "scheme": "`map[string]string`",
+        "description": "The labels of the component",
+      },
+      {
+        "field": "parent_id",
+        "scheme": "`uuid`",
+        "description": "The id of the parent component",
+      },
+      {
+        "field": "properties",
+        "scheme": "`map[string]string`",
+        "description": "The properties of the component",
+      },
+      {
+        "field": "silenced",
+        "scheme": "bool",
+        "description": "Whether the component is silenced"
+      },
+      {
+        "field": "status_reason",
+        "scheme": "string",
+        "description": "The status reason of the component"
+      },
+      {
+        "field": "status",
+        "scheme": "string",
+        "description": "The status of the component"
+      },
+      {
+        "field": "health",
+        "scheme": "string",
+        "description": "Health of the component"
+      },
+      {
+        "field": "summary",
+        "scheme": "`map[string]string`",
+        "description": "The summary of the component",
+      },
+      {
+        "field": "text",
+        "scheme": "string",
+        "description": "The text of the component"
+      },
+      {
+        "field": "topology_type",
+        "scheme": "string",
+        "description": "The type of the topology"
+      },
+      {
+        "field": "type",
+        "scheme": "string",
+        "description": "The type of the component"
+      },
+      {
+        "field": "cost_per_minute",
+        "scheme": "`float64`",
+        "description": "The cost per minute of the component"
+      },
+      {
+        "field": "cost_total_1d",
+        "scheme": "`float64`",
+        "description": "The cost total 1d of the component"
+      },
+      {
+        "field": "cost_total_7d",
+        "scheme": "`float64`",
+        "description": "The cost total 7d of the component"
+      },
+      {
+        "field": "cost_total_30d",
+        "scheme": "`float64`",
+        "description": "The cost total 30d of the component"
+      },
+      {
+        "field": "created_by",
+        "scheme": "`uuid`",
+        "description": "Id of the person that created this component"
+      },
+      {
+        "field": "created_at",
+        "scheme": "`time.Time`",
+        "description": "Created timestamp"
+      },
+      {
+        "field": "updated_at",
+        "scheme": "`time.Time`",
+        "description": "Updated timestamp"
+      },
+      {
+        "field": "deleted_at",
+        "scheme": "`time.Time`",
+        "description": "Deleted timestamp",
+      }
+    ]}
+  />

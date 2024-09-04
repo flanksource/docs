@@ -62,7 +62,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       return 1
     }
 
-    return a.field.localeCompare(b.field)
+    return 0
   }
   rows = rows.concat(common.filter(row => row.required))
   rows.sort(fieldSorter);
