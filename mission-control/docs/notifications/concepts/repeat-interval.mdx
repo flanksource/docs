@@ -22,40 +22,14 @@ spec:
   repeatInterval: 2h
 ```
 
-The above notification sends at max 1 email notification in a moving 2 hour window.
+## Grouping Per Resource per Source Event
 
-## Repeat Group
+The `repeatInterval` applies per unique resource per unique event source. This prevents duplicate notifications when the same resource triggers the same event type multiple times within the interval window. It still allows notifications for different event types on the same resource within the window.
 
-By default, the repeat interval applies to any notification sent for the given notification. 
+### Example:
 
-In the example above, if a notification is sent for a `config.healthy` event and then a new notification is to be sent
-for a `config.unhealthy` event, then the notification is dropped due to the repeat interval.
+With the above notification in place, if a Kubernetes Helm release's health fluctuates between `healthy` and `unhealthy` multiple times within a 2-hour window, the system limits notifications to just two: one for the `config.healthy` event and one for the `config.unhealthy` event. 
 
-With grouping, you can apply the repeat interval per source event & per resource ID.
+However, if the Helm release health shifts to `warning` during this same period, it triggers an additional notification. This occurs because the warning status is considered a separate event source.
 
-- `source_event`
-- `resource_id`
-
-```yaml title="deployment-updates.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Notification
-metadata:
-  name: config-updates
-  namespace: default
-spec:
-  events:
-    - config.healthy
-    - config.unhealthy
-    - config.warning
-    - config.unknown
-  filter: config.type == "Kubernetes::Deployment"
-  to:
-    email: alerts@acme.com
-  repeatInterval: 2h
-  // highlight-start
-  repeatGroup:
-    - source_event
-  // highlight-end
-```
-
-With this change, you'll now receive at max 4 notifications for each source event.
+The notification throttling mechanism operates independently for each distinct resource. As a result, other Helm releases are not affected by this limitation.
