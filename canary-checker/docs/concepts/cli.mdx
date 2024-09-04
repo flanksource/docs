@@ -21,7 +21,7 @@ kubectl get canaries -o wide
 
 ## Scaling
 
-Canaries can be scaled up or down just like other kubernetes resources. However, scaling to more than one replica is identical to having just one replica. In other words, scaling a canary can be thought of as a mechanism to turn on/off the canary.
+Canaries can be scaled up or down like other Kubernetes resources. However, scaling to more than one replica is identical to having one replica. In other words, scaling a canary can be thought of as a mechanism to turn on/off the canary.
 
 <Step step={1} name="Scaling up (enabling)">
 
@@ -40,7 +40,7 @@ kubectl get canaries folder-pass -o wide
 </Step>
 
 <Step step={2} name="Scale down (disabling)">
-This effectively stops the canary from running.
+This stops the canary from running.
 
 
 ```bash

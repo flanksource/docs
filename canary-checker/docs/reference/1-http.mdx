@@ -5,7 +5,7 @@ sidebar_class_name: popular
 
 # <Icon name="http"/> HTTP
 
-This check performs queries on HTTP endpoints, and HTTP Namespaces to monitor their activity.
+This check performs queries on HTTP endpoints, and HTTP namespaces to monitor their activity.
 
 ```yaml title=http-check.yaml
 apiVersion: canaries.flanksource.com/v1
@@ -27,8 +27,8 @@ spec:
   {field: "method", description: "HTTP Request method", default: "GET", scheme: "string"},
   {field: "headers", description: "Header fields", scheme: "map[string]string"},
   {field: "body", description: "Request Body Contents", scheme: "string"},
-  {field: "tlsConfig", description: "TLS Config", scheme: "[TLSConfig](#tls-config)"},
-  {field: "templateBody", description: "If true body will be templated", default: false, scheme: "bool"},
+  {field: "tlsConfig", description: "TLS config", scheme: "[TLSConfig](#tls-config)"},
+  {field: "templateBody", description: "If true body is templated", default: false, scheme: "bool"},
   {field: "responseCodes", description: "Expected response codes", scheme: "[]int"},
   {field: "responseContent", description: "Expected response content", scheme: "string"},
   {field: "thresholdMillis", description: "Request timeout", default: 5000, scheme: "int"},
@@ -42,7 +42,7 @@ spec:
   {field: "ca", description: "PEM encoded certificate of the CA to verify the server certificate", scheme: "EnvVar"},
   {field: "cert", description: "PEM encoded client certificate", scheme: "EnvVar"},
   {field: "key", description: "PEM encoded client private key", scheme: "EnvVar"},
-  {field: "handshakeTimeout", description: "Timeout for SSL Handshake (defaults to 10 seconds)", scheme: "int"},
+  {field: "handshakeTimeout", description: "Timeout for SSL handshake (defaults to 10 seconds)", scheme: "int"},
   {field: "insecureSkipVerify", description: "Controls whether a client verifies the server's certificate chain and host name", scheme: "bool"}
 ]}/>
 
@@ -114,7 +114,7 @@ spec:
 | Name                          | Scheme              |
 | ----------------------------- | ------------------- |
 | `metadata.name`               | string              |
-| `metadata.metadata.namespace` | _string_            |
+| `metadata.namespace` | _string_            |
 | `metadata.labels`             | _map[string]string_ |
 | `{fields from []env}`         | any                 |
 
