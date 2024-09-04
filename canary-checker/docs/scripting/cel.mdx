@@ -116,7 +116,7 @@ base64.decode("aGVsbG8=") // return b'hello'
 
 ### .keys
 
-The `keys` method on a map returns a list of keys..
+The `keys` method on a map returns a list of keys.
 
 Syntax:
 
@@ -135,7 +135,7 @@ Examples:
 
 ### .merge
 
-The `merge` method on a map takes in a second map to merge with.
+The `merge` method on a map takes a second map to merge.
 
 Syntax:
 
@@ -155,7 +155,7 @@ Examples:
 
 ### .omit
 
-The `omit` method on a map takes a list of keys to omit from the map.
+The `omit` method on a map takes a list of keys to remove.
 
 Syntax:
 
@@ -175,7 +175,7 @@ Examples:
 
 ### .sort
 
-The `sort` method on a list returns the reversed list.
+The `sort` method on a list returns a sorted list.
 
 Syntax:
 
@@ -195,7 +195,7 @@ Examples:
 
 ### .uniq
 
-The `uniq` method on a list returns a list of the unique elements.
+The `uniq` method on a list returns a list of unique items.
 
 Syntax:
 
@@ -215,7 +215,7 @@ Examples:
 
 ### .values
 
-The `values` method on a map returns a list of values.
+The `values` method on a map returns a list of items.
 
 Syntax:
 
@@ -262,7 +262,7 @@ Examples:
 
 ### exists
 
-The `exists` macro checks if there exists at least one element in a list that satisfies a given condition. It returns a boolean value based on the evaluation.
+The `exists` macro checks if there is at least one element in a list that satisfies a given condition. It returns a boolean value based on the evaluation.
 
 Syntax:
 
@@ -284,7 +284,7 @@ Example:
 
 ### exists_one
 
-The `exists_one` macro checks if there exists exactly one element in a list that satisfies a given condition. It returns a boolean value based on the evaluation.
+The `exists_one` macro checks if there is exactly one element in a list that satisfies a given condition. It returns a boolean value based on the evaluation.
 
 Syntax:
 
@@ -319,7 +319,7 @@ e.filter(x, p)
 
 Where:
 
-- `e` is the list you're filtering.
+- `e` is the list you are filtering.
 - `x` represents each element of the list.
 - `p` is the predicate expression applied to each entry.
 
@@ -332,7 +332,7 @@ Examples:
 
 ### fold
 
-The `fold` macro is used to combine all elements of a collection, such as a list or a map, using a binary function. It's a powerful tool for aggregating or reducing data.
+The `fold` macro combines all elements of a collection, such as a list or a map, using a binary function. It's a powerful tool for aggregating or reducing data.
 
 Syntax:
 
@@ -413,7 +413,7 @@ Syntax:
 e.map(x, t)
 
 // Where:
-//   `e` is the list you're transforming.
+//   `e` is the list you are transforming.
 //   `x` represents each element of the list.
 //   `t` is the transformation function applied to each entry.
 ```
@@ -441,7 +441,7 @@ Examples:
 
 ### or
 
-If the value on the left-hand side is none-type, the optional value on the right hand side is returned. If the value on the left-hand set is valued, then it is returned. This operation is short-circuiting and will only evaluate as many links in the `or` chain as are needed to return a non-empty optional value.
+If the value on the left-hand side is none-type, the optional value on the right hand side is returned. If the value on the left-hand set is valued, then it is returned. This operation is short-circuiting and evaluates as many links in the `or` chain as are needed to return a non-empty optional value.
 
 ```javascript
 obj.?field.or(m[?key]) // if obj.field is none, m.key is returned
@@ -452,24 +452,24 @@ l[?index].or(obj.?field.subfield).or(obj.?other) // first non-none of l[index], 
 
 ### orValue
 
-When creating map or list, if a field may be optionally set based on its presence, then placing a `?` before the field name or key will ensure the type on the right-hand side must be optional(T) where T is the type of the field or key-value.
+When creating map or list, if a field may be optionally set based on its presence, then placing a `?` before the field name or key ensures the type on the right-hand side must be optional(T) where T is the type of the field or key-value.
 
 ```javascript
 // The following returns a map with the key expression set only if the subfield is present, otherwise a default value is returned
 
 {'a': 'x', 'b': 'y', 'c': 'z'}.?c.orValue('empty')  // Returns z since `c` exists
 
-{'a': 'x', 'b': 'y'}.?c.orValue('empty')  // Returns 'empty' since `c` does not exist
+{'a': 'x', 'b': 'y'}.?c.orValue('empty')  // Returns 'empty' since `c` doesn't exist
 
 // We can use the same for list types
 [1, 2, 3][?2].orValue(5) // Return 3 since 2nd index has a value
 
-[1, 2][?2].orValue(5) // Return 5 since 2nd index  does not exist
+[1, 2][?2].orValue(5) // Return 5 since 2nd index doesn't exist
 ```
 
 ### size
 
-`size` function determines the number of elements in a collection or the number of Unicode characters in a string.
+`size` determines the number of elements in a collection or the number of Unicode characters in a string.
 
 Syntax
 
@@ -489,7 +489,7 @@ b"abc".size() // 3
 
 ### slice
 
-Returns a new sub-list using the indexes provided.
+Returns a new sub-list using the indices provided.
 
 ```javascript
 [1, 2, 3, 4].slice(1, 3) // return [2, 3]
@@ -534,11 +534,7 @@ sets.contains([1, 2.0, 3u], [1.0, 2u, 3]) // true
 
 ### sets.equivalent
 
-Returns whether the first and second list are set equivalent. Lists are set
-equivalent if for every item in the first list, there is an element in the
-second which is equal. The lists may not be of the same size as they do not
-guarantee the elements within them are unique, so size does not factor into
-the computation.
+Returns whether the first and second list are set equivalent. Lists are set equivalent if for every item in the first list, there is an element in the second which is equal. The lists may not be of the same size as they do not guarantee the elements within them are unique, so size doesn't factor into the computation.
 
     sets.equivalent(list(T), list(T)) -> bool
 
@@ -562,9 +558,7 @@ sets.equivalent([1, 2, 3], [3u, 2.0, 1]) // true
 
 ### sets.intersects
 
-Returns whether the first list has at least one element whose value is equal
-to an element in the second list. If either list is empty, the result will
-be false.
+Returns whether the first list has at least one element whose value is equal to an element in the second list. If either list is empty, the result is false.
 
 ```javascript
 sets.intersects([1], []) // false
@@ -1011,8 +1005,8 @@ separating them with an OS specific Separator. Empty elements
 are ignored. The result is Cleaned. However, if the argument
 list is empty or all its elements are empty, Join returns
 an empty string.
-On Windows, the result will only be a UNC path if the first
-non-empty element is a UNC path addict.
+On Windows, the result is only a UNC path if the first
+non-empty element is a UNC path.
 
 ```javascript
 filepath.Join(["/home/flanksource", "projects", "gencel"]; // /home/flanksource/projects/gencel
@@ -1710,7 +1704,7 @@ regexp.Split("z", -1, "hello") // ["hello"]
 ### .abbrev
 
 `abbrev` on a string abbreviates the string using ellipses. This will turn the string "Now is the time for all good men" into "...s the time for..."
-This function works like `Abbreviate(string, int)`, but allows you to specify a "left edge" offset. Note that this left edge is not
+This function works like `Abbreviate(string, int)`, but allows you to specify a "left edge" offset. The left edge is not
 necessarily going to be the leftmost character in the result, or the first character following the ellipses, but it will appear
 somewhere in the result.
 In no case will it return a string of length greater than maxWidth.
@@ -1796,7 +1790,7 @@ The valid formatting clauses are:
 
 - `%s` substitutes a string. This can also be used on `bools`, `lists`, `maps`, `bytes`,
   `Duration`, `Timestamp`,`int`, `double`
-  <br/>Note that the dot/period decimal separator will always be used when printing a list or map that contains a double, and that null can be passed (which results in the string "null") in addition to types.
+  <br/>the dot/period decimal separator will always be used when printing a list or map that contains a double, and that null can be passed (which results in the string "null") in addition to types.
 - `%d` substitutes an integer.
 - `%f` substitutes a double with fixed-point precision. The default precision is 6, but this can be adjusted. The strings `Infinity`, `-Infinity`, and `NaN` are also valid input for this clause.
 - `%e` substitutes a double in scientific notation. The default precision is 6, but this can be adjusted.

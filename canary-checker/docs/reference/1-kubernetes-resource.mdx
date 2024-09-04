@@ -43,9 +43,9 @@ check would be to see if a service is accessible via the ingress as shown in the
     {
       field: 'clearResources',
       scheme: 'bool',
-      description: `When set to true, resources from previous checks will be deleted before every run.
-        Even though the resources are deleted at the end of a check, setting this to \`true\` will guarantee that
-        there are no remains from a previous failed run.`
+      description: `When set to true, resources from previous checks are deleted before every run.
+        Even though the resources are deleted at the end of a check, setting this to \`true\` guarantees that
+        there are no leftover resources from a previous failed run.`
     },
     {
       field: 'waitFor',
@@ -147,7 +147,7 @@ Templating the **Group**, **Version**, **Kind** & **Namespace** however isn't al
 
 :::warning
 Since static resources are deleted when the canary is deleted, extra care must be taken when providing their manifests.
-When this canary is deleted, the **test** namespace will be deleted and consequently all the other resources within it, even those not created by this check.
+When this canary is deleted, the **test** namespace is deleted and consequently all the other resources within it, even those not created by this check.
 :::
 
 </div>
