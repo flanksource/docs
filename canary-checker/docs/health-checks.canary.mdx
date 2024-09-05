@@ -38,20 +38,17 @@ Evaluate the health of checks using scripts in CEL, JavaScript, or Go Templating
 
 ## Dashboard
 
-<Step step={1} name="Dashboard" style="list">
 The health checks page provides a high-level view of the overall health of all services, infrastructure, and applications. It surfaces recent failures and provides high-level latency and reliability metrics.
 
 ![](./images/canary-dashboard.png)
-</Step>
 
 
-<Step step={1} name="Prometheus" style="list">
+## Prometheus
 
 [Prometheus](canary-checker/concepts/metrics) metrics are exposed from health checks to provide high-level visibility into latency, error rates, and other metrics. This allows monitoring the health of services and applications using existing Prometheus alerts and [Grafana](canary-checker/concepts/metrics/grafana) dashboards.
 
-</Step>
+## Synthetic
 
-<Step step={1} name="Synthetic" style="list">
 Synthetic checks periodically run to directly test services and applications by generating requests using HTTP, SQL, Mongo, Redis, LDAP, etc.
 
 </Step>
