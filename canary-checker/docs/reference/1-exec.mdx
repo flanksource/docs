@@ -40,7 +40,7 @@ See [image-variants](/reference/canary-checker/image-variants)
 },
 {
   field: "connections",
-  description: "Setup connections for the script (eg: aws credentials)",
+  description: "Setup connections for the script (e.g.: aws credentials)",
   scheme: "[`ExecConnection`](#exec-connection)",
 }
 ]}/>
@@ -57,8 +57,7 @@ See [image-variants](/reference/canary-checker/image-variants)
 <SkipOSS>
 ### Exec Connection
 
-Exec connections allow you to specify credentials for a list of CLI tools that are needed by your scripts. Eg: You can specify the AWS connection name and the credential files along with the necessary environment variables
-will be setup on the host running the script.
+Exec connections allow you to specify credentials for a list of CLI tools that are needed by your scripts. Eg: You can specify the AWS connection name and the credential files along with the necessary environment variables are setup on the host running the script.
 
 | Field   | Description      | Type                                                    | Required |
 | ------- | ---------------- | ------------------------------------------------------- | -------- |
@@ -104,6 +103,6 @@ See [artifacts](/installation/artifacts)
 </details>
 
 <Fields connection="git" rows={[
-  {field: "destination", description: "Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL will be used as the dir name", type: "string"},
+  {field: "destination", description: "Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL is used as the dir name", type: "string"},
 ]}/>
 

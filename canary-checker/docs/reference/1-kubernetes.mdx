@@ -15,7 +15,7 @@ The Kubernetes check performs requests on Kubernetes resources such as Pods to g
   {field: "kind", description: "Kubernetes object kind", scheme: 'string', required: true},
   {field: "resource", description: " Queries resources related to specified Kubernetes object ", scheme: 'ResourceSelector'},
   {field: "namespaceSelector", description: "Namespace of the Kubernetes object",scheme: 'ResourceSelector'},
-  {field: "namespace", description: "Failing checks will be placed in this namespace, useful if you have shared namespaces"},
+  {field: "namespace", description: "Failing checks are placed in this namespace, useful if you have shared namespaces"},
   {field: "ignore", description: "Ignore the specified resources from the fetched resources. Can be a glob pattern.", scheme: '[]glob'},
   {field: "healthy", description: "Fail the check if any resources are unhealthy", scheme: 'bool'},
   {field: "ready", description: "Fail the check if any resources are not ready", scheme: 'bool'},

@@ -118,7 +118,7 @@ spec:
 | `metadata.labels`             | _map[string]string_ |
 | `{fields from []env}`         | any                 |
 
-Variables defined in `env` will be available to template with the name that's configured on the spec.
+Variables defined in `env` are available to template with the name that's configured on the spec.
 Eg: In the following spec, the vars `my_secret_path` and `my_secret_var`, defined in `env`, are available during templating.
 
 <details summary="Templating request body from env variables">

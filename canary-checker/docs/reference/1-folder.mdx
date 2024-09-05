@@ -4,7 +4,7 @@ title: Folder
 
 # <Icon name="smb" /> Folder
 
-Checks the contents of a folder for size, age and count. Folder based checks are useful in a number of scenarios:
+Checks the contents of a folder for size, age, and count. Folder based checks are useful in a number of scenarios:
 
 - Verifying that backups have been uploaded and are the appropriate size
 - Checking that logs or other temporary files are being cleaned up
@@ -43,7 +43,7 @@ spec:
   {field: "minAge", description: "The youngest age a file can be", scheme: "Duration"},
   {field: "maxAge", description: "The oldest age a file can be, often used to check for unprocessed files or files that have not been cleaned up", scheme: "Duration"},
   {field: "minSize", description: "The minimum file size, can be used to detect backups that did not upload successfully", scheme: "Size"},
-  {field: "maxSize", description: "The maximim file size", scheme: "Size"}
+  {field: "maxSize", description: "The maximum file size", scheme: "Size"}
 
 ]}/>
 
