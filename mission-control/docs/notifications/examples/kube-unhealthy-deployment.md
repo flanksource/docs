@@ -2,16 +2,5 @@
 title: Kubernetes Deployment Health
 ---
 
-```yaml title="kubernetes-deployment-health.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Notification
-metadata:
-  name: deployment-health-alerts
-spec:
-  events:
-    - config.unhealthy
-    - config.warning
-  filter: config.type == 'Kubernetes::Deployment'
-  to:
-    connection: connection://mission-control/slack
+```yaml title="kubernetes-deployment-health.yaml" file="../../../modules/mission-control/fixtures/notifications/kube-deployment-unhealthy.yaml"
 ```
