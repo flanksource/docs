@@ -6,7 +6,7 @@ sidebar_class_name: beta
 
 # <Icon name="containerd" /> ContainerD / Docker
 
-This check will try to pull a Docker image from specified registry using containerd and then verify its checksum and size.
+This check pulls a Docker image from specified registry using containerd and then verify its checksum and size.
 
 :::note Root Privileges Required
 The containerd and docker health checks require access to a working socket that is mounted at runtime
@@ -63,7 +63,7 @@ spec:
 
 ## Pushing images
 
-This check will try to push a Docker image to a specified registry using containerd.
+This check pushes a Docker image to a specified registry using containerd.
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1

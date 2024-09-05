@@ -45,7 +45,7 @@ db:
 
 The helm chart creates a postgres server statefulset, with a random password and default port, along with a new database.
 
-To specify a username and password for the chart-managed Postgres server, create a secret in the namespace that the chart will install to, named `postgres-connection`, which contains `POSTGRES_USER` and `POSTGRES_PASSWORD` keys.
+To specify a username and password for the chart-managed Postgres server, create a secret in the namespace that the chart installs to, named `postgres-connection`, which contains `POSTGRES_USER` and `POSTGRES_PASSWORD` keys.
 
 ## Connecting to an existing database
 

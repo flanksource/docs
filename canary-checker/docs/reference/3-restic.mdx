@@ -19,7 +19,7 @@ The Restic check:
 <HealthCheck name="redis" connection="url" rows={[
   {field: "repository", description: "The restic repository path e.g., `rest: https://user:pass@host:8000/` or rest: `https://host:8000/` or `s3:s3.amazonaws.com/bucket_name`", required: true},
   {field: "maxAge", description: "Max age for backup freshness check", required: true, scheme: "Duration"},
-  {field: "checkIntegrity", description: "When enabled will check the Integrity and consistency of the restic repository", scheme: "boolean"},
+  {field: "checkIntegrity", description: "When enabled it checks the Integrity and consistency of the restic repository", scheme: "boolean"},
   {field: "caCert", description: "Path to CA certificate for self-signed certificates", scheme: "string"},
   {field: "password", description: "Password for encrypted repositories", scheme: "EnvVar"},
   {field: "awsConnectionName", description: "AWS connection name for S3 repositories", scheme: "aws"}

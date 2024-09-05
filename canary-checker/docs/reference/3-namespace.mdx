@@ -61,15 +61,15 @@ spec:
 | `httpTimeout` |  | int64 |  |
 | `icon` | Icon for overwriting default icon on the dashboard | *string* |  |
 | `ingressHost` | URL to be used by the ingress to expose the created pod | *string* |  |
-| `ingressName` | Name to use for the ingress object that will expose the created pod | *string* |  |
+| `ingressName` | Name to use for the ingress object that exposes the created pod | *string* |  |
 | `ingressTimeout` | Maximum time to wait for an HTTP connection to the created pod | *int64* |  |
 | `name` | Name of the check | string |  |
 | `namespaceAnnotations` | Metadata annotations to apply to created namespace | *map[string]string* |  |
 | `namespaceLabels` | Metadata labels to apply to created namespace | *map[string]string* |  |
 | `namespaceNamePrefix` | Prefix string to identity namespace | *string* |  |
-| `path` | Path on which the created pod will respond to requests | *string* |  |
+| `path` | Path on which the created pod responds to requests | *string* |  |
 | **`podSpec`** | Spec of pod to be created in check namespace | *string* | Yes |
-|`port` | Port on which the created pod will serve traffic | *int64* |  |
+|`port` | Port on which the created pod serves traffic | *int64* |  |
 | `priorityClass` | Pod priority class | *string* |  |
 | `readyTimeout` | Specify readiness timeout for namespace | *int64* |  |
 | `scheduleTimeout` | Maximum time between pod created and pod running | *int64* |  |
