@@ -25,7 +25,7 @@ Depending on the check this might include:
 - Access to cloud APIs, such as AWS, GCP or Azure API interfaces
 - Locally installed binaries invoked by `exec` scripts
 
-The following local settings will affect the permissions available for use by the canary-checker executable:
+The following local settings affects the permissions available for use by the canary-checker executable:
 
 - The active kubectl context as specified in `KUBECONFIG`
 - The AWS profile specified in `AWS_DEFAULT_PROFILE` or `AWS_PROFILE`, or the AWS credentials specified by `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
@@ -51,7 +51,7 @@ canary-checker run -v test-canary.yaml
 ```
 </Step>
 
-## Trigger a run fom the CLI
+## Trigger a run from the CLI
 
 
 To run a canary outside of its normal schedule add the `next-runtime` annotation:
@@ -90,7 +90,7 @@ which results in an output similar to the below:
 ![](/img/trace-screenshot.png)
 
 :::danger Sensitive Data & Excessive Logging
-Trace level logging will return the HTTP response body which may contain sensitive data (The authorization headers will be sanitized)
+Trace level logging returns the HTTP response body which may contain sensitive data (The authorization headers will be sanitized)
 :::
 
 **Trace Levels**
@@ -126,7 +126,7 @@ Database level logging can be enabled using `--db-log-level`
 | `debug` (1) | Print SQL statements without parameters |
 | `trace` (2) | Print SQL statements with parameters    |
 
-And Kubernetes Operator loggined with `--k8s-log-level`
+And Kubernetes Operator logging with `--k8s-log-level`
 
 | Level       | Description                             |
 | :---------- | :-------------------------------------- |

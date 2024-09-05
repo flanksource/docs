@@ -28,6 +28,7 @@ canary_check
 canary_check_duration
 canary_check_failed_count
 canary_check_info
+canary_check_success_count
 capitalizations
 Chartmuseum
 check_id
@@ -132,6 +133,7 @@ ignoredRules
 incidentcommander
 ingressHost
 ingressTimeout
+inlining
 insecure_tls
 ip
 javascript
@@ -337,3 +339,7 @@ responseCodes
 responseContent
 thresholdMillis
 maxSSLExpiry
+unencrypted
+etcd
+Bitnami
+imcp
