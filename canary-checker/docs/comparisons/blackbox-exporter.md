@@ -1,6 +1,6 @@
 # Canary-Checker vs Prometheus blackbox exporter
 
-[Prometheus Blackbox Exporter](https://github.com/prometheus/blackbox_exporter) is a prometheus exporter for probing HTTP, HTTPS, DNS, TCP, ICMP and gRPC.
+[Prometheus Blackbox Exporter](https://github.com/prometheus/blackbox_exporter) is a prometheus exporter for probing HTTP, HTTPS, DNS, TCP, ICMP, and gRPC.
 
 |                     | Blackbox Exporter                                                                              | Canary Checker                                                                                                         |
 | ------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |

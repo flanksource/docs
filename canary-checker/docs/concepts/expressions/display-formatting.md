@@ -74,7 +74,7 @@ spec:
 ```
 
 :::info
-Do not return anything from the function, e.g. instead of `return "hello" + "world"` use just `"hello" + "world"`
+Do not return anything from the function, e.g. instead of `return "hello" + "world"` use `"hello" + "world"`
 :::
 
 See <CommonLink to="javascript">JavaScript</CommonLink> for more details and a function reference.

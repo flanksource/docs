@@ -5,7 +5,7 @@ title: Health Evaluation
 All checks expose a health stats of passing (Green) or failing (Red), for example the HTTP check fails if the status is `200 >= code < 299`
 these default behaviors can be changed using the `test` field:
 
-In the example below the http check will fail if the SSL certificate expiry age is below 7 days
+In the example below the http check fails if the SSL certificate expiry age is below 7 days
 
 ```yaml title=http-check-expr.yaml
 apiVersion: canaries.flanksource.com/v1

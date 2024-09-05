@@ -80,7 +80,7 @@ metadata:
           : '{}'
 ```
 
-This snippet will retrieve the `last_result.results.max` value from the last execution ensuring data is not duplicated or missed
+This snippet retrieves the `last_result.results.max` value from the last execution ensuring data is not duplicated or missed
 
 ```go
 "@timestamp" : {

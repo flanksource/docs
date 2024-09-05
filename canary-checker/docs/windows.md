@@ -29,7 +29,7 @@ Invoke-WebRequest -Uri https://github.com/flanksource/canary-checker/blob/master
 
 ### (Optional)
 
-If you require a [specific version of Canary Checker](https://github.com/flanksource/canary-checker/releases) or want to build your own to test, place the executable in the same folder as the required powershell script above. Otherwise, the powershell install script will download the latest release.
+If you require a [specific version of Canary Checker](https://github.com/flanksource/canary-checker/releases) or want to build your own to test, place the executable in the same folder as the required powershell script above. Otherwise, the powershell install script downloads the latest release.
 
 ## 3. Create a canary
 
@@ -57,7 +57,7 @@ To test our canary config without installing it, use the below
 
 ## 4. Install Canary Checker as a service
 
-The powershell install script is able to download all requirements , if the windows machine does not have internet access you will need to manually download the [prerequisites](/##-1.-check-prerequisites) and place them in the script folder.
+The powershell install script is able to download all requirements, if the windows machine does not have internet access you might need to manually download the [prerequisites](/##-1.-check-prerequisites) and place them in the script folder.
 
 ```
 .\install-service.ps1 -configfile .\canary-checker.yaml -operation install

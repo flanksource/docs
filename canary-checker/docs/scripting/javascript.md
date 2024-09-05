@@ -27,7 +27,7 @@ spec:
 ```
 
 :::tip Troubleshooting
-You can print to the console for rapid development e.g. `console.log(JSON.stringify(json))`, this will only be shown in the logs
+You can print to the console for rapid development e.g. `console.log(JSON.stringify(json))`, this is only shown in the logs
 :::
 
 ### Underscore

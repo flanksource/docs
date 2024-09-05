@@ -17,7 +17,7 @@
     field: "invalid",
     description: "Set to true if the check is not configured correctly, and can never pass",
     scheme: "bool",
-      priority: 2,
+    priority: 2,
     required: false
   },
     {
@@ -37,7 +37,7 @@
   },
   {
     field: "duration",
-    description: "Time in ms to use for the duration of the check",
+    description: "Time in ms for duration of the check",
     scheme: "int64",
     priority: 2,
     required: false
@@ -53,7 +53,7 @@
 
   {
     field: "name",
-    description: "Name of the check to use, the name will be used to lookup existing checks to update",
+    description: "Name of the check to use, the name is used to lookup existing checks to update",
     priority: 2,
     scheme: "string",
     required: true
