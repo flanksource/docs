@@ -16,6 +16,7 @@ Canary checker can replace the following exporters:
 | [filestat_exporter](https://github.com/michael-doubez/filestat_exporter)                                                                                                              |                           |             |
 
 <!-- vale off -->
+
 ### Prometheus Alert Manager
 
 ### Blackbox Exporter
@@ -37,6 +38,5 @@ Kuberhealthy serves the status of all checks on a simple JSON status page, a [Pr
 https://cloudprober.org/
 
 ### Karma Alert Dashboard
-
 
 <!-- vale on -->
