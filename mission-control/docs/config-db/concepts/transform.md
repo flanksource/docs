@@ -76,7 +76,7 @@ spec:
 
 | Field      | Description                                 | Scheme                                                                                   |
 | ---------- | ------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `selector` | Filter which config items to apply masks on | <CommonLink to="cel">`CEL`</CommonLink> with [Config Item](/reference/config-db) context |
+| `selector` | Filter which config items to apply masks on | <CommonLink to="cel">`CEL`</CommonLink> with [ScrapeResult](/reference/config-db/scrape-result) context |
 | `jsonpath` | Values to mask                              | <CommonLink to="jsonpath">`JSONPath`</CommonLink>                                        |
 | `value`    | The replacement value of matched elements   | `md5` or any static string e.g. `***`                                                    |
 
