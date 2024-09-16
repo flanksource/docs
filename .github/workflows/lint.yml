@@ -1,8 +1,44 @@
-name: Format
+name: Lint
 on:
   pull_request:
 
 jobs:
+  file-ref-check:
+    name: file-ref-check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        docs: [canary-checker, mission-control]
+    steps:
+      - name: Checkout repository 
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.11.1'
+
+      - name: Install dependencies and build
+        run: |
+          cd ${{ matrix.docs }}
+          npm ci
+          npm run build
+      
+      - name: Check for broken file references
+        run: |
+          cd ${{ matrix.docs }}/build
+          broken_files=$(find . -type f -name "*.html" -exec grep -il "file=../../../modules" {} +)
+          if [ -n "$broken_files" ]; then
+            echo "Error: Broken file references found in ${{ matrix.docs }}"
+            echo "Files with broken references:"
+            echo "$broken_files"
+            exit 1
+          else
+            echo "No broken file references found in ${{ matrix.docs }}"
+            exit 0
+          fi
+
   prettier:
     name: prettier
     runs-on: ubuntu-latest
