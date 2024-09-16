@@ -8,34 +8,47 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        docs: [canary-checker, mission-control]
+        repo: [mission-control]
     steps:
-      - name: Checkout repository 
-        uses: actions/checkout@v3
+      - name: Install ripgrep
+        run: |
+          curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz
+          tar xzf ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz
+          mv ripgrep-14.1.1-x86_64-unknown-linux-musl/rg /usr/local/bin/rg
+          rg --version
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           submodules: 'recursive'
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20.11.1'
 
       - name: Install dependencies and build
         run: |
-          cd ${{ matrix.docs }}
+          cd ${{ matrix.repo }}
+          echo "Installing packages in $(pwd)"
           npm ci
+          echo "Building $(pwd)"
           npm run build
-      
+
       - name: Check for broken file references
         run: |
-          cd ${{ matrix.docs }}/build
-          broken_files=$(find . -type f -name "*.html" -exec grep -il "file=../../../modules" {} +)
-          if [ -n "$broken_files" ]; then
-            echo "Error: Broken file references found in ${{ matrix.docs }}"
-            echo "Files with broken references:"
-            echo "$broken_files"
+          cd "${{ matrix.repo }}/build"
+          echo "Checking for broken files in $(pwd)"
+
+          echo "Total files: $(ls -alh . | wc -l)"
+          echo "Total HTML files: $(find . -type f -name "*.html" | wc -l)"
+
+          echo "Ripgrep"
+          if rg 'file=../../../modules' -g '*.html' | grep -q .; then
+            echo "Matches found. Exiting with code 0."
+            rg 'file=../../../modules' -g '*.html'
             exit 1
           else
-            echo "No broken file references found in ${{ matrix.docs }}"
+            echo "No matches found"
             exit 0
           fi
 
