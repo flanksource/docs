@@ -4,7 +4,7 @@ title: Transformation
 
 import TransformFields from './_transform_fields.mdx'
 
-The `transform` can be used to convert one canary check into multiple checks programmatically.
+The `transform` can be used to convert one check into multiple checks programmatically.
 
 ```yaml
 apiVersion: canaries.flanksource.com/v1
@@ -41,6 +41,18 @@ But if we want to display each alert as its own check in the UI, we can use the 
 For example, if there are 9 different alerts, each alert has its own check that can be managed and interacted with equally.
 
 <TransformFields/>
+
+
+Transforms can either update checks in-place or return new checks.
+
+## Updating checks in-place
+
+The update a check in place, return a JSON string of `TransformResult` with the updated fields
+
+## Creating new checks
+
+To create a new check, return a JSON string of `[]TransformResult` containing the new checks.
+
 
 
 

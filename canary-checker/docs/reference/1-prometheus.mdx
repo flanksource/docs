@@ -62,4 +62,17 @@ The Prometheus Check connects to the Prometheus host, performs the desired query
 | ------------ | ----------------------- | --------------------------- |
 | `value`      |                         | _float_                     |
 | `firstValue` | Number of rows returned | _int_                       |
-| `results`    | A list of results       | _[]map[string]interface{ }_ |
+| `results`    | A list of results       | _[]map[string]interface{}_ |
+
+
+## Examples
+
+### Create a check per prometheus job using a transform
+
+```yaml title="jobs.yaml"  file=../../../modules/canary-checker/fixtures/prometheus/jobs.yaml
+```
+
+### Create a check per failing job only
+
+```yaml title="jobs.yaml"  file=../../../modules/canary-checker/fixtures/prometheus/jobs-fail-only.yaml
+```
