@@ -117,6 +117,11 @@ export default async function createConfigAsync() {
               label: 'GitHub',
               position: 'right',
             },
+            {
+              href: 'https://cloud-native.slack.com/messages/canary-checker/',
+              label: 'Slack',
+              position: 'right',
+            },
           ],
         },
         colorMode: {

@@ -33,7 +33,8 @@ spec:
   {field: "responseContent", description: "Expected response content", scheme: "string"},
   {field: "thresholdMillis", description: "Request timeout", default: 5000, scheme: "int"},
   {field: "maxSSLExpiry", description: "Max SSL expiry days", scheme: "int"},
-  {field: "insecureSkipVerify", description: "Skip TLS verification", scheme: "bool"}
+  {field: "insecureSkipVerify", description: "Skip TLS verification", scheme: "bool"},
+  {field: "env", description: "Setup environment variables that are accessible while templating", scheme: "[]EnvVar"},
 ]}/>
 
 ### TLS Config
@@ -67,6 +68,14 @@ spec:
 ```
 
 </details>
+
+### OAuth
+
+<Fields rows={[
+  {field: "tokenURL", description: "URL for OAuth Token", scheme: "string"},
+  {field: "scope", description: "Scope for OAuth token request", scheme: "[]string"},
+  {field: "params", description: "Parameters for OAuth", scheme: "map[string]string"},
+]}/>
 
 ### Result Variables
 
@@ -107,9 +116,7 @@ spec:
 </div>
 </details>
 
-### OAuth
-
-### Template Body Variables
+## Template Body Variables
 
 | Name                          | Scheme              |
 | ----------------------------- | ------------------- |
@@ -128,6 +135,37 @@ Eg: In the following spec, the vars `my_secret_path` and `my_secret_var`, define
 ```
 </div>
 </details>
+
+<details summary="Templating authentication from env variables">
+<div>
+```yaml title="http_user_pass_template.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-basic-auth-url
+  namespace: canaries
+spec:
+  http:
+    - name: test-url-via-env
+      # The URL can be templated from arbritrary values using the env field and $(.) syntax
+      url: $(.url)
+      env:
+        - name: url
+          value: https://hello:world2@httpbin.demo.aws.flanksource.com/basic-auth/hello/world2
+    - name: test-basic-via-env
+      # the url can be constructed from multiple variables
+      url: https://$(.user):$(.pass)@httpbin.demo.aws.flanksource.com/basic-auth/hello/world
+      templateBody: true
+      body: |
+        {{. | toJSONPretty " " }}
+      responseCodes: [200]
+      env:
+        - name: user
+          value: hello
+        - name: pass
+          value: world
+```
+</div>
 
 See <CommonLink to="gotemplate" anchor="escaping">Escaping variables</CommonLink>
 
