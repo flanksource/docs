@@ -147,7 +147,7 @@ metadata:
 spec:
   http:
     - name: test-url-via-env
-      # The URL can be templated from arbritrary values using the env field and $(.) syntax
+      # The URL can be templated from arbitrary values using the env field and $(.) syntax
       url: $(.url)
       env:
         - name: url
@@ -166,6 +166,7 @@ spec:
           value: world
 ```
 </div>
+</details>
 
 See <CommonLink to="gotemplate" anchor="escaping">Escaping variables</CommonLink>
 
