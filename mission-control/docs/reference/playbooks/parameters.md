@@ -63,13 +63,11 @@ When running the playbook on a `Deployment` named `mysql` the following will be 
 | ---------- | -------------------------------------- | -------------------------------------------------- |
 | `filter[]` | Limit the components to the given type | [`ResourceSelector`](/reference/resource-selector) |
 
-
 ### config
 
 | Field         | Description                              | Schema                                             |
 | ------------- | ---------------------------------------- | -------------------------------------------------- |
 | `filter.type` | Limit the config items to the given type | [`ResourceSelector`](/reference/resource-selector) |
-
 
 ### checks
 
