@@ -7,18 +7,7 @@ sidebar_class_name: beta
 
 Checks if a Google Cloud SQL instance has been successfully backed up recently.
 
-```yaml title="gcp-database.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: database-backup-check
-spec:
-  interval: 60
-  databaseBackup:
-    - maxAge: 6h
-      gcp:
-        project: google-project-name
-        instance: cloudsql-instance-name
+```yaml title="gcs-database.yaml" file=../../../modules/canary-checker/fixtures/datasources/GCP/database_backup.yaml
 ```
 
 | Field         | Description                                                 | Scheme                                         | Required |

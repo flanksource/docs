@@ -6,46 +6,7 @@ Canary checker can export custom metrics from any check type, replacing and/or c
 
 In the example below, exchange rates against the USD are exported by first calling an HTTP api and then using the values from the JSON response to create the metrics:
 
-```yaml title="exchange-rates-exporter.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: exchange-rates
-spec:
-  schedule: 'every 1 @hour'
-  http:
-    - name: exchange-rates
-      url: https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,ILS
-      metrics:
-        - name: exchange_rate
-          type: gauge
-          value: result.json.rates.GBP
-          labels:
-            - name: 'from'
-              value: 'USD'
-            - name: to
-              value: GBP
-
-        - name: exchange_rate
-          type: gauge
-          value: result.json.rates.EUR
-          labels:
-            - name: 'from'
-              value: 'USD'
-            - name: to
-              value: EUR
-
-        - name: exchange_rate
-          type: gauge
-          value: result.json.rates.ILS
-          labels:
-            - name: 'from'
-              value: 'USD'
-            - name: to
-              value: ILS
-        - name: exchange_rate_api
-          type: histogram
-          value: result.elapsed.getMilliseconds()
+```yaml title="exchange-rates-exporter.yaml" file=../../../../modules/canary-checker/fixtures/minimal/metrics-multiple.yaml
 ```
 
 Which would output:

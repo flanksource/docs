@@ -11,29 +11,6 @@ Checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/aler
 The following example [transforms](../concepts/expressions/transforms) the list of alerts so that each alert becomes a single check result. Without the transform the health check fails if any alerts are firing.
 
 ```yaml title="alert-manager-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/alertmanager_mix.yaml
-apiVersion: canaries.flanksource.com/v12
-kind: Canary
-metadata:
-  name: alertmanager-check
-spec:
-  schedule: "*/5 * * * *"
-  alertmanager:
-    - url: alertmanager.monitoring.svc
-      alerts:
-        - .*
-      ignore:
-        - KubeScheduler.*
-        - Watchdog
-      transform:
-        expr: |
-          results.alerts.map(r, {
-            'name': r.name + r.fingerprint,
-            'namespace': 'namespace' in r.labels ? r.labels.namespace : '',
-            'labels': r.labels,
-            'icon': 'alert',
-            'message': r.message,
-            'description': r.message,
-          }).toJSON()
 ```
 
 <HealthCheck name="alertmanager" rows={[
@@ -125,38 +102,14 @@ Lookup specifies the type of lookup to perform.
 />
 
 </SkipOSS>
+
 ## Inserting checks into different namespaces
 
 You can specify different namespaces for checks using the `namespace` field. This is helpful when checks are dynamically generated via transformation
 and need to be assigned their respective namespace.
 
-```yaml title="alertmanager.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: alertmanager
-spec:
-  interval: 30
-  alertmanager:
-    - url: https://alertmanager.demo.aws.flanksource.com
-      name: alertmanager-check
-      alerts:
-        - .*
-      ignore:
-        - KubeScheduler.*
-      exclude_filters:
-        namespace: elastic-system
-      transform:
-        expr: |
-          results.alerts.map(r, {
-            'name': r.name + r.fingerprint,
-            // highlight-next-line
-            'namespace': 'namespace' in r.labels ? r.labels.namespace : '',
-            'labels': r.labels,
-            'icon': 'alert',
-            'message': r.message,
-            'description': r.message,
-          }).toJSON()
+
+```yaml title="alert-manager-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/alertmanager_mix.yaml {20}
 ```
 
 The above alertmanager canary can reside on any namespace and the check it generates are assigned the correct namespace derived from the alerts.

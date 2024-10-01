@@ -21,20 +21,7 @@ Avoid inlining secrets, use `valueFrom` and <CommonLink to="authentication">EnvV
 
 Using a HTTP health check as an example for static values:
 
-```yaml title="http-basic-auth-static.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-basic-auth
-spec:
-  http:
-    - url: https://httpbin.org/basic-auth/hello/world
-      responseCodes: [200]
-      authentication:
-        username:
-          value: hello
-        password:
-          value: world
+```yaml title="http-basic-auth-static.yaml" file=../../../modules/canary-checker/fixtures/minimal/http_auth.yaml
 ```
 
 ## Configmaps
