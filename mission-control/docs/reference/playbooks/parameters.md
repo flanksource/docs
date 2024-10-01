@@ -8,16 +8,16 @@ title: Parameters
 
 Playbook parameter defines a parameter that a playbook needs to run.
 
-| Field         | Description                                         | Scheme                          | Required | Templatable |
-| ------------- | --------------------------------------------------- | ------------------------------- | -------- | ----------- |
-| `name`        | Name of parameter.                                  | `string`                        | `true`   |
-| `default`     | Default value of the parameter.                     | `string`                        |          | `true`      |
-| `label`       | Label of the parameter.                             | `string`                        | `true`   |
-| `required`    | Specify if the parameter is required                | `bool`                          |          |
-| `icon`        |                                                     | [`Icon`](/reference/types#icon) |          |
-| `description` | Description of the parameter.                       | `string`                        |          |
-| `type`        | Type of parameter. _(Defaults to "text")_           | `string`                        |          |
-| `properties`  | Properties of parameter. _Varies based on the type_ | `map[string]string`             |          |
+| Field         | Description                                         | Scheme                                         | Required |
+| ------------- | --------------------------------------------------- | ---------------------------------------------- | -------- |
+| `name`        | Name of parameter.                                  | `string`                                       | `true`   |
+| `default`     | Default value of the parameter.                     | [Go Template](/reference/scripting/gotemplate) |          |
+| `label`       | Label of the parameter.                             | `string`                                       |          |
+| `required`    | Specify if the parameter is required.               | `bool`                                         |          |
+| `icon`        | Icon for the playbook.                              | [`Icon`](/reference/types#icon)                |          |
+| `description` | Description of the parameter.                       | `string`                                       |          |
+| `type`        | Type of parameter. _(Defaults to "text")_           | `string`                                       |          |
+| `properties`  | Properties of parameter. _Varies based on the type_ | `map[string]string`                            |          |
 
 ## Defaulting
 
@@ -39,35 +39,37 @@ When running the playbook on a `Deployment` named `mysql` the following will be 
 
 ## Types
 
-| name        | Description                        | UI Component | Schema    | Properties                |
-| ----------- | ---------------------------------- | ------------ | --------- | ------------------------- |
-| `check`     | Limits the value to a check.       | Dropdown     | `string`  | [`Check`](#checks)        |
-| `checkbox`  | Boolean value toggle               | Checkbox     | `boolean` | -                         |
-| `code`      | Text area                          | Code Editor  | `string`  | [`Code`](#code)           |
-| `component` | Limits the value to a component.   | Dropdown     | `string`  | [`Component`](#component) |
-| `config`    | Limits the value to a config item. | Dropdown     | `string`  | [`Config`](#config)       |
-| `list`      | Specify a custom list of values    | Dropdown     | `string`  | [`List`](#list)           |
-| `people`    | Limits the value to people.        | Dropdown     | `string`  | [`People`](#people)       |
-| `team`      | Limits the value to teams.         | Dropdown     | `string`  | -                         |
-| `text`      | Text input                         | Text Input   | `string`  | [`Text`](#text)           |
+| name         | Description                        | UI Component | Schema    | Properties                |
+| ------------ | ---------------------------------- | ------------ | --------- | ------------------------- |
+| `check`      | Limits the value to a check.       | Dropdown     | `string`  | [`Check`](#checks)        |
+| `checkbox`   | Boolean value toggle               | Checkbox     | `boolean` | -                         |
+| `code`       | Text area                          | Code Editor  | `string`  | [`Code`](#code)           |
+| `component`  | Limits the value to a component.   | Dropdown     | `string`  | [`Component`](#component) |
+| `config`     | Limits the value to a config item. | Dropdown     | `string`  | [`Config`](#config)       |
+| `list`       | Specify a custom list of values    | Dropdown     | `string`  | [`List`](#list)           |
+| `people`     | Limits the value to people.        | Dropdown     | `string`  | [`People`](#people)       |
+| `team`       | Limits the value to teams.         | Dropdown     | `string`  | -                         |
+| `text`       | Text input                         | Text Input   | `string`  | [`Text`](#text)           |
+| `millicores` | CPU resource                       | Text Input   | `string`  | -                         |
+| `bytes`      | Memory resource                    | Text Input   | `string`  | -                         |
 
 ### component
 
-| Field         | Description                            | Schema   |
-| ------------- | -------------------------------------- | -------- |
-| `filter.type` | Limit the components to the given type | `string` |
+| Field      | Description                            | Schema                                             |
+| ---------- | -------------------------------------- | -------------------------------------------------- |
+| `filter[]` | Limit the components to the given type | [`ResourceSelector`](/reference/resource-selector) |
 
 ### config
 
-| Field         | Description                            | Schema   |
-| ------------- | -------------------------------------- | -------- |
-| `filter.type` | Limit the components to the given type | `string` |
+| Field         | Description                              | Schema                                             |
+| ------------- | ---------------------------------------- | -------------------------------------------------- |
+| `filter.type` | Limit the config items to the given type | [`ResourceSelector`](/reference/resource-selector) |
 
 ### checks
 
-| Field         | Description                            | Schema   |
-| ------------- | -------------------------------------- | -------- |
-| `filter.type` | Limit the components to the given type | `string` |
+| Field         | Description                        | Schema                                             |
+| ------------- | ---------------------------------- | -------------------------------------------------- |
+| `filter.type` | Limit the checks to the given type | [`ResourceSelector`](/reference/resource-selector) |
 
 ### code
 

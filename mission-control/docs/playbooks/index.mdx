@@ -23,79 +23,29 @@ Some key benefits include:
 * **Cost Efficiency** - Optimize costs with on-demand environments that spin down after a fixed duration.
 * **Portability** - A consistent interface for performing operations irrespective of the underlying infrastructure and/or environment
 
-
 <hr/>
-
 
 ## Use cases
 
 
 ### Provisioning
 
-
-
 ### Day 2 Operations
 
-Day 2 operations can be added onto existing resources using `configs`, `components` or health `checks` using [resource selectors](/reference/resource-selector).
+Day 2 operations can be added onto existing resources (`configs`, `components` or health `checks`) using [resource selectors](/reference/resource-selector).
 
-For example Restarting a Kubernetes Deployment is only applicable to config items of type: `Kubernetes::Deployment`
+For example scaling a Kubernetes Deployment is only applicable to config items of type: `Kubernetes::Deployment`
 
-```yaml title="scale-deployment.yaml"
-#...
-kind: Playbook
-spec:
-  configs:
-    - types:
-        - Kubernetes::Deployment
-   #....
+```yaml title='scale-deployment.yaml' file=../../modules/mission-control/fixtures/playbooks/scale-deployment.yaml
 ```
 
-Before running a playbook, users can provide input using [`parameters`](/reference/playbooks/parameters)
-```yaml title="parameters.yaml"
-#...
-kind: Playbook
-spec:
-  # user input
-  parameters:
-    - name: replicas
-  # ...
+Before running a playbook, users can provide input using [`parameters`](/reference/playbooks/parameters).
+In the playbook above, the user can decide the new number of replicas before running the playbook.
 
-```
 
 ### Just In Time Access
 
 ### AIOps
-
-
-
-## Parameters
-
-Playbooks have 2 types of parameters:
-
-
-
-
-```yaml title="restrict-to-deployment.yaml"
-#...
-kind: Playbook
-spec:
-  # components: ...
-  # checks: ...
-  //highlight-next-line
-  configs:
-    - types:
-        - Kubernetes::Deployment
-```
-
-## Self-Service
-
-
-
-
-## Events
-
-## Webhooks
-
 
 ## Actions
 
