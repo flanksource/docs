@@ -4,26 +4,8 @@ title: Javascript
 
 `javascript` expressions use to the [otto](https://github.com/robertkrimen/otto) Javascript VM
 
-```yaml title="display-with-javascript.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-check
-spec:
-  http:
-    - name: USD
-      url: https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,ILS
-      display:
-        javascript: |
-          currencyCodes = { "EUR": "€", "GBP": "£", "ILS": "₪"}
-          display = ""
-          for (var currency in json.rates) {
-            if (display != "") {
-              display += ", "
-            }
-            display += currency + " = " + currencyCodes[currency] + json.rates[currency] + ", "
-          }
-          "$1 = " + display
+```yaml title="display-with-javascript.yaml" file=../../../modules/canary-checker/fixtures/minimal/display-with-javascript_pass.yaml
+
 ```
 
 :::tip Troubleshooting

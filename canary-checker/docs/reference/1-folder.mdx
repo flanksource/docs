@@ -13,18 +13,7 @@ Checks the contents of a folder for size, age, and count. Folder based checks ar
   - Checking the size of queue processing backlog
   - Checking if any error (`.err` or `.log`) files have been produced.
 
-```yaml title="folder-check.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: folder-check
-spec:
-  interval: 30
-  folder:
-    - path: /etc/
-      name: folder-check-min
-      description: Checks if there are at least 10 files in the folder
-      minCount: 10
+```yaml title="folder-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/folder_single_pass.yaml
 ```
 
 <HealthCheck name="folder" edition="standard" rows={[
@@ -59,19 +48,7 @@ spec:
 
 e.g. to verify that database backups are being performed
 
-```yaml title="postgres-backup-check.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: folder-check
-spec:
-  interval: 30
-  folder:
-    - path: /data/backups
-      filter:
-        regex: 'pg-backups-.*.zip'
-      maxAge: 1d # require a daily backup
-      minSize: 10mb # the backup should be at least 10mb
+```yaml title="postgres-backup-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/folder_with_filter.yaml
 ```
 
 ## Result Variables

@@ -9,18 +9,7 @@ The [CEL playground](https://playcel.undistro.io/) lets you quickly test CEL exp
 :::
 
 
-```yaml title=http-check-expr.yaml
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-check-expr
-spec:
-  interval: 30
-  http:
-    - name: http pass response 200 status code
-      endpoint: https://httpbin.demo.aws.flanksource.com/status/200
-      test:
-        expr: "code in [200,201,301] and sslAge < Duration('7d')"
+```yaml title=http-check-expr.yaml file=../../../modules/canary-checker/fixtures/minimal/display-with-cel_pass.yaml
 ```
 
 Values in CEL represent any of the following:
@@ -591,87 +580,6 @@ CSV(["Alice,30", "Bob,31"])[0][0] // "Alice"
 ```
 
 ---
-
-<!-- ### data.CSVByRow
-
-`data.CSVByRow` converts a CSV formatted string into an array of maps, where each map represents a row with column names as keys.
-
-Syntax:
-
-    data.CSVByRow(csvString)
-
-Where:
-
-- `csvString` is the CSV formatted string.
-
-Examples:
-
-```javascript
-Converting a CSV string with headers to an array of maps:
-data.CSVByRow("name,age\nAlice,30\nBob,35")  // [{"name": "Alice", "age": "30"}, {"name": "Bob", "age": "35"}]
-
-Handling a single row CSV:
-data.CSVByRow("name,age\nAlice,30")  // [{"name": "Alice", "age": "30"}]
-
-An empty CSV string:
-data.CSVByRow("")  // an empty array
-```
-
----
-
-### data.CSVByColumn
-
-`data.CSVByColumn` converts a CSV formatted string into a map of arrays, where keys are column names and values are arrays of column values.
-
-Syntax:
-
-    data.CSVByColumn(csvString)
-
-Where:
-
-- `csvString` is the CSV formatted string.
-
-Examples:
-
-```javascript
-Converting a CSV string with headers to a map of arrays:
-data.CSVByColumn("name,age\nAlice,30\nBob,35")  // {"name": ["Alice", "Bob"], "age": ["30", "35"]}
-
-Handling a single column CSV:
-data.CSVByColumn("name\nAlice\nBob")  // {"name": ["Alice", "Bob"]}
-
-An empty CSV string:
-data.CSVByColumn("")  // an empty map
-```
-
----
-
-### toCSV
-
-`data.ToCSV` converts an array of arrays or an array of maps into a CSV formatted string.
-
-Syntax:
-
-    data.ToCSV(data)
-
-Where:
-
-- `data` is the array of arrays or array of maps to be converted.
-
-Examples:
-
-```javascript
-Converting an array of arrays to a CSV string:
-data.ToCSV([["Alice", 30], ["Bob", 35]])  // "Alice,30\nBob,35"
-
-Handling an array of maps:
-data.ToCSV([{"name": "Alice", "age": 30}, {"name": "Bob", "age": 35}])  // "name,age\nAlice,30\nBob,35"
-
-An empty array:
-data.ToCSV([])  // an empty string
-```
-
---- -->
 
 ## crypto
 

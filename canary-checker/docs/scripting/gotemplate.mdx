@@ -6,17 +6,7 @@ import GoTemplate from '@site/docs/partials/_gotemplate.md'
 
 In this example we print out the exchange rates returned by an HTTP API Call
 
-```yaml title="display-with-gotemplate.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-check
-spec:
-  http:
-    - name: USD
-      url: https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,ILS,ZAR
-      display:
-        template: '$1 = €{{.json.rates.EUR}}, £{{.json.rates.GBP}}, ₪{{.json.rates.ILS}}'
+```yaml title="display-with-gotemplate.yaml" file=../../../modules/canary-checker/fixtures/minimal/display-with-gotemplate_pass.yaml
 ```
 
 <p/>

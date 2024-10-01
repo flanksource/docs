@@ -8,17 +8,8 @@ Canary checker can format the results of checks using the `display` field. All e
 
 In this example we get the current exchange rate:
 
-```yaml title="display-with-gotemplate.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-check
-spec:
-  http:
-    - name: USD
-      url: https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,ILS,ZAR
-      display:
-        template: '$1 = €{{.json.rates.EUR}}, £{{.json.rates.GBP}}, ₪{{.json.rates.ILS}}'
+```yaml title="display-with-gotemplate.yaml" file=../../../../modules/canary-checker/fixtures/minimal/display-with-gotemplate_pass.yaml
+
 ```
 
 Which would display:
@@ -33,44 +24,16 @@ See <CommonLink to="gotemplate">Go Template</CommonLink>
 
 The equivalent using CEL expressions would be:
 
-```yaml title="display-with-cel.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-check
-spec:
-  http:
-    - name: USD
-      url: https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,ILS,ZAR
-      display:
-        expr: "'$1 = €' + string(json.rates.EUR) + ', £' + string(json.rates.GBP) + ', ₪' + string(json.rates.ILS)"
+```yaml title="display-with-cel.yaml" file=../../../../modules/canary-checker/fixtures/minimal/display-with-cel_pass.yaml
+
 ```
 
 See <CommonLink to="cel">Cel Expressions</CommonLink> for a function reference
 
 ## Javascript
 
-```yaml title="display-with-javascript.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-check
-spec:
-  http:
-    - name: USD
-      url: https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,ILS
-      display:
-        javascript: |
-          currencyCodes = { "EUR": "€", "GBP": "£", "ILS": "₪"}
+```yaml title="display-with-javascript.yaml" file=../../../../modules/canary-checker/fixtures/minimal/display-with-javascript_pass.yaml
 
-          display = ""
-          for (var currency in json.rates) {
-            if (display != "") {
-              display += ", "
-            }
-            display += currency + " = " + currencyCodes[currency] + json.rates[currency] + ", "
-          }
-          "$1 = " + display
 ```
 
 :::info
