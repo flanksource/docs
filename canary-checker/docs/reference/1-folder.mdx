@@ -110,7 +110,6 @@ The following fields are available in `test`, `display` and `transform` [express
 <div>
 ```yaml title="exec_artifact.yaml"  file=../../../modules/canary-checker/fixtures/datasources/SFTP/sftp_pass.yaml
 ```
-
 </div>
 </details>
 
@@ -118,40 +117,16 @@ The following fields are available in `test`, `display` and `transform` [express
 
 <Fields connection="aws" />
 
-```yaml title="s3-check.yaml"
-        # ...
-kind: Canary
-spec:
-  folder:
-    //highlight-next-line
-    - path: s3://bucket/folder
-      awsConnection:
-        # ...
-```
 
 <div className="mt-5"/>
 <details summary="S3 Bucket"  >
 <div>
 ```yaml title="exec_artifact.yaml"  file=../../../modules/canary-checker/fixtures/datasources/s3_bucket_pass.yaml
 ```
-
 </div>
 </details>
 
 ### SMB
-
-<Fields connection="smb" />
-
-```yaml title="smb-check.yaml"
-# ...
-kind: Canary
-spec:
-  folder:
-    //highlight-next-line
-    - path: smb:\\192.168.1.9\Some Public Folder\somedir
-      smbConnection:
-           #...
-```
 
 <Fields connection="smb" />
 
@@ -160,7 +135,6 @@ spec:
 <div>
 ```yaml title="smb.yaml"  file=../../../modules/canary-checker/fixtures/quarantine/smb_pass.yaml
 ```
-
 </div>
 </details>
 
@@ -168,22 +142,11 @@ spec:
 
 <Fields connection="gcp" />
 
-```yaml title="gcs-check.yaml"
-# ...
-kind: Canary
-spec:
-  folder:
-  //highlight-next-line
-  - path: gcs://bucket/folder
-    gcpConnection:
-      # ...
-```
 
 <div className="mt-5"/>
 <details summary="GCS Check" >
 <div>
 ```yaml title="gcs.yaml"  file=../../../modules/canary-checker/fixtures/datasources/GCP/folder_pass.yaml
 ```
-
 </div>
 </details>
