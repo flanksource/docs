@@ -6,32 +6,7 @@ import TransformFields from './_transform_fields.mdx'
 
 The `transform` can be used to convert one check into multiple checks programmatically.
 
-```yaml
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: alertmanager-check
-spec:
-  schedule: "*/5 * * * *"
-  alertmanager:
-    - url: alertmanager.example.com
-      name: alert-manager-transform
-      alerts:
-        - .*
-      ignore:
-        - KubeScheduler.*
-      transform:
-        javascript: |
-          var out = _.map(results, function(r) {
-            return {
-              name: r.name,
-              labels: r.labels,
-              icon: 'alert',
-              message: r.message,
-              description: r.message,
-            }
-          })
-          JSON.stringify(out);
+```yaml title="alertmanager-check.yaml" file=../../../../modules/canary-checker/fixtures/datasources/alertmanager.yaml
 ```
 
 In the above example, the check returns multiple alerts from alertmanager. By default, all those alerts are grouped in a single check.

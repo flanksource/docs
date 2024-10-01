@@ -5,21 +5,9 @@ sidebar_class_name: popular
 
 # <Icon name="http"/> HTTP
 
-This check performs queries on HTTP endpoints, and HTTP namespaces to monitor their activity.
+This check performs queries on HTTP to monitor their activity.
 
-```yaml title=http-check.yaml
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-check
-spec:
-  interval: 30
-  http:
-    - name: http pass response 200 status code
-      endpoint: https://httpbin.demo.aws.flanksource.com/status/200
-      thresholdMillis: 3000
-      responseCodes: [201, 200, 301]
-      maxSSLExpiry: 7
+```yaml title=http-check.yaml file=../../../modules/canary-checker/fixtures/minimal/http_single_pass.yaml
 ```
 
 <HealthCheck name="http" connection="url"  rows={[
@@ -49,22 +37,7 @@ spec:
 
 <details summary="Example">
 
-```yaml title=http-check.yaml
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-check
-spec:
-  interval: 30
-  http:
-    - name: http pass response 200 status code
-      url: https://httpbin.demo.aws.flanksource.com/status/200
-      tlsConfig:
-        ca:
-          valueFrom:
-            secretKeyRef:
-              name: ca-cert
-              key: ca.pem
+```yaml title=http-check.yaml   file=../../../modules/canary-checker/fixtures/minimal/http_tls_config.yaml
 ```
 
 </details>
@@ -92,18 +65,7 @@ Result variables can be used in `test`, `display` and `transform` [expressions](
 
 The above canary (`http-check.yaml`) is functionally equivalent to `http-check-expr.yaml` below
 
-```yaml title=http-check-expr.yaml
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-check-expr
-spec:
-  interval: 30
-  http:
-    - name: http pass response 200 status code
-      endpoint: https://httpbin.demo.aws.flanksource.com/status/200
-      test:
-        expr: "code in [200,201,301] and sslAge > Duration('7d')"
+```yaml title=http-check-expr.yaml file=../../../modules/canary-checker/fixtures/minimal/http_tls_check_pass.yaml
 ```
 
 ## Authentication
@@ -111,7 +73,7 @@ spec:
 <details summary="Basic Authentication">
 
 <div>
-```yaml title="http_auth.yaml"   file=../../../modules/canary-checker/fixtures/minimal/http_auth.yaml
+```yaml title="http_auth.yaml"   file=../../../modules/canary-checker/fixtures/minimal/http_auth_from_secret.yaml
 ```
 </div>
 </details>
@@ -137,33 +99,9 @@ Eg: In the following spec, the vars `my_secret_path` and `my_secret_var`, define
 </details>
 
 <details summary="Templating URL from env variables">
+
 <div>
-```yaml title="http_user_pass_template.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-basic-auth-url
-  namespace: canaries
-spec:
-  http:
-    - name: test-url-via-env
-      # The URL can be templated from arbitrary values using the env field and $(.) syntax
-      url: $(.url)
-      env:
-        - name: url
-          value: https://hello:world2@httpbin.demo.aws.flanksource.com/basic-auth/hello/world2
-    - name: test-basic-via-env
-      # the url can be constructed from multiple variables
-      url: https://$(.user):$(.pass)@httpbin.demo.aws.flanksource.com/basic-auth/hello/world
-      templateBody: true
-      body: |
-        {{. | toJSONPretty " " }}
-      responseCodes: [200]
-      env:
-        - name: user
-          value: hello
-        - name: pass
-          value: world
+```yaml title="http_user_pass_template.yaml" file=../../../modules/canary-checker/fixtures/minimal/http_auth_url_pass.yaml
 ```
 </div>
 </details>

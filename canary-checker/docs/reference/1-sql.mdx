@@ -8,33 +8,7 @@ import { AzureSqlServer} from "@flanksource/icons/mi"
 
 This check connects to a specified Postgres database, run a query against it and verify the results.
 
-```yaml
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: postgres-check
-spec:
-  interval: 30
-  postgres: # or mysql, mssql
-    - name: postgres schemas check
-      url: "postgres://$(username):$(password)@postgres.default.svc:5432/postgres?sslmode=disable"
-      username:
-        valueFrom:
-          secretKeyRef:
-            name: postgres-credentials
-            key: USERNAME
-      password:
-        valueFrom:
-          secretKeyRef:
-            name: postgres-credentials
-            key: PASSWORD
-      query: SELECT current_schemas(true)
-      display:
-        template: |
-          {{- range $r := .results.rows }}
-          {{- $r.current_schemas}}
-          {{- end}}
-      results: 1
+```yaml file=../../../modules/canary-checker/fixtures/datasources/postgres.yaml
 ```
 
 <HealthCheck name="postgres"  connection="url" rows={[
@@ -42,7 +16,6 @@ spec:
   {field: "results", description: "Number of expected rows in results", scheme: 'int'}
 
 ]}/>
-
 
 ## Result Variables
 
@@ -52,7 +25,7 @@ spec:
 | `count` | Number of rows returned | *int*                      |
 
 
-## <Icon name="mssql" /> SQL Server
+## <Icon name="sqlserver" /> SQL Server
 
 ```yaml title=canary-mssql.yaml
 # ...
@@ -64,10 +37,7 @@ spec:
       # ...
 ```
 
-
 ## <Icon name="mysql" /> MySQL
-
-
 
 ```yaml title=lookup-mysql.yaml
 # ...
@@ -78,8 +48,8 @@ spec:
     - url: "$(username):$(password)@tcp(mysql.default.svc:3306)/mysqldb"
     # ...
 ```
-## <Icon name="postgres" /> Postgres
 
+## <Icon name="postgres" /> Postgres
 
 ```yaml title=canary-postgres.yaml
 # ...

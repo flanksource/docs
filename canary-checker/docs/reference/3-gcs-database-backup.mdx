@@ -45,38 +45,10 @@ There are 3 options when connecting to GCP:
 1. GKE [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) (the default if no `connection` or `credentials` is specified)
 2. `connection`, this is the recommended method, connections are reusable and secure
 
-```yaml title="aws-connection.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: database-backup-check
-spec:
-  interval: 60
-  databaseBackup:
-    - maxAge: 6h
-      gcp:
-        project: google-project-name
-        instance: cloudsql-instance-name
-       connection: connection://gcp/internal
+```yaml title="database-backup-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/GCP/database_backup_cred_from_connection.yaml
 ```
 
 3. `accessKey` and `secretKey` <CommonLink to="authentication">_EnvVar_</CommonLink> with the credentials stored in a secret.
 
-```yaml title="gcs-database-backup.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: database-backup-check
-spec:
-  interval: 60
-  databaseBackup:
-    - name: gcp db check
-      maxAge: 6h
-      gcp:
-        project: google-project-name
-        credentials:
-          valueFrom:
-            secretKeyRef:
-              name: gcp-credentials
-              key: AUTH_ACCESS_TOKEN
+```yaml title="gcs-database-backup.yaml" file=../../../modules/canary-checker/fixtures/datasources/GCP/database_backup_cred.yaml
 ```

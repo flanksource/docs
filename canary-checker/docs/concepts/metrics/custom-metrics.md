@@ -7,6 +7,7 @@ Canary checker can export custom metrics from any check type, replacing and/or c
 In the example below, exchange rates against the USD are exported by first calling an HTTP api and then using the values from the JSON response to create the metrics:
 
 ```yaml title="exchange-rates-exporter.yaml" file=../../../../modules/canary-checker/fixtures/minimal/metrics-multiple.yaml
+
 ```
 
 Which would output:
