@@ -51,3 +51,29 @@ spec:
         - labelSelector: 'team=payments'
         - labelSelector: 'team=orders'
 ```
+
+### Selecting configs in a playbook paramater
+
+```yaml title="display-config-map.yaml"
+---
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: display-config-map
+  namespace: mc
+spec:
+  category: kubernetes
+  parameters:
+    - name: configmap
+      label: 'Choose a secret'
+      type: config
+      properties:
+        filter:
+          - types:
+              - Kubernetes::ConfigMap
+  actions:
+    - name: JSON
+      exec:
+        script: |
+          echo '{{.params.configmap | toJSONPretty "  "}}'
+```
