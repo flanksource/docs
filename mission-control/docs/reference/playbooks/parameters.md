@@ -50,8 +50,12 @@ When running the playbook on a `Deployment` named `mysql` the following will be 
 | `people`     | Limits the value to people.        | Dropdown     | `string`  | [`People`](#people)       |
 | `team`       | Limits the value to teams.         | Dropdown     | `string`  | -                         |
 | `text`       | Text input                         | Text Input   | `string`  | [`Text`](#text)           |
-| `millicores` | CPU resource                       | Text Input   | `string`  | -                         |
-| `bytes`      | Memory resource                    | Text Input   | `string`  | -                         |
+| `millicores` | CPU resource                       | Number       | `string`  | -                         |
+| `bytes`      | Memory resource                    | Number       | `string`  | -                         |
+
+```yaml title='params-sink.yaml' file=../../../modules/mission-control/fixtures/playbooks/params.yaml {20,24,27,32,39,46,51,56,61,72} showLineNumbers
+
+```
 
 ### component
 
@@ -59,11 +63,13 @@ When running the playbook on a `Deployment` named `mysql` the following will be 
 | ---------- | -------------------------------------- | -------------------------------------------------- |
 | `filter[]` | Limit the components to the given type | [`ResourceSelector`](/reference/resource-selector) |
 
+
 ### config
 
 | Field         | Description                              | Schema                                             |
 | ------------- | ---------------------------------------- | -------------------------------------------------- |
 | `filter.type` | Limit the config items to the given type | [`ResourceSelector`](/reference/resource-selector) |
+
 
 ### checks
 
