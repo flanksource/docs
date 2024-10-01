@@ -1,4 +1,5 @@
 actionPrefix
+apiVersion
 agent_id
 aggregatorName
 alarmPrefix
