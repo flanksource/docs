@@ -192,6 +192,7 @@ keypairs
 knowledgebase
 knowledgebases
 Kratos
+kubeconfig
 kubectl
 Kuberhealthy
 kubernetes
