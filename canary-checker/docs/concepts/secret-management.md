@@ -21,8 +21,20 @@ Avoid inlining secrets, use `valueFrom` and <CommonLink to="authentication">EnvV
 
 Using a HTTP health check as an example for static values:
 
-```yaml title="http-basic-auth.yaml" file=../../../modules/canary-checker/fixtures/minimal/http_auth_static_pass.yaml
-
+```yaml title="http-basic-auth-static.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-basic-auth
+spec:
+  http:
+    - url: https://httpbin.org/basic-auth/hello/world
+      responseCodes: [200]
+      authentication:
+        username:
+          value: hello
+        password:
+          value: world
 ```
 
 ## Configmaps
@@ -33,8 +45,26 @@ To use a configmap, we first need to create the configmap:
 kubectl create configmap basic-auth --from-literal=user=hello --from-literal=pass=world -n default
 ```
 
-```yaml title="http-basic-auth.yaml" file=../../../modules/canary-checker/fixtures/minimal/http_auth_from_config_map.yaml
-
+```yaml title="http-basic-auth-configmap.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-basic-auth-configmap
+spec:
+  http:
+    - url: https://httpbin.org/basic-auth/hello/world
+      responseCodes: [200]
+      authentication:
+        username:
+          valueFrom:
+            configMapKeyRef:
+              name: basic-auth
+              key: user
+        password:
+          valueFrom:
+            configMapKeyRef:
+              name: basic-auth
+              key: pass
 ```
 
 ## Secrets
@@ -45,8 +75,24 @@ To use a secret, first we create the secret:
 kubectl create secret generic basic-auth --from-literal=user=hello --from-literal=pass=world -n default
 ```
 
-```yaml title="http-basic-auth.yaml" file=../../../modules/canary-checker/fixtures/minimal/http_auth_from_secret.yaml
-
+```yaml title="http-basic-auth-secret.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-basic-auth-configmap
+spec:
+  http:
+    - url: https://httpbin.demo.aws.flanksource.com/basic-auth/hello/world
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: user
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: pass
 ```
 
 ## Helm Values
@@ -57,15 +103,50 @@ To use a secret, first we deploy a helm chart
 helm install podinfo  podinfo/podinfo -n podinfo --set ingress.enabled=true
 ```
 
-```yaml title="http-from-helm.yaml"  file=../../../modules/canary-checker/fixtures/minimal/http_auth_from_helm_ref.yaml
+```yaml title="http-from-helm.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-from-helm
+spec:
+  http:
+    - env:
+        - name: url
+          valueFrom:
+            helmRef:
+              name: podinfo
+              key: .ingress.hosts[0].host
 
+      url: $(url)
 ```
 
 ## Service Accounts
 
 Checks can use service accounts for authentication with external services that have existing trust established
 
-```yaml title="http-service-accounts.yaml"  file=../../../modules/canary-checker/fixtures/minimal/http_auth_from_service_account.yaml
+```yaml title="http-service-accounts.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-basic-auth-configmap
+spec:
+  http:
+
+    interval: 30
+  http:
+    - name: vault-example-sre
+      description: "HashiCorp Vault functionality check."
+      url:  https://vault.example/v1/auth/kubernetes/login
+      env:
+        - name: TOKEN
+          valueFrom:
+            serviceAccount: default-account
+      templateBody: true
+      body: |
+        {
+          "jwt": "$(TOKEN)",
+          "role": "example-role"
+        }
 
 ```
 
