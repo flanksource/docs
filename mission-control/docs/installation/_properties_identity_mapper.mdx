@@ -1,0 +1,82 @@
+### Identity Mapper
+
+The schema for the object to be returned by the identity mapper script.
+
+<Fields rows={
+  [{
+    field: "role",
+    description: "Mission control role. See [RBAC](/reference/rbac)",
+    scheme: "`admin` | `viewer` | `editor`",
+  },
+  {
+    field: "teams",
+    description: "List of name or id of the teams the OIDC identity will be put into",
+    scheme: "`[]string`",
+  }]
+} />
+
+
+#### Kratos Identity
+
+<Fields rows={
+  [
+    {
+      field: "created_at",
+      description: "Timestamp for when the identity was created",
+      scheme: "`timestamp`",
+    },
+    {
+      field: "id",
+      description: "Unique identifier for the identity",
+      scheme: "string",
+    },
+    {
+      field: "metadata_public",
+      description: "Public metadata for the identity",
+      scheme: "`map[string]any`",
+    },
+    {
+      field: "state",
+      description: "Current state of the identity",
+      scheme: "`active` | `inactive`",
+    },
+    {
+      field: "traits",
+      description: "Identity's traits.",
+      scheme: "[`Trait`](#kratos-identity-trait)",
+    },
+    {
+      field: "updated_at",
+      description: "Timestamp for when the identity was last updated",
+      scheme: "`timestamp`",
+    },
+  ]
+} />
+
+#### Kratos Identity Trait
+
+<Fields rows={
+  [
+    {
+      field: "name.first",
+      description: "First name",
+      scheme: "string",
+    },
+    {
+      field: "name.last",
+      description: "Last name",
+      scheme: "string",
+    },
+    {
+      field: "email",
+      description: "Email address",
+      scheme: "string",
+      required: true,
+    },
+    {
+      field: "groups",
+      description: "List of groups the identity belongs to",
+      scheme: "`[]string`",
+    }
+  ]
+} />

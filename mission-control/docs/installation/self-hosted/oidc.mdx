@@ -72,7 +72,7 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
     <p/>
 
 5. Optionally, create a cel expression to map identities from the OIDC provider to a mission control role & team. 
-    _Example_: the following script maps all Azure users in the "SRE" group to the "admin" role & everyone else to a "viewer" role.
+    The following script maps all Azure users in the `SRE` group to the `admin` role and everyone else to the `viewer` role.
 
     ```yaml
     apiVersion: v1
@@ -87,7 +87,7 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
     ```
     <p/>
 
-    The cel expression is expected to return an object with a `role` & a `teams[]` fields.
+    See [Identity Mapper Schema](/reference/helm/mission-control#identity-mapper) & [RBAC](/reference/rbac)
 
 6. Supply the identity mapper script to mission control.
 
