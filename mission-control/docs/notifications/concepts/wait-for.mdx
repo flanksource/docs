@@ -1,0 +1,32 @@
+---
+title: Wait For
+---
+
+Kubernetes clusters and similar dynamic systems may experience temporary discrepancies between the actual and intended state of resources. 
+For example, a deployment could momentarily appear unhealthy during a scaling operation.
+If alerts are configured for `config.unhealthy` events, these transient state fluctuations might lead to an overwhelming number of unnecessary notifications.
+
+To address this issue, you can utilize the waitFor parameter.
+This feature allows you to define a delay before sending notifications for specific events.
+After an event occurs, the system will recheck its status following the specified wait period. Only if the undesired state persists will a notification be triggered.
+
+:::info
+`waitFor` is only applicable on health related events
+:::
+
+This approach helps reduce unnecessary notifications caused by transient state changes, ensuring you're alerted only to persistent issues.
+
+
+```yaml title='notify-unhealthy-deployments.yaml' {8}
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: deployment-unhealthy-alerts
+spec:
+  events:
+    - config.unhealthy
+  waitFor: 2m
+  filter: config.type == 'Kubernetes::Deployment'
+  to:
+    email: alerts@acme.com
+```

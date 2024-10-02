@@ -46,6 +46,11 @@
     scheme: "`[]string`"
   },
   {
+    field: "waitFor",
+    description: "The duration to delay sending a health-based notification.\n\nAfter this period, the health status is reassessed to confirm it hasn't changed, helping prevent false alarms from transient issues.",
+    scheme: "duration"
+  },
+  {
     field: "title",
     description: "Channel dependent e.g. subject for email",
     scheme: "GoTemplate",

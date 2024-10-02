@@ -1,0 +1,28 @@
+---
+title: Silences
+---
+
+Silences prevent notifications from being sent. 
+Silences are attached to a particular resource (`catalog`, `health check`, or `component`) and are active for a specified duration.
+
+:::note
+Notifications that aren't sent due to silence are still visible in the notification history for auditing purposes.
+:::
+
+## Use cases
+
+- Planned maintenance or deployments. Eg: You can silence a namespace or a helm release and automatically silence notifications from all of their children.
+- Non-critical resources: Notifications from resources that routinely trigger alerts but are expected and harmless can be silenced.
+- Known issues: If there's a known issue that can't be immediately resolved (e.g., due to dependencies or resource constraints), you might silence related alerts until a fix can be implemented.
+
+## Add Silence
+
+Silences can be added from the notification page. Alternatively, if you're using the default slack notification templates, you get a silence button
+on each notification.
+
+![Silence Notification form](./silence-notification-form.png)
+
+## Recursive mode
+
+When a silence is recursively applied, it applies to all of its children. 
+So silencing a namespace would silence all deployments, statefulsets, pods, etc in that namespace. 
