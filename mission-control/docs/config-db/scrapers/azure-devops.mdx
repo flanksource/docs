@@ -25,16 +25,17 @@ Each time the pipeline is run it will create a change for that configuration ite
 
 ### AzureDevops
 
-| Field                 | Description                                                           | Scheme                                           | Required |
-| --------------------- | --------------------------------------------------------------------- | ------------------------------------------------ | -------- |
-| `connection`          | Connection to use for azure devops credential                         | `string`                                         |          |
-| `organization`        | Specifies the name of the Azure DevOps organization to scrape         | `string`                                         |          |
-| `personalAccessToken` | Specifies the personal access token to authenticate with Azure DevOps | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
-| `projects`            | Specifies the Azure DevOps projects to scrape                         | `[]string`                                       | `true`   |
-| `pipelines`           | Specifies the Azure DevOps pipelines to scrape                        | `[]string`                                       | `true`   |
-| `properties`          | Custom templatable properties for the scraped config items.           | [`[]ConfigProperty`](/reference/config-db/properties)   |          |
-| `transform`       | Field to transform result                                                                        | [`Transform`](/config-db/concepts/transform)                        |          |
-| `tags`                | Set custom tags on the scraped config items                           | `map[string]string`                              |          |
+| Field                 | Description                                                           | Scheme                                                | Required |
+| --------------------- | --------------------------------------------------------------------- | ----------------------------------------------------- | -------- |
+| `connection`          | Connection to use for Azure DevOps credential                         | `string`                                              |          |
+| `organization`        | Specifies the name of the Azure DevOps organization to scrape         | `string`                                              |          |
+| `personalAccessToken` | Specifies the personal access token to authenticate with Azure DevOps | <CommonLink to="secrets">[]_EnvVar_</CommonLink>      |          |
+| `projects`            | Specifies the Azure DevOps projects to scrape                         | `[]string`                                            | `true`   |
+| `pipelines`           | Specifies the Azure DevOps pipelines to scrape                        | `[]string`                                            | `true`   |
+| `properties`          | Custom templatable properties for the scraped config items.           | [`[]ConfigProperty`](/reference/config-db/properties) |          |
+| `transform`           | Field to transform result                                             | [`Transform`](/config-db/concepts/transform)          |          |
+| `tags`                | Set custom tags on the scraped config items                           | `map[string]string`                                   |          |
+
 
 :::note
 Either the connection name or the credentials (organization & personalAccessToken) are required
