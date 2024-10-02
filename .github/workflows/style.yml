@@ -1,6 +1,6 @@
 name: Vale
 on:
-  push:
+  pull_request:
 
 jobs:
   vale:
@@ -8,6 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: errata-ai/vale-action@reviewdog
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+
+      - name: List changed fiels
+        run: |
+          echo "Files changed:"
+          echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n'
+
+      - name: Run Vale on changed files
+        uses: errata-ai/vale-action@reviewdog
         with:
-          reporter: github-check
+          files: ${{ steps.changed-files.outputs.all_changed_files }}
+          separator: " "
+          reporter: github-pr-check
+          fail_on_error: true
