@@ -6,7 +6,7 @@ title: Kubernetes
 
 The Kubernetes component lookup fetches kubernetes resources to be used as components.
 
-```yaml title="kube-check.yml"
+```yaml title="kube-configmap-components.yml"
 ---
 apiVersion: canaries.flanksource.com/v1
 kind: Topology
@@ -15,7 +15,7 @@ metadata:
 spec:
   type: Config
   icon: kubernetes
-  schedule: '@every 30s'
+  schedule: '@every 5m'
   components:
     - name: configs
       icon: server
@@ -24,12 +24,13 @@ spec:
       lookup:
         kubernetes:
           - kind: ConfigMap
-        display:
-          expr: |
-            dyn(results).map(c, {
-              'name': c.name,
-              'type': 'ConfigMap',
-            }).toJSON()
+            display:
+              expr: |
+                dyn(results).map(c, {
+                  'name': c.Object.metadata.name,
+                  'type': 'ConfigMap',
+                }).toJSON()
+
       // highlight-end
 ```
 
@@ -55,3 +56,122 @@ spec:
 ## Results
 
 The `results` variable in the template is itself a list of all the kubernetes resources.
+
+## Remote clusters
+
+A single canary-checker instance can connect to any number of remote clusters via custom kubeconfig.
+Either the kubeconfig itself or the path to the kubeconfig can be provided.
+
+### From kubernetes secret
+
+```yaml title="remote-cluster.yaml"
+---
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: kubernetes-configs
+spec:
+  type: Config
+  icon: kubernetes
+  schedule: '@every 5m'
+  components:
+    - name: configs
+      icon: server
+      type: ConfigMap
+      lookup:
+        kubernetes:
+          - kind: ConfigMap
+            display:
+              expr: |
+                dyn(results).map(c, {
+                  'name': c.Object.metadata.name,
+                  'type': 'ConfigMap',
+                }).toJSON()
+        // highlight-start
+        kubeconfig:
+          valueFrom:
+            secretKeyRef:
+              name: aws-kubeconfig
+              key: kubeconfig
+        // highlight-end
+```
+
+### Kubeconfig inline
+
+```yaml title="remote-cluster.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: kubernetes-configs
+spec:
+  type: Config
+  icon: kubernetes
+  schedule: '@every 5m'
+  components:
+    - name: configs
+      icon: server
+      type: ConfigMap
+      lookup:
+        kubernetes:
+          - kind: ConfigMap
+            display:
+              expr: |
+                dyn(results).map(c, {
+                  'name': c.Object.metadata.name,
+                  'type': 'ConfigMap',
+                }).toJSON()
+        // highlight-start
+        kubeconfig:
+          value: |
+            apiVersion: v1
+            clusters:
+                - cluster:
+                    certificate-authority-data: xxxxx
+                    server: https://xxxxx.sk1.eu-west-1.eks.amazonaws.com
+                  name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+            contexts:
+                - context:
+                    cluster: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                    namespace: mission-control
+                    user: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                  name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+            current-context: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+            kind: Config
+            preferences: {}
+            users:
+                - name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                  user:
+                    exec:
+                        ....
+        // highlight-end
+```
+
+### From local filesystem
+
+```yaml title="remote-cluster.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: kubernetes-configs
+spec:
+  type: Config
+  icon: kubernetes
+  schedule: '@every 5m'
+  components:
+    - name: configs
+      icon: server
+      type: ConfigMap
+      lookup:
+        kubernetes:
+          - kind: ConfigMap
+        display:
+          expr: |
+            dyn(results).map(c, {
+              'name': c.name,
+              'type': 'ConfigMap',
+            }).toJSON()
+        // highlight-start
+        kubeconfig:
+          value: /root/.kube/aws-kubeconfig
+        // highlight-end
+```

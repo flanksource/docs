@@ -116,6 +116,127 @@ check would be to see if a service is accessible via the ingress as shown in the
   ]}
 />
 
+### Remote clusters
+
+A single canary-checker instance can connect to any number of remote clusters via custom kubeconfig.
+Either the kubeconfig itself or the path to the kubeconfig can be provided.
+
+#### kubeconfig from kubernetes secret
+
+```yaml title="remote-cluster.yaml" {11-15}
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: pod-creation-test
+spec:
+  schedule: "@every 5m"
+  kubernetesResource:
+    - name: pod creation on aws cluster
+      namespace: default
+      description: "deploy httpbin"
+      kubeconfig:
+        valueFrom:
+          secretKeyRef:
+            name: aws-kubeconfig
+            key: kubeconfig
+      resources:
+        - apiVersion: v1
+          kind: Pod
+          metadata:
+            name: httpbin
+            namespace: default
+            labels:
+              app: httpbin
+          spec:
+            containers:
+              - name: httpbin
+                image: "kennethreitz/httpbin:latest"
+                ports:
+                  - containerPort: 80
+```
+
+#### Kubeconfig inline
+
+```yaml title="remote-cluster.yaml" {11-32}
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: pod-creation-test
+spec:
+  schedule: "@every 5m"
+  kubernetesResource:
+    - name: pod creation on aws cluster
+      namespace: default
+      description: "deploy httpbin"
+      kubeconfig:
+        value: |
+          apiVersion: v1
+          clusters:
+              - cluster:
+                  certificate-authority-data: xxxxx
+                  server: https://xxxxx.sk1.eu-west-1.eks.amazonaws.com
+                name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+          contexts:
+              - context:
+                  cluster: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                  namespace: mission-control
+                  user: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+          current-context: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+          kind: Config
+          preferences: {}
+          users:
+              - name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                user:
+                  exec:
+                      ....
+      resources:
+        - apiVersion: v1
+          kind: Pod
+          metadata:
+            name: httpbin
+            namespace: default
+            labels:
+              app: httpbin
+          spec:
+            containers:
+              - name: httpbin
+                image: "kennethreitz/httpbin:latest"
+                ports:
+                  - containerPort: 80
+```
+
+#### Kubeconfig from local filesystem
+
+```yaml title="remote-cluster.yaml" {11-12}
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: pod-creation-test
+spec:
+  schedule: "@every 5m"
+  kubernetesResource:
+    - name: pod creation on aws cluster
+      namespace: default
+      description: "deploy httpbin"
+      kubeconfig:
+        value: /root/.kube/aws-kubeconfig
+      resources:
+        - apiVersion: v1
+          kind: Pod
+          metadata:
+            name: httpbin
+            namespace: default
+            labels:
+              app: httpbin
+          spec:
+            containers:
+              - name: httpbin
+                image: "kennethreitz/httpbin:latest"
+                ports:
+                  - containerPort: 80
+```
+
 ### Templating
 
 The `resources` and `staticResources` fields can be templated using <CommonLink to="gotemplate">Go Templates</CommonLink>.
