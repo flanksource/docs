@@ -5,14 +5,13 @@ slug: sso
 
 import Properties from '../_properties.mdx'
 
-Mission Control uses [kratos](https://www.ory.sh/kratos/) for identity management. Login via email/password is the default flow but any OIDC provider supported by Kratos can be used
+Mission Control uses [kratos](https://www.ory.sh/kratos/) for identity management. Login via email/password is the default flow but any OIDC provider supported by Kratos can be used.
 
 See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more details on supported providers.
 
 <Properties section="authentication"/>
 
 ## Microsoft Entra (Azure AD)
-
 
 1. Create a new Azure Entra App Registration
     * Add a new app from [Azure AD App Registration](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps)
@@ -24,11 +23,9 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
     * Certificates & Secrets
       * Create a new `client secret`
 
-2. Get The Tenant ID
-  Get the `Tenant ID` (Directory ID) from [Directories](https://portal.azure.com/#settings/directory)
+2. Get the `Tenant ID` (Directory ID) from [Directories](https://portal.azure.com/#settings/directory)
 
-3. Create a JSONNET claims mapper
-    Jsonnet is used to [map](https://www.ory.sh/docs/kratos/social-signin/data-mapping) the claims provided by Azure AD, to the Kratos [Identity Schema](https://github.com/flanksource/mission-control-chart/blob/main/chart/files/kratos-identity-schema.json)
+3. Create a JSONNET claims mapper. Jsonnet is used to [map](https://www.ory.sh/docs/kratos/social-signin/data-mapping) the claims provided by Azure AD, to the Kratos [Identity Schema](https://github.com/flanksource/mission-control-chart/blob/main/chart/files/kratos-identity-schema.json)
 
     ```javascript
     local claims = std.extVar('claims');
@@ -40,7 +37,7 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
             [if 'family_name' in claims then 'last' else null]: claims.family_name,
           },
 
-          [if   'raw_claims' in claims &&
+          [if 'raw_claims' in claims &&
             'groups' in claims.raw_claims then 'groups' else null]: claims.raw_claims.groups,
 
           [if 'preferred_username' in claims then 'email' else null]: claims.preferred_username,
@@ -51,9 +48,7 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
     ```
     See [MS Entra ID Tokens](https://learn.microsoft.com/en-us/entra/identity-platform/id-token-claims-reference)
 
-4. Update the helm values
-
-    Create the `mapper_url` by Base64 encoding the jsonnet file and prefixing it with `base64://`
+4. Update the helm values. Create the `mapper_url` by Base64 encoding the jsonnet file and prefixing it with `base64://`
 
     ```yaml title="values.yaml"
     kratos:
@@ -68,11 +63,37 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
                               microsoft_tenant: # The Azure AD Tenant Id
                               client_id: #...
                               client_secret: #...
-                              mapper_url: base64:// #base64 encoded mapper_url
+                              mapper_url: base64:// #base64 encoded jsonnet schema
                               scope:
                                 - email
                                 - openid
                                 - profile
     ```
+    <p/>
 
+5. Optionally, create a cel expression to map identities from the OIDC provider to a mission control role & team. 
+    _Example_: the following script maps all Azure users in the "SRE" group to the "admin" role & everyone else to a "viewer" role.
 
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap                 
+    metadata:                       
+      name: azure-identity-mapper
+    data:
+      script: >
+        {  
+          "role": "sre" in identity.traits.groups ?  "admin":  "viewer"
+        }
+    ```
+    <p/>
+
+    The cel expression is expected to return an object with a `role` & a `teams[]` fields.
+
+6. Supply the identity mapper script to mission control.
+
+    ```yaml title="values.yaml"
+    identityRoleMapper:
+      configMap:
+        name: "azure-identity-mapper"
+        key: "script"
+    ```
