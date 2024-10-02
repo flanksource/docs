@@ -8,17 +8,53 @@ title: Parameters
 
 Playbook parameter defines a parameter that a playbook needs to run.
 
-| Field         | Description                                         | Scheme                                         | Required |
-| ------------- | --------------------------------------------------- | ---------------------------------------------- | -------- |
-| `name`        | Name of parameter.                                  | `string`                                       | `true`   |
-| `default`     | Default value of the parameter.                     | [Go Template](/reference/scripting/gotemplate) |          |
-| `label`       | Label of the parameter.                             | `string`                                       |          |
-| `required`    | Specify if the parameter is required.               | `bool`                                         |          |
-| `icon`        | Icon for the playbook.                              | [`Icon`](/reference/types#icon)                |          |
-| `description` | Description of the parameter.                       | `string`                                       |          |
-| `type`        | Type of parameter. _(Defaults to "text")_           | `string`                                       |          |
-| `properties`  | Properties of parameter. _Varies based on the type_ | `map[string]string`                            |          |
-
+<Fields withTemplates rows={[
+  {
+    field: "name",
+    description: "Name of parameter.",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "default",
+    description: "Default value of the parameter.",
+    scheme: "gotemplate",
+    templateEnv: [
+      {"name": "Context", "url": "/reference/playbooks/context"},
+    ]
+  },
+  {
+    field: "label",
+    description: "Label of the parameter.",
+    scheme: "string",
+  },
+  {
+    field: "required",
+    description: "Specify if the parameter is required.",
+    scheme: "bool",
+  },
+  {
+    field: "icon",
+    description: "Icon for the playbook.",
+    scheme: "Icon",
+  },
+  {
+    field: "description",
+    description: "A short sentence to describe the parameter. This shows up in the input form when running the playbook.",
+    scheme: "string",
+  },
+  {
+    field: "type",
+    description: "Type of parameter. (Defaults to \"text\")",
+    scheme: "[`Type`](#types)",
+  },
+  {
+    field: "properties",
+    description: "Properties of parameter. _Varies based on the type_",
+    scheme: "`map[string]string`",
+  }
+]} />
+  
 ## Defaulting
 
 Parameter values can be defaulted from the selected resource
