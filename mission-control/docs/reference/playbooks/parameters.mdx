@@ -97,19 +97,19 @@ When running the playbook on a `Deployment` named `mysql` the following is pre-p
 
 | Field      | Description                            | Schema                                             |
 | ---------- | -------------------------------------- | -------------------------------------------------- |
-| `filter[]` | Limit the components to the given type | [`ResourceSelector`](/reference/resource-selector) |
+| `filter[]` | Limit the components to these resources | [`ResourceSelector`](/reference/resource-selector) |
 
 ### config
 
 | Field         | Description                              | Schema                                             |
 | ------------- | ---------------------------------------- | -------------------------------------------------- |
-| `filter.type` | Limit the config items to the given type | [`ResourceSelector`](/reference/resource-selector) |
+| `filter[]` | Limit the config items to these resources | [`ResourceSelector`](/reference/resource-selector) |
 
 ### checks
 
 | Field         | Description                        | Schema                                             |
 | ------------- | ---------------------------------- | -------------------------------------------------- |
-| `filter.type` | Limit the checks to the given type | [`ResourceSelector`](/reference/resource-selector) |
+| `filter[]` | Limit the checks to these resources | [`ResourceSelector`](/reference/resource-selector) |
 
 ### code
 
