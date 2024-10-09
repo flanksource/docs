@@ -76,87 +76,18 @@ dyn(results).all(x, k8s.isReady(x))
 
 A single canary-checker instance can connect to any number of remote clusters via custom kubeconfig.
 Either the kubeconfig itself or the path to the kubeconfig can be provided.
-
+ 
 #### kubeconfig from kubernetes secret
 
-```yaml title="remote-cluster.yaml" {11-15}
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: pod-creation-test
-spec:
-  schedule: "@every 5m"
-  kubernetes:
-    - name: pod creation on aws cluster
-      namespace: default
-      description: "deploy httpbin"
-      kubeconfig:
-        valueFrom:
-          secretKeyRef:
-            name: aws-kubeconfig
-            key: kubeconfig
-      kind: Pod
-      ready: true
-      namespaceSelector:
-        name: default
+```yaml title="remote-cluster.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes-check-kubeconfig-from-secrets.yaml {12-16}
 ```
 
 #### Kubeconfig inline
 
-```yaml title="remote-cluster.yaml" {10-31}
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: pod-creation-test
-spec:
-  schedule: "@every 5m"
-  kubernetes:
-    - name: pod creation on aws cluster
-      namespace: default
-      kubeconfig:
-        value: |
-          apiVersion: v1
-          clusters:
-              - cluster:
-                  certificate-authority-data: xxxxx
-                  server: https://xxxxx.sk1.eu-west-1.eks.amazonaws.com
-                name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-          contexts:
-              - context:
-                  cluster: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-                  namespace: mission-control
-                  user: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-                name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-          current-context: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-          kind: Config
-          preferences: {}
-          users:
-              - name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-                user:
-                  exec:
-                      ....
-      kind: Pod
-      ready: true
-      namespaceSelector:
-        name: default
+```yaml title="remote-cluster.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes-check-inline-kubeconfig.yaml {11-32}
 ```
 
 #### Kubeconfig from local filesystem
 
-```yaml title="remote-cluster.yaml" {10-11}
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: pod-creation-test
-spec:
-  schedule: "@every 5m"
-  kubernetes:
-    - name: pod creation on aws cluster
-      namespace: default
-      kubeconfig:
-        value: /root/.kube/aws-kubeconfig
-      kind: Pod
-      ready: true
-      namespaceSelector:
-        name: default
+```yaml title="remote-cluster.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes-check-kubeconfig-from-file.yaml {11-12}
 ```

@@ -6,32 +6,8 @@ title: Kubernetes
 
 The Kubernetes component lookup fetches kubernetes resources to be used as components.
 
-```yaml title="kube-configmap-components.yml"
----
-apiVersion: canaries.flanksource.com/v1
-kind: Topology
-metadata:
-  name: kubernetes-configs
-spec:
-  type: Config
-  icon: kubernetes
-  schedule: '@every 5m'
-  components:
-    - name: configs
-      icon: server
-      type: ConfigMap
-      // highlight-start
-      lookup:
-        kubernetes:
-          - kind: ConfigMap
-            display:
-              expr: |
-                dyn(results).map(c, {
-                  'name': c.Object.metadata.name,
-                  'type': 'ConfigMap',
-                }).toJSON()
+```yaml title="kube-configmap-components.yaml"  file=../../../modules/canary-checker/fixtures/topology/kubernetes-lookup.yaml {14-22}
 
-      // highlight-end
 ```
 
 | Field     | Description                                                                         | Scheme                                  | Required |
@@ -64,114 +40,18 @@ Either the kubeconfig itself or the path to the kubeconfig can be provided.
 
 ### From kubernetes secret
 
-```yaml title="remote-cluster.yaml"
----
-apiVersion: canaries.flanksource.com/v1
-kind: Topology
-metadata:
-  name: kubernetes-configs
-spec:
-  type: Config
-  icon: kubernetes
-  schedule: '@every 5m'
-  components:
-    - name: configs
-      icon: server
-      type: ConfigMap
-      lookup:
-        kubernetes:
-          - kind: ConfigMap
-            display:
-              expr: |
-                dyn(results).map(c, {
-                  'name': c.Object.metadata.name,
-                  'type': 'ConfigMap',
-                }).toJSON()
-        // highlight-start
-        kubeconfig:
-          valueFrom:
-            secretKeyRef:
-              name: aws-kubeconfig
-              key: kubeconfig
-        // highlight-end
+```yaml title="remote-cluster.yaml"  file=../../../modules/canary-checker/fixtures/topology/kubernetes-lookup-kubeconfig-from-secrets.yaml {23-27}
+
 ```
 
 ### Kubeconfig inline
 
-```yaml title="remote-cluster.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Topology
-metadata:
-  name: kubernetes-configs
-spec:
-  type: Config
-  icon: kubernetes
-  schedule: '@every 5m'
-  components:
-    - name: configs
-      icon: server
-      type: ConfigMap
-      lookup:
-        kubernetes:
-          - kind: ConfigMap
-            display:
-              expr: |
-                dyn(results).map(c, {
-                  'name': c.Object.metadata.name,
-                  'type': 'ConfigMap',
-                }).toJSON()
-        // highlight-start
-        kubeconfig:
-          value: |
-            apiVersion: v1
-            clusters:
-                - cluster:
-                    certificate-authority-data: xxxxx
-                    server: https://xxxxx.sk1.eu-west-1.eks.amazonaws.com
-                  name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-            contexts:
-                - context:
-                    cluster: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-                    namespace: mission-control
-                    user: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-                  name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-            current-context: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-            kind: Config
-            preferences: {}
-            users:
-                - name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
-                  user:
-                    exec:
-                        ....
-        // highlight-end
+```yaml title="remote-cluster.yaml"  file=../../../modules/canary-checker/fixtures/topology/kubernetes-lookup-inline-configmap.yaml {22-48}
+
 ```
 
 ### From local filesystem
 
-```yaml title="remote-cluster.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Topology
-metadata:
-  name: kubernetes-configs
-spec:
-  type: Config
-  icon: kubernetes
-  schedule: '@every 5m'
-  components:
-    - name: configs
-      icon: server
-      type: ConfigMap
-      lookup:
-        kubernetes:
-          - kind: ConfigMap
-        display:
-          expr: |
-            dyn(results).map(c, {
-              'name': c.name,
-              'type': 'ConfigMap',
-            }).toJSON()
-        // highlight-start
-        kubeconfig:
-          value: /root/.kube/aws-kubeconfig
-        // highlight-end
+```yaml title="remote-cluster.yaml"  file=../../../modules/canary-checker/fixtures/topology/kubernetes-lookup-kubeconfig-from-file.yaml {22-23}
+
 ```
