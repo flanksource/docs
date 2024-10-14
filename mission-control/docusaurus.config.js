@@ -149,6 +149,9 @@ export default async function createConfigAsync() {
         'classic',
         /** @type {import('@docusaurus/preset-classic').Options} */
         ({
+          googleTagManager: {
+            containerId: 'GTM-KZHC2BXZ',
+          },
           docs: {
             routeBasePath: '/',
             exclude: [
