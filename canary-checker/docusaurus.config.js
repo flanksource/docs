@@ -126,8 +126,8 @@ export default async function createConfigAsync() {
         },
         colorMode: {
           defaultMode: 'light',
-          disableSwitch: false,
-          respectPrefersColorScheme: true,
+          disableSwitch: true,
+          respectPrefersColorScheme: false
         },
         announcementBar: {
           content:

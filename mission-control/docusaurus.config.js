@@ -268,8 +268,8 @@ export default async function createConfigAsync() {
         },
         colorMode: {
           defaultMode: 'light',
-          disableSwitch: false,
-          respectPrefersColorScheme: true
+          disableSwitch: true,
+          respectPrefersColorScheme: false
         },
         footer: {
           style: 'dark',
