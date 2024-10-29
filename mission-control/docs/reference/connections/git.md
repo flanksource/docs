@@ -41,7 +41,7 @@ spec:
       valueFrom:
         secretKeyRef:
           name: secret-name
-          key: pay
+          key: pat
 ```
 
 :::tip Classic PAT

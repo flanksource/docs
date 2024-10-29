@@ -91,7 +91,10 @@ To install and run Mission Control you need the following:
 
 An SMTP server is required for sending notifications, approvals, user invites and password resets.
 
-The format of `connection_uri` is `smtp://hostname:port`
+The format of `connection_uri` is `smtp|smtps://USER:PASS@host:PORT`
+
+This URI will be used to connect to the SMTP server. Use the scheme `smtps` for implicit TLS sessions or `smtp` for explicit StartTLS/cleartext sessions. Nnote that TLS is always enforced with certificate trust verification by default for security reasons on both schemes. With the `smtp` scheme you can use the query parameter (`?disable_starttls=true`) to allow cleartext sessions or (`?disable_starttls=false`) to enforce StartTLS (default behaviour). Additionally, use the query parameter to allow (`?skip_ssl_verify=true`) or disallow (`?skip_ssl_verify=false`) self-signed TLS certificates (default behaviour) on both implicit and explicit TLS sessions.
+
 
 ```yaml title="values.yaml"
 kratos:
@@ -99,7 +102,7 @@ kratos:
     config:
       courier:
         smtp:
-          connection_uri: # smtp://localhost:25
+          connection_uri: # smtp://user:pass@localhost:25
           from_address: noreply@
           from_name: Mission Control
           # These headers will be passed in the SMTP conversation
@@ -107,7 +110,7 @@ kratos:
           headers: {}
           # Identifier used in the SMTP HELO/EHLO command.
           # Some SMTP relays require a unique identifier.
-          local_name:
+          local_name: ""
 ```
 
 See also [HTTP Webhooks](https://www.ory.sh/docs/kratos/self-hosted/email-http) for sending emails.
