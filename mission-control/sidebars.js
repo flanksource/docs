@@ -183,6 +183,12 @@ const sidebars = {
               label: 'Agent'
             },
 
+            {
+              type: 'doc',
+              id: 'installation/saas/kubectl',
+              label: 'Kubectl Access'
+            },
+
           ]
         },
         {
