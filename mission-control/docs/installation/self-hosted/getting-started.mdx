@@ -91,9 +91,14 @@ To install and run Mission Control you need the following:
 
 An SMTP server is required for sending notifications, approvals, user invites and password resets.
 
-The format of `connection_uri` is `smtp|smtps://USER:PASS@host:PORT`
+The format of `connection_uri` is `smtp|smtps://USER:PASS@host:PORT[?param=value]`
 
-This URI will be used to connect to the SMTP server. Use the scheme `smtps` for implicit TLS sessions or `smtp` for explicit StartTLS/cleartext sessions. Nnote that TLS is always enforced with certificate trust verification by default for security reasons on both schemes. With the `smtp` scheme you can use the query parameter (`?disable_starttls=true`) to allow cleartext sessions or (`?disable_starttls=false`) to enforce StartTLS (default behaviour). Additionally, use the query parameter to allow (`?skip_ssl_verify=true`) or disallow (`?skip_ssl_verify=false`) self-signed TLS certificates (default behaviour) on both implicit and explicit TLS sessions.
+Use `smtps` for implicit TLS sessions or `smtp` for explicit StartTLS/cleartext sessions.
+
+| Parameter | Description | Default |
+| --- | --- | --- |
+| `disable_starttls` | When using `smtp` scheme, set to `true` to allow cleartext sessions or `false` to enforce StartTLS | `false` |
+| `skip_ssl_verify` | Set to `true` to allow self-signed TLS certificates or `false` to enforce certificate verification. Applies to both implicit and explicit TLS sessions | `false` |
 
 
 ```yaml title="values.yaml"
