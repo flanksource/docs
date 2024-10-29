@@ -14,38 +14,31 @@ The access token provided has role-based permissions limited to either [mission-
 For production environments, it is recommended to use GitOps tools like Argo CD or Flux to manage configurations rather than applying them directly with kubectl. Use the kubeconfig file to configure your GitOps tool to target the Mission Control SaaS instance.
 :::
 
-
-
 1. Save the kubeconfig to your GitOps cluster:
 
-    ```shell
-    kubectl create secret generic mission-control-kubeconfig \
-      -n flux-system \
-      --from-file=KUBECONFIG=./kubeconfig
-    ```
-
+   ```shell
+   kubectl create secret generic mission-control-kubeconfig \
+     -n flux-system \
+     --from-file=KUBECONFIG=./kubeconfig
+   ```
 
 1. Reference the kubeconfig when deploying Mission Control manifests:
 
-    ```yaml
-    apiVersion: kustomize.toolkit.fluxcd.io/v1
-    kind: Kustomization
-    metadata:
-      name: mission-control-config
-      namespace: flux-system
-    spec:
-      interval: 10m
-      path: ./
-      prune: true
-      sourceRef:
-        kind: GitRepository
-        name: mission-control-gitops
-      kubeConfig:
-        secretRef:
-          name: mission-control-kubeconfig
-          key: KUBECONFIG
-    ```
-
-
-
-
+   ```yaml
+   apiVersion: kustomize.toolkit.fluxcd.io/v1
+   kind: Kustomization
+   metadata:
+     name: mission-control-config
+     namespace: flux-system
+   spec:
+     interval: 10m
+     path: ./
+     prune: true
+     sourceRef:
+       kind: GitRepository
+       name: mission-control-gitops
+     kubeConfig:
+       secretRef:
+         name: mission-control-kubeconfig
+         key: KUBECONFIG
+   ```
