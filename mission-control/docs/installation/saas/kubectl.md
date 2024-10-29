@@ -25,7 +25,7 @@ For production environments, it is recommended to use GitOps tools like Argo CD 
     ```
 
 
-1. Reference the kubconfig when deploying Mission Control manifests:
+1. Reference the kubeconfig when deploying Mission Control manifests:
 
     ```yaml
     apiVersion: kustomize.toolkit.fluxcd.io/v1
