@@ -9,9 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Get changed files
+      - name: Get all changed md/mdx files
         id: changed-files
         uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            **/*.md
+            **/*.mdx
 
       - name: List changed fiels
         run: |
