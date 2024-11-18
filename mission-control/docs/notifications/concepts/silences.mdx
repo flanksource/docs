@@ -15,7 +15,7 @@ Notifications that aren't sent due to silence are still visible in the notificat
 
 ## Use cases
 
-- Planned maintenance or deployments. Eg: You can silence a namespace or a helm release and automatically silence notifications from all of their children.
+- Planned maintenance or deployments. Eg: You can silence a namespace or a helm release and automatically silence notifications from all their children.
 - Non-critical resources: Notifications from resources that routinely trigger alerts but are expected and harmless can be silenced.
 - Known issues: If there's a known issue that can't be immediately resolved (e.g., due to dependencies or resource constraints), you might silence related alerts until a fix can be implemented.
 
@@ -29,9 +29,9 @@ on each notification.
 ### Filters
 
 A silence can optionally contain a filter. A filter is a cel-expression that results in a boolean value. 
-If a filter returns a truthy value, the notification is silenced.
+If a filter return true, the notification is silenced.
 
-Example: `check.type == 'http'` filter will only silence HTTP check related notifications
+Example: `check.type == 'http'` filter silences only HTTP check related notifications.
 
 #### Template variables
 
@@ -41,5 +41,5 @@ Example: `check.type == 'http'` filter will only silence HTTP check related noti
 
 ## Recursive mode
 
-When a silence is recursively applied, it applies to all of its children. 
+When a silence is recursively applied, it applies to its all children. 
 So silencing a namespace would silence all deployments, statefulsets, pods, etc in that namespace. 
