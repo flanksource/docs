@@ -31,7 +31,14 @@ on each notification.
 A silence can optionally contain a filter. A filter is a cel-expression that results in a boolean value. 
 If a filter return true, the notification is silenced.
 
-Example: `check.type == 'http'` filter silences only HTTP check related notifications.
+#### Examples
+
+| Filter | description |
+|--------|-------------|
+| `check.type == 'http'`                                                    | silences only HTTP check related notifications. |
+| `regexp.Match("^check-[0-9]+", check.name)`                               | matches any check with the prefix `check-` |
+| `config.name == "postgresql" && config.type == "Kubernetes::StatefulSet"` | silences notifications from a stateful set named "postgresql" |
+| `config.type == "Kubernetes::Pod" && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming").size > 0 && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming")[0].tags.?env.orValue("") == "prod"` | matches kubernetes pod in a prod namespace |
 
 #### Template variables
 
@@ -39,7 +46,9 @@ Example: `check.type == 'http'` filter silences only HTTP check related notifica
 - [ConfigEvents](/reference/notifications/template_vars/config)
 - [ComponentEvents](/reference/notifications/template_vars/components)
 
-## Recursive mode
+### Recursive mode
 
 When a silence is recursively applied, it applies to its all children. 
 So silencing a namespace would silence all deployments, statefulsets, pods, etc in that namespace. 
+
+
