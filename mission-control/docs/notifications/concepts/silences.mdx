@@ -2,8 +2,12 @@
 title: Silences
 ---
 
-Silences prevent notifications from being sent. 
-Silences are attached to a particular resource (`catalog`, `health check`, or `component`) and are active for a specified duration.
+A silence is a way to temporarily suppress notifications. Each silence has:
+
+- A set duration - like an expiration timer
+- A scope - it can be applied to either:
+  - Individual resources (a specific catalog, health check, or component)
+  - Multiple matching resources using filters
 
 :::note
 Notifications that aren't sent due to silence are still visible in the notification history for auditing purposes.
@@ -21,6 +25,19 @@ Silences can be added from the notification page. Alternatively, if you're using
 on each notification.
 
 ![Silence Notification form](./silence-notification-form.png)
+
+### Filters
+
+A silence can optionally contain a filter. A filter is a cel-expression that results in a boolean value. 
+If a filter returns a truthy value, the notification is silenced.
+
+Example: `check.type == 'http'` filter will only silence HTTP check related notifications
+
+#### Template variables
+
+- [CheckEvents](/reference/notifications/template_vars/checks)
+- [ConfigEvents](/reference/notifications/template_vars/config)
+- [ComponentEvents](/reference/notifications/template_vars/components)
 
 ## Recursive mode
 
