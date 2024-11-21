@@ -1,0 +1,171 @@
+---
+title: Continuously testing helm charts
+---
+
+# Introduction
+
+TODO: Small intro about canary-checker and how it fits into the ecosystem
+
+# Prerequisites
+
+- Canary Checker should be installed (Link)
+- FluxCD or ArgoCD should be installed (Link)
+
+## Deploying PostgreSQL chart using Resource Check
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+<TabItem value="flux" label="Flux" default>
+
+Write 2 lines about how applying these would deploy
+
+```yaml title="title.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: helm-release-postgres
+spec:
+  schedule: "@every 1m"
+  kubernetesResource:
+    - name: helm-release-postgres-check
+      namespace: default
+      description: "Deploy postgresql via HelmRelease"
+      waitFor: 
+        expr: 'dyn(resources).all(r, k8s.isReady(r))'
+        interval: 2s
+        timeout: 5m
+      staticResources:
+        - apiVersion: source.toolkit.fluxcd.io/v1
+          kind: HelmRepository
+          metadata:
+            name: bitnami-k8s-check
+            namespace: flux-system
+          spec:
+            interval: 1h
+            url: https://charts.bitnami.com/bitnami
+
+      display:
+        expr: '"hello"'
+      resources:
+        - apiVersion: helm.toolkit.fluxcd.io/v2
+          kind: HelmRelease
+          metadata:
+            name: postgresql
+            namespace: default  # Adjust the namespace if necessary
+          spec:
+            chart:
+              spec:
+                chart: postgresql  # This is the official Helm PostgreSQL chart
+                sourceRef:
+                  kind: HelmRepository
+                  name: bitnami 
+                  namespace: flux-system
+            interval: 5m  # How often Flux checks for updates
+            install:
+              createNamespace: true
+            values:
+              auth:
+                username: admin
+                postgresPassword: qwerty123  # Ensure this is a secure password in production
+                password: qwerty123  # Ensure this is a secure password in production
+                database: exampledb
+              primary:
+                persistence:
+                  enabled: false
+
+      checks:
+        - postgres:
+            - name: postgres schemas check
+              #url: "postgres://$(username):$(password)@postgres.default.svc:5432/exampledb?sslmode=disable"
+              url: "postgres://admin:qwerty123@postgresql.default.svc:5432/exampledb?sslmode=disable"
+              #url: "postgres://admin:qwerty123@localhost:6644/exampledb?sslmode=disable"
+              username:
+                value: admin
+              password:
+                value: password
+              # Since we just want to check if database is responding,
+              # a SELECT 1 query should suffice
+              query: SELECT 1  
+
+      checkRetries:
+        delay: 15s
+        interval: 10s
+        timeout: 5m
+```
+
+
+:::info
+The role binded to canary-checker should be allowed to manage HelmRepository and HelmRelease, so you might have to add this in the role:
+```yaml
+- apiGroups:
+  - source.toolkit.fluxcd.io
+  - helm.toolkit.fluxcd.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+```
+:::
+
+</TabItem>
+
+<TabItem value="argo" label="ArgoCD">
+
+Write 2 lines about how applying this would deploy
+
+```yaml title="argo-app.yaml"
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgresql
+  namespace: argocd  # Use the namespace where ArgoCD is installed
+spec:
+  project: default
+  source:
+    repoURL: https://charts.helm.sh/stable  # Helm repository URL for stable charts
+    chart: postgresql  # Official PostgreSQL chart
+    targetRevision: "12.6.0"  # Chart version
+    helm:
+      values: |  # Inline values
+        postgresqlUsername: admin
+        postgresqlPassword: password  # Make sure this is secure in production
+        postgresqlDatabase: exampledb
+  destination:
+    server: https://kubernetes.default.svc  # Kubernetes cluster API
+    namespace: default  # Target namespace for the application
+  syncPolicy:
+    automated:
+      prune: true  # Prune resources when not defined in Git
+      selfHeal: true  # Automatically sync if resources are out of sync
+    syncOptions:
+    - CreateNamespace=true  # Create the namespace if it doesn't exist
+```
+</TabItem>
+</Tabs>
+
+## Continuous testing
+
+Continuous testing ensures that changes to infrastructure and applications are continuously validated throughout the lifecycle.
+
+In Kubernetes, this involves automating tests for containerized applications & infrastructure configurations (such as manifests and Helm charts) and the orchestration layer itself.
+
+These tests can be integrated at multiple stages, including infrastructure provisioning, deployment pipelines, and post updates to clusters, ensuring that new changes do not break functionality or compromise security.
+
+This approach enables faster feedback, stability, and resilience in cloud-native environments.
+
+In the above example, we are not only continuously testing the deployment and installation of a chart but testing the functionality of the chart as well.
+
+## Things that can go wrong
+
+When we deploy a chart, there are a lot of moving parts, which can lead to failures at any level.
+
+Few problems:
+- Fetching the chart from the source fails
+- Chart's default values might have been updated which break existing functionality
+- Admission rules or policies in cluster could change resulting in prevention of installation of new charts
+- Templating or rendering errors in helm charts
+- Conflict with existing resources in the kubernetes cluster during chart installation
+- Depenency mismatch in chart's subcharts
+- Problems provisioning storage via PVC due to misconfiguration or lack of availability
