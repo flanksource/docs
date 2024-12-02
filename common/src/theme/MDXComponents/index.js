@@ -10,6 +10,7 @@ import MDXImg from '@theme/MDXComponents/Img'
 import Admonition from '@theme/Admonition'
 import Mermaid from '@theme/Mermaid'
 import Icon from '@site/src/components/Icon'
+import Menu from '@site/src/components/Menu'
 import { Asciinema } from '@site/src/components/Asciinema'
 import {
   Health,
@@ -38,14 +39,20 @@ import TabItem from '@theme/TabItem';
 import { Scraper, CustomScraper } from '@site/src/components/Scraper'
 import Helm from "@site/src/components/Helm"
 import { Advanced } from '@site/src/components/Badges'
-
+import TerminalOutput from "@site/src/components/TerminalOutput"
+import Tooltip from '@site/src/components/Tooltip'
+import { Icon as IIcon } from '@iconify-icon/react';
 const MDXComponents = {
   Health: Health,
+  TerminalOutput: TerminalOutput,
   Unhealthy: Unhealthy,
   Healthy: Healthy,
+  IIcon: IIcon,
   Warning: Warning,
   Advanced: Advanced,
+  Tooltip: Tooltip,
   Helm: Helm,
+  Menu: Menu,
   Icon: Icon,
   CommonLink: CommonLink,
   ConfigTransform: ConfigTransform,

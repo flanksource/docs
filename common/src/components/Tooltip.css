@@ -1,0 +1,17 @@
+.td-tooltip {
+  background-color: #444;
+  color: white;
+  font-size: 90%;
+  padding: 4px 8px;
+  max-width: 20ch;
+  overflow: wrap;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: calc(100vw - 10px);
+}
+
+.td-tooltip > code {
+  background-color: transparent !important;
+}
+
