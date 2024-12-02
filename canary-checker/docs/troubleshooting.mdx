@@ -69,6 +69,15 @@ To pause a canary from running add a `suspend: true` annotation or set the `sche
  ```
 
 
+## Templating errors
+
+To check what context is available during runtime use:
+
+```yaml
+      display:
+        template: '{{. | toJSONPretty "\t" }}'
+```
+
 ## Logging
 
 To add detailed debug information related to a specific Canary to the log output, add a `debug: true` or `trace: true` annotation to the Canary resource:

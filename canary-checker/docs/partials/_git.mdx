@@ -1,0 +1,41 @@
+#### HTTP Basic Auth
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: git
+spec:
+  git:
+    username:
+      valueFrom:
+        secretKeyRef:
+          name: secret-name
+          key: username
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: secret-name
+          key: password
+```
+
+
+#### SSH Keys
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: git
+spec:
+  git:
+    certificate:
+      value: |
+        -----BEGIN OPENSSH PRIVATE KEY-----
+        ...
+        -----END OPENSSH PRIVATE KEY-----
+
+```
+
+:::info
+The `git` connection type does not support opening pull requests, use a [`github`](./github), [`gitlab`](./gitlab) or [`azureDevops`](./azure-devops) connection type instead.
+:::
