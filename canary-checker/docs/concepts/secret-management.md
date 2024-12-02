@@ -3,20 +3,26 @@ title: Env Vars
 sidebar_position: 1
 ---
 
-Canary checker uses the Kubernetes ValuesFrom pattern to retrieve sensitive values like usernames, password and access keys.
+import { K8SCustomresourcedefinition } from '@flanksource/icons/mi'
+import { K8SConfigmap } from '@flanksource/icons/mi'
+import { K8SSecret } from '@flanksource/icons/mi'
+import { Helm } from '@flanksource/icons/mi'
+import { K8SServiceaccount } from '@flanksource/icons/mi'
+
+Mission Control uses the Kubernetes ValuesFrom pattern to retrieve sensitive values like usernames, password and access keys.
 
 Whenever a field uses the `EnvVar` object type you have the option of specifying the value in multiple ways.
 
 1. Statically in the `value`
-1. Via a Kubernetes Config Map via the `configMapKeyRef`
-1. Via a Kubernetes Secret via the `secretKeyRef`
-1. From a value of a deployed helm chart using `helmRef`
-1. From a service account using `serviceAccount`
+1. From a <K8SConfigmap size={16}/> Kubernetes Config Map via `configMapKeyRef`
+1. From a <K8SSecret size={16}/> Kubernetes Secret via `secretKeyRef`
+1. From a <Helm size={16}/> Helm chart computed `values.yaml` via `helmRef`
+1. From a <K8SServiceaccount size={16}/> Kubernetes service account using `serviceAccount`
 
 ## Static Values
 
 :::warning
-Avoid inlining secrets, use `valueFrom` and <CommonLink to="authentication">EnvVar</CommonLink>
+Avoid in-lining secrets, use `valueFrom` and <CommonLink to="authentication">EnvVar</CommonLink>
 :::
 
 Using a HTTP health check as an example for static values:
@@ -37,7 +43,7 @@ spec:
           value: world
 ```
 
-## Configmaps
+## <K8SConfigmap size={25}/> Kubernetes Config Maps
 
 To use a configmap, we first need to create the configmap:
 
@@ -67,7 +73,7 @@ spec:
               key: pass
 ```
 
-## Secrets
+## <K8SSecret size={25}/> Kubernetes Secrets
 
 To use a secret, first we create the secret:
 
@@ -95,7 +101,7 @@ spec:
             key: pass
 ```
 
-## Helm Values
+## <Helm size={25}/> Helm Values
 
 To use a secret, first we deploy a helm chart
 
@@ -120,7 +126,7 @@ spec:
       url: $(url)
 ```
 
-## Service Accounts
+## <K8SServiceaccount size={25}/> Kubernetes Service Accounts
 
 Checks can use service accounts for authentication with external services that have existing trust established
 
@@ -184,14 +190,3 @@ rules:
 ```
 
 :::
-
-## Recommendations
-
-Kubernetes Secrets are, by default, stored unencrypted in the API server's underlying data store (etcd). Anyone with API access can retrieve or modify a Secret, and so can anyone with access to etcd. With this in mind, it is recommended to implement some level of security to prevent unauthorized access to your Kubernetes secrets.
-You may consider the following for your encryption and security needs:
-
-- [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/getting-started/)
-- [Bitnami Sealed Secrets](https://www.youtube.com/watch?v=xd2QoV6GJlc&ab_channel=DevOpsToolkit)
-- [KSOPS](https://blog.oddbit.com/post/2021-03-09-getting-started-with-ksops/)
-- [Enable Encryption at Rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/)
-- [Enable or configure RBAC rules](https://kubernetes.io/docs/reference/access-authn-authz/authorization/)
