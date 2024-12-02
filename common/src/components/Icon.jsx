@@ -16,9 +16,10 @@ export default function Icon({ name, height = 22, className, url, children }) {
   if (!IconSVG) {
     return <span>{name}</span>
   }
-  let img = <span className={clsx("align-middle", className)}><IconSVG className="my-auto" name={name} size={height} />
-    <span className="pl-1.5">{children}</span>
-  </span>
+  let img = <div className="inline-block spacing-x-2"><IconSVG className={clsx("align-middle", className)} name={name} size={height} />
+    <span >{children}</span>
+  </div>
+
 
   if (url != null) {
     return <a href={url}>{img}</a>

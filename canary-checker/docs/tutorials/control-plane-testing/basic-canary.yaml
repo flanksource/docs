@@ -38,10 +38,10 @@ spec:
             values:
               auth:
                 username: admin
-                postgresPassword: qwerty123
                 password: qwerty123
                 database: exampledb
-                        primary:
-              persistence:
+              primary:
+                persistence:
                   enabled: true
                   size: 8Gi
+

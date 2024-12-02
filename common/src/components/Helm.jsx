@@ -139,8 +139,8 @@ kind: Namespace
 metadata:
   name: ${namespace}
 ---
-`}
-          {createRepo && `apiVersion: source.toolkit.fluxcd.io/v1beta1
+` || ""}
+          {createRepo && `apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: ${repoName}
@@ -149,8 +149,8 @@ spec:
   interval: 5m0s
   url: ${repo}
 ---
-`}
-          {`apiVersion: helm.toolkit.fluxcd.io/v2beta1
+` || ""}
+          {`apiVersion:  helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: ${chart}
