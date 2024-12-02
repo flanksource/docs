@@ -131,6 +131,8 @@ fromAddress
 fromName
 gcpConnection
 GCPDatabase
+Jira
+Param
 getAction
 Gitea
 Gitlab
@@ -142,6 +144,14 @@ gitops
 Gitops
 gojq
 golang
+XPath
+stderr
+stdout
+stdin
+forEach
+labelSelector
+fieldSelector
+crashlooping
 gomplate
 gotemplate
 Gotify
