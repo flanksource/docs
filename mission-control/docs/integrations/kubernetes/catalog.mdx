@@ -1,0 +1,49 @@
+---
+title: Setup
+
+sidebar_position: 1
+---
+
+import { MenuItem } from '@site/src/components/Menu';
+import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+
+
+
+Mission Control provides comprehensive monitoring and management capabilities for your Kubernetes clusters. It automatically discovers and tracks:
+
+- All standard Kubernetes resources (Pods, Deployments, Services, etc.)
+- Custom Resources (CRDs)
+- Resource health status via [is-healthy](https://github.com/flanksource/is-healthy)
+- Configuration changes
+- Resource relationships and dependencies
+
+This enables you to:
+- Get real-time visibility into your cluster's state
+- Troubleshoot issues faster with relationship mapping
+- Track configuration drift and changes over time
+- Monitor resource utilization and capacity
+- Ensure compliance with security policies
+- Manage multiple clusters from a single interface
+
+
+
+1. Install the Kubernetes  chart
+
+  <Helm chart="mission-control-kubernetes"
+  createNamespace={false}
+  createRepo={true}
+  values={{
+    "clusterName": "CHANGEME"
+  }}/>
+
+
+
+1. Install common playbooks for interacting with Kubernetes items
+
+
+## Learn More
+
+- Kubernetes Scraper [kubernetes](/config-db/scrapers/kubernetes)
+- [<iconify-icon icon="lets-icons:external"/> Auto Merging PRs](https://jhale.dev/posts/auto-merging-prs/) by @jhale, has a run-down of using Github Actions to automerge, with some gotchas
+- [<iconify-icon icon="lets-icons:external"/> trivy](https://trivy.dev/) - A mis-configuration, secrets and compliance scanner with good support for Kubernetes
+- [<iconify-icon icon="lets-icons:external"/> bulldozer](https://github.com/palantir/bulldozer) and [ <iconify-icon icon="lets-icons:external"/> policy-bot](https://github.com/palantir/policy-bot) for auto-merging PR's using customizable rules and policies
