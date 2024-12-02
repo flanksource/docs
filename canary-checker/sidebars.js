@@ -82,6 +82,23 @@ module.exports = {
       type: 'doc',
       id: 'troubleshooting',
       label: 'Troubleshooting'
-    }
+    },
+
+
+    {
+      type: 'category',
+      label: 'Tutorials',
+      collapsed: false,
+      items: [
+        {
+          type: 'doc',
+          id: 'tutorials/control-plane-testing/index',
+          label: 'Control Plane Testing'
+        }
+      ]
+
+    },
+
+
   ]
 }

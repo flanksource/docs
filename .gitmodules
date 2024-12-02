@@ -14,3 +14,6 @@
 [submodule "modules/duty"]
 	path = modules/duty
 	url = https://github.com/flanksource/duty.git
+[submodule "modules/mission-control-registry"]
+	path = modules/mission-control-registry
+	url = https://github.com/flanksource/mission-control-registry.git
