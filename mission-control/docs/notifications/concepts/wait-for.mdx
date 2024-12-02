@@ -8,8 +8,7 @@ If alerts are configured for `config.unhealthy` events, these transient state fl
 
 To address this issue, you can utilize the waitFor parameter.
 This feature allows you to define a delay before sending notifications for specific events.
-After an event occurs, the system will recheck its status following the specified wait period. Only if the undesired state persists will a notification be triggered.
-
+After an event occurs, the system rechecks its status following the specified wait period. Only if the undesired state persists does a notification trigger.
 :::info
 `waitFor` is only applicable on health related events
 :::
@@ -32,9 +31,9 @@ spec:
 ```
 
 :::warning Handling Scrape Lag
-`waitFor` re-evaluates the health based on the current state in config-db, in some circumstances there can be a lag between when a change occors and the state reflects in config-db which can lead to false positives.
+`waitFor` re-evaluates the health based on the current state in config-db, in some circumstances there can be a lag between when a change occurs and the state reflects in config-db which can lead to false positives.
 
-`waitForEvalPeriod` will force an incremental scrape of the resource prior to sending a notification, it will wait for up to this period for a scrape to complete before sending a notification.
+`waitForEvalPeriod` forces an incremental scrape of the resource before sending a notification, it waits for up to this period for a scrape to complete before sending a notification.
 
 ```yaml title=waitForEvalPeriod.yaml
 apiVersion: mission-control.flanksource.com/v1
@@ -48,4 +47,5 @@ spec:
   //highlight-next-line
   waitForEvalPeriod: 30s
 ```
+
 :::
