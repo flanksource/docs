@@ -165,12 +165,12 @@ export default async function createConfigAsync() {
               position: 'left',
               label: 'Overview'
             },
-            // {
-            //   to: 'integrations',
-            //   activeBasePath: '/integrations',
-            //   position: 'left',
-            //   label: 'Integrations'
-            // },
+            {
+              to: 'integrations',
+              activeBasePath: '/integrations',
+              position: 'left',
+              label: 'Integrations'
+            },
             {
               to: 'config-db',
               activeBasePath: '/config-db',
