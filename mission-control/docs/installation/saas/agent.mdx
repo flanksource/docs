@@ -18,9 +18,7 @@ To install and run the Mission Control agent you need to have the following prer
 
 <Helm chart="mission-control-agent"/>
 
-  <Screenshot img="/img/agent_settings.png" size="800px"/>
-
-
+<Screenshot img="/img/agent_settings.png" size="800px"/>
 
 <Helm chart="mission-control-agent"
 values={{
@@ -31,4 +29,19 @@ values={{
 }}
 
 />
+
+The upstream credentials can be externalized from the chart using:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: upstream
+stringData:
+  UPSTREAM_HOST: ""
+  UPSTREAM_USER: token
+  UPSTREAM_PASSWORD: ""
+  AGENT_NAME: "YOUR_LOCAL_NAME"
+
+
 

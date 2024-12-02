@@ -1,9 +1,14 @@
+const { addIconSelectors, addDynamicIconSelectors } = require('@iconify/tailwind');
+
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./docs/**.{md,mdx}"],
   theme: {
     extend: {},
+    fontFamily: {
+      'sans': ["Open Sans", "sans-serif"],
+    }
   },
-  plugins: [],
+
   safelist: [
     {
       pattern: /bg-zinc/,
@@ -20,6 +25,13 @@ module.exports = {
     {
       pattern: /text-gray/,
     },
+    {
+      pattern: /text-green/,
+    },
+    {
+      pattern: /text-red/,
+    },
+
     {
       pattern: /text-zinc/,
     },
