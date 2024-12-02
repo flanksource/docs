@@ -1,0 +1,15 @@
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: azure
+spec:
+  azureDevops:
+    url: https://dev.azure.com/YOUR_ORGANIZATION-OMA/YOUR_PROJECT/_git/repo
+    organization: YOUR_ORGANIZATION
+    personalAccessToken:
+      valueFrom:
+        secretKeyRef:
+          name: secret-name
+          key: pat
+```

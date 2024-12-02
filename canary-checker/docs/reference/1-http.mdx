@@ -11,7 +11,7 @@ This check performs queries on HTTP to monitor their activity.
 ```
 
 <HealthCheck name="http" connection="url"  rows={[
-  {field: "endpoint", description: "HTTP URL", scheme: "string", required: true},
+  {field: "url", description: "HTTP URL", scheme: "string", required: true},
   {field: "method", description: "HTTP Request method", default: "GET", scheme: "string"},
   {field: "headers", description: "Header fields", scheme: "map[string]string"},
   {field: "body", description: "Request Body Contents", scheme: "string"},
@@ -23,6 +23,7 @@ This check performs queries on HTTP to monitor their activity.
   {field: "maxSSLExpiry", description: "Max SSL expiry days", scheme: "int"},
   {field: "insecureSkipVerify", description: "Skip TLS verification", scheme: "bool"},
   {field: "env", description: "Setup environment variables that are accessible while templating", scheme: "[]EnvVar"},
+  {field: "endpoint", description: "Depreceated use `url`", scheme: "string", required: true},
 ]}/>
 
 ### TLS Config
