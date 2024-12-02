@@ -13,6 +13,7 @@ APIs
 apiVersion
 argocd
 arkade
+kubernetesResource
 arn
 asciicast
 aws
@@ -132,6 +133,7 @@ gcpConnection
 GCPDatabase
 getAction
 Gitea
+Gitlab
 github
 Github
 github_actions_exporter
