@@ -46,7 +46,7 @@ The [`kubernetesResource`](../../reference/kubernetes-resource) check creates ku
 
 
 :::info Prerequisites
-To follow this tutorial, you will need:
+To follow this tutorial, you need:
 
 - A Kubernetes cluster
 - [FluxCD](https://fluxcd.io/) installed
@@ -56,7 +56,7 @@ To follow this tutorial, you will need:
 
 1. Define the workload under test
 
-    Before you can create a canary you should start with a working example of a resource, in this example we will use a `HelmRelease` to deploy a postgres database.
+    Before you can create a canary you should start with a working example of a resource, in this example we use a `HelmRelease` to deploy a postgres database.
 
     ```yaml file=flux.yaml
     ```
@@ -134,12 +134,12 @@ To follow this tutorial, you will need:
     </TerminalOutput>
 2. Add custom check
 
-        By default `kubernetesResource`  will only check if the resource is ready. However, you can add custom checks to validate the resource further.
+        By default `kubernetesResource`  only checks if the resource is ready. However, you can add custom checks to validate the resource further.
 
         For example, you can validate the PostgreSQL database is running and accepting connections, with a custom `postgres` check:
 
 
-
+        ```yaml
         apiVersion: canaries.flanksource.com/v1
         kind: Canary
         #...
@@ -157,7 +157,7 @@ To follow this tutorial, you will need:
                     # Since we just want to check if database is responding,
                     # a SELECT 1 query should suffice
                     query: SELECT 1
-
+        ```
 
         :::warning Accessing variables
         This example uses the `$(username)` and `$(password)` syntax to access the `username` and `password` variables hardcoded in the `checks` section, but in a production setting, reference secrets using [`valueFrom`](/reference/env-var)
@@ -170,7 +170,9 @@ To follow this tutorial, you will need:
 
 3. The final test looks like:
 
-     file=custom-canary.yaml
+
+   ```yaml  file=custom-canary.yaml
+   ```
 
 ## Conclusion
 
