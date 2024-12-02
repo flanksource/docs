@@ -217,7 +217,6 @@ code {
 }
 
 
-div:not(.unstyled) {
 ol {
   all: initial;
   --bullet-size: calc(var(--sl-line-height) * 1rem);
@@ -304,7 +303,7 @@ ol > li > :first-child {
 ol > li > :first-child:where(h1, h2, h3, h4, h5, h6) {
   --lh: calc(1em * var(--sl-line-height-headings));
 }
-}
+
 details table thead {
   background: #f7f7f7;
 }
