@@ -1,53 +1,7 @@
-// @ts-check
-// `@type` JSDoc annotations allow editor autocompletion and type checking
-// (when paired with `@ts-check`).
-// There are various equivalent ways to declare your Docusaurus config.
-// See: https://docusaurus.io/docs/api/docusaurus-config
-
-// const lightCodeTheme = require('prism-react-renderer/themes/palenight')
-// const darkCodeTheme = require('prism-react-renderer/themes/dracula')
-// import fs from 'node:fs/promises';
-// import rehypeShiki, { RehypeShikiOptions } from '@shikijs/rehype';
-// import { bundledLanguages } from 'shiki';
-// import {
-//   transformerMetaHighlight,
-//   transformerNotationDiff,
-//   transformerNotationHighlight,
-//   transformerNotationFocus,
-// } from '@shikijs/transformers';
-
-// const rehypeShikiPlugin = [
-//   rehypeShiki,
-//   {
-//     themes: {
-//       dark: 'github-light',
-//       light: 'github-light',
-//     },
-//     transformers: [
-//       {
-//         name: 'meta',
-//         code(node) {
-//           const language = this.options.lang ?? 'plaintext';
-//           this.addClassToHast(node, `language-${language}`);
-//           return node;
-//         },
-//       },
-//       transformerMetaHighlight(),
-//       transformerNotationDiff(),
-//       transformerNotationHighlight(),
-//       transformerNotationFocus(),
-//     ],
-//     langs: [
-//       ...(Object.keys(bundledLanguages)),
-//       async () => JSON.parse(await fs.readFile('./languages/bash.tmLanguage.json', 'utf-8')),
-//     ],
-//   }
-// ];
-
-
-
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+
+import type * as Preset from '@docusaurus/preset-classic';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -89,7 +43,13 @@ export default async function createConfigAsync() {
     },
 
     plugins: [
+      // ['docusaurus-plugin-redoc',
 
+      //   {
+      //     spec: "https://redocly.github.io/redoc/openapi.yaml",
+      //     route: '/openapu'
+      //   }
+      // ],
 
       ['@docusaurus/plugin-client-redirects',
         {
@@ -173,11 +133,15 @@ export default async function createConfigAsync() {
           blog: {
             showReadingTime: true
           },
+
           theme: {
+
             customCss: './src/css/out.css'
           }
-        })
-      ]
+        } satisfies Preset.Options
+        )
+
+      ],
     ],
 
     themeConfig:
@@ -201,6 +165,12 @@ export default async function createConfigAsync() {
               position: 'left',
               label: 'Overview'
             },
+            // {
+            //   to: 'integrations',
+            //   activeBasePath: '/integrations',
+            //   position: 'left',
+            //   label: 'Integrations'
+            // },
             {
               to: 'config-db',
               activeBasePath: '/config-db',
@@ -233,7 +203,6 @@ export default async function createConfigAsync() {
               position: 'left'
             },
 
-
             {
               to: 'registry',
               activeBasePath: 'registry',
@@ -245,7 +214,20 @@ export default async function createConfigAsync() {
               activeBasePath: '/reference',
               label: 'Reference',
               position: 'left'
-            }
+            },
+
+            {
+              href: "https://app.flanksource.com/",
+              label: "Login",
+              // html: '<a href="https://app.flanksource.com/" class=" btn rounded bg-white px-2 py-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" style="border: 1px solid #e5e7eb;">Login</a>',
+              position: 'right',
+            },
+            {
+              href: "https://accounts.flanksource.com/sign-up",
+              html: '<a href="https://accounts.flanksource.com/sign-up" class="btn btn-primary hover:text-white" >Sign up</a>',
+              position: 'right',
+            },
+
           ]
         },
 
