@@ -23,10 +23,9 @@ For example, consider deploying a stateful PostgreSQL database via Flux on AWS. 
 * Deploying to a staging environment can help catch issues before they reach production, but this approach doesn't detect capacity, performance or latent errors that only surface under load.
 
 
-Control plane testing can help improve resilence by continously redeploying workloads, ensuring there is enough capacity within the system and that all operators and external dependencies are working correctly.
+Control plane testing can help improve resilience by continuously redeploying workloads, ensuring there is enough capacity within the system and that all operators and external dependencies are working correctly.
 
-Canary checker is a kubernetes-native test platform that continously runs tests using 30+ check styles against your workloads, in this tutorial we will use it to continously verify the ability to provision and run stateful workloads in a cluster.
-
+Canary checker is a kubernetes-native test platform that continuously runs tests using 30+ check styles against your workloads. In this tutorial, we use it to continuously verify the ability to provision and run stateful workloads in a cluster.
 
 
 
@@ -55,20 +54,22 @@ To follow this tutorial, you will need:
 :::
 
 
-1. Define the workload under under test
+1. Define the workload under test
 
     Before you can create a canary you should start with a working example of a resource, in this example we will use a `HelmRelease` to deploy a postgres database.
 
     ```yaml file=flux.yaml
     ```
 
-    One you have verfied the helm release is working on it's own, you can then begin building the control plane test using a canary.
+    Once you have verified the helm release is working on its own, you can then begin building the control plane test using `canary-checker`.
 
 
 
 1. Install the `canary-checker` binary
     <Install/>
 
+    :::info Operator Mode
+    This tutorial uses the CLI for faster feedback, when rolling this out to production we recommend installing `canary-checker` as an [operator](../../getting-started)
 
 1. Next create a `Canary` CustomResourceDefinition (CRD)  using the `kubernetesResource` check type, the layout of the canary is as follows:
 
@@ -138,7 +139,7 @@ To follow this tutorial, you will need:
         For example, you can validate the PostgreSQL database is running and accepting connections, with a custom `postgres` check:
 
 
-        ```yaml
+
         apiVersion: canaries.flanksource.com/v1
         kind: Canary
         #...
@@ -156,7 +157,7 @@ To follow this tutorial, you will need:
                     # Since we just want to check if database is responding,
                     # a SELECT 1 query should suffice
                     query: SELECT 1
-        ```
+
 
         :::warning Accessing variables
         This example uses the `$(username)` and `$(password)` syntax to access the `username` and `password` variables hardcoded in the `checks` section, but in a production setting, reference secrets using [`valueFrom`](/reference/env-var)
@@ -167,11 +168,9 @@ To follow this tutorial, you will need:
     :::
 
 
-3.
-    The final test looks like:
+3. The final test looks like:
 
-    ```yaml file=custom-canary.yaml
-    ```
+     file=custom-canary.yaml
 
 ## Conclusion
 
