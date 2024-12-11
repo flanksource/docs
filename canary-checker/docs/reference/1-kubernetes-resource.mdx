@@ -1,6 +1,8 @@
 ---
 title: Kubernetes Resource
-sidebar_class_name: popular
+sidebar_position: 0
+sidebar_custom_props:
+  icon: k8s
 ---
 
 # <Icon name="k8s" /> Kubernetes Resource
@@ -8,7 +10,7 @@ sidebar_class_name: popular
 The Kubernetes resource check creates kubernetes resources based on the provided manifests & perform checks on them. Some common use case of this
 check would be to see if a service is accessible via the ingress as shown in the example below.
 
-```yaml title="ingress_test.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes_resource_ingress_pass.yaml
+```yaml title="ingress_test.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes_resource_ingress_pass.yaml
 
 ```
 
@@ -123,17 +125,17 @@ Either the kubeconfig itself or the path to the kubeconfig can be provided.
 
 #### kubeconfig from kubernetes secret
 
-```yaml title="remote-cluster.yaml" file=../../../modules/canary-checker/fixtures/k8s/kubernetes-resource-check-kubeconfig-from-secrets.yaml {12-16} 
+```yaml title="remote-cluster.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-resource-check-kubeconfig-from-secrets.yaml {12-16}
 ```
 
 #### Kubeconfig inline
 
-```yaml title="remote-cluster.yaml" yaml title="remote-cluster.yaml" file=../../../modules/canary-checker/fixtures/k8s/kubernetes-resource-check-inline-kubeconfig.yaml {12-33}
+```yaml title="remote-cluster.yaml" yaml title="remote-cluster.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-resource-check-inline-kubeconfig.yaml {12-33}
 ```
 
 #### Kubeconfig from local filesystem
 
-```yaml title="remote-cluster.yaml" file=../../../modules/canary-checker/fixtures/k8s/kubernetes-resource-check-kubeconfig-from-file.yaml {12-13}
+```yaml title="remote-cluster.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-resource-check-kubeconfig-from-file.yaml {12-13}
 ```
 
 ### Templating
@@ -149,7 +151,7 @@ Templating the **Group**, **Version**, **Kind** & **Namespace** however isn't al
 <details summary="Creating a pod with a unique name on every run">
 <div>
 
-```yaml title="pod_exit_code_check.yaml" file=../../../modules/canary-checker/fixtures/k8s/kubernetes_resource_pod_exit_code_pass.yaml
+```yaml title="pod_exit_code_check.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes_resource_pod_exit_code_pass.yaml
 
 ```
 
@@ -161,7 +163,7 @@ Templating the **Group**, **Version**, **Kind** & **Namespace** however isn't al
 <details summary="Creating a namespace">
 <div>
 
-```yaml title="namespace_creation.yaml" file=../../../modules/canary-checker/fixtures/k8s/kubernetes_resource_namespace_pass.yaml
+```yaml title="namespace_creation.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes_resource_namespace_pass.yaml
 
 ```
 
@@ -176,7 +178,7 @@ When this canary is deleted, the **test** namespace is deleted and consequently 
 <details summary="Crossplane Example">
 <div>
 
-```yaml title="namespace_creation.yaml" file=../../../modules/canary-checker/fixtures/external/crossplane-kubernetes-resource.yaml
+```yaml title="namespace_creation.yaml" file=<rootDir>/modules/canary-checker/fixtures/external/crossplane-kubernetes-resource.yaml
 
 ```
 

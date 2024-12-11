@@ -1,14 +1,16 @@
 ---
 title: SQL
+sidebar_custom_props:
+  icon: database
 ---
 
-import { AzureSqlServer} from "@flanksource/icons/mi"
+import { AzureSqlServer } from "@flanksource/icons/mi"
 
 # <AzureSqlServer/> SQL
 
 This check connects to a specified Postgres database, run a query against it and verify the results.
 
-```yaml file=../../../modules/canary-checker/fixtures/datasources/postgres.yaml
+```yaml file=<rootDir>/modules/canary-checker/fixtures/datasources/postgres.yaml
 ```
 
 <HealthCheck name="postgres"  connection="url" rows={[
@@ -21,7 +23,7 @@ This check connects to a specified Postgres database, run a query against it and
 
 | Name    | Description             | Scheme                     |
 | ------- | ----------------------- | -------------------------- |
-| `rows`  |                         | *[]map[string]interface{ }* |
+| `rows`  |                         | *[]map[string]interface{}* |
 | `count` | Number of rows returned | *int*                      |
 
 

@@ -1,0 +1,309 @@
+---
+title: GitOps
+sidebar_custom_props:
+  icon: git
+
+---
+
+import Templating from '@site/docs/reference/playbooks/context.mdx'
+
+# <Icon name="git"/> GitOps Action
+
+GitOps action allows you to make commits and push to a remote repository.
+
+```yaml title="edit-kubernetes-manifests-gitops.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: edit-kubernetes-manifests-gitops
+spec:
+  title: 'Edit Kustomize Resource'
+  icon: 'flux'
+  parameters:
+    - default: 'chore: update $(.config.type)/$(.config.name)'
+      label: 'Commit Message'
+      name: 'commit_message'
+    - default: '$(.config.config | toJSON | neat | json | toYAML)'
+      label: 'Changes'
+      name: 'yamlInput'
+      properties:
+        size: 'large'
+      type: 'code'
+  configs:
+    - labelSelector: 'kustomize.toolkit.fluxcd.io/name'
+  actions:
+    - name: 'Create Pull Request With Changes'
+      gitops:
+        repo:
+          url: 'https://github.com/flanksource/flux'
+          connection: 'connection://default/github'
+          base: 'main'
+          branch: 'edit-manifest-$(random.Alpha 8)'
+        commit:
+          author: '$(.user.name)'
+          email: '$(.user.email)'
+          message: '$(.params.commit_message)'
+        pr:
+          title: '$(.params.commit_message)'
+        patches:
+          - path: 'prod/kustomization.yaml'
+            yq: |
+              select(
+                .kind=="$(.config.config | jq `.kind`)" and
+                .metadata.name=="$(.config.config | jq `.metadata.name`)"
+              ) |= $(.params.yamlInput | yaml | toJSON)
+```
+
+<Action
+  anyOf={['patches', 'files']}
+  rows={[
+    {
+      field: 'repo',
+      description: 'The repository details',
+      scheme: '[Repository](#repository)',
+      required: true
+    },
+    {
+      field: 'commit',
+      description: 'Commit details',
+      scheme: '[Commit](#commit-detail)',
+      required: true
+    },
+    {
+      field: 'pr',
+      description:
+        'Create a Pull Request instead of a commit (Only available for `github` and `gitlab`)',
+      scheme: '[PullRequest](#pull-request)'
+    },
+    {
+      field: 'patches',
+      description: 'List of JQ/YQ patches to apply',
+      scheme: '[[]Patch](#patch)'
+    },
+    {
+      field: 'files',
+      description: 'List of files to create',
+      scheme: '[[]File](#file)'
+    }
+  ]}
+/>
+
+### Repository
+
+<Fields oneOf={["connection", "url"]} rows={[
+  {field: "connection", description: "Connection name to use the credentials for the git repo", scheme: "string"},
+  {field: "url", description: "URL of the git repository", scheme: "string"},
+  {field: "base", description: "Branch to clone. Defaults to `main`", scheme: "string"},
+  {field: "branch", description: "The branch to update. Defaults to base", scheme: "string"},
+  {field: "type", description: "Git repository type", scheme: "`github`, `gitlab`, `azure_devops`, `http`, `git`"}
+
+]}/>
+
+### Commit Detail
+
+| Field     | Description    | Scheme   | Required | Templatable |
+| --------- | -------------- | -------- | -------- | ----------- |
+| `author`  | Author name    | `string` | `true`   | `true`      |
+| `email`   | Author email   | `string` | `true`   |             |
+| `message` | Commit message | `string` | `true`   |             |
+
+### Pull Request
+
+| Field   | Description               | Scheme     | Required | Templatable |
+| ------- | ------------------------- | ---------- | -------- | ----------- |
+| `title` | Title of the Pull request | `string`   | `true`   | `true`      |
+| `tags`  | Tags to add to the PR     | `[]string` |          | `true`      |
+
+### Patch
+
+Patches modify existing files on the git repo. You can either use `yq` to modify yaml files or `jq` to modify json files.
+
+| Field  | Description   | Scheme   | Required | Templatable |
+| ------ | ------------- | -------- | -------- | ----------- |
+| `path` | Path to patch | `string` | `true`   | `true`      |
+| `yq`   | yq query      | `string` | `false`  | `true`      |
+| `jq`   | jq query      | `string` | `false`  | `true`      |
+
+### File
+
+Files create or delete existing files on the git repo.
+
+| Field     | Description                                                               | Scheme   | Required | Templatable |
+| --------- | ------------------------------------------------------------------------- | -------- | -------- | ----------- |
+| `path`    | Path to file                                                              | `string` | `true`   | `true`      |
+| `content` | Content of the file. Use the `$delete` keyword to delete an existing file | `string` | `true`   | `true`      |
+
+## Custom Origin Annotation
+
+In the example above, you saw a playbook that edited Flux-created manifests. However, there was a slight issue - it had some variables hardcoded, specifically the git repository, git branch, and the kustomization file path. When you have configurations from multiple clusters, you'll need to duplicate the playbook for each cluster, as the git repository and kustomization file path will differ. Even if you have multiple Flux kustomizations on a single cluster, you'll need to duplicate the playbook for each of those kustomizations.
+
+There's a better way to build a single generic GitOps playbook that works for configurations with any Flux source and kustomization.
+
+When a GitOps action is run against a config resource that has a `config.kubernetes.io/origin` annotation, the following [env vars](../../reference/playbooks/env-vars) are automatically available:
+
+<Fields
+  rows={[
+    {
+      field: 'git.file',
+      description: `Name of the file that created the config resource the playbook is run against.`,
+      scheme: 'string'
+    },
+    {
+      field: 'git.url',
+      description: 'URL of the git repository',
+      scheme: 'string'
+    },
+    {
+      field: 'git.branch',
+      description: 'The primary branch',
+      scheme: 'string'
+    },
+    {
+      field: 'kustomize.path',
+      description:
+        'Path of the kustomization file that created the config resource the playbook is run against. This comes from the spec of the kustomization.',
+      scheme: 'string'
+    }
+  ]}
+/>
+
+These env vars are extracted by traversing up the Flux Kustomization and Git Repository that created the config resource the playbook is running against. We'll see this in detail shortly.
+
+To tag all the resources with that annotation, you'll need to add `originAnnotations` to the buildMetadata field as shown below:
+
+<details summary="Setting origin annotation">
+
+```yaml title='kustomization.yaml'
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+// highlight-next-line
+buildMetadata: [originAnnotations]
+resources:
+- monitoring
+```
+
+The above kustomization would add the following annotation to the config resource:
+
+```yaml title="monitoring/alertmanager.yaml"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    config.kubernetes.io/origin: |
+      path: monitoring/alertmanager.yaml
+  ...
+```
+
+</details>
+
+### Example
+
+<Tabs>
+<TabItem label="Wihout origin annotation" value="without-origin-annotation">
+
+```yaml title="edit-kubernetes-manifests-gitops.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: edit-kubernetes-manifests-gitops
+spec:
+  title: 'Edit Kustomize Resource'
+  icon: flux
+  parameters:
+    - default: 'chore: update $(.config.type)/$(.config.name)'
+      label: Commit Message
+      name: commit_message
+    - default: $(.config.config | toJSON | neat | json | toYAML)
+      label: ""
+      name: yamlInput
+      properties:
+        size: large
+      type: code
+  configs:
+    - labelSelector: 'kustomize.toolkit.fluxcd.io/name'
+  env:
+    - name: file_path
+      value: {{ .config.config | jq `.metadata.annotations["config.kubernetes.io/origin"]` | yaml).path }}
+    - name: kustomization_path
+      value:  {{ (catalog_traverse .config.id  "Kubernetes::Kustomization").Config | json | jq `.spec.path` }}
+    - name: git_url
+      value:  {{ (catalog_traverse .config.id  "Kubernetes::Kustomization/Kubernetes::GitRepository").Config | json | jq `.spec.url` }}
+    - name: git_branch
+      value:  {{ (catalog_traverse .config.id  "Kubernetes::Kustomization/Kubernetes::GitRepository").Config | json | jq `.spec.ref.branch` }}
+  actions:
+    - name: Create Pull Request With Changes
+      gitops:
+        repo:
+          url: '$(.env.git_url)'
+          connection: 'connection://default/github'
+          base: '$(.env.git_branch)'
+          branch: edit-manifest-$(random.Alpha 8)
+        commit:
+          author: '$(.user.name)'
+          email: '$(.user.email)'
+          message: $(.params.commit_message)
+        pr:
+          title: $(.params.commit_message)
+        patches:
+          - path: '$(filepath.Join .env.kustomization_path .env.file_path)'
+            yq: |
+              select(
+                .kind=="$(.config.config | jq `.kind`)" and
+                .metadata.name=="$(.config.config | jq `.metadata.name`)"
+              ) |= $(.params.yamlInput | yaml | toJSON)
+```
+
+</TabItem>
+
+<TabItem label="With origin annotation" value="with-origin-annotation">
+
+```yaml title="edit-kubernetes-manifests-gitops.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: edit-kubernetes-manifests-gitops
+spec:
+  title: 'Edit Kustomize Resource'
+  icon: flux
+  parameters:
+    - default: 'chore: update $(.config.type)/$(.config.name)'
+      label: Commit Message
+      name: commit_message
+    - default: $(.config.config | toJSON | neat | json | toYAML)
+      label: ''
+      name: yamlInput
+      properties:
+        size: large
+      type: code
+  configs:
+    - labelSelector: 'kustomize.toolkit.fluxcd.io/name'
+  actions:
+    - name: Create Pull Request With Changes
+      gitops:
+        repo:
+          url: '$(.env.git.url)'
+          connection: 'connection://default/github'
+          base: '$(.env.git.branch)'
+          branch: edit-manifest-$(random.Alpha 8)
+        commit:
+          author: '$(.user.name)'
+          email: '$(.user.email)'
+          message: $(.params.commit_message)
+        pr:
+          title: $(.params.commit_message)
+        patches:
+          - path: '$(filepath.Join .env.kustomization.path .env.git.file)'
+            yq: |
+              select(
+                .kind=="$(.config.config | jq `.kind`)" and
+                .metadata.name=="$(.config.config | jq `.metadata.name`)"
+              ) |= $(.params.yamlInput | yaml | toJSON)
+```
+
+</TabItem>
+
+</Tabs>
+
+## Templating
+
+<Templating />

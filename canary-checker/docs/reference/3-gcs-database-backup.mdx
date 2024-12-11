@@ -1,13 +1,15 @@
 ---
 title: GCS Database Backup
 sidebar_class_name: beta
+sidebar_custom_props:
+  icon: google-cloud
 ---
 
 # <Icon name="database" /> Google Cloud SQL Backups
 
 Checks if a Google Cloud SQL instance has been successfully backed up recently.
 
-```yaml title="gcs-database.yaml" file=../../../modules/canary-checker/fixtures/datasources/GCP/database_backup.yaml
+```yaml title="gcs-database.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/database_backup.yaml
 ```
 
 | Field         | Description                                                 | Scheme                                         | Required |
@@ -45,10 +47,10 @@ There are 3 options when connecting to GCP:
 1. GKE [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) (the default if no `connection` or `credentials` is specified)
 2. `connection`, this is the recommended method, connections are reusable and secure
 
-```yaml title="database-backup-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/GCP/database_backup_cred_from_connection.yaml
+```yaml title="database-backup-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/database_backup_cred_from_connection.yaml
 ```
 
 3. `accessKey` and `secretKey` <CommonLink to="authentication">_EnvVar_</CommonLink> with the credentials stored in a secret.
 
-```yaml title="gcs-database-backup.yaml" file=../../../modules/canary-checker/fixtures/datasources/GCP/database_backup_cred.yaml
+```yaml title="gcs-database-backup.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/database_backup_cred.yaml
 ```

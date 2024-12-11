@@ -1,0 +1,63 @@
+---
+title: Templating
+sidebar_custom_props:
+  icon: carbon:value-variable
+---
+
+import Context from '@site/docs/reference/playbooks/context.mdx'
+
+
+You can use templating to access data from your configs, health checks, and components. Templates allow you to create reusable playbooks by
+
+* Get the namespace of a Kubernetes deployment.
+* Get the name of a config.
+* Get the status of a health check.
+
+To use templating in your playbooks, you can use the following syntax:
+
+`{{.context.property}}`
+
+Where:
+
+* `context` is the context of the template, such as [config](/reference/config-db/config), [check](/reference/canary-checker/check), or [component](/reference/topology/components).
+* `property` is the property of the context that you want to access.
+
+For example, to get the namespace of a Kubernetes deployment, you would use the following template:
+
+`{{.config.tags.namespace}}`
+
+### Example
+
+The following playbook scales a Kubernetes deployment to a specified number of replicas.
+
+```yaml  title='scale-deployment.yaml'
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: scale-deployment
+spec:
+  description: Scale deployment
+  configs:
+    - type: Kubernetes::Deployment
+  parameters:
+    - name: replicas
+      label: The new desired number of replicas.
+  actions:
+    - name: 'scale deployment'
+      exec:
+        //highlight-next-line
+        script: kubectl scale \
+         --replicas={{.params.replicas}} \
+         --namespace={{.config.tags.namespace}} \
+          deployment {{.config.name}}
+```
+
+This playbook:
+  * defines a parameter called `replicas` that a user will supply when running
+  * gets the deployment's  name (`{{.config.name}}`) and namespace (`{{.config.tags.namespace}}`)
+  * create a `kubectl scale` command from these values
+  * runs the command and prints the results
+
+## Context
+
+<Context/>

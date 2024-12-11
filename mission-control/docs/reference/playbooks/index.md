@@ -1,6 +1,9 @@
 ---
 title: Playbook
 sidebar_position: 6
+sidebar_custom_props:
+  icon: playbook
+
 ---
 
 | Field             | Description                                                                                                                                                                                                                                                                           | Scheme                                               |
@@ -93,7 +96,7 @@ scheme: 'string',
 
 Approvals allow requiring one or more people to approve before a playbook runs.
 
-```yaml title="scale-deployment.yaml" {10-14} file=../../../modules/mission-control/fixtures/playbooks/delete-pv.yaml
+```yaml title="scale-deployment.yaml" {10-14} file=<rootDir>/modules/mission-control/fixtures/playbooks/delete-pv.yaml
 
 ```
 

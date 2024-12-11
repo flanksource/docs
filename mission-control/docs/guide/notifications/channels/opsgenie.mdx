@@ -1,0 +1,112 @@
+---
+sidebar_custom_props:
+  icon: logos:opsgenie
+---
+
+
+
+# OpsGenie
+
+:::info URL Format
+     opsgenie://api.opsgenie.com/**`apiKey`**
+:::
+
+
+import Fields from '@site/src/components/Fields';
+
+<Fields rows={[
+    {
+        field: "host",
+        description: "The OpsGenie API host",
+        anyOf: ["api.opsgenie.com","api.eu.opsgenie.com"],
+        default: "api.opsgenie.com"
+    },
+    {
+        field: "port",
+        default: "443",
+        scheme: "int"
+    },
+    {
+        field: "apikey",
+        description: "The OpsGenie API key",
+        scheme: "string",
+        required: true
+    },
+    {
+        field: "actions",
+        description: "Custom actions that will be available for the alert",
+                scheme: "string",
+    },
+    {
+        field: "alias",
+        description: "Client-defined identifier of the alert",
+                scheme: "string",
+    },
+    {
+        field: "description",
+        description: "Description field of the alert",
+                scheme: "string",
+    },
+    {
+        field: "details",
+        description: "Map of key-value pairs to use as custom properties of the alert",
+                scheme: "string",
+    },
+    {
+        field: "entity",
+        description: "Entity field of the alert that is generally used to specify which domain the Source field of the alert",
+                scheme: "string",
+    },
+    {
+        field: "note",
+        description: "Additional note that will be added while creating the alert",
+                scheme: "string",
+    },
+    {
+        field: "priority",
+        description: "Priority level of the alert",
+        anyOf: ["P1", "P2", "P3", "P4", "P5"]
+    },
+    {
+        field: "responders",
+        description: "Teams, users, escalations and schedules that the alert will be routed to send notifications",
+                scheme: "string",
+    },
+    {
+        field: "source",
+        description: "Source field of the alert",
+                scheme: "string",
+    },
+    {
+        field: "tags",
+        description: "Tags of the alert",
+                scheme: "`JSON Array`",
+        example: `["tag1","tag2"]`
+    },
+    {
+        field: "user",
+        description: "Display name of the request owner",
+                scheme: "string",
+    },
+    {
+        field: "visibleTo",
+        description: "Teams and users that the alert will become visible to without sending any notification",
+                scheme: "string",
+    },
+]} />
+
+
+
+## Creating an API Key
+
+1. Navigate to  **Settings** → **Integration List**
+
+2. Click **API** → **Add**
+
+3. Check  *Create and Update Access* and *Enabled*
+
+3. Click **Save Integration**
+
+4. Copy the *API Key*
+
+

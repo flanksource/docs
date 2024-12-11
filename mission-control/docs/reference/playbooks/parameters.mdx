@@ -2,7 +2,7 @@
 title: Parameters
 ---
 
-```yaml title="scale-deployment.yaml" file=../../../modules/mission-control/fixtures/playbooks/scale-deployment.yaml
+```yaml title="scale-deployment.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/scale-deployment.yaml
 
 ```
 
@@ -54,7 +54,7 @@ Playbook parameter defines a parameter that a playbook needs to run.
     scheme: "`map[string]string`",
   }
 ]} />
-  
+
 ## Defaulting
 
 Parameter values can be defaulted from the selected resource
@@ -89,7 +89,7 @@ When running the playbook on a `Deployment` named `mysql` the following is pre-p
 | `millicores` | CPU resource                       | Number       | `string`  | -                         |
 | `bytes`      | Memory resource                    | Number       | `string`  | -                         |
 
-```yaml title='params-sink.yaml' file=../../../modules/mission-control/fixtures/playbooks/params.yaml {20,24,27,32,39,46,51,56,61,72} showLineNumbers
+```yaml title='params-sink.yaml' file=<rootDir>/modules/mission-control/fixtures/playbooks/params.yaml {20,24,27,32,39,46,51,56,61,72} showLineNumbers
 
 ```
 

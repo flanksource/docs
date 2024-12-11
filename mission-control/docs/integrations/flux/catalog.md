@@ -14,7 +14,8 @@ Mission Control provides built-in support for relating Flux resources to each ot
 - Monitor the overall health of your Flux-based GitOps workflows
 
 
-![](/img/helmrelease-graph.png)
+<img src="/img/helmrelease-graph.png" className="mb-[-12%] rounded-xl shadow-2xl ring-1 ring-gray-900/10"/>
+
 
 
 ## Next Steps

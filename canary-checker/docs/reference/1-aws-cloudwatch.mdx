@@ -1,13 +1,15 @@
 ---
 title: AWS Cloud Watch
 hide_title: true
+sidebar_custom_props:
+  icon: aws-cloudwatch
 ---
 
 # <Icon name="aws-cloudwatch" size={32}> CloudWatch</Icon>
 
 Cloudwatch checks for all active alarms
 
-```yaml title="cloudwatch.yaml"  file=../../../modules/canary-checker/fixtures/aws/cloudwatch_pass.yaml
+```yaml title="cloudwatch.yaml"  file=<rootDir>/modules/canary-checker/fixtures/aws/cloudwatch_pass.yaml
 ```
 
 <HealthCheck name="cloudwatch" connection="aws" rows={[

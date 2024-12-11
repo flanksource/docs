@@ -1,5 +1,7 @@
 ---
 title: Security
+sidebar_custom_props:
+  icon: shield
 ---
 
 At Flanksource, security isn't just a feature; it's the foundation of the design that went into the Mission Control platform. We've meticulously designed every aspect of our internal developer platform to meet the stringent requirements of security teams.

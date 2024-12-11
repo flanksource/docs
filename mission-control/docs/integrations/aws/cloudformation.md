@@ -1,5 +1,8 @@
 ---
 draft: true
+title: Cloudformation
+sidebar_custom_props:
+  icon: aws-cloudformation
 ---
 
 # <span class=" iconify-color logos--aws-cloudformation"></span> CloudFormation

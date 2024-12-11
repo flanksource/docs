@@ -1,0 +1,28 @@
+---
+title: Notification
+sidebar_custom_props:
+  icon: email
+
+---
+import Templating from "@site/docs/reference/playbooks/context.mdx"
+
+# <Icon name="bell-dark"/> Notification
+
+Notification action sends notification.
+
+```yaml title="notify-deployment-restarts.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/notification-playbook.yaml
+```
+
+<Action oneOf={["url", "connection"]} rows={[
+{field: "url", description: "Notification URL", scheme: "NotificationURL"},
+{field: "connection", description: "Connection to use to send the notification", scheme: "NotificationConnection"},
+{field: "title", description: "Title of the notification", scheme: "string", required: true, templatable: true},
+{field: "message", description: "Message is the body of the notification", scheme: "string", required: true, templatable: true},
+{field: "properties", description: "Notification channel properties", scheme: "NotificationProperties", templatable: true}
+
+]}/>
+
+
+## Templating
+
+<Templating/>

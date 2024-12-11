@@ -1,0 +1,37 @@
+---
+title: Repeat Interval
+sidebar_custom_props:
+  icon: dedupe
+---
+
+The repeat interval determines the duration between subsequent notifications after an initial successful delivery.
+
+```yaml title="deployment-failed.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: config-updates
+  namespace: default
+spec:
+  events:
+    - config.healthy
+    - config.unhealthy
+    - config.warning
+    - config.unknown
+  filter: config.type == "Kubernetes::Deployment"
+  to:
+    email: alerts@acme.com
+  repeatInterval: 2h
+```
+
+## Grouping Per Resource per Source Event
+
+The `repeatInterval` applies per unique resource per unique event source. This prevents duplicate notifications when the same resource triggers the same event type multiple times within the interval window. It still allows notifications for different event types on the same resource within the window.
+
+### Example:
+
+With the above notification in place, if a Kubernetes Helm release's health fluctuates between `healthy` and `unhealthy` multiple times within a 2-hour window, the system limits notifications to just two: one for the `config.healthy` event and one for the `config.unhealthy` event.
+
+However, if the Helm release health shifts to `warning` during this same period, it triggers an additional notification. This occurs because the warning status is considered a separate event source.
+
+The notification throttling mechanism operates independently for each distinct resource. As a result, other Helm releases are not affected by this limitation.

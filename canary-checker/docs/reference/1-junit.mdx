@@ -1,5 +1,7 @@
 ---
 title: JUnit
+sidebar_custom_props:
+  icon: junit
 ---
 
 # <Icon name="junit" /> JUnit
@@ -9,7 +11,7 @@ title: JUnit
 JUnit check performs a Unit test, parses the JUnit test reports in a container at a specified path as defined in `testResults`.
 
 
-```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/junit_pass.yaml
+```yaml title="junit.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/junit_pass.yaml
 ```
 
 <HealthCheck name="junit" edition="standard"  rows={[
@@ -26,7 +28,7 @@ JUnit check performs a Unit test, parses the JUnit test reports in a container a
 
 <details summary="Export custom metrics from JUnit results">
 <div>
-```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/junit_pass_metrics.yaml
+```yaml title="junit.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/junit_pass_metrics.yaml
 ```
 </div>
 </details>

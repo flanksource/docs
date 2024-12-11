@@ -1,7 +1,6 @@
 ---
 title: Playbooks
 ---
-
 # <Icon name="flux"/> Flux Playbooks
 
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
@@ -10,11 +9,9 @@ import Git from '@site/docs/partials/\_git_all.mdx';
 Mission control enhances a [flux](https://fluxcd.io/flux) deployment with:
 
 1. An Argo style graph between Flux resources and the objects they create
-2. A playbook libary that includes a GUI for both day 2 operations with `flux` cli and a Git
+2. A playbook library that includes a GUI for both day 2 operations with `flux` cli and a GitOps Approach
 3. Health checks on all flux resources based on `status.conditions`
-4. Alert silencing based on Flux hierachy - i.e. Silence all alerts for objects created by this Kustomization/HelmChart
-
-## Playbooks
+4. Alert silencing based on Flux hierarchy - that is, silence all alerts for objects created by a `Kustomization` or `HelmRlease`
 
 The following playbooks work by calling the `flux` CLI directly
 

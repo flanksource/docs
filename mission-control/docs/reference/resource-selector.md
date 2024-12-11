@@ -1,6 +1,8 @@
 ---
 title: Resource Selectors
 sidebar_position: 2
+sidebar_custom_props:
+  icon: stash:search-box-light
 ---
 
 # Resource Selectors

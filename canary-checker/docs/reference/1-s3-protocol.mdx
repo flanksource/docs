@@ -1,6 +1,8 @@
 ---
 title: S3 Protocol
 sidebar_className: infra
+sidebar_custom_props:
+  icon: logos:aws-s3
 tags:
 - enterprise
 ---
@@ -20,7 +22,7 @@ The S3 check:
 - Downloads previously uploaded object to check for Get permissions
 
 
-```yaml title="s3-protocol"  file=../../../modules/canary-checker/fixtures/aws/s3-protocol.yaml
+```yaml title="s3-protocol"  file=<rootDir>/modules/canary-checker/fixtures/aws/s3-protocol.yaml
 ```
 <HealthCheck name="s3" edition="enterprise" connection="aws" rows={[
 

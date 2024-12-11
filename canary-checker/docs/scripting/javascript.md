@@ -1,10 +1,12 @@
 ---
 title: Javascript
+sidebar_custom_props:
+  icon: js
 ---
 
 `javascript` expressions use to the [otto](https://github.com/robertkrimen/otto) Javascript VM
 
-```yaml title="display-with-javascript.yaml" file=../../../modules/canary-checker/fixtures/minimal/display-with-javascript_pass.yaml
+```yaml title="display-with-javascript.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/display-with-javascript_pass.yaml
 
 ```
 

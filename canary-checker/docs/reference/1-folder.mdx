@@ -1,5 +1,7 @@
 ---
 title: Folder
+sidebar_custom_props:
+  icon: folder
 ---
 
 # <Icon name="smb" /> Folder
@@ -13,7 +15,7 @@ Checks the contents of a folder for size, age, and count. Folder based checks ar
   - Checking the size of queue processing backlog
   - Checking if any error (`.err` or `.log`) files have been produced.
 
-```yaml title="folder-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/folder_single_pass.yaml
+```yaml title="folder-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/folder_single_pass.yaml
 ```
 
 <HealthCheck name="folder" edition="standard" rows={[
@@ -48,7 +50,7 @@ Checks the contents of a folder for size, age, and count. Folder based checks ar
 
 e.g. to verify that database backups are being performed
 
-```yaml title="postgres-backup-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/folder_with_filter.yaml
+```yaml title="postgres-backup-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/folder_with_filter.yaml
 ```
 
 ## Result Variables
@@ -85,7 +87,7 @@ The following fields are available in `test`, `display` and `transform` [express
 
 <details summary="SFTP Check">
 <div>
-```yaml title="exec_artifact.yaml"  file=../../../modules/canary-checker/fixtures/datasources/SFTP/sftp_pass.yaml
+```yaml title="exec_artifact.yaml"  file=<rootDir>/modules/canary-checker/fixtures/datasources/SFTP/sftp_pass.yaml
 ```
 </div>
 </details>
@@ -98,7 +100,7 @@ The following fields are available in `test`, `display` and `transform` [express
 <div className="mt-5"/>
 <details summary="S3 Bucket"  >
 <div>
-```yaml title="exec_artifact.yaml"  file=../../../modules/canary-checker/fixtures/datasources/s3_bucket_pass.yaml
+```yaml title="exec_artifact.yaml"  file=<rootDir>/modules/canary-checker/fixtures/datasources/s3_bucket_pass.yaml
 ```
 </div>
 </details>
@@ -110,7 +112,7 @@ The following fields are available in `test`, `display` and `transform` [express
 <div className="mt-5"/>
 <details summary="SMB / CIFS" >
 <div>
-```yaml title="smb.yaml"  file=../../../modules/canary-checker/fixtures/quarantine/smb_pass.yaml
+```yaml title="smb.yaml"  file=<rootDir>/modules/canary-checker/fixtures/quarantine/smb_pass.yaml
 ```
 </div>
 </details>
@@ -123,7 +125,7 @@ The following fields are available in `test`, `display` and `transform` [express
 <div className="mt-5"/>
 <details summary="GCS Check" >
 <div>
-```yaml title="gcs.yaml"  file=../../../modules/canary-checker/fixtures/datasources/GCP/folder_pass.yaml
+```yaml title="gcs.yaml"  file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/folder_pass.yaml
 ```
 </div>
 </details>

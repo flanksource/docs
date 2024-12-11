@@ -1,5 +1,7 @@
 ---
 title: LDAP
+sidebar_custom_props:
+  icon: ldap
 ---
 
 # <Icon name="ldap" /> LDAP
@@ -10,7 +12,7 @@ The LDAP check:
 * Searches an object type in the provided `bindDN`.
 
 
-```yaml title="icmp.yaml"  file=../../../modules/canary-checker/fixtures/ldap/ldap_pass.yaml
+```yaml title="icmp.yaml"  file=<rootDir>/modules/canary-checker/fixtures/ldap/ldap_pass.yaml
 ```
 <HealthCheck name="ldap" connection="ldap" rows={[
   {field: "bindDN", description: "BindDN to use in query", scheme: 'string', required: true},

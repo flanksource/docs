@@ -1,4 +1,6 @@
 ---
 title: Kubernetes
-sidebar_class_name: icon-kubernetes
+
+sidebar_custom_props:
+  icon: k8s
 ---
