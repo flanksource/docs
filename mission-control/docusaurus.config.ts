@@ -58,14 +58,32 @@ export default async function createConfigAsync() {
           redirects: [
             // /docs/oldDoc -> /docs/newDoc
             {
-              to: '/canary-checker/reference/sql',
+              to: '/guide/canary-checker/reference/sql',
               from: ['/canary-checker/reference/postgres', '/canary-checker/reference/mysql', '/canary-checker/reference/mssql'],
             },
 
             {
-              to: '/canary-checker/reference/folder#s3',
+              to: '/guide/canary-checker/reference/folder#s3',
               from: '/canary-checker/reference/s3-bucket',
+            },
+
+            {
+              to: '/guide/canary-checker',
+              from: '/canary-checker',
+            },
+            {
+              to: '/guide/playbooks',
+              from: '/playbooks',
+            },
+            {
+              to: '/guide/notifications/',
+              from: '/notifications',
+            },
+            {
+              to: '/guide/topology',
+              from: '/topology',
             }
+
           ],
 
         }],
@@ -131,7 +149,25 @@ export default async function createConfigAsync() {
             // rehypePlugins: [rehypeKatex],
           },
           blog: {
-            showReadingTime: true
+            showReadingTime: true,
+            blogTitle: 'Flanksource Blog',
+            // blogDescription: 'A Docusaurus powered blog!',
+            postsPerPage: 'ALL',
+            blogSidebarTitle: 'All posts',
+            blogSidebarCount: 0,
+            feedOptions: {
+              type: 'all',
+              copyright: `Copyright © ${new Date().getFullYear()} Flanksource, Inc.`,
+              createFeedItems: async (params) => {
+                const { blogPosts, defaultCreateFeedItems, ...rest } = params;
+                return defaultCreateFeedItems({
+                  // keep only the 10 most recent blog posts in the feed
+                  blogPosts: blogPosts.filter((item, index) => index < 10),
+                  ...rest,
+                });
+              },
+            },
+
           },
 
           theme: {
@@ -168,53 +204,51 @@ export default async function createConfigAsync() {
             {
               to: 'integrations',
               activeBasePath: '/integrations',
+              // sidebarId: 'integrationsSidebar',
               position: 'left',
               label: 'Integrations'
             },
             {
-              to: 'config-db',
-              activeBasePath: '/config-db',
-              label: 'Catalog',
+              to: 'guide',
+              activeBasePath: '/guide',
+              // activeBasePath: '/config-db',
+              label: 'User Guide',
               position: 'left'
             },
-            {
-              to: 'playbooks',
-              activeBasePath: '/playbooks',
-              label: 'Playbooks',
-              position: 'left'
-            },
-            {
-              to: 'topology',
-              activeBasePath: 'topology',
-              label: 'Topology',
-              position: 'left'
-            },
-            {
-              to: 'canary-checker',
-              label: 'Health Checks',
-              activeBasePath: 'canary-checker',
-              position: 'left'
-            },
+            // {
+            //   to: 'playbooks',
+            //   activeBasePath: '/playbooks',
+            //   label: 'Playbooks',
+            //   position: 'left'
+            // },
+            // {
+            //   to: 'topology',
+            //   activeBasePath: 'topology',
+            //   label: 'Topology',
+            //   position: 'left'
+            // },
+            // {
+            //   to: 'canary-checker',
+            //   label: 'Health Checks',
+            //   activeBasePath: 'canary-checker',
+            //   position: 'left'
+            // },
 
-            {
-              to: 'notifications',
-              activeBasePath: 'notifications',
-              label: 'Notifications',
-              position: 'left'
-            },
+            // {
+            //   to: 'notifications',
+            //   activeBasePath: 'notifications',
+            //   label: 'Notifications',
+            //   position: 'left'
+            // },
 
-            {
-              to: 'registry',
-              activeBasePath: 'registry',
-              label: 'Registry',
-              position: 'left'
-            },
             {
               to: 'reference',
               activeBasePath: '/reference',
               label: 'Reference',
               position: 'left'
             },
+
+            { to: 'blog', label: 'Blog', position: 'left' }, // or position: 'right'
 
             {
               href: "https://app.flanksource.com/",

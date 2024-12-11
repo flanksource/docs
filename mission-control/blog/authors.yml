@@ -1,0 +1,17 @@
+moshe:
+  name: Moshe Immerman
+  title: Founder @ Flanksource
+  # url: https://github.com/moshloop
+  image_url: /img/moshe.jpg
+  page: true
+  socials:
+    linkedin: https://www.linkedin.com/in/moshe-immerman/
+    github: moshloop
+yash:
+  name: Yash Mehrotra
+  title: Sr Sofware Engineer
+  page: true
+  #  url: https://github.com/yashmehrotra
+  image_url: /img/yash.png
+  socials:
+    github: yashmehrotra
