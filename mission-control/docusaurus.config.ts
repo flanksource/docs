@@ -22,8 +22,8 @@ export default async function createConfigAsync() {
     organizationName: 'flanksource', // Usually your GitHub org/user name.
     projectName: 'docs', // Usually your repo name.
     favicon: 'img/flanksource-icon.png',
-    onBrokenLinks: 'warn',
-    onBrokenMarkdownLinks: 'warn',
+    onBrokenLinks: 'throw',
+    onBrokenMarkdownLinks: 'throw',
     // scripts: [
     //   "https://cdn.tailwindcss.com",
     // ],
@@ -100,6 +100,37 @@ export default async function createConfigAsync() {
       //   };
       // },
 
+
+async      function nodePolyfillPlugin(context, options) {
+        return {
+          name: 'node-polyfill-plugin',
+          configureWebpack(config, isServer) {
+            if (!isServer) {
+              return {
+                resolve: {
+                  fallback: {
+                    path: require.resolve('path-browserify'),
+                    util: require.resolve('util/'),
+                    process: require.resolve('process/browser'),
+                    buffer: require.resolve('buffer/'),
+                    fs: require.resolve("browserify-fs"),
+                  },
+                },
+
+                plugins: [
+                  new (require('webpack').ProvidePlugin)({
+                    process: [ 'process'],
+
+                    Buffer: ['buffer', 'Buffer'],
+                  }),
+                ],
+              };
+            }
+            return {};
+
+          },
+        };
+      },
       async function resolveSymlinkPlgugin(context, options) {
         return {
           name: 'resolve-symlinks',
@@ -186,7 +217,7 @@ export default async function createConfigAsync() {
         // Replace with your project's social card
         image: 'img/flanksource-icon.png',
         home: 'docs/index.md',
-
+        themes: [["docusaurus-json-schema-plugin", {}]],
         navbar: {
           title: '',
           logo: {
@@ -295,6 +326,6 @@ export default async function createConfigAsync() {
           theme: PrismLight,
           darkTheme: PrismDark,
         },
-      })
+      }),
   }
 }

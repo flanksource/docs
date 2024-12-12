@@ -1,8 +1,14 @@
 ---
 title: Playbooks
+sidebar_custom_props:
+  icon: playbook
 ---
 
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+
+import Schema from '@site/modules/mission-control-registry/charts/playbooks-kubernetes/values.schema.json'
+import OpenAPI from '@site/src/components/OpenAPI'
+
 
 Self-service playbooks empower teams to manage their Kubernetes resources efficiently:
 
@@ -40,9 +46,11 @@ The following playbooks are available for use:
 If you are using the SaaS, then this needs to be installed on the SaaS vCluster using [kubectl](/installation/saas/kubectl)
 
 <Helm chart="mission-control-playbooks-kubernetes"
+  schema={Schema}
   createNamespace={false}
   createRepo={false}
   />
+
 
 :::info Note
 The playbooks chart only needs to be installed once, unlike the `mission-control-kubernetes` chart which is per cluster
@@ -50,12 +58,4 @@ The playbooks chart only needs to be installed once, unlike the `mission-control
 
 ## Customizing playbooks
 
-To customize the default playbooks, you can turn off the playbook in the chart:
-
-1. For example, to disable the `delete-pod` playbook
-
-   ```yaml
-   deletePod: false
-   ```
-
-2. Copy the playbook from [here](https://github.com/flanksource/mission-control-registry/tree/main/charts/playbooks-kubernetes/templates) to your own repository.
+Copy the playbook from [here](https://github.com/flanksource/mission-control-registry/tree/main/charts/playbooks-kubernetes/templates) to your own repository.

@@ -3,19 +3,88 @@ slug: /
 title: Flanksource Mission Control
 hide_title: true
 # hide_table_of_contents: true
-pagination_next: guide/config-db/index
+pagination_next: null
 pagination_prev: null
 ---
 
-import {Card, Cards} from '@site/src/components/Card'
+import { SlClose, SlCheck } from "react-icons/sl"
+
+Flanksource Mission Control is an Internal Developer Platform that helps teams improve developer productivity and operational resilience.
+
+<Screenshot img="/img/how-it-works.svg" alt="Mission Control Concepts" shadow="false" size="800px"/>
+
+With Mission Control you can:
+
+* [Catalog](/guide/config-db) and track changes on infrastructure, applications and configuration.
+* [Empower Developers](/guide/playbooks) with self-service playbooks for Day 0-2 operations.
+* [Run Health Checks](/guide/canary-checker) across both cloud-native and legacy infrastructure and applications.
+* [Incrementally Adopt GitOps](/guide/playbooks/actions/gitops) with playbooks that perform Git commits in the background.
+* Aggregate Alerts from [Prometheus](/guide/canary-checker/reference/alert-manager), [Cloudwatch](/canary-checker/reference/aws-cloudwatch), etc.
+* [Visualize Complex Systems](/guide/topology) with a multi-dimensional system topology.
+* [Build Event Driven Control Planes](/guide/playbooks/actions/gitops) with a combination of webhooks, events and GitOps.
+* [Notify People and Systems](/guide/notifications) about changes in health and configuration.
 
 
-  ```
-  {}
-  ```
+
+
+<div className="flex flex-col gap-8 my-10 md:flex-row">
+  <div className="rounded-lg bg-primary-300 p-4 pt-6 pb-8 text-black md:w-1/2" style={{
+    border: "1px solid #0c63db"
+  }}>
+
+    <div className=" w-full justify-center flex mb-4">
+    <SlCheck  size="48px" style={{strokeWidth: "1px"}} color="#0c63db"  />
+    </div>
+    <h2 className="mb-6 text-center font-basier text-2xl font-semibold">When to use Mission Control?</h2>
+    <ul className="ml-4 flex list-disc flex-col gap-y-2 ">
+      <li>You prefer GitOps and Kubernetes</li>
+      <li>You want to adopt GitOps and IDP's incrementally</li>
+      <li>You prefer self-hosted</li>
+      <li>You have a mix of on-premise, cloud and legacy</li>
+    </ul>
+  </div>
+  <div className="rounded-lg border-gray-500 border p-4 pt-6  md:w-1/2" style={{
+    border: "1px solid #cbd5e1"
+  }}>
+
+    <div className="w-full justify-center flex  mb-4">
+  <SlClose   size="48px"   color="#64748b"   />
+  </div>
+
+    <h2 className="mb-6 text-center font-basier text-2xl font-semibold">When NOT to use Mission Control?</h2>
+    <ul className="ml-4  flex list-disc flex-col gap-y-2 ">
+      <li>You prefer ClickOps to GitOps</li>
+      <li>You have dedicated full-stack Platform Engineers</li>
+      <li>You are mostly serverless</li>
+      <li>You want to track team/app maturity</li>
+    </ul>
+  </div>
+</div>
+
+
+## Next Steps
+
+<div className="pretty">
+1. See [How it Works](./how-it-works) to learn how to configure Mission Control using Kubernetes CRD's
+1. See [Local Testing](./installation/local-testing) to setup a Mission Control instance in < 5 minutes on Kind or Minukube
+1. See [Architecture](./architecture) to understand the components and services that make up a Mission Control Installation
+1. See [Deployment Models](/installation/deployment-models) for the different ways of deploying mission control (Self-Hosted, SaaS, Hybrid)
+</div>
+
+## Getting Help
+
+If you have any questions about canary checker:
+
+* Invite yourself to the [CNCF community slack](https://slack.cncf.io/) and join the [#canary-checker](https://cloud-native.slack.com/messages/canary-checker/) channel.
+* Check out the [Youtube Playlist](https://www.youtube.com/playlist?list=PLz4F_KggvA58D6krlw433TNr8qMbu1aIU).
+* File an [issue](https://github.com/flanksource/mission-control/issues/new) - (We do provide user support via Github Issues, so don't worry  if your issue is a "real" bug or not)
+* Email us at [hello@flanksource.com](mailto:hello@flanksource.com)
+
+Your feedback is always welcome!
+
   <Cards>
 
-  
+
     <Card link="/" title="Overview" />
     <Card link="/how-it-works" title="How It Works" icon="concepts"/>
     <Card link="" title="Installation" icon="getting-started"/>
@@ -23,4 +92,3 @@ import {Card, Cards} from '@site/src/components/Card'
     <Card link="/security" title="Security" icon="shield"/>
 
   </Cards>
-  

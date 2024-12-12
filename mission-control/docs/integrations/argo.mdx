@@ -5,7 +5,11 @@ sidebar_custom_props:
   icon: argo
 ---
 
-# ArgoCD Integration
+
+
+import Schema from '@site/modules/mission-control-registry/charts/argocd/values.schema.json'
+
+# ArgoCD
 
 Mission Control integrates with ArgoCD to provide monitoring and relationship tracking of ArgoCD Applications and their associated resources.
 
@@ -25,3 +29,16 @@ For example, if an ArgoCD Application deploys a Deployment and Service, Mission 
 ## Health Status
 
 ArgoCD's built-in health checks are used to determine the overall health status of Applications and their resources. The status is gathered from ArgoCD's native health assessment and surfaced in Mission Control's UI.
+
+
+## Topology
+
+The Argo topology can be used to monitor and manage both an Argo instance and the Argo applications created
+
+1. Install the [mission-control-flux](https://artifacthub.io/packages/helm/flanksource/mission-control-argo) chart
+
+   <Helm chart="mission-control-argo"
+   schema={Schema}
+   createRepo={false}
+   creareNamespace={false}
+    />

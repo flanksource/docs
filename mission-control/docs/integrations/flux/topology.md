@@ -1,5 +1,7 @@
 ---
 title: Topology
+sidebar_custom_props:
+  icon: topology
 ---
 
 The Flux topology provides a comprehensive view of your Flux-based GitOps infrastructure by monitoring and visualizing several key components:

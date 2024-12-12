@@ -1,10 +1,14 @@
 ---
 title: Playbooks
+sidebar_custom_props:
+  icon: playbook
 ---
 # <Icon name="flux"/> Flux Playbooks
 
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import Git from '@site/docs/partials/\_git_all.mdx';
+   import Schema from '@site/modules/mission-control-registry/charts/playbooks-flux/values.schema.json'
+  import OpenAPI from '@site/src/components/OpenAPI'
 
 Mission control enhances a [flux](https://fluxcd.io/flux) deployment with:
 
@@ -40,7 +44,7 @@ The following playbooks enable a ClickOps style of working, but with all changes
 
 ### Just In Time (JIT) Access
 
-Just In Time playbooks provide a mechnism to grant users access to a namespace for a short space of time, this works by creating a new `Rolebinding` resource and inserting it into the kustomization resources, and then after the expiry window deleting the resources from git.
+Just In Time playbooks provide a mechanism to grant users access to a namespace for a short space of time, this works by creating a new `Rolebinding` resource and inserting it into the kustomization resources, and then after the expiry window deleting the resources from git.
 
 This approach provides a single audit trail of who has received access, and limits the need for the control plane to have direct access to update permissions.
 
@@ -74,6 +78,9 @@ To enable the Flux integration you need
      "git.type": "github",
      "git.connection": "connection://mission-control/github",
    }}/>
+
+
+  <OpenAPI schema={Schema}/>
 
 3. Annotate resources with `config.kubernetes.io/origin`
 

@@ -1,5 +1,8 @@
 ---
-title: Catalog
+title: Getting Started
+sidebar_position: 0
+sidebar_custom_props:
+  icon: getting-started
 ---
 import { IoIosHeart } from "react-icons/io";
 
@@ -14,12 +17,37 @@ Mission Control provides built-in support for relating Flux resources to each ot
 - Monitor the overall health of your Flux-based GitOps workflows
 
 
-<img src="/img/helmrelease-graph.png" className="mb-[-12%] rounded-xl shadow-2xl ring-1 ring-gray-900/10"/>
+<Screenshot img="/img/helmrelease-graph.png" alt="Flux Relationship Graph" shadow="false"/>
 
 
 
 ## Next Steps
 
-1. Use self-service [playbooks](./playbooks) to enable a ClickOps experience, while still leveraging the power of GitOps.
-2. Manage and monitor Flux with a [topology](./topology) view, providing the missing GUI for Flux.
-3. [Continuously test your control plane](/canary-checker/tutorials/control-plane-testing) with `kubernetesResource` canaries
+<Cards className="border border-t border-solid border-gray-200">
+
+  <Card size="sm" title="GitOps Actions" icon="git" link="/guide/playbooks/actions/gitops">
+
+          <Tag label="action"/>
+  </Card>
+ <Card size="sm" title="Topology" icon="topology" link="topology">
+      Manage & Monitor flux instances.
+          <Tag label="topology"/>
+  </Card>
+
+
+
+    <Card size="sm" title="GitOps Playbooks" icon="playbook" link="./playbooks">
+    Enable ClickOps workflows backed by git.
+          <Tag label="playbooks"/>
+  </Card>
+
+
+<Card size="sm" title="Control Plane Testing With Canary Checker and Flux" icon="flux" link="/blog//control-plane-testing-part1" >
+     <Tag label="blog"/>
+</Card>
+
+
+
+
+</Cards>
+

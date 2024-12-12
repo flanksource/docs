@@ -6,6 +6,7 @@ import clsx from 'clsx'
 export const Card = ({
   title,
   icon,
+  size = "md",
   height = 'h-32',
   link,
   variant = 'primary',
@@ -15,18 +16,18 @@ export const Card = ({
   if (sidebar) {
     link = sidebar.href;
     if (sidebar.customProps?.icon) {
-      icon = <Icon name={sidebar.customProps?.icon}/>
+      icon = <Icon name={sidebar.customProps?.icon} />
     }
     title = sidebar.label;
   }
-  if (icon && typeof(icon) == 'string') {
-    icon = <Icon name={icon}/>
+  if (icon && typeof (icon) == 'string') {
+    icon = <Icon name={icon} />
   }
   const cardContent = (
-    <div className={clsx(height, "flex border border-slate-200 border-solid hover:border-slate-300 hover:shadow-lg rounded-lg p-5")}>
+    <div className={clsx(height, "flex border border-slate-200 border-solid hover:border-slate-300 hover:shadow-lg rounded-lg", size == "md" && "p-5", size == "sm" && "p-2", size)}>
       <div className="items-start flex-col flex-grow justify-around flex">
         <span className="flex flex-row items-center space-x-1 ">
-          {icon && icon}<span className='text-2xl'>{title}</span>
+          {icon && icon}<span className={clsx(size == "md" && 'text-2xl', size == "sm" && "text-xl")}>{title}</span>
         </span>
         {children}
       </div>

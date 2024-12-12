@@ -4,3 +4,38 @@ title: Azure
 sidebar_custom_props:
   icon: azure
 ---
+
+import Schema from '@site/modules/mission-control-registry/charts/azure/values.schema.json'
+
+
+Mission Control integrates with Azure to scrape and monitor your Azure cloud resources. The integration supports:
+
+- Azure subscription monitoring via subscription ID
+- Organization and tenant-based access
+- Configurable exclusions and transformations
+- Authentication via client ID and secret
+- Custom connection settings
+
+## Getting Started
+
+
+1. Install the [mission-control-azure](https://artifacthub.io/packages/helm/flanksource/mission-control-azure) chart
+
+   <Helm chart="mission-control-azure"
+   createRepo={false}
+   schema={Schema}
+   createNamespace={false}
+   values={{
+    "subscriptionID": "<your-subscription-id>",
+    "tenantID": "<your-tenant-id>"
+   }}/>
+
+
+
+## Next Steps
+
+<Cards>
+    <Card size="sm" title="ScrapeConfig" icon="k8s-customresourcedefinition" link="/guide/config-db/scrapers/azure">
+      <Tag label="CRD"/>
+  </Card>
+</Cards>

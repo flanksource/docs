@@ -2,13 +2,10 @@
 title: How It Works
 sidebar_custom_props:
   icon: concepts
-
 ---
 
 import { GoDotFill } from "react-icons/go";
 
-
-## Configuration Approach
 
 Mission Control manages configuration primarily through Custom Resource Definitions (CRDs). While a postgres database serves as the ultimate source of truth, Kubernetes operators ensure continuous synchronization between the CRDs and the database.  By using the database as the source of truth Mission Control provides the best of both worlds.
 

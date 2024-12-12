@@ -1,6 +1,9 @@
-import Domain from '@site/docs/partials/_domain.mdx'
+---
+title: IAM
+sidebar_custom_props:
+  icon: logos:aws-iam
+---
 
-## Create an IAM Role
 
 Depending on how you want to use Mission Control you need to create an IAM role for mission control to use:
 
@@ -71,13 +74,12 @@ You can also create a new policy with just the permissions required by Mission C
 </details>
 
 ## Configure IAM Roles for Mission Control
-
-<Tabs>
+<Tabs queryString="type">
 <TabItem label="IAM Roles for Service Accounts" value="IRSA">
 
 <Tabs>
 <TabItem label="eksctl" value="cli">
-2. Setup variables
+1. Setup variables
 	```bash
 	# The name of the EKS cluster mission control is being deployed to
 	export CLUSTER= <CLUSTER_NAME>
@@ -87,7 +89,7 @@ You can also create a new policy with just the permissions required by Mission C
 	```
 	<p/>
 
-1. Enable [EKS IAM Roles for Service Accounts](https://eksctl.io/usage/iamserviceaccounts/)
+2. Enable [EKS IAM Roles for Service Accounts](https://eksctl.io/usage/iamserviceaccounts/)
 
    ```bash
    eksctl utils associate-iam-oidc-provider --cluster=$CLUSTER
@@ -95,7 +97,7 @@ You can also create a new policy with just the permissions required by Mission C
 
    <p />
 
-2. Create the IAM Role mappings
+3. Create the IAM Role mappings
 
    ```yaml title="eksctl.yaml"
    iam:
@@ -129,27 +131,6 @@ You can also create a new policy with just the permissions required by Mission C
    eksctl create iamserviceaccount --cluster $CLUSTER -c eksctl.yaml
    ```
 
-3. <Domain />
-
-4. Install Mission Control
-
-	<Helm chart={props.chart} values={props.values} valueFile={`
-	serviceAccount:
-		annotations:
-			# used by mission control for notifications / playbooks
-			eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/MissionControlRole
-
-	canary-checker:
-		serviceAccount:
-			annotations:
-				# used for cloudwatch, S3 and other AWS health checks
-				eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/CanaryCheckerRole
-
-	config-db:
-		serviceAccount:
-			annotations:
-				# used to scrape AWS resources, change history via AWS CloudTrail and cost via Athena
-				eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/ConfigDBRole`}   />
 
 </TabItem>
 </Tabs>
@@ -224,7 +205,7 @@ You can also create a new policy with just the permissions required by Mission C
 
 	</details>
 
-1. Apply the Pod Identities using `eksctl`
+3. Apply the Pod Identities using `eksctl`
 
    ```bash
    eksctl create podidentityassociation  -c eksctl.yaml
@@ -232,10 +213,7 @@ You can also create a new policy with just the permissions required by Mission C
 
    <p />
 
-1. <Domain />
 
-1. Install Mission Control
-   <Helm chart={props.chart} values={props.values} />
 
 </TabItem>
 <TabItem label="Terraform" value="terraform">
@@ -251,10 +229,6 @@ You can also create a new policy with just the permissions required by Mission C
    TF_VAR_role=$CLUSTER  terraform apply
    ```
 	 <p/>
-1. <Domain/>
-
-4. Install Mission Control
-   <Helm chart={props.chart} values={props.values}/>
 
 </TabItem>
 
@@ -284,9 +258,7 @@ You can also create a new policy with just the permissions required by Mission C
 	```
 	<p/>
 
-1. <Domain/>
-2. Install Mission Control
-   <Helm chart={props.chart}  values={props.values}/>
+
 
 </TabItem>
 </Tabs>
@@ -300,11 +272,6 @@ Using Access Keys and Secrets is not recommended from a security perspective
 :::
 
 First we create a secret called `aws` containing the access key and secret.
-
-1. <Domain/>
-
-2. Install Mission Control
-   <Helm chart={props.chart}  values={props.values}/>
 
 1. Create a new IAM User and Access Key
 

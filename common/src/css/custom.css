@@ -63,6 +63,11 @@
   --tw-bg-opacity: 1;
 }
 
+
+.sm p {
+  @apply my-2
+}
+
 li::marker {
   color: #3578e5;
 }

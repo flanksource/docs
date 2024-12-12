@@ -3,6 +3,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Link from '@docusaurus/Link';
 import { useState, useRef } from "react"
+import OpenAPISchema from './OpenAPI';
 
 
 function generateCli(
@@ -60,6 +61,7 @@ export default function Helm({
   values = {},
   valueFile = null,
   args = [],
+  schema,
   properties = null
 }) {
 
@@ -164,17 +166,19 @@ spec:
         name: ${repoName}
         namespace: ${namespace}
       interval: 1m
-  values:
   `}
+          {valueFile || values && "values:\n"}
           {valueFile && valueFile.replace(/^/gm, '   ')}
           {values && Object.keys(values).map((k) => {
-            return `\n   ${k}: ${values[k]}`
+            return `    ${k}: ${values[k]}\n`
           }).join("")}
         </CodeBlock>
       </TabItem>
     </Tabs >
 
-    {(chart == "mission-control" || chart == "mission-control-agent") &&
+
+    {schema && <OpenAPISchema schema={schema} />}
+    {!schema && (chart == "mission-control" || chart == "mission-control-agent") &&
 
       <>See < Link to={`/reference/helm/${chart}`}>values.yaml</Link ></>
 

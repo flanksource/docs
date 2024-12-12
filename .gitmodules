@@ -17,3 +17,9 @@
 [submodule "modules/mission-control-registry"]
 	path = modules/mission-control-registry
 	url = https://github.com/flanksource/mission-control-registry.git
+[submodule "mission-control-chart"]
+	path = mission-control-chart
+	url = https://github.com/flanksource/mission-control-chart.git
+[submodule "modules/mission-control-chart"]
+	path = modules/mission-control-chart
+	url = https://github.com/flanksource/mission-control-chart.git

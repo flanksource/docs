@@ -1,13 +1,15 @@
 ---
-title: Setup
-
-sidebar_position: 1
+title: Getting Started
+sidebar_position: 0
+hide_title: true
+sidebar_custom_props:
+  icon: getting-started
 ---
 
 import { MenuItem } from '@site/src/components/Menu';
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 
-
+import Schema from '@site/modules/mission-control-registry/charts/kubernetes/values.schema.json'
 
 Mission Control provides comprehensive monitoring and management capabilities for your Kubernetes clusters. It automatically discovers and tracks:
 
@@ -30,6 +32,7 @@ This enables you to:
 1. Install the Kubernetes  chart
 
   <Helm chart="mission-control-kubernetes"
+  schema={Schema}
   createNamespace={false}
   createRepo={true}
   values={{
@@ -38,12 +41,38 @@ This enables you to:
 
 
 
-1. Install common playbooks for interacting with Kubernetes items
+## Next Steps
 
 
-## Learn More
 
-- Kubernetes Scraper [kubernetes](/config-db/scrapers/kubernetes)
-- [<iconify-icon icon="lets-icons:external"/> Auto Merging PRs](https://jhale.dev/posts/auto-merging-prs/) by @jhale, has a run-down of using Github Actions to automerge, with some gotchas
-- [<iconify-icon icon="lets-icons:external"/> trivy](https://trivy.dev/) - A mis-configuration, secrets and compliance scanner with good support for Kubernetes
-- [<iconify-icon icon="lets-icons:external"/> bulldozer](https://github.com/palantir/bulldozer) and [ <iconify-icon icon="lets-icons:external"/> policy-bot](https://github.com/palantir/policy-bot) for auto-merging PR's using customizable rules and policies
+
+<Cards className="border border-t border-solid border-gray-200">
+
+  <Card size="sm" title="Scraper" icon="k8s-customresourcedefinition" link="/guide/config-db/scrapers/kubernetes">
+          <Tag label="CRD"/>
+  </Card>
+
+   <Card size="sm" title="Resource Check" icon="k8s" link="/guide/canary-checker/reference/kubernetes-resource">
+      Synthetic infrastructure checks
+      <Tag label="health-check"/>
+  </Card>
+
+    <Card size="sm" title="Health" icon="k8s" link="/guide/canary-checker/reference/kubernetes">
+      Polls the health of selected resources
+      <Tag label="health-check"/>
+  </Card>
+
+
+  <Card size="sm" title="Action" icon="k8s-pod" link="/guide/playbooks/actions/pod">
+  Run one-off pods in a playbook
+          <Tag label="action"/>
+  </Card>
+
+    <Card size="sm" title="Playbook" icon="playbook" link="./playbooks">
+    Playbooks for interacting with clusters.
+          <Tag label="playbooks"/>
+  </Card>
+
+</Cards>
+
+
