@@ -5,7 +5,7 @@ title: AWS
 import AwsIam from "../installation/_aws_iam.mdx"
 
 
-The AWS bundle installs a catalog [scraper](/config-db/scrapers/aws) that:
+The AWS bundle installs a catalog [scraper](/guide/config-db/scrapers/aws) that:
 
 - Scrapes AWS Resources and detects changes in the resource definition
 - Ingests changes from CloudTrail
@@ -57,7 +57,7 @@ The following table lists the configurable parameters and their default values:
 | `cloudtrail.exclude` | List of excluded items for CloudTrail. | [] |  |
 | `compliance` | Enable or disable compliance. | true |  |
 | `costReporting.enabled` | Enable or disable cost reporting. | false |  |
-| `costReporting.database` | Cost reporting database. | "" |  |
+| `costReporting.database` |Athena database. | "" |  |
 | `costReporting.region` | Cost reporting region. | "" |  |
 | `costReporting.s3BucketPath` | S3 bucket path for cost reporting. | "" |  |
 | `costReporting.table` | Table for cost reporting. | "" |  |

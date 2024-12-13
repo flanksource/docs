@@ -52,9 +52,9 @@ spec:
 | Field        | Description                                                                                                                                                    | Scheme                               | Required |
 | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | -------- |
 | **`script`** | Script can be a inline script or a path to a script that needs to be executed. On windows executed via powershell and in darwin and Linux executed using bash. | `Path`, `Bash`or`Powershell`         | Yes      |
-| `display`    | Template to display server response in text (overrides default bar format for UI)                                                                              | [_Template_](../concepts/templating) |          |
+| `display`    | Template to display server response in text (overrides default bar format for UI)                                                                              | [_Template_](/guide/topology/concepts/templating) |          |
 | `labels`     | Labels for the check                                                                                                                                           | Labels                               |          |
-| `transform`  | Template to transform results by excluding or including certain fields in result                                                                               | [_Template_](../concepts/templating) |          |
+| `transform`  | Template to transform results by excluding or including certain fields in result                                                                               | [_Template_](/guide/topology/concepts/templating) |          |
 
 ## Results
 

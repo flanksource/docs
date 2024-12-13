@@ -5,9 +5,9 @@ sidebar_custom_props:
   icon: hugeicons:chart-relationship
 ---
 
-:::tip Registry
+:::tip Integarations
 
-The [registry](/integration/registry) charts include many common relationships for Argo, Flux, etc out of the box.
+The integration [charts](/integration) include many common relationships for Argo, Flux, etc out of the box.
 
 :::
 

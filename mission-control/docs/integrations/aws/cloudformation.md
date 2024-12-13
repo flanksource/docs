@@ -53,4 +53,4 @@ spec:
 
 ## Learn More
 
-- [AWS](/config-db/scrapers/aws) Scraper
+- [AWS](/guide/config-db/scrapers/aws) Scraper

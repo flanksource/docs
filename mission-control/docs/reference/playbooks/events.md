@@ -54,17 +54,17 @@ Component events relate to activities on Topology components.
 | `warning`   | when a component has warning       |
 | `error`     | when a component has error         |
 
-```yaml title="notify-unhealthy-database-component.yaml"
+```yaml title="notify-unhealthy-/guide/canary-checker/reference/database-component.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Playbook
 metadata:
-  name: notify-unhealthy-database-component
+  name: notify-unhealthy-/guide/canary-checker/reference/database-component
 spec:
-  description: Notify when a database component goes unhealthy
+  description: Notify when a /guide/canary-checker/reference/database component goes unhealthy
   on:
     component:
       - event: unhealthy
-        filter: component.type == 'database'
+        filter: component.type == '/guide/canary-checker/reference/database'
         labels:
           env: production
   actions:

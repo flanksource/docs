@@ -11,32 +11,32 @@ export function ConfigTransform({ rows, ...props }) {
     {
       field: 'expr',
       description: 'Specify Cel expression',
-      scheme: '[CEL](/config-db/concepts/tranform#scripting)',
+      scheme: '[CEL](/guide/config-db/concepts/tranform#scripting)',
     },
     {
       field: 'changes',
       description: 'Apply transformation on the scraped changes',
-      scheme: '[[]Changes](/config-db/concepts/tranform#changes)',
+      scheme: '[[]Changes](/guide/config-db/concepts/tranform#changes)',
 
     },
     {
       field: 'exclude',
       description:
         'Fields to remove from the config, useful for removing sensitive data and fields that change often without a material impact i.e. Last Scraped Time',
-      scheme: '[[]Exclude](/config-db/concepts/tranform#exclusion)',
+      scheme: '[[]Exclude](/guide/config-db/concepts/tranform#exclusion)',
 
     },
     {
       field: 'mask',
       description:
         'Specify configurations to replace sensitive fields with hash functions or static string.',
-      scheme: '[[]Mask](/config-db/concepts/tranform#mask)',
+      scheme: '[[]Mask](/guide/config-db/concepts/tranform#mask)',
 
     },
     {
       field: 'relationship',
       description: 'Form relationships between config items using selectors',
-      scheme: '[[]Relationships](/config-db/concepts/relationships)',
+      scheme: '[[]Relationships](/guide/config-db/concepts/relationships)',
 
     }
   ]

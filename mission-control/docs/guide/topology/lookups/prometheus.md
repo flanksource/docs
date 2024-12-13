@@ -34,7 +34,7 @@ spec:
 
 | Field       | Description                       | Scheme                             | Required |
 | ----------- | --------------------------------- | ---------------------------------- | -------- |
-| `display`   | Template to display the result in | [Template](../concepts/templating) |          |
+| `display`   | Template to display the result in | [Template](/guide/topology/concepts/templating) |          |
 | **`host`**  | Address of the Prometheus server  | string                             | Yes      |
 | **`query`** | PromQL query                      | string                             | Yes      |
 

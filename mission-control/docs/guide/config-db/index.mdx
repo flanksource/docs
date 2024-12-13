@@ -35,9 +35,9 @@ Under the hood the catalog is powered by [github.com/flanksource/config-db](http
 
 The catalog is comprised of:
 
-* **Config Items** are individual resources e.g. `Pod`, `EBS`, `IAM Role`, `postgres.conf` scraped from external sources like  [AWS](/config-db/scrapers/aws), [Kubernetes](/config-db/scrapers/kubernetes), [Azure](/config-db/scrapers/azure), [Azure Devops](/config-db/scrapers/azure-devops) , [Github](/config-db/scrapers/github)
-* **Changes** recorded against config items either through automatic change detection (diffs) or from sources like [Cloud Trail](/config-db/scrapers/aws#cloudtrail) or [Kubernetes Events](/config-db/scrapers/kubernetes#events)
-* **Insights** recorded against config items from external sources like [AWS Trusted Advisor](/config-db/scrapers/aws#trusted-advisor) or [Trivy](/config-db/scrapers/trivy)
+* **Config Items** are individual resources e.g. `Pod`, `EBS`, `IAM Role`, `postgres.conf` scraped from external sources like [AWS](/guide/config-db/scrapers/aws), [Kubernetes](/guide/config-db/scrapers/kubernetes), [Azure](/guide/config-db/scrapers/azure), [Azure DevOps](/guide/config-db/scrapers/azure-devops), [GitHub](/guide/config-db/scrapers/github)
+* **Changes** recorded against config items either through automatic change detection (diffs) or from sources like [CloudTrail](/guide/config-db/scrapers/aws#cloudtrail) or [Kubernetes Events](/guide/config-db/scrapers/kubernetes#events)
+* **Insights** recorded against config items from external sources like [Trusted Advisor](/guide/config-db/scrapers/aws#trusted-advisor) or [Trivy](/guide/config-db/scrapers/trivy)
 * **Relationships** between configuration items
 
 
@@ -48,12 +48,12 @@ Config items, insights and change are ingested using scrapers which are jobs tha
 <Step step={1} name="Native" style="list">
 
 
-Native scrapers ingest config items from common sources like [AWS](/config-db/scrapers/aws), [Kubernetes](/config-db/scrapers/kubernetes), [Azure](/config-db/scrapers/azure) and automatically add metadata and relationships
+Native scrapers ingest config items from common sources like [AWS](/guide/config-db/scrapers/aws), [Kubernetes](/guide/config-db/scrapers/kubernetes), [Azure](/guide/config-db/scrapers/azure) and automatically add metadata and relationships
 </Step>
 
 <Step step={2} name="Custom" style="list">
 
-Custom scrapers ingest raw data from [Files](/config-db/scrapers/custom/file) and [SQL queries](/config-db/scrapers/custom/sql) the results of which need to mapped to metadata and relationships manually.
+Custom scrapers ingest raw data from [File](/guide/config-db/scrapers/file) and [SQL](/guide/config-db/scrapers/sql) queries the results of which need to mapped to metadata and relationships manually.
 
 </Step>
 

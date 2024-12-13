@@ -15,13 +15,13 @@ Mission Control does not perform low-level reconciliation. It is built for meta-
 
 Argo also support custom Lua actions that apply changes directly to the Kubernetes API, but lacks the ability to push these back to git.
 
-Mission Control offers a [GitOps](/playbooks/actions/gitops) playbook action for creating new resources (e.g., Scaffolding) and updating existing files in Git repos via Pull Request. This can be used to update YAML files monitored by Flux/Argo or other files managed by Terraform, etc.
+Mission Control offers a [GitOps](/guide/playbooks/actions/gitops) playbook action for creating new resources (e.g., Scaffolding) and updating existing files in Git repos via Pull Request. This can be used to update YAML files monitored by Flux/Argo or other files managed by Terraform, etc.
 
 ## Health
 
 Flux relies on the status of Kubernetes objects or Helm-based pod health checks. Argo supports custom health checks via Lua scripts for many common resources.
 
-Mission Control offers enhanced health tracking using a combination of status, Lua, Go, and active/passive [health checks](/canary-checker/).
+Mission Control offers enhanced health tracking using a combination of status, Lua, Go, and active/passive [health checks](/guide/canary-checker/).
 
 Mission Control tracks each catalog item for:
 
@@ -29,7 +29,7 @@ Mission Control tracks each catalog item for:
 - Status (resource-specific status such as `Running`, `Terminating`, `Issuing`)
 - Readiness (e.g., whether the resource is still reconciling/provisioning or is in its final state)
 
-These combinations enable very fine-grained [notifications](/notifications) and filtering.
+These combinations enable very fine-grained [notifications](/guide/notifications) and filtering.
 
 ## Change / Drift Detection
 

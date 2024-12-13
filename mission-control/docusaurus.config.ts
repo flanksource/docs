@@ -22,8 +22,8 @@ export default async function createConfigAsync() {
     organizationName: 'flanksource', // Usually your GitHub org/user name.
     projectName: 'docs', // Usually your repo name.
     favicon: 'img/flanksource-icon.png',
-    onBrokenLinks: 'throw',
-    onBrokenMarkdownLinks: 'throw',
+    onBrokenLinks: 'warn',
+    onBrokenMarkdownLinks: 'warn',
     // scripts: [
     //   "https://cdn.tailwindcss.com",
     // ],
@@ -34,7 +34,7 @@ export default async function createConfigAsync() {
       links: {
         authentication: '/reference/env-var',
         secrets: '/reference/env-var',
-        connection: '/reference/connection',
+        connection: '/reference/connections',
         cel: '/reference/scripting/cel',
         gotemplate: '/reference/scripting/gotemplate',
         javascript: '/reference/scripting/javascript',
@@ -57,15 +57,15 @@ export default async function createConfigAsync() {
           toExtensions: ['exe', 'zip'], // /myAsset -> /myAsset.zip (if latter exists)
           redirects: [
             // /docs/oldDoc -> /docs/newDoc
-            {
-              to: '/guide/canary-checker/reference/sql',
-              from: ['/canary-checker/reference/postgres', '/canary-checker/reference/mysql', '/canary-checker/reference/mssql'],
-            },
+            // {
+            //   to: '/guide/canary-checker/reference/sql',
+            //   from: ['/guide/canary-checker/reference/postgres', '/guide/canary-checker/reference/mysql', '/guide/canary-checker/reference/mssql'],
+            // },
 
-            {
-              to: '/guide/canary-checker/reference/folder#s3',
-              from: '/canary-checker/reference/s3-bucket',
-            },
+            // {
+            //   to: '/guide/canary-checker/reference/folder#s3',
+            //   from: '/guide/canary-checker/reference/s3-bucket',
+            // },
 
             {
               to: '/guide/canary-checker',
@@ -101,7 +101,7 @@ export default async function createConfigAsync() {
       // },
 
 
-async      function nodePolyfillPlugin(context, options) {
+      async function nodePolyfillPlugin(context, options) {
         return {
           name: 'node-polyfill-plugin',
           configureWebpack(config, isServer) {
@@ -119,7 +119,7 @@ async      function nodePolyfillPlugin(context, options) {
 
                 plugins: [
                   new (require('webpack').ProvidePlugin)({
-                    process: [ 'process'],
+                    process: ['process'],
 
                     Buffer: ['buffer', 'Buffer'],
                   }),

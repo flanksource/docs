@@ -4,7 +4,7 @@ title: Kubernetes
 
 ## Setup
 
-The Kubernetes helm chart installs a [catalog scraper](/config-db/scrapers/kubernetes) and a [topology](/topology/examples/kubernetes) for a kubernetes
+The Kubernetes helm chart installs a [catalog scraper](/guide/config-db/scrapers/kubernetes) and a [topology](/guide/topology/examples/kubernetes) for a kubernetes
 
 ```sh
 helm repo add flanksource https://flanksource.github.io/charts
@@ -72,7 +72,7 @@ The following table lists the configurable parameters and their default values:
 | `scraper.severityKeywords.error`    | Keywords indicating error severity.                                                                                                       | `["failed", "error"]`                                                                                                                                                                                                                                                              |
 | `scraper.severityKeywords.warn`     | Keywords indicating warning severity.                                                                                                     | `["backoff", "nodeoutofmemory"]`                                                                                                                                                                                                                                                   |
 | `scraper.retention.changes`         | Retention changes.                                                                                                                        | `[{"name": "ReconciliationSucceeded", "count": 10}]`                                                                                                                                                                                                                               |
-| `scraper.relationships`             | Kubernetes Relationships to create via name, namespace and kind. [Kubernetes Relationships](/config-db/scrapers/kubernetes#relationships) | Helm and Argo                                                                                                                                                                                                                                                                      |
+| `scraper.relationships`             | Kubernetes Relationships to create via name, namespace and kind. [Kubernetes Relationships](/guide/config-db/scrapers/kubernetes#relationships) | Helm and Argo                                                                                                                                                                                                                                                                      |
 
 ### Playbooks
 

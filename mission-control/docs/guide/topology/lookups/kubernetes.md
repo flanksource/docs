@@ -12,14 +12,14 @@ The Kubernetes component lookup fetches kubernetes resources to be used as compo
 
 | Field     | Description                                                                         | Scheme                                  | Required |
 | --------- | ----------------------------------------------------------------------------------- | --------------------------------------- | -------- |
-| display   | Template to display query results in text (overrides default bar format for UI)     | [_Template_](../concepts/templating)    |          |
+| display   | Template to display query results in text (overrides default bar format for UI)     | [_Template_](/guide/topology/concepts/templating)    |          |
 | ignore    | Ignore the specified resources from the fetched resources. Can be a glob pattern.   | _[]string_                              |          |
 | **kind**  | Specifies the kind of Kubernetes object for interaction                             | _string_                                | Yes      |
 | labels    | Labels for the check                                                                | _string_                                |          |
 | namespace | Specifies namespace for Kubernetes object                                           | [_ResourceSelector_](#resourceselector) |          |
 | ready     | Boolean value of true or false to query and display resources based on availability | _bool_                                  |          |
 | resource  | Queries resources related to specified Kubernetes object                            | [_ResourceSelector_](#resourceselector) |          |
-| transform | Template to transform results to                                                    | [_Template_](../concepts/templating)    |          |
+| transform | Template to transform results to                                                    | [_Template_](/guide/topology/concepts/templating)    |          |
 
 ## ResourceSelector
 

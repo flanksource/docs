@@ -111,7 +111,7 @@ To enable the Flux integration you need
 
 ## Learn More
 
-- Playbook [exec](/playbooks/actions/exec) and [gitops](/playbooks/actions/gitops) actions
+- Playbook [exec](/guide/playbooks/actions/exec) and [gitops](/guide/playbooks/actions/gitops) actions
 - [<iconify-icon icon="lets-icons:external"/> Auto Merging PRs](https://jhale.dev/posts/auto-merging-prs/) by @jhale, has a run-down of using Github Actions to automerge, with some gotchas
 - [<iconify-icon icon="lets-icons:external"/> trivy](https://trivy.dev/) - A mis-configuration, secrets and compliance scanner with good support for Kubernetes
 - [<iconify-icon icon="lets-icons:external"/> bulldozer](https://github.com/palantir/bulldozer) and [<iconify-icon icon="lets-icons:external"/> policy-bot](https://github.com/palantir/policy-bot) for auto-merging PR's using customizable rules and policies

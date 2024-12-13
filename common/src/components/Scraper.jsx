@@ -64,7 +64,7 @@ const commonsRows = [
   {
     field: 'transform',
     description: "Transform configs after they've been scraped",
-    scheme: '[`Transform`](/config-db/concepts/transform)'
+    scheme: '[`Transform`](/guide/config-db/concepts/transform)'
   },
   {
     field: 'properties',
@@ -79,7 +79,7 @@ const commonsRows = [
   {
     field: 'tags',
     description: 'Tags for each config item. Max allowed: 5',
-    scheme: '[`[]ConfigTag`](/config-db/concepts/tags)'
+    scheme: '[`[]ConfigTag`](/guide/config-db/concepts/tags)'
   }
 ]
 

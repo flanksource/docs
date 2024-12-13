@@ -9,7 +9,7 @@ sidebar_custom_props:
 import Schema from '@site/modules/mission-control-registry/charts/aws/values.schema.json'
 
 
-The AWS chart catalog [scraper](/config-db/scrapers/aws) that:
+The AWS chart catalog [scraper](/guide/config-db/scrapers/aws) that:
 
 - Scrapes AWS Resources and detects changes in the resource definition
 - Ingests changes from CloudTrail

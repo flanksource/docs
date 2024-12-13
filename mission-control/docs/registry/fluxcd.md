@@ -4,7 +4,7 @@ title: FluxCD
 
 ## Setup
 
-The FluxCD helm chart installs a [topology](/topology) for FluxCD
+The FluxCD helm chart installs a [topology](/guide/topology) for FluxCD
 
 ```bash
 helm repo add flanksource https://flanksource.github.io/charts
