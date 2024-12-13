@@ -123,6 +123,7 @@ footer {
 .blog-list-page {
   h2 {
     font-size: 1.25em;
+    margin-bottom: 6px;
     a {
       color: var(--ifm-link-color);
       text-decoration: none;

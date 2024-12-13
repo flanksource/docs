@@ -7,7 +7,7 @@ export const Card = ({
   title,
   icon,
   size = "md",
-  height = 'h-32',
+  height = 'min-h-20 md:min-h-32',
   link,
   variant = 'primary',
   sidebar,
@@ -24,7 +24,7 @@ export const Card = ({
     icon = <Icon name={icon} />
   }
   const cardContent = (
-    <div className={clsx(height, "flex border border-slate-200 border-solid hover:border-slate-300 hover:shadow-lg rounded-lg", size == "md" && "p-5", size == "sm" && "p-2", size)}>
+    <div className={clsx(height, "flex border border-slate-200 border-solid hover:border-slate-300 hover:shadow-lg rounded-lg", size == "md" && "p-2 sm:p-5", size == "sm" && "p-1 sm:p-2", size)}>
       <div className="items-start flex-col flex-grow justify-around flex">
         <span className="flex flex-row items-center space-x-1 ">
           {icon && icon}<span className={clsx(size == "md" && 'text-2xl', size == "sm" && "text-xl")}>{title}</span>
@@ -43,7 +43,7 @@ export const Card = ({
 };
 export const Cards = ({ columns = 3, children }) => {
   return (
-    <div className="text-slate-900 grid grid-cols-3 flex gap-x-4 gap-y-4 ">
+    <div className="text-slate-900 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-4">
       {children}
     </div>
   );

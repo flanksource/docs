@@ -41,6 +41,15 @@ The following playbooks are available for use:
 
 ## Getting Started
 
+
+:::info Prerequisites
+To enable the Kubernetes integration you need:
+
+- Mission Control [installed](/installation/)
+- [kubectl](/installation/saas/kubectl) access to the Mission Control instance
+:::
+
+
 1. Install the `mission-control-playbooks-kubernetes` helm chart.
 
 If you are using the SaaS, then this needs to be installed on the SaaS vCluster using [kubectl](/installation/saas/kubectl)

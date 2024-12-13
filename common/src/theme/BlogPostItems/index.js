@@ -15,8 +15,7 @@ export default function BlogPostItems({
           <BlogPostProvider
             key={BlogPostContent.metadata.permalink}
             content={BlogPostContent}>
-
-            <BlogPostCard url={BlogPostContent.metadata.permalink} className="w-full" />
+            <BlogPostCard post={BlogPostContent} className="w-full" />
 
           </BlogPostProvider>
         ))}

@@ -1,5 +1,5 @@
 ---
-title: Canary Checker v1.1.0 Release
+title: 🎉 Canary Checker v1.1.0 Released
 slug: canary-checker-v1.1.0
 authors: [moshe]
 tags: [release, canary-checker]
