@@ -62,13 +62,13 @@ Health checks can be associated with components in a [topology](topology/concept
 ![](./images/topology-health-checks.png)
 </Step>
 
-<Step step={1} name="Prometheus" style="list">
+<Step step={3} name="Prometheus" style="list">
 
 [Prometheus](canary-checker/concepts/metrics) metrics are exposed from health checks to provide high level visibility into latency, error rates and other metrics. This allows monitoring the health of services and applications using existing Prometheus alerts and [Grafana](canary-checker/concepts/metrics/grafana) dashboards.
 
 </Step>
 
-<Step step={1} name="Synthetic" style="list">
+<Step step={4} name="Synthetic" style="list">
 Synthetic checks are periodically run by canary checker to directly test services/applications by generating requests using http, sql, mongo, redis, ldap, etc.
 
 </Step>
