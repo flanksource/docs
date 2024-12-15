@@ -1,7 +1,8 @@
 ---
 title: ContainerD / Docker
 sidebar_class_name: beta
-
+sidebar_custom_props:
+  icon: containerd
 ---
 
 # <Icon name="containerd" /> ContainerD / Docker
@@ -14,7 +15,7 @@ The containerd and docker health checks require access to a working socket that 
 
 ## Pulling images
 
-```yaml file=../../../modules/canary-checker/fixtures/minimal/containerd-pull.yaml title='containerd-pull.yaml'
+```yaml file=<rootDir>/modules/canary-checker/fixtures/minimal/containerd-pull.yaml title='containerd-pull.yaml'
 ```
 
 <HealthCheck name="containerd"  rows={[
@@ -54,7 +55,7 @@ The containerd and docker health checks require access to a working socket that 
 
 This check pushes a Docker image to a specified registry using containerd.
 
-```yaml file=../../../modules/canary-checker/fixtures/minimal/containerd-push.yaml title='containerd-push.yaml'
+```yaml file=<rootDir>/modules/canary-checker/fixtures/minimal/containerd-push.yaml title='containerd-push.yaml'
 ```
 
 

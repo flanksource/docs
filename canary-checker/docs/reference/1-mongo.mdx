@@ -1,12 +1,14 @@
 ---
 title: MongoDB
+sidebar_custom_props:
+  icon: mongo
 ---
 
 # <Icon name="mongo" /> MongoDB
 
 The Mongo check tries to connect to a specified Mongo Database to ensure connectivity.
 
-```yaml title="icmp.yaml"  file=../../../modules/canary-checker/fixtures/datasources/mongo_pass.yaml
+```yaml title="icmp.yaml"  file=<rootDir>/modules/canary-checker/fixtures/datasources/mongo_pass.yaml
 ```
 <HealthCheck name="mongo" connection="url" rows={[
   {field: "url", description: "MongoDB [connection-string](https://docs.mongodb.com/manual/reference/connection-string/) e.g.  `mongodb://:27017/?authSource=admin`", required: true},

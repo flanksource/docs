@@ -6,6 +6,7 @@ description: Fields available during change filtering / mapping
 | Field                | Description                             | Scheme               |
 | -------------------- | --------------------------------------- | -------------------- |
 | `action`             | Action of the change                    | `delete` or `ignore` |
+| `config`             | Config item the change is for           | `string`             |
 | `change_type`        | Type of the change                      | `string`             |
 | `config_type`        | Type of the config                      | `string`             |
 | `config`             | Config Source                           | `JSON`               |

@@ -1,0 +1,53 @@
+---
+title: Wait For
+sidebar_custom_props:
+  icon: hourglass
+---
+
+Kubernetes clusters and similar dynamic systems may experience temporary discrepancies between the actual and intended state of resources.
+For example, a deployment could momentarily appear unhealthy during a scaling operation.
+If alerts are configured for `config.unhealthy` events, these transient state fluctuations might lead to an overwhelming number of unnecessary notifications.
+
+To address this issue, you can utilize the waitFor parameter.
+This feature allows you to define a delay before sending notifications for specific events.
+After an event occurs, the system rechecks its status following the specified wait period. Only if the undesired state persists does a notification trigger.
+:::info
+`waitFor` is only applicable on health related events
+:::
+
+This approach helps reduce unnecessary notifications caused by transient state changes, ensuring you're alerted only to persistent issues.
+
+
+```yaml title='notify-unhealthy-deployments.yaml' {8}
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: deployment-unhealthy-alerts
+spec:
+  events:
+    - config.unhealthy
+  waitFor: 2m
+  filter: config.type == 'Kubernetes::Deployment'
+  to:
+    email: alerts@acme.com
+```
+
+:::warning Handling Scrape Lag
+`waitFor` re-evaluates the health based on the current state in config-db, in some circumstances there can be a lag between when a change occurs and the state reflects in config-db which can lead to false positives.
+
+`waitForEvalPeriod` forces an incremental scrape of the resource before sending a notification, it waits for up to this period for a scrape to complete before sending a notification.
+
+```yaml title=waitForEvalPeriod.yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: deployment-unhealthy-alerts
+spec:
+  events:
+    - config.unhealthy
+  waitFor: 5m
+  //highlight-next-line
+  waitForEvalPeriod: 30s
+```
+
+:::

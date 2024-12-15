@@ -21,8 +21,8 @@ This page defines the specification for Topology. There are few samples in the e
 | `schedule`   | Set schedule to update topology at the set interval.                           | `string`                                           |          |
 | `text`       | Set description or text of choice pertaining to topology.                      | `string`                                           |          |
 | `tooltip`    | Set tooltip outlining information pertaining to the topology.                  | `string`                                           |          |
-| `type`       | Set type of topology e.g. service, API, website, library, database, etc.       | `string`                                           |          |
-| `push`       | Set type of topology e.g. service, API, website, library, database, etc.       | [`HTTPConnection`](/reference/connections/http)                                           |          |
+| `type`       | Set type of topology e.g. service, API, website, library, /guide/canary-checker/reference/database, etc.       | `string`                                           |          |
+| `push`       | Set type of topology e.g. service, API, website, library, /guide/canary-checker/reference/database, etc.       | [`HTTPConnection`](/reference/connections/http)                                           |          |
 
 ### ID Selector
 
@@ -57,7 +57,7 @@ one for each cluster tag value (aws, azure, gcp).
 This allows you to define a single topology that can automatically generate multiple topologies & stay up-to-date and aligned as your infrastructure grows and new clusters or environments are added without having to ever update the topology.
 
 :::info
-It is important to understand that group by tag works only when a toplogy is built from catalog & config lookups/selectors.  
+It is important to understand that group by tag works only when a toplogy is built from catalog & config lookups/selectors.
 Config tags are crucial to the functioning of grouping.
 :::
 
@@ -77,7 +77,7 @@ Config tags are crucial to the functioning of grouping.
   ]}
 />
 
-```yaml file=../../../modules/canary-checker/fixtures/topology/kubernetes-cluster-group-by.yaml
+```yaml file=<rootDir>/modules/canary-checker/fixtures/topology/kubernetes-cluster-group-by.yaml
 
 ```
 
@@ -104,7 +104,7 @@ Components are the building blocks of a Topology. The component specification pr
 | `relationships` | Specify relationship of component                                                                                                                                    | [`[]RelationshipSpec`](#relationshipspec)    |          |
 | `selectors`     | Specify component for topology based on `fieldSelector` and `labelSelector`                                                                                          | [`[]ResourceSelector`](../resource-selector) |          |
 | `tooltip`       | Set tooltip outlining information pertaining to the component                                                                                                        | `string`                                     |          |
-| `type`          | Set type of component e.g. service, API, website, library, database, etc.                                                                                            | `string`                                     |          |
+| `type`          | Set type of component e.g. service, API, website, library, /guide/canary-checker/reference/database, etc.                                                                                            | `string`                                     |          |
 
 ### RelationshipSpec
 

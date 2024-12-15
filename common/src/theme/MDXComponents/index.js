@@ -11,6 +11,7 @@ import Admonition from '@theme/Admonition'
 import Mermaid from '@theme/Mermaid'
 import Icon from '@site/src/components/Icon'
 import Menu from '@site/src/components/Menu'
+import Tag from '@theme/Tag'
 import { Asciinema } from '@site/src/components/Asciinema'
 import {
   Health,
@@ -42,8 +43,11 @@ import { Advanced } from '@site/src/components/Badges'
 import TerminalOutput from "@site/src/components/TerminalOutput"
 import Tooltip from '@site/src/components/Tooltip'
 import { Icon as IIcon } from '@iconify-icon/react';
+import { Card, Cards } from '@site/src/components/Card'
 const MDXComponents = {
   Health: Health,
+  Card: Card,
+  Cards: Cards,
   TerminalOutput: TerminalOutput,
   Unhealthy: Unhealthy,
   Healthy: Healthy,
@@ -68,6 +72,7 @@ const MDXComponents = {
   Highlight: Highlight,
   Step: Step,
   head: MDXHead,
+  Tag: Tag,
   code: MDXCode,
   a: MDXA,
   Tabs: Tabs,

@@ -1,4 +1,4 @@
-import Domain from '../partials/_domain.mdx'
+import Domain from '@site/docs/partials/_domain.mdx'
 
 ## Create an IAM Role
 
@@ -243,7 +243,7 @@ You can also create a new policy with just the permissions required by Mission C
 
 2. Create `main.tf`
 
-   ```hcl title="main.tf"  file=../partials/_pod_identity.tf
+   ```hcl title="main.tf"  file=<rootDir>/docs/partials/_pod_identity.tf
    ```
 	<p/>
 3. Apply the terraform
@@ -271,7 +271,7 @@ You can also create a new policy with just the permissions required by Mission C
 
 1. Create a cloudformation template
 
-   ```yaml title="mission-control-iam-cloudformation.yaml"  file=../partials/_pod_identity.yaml
+   ```yaml title="mission-control-iam-cloudformation.yaml"  file=<rootDir>/docs/partials/_pod_identity.yaml
    ```
 	 <p/>
 

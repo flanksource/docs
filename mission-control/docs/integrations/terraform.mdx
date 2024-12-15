@@ -1,0 +1,64 @@
+---
+draft: true
+title: Terraform
+sidebar_custom_props:
+  icon: terraform
+---
+# Terraform Integration
+
+The Terraform integration allows Mission Control to scrape and analyze your Terraform state files to build relationships between your infrastructure resources. The scraper examines Terraform state files to extract resource information and establish connections between different AWS resources.
+
+## How It Works
+
+The Terraform scraper performs the following key functions:
+
+1. **State File Processing**:
+   - Loads Terraform state files from specified locations
+   - Parses the JSON state data to extract resource information
+   - Maintains the state file lineage as a unique identifier
+
+2. **Resource Relationship Mapping**:
+   - Identifies managed AWS resources in the Terraform state
+   - Extracts ARN (Amazon Resource Name) information from resource attributes
+   - Creates relationships between Terraform configurations and AWS resources using ARNs
+
+3. **Configuration Tracking**:
+   - Creates unique configurations for each Terraform state
+   - Masks sensitive attributes in the state data
+   - Maintains aliases and identifiers for tracking purposes
+
+## Example Configuration
+
+```yaml
+spec:
+  terraform:
+    - name: "{{.path}}"  # Uses the state file path as the configuration name
+      state:
+        path: "/path/to/terraform/states"  # Directory containing terraform state files
+```
+
+The scraper currently supports AWS resources and can extract relationships based on various ARN attributes including:
+- Standard ARN
+- Policy ARN
+- Function ARN
+- Role ARN
+- KMS Key ARN
+- Bucket ARN
+- Topic ARN
+- Queue ARN
+- Lambda ARN
+- Cluster ARN
+- Instance ARN
+- Execution ARN
+- Stream ARN
+
+## Generated Relationships
+
+For each AWS resource found in the Terraform state, the scraper creates a relationship between:
+- The Terraform module configuration (identified by its lineage)
+- The corresponding AWS resource (identified by its ARN)
+
+These relationships help in:
+- Understanding resource dependencies
+- Tracking infrastructure changes
+- Mapping infrastructure relationships across your AWS environment

@@ -8,7 +8,7 @@ these default behaviors can be changed using the `test` field:
 
 In the example below the http check fails if the HTTP response header contains an 'Authorization' field.
 
-```yaml title=http-check-expr.yaml file=../../../../modules/canary-checker/fixtures/minimal/http_no_auth_pass.yaml
+```yaml title=http-check-expr.yaml file=<rootDir>/modules/canary-checker/fixtures/minimal/http_no_auth_pass.yaml
 
 ```
 

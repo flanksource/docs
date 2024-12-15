@@ -1,6 +1,8 @@
 ---
 title: Restic
 sidebar_class_name: beta
+sidebar_custom_props:
+  icon: restic
 ---
 
 # <Icon name="restic" /> Restic
@@ -14,7 +16,7 @@ The Restic check:
 * Checks for backup freshness.
 
 
-```yaml title="restic.yaml"  file=../../../modules/canary-checker/fixtures/restic/restic_without_integrity_pass.yaml
+```yaml title="restic.yaml"  file=<rootDir>/modules/canary-checker/fixtures/restic/restic_without_integrity_pass.yaml
 ```
 <HealthCheck name="redis" connection="url" rows={[
   {field: "repository", description: "The restic repository path e.g., `rest: https://user:pass@host:8000/` or rest: `https://host:8000/` or `s3:s3.amazonaws.com/bucket_name`", required: true},

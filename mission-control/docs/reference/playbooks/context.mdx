@@ -36,7 +36,7 @@ Playbook actions can be selectively executed based on CEL expressions. These exp
 | `success()` | run only if all previous actions succeeded (default)        |
 | `timeout()` | run only if any of the previous actions timed out           |
 
-```yaml title="delete-kubernetes-pod.yaml" file=../../../modules/mission-control/fixtures/playbooks/exec-filter.yaml
+```yaml title="delete-kubernetes-pod.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/exec-filter.yaml
 
 ```
 
@@ -68,7 +68,7 @@ When templating `actions` with [Go Templates](/reference/scripting/gotemplate), 
 
 <details summary="Templating Actions">
   <div>
-    ```yaml title="delete-kubernetes-pod.yaml" file=../../../modules/mission-control/fixtures/playbooks/scale-deployment.yaml
+    ```yaml title="delete-kubernetes-pod.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/scale-deployment.yaml
     ```
   </div>
 </details>
@@ -80,9 +80,12 @@ When templating `actions` with [Go Templates](/reference/scripting/gotemplate), 
 | `getLastAction()`     | Returns the result of the action that just run | Action Specific |
 | `getAction({action})` | Return the result of a specific action         | Action Specific |
 
+:::tip Printing out Results
+:::
+
 <details summary="Reusing Action Results">
   <div>
-    ```yaml title="action-results.yaml" file=../../../modules/mission-control/fixtures/playbooks/action-result.yaml
+    ```yaml title="action-results.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/action-result.yaml
     ```
   </div>
 </details>

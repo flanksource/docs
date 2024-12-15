@@ -4,7 +4,7 @@ title: ArgoCD
 
 ## Setup
 
-The ArgoCD helm chart installs a [topology](/topology) for ArgoCD
+The ArgoCD helm chart installs a [topology](/guide/topology) for ArgoCD
 
 ```sh
 helm repo add flanksource https://flanksource.github.io/charts

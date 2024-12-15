@@ -1,13 +1,15 @@
 ---
 title: HTTP
-sidebar_class_name: popular
+sidebar_position: 0
+sidebar_custom_props:
+  icon: http
 ---
 
 # <Icon name="http"/> HTTP
 
 This check performs queries on HTTP to monitor their activity.
 
-```yaml title=http-check.yaml file=../../../modules/canary-checker/fixtures/minimal/http_single_pass.yaml
+```yaml title=http-check.yaml file=<rootDir>/modules/canary-checker/fixtures/minimal/http_single_pass.yaml
 ```
 
 <HealthCheck name="http" connection="url"  rows={[
@@ -17,10 +19,10 @@ This check performs queries on HTTP to monitor their activity.
   {field: "body", description: "Request Body Contents", scheme: "string"},
   {field: "tlsConfig", description: "TLS config", scheme: "[TLSConfig](#tls-config)"},
   {field: "templateBody", description: "If true body is templated", default: false, scheme: "bool"},
-  {field: "responseCodes", description: "Expected response codes", scheme: "[]int"},
-  {field: "responseContent", description: "Expected response content", scheme: "string"},
+  {field: "responseCodes", description: <>Expected http response codes<br/>Equivalent to <code>test.expr: code in [200, 201]</code></>, scheme: "[]int"},
+  {field: "responseContent", description: <>Expected response body content<br/>Equivalent to <code>test.expr: content.contains("value")</code></>, scheme: "string"},
   {field: "thresholdMillis", description: "Request timeout", default: 5000, scheme: "int"},
-  {field: "maxSSLExpiry", description: "Max SSL expiry days", scheme: "int"},
+  {field: "maxSSLExpiry", description: <>Max SSL expiry days<br/>Equivalent  to <code>test.expr: sslAge &lt; Age("7d")</code></>, scheme: "int"},
   {field: "insecureSkipVerify", description: "Skip TLS verification", scheme: "bool"},
   {field: "env", description: "Setup environment variables that are accessible while templating", scheme: "[]EnvVar"},
   {field: "endpoint", description: "Deprecated use `url`", scheme: "string", required: true},
@@ -36,9 +38,9 @@ This check performs queries on HTTP to monitor their activity.
   {field: "insecureSkipVerify", description: "Controls whether a client verifies the server's certificate chain and host name", scheme: "bool"}
 ]}/>
 
-<details summary="Example">
+<details summary="Verifying against an external CA">
 
-```yaml title=http-check.yaml   file=../../../modules/canary-checker/fixtures/minimal/http_tls_config.yaml
+```yaml title=http-check.yaml   file=<rootDir>/modules/canary-checker/fixtures/minimal/http_tls_config.yaml
 ```
 
 </details>
@@ -66,7 +68,7 @@ Result variables can be used in `test`, `display` and `transform` [expressions](
 
 The above canary (`http-check.yaml`) is functionally equivalent to `http-check-expr.yaml` below
 
-```yaml title=http-check-expr.yaml file=../../../modules/canary-checker/fixtures/minimal/http_tls_check_pass.yaml
+```yaml title=http-check-expr.yaml file=<rootDir>/modules/canary-checker/fixtures/minimal/http_tls_check_pass.yaml
 ```
 
 ## Authentication
@@ -74,7 +76,7 @@ The above canary (`http-check.yaml`) is functionally equivalent to `http-check-e
 <details summary="Basic Authentication">
 
 <div>
-```yaml title="http_auth.yaml"   file=../../../modules/canary-checker/fixtures/minimal/http_auth_from_secret.yaml
+```yaml title="http_auth.yaml"   file=<rootDir>/modules/canary-checker/fixtures/minimal/http_auth_from_secret.yaml
 ```
 </div>
 </details>
@@ -94,7 +96,7 @@ Eg: In the following spec, the vars `my_secret_path` and `my_secret_var`, define
 <details summary="Templating request body from env variables">
 
 <div>
-```yaml title="http_template.yaml"   file=../../../modules/canary-checker/fixtures/minimal/http_template.yaml
+```yaml title="http_template.yaml"   file=<rootDir>/modules/canary-checker/fixtures/minimal/http_template.yaml
 ```
 </div>
 </details>
@@ -102,7 +104,7 @@ Eg: In the following spec, the vars `my_secret_path` and `my_secret_var`, define
 <details summary="Templating URL from env variables">
 
 <div>
-```yaml title="http_user_pass_template.yaml" file=../../../modules/canary-checker/fixtures/minimal/http_auth_url_pass.yaml
+```yaml title="http_user_pass_template.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_auth_url_pass.yaml
 ```
 </div>
 </details>
@@ -121,7 +123,7 @@ Status class is one of `1xx`, `2xx`, `3xx`, `4xx`, `5xx`
 <details summary="Adding custom metrics">
 
 <div>
-```yaml title="metrics.yaml"   file=../../../modules/canary-checker/fixtures/minimal/metrics.yaml
+```yaml title="metrics.yaml"   file=<rootDir>/modules/canary-checker/fixtures/minimal/metrics.yaml
 ```
 </div>
 </details>
@@ -129,7 +131,7 @@ Status class is one of `1xx`, `2xx`, `3xx`, `4xx`, `5xx`
 <details summary="Transforming metrics into individual checks">
 
 <div>
-```yaml title="metrics.yaml"   file=../../../modules/canary-checker/fixtures/minimal/metrics-transformed.yaml
+```yaml title="metrics.yaml"   file=<rootDir>/modules/canary-checker/fixtures/minimal/metrics-transformed.yaml
 ```
 </div>
 </details>

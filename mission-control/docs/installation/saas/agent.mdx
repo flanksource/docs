@@ -2,7 +2,6 @@
 title: Agent Installation
 ---
 
-import
 
 :::info Prerequisites
 To install and run the Mission Control agent you need to have the following prerequisites:
@@ -13,35 +12,73 @@ To install and run the Mission Control agent you need to have the following prer
 :::
 
 
+import Schema from '@site/modules/mission-control-chart/agent-chart/values.schema.json'
+import OpenAPI from '@site/src/components/OpenAPI'
+
+
+The recommended way of installing an agent is generating the Helm/Flux install script on the UI:
 
 
 
-<Helm chart="mission-control-agent"/>
+1. Navigate to **Settings** --> **Agents**
+2. Click on the <Icon name="plus"/> button
 
-<Screenshot img="/img/agent_settings.png" size="800px"/>
+    Enter the following:
+    * **clusterName**
+    * Toggle **Kubernetes** to automatically scrape the cluster the agent is installed in, you can skip this step and perform it later by installing the [chart](/integrations/kubernets/catalog)
+    <p/>
+3. Click **Next**
 
-<Helm chart="mission-control-agent"
-values={{
-  "upstream.agent": "YOUR_LOCAL_NAME",
-  "upstream.username": "token",
-  "upstream.password": "",
-  "upstream.host": ""
-}}
+    You should see an installation script generated for Flux or Helm CLI
 
-/>
+    <Screenshot img="/img/agent_settings.png" size="800px" alt="Generated Installation Script"/>
 
-The upstream credentials can be externalized from the chart using:
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: upstream
-stringData:
-  UPSTREAM_HOST: ""
-  UPSTREAM_USER: token
-  UPSTREAM_PASSWORD: ""
-  AGENT_NAME: "YOUR_LOCAL_NAME"
+4. Alternatively if you are installing the agent in multiple locations you can reuse the same token generated
 
 
 
+    <Helm chart="mission-control-agent"
+    createRepo={false} createNamespace={false}
+    values={{
+      "clusterName": "<Unique name for this agent>",
+      "upstream.agent": "YOUR_LOCAL_NAME",
+      "upstream.username": "token",
+      "upstream.password": "",
+      "upstream.host": ""
+    }}
+
+    />
+
+
+
+
+:::info Externalize the token
+We recommend that the upstream token be stored separately and encrypted using sops or similar
+
+1. Create a new secret called `mission-control-upstream`
+     title=secret.yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: upstream
+    stringData:
+      UPSTREAM_HOST: ""
+      UPSTREAM_USER: token
+      UPSTREAM_PASSWORD: ""
+      AGENT_NAME: "YOUR_LOCAL_NAME"
+
+    <p/>
+
+2. Update the chart values:
+     title=values.yaml
+    upstream:
+      createSecret: false
+      secretName: mission-control-upstream
+
+:::
+
+
+
+### values.yaml
+
+<OpenAPI schema={Schema}/>

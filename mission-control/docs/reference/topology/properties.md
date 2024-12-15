@@ -40,5 +40,5 @@ title: Property
 | `config.type`   | The type of config item.                                 | `string`                           |          |
 | `config.labels` | Match labels of the config item, all labels must match   | `map[string]string`                |          |
 | `field`         | A JSONPath expression to lookup the value in the config. | `string`                           | `true`   |
-| `display`       | Apply transformations to the value.                      | [`Display`](./concepts/templating) |          |
+| `display`       | Apply transformations to the value.                      | [`Display`](/guide/topology/concepts/templating) |          |
 | `id`            | The UUID of config item, rarely used                     | `string`                           |          |

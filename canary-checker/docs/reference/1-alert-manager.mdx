@@ -1,7 +1,10 @@
 ---
 title: Alertmanager
 hide_title: true
-sidebar_class_name: popular
+sidebar_position: 0
+sidebar_custom_props:
+  icon: prometheus
+
 ---
 
 # <Icon name="prometheus">Alertmanager</Icon>
@@ -10,7 +13,7 @@ Checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/aler
 
 The following example [transforms](../concepts/expressions/transforms) the list of alerts so that each alert becomes a single check result. Without the transform the health check fails if any alerts are firing.
 
-```yaml title="alert-manager-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/alertmanager_mix.yaml
+```yaml title="alert-manager-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/alertmanager_mix.yaml
 ```
 
 <HealthCheck name="alertmanager" rows={[
@@ -109,7 +112,7 @@ You can specify different namespaces for checks using the `namespace` field. Thi
 and need to be assigned their respective namespace.
 
 
-```yaml title="alert-manager-check.yaml" file=../../../modules/canary-checker/fixtures/datasources/alertmanager_mix.yaml {20}
+```yaml title="alert-manager-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/alertmanager_mix.yaml {20}
 ```
 
 The above alertmanager canary can reside on any namespace and the check it generates are assigned the correct namespace derived from the alerts.

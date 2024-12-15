@@ -2,6 +2,7 @@ const { addIconSelectors, addDynamicIconSelectors } = require('@iconify/tailwind
 
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./docs/**.{md,mdx}"],
+  plugins: [require('@tailwindcss/typography')],
   theme: {
     extend: {},
     fontFamily: {
@@ -10,6 +11,16 @@ module.exports = {
   },
 
   safelist: [
+    {
+      pattern: /p/
+    },
+
+    {
+      pattern: /spacing/,
+    },
+    {
+      pattern: /border/,
+    },
     {
       pattern: /bg-zinc/,
     },

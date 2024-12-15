@@ -311,10 +311,12 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
                 </code>
               </td>
               <td>
-                <ReactMarkdown>
-                  {(row.description ? row.description : '') +
-                    (row.default ? `. Defaults to \`${row.default}\`` : '')}
-                </ReactMarkdown>
+                {typeof (row.description) === 'string' ? (
+                  <ReactMarkdown>
+                    {(row.description ? row.description : '') +
+                      (row.default ? `. Defaults to \`${row.default}\`` : '')}
+                  </ReactMarkdown>
+                ) : row.description}
               </td>
               <td>
                 {row.anyOf && <code>{row.anyOf.join(' | ')}</code>}

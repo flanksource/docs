@@ -1,0 +1,396 @@
+---
+title: Kubernetes
+sidebar_position: 4
+sidebar_custom_props:
+  icon: k8s
+---
+
+# <Icon name="k8s"/> Kubernetes
+
+:::tip Registry
+
+The registry has a [Kubernetes](/registry/kubernetes) Helm chart that provides a pre-configured Scraper and Topology with some common defaults
+
+:::
+
+The `kubernetes` scraper collects all of the resources and events in a Kubernetes cluster, and then watches for changes.
+
+```yaml title='kubernetes-scraper.yaml' file=<rootDir>/modules/config-db/fixtures/kubernetes.yaml
+
+```
+
+| Field        | Description                                                                  | Scheme                                       |
+| ------------ | ---------------------------------------------------------------------------- | -------------------------------------------- |
+| `logLevel`   | Specify the level of logging.                                                | `string`                                     |
+| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                     |
+| `retention`  | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |
+| `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                   | [`[]Kubernetes`](#kubernetes)                |
+
+## Kubernetes
+
+<Scraper
+  rows={[
+    {
+      field: 'clusterName',
+      description: 'A unique name for the cluster config.',
+      scheme: 'string',
+      required: true
+    },
+    {
+      field: 'namespace',
+      description: 'Include resources only from this namespace',
+      scheme: 'string'
+    },
+    {
+      field: 'useCache',
+      description:
+        'Whether to use cache or not when fetching resources. Default: false',
+      scheme: 'bool'
+    },
+    {
+      field: 'allowIncomplete',
+      description:
+        "whether to fail scrape if all api resources weren't fetched successfully",
+      scheme: 'bool'
+    },
+    {
+      field: 'scope',
+      description:
+        'Specify scope for scrape. Allowed: `namespaced`, `cluster` (default)',
+      scheme: 'string'
+    },
+    {
+      field: 'since',
+      description:
+        'Set time constraint for scraping resources within the set period',
+      scheme: 'duration'
+    },
+    {
+      field: 'selector',
+      description:
+        'Include resources matching this selector only e.g `matchLabels`',
+      scheme: 'string'
+    },
+    {
+      field: 'fieldSelector',
+      description: 'Resources to be included e.g `status.Phase=Running`',
+      scheme: 'string'
+    },
+    {
+      field: 'maxInflight',
+      description:
+        'Concurrency level when resources are fetched one at a time.`',
+      scheme: 'int'
+    },
+    {
+      field: 'kubeconfig',
+      description: 'Kubeconfig to connect to the cluster',
+      scheme: '_EnvVar_'
+    },
+    {
+      field: 'watch',
+      description: 'Kubeconfig to connect to the cluster',
+      scheme: '[`[]WatchSelector`]()'
+    },
+    {
+      field: 'event',
+      description: 'Specify configuration to handle Kubernetes events',
+      scheme: '[Event](#events)'
+    },
+    {
+      field: 'exclusions',
+      description: 'Resources to be excluded from scraping',
+      scheme: '[Exclusion](#exclusion)'
+    },
+    {
+      field: 'relationships',
+      description: 'Create relationships between kubernetes objects',
+      scheme: '[`[]Relationship`](#relationships)'
+    }
+  ]}
+/>
+
+### Event
+
+`Kubernetes::Event` resources are mapped to config changes. Events can be very verbose so they can be excluded or their severity level changed:
+
+| Field              | Description                                                                                | Scheme                                  | Required |
+| ------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------- | -------- |
+| `exclusions`       | A list of keywords used to exclude event objects based on the reason                       | `[]string`                              |          |
+| `severityKeywords` | Specify keywords used to identify the severity of the Kubernetes Event based on the reason | [`SeverityKeywords`](#severitykeywords) |          |
+
+#### SeverityKeywords
+
+| Field   | Description                                                                                                                                                        | Scheme     | Required |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | -------- |
+| `warn`  | A list of keywords used to identify a warning severity from the reason. It could also be a match pattern: e.g. `*` to match all or `!badword` to exclude `badword` | `[]string` |          |
+| `error` | Same as `warn` but used to map to error severity.                                                                                                                  | `[]string` |          |
+
+### Watch Events & Resources
+
+While the kubernetes scraper runs on a schedule you've specified, it can also watch for changes to resources and events in real-time.
+This allows near-real-time updates to your kubernetes catalogs with the flexibility of performing full scrape on a larger interval.
+
+This feature is enabled by default but can be disabled by setting the property `watch.disable=true`.
+
+#### Watch Selector
+
+```yaml title="custom-watch-resources.yaml"
+kubernetes:
+  - clusterName: 'eks'
+    watch:
+      - apiVersion: v1
+        kind: Pod
+      - apiVersion: apps
+        kind: Deployment
+      - apiVersion: batch/v1
+        kind: CronJob
+```
+
+<Fields
+  rows={[
+    {
+      field: 'apiVersion',
+      description: 'API version of the Kubernetes resource to watch',
+      scheme: 'string',
+      required: true
+    },
+    {
+      field: 'kind',
+      description: 'Kind of the Kubernetes resource to watch',
+      scheme: 'string',
+      required: true
+    }
+  ]}
+/>
+
+The following resource types are "watched" by default.
+
+| apiVersion | kind          |
+| ---------- | ------------- |
+| `apps/v1`  | `DaemonSet`   |
+| `apps/v1`  | `Deployment`  |
+| `apps/v1`  | `ReplicaSet`  |
+| `apps/v1`  | `StatefulSet` |
+| `batch/v1` | `CronJob`     |
+| `batch/v1` | `Job`         |
+| `v1`       | `Node`        |
+| `v1`       | `Pod`         |
+
+### Relationships
+
+You can create relationships between kubernetes objects on the basis of kind, name & namespace.
+
+:::info
+[Relationships](../concepts/relationships) can also be defined under `transform.relationships`, however defining them under `kubernetes.relationships` is simpler with specific support for `kind`, `name` and `namespace` fields.
+:::
+
+```yaml title="kubernetes-relationship.yaml"
+kubernetes:
+  - clusterName: 'eks'
+    relationships:
+      # If object has spec.claimRef field, use its kind, name and namespace
+      - kind:
+          expr: "has(spec.claimRef) ? spec.claimRef.kind : ''"
+        name:
+          expr: "has(spec.claimRef) ? spec.claimRef.name : ''"
+        namespace:
+          expr: "has(spec.claimRef) ? spec.claimRef.namespace : ''"
+
+      # If object flux kustomize labels, link it to the parent Kustomization object
+      - kind:
+          value: Kustomization
+        name:
+          label: kustomize.toolkit.fluxcd.io/name
+        namespace:
+          label: kustomize.toolkit.fluxcd.io/namespace
+
+      # If object helm kustomize labels, link it to the parent HelmRelease object
+      - kind:
+          value: HelmRelease
+        name:
+          label: helm.toolkit.fluxcd.io/name
+        namespace:
+          label: helm.toolkit.fluxcd.io/namespace
+```
+
+| Field       | Description                      | Scheme              | Required |
+| ----------- | -------------------------------- | ------------------- | -------- |
+| `kind`      | `kind` of Kubernetes Object      | [`Lookup`](#lookup) | `true`   |
+| `name`      | `name` of Kubernetes Object      | [`Lookup`](#lookup) | `true`   |
+| `namespace` | `namespace` of Kubernetes Object | [`Lookup`](#lookup) | `true`   |
+
+###### Lookup
+
+There are 3 different ways to specify which value to use when finding related configs:
+
+| Field   | Description                        | Scheme   | Required |
+| ------- | ---------------------------------- | -------- | -------- |
+| `expr`  | Use an expression to get the value | `string` |          |
+| `value` | Specify a static value             | `string` |          |
+| `label` | Get the value from a label         | `string` |          |
+
+### Exclusion
+
+excludes certain kubernetes objects from being scraped
+
+<Fields
+  rows={[
+    {
+      field: 'names',
+      description: 'names of kubernetes objects to exclude',
+      type: 'string[]'
+    },
+    {
+      field: 'kinds',
+      description: 'kinds of kubernetes objects to exclude',
+      type: 'string[]'
+    },
+    {
+      field: 'namespaces',
+      description: 'namespaces of kubernetes objects to exclude',
+      type: 'string[]'
+    },
+    {
+      field: 'labels',
+      description: 'labels of kubernetes objects to exclude',
+      type: 'map[string]string'
+    }
+  ]}
+/>
+
+## Annotations
+
+Kubernetes resources can be annotated with annotations that can direct the scraper to certain behaviors.
+
+<Fields
+  rows={[
+    {
+      field: 'config-db.flanksource.com/tags',
+      description:
+        'Add custom tags.  Config items can only have up to `5` tags, so keep the custom tags limited.',
+      scheme: '`key1:val1,key2:val2`'
+    },
+    {
+      field: 'config-db.flanksource.com/ignore',
+      description: 'Ignore config items',
+      scheme: 'bool'
+    },
+    {
+      field: 'config-db.flanksource.com/ignore-changes',
+      description: 'Ignore changes by change type',
+      scheme: 'MatchPattern'
+    },
+    {
+      field: 'config-db.flanksource.com/ignore-change-severity',
+      description: 'Ignore changes by severity ',
+      scheme: 'MatchPattern'
+    }
+  ]}
+/>
+
+### Examples
+
+#### Exclude verbose changes from argo application
+
+```yaml title="argo-application.yaml"
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sock-shop
+  namespace: argo
+  annotations:
+    config-db.flanksource.com/ignore-changes: ReconciliationSucceeded
+    config-db.flanksource.com/ignore-change-severity: low
+spec: ...
+```
+
+#### Excluding a particular secret from being scraped
+
+```yaml title="secret.yaml"
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations:
+    config-db.flanksource.com/ignore: true
+  name: slack
+  namespace: default
+type: Opaque
+data:
+  token: ...
+```
+
+## Scraping remote clusters
+
+A single config-db instance can scrape multiple clusters when provided with a kubeconfig. Either the kubeconfig itself or the path to the kubeconfig can be provided.
+
+### Local path to kubeconfig
+
+```yaml title="remote-cluster.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: azure-scraper
+spec:
+  schedule: '@every 5h'
+  kubernetes:
+    - clusterName: 'azure production cluster'
+      kubeconfig:
+        value: /home/flanksource/.kube/azure_config
+```
+
+### Kubeconfig
+
+```yaml title="remote-cluster.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-scraper
+spec:
+spec:
+  schedule: '@every 5h'
+  kubernetes:
+    - clusterName: 'aws cluster'
+      kubeconfig:
+        value: |
+          apiVersion: v1
+          clusters:
+              - cluster:
+                  certificate-authority-data: xxxxx
+                  server: https://xxxxx.sk1.eu-west-1.eks.amazonaws.com
+                name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+          contexts:
+              - context:
+                  cluster: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                  namespace: mission-control
+                  user: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+          current-context: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+          kind: Config
+          preferences: {}
+          users:
+              - name: arn:aws:eks:eu-west-1:765618022540:cluster/aws-cluster
+                user:
+                  exec:
+                      ....
+
+```
+
+or, a kubeconfig inside a secret can be referenced as follows:
+
+```yaml title="remote-cluster.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-scraper
+spec:
+spec:
+  schedule: '@every 5h'
+  kubernetes:
+    - clusterName: 'aws cluster'
+      kubeconfig:
+        valueFrom:
+          secretKeyRef:
+            name: aws-kubeconfig
+            key: kubeconfig
+```

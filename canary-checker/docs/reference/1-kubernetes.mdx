@@ -1,6 +1,8 @@
 ---
 title: Kubernetes
-sidebar_class_name: popular
+sidebar_position: 0
+sidebar_custom_props:
+  icon: k8s
 ---
 
 # <Icon name="k8s" /> Kubernetes
@@ -8,7 +10,7 @@ sidebar_class_name: popular
 The Kubernetes check performs requests on Kubernetes resources such as Pods to get the desired information.
 
 
-```yaml title="kubernetes.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes-minimal_pass.yaml
+```yaml title="kubernetes.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-minimal_pass.yaml
 ```
 
 <HealthCheck name="kubernetes" edition="standard" connection="kubeconfig"  rows={[
@@ -66,7 +68,7 @@ dyn(results).all(x, k8s.isReady(x))
 <details summary="Checking for certificate readiness">
 <div>
 
-```yaml title="junit.yaml"  file=../../../modules/canary-checker/fixtures/k8s/certmanager.yaml
+```yaml title="junit.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/certmanager.yaml
 ```
 </div>
 </details>
@@ -76,18 +78,18 @@ dyn(results).all(x, k8s.isReady(x))
 
 A single canary-checker instance can connect to any number of remote clusters via custom kubeconfig.
 Either the kubeconfig itself or the path to the kubeconfig can be provided.
- 
+
 #### kubeconfig from kubernetes secret
 
-```yaml title="remote-cluster.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes-check-kubeconfig-from-secrets.yaml {12-16}
+```yaml title="remote-cluster.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-check-kubeconfig-from-secrets.yaml {12-16}
 ```
 
 #### Kubeconfig inline
 
-```yaml title="remote-cluster.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes-check-inline-kubeconfig.yaml {11-32}
+```yaml title="remote-cluster.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-check-inline-kubeconfig.yaml {11-32}
 ```
 
 #### Kubeconfig from local filesystem
 
-```yaml title="remote-cluster.yaml"  file=../../../modules/canary-checker/fixtures/k8s/kubernetes-check-kubeconfig-from-file.yaml {11-12}
+```yaml title="remote-cluster.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-check-kubeconfig-from-file.yaml {11-12}
 ```

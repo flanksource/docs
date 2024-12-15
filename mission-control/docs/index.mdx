@@ -3,27 +3,26 @@ slug: /
 title: Flanksource Mission Control
 hide_title: true
 # hide_table_of_contents: true
-pagination_next: config-db/index
+pagination_next: null
 pagination_prev: null
 ---
-
 
 import { SlClose, SlCheck } from "react-icons/sl"
 
 Flanksource Mission Control is an Internal Developer Platform that helps teams improve developer productivity and operational resilience.
 
-![](/img/how-it-works.svg)
+<Screenshot img="/img/how-it-works.svg" className="h-auto" alt="Mission Control Concepts" shadow="false" size="800px"/>
 
 With Mission Control you can:
 
-* [Catalog](./config-db) and track changes on infrastructure, applications and configuration.
-* [Empower Developers](./playbooks) with self-service playbooks for Day 0-2 operations.
-* [Run Health Checks](./canary-checker) across both cloud-native and legacy infrastructure and applications.
-* [Incrementally Adopt GitOps](./playbooks/actions/gitops) with playbooks that perform Git commits in the background.
-* Aggregate Alerts from [Prometheus](/canary-checker/reference/alert-manager), [Cloudwatch](/canary-checker/reference/aws-cloudwatch), etc.
-* [Visualize Complex Systems](./topology) with a multi-dimensional system topology.
-* [Build Event Driven Control Planes](./playbooks/actions/gitops) with a combination of webhooks, events and GitOps.
-* [Notify People and Systems](./notifications) about changes in health and configuration.
+* [Catalog](/guide/config-db) and track changes on infrastructure, applications and configuration.
+* [Empower Developers](/guide/playbooks) with self-service playbooks for Day 0-2 operations.
+* [Run Health Checks](/guide/canary-checker) across both cloud-native and legacy infrastructure and applications.
+* [Incrementally Adopt GitOps](/guide/playbooks/actions/gitops) with playbooks that perform Git commits in the background.
+* Aggregate Alerts from [Prometheus](/guide/canary-checker/reference/alert-manager), [Cloudwatch](/guide/canary-checker/reference/aws-cloudwatch), etc.
+* [Visualize Complex Systems](/guide/topology) with a multi-dimensional system topology.
+* [Build Event Driven Control Planes](/guide/playbooks/actions/gitops) with a combination of webhooks, events and GitOps.
+* [Notify People and Systems](/guide/notifications) about changes in health and configuration.
 
 
 
@@ -82,3 +81,14 @@ If you have any questions about canary checker:
 * Email us at [hello@flanksource.com](mailto:hello@flanksource.com)
 
 Your feedback is always welcome!
+
+  <Cards>
+
+
+    <Card link="/" title="Overview" />
+    <Card link="/how-it-works" title="How It Works" icon="concepts"/>
+    <Card link="" title="Installation" icon="getting-started"/>
+    <Card link="/architecture" title="Architecture" icon="icon-park-outline:system"/>
+    <Card link="/security" title="Security" icon="shield"/>
+
+  </Cards>

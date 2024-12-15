@@ -1,6 +1,6 @@
 # Azure
 
-The Azure helm chart installs a [catalog scraper](/config-db/scrapers/azure)
+The Azure helm chart installs a [catalog scraper](/guide/config-db/scrapers/azure)
 
 ## Setup
 

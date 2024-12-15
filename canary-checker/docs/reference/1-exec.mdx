@@ -1,5 +1,7 @@
 ---
 title: Exec
+sidebar_custom_props:
+  icon: console
 ---
 
 # <Icon name="console" /> Exec
@@ -12,7 +14,7 @@ Executes a bash (Linux) or powershell (Windows) script. The check is considered 
 See [image-variants](/reference/canary-checker/image-variants)
 :::
 
-```yaml title="exec.yaml"  file=../../../modules/canary-checker/fixtures/minimal/exec_pass.yaml
+```yaml title="exec.yaml"  file=<rootDir>/modules/canary-checker/fixtures/minimal/exec_pass.yaml
 ```
 
 
@@ -48,7 +50,7 @@ See [image-variants](/reference/canary-checker/image-variants)
 
 <details summary="Exec with an Environment Variables">
 <div>
-```yaml title="exec_artifact.yaml"  file=../../../modules/canary-checker/fixtures/minimal/exec_env_pass.yaml
+```yaml title="exec_artifact.yaml"  file=<rootDir>/modules/canary-checker/fixtures/minimal/exec_env_pass.yaml
 ```
 </div>
 </details>
@@ -68,7 +70,7 @@ Exec connections allow you to specify credentials for a list of CLI tools that a
 
 <details summary="Exec with a Connection">
 <div>
-```yaml title="exec_artifact.yaml"  file=../../../modules/canary-checker/fixtures/minimal/exec_connection_aws_fail.yaml
+```yaml title="exec_artifact.yaml"  file=<rootDir>/modules/canary-checker/fixtures/minimal/exec_connection_aws_fail.yaml
 ```
 </div>
 </details>
@@ -84,7 +86,7 @@ See [artifacts](/installation/artifacts)
 
 <details summary="Exec with an Artifact">
 <div>
-```yaml title="exec_artifact.yaml"  file=../../../modules/canary-checker/fixtures/minimal/exec_artifact.yaml
+```yaml title="exec_artifact.yaml"  file=<rootDir>/modules/canary-checker/fixtures/minimal/exec_artifact.yaml
 ```
 
 </div>
@@ -96,7 +98,7 @@ See [artifacts](/installation/artifacts)
 
 <details summary="Exec with Checkout">
 <div>
-```yaml title="exec_artifact.yaml"  file=../../../modules/canary-checker/fixtures/git/exec_checkout_pass.yaml
+```yaml title="exec_artifact.yaml"  file=<rootDir>/modules/canary-checker/fixtures/git/exec_checkout_pass.yaml
 ```
 
 </div>

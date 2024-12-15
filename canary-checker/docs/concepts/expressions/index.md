@@ -1,5 +1,7 @@
 ---
 title: Expressions
+sidebar_custom_props:
+  icon: variable
 ---
 
 canary-checker can be extended using expressions in 3 ways:

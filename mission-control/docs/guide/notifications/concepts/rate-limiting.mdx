@@ -1,0 +1,42 @@
+---
+title: Rate Limiting
+sidebar_custom_props:
+  icon: rate-limit
+---
+
+To prevent overwhelming users with excessive notifications, Mission Control implements a rate limiting mechanism.
+
+We use a sliding window rate limiter that restricts the total number of notifications sent within a specified time period.
+
+:::info
+The rate limit is applied individually to each notification.
+:::
+
+:::caution Rate Limited Notifications
+When a notification exceeds the rate limit, it is dropped and not delivered to the user.
+:::
+
+## Default Configuration
+
+The following table outlines the default rate limiting parameters:
+
+| Property                         | Value    |
+|----------------------------------|----------|
+| Maximum number of notifications allowed per window  | 50       |
+| Time period for the sliding window                  | 4 hours  |
+
+## Customizing Rate Limiting Parameters
+
+You can override the default settings by adjusting the following properties:
+
+- `notifications.max.count`: Sets the maximum number of notifications allowed within the window
+- `notifications.max.window`: Defines the duration of the sliding window (in hours)
+
+### Example Configuration
+
+To allow a maximum of 100 notifications in a 6 hour window:
+
+```
+notifications.max.count=100
+notifications.max.window=6h
+```

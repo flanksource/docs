@@ -1,0 +1,45 @@
+---
+title: Azure DevOps Pipeline
+sidebar_custom_props:
+  icon: azure-devops-pipeline
+
+---
+
+import Templating from '@site/docs/reference/playbooks/context.mdx'
+
+# <Icon name="azure-devops"/> Azure DevOps Pipeline Action
+
+This action allows you to invoke pipelines in your Azure DevOps project.
+
+```yaml title="invoke-azure-devops-pipeline.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/azure-devops.yaml
+
+```
+
+<Action rows={[
+  {field: "org", scheme: "string", description: "Azure DevOps org name", required: true},
+  {field: "project", scheme: "string", description: "Azure DevOps project name", required: true},
+  {field: "token", scheme: "[EnvVar](/reference/env-var)", description: "Azure DevOps PAT", required: true},
+  {field: "pipeline", scheme: "[Pipeline](#pipeline)", description: "Azure pipeline to invoke", required: true},
+  {field: "parameters", scheme: "[Parameters](#parameters)", description: "Pipeline parameters"}
+
+]}/>
+
+## Pipeline
+
+| Field     | Description       | Scheme   | Required | Templatable |
+| --------- | ----------------- | -------- | -------- | ----------- |
+| `id`      | Pipeline ID.      | `string` | `true`   | `true`      |
+| `version` | Pipeline version. | `string` | `false`  | `true`      |
+
+## Parameters
+
+| Field                | Description                               | Scheme           | Required | Templatable |
+| -------------------- | ----------------------------------------- | ---------------- | -------- | ----------- |
+| `resources`          | The resources the run requires.           | `map[string]any` | `false`  | `true`      |
+| `templateParameters` | The template parameters the run requires. | `map[string]any` | `false`  | `true`      |
+| `variables`          | The variables the run requires.           | `map[string]any` | `false`  | `true`      |
+| `stagesToSkip`       | The stages to skip.                       | `[]string`       | `false`  | `true`      |
+
+## Templating
+
+<Templating />

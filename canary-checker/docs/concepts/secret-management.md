@@ -1,5 +1,7 @@
 ---
 title: Env Vars
+sidebar_custom_props:
+  icon: stash:search-box-light
 sidebar_position: 1
 ---
 

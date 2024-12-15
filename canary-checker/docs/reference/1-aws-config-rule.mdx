@@ -1,12 +1,14 @@
 ---
 title: AWS Config Rule
+sidebar_custom_props:
+  icon: aws-config
 ---
 
 # <Icon name="aws-config" /> AWS Config Rule
 
 Check if any AWS resources are failing AWS config rule checks.
 
-```yaml title="aws-config-rule.yaml"  file=../../../modules/canary-checker/fixtures/aws/aws_config_rule_pass.yaml
+```yaml title="aws-config-rule.yaml"  file=<rootDir>/modules/canary-checker/fixtures/aws/aws_config_rule_pass.yaml
 ```
 
 <HealthCheck name="awsConfigRule" connection="aws" rows={[

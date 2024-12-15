@@ -1,0 +1,48 @@
+---
+draft: true
+sidebar_custom_props:
+  icon: crossplane
+title: Crossplane
+---
+
+# Crossplane Integration
+
+Mission Control integrates deeply with Crossplane to provide visibility and relationships across your cloud infrastructure resources managed through Crossplane.
+
+## How It Works
+
+Mission Control's Kubernetes scraper (`kubernetes.go`) automatically detects and handles Crossplane resources by:
+
+1. Identifying Crossplane resources through their API group - any resource with an apiVersion containing `.upbound.io` or `.crossplane.io` is treated as a Crossplane resource.
+
+2. Categorizing them with a special "Crossplane::" type prefix instead of the standard "Kubernetes::" prefix to distinguish them from regular Kubernetes resources.
+
+3. Building relationships between:
+   - Crossplane managed resources and their providers
+   - Crossplane composite resources (XRs) and their composed resources
+   - Crossplane resources and their underlying cloud infrastructure
+
+## Resource Relationships
+
+The scraper automatically establishes relationships between:
+
+- Crossplane Providers and their managed resources
+- Composite Resources (XRs) and their composed resources
+- Crossplane managed resources and their cloud provider equivalents (e.g. AWS RDS instances)
+
+The relationships are created through:
+
+1. Owner references on managed resources pointing to their providers
+2. Cross-references between XRs and composed resources
+3. Cloud provider specific external IDs linking to actual cloud resources
+
+## Scraping and Monitoring
+
+The scraper:
+
+- Watches for changes to Crossplane resources through the Kubernetes event stream
+- Tracks health and status of Crossplane resources
+- Maps relationships between components
+- Provides visibility into the full stack - from Crossplane CRDs down to cloud resources
+
+This enables Mission Control to provide a complete view of your Crossplane-managed infrastructure with proper relationship mapping and real-time updates.

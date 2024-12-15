@@ -1,15 +1,17 @@
 ---
 title: CEL Expressions
+sidebar_custom_props:
+  icon: gravity-ui:curly-brackets-function
 ---
 
 `expr` expressions use the [Common Expression Language (CEL)](https://cel.dev/)
 
 :::tip
-The [CEL playground](https://playcel.undistro.io/) lets you quickly test CEL expressions
+The [CEL playground](https://playcel.undistro.io/) lets you test CEL expressions
 :::
 
 
-```yaml title=http-check-expr.yaml file=../../../modules/canary-checker/fixtures/minimal/display-with-cel_pass.yaml
+```yaml title=http-check-expr.yaml file=<rootDir>/modules/canary-checker/fixtures/minimal/display-with-cel_pass.yaml
 ```
 
 Values in CEL represent any of the following:
@@ -32,31 +34,28 @@ Values in CEL represent any of the following:
 
 ## Handling null types and missing keys
 
-When dealing with CEL objects, we might get errors where a key does not exist or if you're chaining keys, then one of the keys in the middle will be missing
+When dealing with CEL objects, we might get errors where a key doesn't exist or if you're chaining keys, then one of the keys in the middle is missing.
 
 ```javascript
 // Assume we have an obj with value: {'a': {'b': 'c'}}
 
 o.a.b => c
 
-// But this will yield an error
-o.a.d   // Error, attribute 'd' does not exist
+o.a.d   // Error, attribute 'd' doesn't exist
 
-// To handle these, we can use the `or` or `orValue` directives
 
 o.a.?d.orValue('fallback value') => 'fallback value'
 
-// And if d exists, its value is returned
 
 ```
 
-You can read more about [or](#or) and [orValue](#orvalue) below
+You can read more about [or](#or) and [orValue](#orvalue) below.
 
 ## aws
 
 ### aws.arnToMap
 
-Takes in an AWS arn and parses it and returns a map.
+Takes in an AWS ARN, parses it, and returns a map.
 
 ```javascript
 aws.arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic") //
@@ -70,7 +69,7 @@ aws.arnToMap("arn:aws:sns:eu-west-1:123:MMS-Topic") //
 
 ### aws.fromAWSMap
 
-`aws.fromAWSMap` takes a list of `map[string]string` and merges them into a single map. The input map is expected to have the field "Name".
+`aws.fromAWSMap` takes a list of `map[string]string` and merges them into a single map. The input map has the field "Name".
 
 ```javascript
 aws.fromAWSMap(x).hello" == "world" // `true`
@@ -223,8 +222,7 @@ Examples:
 
 ### all
 
-The `all` macro tests whether a predicate holds for **all** elements of a list `e` or keys of a map `e`. It returns a boolean value based on the evaluation.
-If any predicate evaluates to false, the macro evaluates to false, ignoring any errors from other predicates
+The `all` macro tests whether a predicate holds for **all** elements of a list `e` or keys of a map `e`. It returns a boolean value based on the evaluation. If any predicate evaluates to false, the macro evaluates to false, ignoring errors from other predicates.
 
 Syntax:
 
@@ -463,10 +461,10 @@ When creating map or list, if a field may be optionally set based on its presenc
 Syntax
 
 ```javascript
-(string) -> int	string length
-(bytes) -> int	bytes length
-(list(A)) -> int	list size
-(map(A, B)) -> int	map size
+(string) -> int string length
+(bytes) -> int bytes length
+(list(A)) -> int list size
+(map(A, B)) -> int map size
 ```
 
 ```javascript
@@ -494,10 +492,7 @@ Returns a new sub-list using the indices provided.
 
 ### sets.contains
 
-Returns whether the first list argument contains all elements in the second
-list argument. The list may contain elements of any type and standard CEL
-equality is used to determine whether a value exists in both lists. If the
-second list is empty, the result will always return true.
+Returns whether the first list argument contains all elements in the second list argument. The list may contain elements of any type and standard CEL equality is used to determine whether a value exists in both lists. If the second list is empty, the result always returns true.
 
 ```javascript
 sets.contains(list(T), list(T)) -> bool
@@ -623,8 +618,8 @@ timestamp("2023-07-04T12:00:00Z")
 
 | Function                   | Description                                                                                    | Example |
 | -------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
-| `{date>.getDayOfMonth()`   | A integer value representing the day of the month, with the first day being 1.                 | 1 - 31  |
-| `<date>.getDayOfWeek()`    | eturns an integer value representing the day of the week, where Sunday is 0 and Saturday is 6. | 0 - 6   |
+| `{date>.getDayOfMonth()`   | A integer value representing the day of the month, with the first day being 1.                | 1 - 31  |
+| `<date>.getDayOfWeek()`    | Returns an integer value representing the day of the week, where Sunday is 0 and Saturday is 6. | 0 - 6   |
 | `<date>.getDayOfYear()`    | an integer value representing the day of the year, with January 1st being day 1.               | 1 - 366 |
 | `<date>.getDayOfMonth()`   | the full year (4 digits for 4-digit years) of the specified timestamp.                         |         |
 | `<date>.getHours()`        | the full year (4 digits for 4-digit years) of the specified timestamp.                         | 0- 23   |
@@ -856,8 +851,7 @@ urldecode("hello+world+%3F") // 'hello world ?'
 
 `filepath.Base` returns the last element of path.
 Trailing path separators are removed before extracting the last element.
-If the path is empty, Base returns `.`.
-If the path consists entirely of separators, Base returns a single separator.
+If the path is empty, Base returns `.`. If the path consists entirely of separators, Base returns a single separator.
 
 ```javascript
 filepath.Base("/home/flanksource/projects/gencel") // gencel
@@ -877,9 +871,8 @@ filepath.Clean("/foo/bar/../baz") // Evaluates /foo/baz
 `filepath.Dir` returns all but the last element of path, typically the path's directory.
 After dropping the final element, Dir calls Clean on the path and trailing
 slashes are removed.
-If the path is empty, Dir returns `.`.
-If the path consists entirely of separators, Dir returns a single separator.
-The returned path does not end in a separator unless it is the root directory.
+If the path is empty, Dir returns `.`. If the path consists entirely of separators, Dir returns a single separator.
+The returned path doesn't end in a separator unless it is the root directory.
 
 ```javascript
 filepath.Dir("/home/flanksource/projects/gencel") // /home/flanksource/projects
@@ -1003,7 +996,7 @@ filepath.Split("/foo/bar/baz") // [/foo/bar/ baz]
 {'name': 'aditya'}.toJSONPretty('\t')
 //
 // {
-// 	"name": "aditya"
+//  "name": "aditya"
 // }
 ```
 
@@ -1156,7 +1149,6 @@ k8s.isHealthy(deployment) // true if the deployment is healthy
 
 :::tip
 - The namespace is also returned as a label for namespaced objects.
-
 - Any labels ending with `-hash` are removed from the map.
 :::
 
@@ -1179,7 +1171,7 @@ k8s.memoryAsBytes("1.234gi") // 1324997410
 
 ### k8s.nodeProperties
 
-`k8s.nodeProperties` is a helper function that takes in a kubernetes Node object and returns a map of the following node's properties 
+`k8s.nodeProperties` is a helper function that takes in a kubernetes Node object and returns a map of the following node's properties
 
 - ephemeral-storage (in bytes)
 - cpu
@@ -1193,7 +1185,7 @@ k8s.nodeProperties(pod) // {"cpu": 2, "memory": 200, ephemeral-storage": 100000,
 
 ### k8s.podProperties
 
-`k8s.podProperties` is a helper function that takes in a kubernetes pod object and returns a map of the following pod's properties 
+`k8s.podProperties` is a helper function that takes in a kubernetes pod object and returns a map of the following pod's properties
 
 - image
 - cpu
@@ -1483,7 +1475,7 @@ regexp.Match("^h.llo", "hello") // true
 ```
 
 ```javascript
-// Pattern does not match the string:
+// Pattern doesn't match the string:
 regexp.Match("^b", "apple") // false
 ```
 
@@ -1611,7 +1603,7 @@ regexp.Split("z", -1, "hello") // ["hello"]
 
 ### .abbrev
 
-`abbrev` on a string abbreviates the string using ellipses. This will turn the string "Now is the time for all good men" into "...s the time for..."
+`abbrev` on a string abbreviates the string using ellipses. Tl turn the string "Now is the time for all good men" into "...s the time for..."
 This function works like `Abbreviate(string, int)`, but allows you to specify a "left edge" offset. The left edge is not
 necessarily going to be the leftmost character in the result, or the first character following the ellipses, but it will appear
 somewhere in the result.
@@ -1831,7 +1823,7 @@ or custom).
 
 Returns a new string where all ASCII characters are lower-cased.
 
-This function does not perform Unicode case-mapping for characters outside the
+This function doesn't perform Unicode case-mapping for characters outside the
 ASCII range.
 
 ```javascript
@@ -1923,7 +1915,7 @@ Examples:
 
 Returns a new string whose characters are the same as the target string, only formatted in
 reverse order.
-This function relies on converting strings to rune arrays in order to reverse.
+This function relies on converting strings to rune arrays.
 
 ```javascript
 "gums".reverse() // returns 'smug'
@@ -1947,7 +1939,7 @@ This function relies on converting strings to rune arrays in order to reverse.
 
 ### .shellQuote
 
-`shellQuote` quotes a string such that it can be safely used as a token in a shell command.
+`shellQuote` quotes a string such that it can be used as a token in a shell command.
 
 ```javascript
 "Hello World".shellQuote() // "'Hello World'"
@@ -2138,7 +2130,7 @@ length.
 
 Returns a new string which removes the leading and trailing space.
  The trim function uses the Unicode definition of space.
-which does not include the zero-width spaces.
+which doesn't include the zero-width spaces.
 
 ```javascript
 "  \ttrim\n    ".trim() //  'trim'
@@ -2183,7 +2175,7 @@ which does not include the zero-width spaces.
 
 Returns a new string where all ASCII characters are upper-cased.
 
-This function does not perform Unicode case-mapping for characters outside the
+This function doesn't perform Unicode case-mapping for characters outside the
 ASCII range.
 
 ```javascript
@@ -2297,7 +2289,7 @@ SemverCompare("3.4.5", "3.4.5-alpha") // false
 
 ### YAML
 
-`YAML` converts a YAML formatted string into a map. It provides an easy way to handle YAML data.
+`YAML` converts a YAML formatted string into a map.
 
 ```javascript
 // Converting a simple YAML string to a map:
@@ -2348,22 +2340,29 @@ YAMLArray("") // an empty array
 
 ### TOML
 
-`TOML` converts a TOML formatted string into a map, making it easy to work with TOML data.
 
-```javascript
+`TOML` converts a TOML formatted string into a map, providing a convenient way to work with TOML data.
+
+
+
 // Converting a TOML string to a map:
 TOML('name = "Alice"\nage = 30') // a map with keys "name" and "age"
-```
 
-```javascript
+
+
+
+
 // Handling an array in TOML:
 TOML("numbers = [1, 2, 3]") // a map with a key "numbers" containing an array
-```
 
-```javascript
+
+
+
+
 // Nested TOML data conversion:
 TOML('[person]\nname = "Bob"\nage = 35') // a nested map
-```
+
+
 
 ### toTOML
 
@@ -2379,23 +2378,20 @@ Where:
 
 Examples:
 
+
 ```javascript
 // Converting a map to a TOML string:
-toTOML({ name: "Alice", age: 30 }) // "name = \"Alice\"\nage = 30"
-```
+`toTOML({ name: "Alice", age: 30 }) // "name = \"Alice\"\nage = 30"`
 
-```javascript
 // Handling an array (TOML arrays must be of the same type):
 toTOML({ people: ["Alice", "Bob"] }) // "people = [\"Alice\", \"Bob\"]"
-```
 
-```javascript
 // An empty map:
 toTOML({}) // an empty string
 ```
 
----
 
+---
 ## uuid
 
 ### uuid.Nil

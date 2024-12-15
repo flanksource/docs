@@ -4,7 +4,7 @@ title: Stateful Metrics
 
 Metrics can be generated from time based data, e.g. logs per minute, logins per second by using the output of one check execution as the input to the next.
 
-```yaml file=../../../../modules/canary-checker/fixtures/elasticsearch/stateful_metrics.yaml
+```yaml file=<rootDir>/modules/canary-checker/fixtures/elasticsearch/stateful_metrics.yaml
 
 ```
 

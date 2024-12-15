@@ -1,5 +1,7 @@
 ---
 title: SFTP
+sidebar_custom_props:
+  icon: sftp
 ---
 <Fields connection="sftp"/>
 
@@ -22,17 +24,17 @@ metadata:
   name: example-sftp
 spec:
   sftp:
-    host: 
+    host:
       valueFrom:
         secretKeyRef:
           name: sftp-connection
           key: host
-    username: 
+    username:
       valueFrom:
         secretKeyRef:
           name: sftp-connection
           key: username
-    password: 
+    password:
       valueFrom:
         secretKeyRef:
           name: sftp-connection

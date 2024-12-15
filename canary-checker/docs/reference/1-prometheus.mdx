@@ -1,13 +1,15 @@
 ---
 title: Prometheus
 sidebar_class_name: popular
+sidebar_custom_props:
+  icon: prometheus
 ---
 
 # <Icon name="prometheus" /> Prometheus
 
 The Prometheus Check connects to the Prometheus host, performs the desired query, and displays the results.
 
-```yaml title="prometheus.yaml"  file=../../../modules/canary-checker/fixtures/datasources/prometheus.yaml
+```yaml title="prometheus.yaml"  file=<rootDir>/modules/canary-checker/fixtures/datasources/prometheus.yaml
 
 ```
 
@@ -69,10 +71,10 @@ The Prometheus Check connects to the Prometheus host, performs the desired query
 
 ### Create a check per prometheus job using a transform
 
-```yaml title="jobs.yaml"  file=../../../modules/canary-checker/fixtures/prometheus/jobs.yaml
+```yaml title="jobs.yaml"  file=<rootDir>/modules/canary-checker/fixtures/prometheus/jobs.yaml
 ```
 
 ### Create a check per failing job only
 
-```yaml title="jobs.yaml"  file=../../../modules/canary-checker/fixtures/prometheus/jobs-fail-only.yaml
+```yaml title="jobs.yaml"  file=<rootDir>/modules/canary-checker/fixtures/prometheus/jobs-fail-only.yaml
 ```

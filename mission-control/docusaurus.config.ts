@@ -34,7 +34,7 @@ export default async function createConfigAsync() {
       links: {
         authentication: '/reference/env-var',
         secrets: '/reference/env-var',
-        connection: '/reference/connection',
+        connection: '/reference/connections',
         cel: '/reference/scripting/cel',
         gotemplate: '/reference/scripting/gotemplate',
         javascript: '/reference/scripting/javascript',
@@ -57,15 +57,33 @@ export default async function createConfigAsync() {
           toExtensions: ['exe', 'zip'], // /myAsset -> /myAsset.zip (if latter exists)
           redirects: [
             // /docs/oldDoc -> /docs/newDoc
-            {
-              to: '/canary-checker/reference/sql',
-              from: ['/canary-checker/reference/postgres', '/canary-checker/reference/mysql', '/canary-checker/reference/mssql'],
-            },
+            // {
+            //   to: '/guide/canary-checker/reference/sql',
+            //   from: ['/guide/canary-checker/reference/postgres', '/guide/canary-checker/reference/mysql', '/guide/canary-checker/reference/mssql'],
+            // },
+
+            // {
+            //   to: '/guide/canary-checker/reference/folder#s3',
+            //   from: '/guide/canary-checker/reference/s3-bucket',
+            // },
 
             {
-              to: '/canary-checker/reference/folder#s3',
-              from: '/canary-checker/reference/s3-bucket',
+              to: '/guide/canary-checker',
+              from: '/canary-checker',
+            },
+            {
+              to: '/guide/playbooks',
+              from: '/playbooks',
+            },
+            {
+              to: '/guide/notifications/',
+              from: '/notifications',
+            },
+            {
+              to: '/guide/topology',
+              from: '/topology',
             }
+
           ],
 
         }],
@@ -82,6 +100,37 @@ export default async function createConfigAsync() {
       //   };
       // },
 
+
+      async function nodePolyfillPlugin(context, options) {
+        return {
+          name: 'node-polyfill-plugin',
+          configureWebpack(config, isServer) {
+            if (!isServer) {
+              return {
+                resolve: {
+                  fallback: {
+                    path: require.resolve('path-browserify'),
+                    util: require.resolve('util/'),
+                    process: require.resolve('process/browser'),
+                    buffer: require.resolve('buffer/'),
+                    fs: require.resolve("browserify-fs"),
+                  },
+                },
+
+                plugins: [
+                  new (require('webpack').ProvidePlugin)({
+                    process: ['process'],
+
+                    Buffer: ['buffer', 'Buffer'],
+                  }),
+                ],
+              };
+            }
+            return {};
+
+          },
+        };
+      },
       async function resolveSymlinkPlgugin(context, options) {
         return {
           name: 'resolve-symlinks',
@@ -131,7 +180,25 @@ export default async function createConfigAsync() {
             // rehypePlugins: [rehypeKatex],
           },
           blog: {
-            showReadingTime: true
+            showReadingTime: true,
+            blogTitle: 'Flanksource Blog',
+            // blogDescription: 'A Docusaurus powered blog!',
+            postsPerPage: 'ALL',
+            blogSidebarTitle: 'All posts',
+            blogSidebarCount: 0,
+            feedOptions: {
+              type: 'all',
+              copyright: `Copyright © ${new Date().getFullYear()} Flanksource, Inc.`,
+              createFeedItems: async (params) => {
+                const { blogPosts, defaultCreateFeedItems, ...rest } = params;
+                return defaultCreateFeedItems({
+                  // keep only the 10 most recent blog posts in the feed
+                  blogPosts: blogPosts.filter((item, index) => index < 10),
+                  ...rest,
+                });
+              },
+            },
+
           },
 
           theme: {
@@ -150,7 +217,7 @@ export default async function createConfigAsync() {
         // Replace with your project's social card
         image: 'img/flanksource-icon.png',
         home: 'docs/index.md',
-
+        themes: [["docusaurus-json-schema-plugin", {}]],
         navbar: {
           title: '',
           logo: {
@@ -165,56 +232,54 @@ export default async function createConfigAsync() {
               position: 'left',
               label: 'Overview'
             },
+            {
+              to: 'integrations',
+              activeBasePath: '/integrations',
+              // sidebarId: 'integrationsSidebar',
+              position: 'left',
+              label: 'Integrations'
+            },
+            {
+              to: 'guide',
+              activeBasePath: '/guide',
+              // activeBasePath: '/config-db',
+              label: 'User Guide',
+              position: 'left'
+            },
             // {
-            //   to: 'integrations',
-            //   activeBasePath: '/integrations',
-            //   position: 'left',
-            //   label: 'Integrations'
+            //   to: 'playbooks',
+            //   activeBasePath: '/playbooks',
+            //   label: 'Playbooks',
+            //   position: 'left'
             // },
-            {
-              to: 'config-db',
-              activeBasePath: '/config-db',
-              label: 'Catalog',
-              position: 'left'
-            },
-            {
-              to: 'playbooks',
-              activeBasePath: '/playbooks',
-              label: 'Playbooks',
-              position: 'left'
-            },
-            {
-              to: 'topology',
-              activeBasePath: 'topology',
-              label: 'Topology',
-              position: 'left'
-            },
-            {
-              to: 'canary-checker',
-              label: 'Health Checks',
-              activeBasePath: 'canary-checker',
-              position: 'left'
-            },
+            // {
+            //   to: 'topology',
+            //   activeBasePath: 'topology',
+            //   label: 'Topology',
+            //   position: 'left'
+            // },
+            // {
+            //   to: 'canary-checker',
+            //   label: 'Health Checks',
+            //   activeBasePath: 'canary-checker',
+            //   position: 'left'
+            // },
 
-            {
-              to: 'notifications',
-              activeBasePath: 'notifications',
-              label: 'Notifications',
-              position: 'left'
-            },
+            // {
+            //   to: 'notifications',
+            //   activeBasePath: 'notifications',
+            //   label: 'Notifications',
+            //   position: 'left'
+            // },
 
-            {
-              to: 'registry',
-              activeBasePath: 'registry',
-              label: 'Registry',
-              position: 'left'
-            },
             {
               to: 'reference',
               activeBasePath: '/reference',
               label: 'Reference',
               position: 'left'
             },
+
+            { to: 'blog', label: 'Blog', position: 'left' }, // or position: 'right'
 
             {
               href: "https://app.flanksource.com/",
@@ -261,6 +326,6 @@ export default async function createConfigAsync() {
           theme: PrismLight,
           darkTheme: PrismDark,
         },
-      })
+      }),
   }
 }

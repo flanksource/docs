@@ -2,7 +2,7 @@
 title: Env Vars
 ---
 
-```yaml title="call-secret-endpoint.yaml" file=../../../modules/mission-control/fixtures/playbooks/env-secrets.yaml
+```yaml title="call-secret-endpoint.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/env-secrets.yaml
 
 ```
 
