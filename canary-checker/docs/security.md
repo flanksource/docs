@@ -1,5 +1,6 @@
 ---
 title: Security
+sidebar_class_name: hidden-mission-control
 ---
 
 Canary checker is essentially a remote command execution platform, which from a security perspective can be challenging
@@ -10,7 +11,7 @@ Canary checker is essentially a remote command execution platform, which from a 
 
 You can take following steps to harden your installation.
 
-1. 1et the following helm values:
+Set the following helm values:
 
 | Path                       | Value   | Impact                                                                                    |
 | -------------------------- | ------- | ----------------------------------------------------------------------------------------- |

@@ -1,5 +1,7 @@
 ---
 title: Troubleshooting
+sidebar_custom_props:
+  icon: material-symbols-light:troubleshoot
 ---
 
 import Install from '@site/docs/snippets/install.mdx'
@@ -10,46 +12,44 @@ import Install from '@site/docs/snippets/install.mdx'
 
 The easiest method of troubleshooting is to run the `canary-checker run` command with a copy of the canary resource locally.  This increases velocity of troubleshooting iteration, and also prevents the possibility of sensitive information in verbose output being leaked to logging systems by the canary pod.
 
-<Step step={1} name="Install the canary-checker CLI">
+1. Install the canary-checker CLI
 
-<Install/>
+    <Install/>
 
 
 
-<details summary="Configuring the environment">
-<div>
-The local canary-checker execution may need to be provided with the permissions required to run the check.
-Depending on the check this might include:
+    <details summary="Configuring the environment">
+    <div>
+    The local canary-checker execution may need to be provided with the permissions required to run the check.
+    Depending on the check this might include:
 
-- The ability to read secrets or other objects in the cluster
-- Access to cloud APIs, such as AWS, GCP or Azure API interfaces
-- Locally installed binaries invoked by `exec` scripts
+    - The ability to read secrets or other objects in the cluster
+    - Access to cloud APIs, such as AWS, GCP or Azure API interfaces
+    - Locally installed binaries invoked by `exec` scripts
+    <br/>
+    The following local settings affects the permissions available for use by the canary-checker executable:
+    <br/>
+    - The active kubectl context as specified in `KUBECONFIG`
+    - The AWS profile specified in `AWS_DEFAULT_PROFILE` or `AWS_PROFILE`, or the AWS credentials specified by `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+    - The GCP credentials configured through `gcloud auth application-default login`
+    - The `$PATH` configuration
+    </div>
+    </details>
 
-The following local settings affects the permissions available for use by the canary-checker executable:
+1. Get the YAML for an existing canary
 
-- The active kubectl context as specified in `KUBECONFIG`
-- The AWS profile specified in `AWS_DEFAULT_PROFILE` or `AWS_PROFILE`, or the AWS credentials specified by `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
-- The GCP credentials configured through `gcloud auth application-default login`
-- The `$PATH` configuration
-</div>
-</details>
+    ```bash
+    kubectl get canary test-canary -n test-namespace -o yaml \
+        | yq '.metadata.annotations.trace = "true"' > test-canary.yaml
+    ```
 
-</Step>
+    <p/>
 
-<Step step={2} name="Get the YAML for an existing canary">
+1. Run the canary locally
 
-```bash
-kubectl get canary test-canary -n test-namespace -o yaml \
-    | yq '.metadata.annotations.trace = "true"' > test-canary.yaml
-```
-
-</Step>
-<Step step={3} name="Run the canary locally">
-
-```bash
-canary-checker run -v test-canary.yaml
-```
-</Step>
+    ```bash
+    canary-checker run -v test-canary.yaml
+    ```
 
 ## Trigger a run from the CLI
 

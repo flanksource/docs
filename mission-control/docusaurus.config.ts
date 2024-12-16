@@ -18,7 +18,7 @@ export default async function createConfigAsync() {
     tagline: '',
     // staticDirectories: ['images', 'static'],
     url: 'https://docs.flanksource.com',
-    baseUrl: '/',
+    baseUrl: '/docs',
     organizationName: 'flanksource', // Usually your GitHub org/user name.
     projectName: 'docs', // Usually your repo name.
     favicon: 'img/flanksource-icon.png',
@@ -82,7 +82,11 @@ export default async function createConfigAsync() {
             {
               to: '/guide/topology',
               from: '/topology',
-            }
+            },
+            {
+              to: '/installation/',
+              from: '/installation/deployment-models',
+            },
 
           ],
 
@@ -203,7 +207,7 @@ export default async function createConfigAsync() {
 
           theme: {
 
-            customCss: './src/css/out.css'
+            customCss: ['./src/css/out.css', './src/css/mission-control.css']
           }
         } satisfies Preset.Options
         )

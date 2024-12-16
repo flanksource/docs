@@ -55,6 +55,10 @@ const sidebars = {
       customProps: {
         icon: 'getting-started',
       },
+      link: {
+        type: 'doc',
+        id: 'installation/index',
+      },
 
       items: [
         // {
@@ -62,17 +66,20 @@ const sidebars = {
         //   label: 'SaaS',
         //   id: 'installation/saas'
         // },
-        {
-          type: 'doc',
-          label: 'Deployment Models',
-          id: 'installation/deployment-models'
+        // {
+        //   type: 'doc',
+        //   label: 'Deployment Models',
+        //   id: 'installation/deployment-models'
 
-        },
+        // },
 
         {
           type: 'category',
           label: 'SaaS',
-
+          link: {
+            type: 'doc',
+            id: 'installation/saas/getting-started',
+          },
           items: [
 
             {

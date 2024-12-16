@@ -2,6 +2,7 @@
 title: Windows
 description: Installing canary-checker on a windows os
 draft: true
+sidebar_class_name: hidden-mission-control
 ---
 
 # Quick Start
