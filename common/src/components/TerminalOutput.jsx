@@ -30,7 +30,6 @@ function ansi2HTML(str, command) {
   const doc = parser.parseFromString("", 'text/html');
   wrapTextInSpan(doc.body);
   doc.body.innerHTML = `<span class="text-gray-500">&gt;${cmd} </span><br>` + doc.body.innerHTML
-  console.log("inner", doc.body.innerHTML)
   return doc.body.innerHTML.replaceAll("\n", "<br/>");
 }
 
