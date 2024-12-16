@@ -20,8 +20,6 @@ const OpenAPISchema = ({ schema, rootSchema }) => {
     return <div className="text-red-500">No schema provided</div>;
   }
 
-
-
   const getRef = (schema, parent, key) => {
     if (!schema.$ref) {
       return null
@@ -31,7 +29,7 @@ const OpenAPISchema = ({ schema, rootSchema }) => {
     if (resolvedSchema != null) {
       return null;
     }
-    const url = URL.urlToHttpOptions(schema.$ref)
+    const url = URL.parse(schema.$ref)
     const refParts = schema.$ref.split('/')
     let label = refParts[refParts.length - 1]
 

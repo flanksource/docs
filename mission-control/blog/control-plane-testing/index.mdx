@@ -80,9 +80,8 @@ To follow this tutorial, you need:
 1. Install the `canary-checker` binary
     <Install/>
 
-    :::info Operator Mode
-    This tutorial uses the CLI for faster feedback, when rolling this out to production we recommend installing `canary-checker` as an [operator](/guide/canary-checker/getting-started)
-
+    :::info Helm Installation
+    This tutorial uses the CLI for faster feedback, in production we recommend installing `canary-checker` as an operator using the [helm chart](https://canarychecker.io/getting-started) or as part of the full Mission Control [platform](/installation/self-hosted/getting-started).
 1. Next create a `Canary` CustomResourceDefinition (CRD)  using the `kubernetesResource` check type, the layout of the canary is as follows:
 
     ```yaml title=basic-canary.yaml file=template.yaml
