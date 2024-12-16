@@ -59,7 +59,7 @@ To enable the Flux integration you need
 
 - Mission Control [installed](/installation/)
 - [kubectl](/installation/saas/kubectl) access to the Mission Control instance
-  :::
+:::
 
 1. Create a github connection
    <p/>
@@ -74,13 +74,13 @@ To enable the Flux integration you need
    <Helm chart="mission-control-flux"
    createNamespace={false}
    createRepo={false}
+   schema={Schema}
    values={{
      "git.type": "github",
      "git.connection": "connection://mission-control/github",
    }}/>
 
 
-  <OpenAPI schema={Schema}/>
 
 3. Annotate resources with `config.kubernetes.io/origin`
 

@@ -1,5 +1,9 @@
 
 import Convert from 'ansi-to-html'
+
+import CopyButton from '@theme/CodeBlock/CopyButton'
+
+
 function ansi2HTML(str, command) {
 
   const wrapTextInSpan = (node) => {
@@ -52,11 +56,11 @@ export default function Ansi({ command, children }) {
         padding: '0 8px',
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'space-between',
         gap: '6px'
       }}>
         <div
           style={{
-            // backgroundColor: "rgba(5, 5, 5, 0.9)",
             boxSizing: "border-box",
             color: "rgb(137, 137, 144)",
             columnGap: "8px",
@@ -96,6 +100,8 @@ export default function Ansi({ command, children }) {
           />
         </div>
 
+        {/*FIXME: why does the button render outside?*/}
+        <div className='display-block mb-6 mr-[15px]'><CopyButton code={command} className="text-white/[0.5] hover:text-white" /></div>
 
       </div>
       <div

@@ -45,7 +45,7 @@ The following playbooks are available for use:
 :::info Prerequisites
 To enable the Kubernetes integration you need:
 
-- Mission Control [installed](/installation/)
+- Mission Control [installed](/installation)
 - [kubectl](/installation/saas/kubectl) access to the Mission Control instance
 :::
 
