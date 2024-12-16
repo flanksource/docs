@@ -45,7 +45,6 @@ const OpenAPISchema = ({ schema, rootSchema }) => {
 
   const renderSchema = (schema, parent, key) => {
     if (!schema) {
-      console.log("cannot find schema", schema, parent, key)
       return null;
     }
     if (schema.$ref) {
