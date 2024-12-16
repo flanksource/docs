@@ -120,7 +120,7 @@ footer {
   }
 }
 
-.blog-list-page {
+.blog-list-page, .blog-authors-posts-page  {
   h2 {
     font-size: 1.25em;
     margin-bottom: 6px;
