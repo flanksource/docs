@@ -43,7 +43,7 @@ To enable the Flux Topology you need
 
 - Mission Control [installed](/installation/)
 - [kubectl](/installation/saas/kubectl) access to the Mission Control instance
-- Scrape configuration for a [kubernetes](../kubernetes/config) cluster
+- A [kubernetes](/guide/config-db/scrapers/kubernetes/config) scraper already installed.
   :::
 
 1. Install the [mission-control-flux](https://artifacthub.io/packages/helm/flanksource/mission-control-flux) chart

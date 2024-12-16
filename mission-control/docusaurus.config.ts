@@ -83,10 +83,6 @@ export default async function createConfigAsync() {
               to: '/guide/topology',
               from: '/topology',
             },
-            {
-              to: '/installation/',
-              from: '/installation/deployment-models',
-            },
 
           ],
 
@@ -118,6 +114,7 @@ export default async function createConfigAsync() {
                     process: require.resolve('process/browser'),
                     buffer: require.resolve('buffer/'),
                     fs: require.resolve("browserify-fs"),
+                    url: require.resolve("url/")
                   },
                 },
 

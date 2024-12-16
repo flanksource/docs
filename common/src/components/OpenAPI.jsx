@@ -1,5 +1,6 @@
 
 import Details from "@theme/Details";
+import URL from 'url'
 const resolveRef = (schema, ref) => {
   const path = ref.replace(/^#\//, '').split('/');
   return path.reduce((acc, part) => acc && acc[part], schema);
@@ -30,7 +31,7 @@ const OpenAPISchema = ({ schema, rootSchema }) => {
     if (resolvedSchema != null) {
       return null;
     }
-    const url = URL.parse(schema.$ref)
+    const url = URL.urlToHttpOptions(schema.$ref)
     const refParts = schema.$ref.split('/')
     let label = refParts[refParts.length - 1]
 

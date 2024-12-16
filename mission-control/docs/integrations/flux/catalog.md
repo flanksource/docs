@@ -42,7 +42,7 @@ Mission Control provides built-in support for relating Flux resources to each ot
   </Card>
 
 
-<Card size="sm" title="Control Plane Testing With Canary Checker and Flux" icon="flux" link="/blog//control-plane-testing-part1" >
+<Card size="sm" title="Control Plane Testing With Canary Checker and Flux" icon="flux" link="/blog/infrastructure-testing-with-canary-checker-and-flux" >
      <Tag label="blog"/>
 </Card>
 
