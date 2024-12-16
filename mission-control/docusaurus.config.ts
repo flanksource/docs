@@ -17,8 +17,8 @@ export default async function createConfigAsync() {
     title: 'Mission Control',
     tagline: '',
     // staticDirectories: ['images', 'static'],
-    url: 'https://docs.flanksource.com',
-    baseUrl: '/docs',
+    url: 'https://flanksource.com',
+    baseUrl: process.env.NODE_ENV == "development" || process.env.PREVIEW == "true" ? '/' : '/docs',
     organizationName: 'flanksource', // Usually your GitHub org/user name.
     projectName: 'docs', // Usually your repo name.
     favicon: 'img/flanksource-icon.png',

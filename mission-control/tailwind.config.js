@@ -16,11 +16,19 @@ module.exports = {
     },
 
     {
-      pattern: /spacing/,
+      pattern: /space/,
     },
     {
-      pattern: /border/,
+      pattern: /border-gray/,
     },
+    {
+      pattern: /border-blue/,
+    },
+    {
+      pattern: /border-zinc/,
+    },
+
+
     {
       pattern: /bg-zinc/,
     },
