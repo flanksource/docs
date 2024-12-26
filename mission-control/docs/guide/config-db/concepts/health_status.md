@@ -2,7 +2,6 @@
 title: Health & Status
 sidebar_custom_props:
   icon: mdi-light:heart
-
 ---
 
 Each config item has attributes used to determine the health and status of an item.

@@ -3,7 +3,6 @@ title: Playbook
 sidebar_position: 6
 sidebar_custom_props:
   icon: playbook
-
 ---
 
 | Field             | Description                                                                                                                                                                                                                                                                           | Scheme                                               |
@@ -14,7 +13,7 @@ sidebar_custom_props:
 | `on.component`    | Run a playbook when a component becomes heathy/unhealthy                                                                                                                                                                                                                              | [`EventTrigger`](./events#component)                 |
 | `on.config`       | Run a playbook when a config item is created/updated/deleted or changes state                                                                                                                                                                                                         | [`EventTrigger`](./events#config)                    |
 | `on.webhook`      | Run a playbook when a webhook is called                                                                                                                                                                                                                                               | [`Webhook`](./webhooks)                              |
-| `runsOn`          | Which [runner](/guide/playbooks/concepts/runners) (agent) to run the playbook on                                                                                                                                                                                                            | [`[]Agent`](/reference/types#agent)                  |
+| `runsOn`          | Which [runner](/guide/playbooks/concepts/runners) (agent) to run the playbook on                                                                                                                                                                                                      | [`[]Agent`](/reference/types#agent)                  |
 | `templatesOn`     | Where the templating of actions should occur <br/> For `host` the templating occurs on the mission control instance before being passed to the agent <br/> For `agent` the templating occurs on the agent/runner where there might be secrets not accessible by the primary instance. | `host` or `agent`                                    |
 | `checks`          | Which health checks can this playbook run on                                                                                                                                                                                                                                          | [`[]ResourceSelector`](/reference/resource-selector) |
 | `configs`         | Which config items can this playbook run on                                                                                                                                                                                                                                           | [`[]ResourceSelector`](/reference/resource-selector) |
@@ -73,22 +72,22 @@ scheme: 'string',
 
 ## Actions
 
-| Field                 | Description                                                              | Scheme                                                                                                        | Required |
-| --------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | -------- |
-| **`name`**            | Step Name                                                                | `string`                                                                                                      | `true`   |
+| Field                 | Description                                                                    | Scheme                                                                                                        | Required |
+| --------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | -------- |
+| **`name`**            | Step Name                                                                      | `string`                                                                                                      | `true`   |
 | `runsOn`              | Which [runner](/guide/playbooks/concepts/runners) (agent) to run the action on | [`[]Agent`](/reference/types#agent)                                                                           |          |
-| `templatesOn`         | Where templating (and secret management) of actions should occur         | `host` or `agent`                                                                                             |          |
-| `delay`               | A delay before running the action e.g. `8h`                              | [`Duration`](/reference/types#duration) or [CEL](/reference/scripting/cel) with [Playbook Context](./context) |          |
-| `filter`              | Conditionally run an action                                              | [CEL](/reference/scripting/cel) with [Playbook Context](./context)                                            |          |
-| `timeout`             | Timeout on this action.                                                  | [`Duration`](/reference/types#duration)                                                                       |          |
-| `azureDevopsPipeline` | Trigger a pipeline run                                                   | [AzureDevops](/guide/playbooks/actions/azure_devops_pipeline)                                                       |          |
-| `exec`                | Run a script e.g. to use `kubectl` or `aws` CLI's                        | [Exec](/guide/playbooks/actions/exec)                                                                               |          |
-| `github`              | Trigger Github Action                                                    | [Github Action](/guide/playbooks/actions/github)                                                                    |          |
-| `gitops`              | Update a git repository (directly or via pull request)                   | [Gitops](/guide/playbooks/actions/gitops)                                                                           |          |
-| `http`                | Call an HTTP Endpoint                                                    | [Http](/guide/playbooks/actions/http)                                                                               |          |
-| `sql`                 | Execute a SQL query                                                      | [Sql](/guide/playbooks/actions/sql)                                                                                 |          |
-| `pod`                 | Run a kubernetes pod.                                                    | [Pod](/guide/playbooks/actions/pod)                                                                                 |          |
-| `notification`        | Specify notification of action.                                          | [Notification](/guide/playbooks/actions/notification)                                                               |          |
+| `templatesOn`         | Where templating (and secret management) of actions should occur               | `host` or `agent`                                                                                             |          |
+| `delay`               | A delay before running the action e.g. `8h`                                    | [`Duration`](/reference/types#duration) or [CEL](/reference/scripting/cel) with [Playbook Context](./context) |          |
+| `filter`              | Conditionally run an action                                                    | [CEL](/reference/scripting/cel) with [Playbook Context](./context)                                            |          |
+| `timeout`             | Timeout on this action.                                                        | [`Duration`](/reference/types#duration)                                                                       |          |
+| `azureDevopsPipeline` | Trigger a pipeline run                                                         | [AzureDevops](/guide/playbooks/actions/azure_devops_pipeline)                                                 |          |
+| `exec`                | Run a script e.g. to use `kubectl` or `aws` CLI's                              | [Exec](/guide/playbooks/actions/exec)                                                                         |          |
+| `github`              | Trigger Github Action                                                          | [Github Action](/guide/playbooks/actions/github)                                                              |          |
+| `gitops`              | Update a git repository (directly or via pull request)                         | [Gitops](/guide/playbooks/actions/gitops)                                                                     |          |
+| `http`                | Call an HTTP Endpoint                                                          | [Http](/guide/playbooks/actions/http)                                                                         |          |
+| `sql`                 | Execute a SQL query                                                            | [Sql](/guide/playbooks/actions/sql)                                                                           |          |
+| `pod`                 | Run a kubernetes pod.                                                          | [Pod](/guide/playbooks/actions/pod)                                                                           |          |
+| `notification`        | Specify notification of action.                                                | [Notification](/guide/playbooks/actions/notification)                                                         |          |
 
 > Only 1 action should be specified per step
 

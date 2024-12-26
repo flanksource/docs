@@ -2,7 +2,6 @@
 title: Changes
 sidebar_custom_props:
   icon: octicon:diff-16
-
 ---
 
 When you save a config item to Config DB, it tracks its changes. These changes come from external sources like Kubernetes events or Azure activities. Alternatively, Mission Control can automatically detect changes by comparing the old config with the new one.

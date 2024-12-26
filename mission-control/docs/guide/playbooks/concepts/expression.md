@@ -1,7 +1,7 @@
 ---
 title: Expressions
 sidebar_custom_props:
-  icon:   hugeicons:code
+  icon: hugeicons:code
 ---
 
 Playbook event filters use [Common Expression Language (CEL)](https://github.com/google/cel-go).

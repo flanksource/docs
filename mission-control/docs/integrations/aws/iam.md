@@ -4,7 +4,6 @@ sidebar_custom_props:
   icon: logos:aws-iam
 ---
 
-
 Depending on how you want to use Mission Control you need to create an IAM role for mission control to use:
 
 | Use Case                                     | Role                                      |
@@ -74,6 +73,7 @@ You can also create a new policy with just the permissions required by Mission C
 </details>
 
 ## Configure IAM Roles for Mission Control
+
 <Tabs queryString="type">
 <TabItem label="IAM Roles for Service Accounts" value="IRSA">
 
@@ -131,7 +131,6 @@ You can also create a new policy with just the permissions required by Mission C
    eksctl create iamserviceaccount --cluster $CLUSTER -c eksctl.yaml
    ```
 
-
 </TabItem>
 </Tabs>
 
@@ -145,7 +144,8 @@ You can also create a new policy with just the permissions required by Mission C
 1. Ensure the [AWS Pod Identity Agent](https://docs.aws.amazon.com/eks/latest/userguide/pod-id-agent-setup.html) is configured and running
 
 1. Create a mapping file for `eksctl`
-	```yaml title="eksctl.yaml"
+
+   ```yaml title="eksctl.yaml"
    podIdentityAssociations:
    	- namespace: mission-control
    		serviceAccountName:  mission-control-sa
@@ -179,41 +179,40 @@ You can also create a new policy with just the permissions required by Mission C
    			namespace: mission-control
    		attachPolicyARNs:
    		- "arn:aws:iam::aws:policy/ReadOnlyAccess"
-	```
-	<p />
+   ```
 
-	<details summary="Using an existing IAM Role" className="mt-10">
-	<span className="bg-white">
-	<p>If you are using a pre-existing IAM role when creating a pod identity association, you must configure the role to trust the newly introduced EKS service principal (`pods.eks.amazonaws.com`)</p>
+   <p />
 
-	```json title="iam-trust-policy.json"
-	{
-		"Version": "2012-10-17",
-		"Statement": [
-			{
-				"Effect": "Allow",
-				"Principal": {
-					"Service": "pods.eks.amazonaws.com"
-				},
-				"Action": ["sts:AssumeRole", "sts:TagSession"]
-			}
-		]
-	}
-	```
+   <details summary="Using an existing IAM Role" className="mt-10">
+   <span className="bg-white">
+   <p>If you are using a pre-existing IAM role when creating a pod identity association, you must configure the role to trust the newly introduced EKS service principal (`pods.eks.amazonaws.com`)</p>
 
-	</span>
+   ```json title="iam-trust-policy.json"
+   {
+     "Version": "2012-10-17",
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Principal": {
+           "Service": "pods.eks.amazonaws.com"
+         },
+         "Action": ["sts:AssumeRole", "sts:TagSession"]
+       }
+     ]
+   }
+   ```
 
-	</details>
+   </span>
 
-3. Apply the Pod Identities using `eksctl`
+   </details>
+
+1. Apply the Pod Identities using `eksctl`
 
    ```bash
    eksctl create podidentityassociation  -c eksctl.yaml
    ```
 
    <p />
-
-
 
 </TabItem>
 <TabItem label="Terraform" value="terraform">
@@ -222,43 +221,48 @@ You can also create a new policy with just the permissions required by Mission C
 2. Create `main.tf`
 
    ```hcl title="main.tf"  file=<rootDir>/docs/partials/_pod_identity.tf
+
    ```
-	<p/>
+
+   <p/>
+
 3. Apply the terraform
    ```bash
    TF_VAR_role=$CLUSTER  terraform apply
    ```
-	 <p/>
+    <p/>
 
 </TabItem>
 
 <TabItem label="Cloudformation" value="cloudformation">
 
 1. Setup variables
-	```bash
-	# The name of the EKS cluster mission control is being deployed to
-	export CLUSTER= <CLUSTER_NAME>
-	# the default namespace the mission-control helm chart uses
-	export NAMESPACE=mission-control
-	```
-	<p/>
+
+   ```bash
+   # The name of the EKS cluster mission control is being deployed to
+   export CLUSTER= <CLUSTER_NAME>
+   # the default namespace the mission-control helm chart uses
+   export NAMESPACE=mission-control
+   ```
+
+   <p/>
 
 1. Create a cloudformation template
 
    ```yaml title="mission-control-iam-cloudformation.yaml"  file=<rootDir>/docs/partials/_pod_identity.yaml
+
    ```
-	 <p/>
 
-2. Create a new stack
-	```bash
-	aws cloudformation deploy \
-		--stack-name mission-control-roles \
-		--template-file file://mission-control-iam-cloudformation.yaml \
-		--parameter-overrides Cluster==$CLUSTER Namespace=$NAMESPACE
-	```
-	<p/>
+    <p/>
 
-
+1. Create a new stack
+   ```bash
+   aws cloudformation deploy \
+   	--stack-name mission-control-roles \
+   	--template-file file://mission-control-iam-cloudformation.yaml \
+   	--parameter-overrides Cluster==$CLUSTER Namespace=$NAMESPACE
+   ```
+   <p/>
 
 </TabItem>
 </Tabs>
@@ -280,11 +284,12 @@ First we create a secret called `aws` containing the access key and secret.
 
    aws iam create-user --user-name $USER_NAME
    aws iam attach-user-policy \
-	 	--user-name $USER_NAME \
-		--policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess
+    	--user-name $USER_NAME \
+   	--policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess
    key=$(aws iam create-access-key --user-name $USER_NAME)
    ```
-	 <p/>
+
+    <p/>
 
 2. Create a new secret `aws` containing the access and secret key
 
@@ -293,33 +298,35 @@ First we create a secret called `aws` containing the access key and secret.
    	--from-literal=AWS_ACCESS_KEY_ID=$(echo $key | jq -r '.AccessKey.AccessKeyId') \
    	--from-literal=AWS_SECRET_ACCESS_KEY=$(echo $key | jq -r '.AccessKey.SecretAccessKey')
    ```
-	 <p/>
+
+    <p/>
+
 3. Create a new [connection](/reference/connections)
 
-	```yaml title="aws-connection.yaml"
-	apiVersion: mission-control.flanksource.com/v1
-	kind: Connection
-	metadata:
-		name: aws
-		namespace: mission-control
-	spec:
-		region: eu-west-1
-		accessKey:
-			valueFrom:
-				secretKeyRef:
-					name: aws
-					key: AWS_ACCESS_KEY_ID
-		secretKey:
-			valueFrom:
-				secretKeyRef:
-					name: aws
-					key: AWS_ACCESS_KEY_ID
+   ```yaml title="aws-connection.yaml"
+   apiVersion: mission-control.flanksource.com/v1
+   kind: Connection
+   metadata:
+   	name: aws
+   	namespace: mission-control
+   spec:
+   	region: eu-west-1
+   	accessKey:
+   		valueFrom:
+   			secretKeyRef:
+   				name: aws
+   				key: AWS_ACCESS_KEY_ID
+   	secretKey:
+   		valueFrom:
+   			secretKeyRef:
+   				name: aws
+   				key: AWS_ACCESS_KEY_ID
 
-	```
-	 <p/>
+   ```
 
-1. When creating Scrapers / Registry bundles you can now refer to `connection://mission-control/aws`
+    <p/>
+
+4. When creating Scrapers / Registry bundles you can now refer to `connection://mission-control/aws`
 
 </TabItem>
 </Tabs>
-

@@ -3,7 +3,6 @@ title: Webhook Triggers
 sidebar_position: 4
 sidebar_custom_props:
   icon: material-symbols-light:webhook
-
 ---
 
 Playbooks can also be triggered via webhooks. When a webhook is configured, mission-control listens on the specified endpoint and any calls to the endpoint triggers the playbook.

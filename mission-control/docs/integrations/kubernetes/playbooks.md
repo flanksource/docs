@@ -9,7 +9,6 @@ import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import Schema from '@site/modules/mission-control-registry/charts/playbooks-kubernetes/values.schema.json'
 import OpenAPI from '@site/src/components/OpenAPI'
 
-
 Self-service playbooks empower teams to manage their Kubernetes resources efficiently:
 
 - **Reduced operational overhead**: Teams can perform common tasks without DevOps intervention
@@ -41,14 +40,12 @@ The following playbooks are available for use:
 
 ## Getting Started
 
-
 :::info Prerequisites
 To enable the Kubernetes integration you need:
 
 - Mission Control [installed](/installation)
 - [kubectl](/installation/saas/kubectl) access to the Mission Control instance
-:::
-
+  :::
 
 1. Install the `mission-control-playbooks-kubernetes` helm chart.
 
@@ -59,7 +56,6 @@ If you are using the SaaS, then this needs to be installed on the SaaS vCluster 
   createNamespace={false}
   createRepo={false}
   />
-
 
 :::info Note
 The playbooks chart only needs to be installed once, unlike the `mission-control-kubernetes` chart which is per cluster
