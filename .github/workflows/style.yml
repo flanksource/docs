@@ -13,6 +13,7 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v45
         with:
+          json: true
           files: |
             **/*.md
             **/*.mdx
@@ -20,12 +21,12 @@ jobs:
       - name: List changed fiels
         run: |
           echo "Files changed:"
-          echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n'
+          echo "${{ steps.changed-files.outputs.all_changed_files }}"
 
       - name: Run Vale on changed files
-        uses: errata-ai/vale-action@reviewdog
+        uses: errata-ai/vale-action@v2.1.1
         with:
+          version: 3.9.2
           files: ${{ steps.changed-files.outputs.all_changed_files }}
-          separator: " "
           reporter: github-pr-check
           fail_on_error: true
