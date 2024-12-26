@@ -51,6 +51,11 @@
     scheme: "duration"
   },
   {
+    field: "waitForEvalPeriod",
+    description: "an additional delay after WaitFor before evaluating Kubernetes config health",
+    scheme: "duration"
+  },
+  {
     field: "title",
     description: "Channel dependent e.g. subject for email",
     scheme: "GoTemplate",
@@ -61,7 +66,7 @@
     ],
   },
   {
-    field: "body",
+    field: "template",
     description: "Channel dependent e.g. email body for email",
     scheme: "GoTemplate",
     templateEnv: [
@@ -79,8 +84,12 @@
       {"name": "ConfigEvents", "url": "/reference/notifications/template_vars#config-health-env"},
       {"name": "ComponentEvents", "url": "/reference/notifications/template_vars#component-health-env"},
     ],
-  }
-
+  },
+  {
+    field: "to.playbook",
+    description: "specify the `<namespace>/<name>` of the playbook that should be triggered when this notification fires.",
+    scheme: "string",
+  },
 ]}/>
 
 :::info Single Recipient
