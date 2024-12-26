@@ -104,15 +104,29 @@ Reports whether a given object has a property with the given key, or whether a g
 
 ```
 
-### jsonpath
+### jmespath
 
-Extracts portions of an input object or list using a [JSONPath](https://goessner.net/articles/JsonPath) expression.
+`jmespath` evaluates a [JMESPath](https://jmespath.org/) expression against an object or JSON string
 
-Any object or list may be used as input. The output depends somewhat on the expression; if multiple items are matched, an array is returned.
 
 ```go
-{{ .books | jsonpath `$..works[?( @.edition_count > 400 )].title` }} // [Alice's Adventures in Wonderland Gulliver's Travels]
+{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
+{{ $data | jmespath "foo" }} // 1
 
+// Using a JSON string
+{{ $data | toJSON | jsonpath "foo" }} // 1
+```
+
+### jsonpath
+
+`jsonpath` evaluates a [JSONPath](https://datatracker.ietf.org/doc/draft-ietf-jsonpath-base) expression against an object or JSON string
+
+```go
+{{ $data := dict "foo" 1 "bar" 2 "baz" 3 }}
+{{ $data | jsonpath "$.foo" }} // 1
+
+// Using a JSON string
+{{ $data | toJSON | jsonpath "$.foo" }} // 1
 ```
 
 ### jq

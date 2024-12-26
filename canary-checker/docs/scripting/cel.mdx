@@ -1010,6 +1010,23 @@ filepath.Split("/foo/bar/baz") // [/foo/bar/ baz]
 {}.toJSONPretty("    ", );
 ```
 
+### jmespath
+
+`jmespath` evaluates a [JMESPath](https://jmespath.org/) expression against an object or JSON string
+
+```javascript
+// Get all book titles
+jmespath("city", { name: "John", age: 30, city: "NY" }) // "NY"
+```
+### jsonpath
+
+`jsonpath` evaluates a [JSONPath](https://datatracker.ietf.org/doc/draft-ietf-jsonpath-base) expression against an object or JSON string
+
+```javascript
+// Get all book titles
+jmespath("city", { name: "John", age: 30, city: "NY" }) // "NY"
+```
+
 ### jq
 
 `jq` applies a jq expression to filter or transform data.
