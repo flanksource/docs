@@ -84,4 +84,35 @@ In this example:
 - The `filter` field specifies the CEL expression `check.type == 'http'`.
 - This expression evaluates to true only when the `type` attribute of the [check](/reference/canary-checker/check) object is equal to `'http'`.
 - Consequently, notifications will be sent only for events that satisfy this condition, ensuring that you are alerted specifically for failed HTTP checks.
+
+## Triggering Playbooks
+
+Playbooks can be configured as recipients for notifications, allowing you to trigger automated workflows instead of sending notifications to traditional channels like email or Slack. 
+
+While playbooks themselves are capable of listening to events - just like notifications - this approach leverages the full capabilities of notifications, including:
+
+- Rate Limitation
+- Silences
+- Repeat Intervals
+- WaitFor
+
+
+```yaml title="playbook-on-unhealthy-configs.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/health-playbook.yaml
+
 ```
+
+This notification above triggers the playbook `mc/echo-config` whenever a config changes its health to the specified list.
+
+#### Permissions
+
+To enable a notification to execute a playbook, you must configure the necessary permissions as follows:
+
+- **Subject**: notification
+- **Resource**: playbook
+- **Action**: `playbook:run`
+
+
+:::caution permission
+If the required permissions are not set, the playbook will remain in a `pending playbook run` status indefinitely.
+Ensure that permissions are correctly configured to avoid this issue.
+:::
