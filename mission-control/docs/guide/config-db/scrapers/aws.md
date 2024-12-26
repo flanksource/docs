@@ -19,11 +19,11 @@ The registry has an [AWS](/registry/aws) Helm chart that provides a pre-configur
 
 ```
 
-| Field       | Description                                                                  | Scheme                                       | Required |
-| ----------- | ---------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/reference/types#cron)                |          |
+| Field       | Description                                                                  | Scheme                                             | Required |
+| ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/reference/types#cron)                      |          |
 | `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
-| `aws`       | Specifies the list of AWS configurations to scrape.                          | [`[]AWS`](#aws)                              |          |
+| `aws`       | Specifies the list of AWS configurations to scrape.                          | [`[]AWS`](#aws)                                    |          |
 
 ### AWS
 
@@ -35,7 +35,7 @@ The registry has an [AWS](/registry/aws) Helm chart that provides a pre-configur
 | `exclude`        | AWS resources to exclude from scraping                      | `[]string`                                            |          |
 | `include`        | AWS resources to include for scraping                       | `[]string`                                            |          |
 | `properties`     | Custom templatable properties for the scraped config items. | [`[]ConfigProperty`](/reference/config-db/properties) |          |
-| `transform`      | Field to transform result                                   | [`Transform`](/guide/config-db/concepts/transform)          |          |
+| `transform`      | Field to transform result                                   | [`Transform`](/guide/config-db/concepts/transform)    |          |
 | `tags`           | set custom tags on the scraped config items                 | `map[string]string`                                   |          |
 
 ## CloudTrail

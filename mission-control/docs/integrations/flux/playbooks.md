@@ -3,12 +3,13 @@ title: Playbooks
 sidebar_custom_props:
   icon: playbook
 ---
+
 # <Icon name="flux"/> Flux Playbooks
 
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import Git from '@site/docs/partials/\_git_all.mdx';
-   import Schema from '@site/modules/mission-control-registry/charts/playbooks-flux/values.schema.json'
-  import OpenAPI from '@site/src/components/OpenAPI'
+import Schema from '@site/modules/mission-control-registry/charts/playbooks-flux/values.schema.json'
+import OpenAPI from '@site/src/components/OpenAPI'
 
 Mission control enhances a [flux](https://fluxcd.io/flux) deployment with:
 
@@ -59,7 +60,7 @@ To enable the Flux integration you need
 
 - Mission Control [installed](/installation/)
 - [kubectl](/installation/saas/kubectl) access to the Mission Control instance
-:::
+  :::
 
 1. Create a github connection
    <p/>
@@ -79,8 +80,6 @@ To enable the Flux integration you need
      "git.type": "github",
      "git.connection": "connection://mission-control/github",
    }}/>
-
-
 
 3. Annotate resources with `config.kubernetes.io/origin`
 

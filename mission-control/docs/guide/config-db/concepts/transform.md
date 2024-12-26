@@ -2,7 +2,6 @@
 title: Transformation
 sidebar_custom_props:
   icon: hugeicons:code
-
 ---
 
 Transformations allow you to modify scraped config items before they are saved, common use cases include:

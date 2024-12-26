@@ -9,7 +9,6 @@ pagination_next: guide/canary-checker/health-checks
 pagination_prev: guide/playbooks/index
 sidebar_custom_props:
   icon: topology
-
 ---
 
 A topology is a representation of logical system made up of components and sub-components.

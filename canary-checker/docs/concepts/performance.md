@@ -1,6 +1,7 @@
 ---
 draft: true
 ---
+
 ## Disable Check Status Aggregation
 
 jobs.AggregateCheckStatuses1h.disable=true

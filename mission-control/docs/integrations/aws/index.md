@@ -7,4 +7,3 @@ sidebar_custom_props:
 import DocCardList from '@theme/DocCardList';
 
 <DocCardList />
-
