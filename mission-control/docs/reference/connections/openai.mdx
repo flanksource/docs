@@ -1,0 +1,26 @@
+---
+title: OpenAI
+sidebar_custom_props:
+  icon: openai
+---
+
+<Fields connection="openai"/>
+
+## Example
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: openai-gpt4
+  namespace: default
+spec:
+  openai:
+    model:
+      value: gpt-4o
+    apiKey:
+      valueFrom:
+        secretKeyRef:
+          name: openai
+          key: API_KEY
+```
