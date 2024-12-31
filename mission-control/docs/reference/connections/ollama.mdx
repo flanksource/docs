@@ -1,0 +1,21 @@
+---
+title: Ollama
+sidebar_custom_props:
+  icon: ollama
+---
+
+<Fields connection="ollama"/>
+
+## Example
+
+```yaml title="ollama-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: ollama
+spec:
+  ollama:
+    model: llama3.1:8b
+    url:
+      value: http://localhost:11434
+```

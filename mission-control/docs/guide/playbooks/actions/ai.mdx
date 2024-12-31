@@ -1,0 +1,68 @@
+---
+title: AI
+sidebar_custom_props:
+  icon: cpu
+
+---
+import Templating from '@site/docs/reference/playbooks/context.mdx'
+
+# <Icon name="cpu"/> AI Action
+
+AI Action allows you to integrate AI capabilities into your playbooks by leveraging the rich context that Mission Control maintains about your infrastructure. When executed against configs or components, the AI action automatically injects:
+
+- Component/config manifests and specifications
+- Related configurations with configurable relationship depth
+- Historical analysis data within the specified time period
+- Change history across related infrastructure within defined time ranges
+
+This comprehensive context enables AI models to provide more informed analysis and insights about your infrastructure state and relationships.
+For example, when a Kubernetes pod fails, it examines the pod spec, ConfigMap changes, service logs together, revealing patterns that single-component analysis might overlook.
+
+```yaml title="diagnose-kubernetes-resource.yaml"  file=<rootDir>/modules/mission-control/fixtures/playbooks/ai-diagnose-kubernetes-resource.yaml
+```
+
+<Action rows={[
+ {field: "analysis.since", description: "Select the analysis of the playbook resource to feed into the AI", scheme: "duration"},
+ {field: "apiKey", description: "AI service API key", scheme: "[EnvVar](/reference/env-var)"},
+ {field: "apiURL", description: "Custom API endpoint _(applicable when behind a proxy or using Ollama)_", scheme: "string"},
+ {field: "backend", description: "LLM provider", scheme: "`openai` | `anthropic` | `ollama`"},
+ {field: "changes.since", description: "Select the changes of the playbook resource to feed into the AI", scheme: "duration"},
+ {field: "connection", description: "Connection string for the LLM", scheme: "string"},
+ {field: "formats", description: "Output format. _(Only `markdown` supported as of now)_", scheme: "`[]string`"},
+ {field: "model", description: "LLM model (e.g. gpt-4)", scheme: "string"},
+ {field: "prompt", description: "Main prompt", scheme: "string", required: true},
+ {field: "relationships", description: "Select the related configs and their changes and analysis to feed into the AI", scheme: "[[]Relationship](#relationship)"},
+ {field: "systemPrompt", description: "Context-setting system prompt", scheme: "string", required: true}
+]}/>
+
+### Relationship
+
+The AI Action can maintain relationships with other elements:
+
+<Fields rows={[
+ {
+   field: "depth",
+   description: "Depth of the relationship",
+   scheme: "int"
+ },
+ {
+   field: "direction", 
+   description: "Direction of the relationship",
+   scheme: "`all` | `incoming` | `outgoing`"
+ },
+ {
+   field: "changes.since",
+   description: "Select the changes of the related resources to feed into the AI",
+   scheme: "duration"
+ },
+ {
+   field: "analysis.since",
+   description: "Select the analysis of the related resources to feed into the AI",
+   scheme: "duration"
+ }
+]}/>
+
+## Templating
+
+<Templating/>
+

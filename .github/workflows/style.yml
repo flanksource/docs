@@ -17,7 +17,7 @@ jobs:
             **/*.md
             **/*.mdx
 
-      - name: List changed fiels
+      - name: List changed files
         run: |
           echo "Files changed:"
           echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n'
@@ -25,7 +25,7 @@ jobs:
       - name: Run Vale on changed files
         uses: errata-ai/vale-action@reviewdog
         with:
-          files: ${{ steps.changed-files.outputs.all_changed_files }}
-          separator: " "
+          files: '${{ steps.changed-files.outputs.all_changed_files }}'
+          separator: ' '
           reporter: github-pr-check
           fail_on_error: true

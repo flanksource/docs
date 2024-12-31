@@ -1,0 +1,25 @@
+---
+title: Anthropic
+sidebar_custom_props:
+ icon: anthropic
+---
+
+<Fields connection="anthropic"/>
+
+## Example
+
+```yaml title="anthropic-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: anthropic-claude
+  namespace: default
+spec:
+  anthropic:
+    model: llama3.1:8b
+  apikey:
+    valueFrom:
+      secretKeyRef:
+        name: anthropic
+        key: api
+  ```
