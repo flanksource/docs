@@ -12,9 +12,9 @@
     "write-heading-ids": "docusaurus write-heading-ids"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.2.0",
-    "@docusaurus/plugin-client-redirects": "^3.2.0",
-    "@docusaurus/preset-classic": "^3.2.0",
+    "@docusaurus/core": "^3.7.0",
+    "@docusaurus/plugin-client-redirects": "^3.7.0",
+    "@docusaurus/preset-classic": "^3.7.0",
     "@flanksource/icons": "^1.0.24",
     "@floating-ui/react": "^0.26.28",
     "@mdx-js/react": "^3.0.0",
@@ -37,8 +37,8 @@
     "url-loader": "4.1.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.2.0",
-    "@docusaurus/types": "^3.2.0",
+    "@docusaurus/module-type-aliases": "^3.7.0",
+    "@docusaurus/types": "^3.7.0",
     "@iconify-icon/react": "^2.1.0",
     "@iconify/react": "^5.2.0",
     "@iconify/tailwind": "^1.1.3",
