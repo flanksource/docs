@@ -18,7 +18,7 @@ Some of the benefits include:
 - **Different Views** of the same resources based on use case e.g. Platform teams might want an infra focused view, while application teams want an app focused view
 - **Partial Views** enable publishing high-level details of a component without exposing internal or private data more widely.
 
-<img src="/img/topology.svg" width="900px" className="py-3"/>
+<Screenshot img="/img/topology.svg" size="900px" />
 
 A topology is comprised of:
 
@@ -31,7 +31,7 @@ A topology is comprised of:
 ## Components
 
 Components are represented as cards:
-<img src="/img/topology-card.svg" width="700px" className="pb-10"/>
+<Screenshot img="/img/topology-card.svg" size="700px" />
 
 <div style={{width: "800px"}}>
 
@@ -47,7 +47,7 @@ One way to think about a component is as a mini dashboard that has provides a de
 
 Components can be created to represent any logical view of a system, for example the below represents a FluxCD installation, mapping helm releases to pods and resources that they create.
 
-<img src="/img/flux-topology.svg" width="800px" className="py-3"/>
+<Screenshot img="/img/flux-topology.svg" size="800px" />
 
 ## Components vs Config Items
 
