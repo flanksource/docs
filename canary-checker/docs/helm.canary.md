@@ -5,7 +5,7 @@ sidebar_class_name: hidden-mission-control
 slug: /guide/canary-checker/helm
 ---
 
-import Schema from '@site/modules/canary-checker/chart/values.schema.json'
+import Schema from '../../modules/canary-checker/chart/values.schema.json'
 
 # Quick Start
 
@@ -77,4 +77,4 @@ http-check   30         Passed   13s          18/18 (100.0%)   480ms        13s
            secretName: ingress-tls
    ```
 
-:::
+   :::

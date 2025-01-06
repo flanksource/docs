@@ -68,4 +68,4 @@ http-pass   30         Passed             1/1 (100%)   500ms                    
 ```
 
 The above canary will also start showing on the dashboard (at `0.0.0.0:8080`):
-![dashboard-with-canary](images/dashboard-http-pass-canary.png)
+![dashboard-with-canary](../../../docs/images/dashboard-http-pass-canary.png)
