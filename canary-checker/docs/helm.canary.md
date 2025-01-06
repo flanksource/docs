@@ -2,10 +2,10 @@
 title: Helm
 description: Recommended method for installing canary-checker
 sidebar_class_name: hidden-mission-control
-slug: '/guide/canary-checker/helm'
+slug: /guide/canary-checker/helm
 ---
 
-import Schema from '../../modules/canary-checker/chart/values.schema.json'
+import Schema from '@site/modules/canary-checker/chart/values.schema.json'
 
 # Quick Start
 
