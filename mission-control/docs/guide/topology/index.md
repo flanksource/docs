@@ -2,7 +2,6 @@
 slug: /guide/topology
 title: Topology
 sidebar_position: 4
-hide_title: true
 # hide_table_of_contents: true
 
 pagination_next: guide/canary-checker/health-checks
