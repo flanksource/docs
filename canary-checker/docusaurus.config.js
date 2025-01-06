@@ -57,7 +57,8 @@ export default async function createConfigAsync() {
               "**/modules/**",
               "**/_*.mdx",
               "**/_*.md",
-              "index.mdx"
+              "index.mdx",
+              "snippets/*"
 
             ],
 

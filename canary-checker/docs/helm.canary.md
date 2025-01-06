@@ -2,7 +2,7 @@
 title: Helm
 description: Recommended method for installing canary-checker
 sidebar_class_name: hidden-mission-control
-slug: /guide/canary-checker/helm
+slug: '/guide/canary-checker/helm'
 ---
 
 import Schema from '../../modules/canary-checker/chart/values.schema.json'
@@ -58,7 +58,7 @@ http-check   30         Passed   13s          18/18 (100.0%)   480ms        13s
    &nbsp;
    </TerminalOutput>
 
-   <Screenshot shadow={false} img="/img/health-checks.png" alt="Canary Checker Dashboard"/>
+   <Screenshot img="/img/health-checks.png" shadow={false} alt="Canary Checker Dashboard"/>
 
    :::tip
 

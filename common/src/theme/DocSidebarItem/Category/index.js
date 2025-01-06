@@ -13,7 +13,7 @@ import {
   isActiveSidebarItem,
   findFirstSidebarItemLink,
   useDocSidebarItemsExpandedState,
-} from '@docusaurus/plugin-content-docs/client';
+} from '@docusaurus/theme-common/internal';
 import Link from '@docusaurus/Link';
 import { translate } from '@docusaurus/Translate';
 import useIsBrowser from '@docusaurus/useIsBrowser';

@@ -7,7 +7,7 @@ import { getActiveDocContext, useAllDocsData, useDocsSidebar, useDocsData, useDo
 import {
   useCurrentSidebarCategory,
   filterDocCardListItems,
-} from '@docusaurus/plugin-content-docs/client';
+} from '@docusaurus/theme-common';
 
 function DocCardListForCurrentSidebarCategory({ className }) {
   const category = useCurrentSidebarCategory();
