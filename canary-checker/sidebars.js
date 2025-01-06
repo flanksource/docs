@@ -7,7 +7,7 @@ module.exports = {
     },
     {
       type: 'doc',
-      id: 'getting-started',
+      id: 'getting-started.canary',
       label: 'Getting Started'
     },
     {
