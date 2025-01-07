@@ -56,7 +56,9 @@ export default async function createConfigAsync() {
               "**/*.mc.mdx",
               "**/modules/**",
               "**/_*.mdx",
-              "**/_*.md"
+              "**/_*.md",
+              "index.mdx",
+              "snippets/*"
 
             ],
 
@@ -66,7 +68,7 @@ export default async function createConfigAsync() {
             editUrl: 'https://github.com/flanksource/docs/tree/main/',
             remarkPlugins: [[codeImport, {
               allowImportingFromOutside: true,
-              rootDir: resolve('../modules')
+              rootDir: resolve('../')
             }]],
 
             // rehypePlugins: [rehypeExpressiveCode],

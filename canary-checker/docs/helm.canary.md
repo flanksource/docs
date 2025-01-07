@@ -58,7 +58,7 @@ http-check   30         Passed   13s          18/18 (100.0%)   480ms        13s
    &nbsp;
    </TerminalOutput>
 
-   <Screenshot shadow={false} img="/img/health-checks.png" alt="Canary Checker Dashboard"/>
+   <Screenshot img="/img/health-checks.png" shadow={false} alt="Canary Checker Dashboard"/>
 
    :::tip
 
@@ -77,4 +77,4 @@ http-check   30         Passed   13s          18/18 (100.0%)   480ms        13s
            secretName: ingress-tls
    ```
 
-:::
+   :::
