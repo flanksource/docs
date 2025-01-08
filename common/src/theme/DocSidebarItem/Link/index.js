@@ -24,33 +24,40 @@ export default function DocSidebarItemLink({
         ThemeClassNames.docs.docSidebarItemLink,
         ThemeClassNames.docs.docSidebarItemLinkLevel(level),
         'menu__list-item',
-        className,
+        className
       )}
-      key={label}>
+      key={label}
+    >
       <Link
         className={clsx(
           'menu__link',
-          item.customProps?.icon && "gap-x-1 ml-[-10px]",
+          item.customProps?.icon && 'gap-x-1 ml-[-10px]',
           !isInternalLink && styles.menuExternalLink,
           {
-            'menu__link--active': isActive,
-          },
+            'menu__link--active': isActive
+          }
         )}
         autoAddBaseUrl={autoAddBaseUrl}
         aria-current={isActive ? 'page' : undefined}
         to={href}
         {...(isInternalLink && {
-          onClick: onItemClick ? () => onItemClick(item) : undefined,
+          onClick: onItemClick ? () => onItemClick(item) : undefined
         })}
-        {...props}>
-
-        {item.customProps?.icon && <Icon name={item.customProps.icon} className="h-5 w-auto " height={32}
-          style={{
-            fill: "var(--gray-500)"
-          }} />}
-        {label}
+        {...props}
+      >
+        {item.customProps?.icon && (
+          <Icon
+            name={item.customProps.icon}
+            className="h-5 w-auto "
+            height={32}
+            style={{
+              fill: 'var(--gray-500)'
+            }}
+          />
+        )}
+        {item.customProps?.label ??label}
         {!isInternalLink && <IconExternalLink />}
       </Link>
     </li>
-  );
+  )
 }
