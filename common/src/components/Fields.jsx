@@ -287,7 +287,63 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
         scheme: "EnvVar"
       }
     ])
+  } else if (connection == "openai") {
+    rows = rows.concat([
+      {
+        field: "model",
+        description: "OpenAI model to use",
+        scheme: "string",
+        required: true
+      },
+      {
+        field: "url",
+        description: "Optional API endpoint URL",
+        scheme: "EnvVar"
+      },
+      {
+        field: "apiKey",
+        description: "OpenAI API key for authentication",
+        scheme: "EnvVar",
+        required: true
+      }
+    ])
+  } else if (connection == "ollama") {
+    rows = rows.concat([
+      {
+        field: "model",
+        description: "Ollama model to use",
+        scheme: "string",
+        required: true
+      },
+      {
+        field: "url",
+        description: "Ollama API endpoint URL",
+        scheme: "EnvVar",
+        required: true
+      }
+    ])
+  } else if (connection == "anthropic") {
+    rows = rows.concat([
+      {
+        field: "model",
+        description: "Anthropic model to use",
+        scheme: "string",
+        required: true
+      },
+      {
+        field: "url",
+        description: "Optional API endpoint URL",
+        scheme: "EnvVar"
+      },
+      {
+        field: "apiKey",
+        description: "Anthropic API key for authentication", 
+        scheme: "EnvVar",
+        required: true
+      }
+    ])
   }
+
   rows = rows.filter(i => i.field != null)
 
   return (

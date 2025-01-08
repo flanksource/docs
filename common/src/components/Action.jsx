@@ -43,10 +43,8 @@ export default function Action({ rows, ...props }) {
     {
       field: "timeout",
       description: "Timeout on this action.",
-      scheme: "[`Duration`](/reference/types#duration)",
-
+      scheme: "duration",
     }
-
   ]
 
   return <Fields rows={rows} common={commonsRows} {...props} />
