@@ -10,7 +10,7 @@ sidebar_custom_props:
 import { MenuItem } from '@site/src/components/Menu';
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 
-import Schema from '@site/modules/mission-control-registry/charts/kubernetes/values.schema.json'
+import Schema from '@site/modules/mission-control-registry/charts/kubernetes/values.schema.deref.json'
 
 Mission Control provides comprehensive monitoring and management capabilities for your Kubernetes clusters. It automatically discovers and tracks:
 
@@ -41,7 +41,7 @@ To enable the Kubernetes integration you need:
 
 
 
-1. Install the Kubernetes  chart
+1. Install the [mission-control-kubernetes](https://artifacthub.io/packages/helm/flanksource/mission-control-kubernetes) chart
 
   <Helm chart="mission-control-kubernetes"
   schema={Schema}
