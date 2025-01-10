@@ -1,6 +1,89 @@
 ### Identity Mapper
 
-The schema for the object to be returned by the identity mapper script.
+The Identity Role Mapper script is a CEL script that is evaluated after Kratos runs the JSONNET claims mapper to map users to roles and membership in Mission Control teams.
+
+| Value                                            | Description                             |
+| ------------------------------------------------ | --------------------------------------- |
+| identityRoleMapper.configMap.key                 |                                         |
+| identityRoleMapper.configMap.mountPath           | Defaults to `/etc/identity-role-mapper` |
+| identityRoleMapper.configMap.name                |                                         |
+| identityRoleMapper.script                        | CEL script to return a JSON object with a `role` and list of `teams` an identity to should be mapped to                                        |
+
+
+To grant the `admin` role to all users in the `admins` group (as returned by the identity provider)
+```javascript title=identity-role-mapper
+{
+  "role": "admins" in identity.traits.groups ?  "admin":  "viewer"
+}.toJSON()
+```
+
+### Input
+
+The CEL script can make use of any of these Identity fields provided by Kratos
+
+<Fields rows={
+  [
+
+    {
+      field: "identity.id",
+      description: "Unique identifier for the identity",
+      scheme: "string",
+    },
+    {
+      field: "identity.metadata_public",
+      description: "Public metadata for the identity",
+      scheme: "`map[string]any`",
+    },
+    {
+      field: "identity.state",
+      description: "Current state of the identity",
+      scheme: "`active` | `inactive`",
+    },
+{
+      field: "identity.traits.name.first",
+      description: "First name",
+      scheme: "string",
+    },
+    {
+      field: "identity.traits.name.last",
+      description: "Last name",
+      scheme: "string",
+    },
+    {
+      field: "identity.traits.email",
+      description: "Email address",
+      scheme: "string",
+      required: true,
+    },
+    {
+      field: "identity.traits.groups",
+      description: "List of groups the identity belongs to",
+      scheme: "`[]string`",
+    },
+        {
+      field: "identity.created_at",
+      description: "Timestamp for when the identity was created",
+      scheme: "`timestamp`",
+    },
+    {
+      field: "identity.updated_at",
+      description: "Timestamp for when the identity was last updated",
+      scheme: "`timestamp`",
+    },
+  ]
+} />
+
+
+
+### Output
+The CEL script needs to return a JSON object that looks like:
+
+```json title=output.json
+{
+  "role": "admin",
+  "teams": [],
+}
+```
 
 <Fields rows={
   [{
@@ -13,70 +96,4 @@ The schema for the object to be returned by the identity mapper script.
     description: "List of name or id of the teams the OIDC identity will be put into",
     scheme: "`[]string`",
   }]
-} />
-
-
-#### Kratos Identity
-
-<Fields rows={
-  [
-    {
-      field: "created_at",
-      description: "Timestamp for when the identity was created",
-      scheme: "`timestamp`",
-    },
-    {
-      field: "id",
-      description: "Unique identifier for the identity",
-      scheme: "string",
-    },
-    {
-      field: "metadata_public",
-      description: "Public metadata for the identity",
-      scheme: "`map[string]any`",
-    },
-    {
-      field: "state",
-      description: "Current state of the identity",
-      scheme: "`active` | `inactive`",
-    },
-    {
-      field: "traits",
-      description: "Identity's traits.",
-      scheme: "[`Trait`](#kratos-identity-trait)",
-    },
-    {
-      field: "updated_at",
-      description: "Timestamp for when the identity was last updated",
-      scheme: "`timestamp`",
-    },
-  ]
-} />
-
-#### Kratos Identity Trait
-
-<Fields rows={
-  [
-    {
-      field: "name.first",
-      description: "First name",
-      scheme: "string",
-    },
-    {
-      field: "name.last",
-      description: "Last name",
-      scheme: "string",
-    },
-    {
-      field: "email",
-      description: "Email address",
-      scheme: "string",
-      required: true,
-    },
-    {
-      field: "groups",
-      description: "List of groups the identity belongs to",
-      scheme: "`[]string`",
-    }
-  ]
 } />
