@@ -307,10 +307,10 @@ export default async function createConfigAsync() {
 
         algolia: {
           // The application ID provided by Algolia
-          appId: 'OB826SK7ZD',
+          appId: '22S6MCHC33',
 
           // Public API key: it is safe to commit it
-          apiKey: 'b6f91e146e1ed100664b6da07151f287',
+          apiKey: 'f430db27345fc6bcf9fd40d8f5e97160',
 
           indexName: 'flanksource'
         },
