@@ -3,6 +3,7 @@ import Admonition from '@theme/Admonition'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import Link from '@docusaurus/Link'
 import ReactMarkdown from 'react-markdown'
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import clsx from 'clsx'
 
 const schemes = {
@@ -27,6 +28,28 @@ const schemes = {
   "notificationurl": "[Notification](/reference/notifications)",
   "notificationconnection": "[Connection](/reference/connections)",
   "notificationproperties": "[map[string]string](/reference/notifications#properties)",
+}
+
+function useSchemeUrl(value) {
+  if (value == null) {
+    return "string"
+  }
+
+  value = schemes[value.toLowerCase()]
+
+  if (value == null || !value.includes('](/')) {
+    return value
+  }
+  // Extract link text and URL
+  const matches = value.match(/\[(.*?)\]\((.*?)\)/);
+  if (matches) {
+    const [_, text, url] = matches;
+    // Only process internal links (starting with /)
+    if (url.startsWith('/')) {
+      return `[${text}](${useBaseUrl(url)})`;
+    }
+  }
+  return value
 }
 
 export default function Fields({ common = [], rows = [], oneOf, anyOf, connection, withTemplates }) {
@@ -378,8 +401,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
                 {row.anyOf && <code>{row.anyOf.join(' | ')}</code>}
                 {!row.anyOf && row.scheme && (
                   <ReactMarkdown>
-                    {schemes[row.scheme.toLowerCase()] ||
-                      (row.scheme ? row.scheme : 'string')}
+                    {useSchemeUrl(row.scheme)}
                   </ReactMarkdown>
                 )}
               </td>
