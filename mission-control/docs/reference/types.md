@@ -59,7 +59,7 @@ Sizes are strings with a unit suffix, e.g., `100`, `100b`, `10mb`. Valid size un
 
 ## Icon
 
-One of the icons in the [flanksource-icons](https://github.com/flanksource/flanksource-icons/tree/main/svg) project.
+One of the icons in the [flanksource-icons](https://github.com/flanksource/flanksource-icons/tree/main/svg) project or a URL to an image.
 
 e.g.
 
@@ -67,6 +67,12 @@ e.g.
 - `Kubernetes::Pod`
 - `argo`
 - `aws-ebs-volume`
+
+Use the picker below to search for icons:
+
+<iframe src="https://main--625ed6eb9d495f003acc84b4.chromatic.com/iframe.html?args=&id=icons-iconpicker--base&viewMode=story" width="400px" height="300px"></iframe>
+
+
 
 ## Match Pattern
 
