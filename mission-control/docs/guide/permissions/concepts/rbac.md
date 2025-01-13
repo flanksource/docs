@@ -15,4 +15,3 @@ Mission Control has a list of predefined built-in roles and every user must fall
 | `agent`  | Roles for agents                                                                                 | Push resources from agents               |
 
 This system enables fine-grained control over who can view, modify, and manage resources like catalogs, playbooks, components, job histories, etc
-

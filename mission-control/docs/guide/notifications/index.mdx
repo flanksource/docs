@@ -105,14 +105,11 @@ This notification above triggers the playbook `mc/echo-config` whenever a config
 
 #### Permissions
 
-To enable a notification to execute a playbook, you must configure the necessary permissions as follows:
+To enable a notification to execute a playbook, the notification must have `playbook:run` permission on the playbook.
 
-- **Subject**: notification
-- **Resource**: playbook
-- **Action**: `playbook:run`
+The following example shows two notifications `check-alerts` and `homelab-config-health-alerts` being assigned to
+a permission group "config-notifications". The group is then allowed `playbook:run` permission which is inherited by 
+both notifications.
 
-
-:::caution permission
-If the required permissions are not set, the playbook will remain in a `pending playbook run` status indefinitely.
-Ensure that permissions are correctly configured to avoid this issue.
-:::
+```yaml title="permission.yaml" file=<rootDir>//modules/mission-control/fixtures/permissions/config-notification-group-playbook-permission.yaml
+```
