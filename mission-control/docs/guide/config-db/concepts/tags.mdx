@@ -1,0 +1,32 @@
+---
+title: Tags
+sidebar_custom_props:
+  icon: octicon:tag-16
+---
+
+Catalog items can have tags attached to them.
+
+For AWS, these can be `zone-id`, `region` and `account`.
+Kubernetes resources have `cluster` and `namespace` tags associated with them.
+
+The tags for any catalog item are visible on it's page in the sidebar.
+
+<Screenshot>
+
+## Usage
+
+Once items are tagged, they can be used for:
+
+### Filters
+
+TODO: Ask @moshe
+
+### Topology (Group By)
+
+Topologies can be be [grouped by](https://flanksource.com/docs/reference/topology/crd#group-by) tags and resource selectors. This is useful when similar resources are present having different tags.
+
+Example: Flux topology can be grouped by cluster tag, AWS Topology can be grouped by the account tag
+
+### RBAC
+
+[RBAC](Link) rules can use tags to fine-grain access to limited resources
