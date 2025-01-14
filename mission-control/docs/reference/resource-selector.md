@@ -24,6 +24,18 @@ Resource Selectors are used in multiple places including:
 | `fieldSelector` | Kubernetes Style Field Selector Property fields of the component in kubernetes format (or database columns: owner, topology_id, parent_id)                         | [FieldSelector](https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/) | No       |
 | `agent`         | Select resources created on this agent, Defaults to `local`                                                                                                        | `uuid`, `{name}`, `local` or `all`                                                                  | No       |
 | `cache`         | Cache settings to use for the results, expensive selectors or selectors that are are use very often should be cached for longer periods. Defaults to `max-age=10m` | `no-cache`, `no-store` or `max-age={duration}`                                                      | No       |
+| `search`        | Search for resources via key value pairs using parsing expression grammar | `string`                                                      | No       |
+
+
+## Search
+
+The query `field1=value1 field2>value2 field3=value3* field4=*value4` is parsed. `*` is used for prefix and suffix matching.
+
+Supported fields for:
+
+- [Catalog/Config](Link to config item reference): `name`, `source`, `namespace`, `type`, `status`, `health`, `agent`, `created_at`, `updated_at`, `deleted_at`
+- [Components](Link to components reference): `name`, `topology_id`, `namespace`, `type`, `status`, `health`, `agent`, `created_at`, `updated_at`, `deleted_at`
+- [Health Checks](Link to checks reference): `name`, `canary_id`, `namespace`, `type`, `status`, `health`, `agent`, `created_at`, `updated_at`, `deleted_at`
 
 ## Examples
 
@@ -52,4 +64,14 @@ spec:
       selectors:
         - labelSelector: 'team=payments'
         - labelSelector: 'team=orders'
+
+    - name: Kubernetes components which start with kafka created in last 24h
+      # Suffix and Prefix matches are supported using *
+      selectors:
+        - search: name=kafka* type=Kubernetes* created_at>now-24h
+
+    - name: Component with name httpbin-service
+      # Not giving any key will do a name lookup (ie name=httpbin-service)
+      selectors:
+        - search: httpbin-service
 ```
