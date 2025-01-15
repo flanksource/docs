@@ -28,7 +28,7 @@ To enable the Kubernetes integration you need:
    values={{
     "playbook": {
         "enabled": true
-    }
+    },
     "scraper": {
         "charts": [
             "bitnami/kafka",
@@ -41,8 +41,9 @@ To enable the Kubernetes integration you need:
 
 
 ## Installing charts with Playbook
-The `Install Helm Chart` playbook can be used now install the charts into any Kubernetes namespace with user-given values
 
-<Screenshot>
+The `Install Helm Chart` playbook can install the charts into any Kubernetes namespace with user-given values
 
-The [Kubernetes](Link) and Flux(Link) playbooks can further help with operations on these charts and resources created by them.
+<Screenshot img="/img/helm-integration-playbook.png" />
+
+The [Kubernetes](/integrations/kubernetes/playbooks) and [Flux](/integrations/flux/playbooks) playbooks can further help with operations on these charts and resources created by them.

@@ -29,7 +29,7 @@ Resource Selectors are used in multiple places including:
 
 ## Search
 
-The query `field1=value1 field2>value2 field3=value3* field4=*value4` is parsed. `*` is used for prefix and suffix matching.
+The query syntax is `field1=value1 field2>value2 field3=value3* field4=*value4`. `*` is for prefix and suffix matching.
 
 Supported fields for:
 
