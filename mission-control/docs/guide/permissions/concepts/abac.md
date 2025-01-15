@@ -5,7 +5,7 @@ sidebar_position: 2
 
 Attribute-Based Access Control (ABAC) is another security model you can use in Mission Control when RBAC falls short.
 It is a security model that conditionally grants access to resources based on attributes.
-In Mission Control, these attributes relate to the resource being accesses: eg:
+In Mission Control, these attributes relate to the resource being accessed: eg:
 
 - the tags
 - the namespace
