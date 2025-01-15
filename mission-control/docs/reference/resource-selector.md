@@ -24,8 +24,7 @@ Resource Selectors are used in multiple places including:
 | `fieldSelector` | Kubernetes Style Field Selector Property fields of the component in kubernetes format (or database columns: owner, topology_id, parent_id)                         | [FieldSelector](https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/) | No       |
 | `agent`         | Select resources created on this agent, Defaults to `local`                                                                                                        | `uuid`, `{name}`, `local` or `all`                                                                  | No       |
 | `cache`         | Cache settings to use for the results, expensive selectors or selectors that are are use very often should be cached for longer periods. Defaults to `max-age=10m` | `no-cache`, `no-store` or `max-age={duration}`                                                      | No       |
-| `search`        | Search for resources via key value pairs using parsing expression grammar | `string`                                                      | No       |
-
+| `search`        | Search for resources via key value pairs using parsing expression grammar                                                                                          | `string`                                                                                            | No       |
 
 ## Search
 
