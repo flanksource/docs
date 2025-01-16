@@ -20,5 +20,4 @@ This system enables fine-grained control over who can view, modify, and manage r
 
 ## Custom Roles
 
-If you require more specialized access configurations, [PermissionGroups](../index.mdx#permission-groups) offer functionality similar to custom roles. 
-
+If you require more specialized access configurations, [PermissionGroups](../index.mdx#permission-groups) offer functionality similar to custom roles.

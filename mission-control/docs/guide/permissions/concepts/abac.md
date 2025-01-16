@@ -22,4 +22,5 @@ Example use cases:
 - Allow a notification to run a particular playbook.
 
 ```yaml title="deny-person-playbook.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/deny-person-playbook.yaml
+
 ```

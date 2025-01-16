@@ -17,6 +17,7 @@ For example, you might have:
 - Client-specific teams that should only interact with agents deployed in their infrastructure
 
 ```yaml title="agent-based-permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/agent-based-permission.yaml
+
 ```
 
 ### Tag based permission
@@ -32,8 +33,9 @@ Tags can represent various attributes such as:
 - Clusters
 
 ```yaml title="tag-based-permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/tag-based-permission.yaml
+
 ```
 
 :::info
-Tag-based and agent-based permissions can be combined to create sophisticated access control policies that precisely match organizational requirements and security boundaries. 
+Tag-based and agent-based permissions can be combined to create sophisticated access control policies that precisely match organizational requirements and security boundaries.
 :::
