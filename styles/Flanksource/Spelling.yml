@@ -2,4 +2,4 @@ extends: spelling
 message: "Is '%s' spelled correctly? Is it missing code formatting?"
 level: error
 ignore:
-    - ignore/words-with-suggestions.txt
+  - ignore/words-with-suggestions.txt

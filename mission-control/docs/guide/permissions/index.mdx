@@ -17,9 +17,9 @@ This unified permission system allows you to implement precise and granular acce
 For instance, while RBAC can control whether a user can execute any playbooks in the system, 
 more refined ABAC policies allow you to specify exactly which playbooks specific users or teams can access.
 
-Permissions can be managed via the UI as well as via CRDs.
+Permissions are manageable via the UI as well as via CRDs.
 
-```yaml title="permission.yaml" file=<rootDir>//modules/mission-control/fixtures/permissions/allow-person-playbook.yaml
+```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/allow-person-playbook.yaml
 ```
 
 A Permission consists of 4 components
@@ -86,7 +86,7 @@ Deny rules always take precedence over Allow rules
   ]}
 />
 
-Additionally, for [tag-agent based ABAC](./concepts/abac.md#advanced-use-cases), these fields are also available.
+Additionally, for [tag-agent based ABAC](./concepts/multi-tenancy.md), these fields are also available.
 
 <Fields
   rows={[
@@ -111,7 +111,7 @@ Permissions applied to the group are then inherited by the encompassed subjects.
 
 ### CRD
 
-```yaml title="permission.yaml" file=<rootDir>//modules/mission-control/fixtures/permissions/config-notification-group-playbook-permission.yaml
+```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/config-notification-group-playbook-permission.yaml
 ```
 
 <Fields

@@ -28,7 +28,7 @@ spec:
     email: alerts@acme.com
 ```
 
-This notification will send an email to `alerts@acme.com` whenever a health check fails.
+This notification sends an email to `alerts@acme.com` whenever a health check fails.
 
 <Notification/>
 
@@ -49,11 +49,11 @@ spec:
   title: Check {{.check.name}} is {{.check.health}}
 ```
 
-In this example `{{.check.name}}` and `{{.check.health}}` are placeholders that will be replaced with the actual values of the `name` and `health` fields from the [check](/reference/canary-checker/check) object associated with the event.
+In this example `{{.check.name}}` and `{{.check.health}}` are placeholders that gets replaced with the actual values of the `name` and `health` fields from the [check](/reference/canary-checker/check) object associated with the event.
 
 
 :::tip Markdown
-All notification templates in Mission Control are defined in markdown, and depending on the support of the notification channel it will either be converted to HTML or plain text.
+Mission Control defines all notification templates in markdown and converts them to HTML or plain text based on the notification channel's support
 :::
 
 ## Filtering Events
@@ -83,13 +83,13 @@ In this example:
 
 - The `filter` field specifies the CEL expression `check.type == 'http'`.
 - This expression evaluates to true only when the `type` attribute of the [check](/reference/canary-checker/check) object is equal to `'http'`.
-- Consequently, notifications will be sent only for events that satisfy this condition, ensuring that you are alerted specifically for failed HTTP checks.
+- So, Mission Control only sends notifications for events that meet this condition, which alerts you when HTTP checks fail.
 
 ## Triggering Playbooks
 
 Playbooks can be configured as recipients for notifications, allowing you to trigger automated workflows instead of sending notifications to traditional channels like email or Slack. 
 
-While playbooks themselves are capable of listening to events - just like notifications - this approach leverages the full capabilities of notifications, including:
+While playbooks themselves are capable of listening to events like notifications - this approach leverages the full capabilities of notifications, including:
 
 - Rate Limitation
 - Silences
@@ -107,9 +107,8 @@ This notification above triggers the playbook `mc/echo-config` whenever a config
 
 To enable a notification to execute a playbook, the notification must have `playbook:run` permission on the playbook.
 
-The following example shows two notifications `check-alerts` and `homelab-config-health-alerts` being assigned to
-a permission group "config-notifications". The group is then allowed `playbook:run` permission which is inherited by 
-both notifications.
+The example shows two notifications: `check-alerts` and `homelab-config-health-alerts` which belong to a permission group "config-notifications".
+The group has `playbook:run` permission, which both notifications inherit.
 
-```yaml title="permission.yaml" file=<rootDir>//modules/mission-control/fixtures/permissions/config-notification-group-playbook-permission.yaml
+```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/config-notification-group-playbook-permission.yaml
 ```
