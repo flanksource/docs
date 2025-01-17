@@ -32,20 +32,19 @@ The query syntax is `field1=value1 field2>value2 field3=value3* field4=*value4`.
 
 Supported operators:
 
-| Operator | Syntax                          | Types                 |
-|----------|---------------------------------|-----------------------|
-| `=`      | `field=value`                   | `string` `int` `json` |
-| `!=`     | `field!=value`                  | `string` `int` `json` |
-| `*`      | `field=*value` or `field=value*`| `string` `int`        |
-| `>` `<`  | `field>value` or `field<value`  | `datetime` `int`      |
-
+| Operator | Syntax                           | Types                 |
+| -------- | -------------------------------- | --------------------- |
+| `=`      | `field=value`                    | `string` `int` `json` |
+| `!=`     | `field!=value`                   | `string` `int` `json` |
+| `*`      | `field=*value` or `field=value*` | `string` `int`        |
+| `>` `<`  | `field>value` or `field<value`   | `datetime` `int`      |
 
 Supported fields for:
 
 - [Catalog/Config](/reference/config-db/config):
 
 | Field        | Type       |
-|--------------|------------|
+| ------------ | ---------- |
 | `name`       | `string`   |
 | `source`     | `string`   |
 | `namespace`  | `string`   |
@@ -62,25 +61,24 @@ Supported fields for:
 
 - [Components](/reference/topology/components):
 
-| Field        | Type       |
-|--------------|------------|
-| `name`       | `string`   |
-| `topology_id`| `string`   |
-| `namespace`  | `string`   |
-| `type`       | `string`   |
-| `status`     | `string`   |
-| `labels`     | `json`     |
-| `health`     | `string`   |
-| `agent`      | `string`   |
-| `created_at` | `datetime` |
-| `updated_at` | `datetime` |
-| `deleted_at` | `datetime` |
-
+| Field         | Type       |
+| ------------- | ---------- |
+| `name`        | `string`   |
+| `topology_id` | `string`   |
+| `namespace`   | `string`   |
+| `type`        | `string`   |
+| `status`      | `string`   |
+| `labels`      | `json`     |
+| `health`      | `string`   |
+| `agent`       | `string`   |
+| `created_at`  | `datetime` |
+| `updated_at`  | `datetime` |
+| `deleted_at`  | `datetime` |
 
 - [Health Checks](/reference/canary-checker/check):
 
 | Field        | Type       |
-|--------------|------------|
+| ------------ | ---------- |
 | `name`       | `string`   |
 | `canary_id`  | `string`   |
 | `namespace`  | `string`   |
@@ -92,7 +90,6 @@ Supported fields for:
 | `created_at` | `datetime` |
 | `updated_at` | `datetime` |
 | `deleted_at` | `datetime` |
-
 
 ## Examples
 
