@@ -30,11 +30,69 @@ Resource Selectors are used in multiple places including:
 
 The query syntax is `field1=value1 field2>value2 field3=value3* field4=*value4`. `*` is for prefix and suffix matching.
 
+Supported operators:
+
+| Operator | Syntax                          | Types                 |
+|----------|---------------------------------|-----------------------|
+| `=`      | `field=value`                   | `string` `int` `json` |
+| `!=`     | `field!=value`                  | `string` `int` `json` |
+| `*`      | `field=*value` or `field=value*`| `string` `int`        |
+| `>` `<`  | `field>value` or `field<value`  | `datetime` `int`      |
+
+
 Supported fields for:
 
-- [Catalog/Config](Link to config item reference): `name`, `source`, `namespace`, `type`, `status`, `health`, `agent`, `created_at`, `updated_at`, `deleted_at`
-- [Components](Link to components reference): `name`, `topology_id`, `namespace`, `type`, `status`, `health`, `agent`, `created_at`, `updated_at`, `deleted_at`
-- [Health Checks](Link to checks reference): `name`, `canary_id`, `namespace`, `type`, `status`, `health`, `agent`, `created_at`, `updated_at`, `deleted_at`
+- [Catalog/Config](/reference/config-db/config):
+
+| Field        | Type       |
+|--------------|------------|
+| `name`       | `string`   |
+| `source`     | `string`   |
+| `namespace`  | `string`   |
+| `type`       | `string`   |
+| `status`     | `string`   |
+| `labels`     | `json`     |
+| `tags`       | `json`     |
+| `config`     | `json`     |
+| `health`     | `string`   |
+| `agent`      | `string`   |
+| `created_at` | `datetime` |
+| `updated_at` | `datetime` |
+| `deleted_at` | `datetime` |
+
+- [Components](/reference/topology/components):
+
+| Field        | Type       |
+|--------------|------------|
+| `name`       | `string`   |
+| `topology_id`| `string`   |
+| `namespace`  | `string`   |
+| `type`       | `string`   |
+| `status`     | `string`   |
+| `labels`     | `json`     |
+| `health`     | `string`   |
+| `agent`      | `string`   |
+| `created_at` | `datetime` |
+| `updated_at` | `datetime` |
+| `deleted_at` | `datetime` |
+
+
+- [Health Checks](/reference/canary-checker/check):
+
+| Field        | Type       |
+|--------------|------------|
+| `name`       | `string`   |
+| `canary_id`  | `string`   |
+| `namespace`  | `string`   |
+| `type`       | `string`   |
+| `status`     | `string`   |
+| `health`     | `string`   |
+| `labels`     | `json`     |
+| `agent`      | `string`   |
+| `created_at` | `datetime` |
+| `updated_at` | `datetime` |
+| `deleted_at` | `datetime` |
+
 
 ## Examples
 
@@ -69,8 +127,21 @@ spec:
       selectors:
         - search: name=kafka* type=Kubernetes* created_at>now-24h
 
+    - name: All components updated between a specific interval
+      selectors:
+        - search: updated_at>2024-10-10 updated_at<2024-10-17
+
     - name: Component with name httpbin-service
       # Not giving any key will do a name lookup (ie name=httpbin-service)
       selectors:
         - search: httpbin-service
+
+    - name: Components with label cluster
+      # JSON lookups are also supported
+      selectors:
+        - search: labels.cluster=prod
+
+    - name: Link configs which have logistics-api image
+      configs:
+        - search: config.spec.template.spec.containers[0].name=docker.io/example/logistics-api:latest
 ```
