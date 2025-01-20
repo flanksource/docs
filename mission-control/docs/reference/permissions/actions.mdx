@@ -1,0 +1,66 @@
+---
+title: Actions
+sidebar_position: 1
+---
+
+# Permission Actions Reference
+
+## Core Actions
+
+These are the fundamental CRUD operations that can be applied to any resource in Mission Control.
+
+| Action | Description |
+|--------|-------------|
+| `*` | Grants full access to all operations on the specified resource. Use with caution as this provides unrestricted access. |
+| `create,read,update,delete` | Explicit specification of all CRUD operations. Functionally equivalent to `*` but more explicit. |
+| `create` | Allows creating new instances of a resource |
+| `read` | Allows viewing and listing resources |
+| `update` | Allows modifying existing resources |
+| `delete` | Allows removing resources |
+
+## Playbook-Specific Actions
+
+These actions are specific to playbook resources and provide fine-grained control over playbook execution and approval workflows.
+
+| Action | Description |
+|--------|-------------|
+| `playbook:run` | Allows execution of playbooks |
+| `playbook:approve` | Allows approving playbook execution requests |
+
+## Usage Examples
+
+### Basic Configuration Access
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: dev-team-config-access
+spec:
+  subject:
+    team: developers
+  object:
+    configs:
+      - namespaces: ["dev", "staging"]
+  actions: 
+    - "playbook:run"
+    - "playbook:approve"
+    - "create,read,update,delete"
+```
+
+### Approval Workflow
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: lead-approval-permission
+spec:
+  subject:
+    team: team-leads
+  object:
+    playbooks:
+      - tags:
+          environment: production
+  actions: 
+    - "read"
+    - "playbook:approve"
+```

@@ -72,8 +72,6 @@ Use the picker below to search for icons:
 
 <iframe src="https://main--625ed6eb9d495f003acc84b4.chromatic.com/iframe.html?args=&id=icons-iconpicker--base&viewMode=story" width="400px" height="300px"></iframe>
 
-
-
 ## Match Pattern
 
 Pattern matching supports the following operations:

@@ -8,10 +8,14 @@ first: '\b([A-Z]{3,5})\b'
 second: '(?:\b[A-Z][a-z]+ )+\(([A-Z]{3,5})\)'
 # ... with the exception of these:
 exceptions:
+  - ABAC
   - API
   - ASP
+  - CEL
   - CLI
   - CPU
+  - CRD
+  - CRUD
   - CSS
   - CSV
   - DEBUG
@@ -43,6 +47,7 @@ exceptions:
   - PHP
   - POST
   - RAM
+  - RBAC
   - REPL
   - RSA
   - SCM
@@ -59,6 +64,7 @@ exceptions:
   - URL
   - USB
   - UTF
+  - UUID
   - XML
   - XSS
   - YAML

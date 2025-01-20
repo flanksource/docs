@@ -1,0 +1,141 @@
+---
+slug: /guide/permission
+title: Permissions
+sidebar_position: 6
+hide_title: true
+# hide_table_of_contents: true
+pagination_prev: guide/topology/index
+sidebar_custom_props:
+  icon: user
+---
+
+## Permission
+
+In Mission Control, Permission provides a flexible and robust security model that combines two powerful approaches:
+Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC). 
+This unified permission system allows you to implement precise and granular access policies.
+For instance, while RBAC can control whether a user can execute any playbooks in the system, 
+more refined ABAC policies allow you to specify exactly which playbooks specific users or teams can access.
+
+Permissions are manageable via the UI as well as via CRDs.
+
+```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/allow-person-playbook.yaml
+```
+
+A Permission consists of 4 components
+
+- **Subject**: the entity requesting access (person, team, or a service)
+- **Object**: Target resources this permission applies to (playbooks, configs, or components)
+- **Effect**: Whether to allow or deny access (Default: allow)
+- **Actions**: [Concerned list of actions](/reference/permissions/actions)
+
+:::info
+Deny rules always take precedence over Allow rules
+:::
+
+### CRD
+
+<Fields
+  rows={[
+    {
+      field: 'description',
+      description: 'Description of the permission',
+      scheme: 'string',
+    },
+    {
+      field: 'actions',
+      required: true,
+      description: 'List of [allowed actions](/reference/permissions/actions)',
+      scheme: '`[]string`',
+    },
+    {
+      field: 'subject.person',
+      description: 'Email or ID of the person',
+      scheme: 'string',
+    },
+    {
+      field: 'subject.team',
+      description: 'Name or ID of the team',
+      scheme: 'string',
+    },
+    {
+      field: 'subject.notification',
+      description: '`<namespace>/<name>` of the notification',
+      scheme: 'string',
+    },
+    {
+      field: 'object.playbooks',
+      description: 'List of playbook resource selectors',
+      scheme: 'resourceselectors',
+    },
+    {
+      field: 'object.configs',
+      description: 'List of config resource selectors',
+      scheme: 'resourceselectors',
+    },
+    {
+      field: 'object.components',
+      description: 'List of component resource selectors',
+      scheme: 'resourceselectors',
+    },
+    {
+      field: 'deny',
+      description: 'Whether this is a deny rule. _(Default: False)_',
+      scheme: 'bool',
+    },
+  ]}
+/>
+
+Additionally, for [tag-agent based ABAC](./concepts/multi-tenancy.md), these fields are also available.
+
+<Fields
+  rows={[
+    {
+      field: 'agents',
+      description: 'List of agents',
+      scheme: '`[]string`',
+    },
+    {
+      field: 'tags',
+      description: 'Key-value pairs of tags',
+      scheme: '`map[string]string`',
+    },
+  ]}
+/>
+
+
+## Permission Groups
+
+Permission Groups allow you to organize subjects (people, teams, or notifications) under a common label for easier permission management.
+Permissions applied to the group are then inherited by the encompassed subjects.
+
+### CRD
+
+```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/config-notification-group-playbook-permission.yaml
+```
+
+<Fields
+  rows={[
+    {
+      field: 'name',
+      description: 'Set a unique name for the permission group',
+      required: true,
+      scheme: 'string',
+    },
+    {
+      field: 'people',
+      description: 'List of people identifiers (email or id) to associate with the group',
+      scheme: '`[]string`',
+    },
+    {
+      field: 'teams',
+      description: 'List of team names to associate with the group',
+      scheme: '`[]string`',
+    },
+    {
+      field: 'notifications',
+      description: 'List of notification `<namespace>/<name>`',
+      scheme: '`[]string`',
+    },
+  ]}
+/>
