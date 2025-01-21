@@ -1,6 +1,49 @@
 ---
-draft: true
 title: Helm
 sidebar_custom_props:
   icon: helm
 ---
+
+import Schema from '@site/modules/mission-control-registry/charts/helm/values.schema.json'
+
+Install helm charts on the cluster and add them to the [Catalog](/guide/config-db).
+
+## Getting Started
+
+:::info Prerequisites
+To enable the Helm integration you need:
+
+- Mission Control [installed](/installation/)
+- [kubectl](/installation/saas/kubectl) access to the Mission Control instance
+- FluxCD running in the cluster
+:::
+
+
+1. Install the [mission-control-helm](https://artifacthub.io/packages/helm/flanksource/mission-control-helm) chart
+
+   <Helm chart="mission-control-helm"
+   createRepo={false}
+   schema={Schema}
+   createNamespace={false}
+   values={{
+    "playbook": {
+        "enabled": true
+    },
+    "scraper": {
+        "charts": [
+            "bitnami/kafka",
+            "bitnami/postgresql",
+            "bitnami/rabbitmq",
+            "prometheus-community/prometheus"
+        ]
+    }
+   }}/>
+
+
+## Installing charts with Playbook
+
+The `Install Helm Chart` playbook can install the charts into any Kubernetes namespace with user-given values
+
+<Screenshot img="/img/helm-integration-playbook.png" />
+
+The [Kubernetes](/integrations/kubernetes/playbooks) and [Flux](/integrations/flux/playbooks) playbooks can further help with operations on these charts and resources created by them.

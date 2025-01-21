@@ -1,0 +1,32 @@
+---
+title: Tags
+sidebar_custom_props:
+  icon: octicon:tag-16
+---
+
+Catalog items can have tags attached to them.
+
+For [AWS](/guide/config-db/scrapers/aws), these can be `zone-id`, `region` and `account`.
+[Kubernetes](/guide/config-db/scrapers/kubernetes) resources have `cluster` and `namespace` tags associated with them.
+
+The tags for any catalog item are visible on its page in the sidebar.
+
+<Screenshot img="/img/tag-sidebar.png" />
+
+## Usage
+
+### Filters
+
+Tags help filter catalog items in UI (inclusion and exclusion)
+
+<Screenshot img="/img/tag-filters.png" />
+
+### Topology (Group By)
+
+Tags can [group Topologies](/reference/topology/crd#group-by). This is useful when similar resources exist with different tags.
+
+Example: `cluster` tag can group Flux topologies and `account` tag can group AWS Topologies.
+
+### RBAC
+
+[RBAC](/reference/rbac) rules can use tags to fine-grain access to limited resources.
