@@ -51,6 +51,26 @@ o.a.?d.orValue('fallback value') => 'fallback value'
 
 You can read more about [or](#or) and [orValue](#orvalue) below.
 
+## matchQuery
+
+`matchQuery` matches a given resource against a search query.
+
+Syntax:
+
+```javascript
+matchQuery(r, s)
+
+// Where
+//  r = resource
+//  s = search query
+```
+
+Example:
+```javascript
+matchQuery(.config, "type=Kubernetes::Pod")
+matchQuery(.config, "type=Kubernetes::Pod tags.cluster=homelab")
+```
+
 ## aws
 
 ### aws.arnToMap

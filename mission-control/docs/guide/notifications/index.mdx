@@ -85,6 +85,31 @@ In this example:
 - This expression evaluates to true only when the `type` attribute of the [check](/reference/canary-checker/check) object is equal to `'http'`.
 - So, Mission Control only sends notifications for events that meet this condition, which alerts you when HTTP checks fail.
 
+<details summary="Sophisticated Filters">
+For a more sophisticated filter, you can also use the handy [`matchQuery`](/reference/scripting/cel#matchquery) cel function that supports search query.
+Example:
+
+```yaml title="config.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: config-alerts
+spec:
+  events:
+    - config.unhealthy
+    - config.warning
+  // highlight-next-line
+  filter: >
+    type=Kubernetes::Pod,Kubernetes::Deployment name!=postgres tags.cluster=homelab
+  to:
+    email: alerts@acme.com
+```
+
+In this example, the filter matches all unhealthy or warning deployments and pods in the homelab cluster except for the postgres deployment.
+
+</details>
+
+
 ## Triggering Playbooks
 
 Playbooks can be configured as recipients for notifications, allowing you to trigger automated workflows instead of sending notifications to traditional channels like email or Slack. 
