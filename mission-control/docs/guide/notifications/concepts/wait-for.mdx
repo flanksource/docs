@@ -11,11 +11,10 @@ If alerts are configured for `config.unhealthy` events, these transient state fl
 To address this issue, you can utilize the waitFor parameter.
 This feature allows you to define a delay before sending notifications for specific events.
 After an event occurs, the system rechecks its status following the specified wait period. Only if the undesired state persists does a notification trigger.
-:::info
-`waitFor` is only applicable on health related events
-:::
 
-This approach helps reduce unnecessary notifications caused by transient state changes, ensuring you're alerted only to persistent issues.
+:::info
+`waitFor` is only applicable to notifications of health related events
+:::
 
 
 ```yaml title='notify-unhealthy-deployments.yaml' {8}
@@ -33,9 +32,13 @@ spec:
 ```
 
 :::warning Handling Scrape Lag
-`waitFor` re-evaluates the health based on the current state in config-db, in some circumstances there can be a lag between when a change occurs and the state reflects in config-db which can lead to false positives.
 
-`waitForEvalPeriod` forces an incremental scrape of the resource before sending a notification, it waits for up to this period for a scrape to complete before sending a notification.
+`waitFor` re-evaluates the health based on the current state in config-db. 
+However, in some circumstances, there may be a delay between when a change occurs and when it's refelected in config-db,
+potentially resulting in false positives.
+
+`waitForEvalPeriod` forces an incremental scrape of the resource before sending a notification.
+It waits for up to this period for a scrape to complete before sending a notification.
 
 ```yaml title=waitForEvalPeriod.yaml
 apiVersion: mission-control.flanksource.com/v1
@@ -49,5 +52,27 @@ spec:
   //highlight-next-line
   waitForEvalPeriod: 30s
 ```
-
 :::
+
+### Grouping Notifications
+
+Multiple related notifications may be generated within a short time window. Instead of sending each alert separately, 
+you can use notification grouping to consolidate multiple events into a single message.
+
+_Example_: When a Kubernetes deployment becomes unhealthy, its replicaset and associated pods will also become unhealthy. 
+If you have a notification set up to alert on `config.unhealthy`, you'll receive 3 different notifications at the very least for the same cause.
+
+The `groupBy` parameter allows you to define how notifications should be grouped. 
+Grouping can be done via 
+- `type` (type of the config)
+- `description`
+- `status_reason`
+- `labels` in the format `labels:app`
+- `tags` in the format `tag:namespace`
+
+:::info
+Grouping only works with waitFor. 
+Hence, a waitFor duration is required 
+:::
+
+TODO(example): reference fixture after this merged: https://github.com/flanksource/mission-control/pull/1853/files
