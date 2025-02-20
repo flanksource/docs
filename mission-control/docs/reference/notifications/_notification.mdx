@@ -56,6 +56,11 @@
     scheme: "duration"
   },
   {
+    field: "groupBy",
+    description: "Group notifications that are in waiting stage based on labels, tags and attributes. Only applicable when `waitFor` is provided. See [Grouping attributes](../../guide/notifications/concepts/wait-for#grouping-notifications)",
+    scheme: "[]string"
+  },
+  {
     field: "title",
     description: "Channel dependent e.g. subject for email",
     scheme: "GoTemplate",

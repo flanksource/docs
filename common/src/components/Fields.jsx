@@ -23,6 +23,7 @@ const schemes = {
   resourceselectors: '[[]ResourceSelector](/reference/resource-selector)',
   connection: '[Connection](/reference/connections)',
   string: '`string`',
+  "[]string": '`[]string`',
   icon: '[Icon](/reference/types#icon)',
   bool: '`boolean`',
   int: '`integer`',
@@ -37,11 +38,16 @@ function useSchemeUrl(value) {
     return "string"
   }
 
-  value = schemes[value.toLowerCase()]
+  const key = value.toLowerCase();
+  if (!(key in schemes)) {
+    return value;
+  }
 
+  value = schemes[key]
   if (value == null || !value.includes('](/')) {
     return value
   }
+
   // Extract link text and URL
   const matches = value.match(/\[(.*?)\]\((.*?)\)/);
   if (matches) {
