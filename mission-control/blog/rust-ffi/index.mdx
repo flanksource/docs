@@ -6,56 +6,52 @@ authors: [yash]
 hide_table_of_contents: false
 ---
 
-For the past few years I've been working at [Flanksource](https://flanksource.com/) building [Mission Control](https://flanksource.com/docs), a Kubernetes-native internal developer platform to improve developer productivity and operational resilience.
+For the past few years at [Flanksource](https://flanksource.com/), I've helped build [Mission Control](https://flanksource.com/docs) - a Kubernetes-native internal developer platform that improves developer productivity and operational resilience.
 
-On a dull Tuesday afternoon, one of our pod started crashing due to OOM (OutOfMemory).
+One Tuesday afternoon, one of our pods started crashing with an OOM (OutOfMemory) error.
 
-> In Kubernetes, we can limit the max memory a container can use, and if that is exceeded Kubernetes restarts the container with an OutOfMemory message. If there is a memory leak, that can cause a crash loop cycle
+> When a container exceeds its memory limit in Kubernetes, the system restarts it with an OutOfMemory message. Memory leaks can trigger a crash loop cycle.
 
-This problem was frequent enough to have everyone worried, and weirdly, was just happening in one customer's environment.
+This issue occurred frequently enough to raise concerns, particularly since it only affected one customer's environment.
 
-Finding the root cause was very tricky. There were no logs related to what might be crashing the application, memory usage graphs didn't help and showed normal usage before crashing. This might mean that the spike was sudden and the pod crashed before its memory was captured, thus ruling out any straight-forward memory leakage bugs.
+Finding the cause proved challenging. The application logs provided no clear indicators of the crash trigger. Memory usage graphs showed normal patterns before crashes, suggesting sudden spikes that occurred too quickly to be captured. This pattern ruled out straightforward memory leakage bugs.
 
-All this meant was, I had to dive in deeper. We had built profiling functionality inside the app, so the next part was generating memory profiles and hoping that they give any clues.
+These circumstances required deeper investigation. We leveraged Go's built-in profiling functionality to generate memory profiles, hoping to uncover clues about the issue.
 
-# Profiling, profiling and more profiling
+# Memory Profiling Investigation
 
-Me and [Aditya](https://adityathebe.com) ran multiple profiles for a few hours but didn't get anything conclusive. The only certainty was whatever was causing the crash was instant, and not a slow over the time memory leak.
+After running multiple profiles for several hours, the investigation did not yield conclusive results. The only certainty was that the crash occurred instantly, rather than resulting from a gradual memory leak.
 
-Eventually we did get lucky and saw a trace with huge memory usage.
+A trace with significant memory usage emerged during the investigation.
 
 <Screenshot img="/img/blog/rust-ffi/go-diff-first-profile.png" shadow={false} />
 
-Interesting ...
+The trace pointed to the diff function.
 
-This trace is pointing at the diff function we used.
-
-One of the crucial features we have is change mapping. Mission Control scrapes all the resources in your infrastructure (From AWS EC2 instances to kubernetes pods to Azure DNSs) and anytime anything changes, those changes are saved and a diff is generated for the changelog. This way the user has a timeline of all changes that happen in their environment.
+> Change mapping is a core feature of Mission Control. It scrapes all resources in the infrastructure (Kubernetes, AWS, etc) and records changes by generating diffs for the changelog. This provides users with a timeline of all infrastructure changes in their environment.
 
 <Screenshot img="/img/blog/rust-ffi/change-mapping.png" shadow={false} />
 
-On further inspection, it turned out that there were certain entities with bigger sizes (Kubernetes CRDs having more than 1MB in size) which lead to the diff generation taking more time and was causing the higher memory consumption as well. Processing these in bulk triggered the memory overflow.
+Investigation revealed that certain entities with larger sizes (Kubernetes CRDs exceeding 1MB) caused increased processing time and memory consumption during diff generation. Processing these entities in bulk triggered the memory overflow.
 
-We initially experimented with golang's [GC settings](https://tip.golang.org/doc/gc-guide#Memory_limit) (GOGC & GOMEMLIMIT), but were unable to find a sweet spot. We would have to significantly limit performance just to control the heap size for this edge case which was not desirable.
+Initial experiments with golang's [GC settings](https://tip.golang.org/doc/gc-guide#Memory_limit) (GOGC & GOMEMLIMIT) did not yield an optimal solution. Controlling the heap size for this edge case required significant performance limitations, which was not a viable option.
 
-I contemplated ways to mitigate this. The first option was to look for an alternate library which does the same thing (generate diffs). The one we were currently using was not updated in a long time.
+Several approaches to mitigate this issue were considered:
 
-Unfortunately, there were not any better tools that had the same functionality. I started thinking of alternative approaches:
+- Creating a buffer to process diffs in a limited batch
+- Handling larger resources separately
+- Calling the garbage collector via [`runtime.GC`](https://pkg.go.dev/runtime#GC) periodically
+- Skipping certain types of resources
 
-- Create a buffer to process diffs in a limited batch
-- Handle relatively bigger resources separately
-- Intentionally call the garbage collector via [`runtime.GC`](https://pkg.go.dev/runtime#GC) periodically
-- Skip certain types of resources
-
-None of the above options were ideal
+None of these options provided an optimal solution.
 
 # Experimenting with FFI
 
-Whilst this was going on, a thought popped in my mind: This is a bottleneck in golang since we cannot completely control how we manage the memory, what if ... we use a language that requires you to manage the memory yourself. Maybe try this functionality in rust ?
+Memory management limitations in Go created a performance bottleneck. Languages with manual memory management, like Rust, presented a potential solution.
 
-First, I had to see if running rust with golang was feasible. Some rudimentary research lead to discovery of [FFI (Foreign Function Interface)](https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code) 
+Research revealed [FFI (Foreign Function Interface)](https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code) as a method to integrate Rust with Go.
 
-I wrote a proof of concept hello world with rust and golang and managed to get it in a working state, no benchmarks or anything, just `Hello World!`.
+A proof of concept demonstrated the feasibility of Go-Rust integration through a basic "Hello World" implementation.
 
 ```go title="main.go"
 package main
@@ -93,15 +89,13 @@ pub extern "C" fn printString(message: *const libc::c_char) {
 void printString(char *message);
 ```
 
-The cargo build process produces a `libhello.a` (an archive library for static linking) file. We can also create a `.so (shared object)` and dynamically link them but I went with static linking as having one binary with everything is simpler.
+The cargo build process produces a `libhello.a` file (an archive library for static linking). While dynamic linking with `.so` (shared object) files is possible, static linking simplifies deployment by producing a single self-contained binary.
 
-Well, it is possible to mix golang and rust. Like a mad scientist infatuated by this new discovery, ignoring the laws of nature, I didn't even stop to question if this is right.
+After confirming Go and Rust could be integrated, the next step was finding a suitable diff library. [Armin Ronacher's](https://mitsuhiko.at) library [similar](https://github.com/mitsuhiko/similar) provided the required functionality.
 
-Then began my search for a good diff library, and [Armin's](https://mitsuhiko.at) library called [similar](https://github.com/mitsuhiko/similar) seemed great.
+The integration of the similar library into Go took minimal effort and compiled successfully, allowing Go binaries to call Rust functions.
 
-It only took a few minutes to integrate this into golang, and voila! It compiled. I could execute a go binary which called a rust function.
-
-But none of this matters if the benchmarks aren't good. If the golang+rust code is taking similar amount of memory, then it will all be in vain.
+However, the key success metric would be the memory usage benchmarks. If the combined Go and Rust implementation didn't provide significant memory improvements, the integration would not be worthwhile.
 
 # Moment of truth
 
@@ -114,21 +108,40 @@ After benchmarking both implementations using golang's standard benchmarking, th
 | Rust FFI | 349 MB        | 32619 | 2         |
 
 
-We can clearly see that using rust is extremely more memory efficient. There was a small 5-6 % improvement in the time taken as well.
+## Benchmarking Results and Production Implementation
 
-I told my colleague about this fun little experiment, but I had no intentions of telling it to the team since linking rust in our golang binary would be a bit crazy ?
+### Performance Improvements
 
-In the sync-up the following day, he mentioned this to the team, and people were curious. [Moshe](https://www.linkedin.com/in/moshe-immerman/) encouraged me to have a shot at this with the main codebase.
+The benchmarking results demonstrated significant improvements in memory efficiency when using Rust. The implementation showed:
 
-We timeboxed the effort, and within a day I made a working concept with our own codebase. The benchmarks against our existing test suite gave promising results.
+- 92% reduction in memory allocation (from 4.1GB to 349MB)
+- 5-6% improvement in execution time
+- Dramatic reduction in allocations per operation (from 182 to 2)
 
-It was then deployed to the environment that was crashing and well ... the crashing stopped.
+### From Experiment to Production
 
-I verified the newly generated diffs which were all correct and the overall memory usage also decreased. This was incredible.
+What started as an experimental project quickly gained traction within the team. After sharing the initial results with colleagues, there was immediate interest in exploring this approach for our production codebase.
 
-The next step was taking it from a concept to productionizing it. That was straight-forward since we primarily ship via containers, the only change required was to create a rust builder image and copy the `.a archive` before building the golang binary.
+With support from our technical leadership, particularly Moshe Immerman, we conducted a time-boxed proof of concept using our main codebase. The implementation process involved:
 
-```Dockerfile
+1. Creating a working prototype within one day
+2. Running comprehensive benchmarks against our existing test suite
+3. Deploying to the environment experiencing memory-related crashes
+4. Validating diff generation accuracy and monitoring memory usage
+
+The results exceeded expectations - the memory-related crashes ceased completely while maintaining correct diff generation and reducing overall memory consumption.
+
+### Production Implementation
+
+The transition from proof of concept to production was straightforward due to our container-based deployment strategy. The primary changes involved:
+
+1. Creating a Rust builder image
+2. Copying the static library (`.a` archive) before building the Go binary
+3. Integrating the build process into our existing containerized workflow
+
+This implementation demonstrates how combining different programming languages, when done thoughtfully, can solve real-world production issues effectively.
+
+```Dockerfile title="Dockerfile"
 FROM rust AS rust-builder
 ...
 RUN cargo build --release
@@ -139,7 +152,9 @@ RUN go mod download
 RUN make build
 ```
 
-It was amazing to see what began as a fun weird experiment getting shipped to customers as a viable solution in just a few days. While initially apprehensive about the approach of combining multiple languages and all the problems that come with it, having clear boundaries and tests give sense of assurity. This reinforces the importance of choosing the right tool for the job and the benefits of a polyglot approach to software development.
+## Conclusion
+
+What began as an experimental project was shipped to customers as a viable solution within days. While initially hesitant about combining multiple languages and their associated challenges, having clear boundaries and comprehensive tests provided confidence in the implementation. This reinforces selecting the appropriate tools for specific requirements and highlights the advantages of using multiple programming languages in software development.
 
 Further reading:
 - [Sample repo with diff gen code and benchmarks](https://github.com/yashmehrotra/go-rust-diffgen)
