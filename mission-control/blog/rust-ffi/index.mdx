@@ -3,7 +3,6 @@ title: "Overcoming Go's memory constraints with Rust FFI"
 tags: ["golang", "rust", "performance"]
 description: "An experiment with Golang and Rust FFI"
 authors: [yash]
-slug: todo
 hide_table_of_contents: false
 ---
 
@@ -15,13 +14,13 @@ On a dull Tuesday afternoon, one of our pod started crashing due to OOM (OutOfMe
 
 This problem was frequent enough to have everyone worried, and weirdly, was just happening in one customer's environment.
 
-Finding the root cause was very tricky. There were no logs related to what might be crashing the application, memory usage graphs didn't help and showed normal usage before crashing. This might mean that the spike was sudden and the pod crashed before it's memory was captured, thus ruling out any straight-forward memory leakage bugs.
+Finding the root cause was very tricky. There were no logs related to what might be crashing the application, memory usage graphs didn't help and showed normal usage before crashing. This might mean that the spike was sudden and the pod crashed before its memory was captured, thus ruling out any straight-forward memory leakage bugs.
 
 All this meant was, I had to dive in deeper. We had built profiling functionality inside the app, so the next part was generating memory profiles and hoping that they give any clues.
 
 # Profiling, profiling and more profiling
 
-Me and [Aditya](https://adityathebe.com) ran multiple profiles for a few hours but didn't get anything conclusive. The only certainity was whatever was causing the crash was instant, and not a slow over the time memory leak.
+Me and [Aditya](https://adityathebe.com) ran multiple profiles for a few hours but didn't get anything conclusive. The only certainty was whatever was causing the crash was instant, and not a slow over the time memory leak.
 
 Eventually we did get lucky and saw a trace with huge memory usage.
 
@@ -54,7 +53,7 @@ None of the above options were ideal
 
 Whilst this was going on, a thought popped in my mind: This is a bottleneck in golang since we cannot completely control how we manage the memory, what if ... we use a language that requires you to manage the memory yourself. Maybe try this functionality in rust ?
 
-First, I had to see if running rust with golang was feasible. Some rudimentary research lead to discover [FFI (Foreign Function Interface)](https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code) 
+First, I had to see if running rust with golang was feasible. Some rudimentary research lead to discovery of [FFI (Foreign Function Interface)](https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code) 
 
 I wrote a proof of concept hello world with rust and golang and managed to get it in a working state, no benchmarks or anything, just `Hello World!`.
 
