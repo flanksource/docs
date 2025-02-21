@@ -57,8 +57,7 @@ First, I had to see if running rust with golang was feasible. Some rudimentary r
 
 I wrote a proof of concept hello world with rust and golang and managed to get it in a working state, no benchmarks or anything, just `Hello World!`.
 
-It looks something like ([Link to full code](https://github.com/yashmehrotra/go-rust-diffgen/blob/main/main.go)):
-```go
+```go title="main.go"
 package main
 
 /*
@@ -77,9 +76,9 @@ func main() {
 }
 ```
 
-and the rust code ([Link to full code](https://github.com/yashmehrotra/go-rust-diffgen/blob/main/lib/diffgen/src/lib.rs)):
+and the rust code:
 
-```rust
+```rust title="src/lib.rs"
 use std::ffi::CStr;
 
 #[no_mangle]
@@ -90,8 +89,7 @@ pub extern "C" fn printString(message: *const libc::c_char) {
 }
 ```
 
-The `lib/hello.h` header file ([Link to full code](https://github.com/yashmehrotra/go-rust-diffgen/blob/main/lib/diffgen.h)):
-```c
+```c title="lib/hello.h"
 void printString(char *message);
 ```
 
@@ -145,10 +143,10 @@ It was amazing to see what began as a fun weird experiment getting shipped to cu
 
 Further reading:
 - [Sample repo with diff gen code and benchmarks](https://github.com/yashmehrotra/go-rust-diffgen)
-- [Offical Rust FFI documentation: Using `extern` Functions to Call External Code](https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code)
+- [Using `extern` Functions to Call External Code](https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code)
 - [Medi-Remi's sample repo: rust-plus-golang](https://github.com/mediremi/rust-plus-golang)
-- [Filippo's blog: rustgo: calling Rust from Go with near-zero overhead](https://words.filippo.io/rustgo/)
-- [MetalBear's blog: Hooking Go from Rust - Hitchhiker’s Guide to the Go-laxy](https://metalbear.co/blog/hooking-go-from-rust-hitchhikers-guide-to-the-go-laxy/)
+- [rustgo: calling Rust from Go with near-zero overhead](https://words.filippo.io/rustgo/) by Filippo
+- [Hooking Go from Rust - Hitchhiker’s Guide to the Go-laxy](https://metalbear.co/blog/hooking-go-from-rust-hitchhikers-guide-to-the-go-laxy/) by MetalBear
 
 
 
