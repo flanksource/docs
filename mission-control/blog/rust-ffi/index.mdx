@@ -24,13 +24,13 @@ After running multiple profiles for several hours, the investigation did not yie
 
 A trace with significant memory usage emerged during the investigation.
 
-<Screenshot img="/img/blog/rust-ffi/go-diff-first-profile.png" shadow={false} />
+<Screenshot img="/img/blog/rust-ffi/go-diff-first-profile.png" shadow={false} alt="Memory profile of the application"/>
 
 The trace pointed to the diff function.
 
 > Change mapping is a core feature of Mission Control. It scrapes all resources in the infrastructure (Kubernetes, AWS, etc) and records changes by generating diffs for the changelog. This provides users with a timeline of all infrastructure changes in their environment.
 
-<Screenshot img="/img/blog/rust-ffi/change-mapping.png" shadow={false} />
+<Screenshot img="/img/blog/rust-ffi/change-mapping.png" shadow={false} alt="Catalog changes and diff in UI"/>
 
 Investigation revealed that certain entities with larger sizes (Kubernetes CRDs exceeding 1MB) caused increased processing time and memory consumption during diff generation. Processing these entities in bulk triggered the memory overflow.
 
