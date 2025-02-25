@@ -1,0 +1,170 @@
+---
+title: "Overcoming Go's memory constraints with Rust FFI"
+tags: ["golang", "rust", "performance"]
+description: "An experiment with Golang and Rust FFI"
+authors: [yash]
+hide_table_of_contents: false
+date: 2025-02-25T10:00
+---
+
+For the past few years at [Flanksource](https://flanksource.com/), I've helped build [Mission Control](https://flanksource.com/docs) - a Kubernetes-native internal developer platform that improves developer productivity and operational resilience.
+
+One Tuesday afternoon, one of our pods started crashing with an OOM (OutOfMemory) error.
+
+> When a container exceeds its memory limit in Kubernetes, the system restarts it with an OutOfMemory message. Memory leaks can trigger a crash loop cycle.
+
+This issue occurred frequently enough to raise concerns, particularly since it only affected one customer's environment.
+
+Finding the cause proved challenging. The application logs provided no clear indicators of the crash trigger. Memory usage graphs showed normal patterns before crashes, suggesting sudden spikes that occurred too quickly to be captured. This pattern ruled out straightforward memory leakage bugs.
+
+These circumstances required deeper investigation. We leveraged Go's built-in profiling functionality to generate memory profiles, hoping to uncover clues about the issue.
+
+# Memory Profiling Investigation
+
+After running multiple profiles for several hours, the investigation did not yield conclusive results. The only certainty was that the crash occurred instantly, rather than resulting from a gradual memory leak.
+
+A trace with significant memory usage emerged during the investigation.
+
+<Screenshot img="/img/blog/rust-ffi/go-diff-first-profile.png" shadow={false} alt="Memory profile of the application"/>
+
+The trace pointed to the diff function.
+
+> Change mapping is a core feature of Mission Control. It scrapes all resources in the infrastructure (Kubernetes, AWS, etc) and records changes by generating diffs for the changelog. This provides users with a timeline of all infrastructure changes in their environment.
+
+<Screenshot img="/img/blog/rust-ffi/change-mapping.png" shadow={false} alt="Catalog changes and diff in UI"/>
+
+Investigation revealed that certain entities with larger sizes (Kubernetes CRDs exceeding 1MB) caused increased processing time and memory consumption during diff generation. Processing these entities in bulk triggered the memory overflow.
+
+Initial experiments with golang's [GC settings](https://tip.golang.org/doc/gc-guide#Memory_limit) (GOGC & GOMEMLIMIT) did not yield an optimal solution. Controlling the heap size for this edge case required significant performance limitations, which was not a viable option.
+
+Several approaches to mitigate this issue were considered:
+
+- Creating a buffer to process diffs in a limited batch
+- Handling larger resources separately
+- Calling the garbage collector via [`runtime.GC`](https://pkg.go.dev/runtime#GC) periodically
+- Skipping certain types of resources
+
+None of these options provided an optimal solution.
+
+# Experimenting with FFI
+
+Memory management limitations in Go created a performance bottleneck. Languages with manual memory management, like Rust, presented a potential solution.
+
+Research revealed [FFI (Foreign Function Interface)](https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code) as a method to integrate Rust with Go.
+
+A proof of concept demonstrated the feasibility of Go-Rust integration through a basic "Hello World" implementation.
+
+```go title="main.go"
+package main
+
+/*
+#cgo LDFLAGS: ./lib/libhello.a -ldl
+#include "./lib/hello.h"
+#include <stdlib.h>
+*/
+import "C"
+import "unsafe"
+
+func main() {
+	str := C.CString("Hello World!")
+	defer C.free(unsafe.Pointer(str))
+
+	C.printString(str)
+}
+```
+
+and the rust code:
+
+```rust title="src/lib.rs"
+use std::ffi::CStr;
+
+#[no_mangle]
+pub extern "C" fn printString(message: *const libc::c_char) {
+    let message_cstr = unsafe { CStr::from_ptr(message) };
+    let message = message_cstr.to_str().unwrap();
+    println!("({})", message);
+}
+```
+
+```c title="lib/hello.h"
+void printString(char *message);
+```
+
+The cargo build process produces a `libhello.a` file (an archive library for static linking). While dynamic linking with `.so` (shared object) files is possible, static linking simplifies deployment by producing a single self-contained binary.
+
+After confirming Go and Rust could be integrated, the next step was finding a suitable diff library. [Armin Ronacher's](https://mitsuhiko.at) library [similar](https://github.com/mitsuhiko/similar) provided the required functionality.
+
+The integration of the similar library into Go took minimal effort and compiled successfully, allowing Go binaries to call Rust functions.
+
+However, the key success metric would be the memory usage benchmarks. If the combined Go and Rust implementation didn't provide significant memory improvements, the integration would not be worthwhile.
+
+# Moment of truth
+
+After benchmarking both implementations using golang's standard benchmarking, the results were even better than expected.
+
+
+|          | Max Allocated | ns/op | allocs/op |
+|----------|---------------|-------|-----------|
+| Golang   | 4.1 GB        | 64740 | 182       |
+| Rust FFI | 349 MB        | 32619 | 2         |
+
+
+## Benchmarking Results and Production Implementation
+
+### Performance Improvements
+
+The benchmarking results demonstrated significant improvements in memory efficiency when using Rust. The implementation showed:
+
+- 92% reduction in memory allocation (from 4.1GB to 349MB)
+- 5-6% improvement in execution time
+- Dramatic reduction in allocations per operation (from 182 to 2)
+
+### From Experiment to Production
+
+What started as an experimental project quickly gained traction within the team. After sharing the initial results with colleagues, there was immediate interest in exploring this approach for our production codebase.
+
+With support from our technical leadership, particularly Moshe Immerman, we conducted a time-boxed proof of concept using our main codebase. The implementation process involved:
+
+1. Creating a working prototype within one day
+2. Running comprehensive benchmarks against our existing test suite
+3. Deploying to the environment experiencing memory-related crashes
+4. Validating diff generation accuracy and monitoring memory usage
+
+The results exceeded expectations - the memory-related crashes ceased completely while maintaining correct diff generation and reducing overall memory consumption.
+
+### Production Implementation
+
+The transition from proof of concept to production was straightforward due to our container-based deployment strategy. The primary changes involved:
+
+1. Creating a Rust builder image
+2. Copying the static library (`.a` archive) before building the Go binary
+3. Integrating the build process into our existing containerized workflow
+
+This implementation demonstrates how combining different programming languages, when done thoughtfully, can solve real-world production issues effectively.
+
+```Dockerfile title="Dockerfile"
+FROM rust AS rust-builder
+...
+RUN cargo build --release
+
+FROM golang AS builder
+COPY --from=rust-builder /path/release/target /external/diffgen/target
+RUN go mod download
+RUN make build
+```
+
+## Parting thoughts
+
+What began as an experimental project was shipped to customers as a viable solution within days. While initially hesitant about combining multiple languages and their associated challenges, having clear boundaries and comprehensive tests provided confidence in the implementation. This reinforces selecting the appropriate tools for specific requirements and highlights the advantages of using multiple programming languages in software development.
+
+[Sample repo with diff gen code and benchmarks](https://github.com/yashmehrotra/go-rust-diffgen)
+
+**Further reading**:
+- [Using `extern` Functions to Call External Code](https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code)
+- [Medi-Remi's sample repo: rust-plus-golang](https://github.com/mediremi/rust-plus-golang)
+- [rustgo: calling Rust from Go with near-zero overhead](https://words.filippo.io/rustgo/) by Filippo
+- [Hooking Go from Rust - Hitchhiker’s Guide to the Go-laxy](https://metalbear.co/blog/hooking-go-from-rust-hitchhikers-guide-to-the-go-laxy/) by MetalBear
+
+
+
+*Originally posted on [yashmehrotra.com](https://yashmehrotra.com/posts/overcoming-gos-memory-constraints-with-rust-ffi/?ref=flanksource.com)
