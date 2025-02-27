@@ -1,0 +1,98 @@
+---
+title: Kubernetes
+sidebar_custom_props:
+  icon: k8s
+---
+
+Kubernetes connections enable integration with Kubernetes clusters across different cloud providers and environments. 
+You can configure connections to AWS EKS clusters, Google Cloud GKE instances, and Config Connector (CNRM) implementations.
+
+<Fields connection="kubernetes" rows={[
+  {
+    field: "connection",
+    description: "The connection url to use, mutually exclusive with `kubeconfig`",
+    scheme: "Connection",
+  },
+  {
+    field: "kubeconfig",
+    description: "Source for kubeconfig",
+    scheme: "EnvVar"
+  },
+  {
+    field: "eks",
+    description: "EKS connection details", 
+    scheme: "[EKS](#eks-connection)",
+  },
+  {
+    field: "gke",
+    description: "GKE connection details", 
+    scheme: "[GKE](#gke-connection)",
+  },
+  {
+    field: "cnrm",
+    description: "CNRM connection details", 
+    scheme: "[CNRM](#cnrm-connection)",
+  }
+]}
+/>
+
+:::note
+One of the four sources of connection details must be provided.
+:::
+
+### EKS Connection
+
+<Fields connection="aws" rows={[
+  {
+    field: "cluster",
+    description: "Name of the cluster",
+    scheme: "string",
+    required: true,
+  }
+]}
+/>
+
+### GKE Connection
+
+<Fields connection="gcp" rows={[
+  {
+    field: "project",
+    description: "Name of the project",
+    scheme: "string",
+    required: true,
+  },
+  {
+    field: "zone",
+    description: "Name of the zone",
+    scheme: "string",
+    required: true,
+  },
+  {
+    field: "cluster",
+    description: "Name of the cluster",
+    scheme: "string",
+    required: true,
+  }
+]}
+/>
+
+### CNRM Connection
+
+<Fields connection="cnrm" rows={[
+  {
+    field: "gke",
+    description: "GKE connection",
+    scheme: "[GKE](#gke-connection)",
+  },
+  {
+    field: "clusterResource",
+    description: "Name of the cluster resource",
+    scheme: "string",
+  },
+  {
+    field: "clusterResourceNamespace",
+    description: "Namespace of the cluster resource",
+    scheme: "string",
+  }
+]}
+/>
