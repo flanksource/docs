@@ -70,7 +70,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     (row.field != "artifacts" || !oss));
 
 
-  var fieldSorter = function (a, b) {
+  var fieldSorter = function(a, b) {
     if (a.required && !b.required) {
       return -1;
     }
@@ -192,10 +192,12 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       },
       {
         field: "accessKey",
+        description: "",
         scheme: "EnvVar"
       },
       {
         field: "secretKey",
+        description: "",
         scheme: "EnvVar"
       },
       {
@@ -205,6 +207,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       },
       {
         field: "endpoint",
+        scheme: "string",
         description: "Custom AWS Endpoint to use",
       },
       {
@@ -216,14 +219,25 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
   } else if (connection == "gcp") {
     rows = rows.concat([
       {
-        field: oss ? null : "connection",
-        description: "The connection url to use, mutually exclusive with `credentials`",
-        scheme: "Connection",
+        field: oss ? null : 'connection',
+        description:
+          'The connection url to use, mutually exclusive with `credentials`',
+        scheme: 'Connection'
       },
       {
-        field: "credentials",
-        description: "The credentials to use for authentication",
-        scheme: "EnvVar"
+        field: 'credentials',
+        description: 'The credentials to use for authentication',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'endpoint',
+        description: 'Custom GCP Endpoint to use',
+        scheme: 'string'
+      },
+      {
+        field: 'skipTLSVerify',
+        description: 'Skip TLS verification when connecting to GCP',
+        scheme: 'bool'
       }
     ])
   } else if (connection == "sftp") {
@@ -368,7 +382,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       },
       {
         field: "apiKey",
-        description: "Anthropic API key for authentication", 
+        description: "Anthropic API key for authentication",
         scheme: "EnvVar",
         required: true
       }
