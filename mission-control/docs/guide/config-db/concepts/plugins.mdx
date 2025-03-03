@@ -10,18 +10,8 @@ These behaviors can also be defined on a ScrapeConfig, but using a scrape plugin
 
 For example, if you want to exclude all events with severity="info", a scrape plugin can help you achieve that.
 
-```yaml title="scrape-plugin.yaml"
-apiVersion: configs.flanksource.com/v1
-kind: ScrapePlugin
-metadata:
-  name: exclude-info-level-changes
-  namespace: mc
-spec:
-  changes:
-    exclude:
-    - severity == "info"
+```yaml title="plugin-change-exclusion.yaml" file=<rootDir>/modules/config-db/fixtures/plugin-change-exclusion.yaml
 ```
-
 
 ### Spec
 
@@ -51,36 +41,35 @@ spec:
   ]}
 />
 
-
 ### Mapping
 
-When you encounter a diff change, unlike an event-based change, it can sometimes appear unclear. The summary of the change may not immediately indicate its purpose. For example, the change 'status.images' might not be self-explanatory. To clarify this, you can assign types to these diff changes using mapping.
+When you encounter a diff change, unlike an event-based change, it can sometimes appear unclear. The summary of the change may not immediately indicate its purpose.
+For example, the change 'status.images' might not be self-explanatory. To clarify this, you can assign types to these diff changes using mapping.
 
-```yaml title="scrape-plugin.yaml"
-apiVersion: configs.flanksource.com/v1
-kind: ScrapePlugin
-metadata:
-  name: exclude-info-level-changes
-  namespace: mc
-spec:
-  changes:
-    //highlight-start
-    mapping:
-      - filter: >
-          change.change_type == 'diff' && change.summary == "status.containerStatuses" &&
-          patch != null && has(patch.status) && has(patch.status.containerStatuses) &&
-          patch.status.containerStatuses.size() > 0 &&
-          has(patch.status.containerStatuses[0].restartCount)
-        type: PodCrashLooping
-      - filter: >
-          change.change_type == 'diff' && change.summary == "status.images" && config.kind == "Node"
-        type: ImageUpdated
-        //highlight-end
+```yaml title="plugin-change-mapping.yaml" file=<rootDir>/modules/config-db/fixtures/plugin-change-mapping.yaml
 ```
 
-| Field     | Description                                                                                            | Scheme                                                                                                   |
-| --------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| `filter`  | Selects changes to apply the mapping                                                                   | <CommonLink to="cel">CEL</CommonLink> with [Change Context](/reference/config-db/changes)                |
-| `action`  | What action to take on the change, if `delete` then the corresponding config item is marked as deleted | `delete` or `ignore`                                                                                     |
-| `type`    | New change type                                                                                        | `string`                                                                                                 |
-| `summary` | New summary of the change                                                                              | <CommonLink to="gotemplate">Go Template</CommonLink> with [Change Context](/reference/config-db/changes) |
+<Fields
+  rows={[
+    {
+      field: 'filter',
+      description: 'Selects changes to apply the mapping',
+      scheme: 'cel'
+    },
+    {
+      field: 'action',
+      description: 'What action to take on the change, if `delete` then the corresponding config item is marked as deleted',
+      scheme: '`delete` | `ignore`'
+    },
+    {
+      field: 'type',
+      description: 'New change type',
+      scheme: 'string'
+    },
+    {
+      field: 'summary',
+      description: 'New summary of the change',
+      scheme: 'gotemplate'
+    }
+  ]}
+/>
