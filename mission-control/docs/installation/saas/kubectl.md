@@ -16,13 +16,14 @@ For production environments, it is recommended to use GitOps tools like Argo CD 
 
 1. Save the kubeconfig to your GitOps cluster:
 
-   ```shell
-   kubectl create secret generic mission-control-kubeconfig \
-     -n flux-system \
-     --from-file=KUBECONFIG=./kubeconfig
-   ```
+    ```shell
+    kubectl create secret generic mission-control-kubeconfig \
+      -n flux-system \
+      --from-file=KUBECONFIG=./kubeconfig
+    ```
+    <br></br>
 
-1. Reference the kubeconfig when deploying Mission Control manifests:
+2. Reference the kubeconfig when deploying Mission Control manifests:
 
    ```yaml
    apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -42,3 +43,65 @@ For production environments, it is recommended to use GitOps tools like Argo CD 
          name: mission-control-kubeconfig
          key: KUBECONFIG
    ```
+
+## Example: Installing Playbooks
+
+Let's walk through an example of installing playbooks using the `mission-control-playbooks-kubernetes` Helm chart. 
+The chart installs a list of playbooks that you can use to manage Kubernetes resources.
+
+You can tweak the `values.yaml` file to install only the playbooks you want. 
+For this example, we'll use the default values, which install most of the playbooks.
+
+<Tabs>
+<TabItem value="kubectl" label="Kubectl">
+1. First, ensure you have the `kubeconfig` file downloaded and saved as described above.
+
+2. Add the Flanksource Helm repository:
+
+    ```shell
+    helm repo add flanksource https://flanksource.github.io/charts
+    ```
+    <br></br>
+
+3. Install the `mission-control-playbooks-kubernetes` chart:
+
+    ```shell
+    helm install mission-control-playbooks flanksource/mission-control-playbooks-kubernetes --kubeconfig=./kubeconfig
+    ```
+    <br></br>
+</TabItem>
+
+<TabItem value="flux" label="Flux Installation">
+1. First, ensure you have the `kubeconfig` file downloaded and saved as described above.
+
+2. Save the kubeconfig to your GitOps cluster:
+
+    ```shell
+    kubectl create secret generic mission-control-kubeconfig \
+      -n flux-system \
+      --from-file=KUBECONFIG=./kubeconfig
+    ```
+
+3. Reference the kubeconfig when deploying Mission Control manifests:
+
+    ```yaml
+    apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    metadata:
+      name: mission-control-config
+      namespace: flux-system
+    spec:
+      interval: 10m
+      path: ./
+      prune: true
+      sourceRef:
+        kind: GitRepository
+        name: mission-control-gitops
+      kubeConfig:
+        secretRef:
+          name: mission-control-kubeconfig
+          key: KUBECONFIG
+    ```
+
+  </TabItem>
+</Tabs>
