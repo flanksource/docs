@@ -1,0 +1,179 @@
+---
+title: Kubectl Access
+---
+
+Mission Control SaaS instances are deployed on dedicated [vCluster](https://www.vcluster.com/) instances.
+
+Mission Control configuration is managed through Kubernetes Custom Resource Definitions (CRDs). Depending on your deployment model, you may need to apply resources directly to the vCluster. To facilitate this, you can download a `kubeconfig` file after authentication.
+
+    <Screenshot img="/img/download-kubeconfig.png" size="400px"/>
+
+The access token provided has role-based permissions limited to either [mission-control-reader](https://github.com/flanksource/mission-control-chart/blob/main/chart/templates/rbac.yaml#L130-L143) or [mission-control-writer](https://github.com/flanksource/mission-control-chart/blob/main/chart/templates/rbac.yaml#L145C1-L169C17), based on your selected role. Use this `kubeconfig` file to interact with your Mission Control SaaS instance via `kubectl`.
+
+:::tip Production
+For production environments, it is recommended to use GitOps tools like Argo CD or Flux to manage configurations rather than applying them directly with kubectl. Use the kubeconfig file to configure your GitOps tool to target the Mission Control SaaS instance.
+:::
+
+1. Save the kubeconfig to your GitOps cluster:
+
+    ```shell
+    kubectl create secret generic mission-control-kubeconfig \
+      -n flux-system \
+      --from-file=KUBECONFIG=./kubeconfig
+    ```
+    <br></br>
+
+2. Reference the kubeconfig when deploying Mission Control manifests:
+
+   ```yaml
+   apiVersion: kustomize.toolkit.fluxcd.io/v1
+   kind: Kustomization
+   metadata:
+     name: mission-control-config
+     namespace: flux-system
+   spec:
+     interval: 10m
+     path: ./
+     prune: true
+     sourceRef:
+       kind: GitRepository
+       name: mission-control-gitops
+     kubeConfig:
+       secretRef:
+         name: mission-control-kubeconfig
+         key: KUBECONFIG
+   ```
+
+## Example: Installing Playbooks
+
+Let's walk through an example of installing playbooks using the `mission-control-playbooks-kubernetes` Helm chart. 
+The chart installs a list of playbooks that you can use to manage Kubernetes resources. You can tweak the `values.yaml` file to install only the playbooks you want. 
+For this example, we'll use the default values, which installs most of the playbooks.
+
+<Tabs>
+<TabItem value="kubectl" label="Kubectl">
+1. First, ensure you have the `kubeconfig.yaml` file downloaded and saved as described above.
+
+2. Add the Flanksource Helm repository:
+
+    ```shell
+    helm repo add flanksource https://flanksource.github.io/charts
+    helm repo update flanksource
+    ```
+    <br></br>
+
+3. Install the `mission-control-playbooks-kubernetes` chart:
+
+    ```shell
+    helm install mission-control-playbooks-kubernetes flanksource/mission-control-playbooks-kubernetes --kubeconfig=./kubeconfig.yaml
+    ```
+    <br></br>
+</TabItem>
+
+<TabItem value="flux" label="GitOps with Flux">
+
+Assuming you have flux setup in your cluster, you can use the following manifests to install the playbooks in the SAAS instance.
+
+1. First, ensure you have the `kubeconfig.yaml` file downloaded and saved as described above.
+
+2. Create a namespace that'll hold the Mission Control resources:
+
+    ```yaml title="specs/namespace.yaml"
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: missioncontrol
+    ```
+    <br></br>
+
+3. Save the kubeconfig to your GitOps cluster:
+
+    ```yaml title="specs/kubeconfig.yaml"
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: mission-control-kubeconfig
+      namespace: missioncontrol
+    type: Opaque
+    stringData:
+      kubeconfig: |-
+        <your kubeconfig here>
+    ```
+    <br></br>
+
+    :::note Encrypt
+    It's recommended that you encrypt the kubeconfig file before saving it to the cluster.
+    E.g. using [sops](https://github.com/getsops/sops)
+    :::
+
+4. Install the flanksource helm repository
+
+    ```yaml title="specs/helmrepo.yaml"
+    apiVersion: source.toolkit.fluxcd.io/v1beta2
+    kind: HelmRepository
+    metadata:
+      name: flanksource
+      namespace: missioncontrol
+    spec:
+      interval: 10m
+      url: https://flanksource.github.io/charts
+    ```
+    <br></br>
+
+5. Reference the kubeconfig when deploying Mission Control manifests:
+
+    ```yaml title="specs/helmrelease.yaml"
+    apiVersion: helm.toolkit.fluxcd.io/v2beta1
+    kind: HelmRelease
+    metadata:
+      name: mission-control-playbooks-kubernetes
+      namespace: missioncontrol
+    spec:
+      releaseName: mission-control-playbooks-kubernetes
+      interval: 5m
+      chart:
+        spec:
+          chart: mission-control-playbooks-kubernetes
+          sourceRef:
+            kind: HelmRepository
+            name: flanksource
+      kubeConfig:
+        secretRef:
+          name: mission-control-kubeconfig
+          key: kubeconfig
+    ```
+    <br></br>
+
+6. A kustomization
+
+    ```yaml title="specs/kustomization.yaml"
+    apiVersion: kustomize.config.k8s.io/v1beta1
+    kind: Kustomization
+    resources:
+      - namespace.yaml
+      - helmrepo.yaml
+      - helmrelease.yaml
+      - kubeconfig.yaml
+    ```
+    <br></br>
+
+7. Finally, create a flux Kustomization to apply the manifests:
+
+    ```yaml title="kustomization.yaml"
+    apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+    kind: Kustomization
+    metadata:
+      name: mission-control-playbooks
+      namespace: flux-system
+    spec:
+      interval: 5m
+      path: ./specs
+      prune: true
+      sourceRef:
+        kind: GitRepository
+        name: <your-git-repo-name>
+    ```
+    <br></br>
+
+  </TabItem>
+</Tabs>
