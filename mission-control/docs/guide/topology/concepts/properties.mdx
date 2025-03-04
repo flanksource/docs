@@ -59,4 +59,152 @@ spec:
 This `config` object is used to find the config item to lookup a value from, if there are multiple matches, the first match is used.
 
 
-###
+### External Source Lookup
+
+Property values can be lookup up from external sources (HTTP, SQL, Prometheus etc.) using the `lookup` field:
+
+```yaml title="order-api.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: order-api
+spec:
+  components:
+  - name: Order API
+    properties:
+      - name: 3PL Status
+        lookup:
+          http:
+          - url: https://third-party-logistics.example.com/status
+            display:
+              expr: json.status
+      - name: Orders in past 24h
+        lookup:
+          postgres:
+          - connection: connection://orders/order-api-postgres
+            query: SELECT COUNT(*) FROM orders WHERE created_at > (NOW() - '24 hours'::INTERVAL)
+            display:
+              expr: results.rows[0].count
+```
+
+### Dynamically generating properties
+
+Properties' `expr` field can return a json object of `Property` or json list of `[]Property`
+
+```yaml title="order-api.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: order-api
+spec:
+  components:
+  - name: Order API
+    properties:
+      - name: error_percentage
+        lookup:
+          postgresql:
+          - connection: connection://api/resources-postgres
+            query: SELECT key, value FROM resources, jsonb_each_text(labels) where id = '874a10a0-7728-4ee1-91fb-cc7dab0a6fb5'
+            display:
+              expr: |
+                dyn(results.rows).map(r, [
+                  {'name': r.key, 'text': r.value}
+                ]).toJSON()
+```
+
+
+Properties' `expr` field can return separate properties for multiple components and they can then be joined using the component name
+
+```yaml title="order-api.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: test-topology-property-merge
+spec:
+  schedule: "@every 10m"
+  components:
+  - name: RootComponents
+    type: virtual
+    icon: server
+    lookup:
+      http:
+        - url: https://httpbin.demo.aws.flanksource.com/status/200
+          name: http-lookup
+          display:
+            expr: |
+              [
+                {
+                  'name': 'component-a',
+                  'type': 'API',
+                  'properties': [{'name': 'error_percentage', 'min': 0, 'max': 100}, {'name': 'owner'}]
+                },
+                {
+                  'name': 'component-b',
+                  'type': 'Frontend',
+                  'properties': [{'name': 'error_percentage', 'min': 0, 'max': 100}, {'name': 'owner'}]
+                },
+                {
+                  'name': 'component-c',
+                  'type': 'Database',
+                  'properties': [{'name': 'error_percentage', 'min': 0, 'max': 100}, {'name': 'owner'}]
+                },
+              ].toJSON()
+    properties:
+      # These get merged with the components
+      - name: error_percentage
+        lookup:
+          http:
+          - url: https://httpbin.demo.aws.flanksource.com/status/200
+            name: error_percentage_lookup
+            display:
+              expr: |
+                [
+                  {
+                    'name': 'component-a',
+                    'properties': [{'name': 'error_percentage', 'value': 1}]
+                  },
+                  {
+                    'name': 'component-b',
+                    'properties': [{'name': 'error_percentage', 'value': 10}]
+                  },
+                  {
+                    'name': 'component-c',
+                    'properties': [{'name': 'error_percentage', 'value': 50}]
+                  },
+                ].toJSON()
+      # These also get merged with the components
+      - name: owner
+        lookup:
+          http:
+          - url: https://httpbin.demo.aws.flanksource.com/status/200
+            name: owner_lookup
+            display:
+              expr: |
+                [
+                  {
+                    'name': 'component-a',
+                    'properties': [{'name': 'owner', 'text': 'team-a'}]
+                  },
+                  {
+                    'name': 'component-b',
+                    'properties': [{'name': 'owner', 'text': 'team-b'}]
+                  },
+                  {
+                    'name': 'component-c',
+                    'properties': [{'name': 'owner', 'text': 'team-b'}]
+                  },
+                ].toJSON()
+      # These are applied to all the components
+      - name: generic
+        lookup:
+          http:
+          - url: https://httpbin.demo.aws.flanksource.com/status/200
+            name: generic_lookup
+            display:
+              expr: |
+                [
+                  {'name': 'company', 'text': 'Acme'},
+                  {'name': 'location', 'text': 'Mars'},
+                ].toJSON()
+```
+
