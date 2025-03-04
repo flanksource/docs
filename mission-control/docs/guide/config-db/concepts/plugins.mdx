@@ -1,0 +1,75 @@
+---
+title: Plugins
+sidebar_custom_props:
+  icon: octicon:gear
+---
+
+Scrape Plugins are resources that modify the behavior of other scrapers. 
+They can transform changes, add properties to configs, and even set up relationships between configs. 
+These behaviors can also be defined on a ScrapeConfig, but using a scrape plugin makes them global, eliminating the need to define them in all scrapers.
+
+For example, if you want to exclude all events with severity="info", a scrape plugin can help you achieve that.
+
+```yaml title="plugin-change-exclusion.yaml" file=<rootDir>/modules/config-db/fixtures/plugin-change-exclusion.yaml
+```
+
+### Spec
+
+<Fields
+  rows={[
+    {
+      field: 'relationship',
+      description: 'Select all the components to link to this check',
+      scheme: '[Relationships](./relationships)'
+    },
+    {
+      field: 'properties',
+      description: 'Custom templatable properties for the scraped config items.',
+      scheme: '[`[]ConfigProperty`](/reference/config-db/properties)'
+    },
+    {
+      field: 'changes.exclude',
+      description: 'Ignore changes',
+      scheme: '[[]CEL](#exclusions) with [Change Context](/reference/config-db/changes)'
+    },
+    {
+      field: 'changes.mapping',
+      description: 'Categorize changes',
+      scheme: '[Mapping](#mapping)'
+    }
+
+  ]}
+/>
+
+### Mapping
+
+When you encounter a diff change, unlike an event-based change, it can sometimes appear unclear. The summary of the change may not immediately indicate its purpose.
+For example, the change 'status.images' might not be self-explanatory. To clarify this, you can assign types to these diff changes using mapping.
+
+```yaml title="plugin-change-mapping.yaml" file=<rootDir>/modules/config-db/fixtures/plugin-change-mapping.yaml
+```
+
+<Fields
+  rows={[
+    {
+      field: 'filter',
+      description: 'Selects changes to apply the mapping',
+      scheme: 'cel'
+    },
+    {
+      field: 'action',
+      description: 'What action to take on the change, if `delete` then the corresponding config item is marked as deleted',
+      scheme: '`delete` | `ignore`'
+    },
+    {
+      field: 'type',
+      description: 'New change type',
+      scheme: 'string'
+    },
+    {
+      field: 'summary',
+      description: 'New summary of the change',
+      scheme: 'gotemplate'
+    }
+  ]}
+/>
