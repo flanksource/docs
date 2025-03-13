@@ -1,12 +1,9 @@
 import React from 'react'
-import Admonition from '@theme/Admonition'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-import Link from '@docusaurus/Link'
 import ReactMarkdown from 'react-markdown'
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import clsx from 'clsx'
 
-const schemes = {
+let schemes = {
   envvar: '[EnvVar](/reference/env-var)',
   matchpattern: '[MatchPattern](/reference/types#match-pattern)',
   '[]envvar': '[[]EnvVar](/reference/env-var)',
@@ -18,6 +15,7 @@ const schemes = {
   '[]jsonpathorstring': '`[]string` or [[]JSONPath](https://jsonpath.com/)',
   jsonpath: '[JSONPath](https://jsonpath.com/)',
   size: '[Size](/reference/types#size)',
+  "[]metric": '[[]Metric](/guides/canary-checker/concepts/metrics#custom-metrics)',
   agent: '[Agent](/reference/types#agent)',
   resourceselector: '[ResourceSelector](/reference/resource-selector)',
   resourceselectors: '[[]ResourceSelector](/reference/resource-selector)',
@@ -33,7 +31,22 @@ const schemes = {
     '[map[string]string](/reference/notifications#properties)'
 }
 
-function useSchemeUrl(value) {
+let ossSchemes = {
+  icon: '[Icon](/types#icon)',
+  envvar: '[EnvVar](/concepts/secret-management)',
+  matchpattern: '[MatchPattern](/types#match-pattern)',
+  '[]envvar': '[[]EnvVar](/concepts/secret-management)',
+  cel: '[CEL](/scripting/cel)',
+  javascript: '[Javascript](/scripting/javascript)',
+  gotemplate: '[Go Template](/scripting/gotemplate)',
+  duration: '[Duration](/types#duration)',
+  size: '[Size](/types#size)',
+  "[]metric": '[[]Metric](/concepts/metrics#custom-metrics)',
+  resourceselector: '[ResourceSelector](/resource-selector)',
+  resourceselectors: '[[]ResourceSelector](/resource-selector)',
+}
+
+function useSchemeUrl(value, oss) {
   if (value == null) {
     return "string"
   }
@@ -43,10 +56,19 @@ function useSchemeUrl(value) {
     return value;
   }
 
-  value = schemes[key]
-  if (value == null || !value.includes('](/')) {
+  if (oss) {
+    for (const key of Object.keys(ossSchemes)) {
+      schemes[key] = ossSchemes[key];
+    }
+  }
+
+  let mapping = schemes[value.toLowerCase()]
+
+  if (mapping == null || !mapping.includes('](/')) {
     return value
   }
+
+  value = mapping;
 
   // Extract link text and URL
   const matches = value.match(/\[(.*?)\]\((.*?)\)/);
@@ -65,12 +87,11 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
 
   const oss = siteConfig.customFields.oss;
 
-
   rows = rows.filter(row => row.field != null &&
     (row.field != "artifacts" || !oss));
 
 
-  var fieldSorter = function(a, b) {
+  var fieldSorter = function (a, b) {
     if (a.required && !b.required) {
       return -1;
     }
@@ -423,7 +444,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
                 {row.anyOf && <code>{row.anyOf.join(' | ')}</code>}
                 {!row.anyOf && row.scheme && (
                   <ReactMarkdown>
-                    {useSchemeUrl(row.scheme)}
+                    {useSchemeUrl(row.scheme, oss)}
                   </ReactMarkdown>
                 )}
               </td>

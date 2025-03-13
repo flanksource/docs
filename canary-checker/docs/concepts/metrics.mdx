@@ -1,0 +1,117 @@
+---
+title: Metrics
+sidebar_custom_props:
+  icon: clarity:dashboard-line
+---
+
+
+Canary Checker works well with Prometheus and exports metrics for every check, the standard metrics included are:
+
+| Metric                                         | Type      | Description                                 |
+| ---------------------------------------------- | --------- | ------------------------------------------- |
+| canary_check                                   | Gauge     | Set to 0 when passing and 1 when failing    |
+| canary_check_success_count                     | Counter   |                                             |
+| canary_check_failed_count                      | Counter   |                                             |
+| canary_check_info                              | Info      |                                             |
+| canary_check_duration                          | Histogram | Histogram of canary durations               |
+
+Some checks like [pod](../../reference/pod) and [http](../../reference/http) expose additional metrics.
+
+
+## Custom Metrics
+
+Canary checker can export custom metrics from any check type, replacing and/or consolidating multiple standalone Prometheus Exporters into a single exporter.
+
+In the example below, exchange rates against USD are exported by first calling an HTTP api and then using the values from the JSON response to create the metrics:
+
+```yaml title="exchange-rates-exporter.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/metrics-multiple.yaml
+
+```
+
+Which would output:
+
+```shell
+exchange_rate{from=USD, to=GBP} 0.819
+exchange_rate{from=USD, to=EUR} 0.949
+exchange_rate{from=USD, to=ILS} 3.849
+exchange_rate_api 260.000
+```
+
+### Fields
+
+| Field    | Description                                            | Scheme            | Required |
+| -------- | ------------------------------------------------------ | ----------------- | -------- |
+| `metrics[].name`   | Name of the metric                                     | `string`          | Yes      |
+| `metrics[].value`  | An expression to derive the metric value from          | <CommonLink to="cel">CEL</CommonLink> with [Check Context](#check-context) that returns `float`       | Yes      |
+| `metrics[].type`   | Prometheus Metric Type  | `counter`, `guage`, `histogram`          | Yes      |
+| `metrics[].labels[].name`      | Name of the label                                      | `string`            | Yes      |
+| `metrics[].labels[].value`     | A static value for the label value                     | `float`            |          |
+| `metrics[].labels[].valueExpr` | An expression to derive the label value from          | <CommonLink to="cel">CEL</CommonLink> with [Check Context](#check-context)     |          |
+| `metrics[].labels[].labels`    | Labels for prometheus metric (values can be templated) | `map[string]string` |          |
+
+Expressions can make use of the following variables:
+
+### Check Context
+
+| Fields                    | Description                                | Scheme                                    |
+| ------------------------- | ------------------------------------------ | ----------------------------------------- |
+| `*`              | All fields from the check result                            | See result variables section of the check |
+| **`last_result.results`** | The last result                            |                                           |
+| `check.name`              | Check name                                 | `string`                                  |
+| `check.description`       | Check description                          | `string`                                  |
+| `check.labels`            | Dynamic labels attached to the check       | `map[string]string`                       |
+| `check.endpoint`          | Endpoint (usually a URL)                   | `string`                                  |
+| `check.duration`          | Duration in milliseconds                   | `int64`                                   |
+| `canary.name`             | Canary name                                | `string`                                  |
+| `canary.namespace`        | Canary namespace                           | `string`                                  |
+| `canary.labels`           | Labels attached to the canary CRD (if any) | `map[string]string`                       |
+
+
+## Prometheus Operator
+
+The helm chart can install a `ServiceMonitor` for the prometheus operator, by enabling the serviceMonitor flag
+
+```
+--set serviceMonitor=true
+```
+
+## Grafana
+
+
+Default grafana dashboards are available. After you deploy Grafana, these dashboards can be installed with
+
+```
+--set grafanaDashboards=true --set serviceMonitor=true
+```
+
+![](/img/grafana-dashboard.png)
+
+
+## Stateful Metrics
+
+
+Metrics can be generated from time based data, e.g. logs per minute, logins per second by using the output of one check execution as the input to the next.
+
+```yaml file=<rootDir>/modules/canary-checker/fixtures/elasticsearch/stateful_metrics.yaml
+
+```
+
+This snippet retrieves the `last_result.results.max` value from the last execution ensuring data is not duplicated or missed
+
+```go
+"@timestamp" : {
+  {{-  if last_result.results.max }}
+  "gte": "{{ last_result.results.max }}"
+  {{- else }}
+  "gte": "now-5m"
+  {{- end }}
+}
+```
+
+The max value is saved in the `transform` section using:
+
+```yaml
+#...
+'detail': { 'max': string(json.?aggregations.logs.age.value_as_string.orValue(last_result().?results.max.orValue(time.Now()))) },
+#...
+```

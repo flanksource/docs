@@ -5,40 +5,22 @@ sidebar_custom_props:
   icon: google-cloud
 ---
 
-# <Icon name="database" /> Google Cloud SQL Backups
+# <Icon name="google-cloud" /> Google Cloud SQL Backups
 
 Checks if a Google Cloud SQL instance has been successfully backed up recently.
 
 ```yaml title="gcs-database.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/database_backup.yaml
 ```
 
-| Field         | Description                                                 | Scheme                                         | Required |
-| ------------- | ----------------------------------------------------------- | ---------------------------------------------- | -------- |
-| **`gcp`**     | Connect to GCP project and instance                         | [_GCPDatabase_](#gcpdatabase)                  | Yes      |
-| **`maxAge`**  | Max age for backup allowed, e.g. 5h30m                       | _Duration_                                     |          |
-| **`name`**    | Name of the check, must be unique within the canary         | `string`                                       | Yes      |
-| `description` | Description for the check                                   | `string`                                       |          |
-| `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                       |          |
-| `labels`      | Labels for check                                            | `map[string]string`                            |          |
-| `test`        | Evaluate whether a check is healthy                         | [`Expression`](../concepts/expressions/health-evaluation)  |          |
-| `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/expressions/display-formatting ) |          |
-| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/expressions/transforms)         |          |
-| `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics/custom-metrics)    |          |
-|               |                                                             |                                                |          |
+<HealthCheck name="databaseBackup" edition="standard" rows={[
 
-## Duration
+{name: "maxAge", description: "Max age for backup allowed", scheme: "Duration", required:true },
+  {name: "gcp.database", description: "GCP project name", required: true},
+  {name: "gcp.instance", description: "Google CloudSQL instance name",  required: true},
+  {name: "gcp.gcpConnection.credentials",  scheme: "env-var", required: true}
+]}/>
 
-Durations are strings with an optional fraction and unit e.g. `300ms`, `1.5h` or `2h45m`. Valid time units are `ms`, `s`, `m`, `h`.
 
-## GCPDatabase
-
-| Field          | Description                                                                                                                   | Scheme                                                 | Required |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------- |
-| `project`      | GCP project name                                                                                                             | _string_                                               | Yes      |
-| `instance`     | Google CloudSQL instance name                                                                                                 | _string_                                               | Yes      |
-| **Connection** |                                                                                                                               |                                                        |          |
-| `connection`   | Path of an existing connection e.g. `connection://gcp`/. Mutually exclusive with `credentials` <br /> <Commercial /> | <CommonLink to="connection">_Connections_</CommonLink> |          |
-| `credentials`  | GCP Access Token File. <SkipOSS>Mutually exclusive with `connection`</SkipOSS>                                                | <CommonLink to="authentication">_EnvVar_</CommonLink>  | Yes      |
 
 ### Connecting to GCP
 

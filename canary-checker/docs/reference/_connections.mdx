@@ -23,11 +23,10 @@ title: Connections
 
 There are 3 options when connecting to AWS:
 
-<Step step={1} name="AWS Instance or Pod Identity" style="list">
+1. AWS Instance or Pod Identity
 
 By using the AWS [Instance Profile](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html) or [Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-configuration.html) (the default if no `connection` or `accessKey` is specified)
-</Step>
-<Step step={2} name="Connection" style="list">
+1. Connection
 
 Using a shared <CommonLink to="connection">Connection</CommonLink>
 ```yaml title="aws-connection.yaml"
@@ -41,8 +40,7 @@ spec:
     - connection: connection://aws/internal
       region: us-east-1 # optional if specified in the connection
 ```
-</Step>
-<Step step={3} name="Inline" style="list">
+1. Inline
 
 ```yaml title="inline.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -64,9 +62,6 @@ spec:
             key: AWS_SECRET_ACCESS_KEY
       region: us-east-1
 ```
-</Step>
-
-
 
 ## GCP
 
@@ -81,12 +76,11 @@ spec:
 
 There are 3 options when connecting to GCP:
 
-<Step step={1} name="GKE Workload Identity"  style="list">
+1. GKE Workload Identity
 
 GKE [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) (the default if no `connection` or `credentials` is specified)
-</Step>
 
-<Step step={2} name="Connection" style="list">
+1. Connection
 
 ```yaml title="gcs-connection.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -102,9 +96,8 @@ spec:
         connection: connection://gcp/internal
 ```
 
-</Step>
 
-<Step step={3} name="Inline"  style="list">
+1. Inline
 
 ```yaml title="gcp-inline.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -123,8 +116,6 @@ spec:
               name: gcp-credentials
               key: AUTH_ACCESS_TOKEN
 ```
-</Step>
-
 
 ## Azure
 

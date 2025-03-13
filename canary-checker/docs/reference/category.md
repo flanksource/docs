@@ -1,8 +1,9 @@
 ---
 title: Checks
-sidebar_position: 1
+hide_sidebar: true
 sidebar_custom_props:
   icon: codicon:pass
+slug: /reference
 ---
 
 import DocCardList from '@theme/DocCardList';

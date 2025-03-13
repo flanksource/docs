@@ -3,6 +3,7 @@ title: Getting Started
 sidebar_position: 1
 sidebar_custom_props:
   icon: getting-started
+slug: /getting-started
 ---
 
 import { HiOutlineExternalLink } from "react-icons/hi";
@@ -11,9 +12,9 @@ import { HiOutlineExternalLink } from "react-icons/hi";
 
 1. Install canary checker using helm
 
-  <Helm chart="canary-checker"
-    namespace="canary-checker"
-    />
+    <Helm chart="canary-checker"
+      namespace="canary-checker"
+      />
     <p/>
 
 2. Create a new check
@@ -29,7 +30,7 @@ import { HiOutlineExternalLink } from "react-icons/hi";
     ```
     <p/>
     <Details summary="Run the check locally">
-      You can also run the check locally to see its output by using the [cli](./cli)
+      You can also run the check locally to see its output by using the [cli](./installation/cli)
 
       ```bash
       canary-checker run canary.yaml

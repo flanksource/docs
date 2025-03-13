@@ -1,8 +1,18 @@
 ---
 title: Image Variants
+sidebar_custom_props:
+  icon: docker
 ---
 
 Canary checker comes with 2 image variants:
+
+## [Slim](https://github.com/flanksource/canary-checker/blob/master/build/slim/Dockerfile)
+
+- [arkade](https://github.com/alexellis/arkade)
+- jq
+- yq
+- python3
+
 
 ## [Minimal](https://github.com/flanksource/canary-checker/blob/master/build/minimal/Dockerfile)
 

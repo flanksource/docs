@@ -1,6 +1,9 @@
 ---
 description: Alternative methods for connecting to the db used for persistence
 sidebar_class_name: hidden-mission-control
+slug: /installation/database
+sidebar_custom_props:
+  icon: postgres
 ---
 
 # Database

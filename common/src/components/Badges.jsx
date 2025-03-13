@@ -2,7 +2,7 @@ import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { GoDotFill } from "react-icons/go";
 import clsx from 'clsx'
-
+import { CommonLink } from './Link'
 export function Health({ color, children }) {
   return <span className='rounded rounded-sm bg-zinc-100' style={{
     fontSize: '0.85rem',
@@ -34,7 +34,7 @@ export function FullImage({ color }) {
         marginLeft: "3px",
         padding: '0.3rem',
       }}>
-      <a href="/reference/canary-checker/image-variants" style={{ color: "white" }}>Full Image Variant Required</a>
+      <CommonLink to="image-variants#full">Full Image</CommonLink> variant required.
     </span >
   );
 }

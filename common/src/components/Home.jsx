@@ -147,7 +147,7 @@ function Home() {
           subtitle="Integrations"
           title="Batteries included with 30+ check types"
           image={<Integrations />}
-          url="/checks">
+          url="/getting-started">
           Canary checker is a single binary with most checks bundled and not requiring an external installation.
 
         </Feature>
@@ -171,7 +171,7 @@ function Home() {
           subtitle="Prometheus"
           title="Metrics Exporter"
           image="metrics-exporter.png"
-          url="/concepts/metrics-exporter">
+          url="/concepts/metrics">
           Export custom metrics from any check, replacing the need for multiple separate metric exporters.
         </Feature>
 
@@ -180,7 +180,7 @@ function Home() {
           title="Grafana"
           left={false}
           image="grafana-dashboard.png"
-          url="/concepts/grafana">
+          url="/concepts/metrics#grafana">
           Chose from a standard <a href="https://github.com/flanksource/canary-checker/tree/master/chart/dashboards" target="_blank">Grafana dashboard</a> or create your own using the prometheus metrics exposed by Canary Checker.
         </Feature>
 
@@ -226,7 +226,7 @@ function Home() {
 
 
           image="display-format.png"
-          url="/concepts/display-formatting">
+          url="/concepts/expressions/display-formatting">
           Evaluate the health of checks using scripts in CEL, Javascript or Go Templating. Templates can also be used to format the output of checks.
           <div className='space-x-2' >
 
@@ -250,7 +250,7 @@ function Home() {
           subtitle="Control Plane Monitoring"
           title="Active Infrastructure Checks"
           image="infrastructure-check.png"
-          url="/concepts/scripting">
+          url="https://flanksource.com/docs/blog/infrastructure-testing-with-canary-checker-and-flux">
           Proactive infrastructure checks ensure your control plane has ample buffer/ or capacity. These checks validate the ability to schedule new pods, launch EC2 instances, and  push/pull to docker and helm repositories.
           <div className='pt-2 spacing-x-2' >
             <Icon name="k8s" url="/reference/kubernetes-resource" height={32} />
@@ -267,7 +267,7 @@ function Home() {
           left={false}
 
           image="exec-check.png"
-          url="/concepts/scripting">
+          url="/scripting">
           Evaluate the health of checks using scripts in CEL, Javascript or Go Templating. Templates can also be used to format the output of checks.
           <div className='space-x-2' >
 
@@ -286,7 +286,7 @@ function Home() {
 
           title="Leverage Kubernetes Secrets"
           image="auth-check.png"
-          url="/concepts/authentication">
+          url="/concepts/secret-management">
           Canaries are namespace aware and can be configured to use kubernetes secrets and configmaps for authentication details, negating the need to store secrets in the configuration.
         </Feature>
 

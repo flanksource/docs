@@ -11,7 +11,7 @@ sidebar_custom_props:
 Executes a bash (Linux) or powershell (Windows) script. The check is considered passing if the script exits with `0`
 
 :::tip Docker Image variants
-See [image-variants](/reference/canary-checker/image-variants)
+See <CommonLink to="image-variants">Image Variants</CommonLink> for a list of installed applications
 :::
 
 ```yaml title="exec.yaml"  file=<rootDir>/modules/canary-checker/fixtures/minimal/exec_pass.yaml
@@ -46,6 +46,20 @@ See [image-variants](/reference/canary-checker/image-variants)
   scheme: "[`ExecConnection`](#exec-connection)",
 }
 ]}/>
+
+
+## Scripting languages
+
+Use a shebang (`#!`) line to choose a different shell (`python`, `bash` and `pwsh` are included in the base image)
+
+```yaml
+exec:
+  script: |
+    //highlight-next-line
+    #! pwsh
+    Get-Items | ConvertTo-JSON
+```
+
 
 
 <details summary="Exec with an Environment Variables">
