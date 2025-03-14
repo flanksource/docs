@@ -6,6 +6,6 @@ sidebar_custom_props:
   icon: fluent:library-16-regular
 ---
 
-import Types from '@site/docs/snippets/_types.md'
+import Types from '@site/docs/snippets/\_types.md'
 
 <Types/>

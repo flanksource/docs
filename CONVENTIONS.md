@@ -1,3 +1,4 @@
+<!-- vale off -->
 1. Use an active, present tense voice
 2. When referring to concepts or resources do not use the term "they", use the name of the concept or resource instead
 3. Do not use any salesy or marketing terms, Do not use adverbs.
