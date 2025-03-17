@@ -13,12 +13,40 @@ Runs a [config-db](https://github.com/flanksource/config-db) query.
 ```yaml title="catalog.yaml"  file=<rootDir>/modules/canary-checker/fixtures/external/catalog.yaml
 ```
 
-
 <HealthCheck name="catalog"  rows={[
   {
     field: "selector" ,
-    scheme: 'ResourceSelector',
+    scheme: '[ResourceSelector](#resource-selectors)',
     required: true
   },
 ]}/>
 
+
+## Resource Selectors
+
+
+| Field           | Description                                                                                                                                                        | Scheme                                                                                              | Required |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- | -------- |
+| `id`            | ID of the component                                                                                                                                                | `string`                                                                                            | No       |
+| `name`          | Name of the component/config                                                                                                                                       | `string`                                                                                            | No       |
+| `namespace`     | Select resources in this namespace only, if empty find resources in all namespaces                                                                                 | `string`                                                                                            | No       |
+| `types`         | Match any of the types specified                                                                                                                                   | `[]string`                                                                                          | No       |
+| `statuses`      | Match any of the statuses specified                                                                                                                                | `[]string`                                                                                          | No       |
+| `labelSelector` | Kubernetes Style Label Selector                                                                                                                                    | [LabelSelector](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)          | No       |
+| `fieldSelector` | Kubernetes Style Field Selector Property fields of the component in kubernetes format (or database columns: owner, topology_id, parent_id)                         | [FieldSelector](https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/) | No       |
+| `agent`         | Select resources created on this agent, Defaults to `local`                                                                                                        | `uuid`, `{name}`, `local` or `all`                                                                  | No       |
+| `cache`         | Cache settings to use for the results, expensive selectors or selectors that are used often should be cached for longer periods. Defaults to `max-age=10m` | `no-cache`, `no-store` or `max-age={duration}`                                                      | No       |
+| `search`        | Search for resources via key value pairs using parsing expression grammar                                                                                          | [Search](#search)                                                                                     | No       |
+
+## Search
+
+The query syntax is `field1=value1 field2>value2 field3=value3* field4=*value4`. `*` is for prefix and suffix matching.
+
+Supported operators:
+
+| Operator | Syntax                           | Types                 |
+| -------- | -------------------------------- | --------------------- |
+| `=`      | `field=value`                    | `string` `int` `json` |
+| `!=`     | `field!=value`                   | `string` `int` `json` |
+| `*`      | `field=*value` or `field=value*` | `string` `int`        |
+| `>` `<`  | `field>value` or `field<value`   | `datetime` `int`      |

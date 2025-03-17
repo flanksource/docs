@@ -35,6 +35,18 @@ exec:
         script: kubectl rollout release deployment -n $(.config.tags.namespace) $(.conf
 ```
 
+## Shell Language
+
+Use a shebang (`#!`) line to choose a different shell (`python`, `bash` and `pwsh` are included in the base image)
+
+```yaml
+exec:
+  script: |
+    //highlight-next-line
+    #! pwsh
+    Get-Items | ConvertTo-JSON
+```
+
 <GoTemplate/>
 
 

@@ -950,7 +950,7 @@ filepath.Match("*.txt", "foo.txt") // true
 `filepath.Rel` returns a relative path that is lexically equivalent to targpath when
 joined to basepath with an intervening separator. That is,
 Join(basepath, Rel(basepath, targpath)) is equivalent to targpath itself.
-On success, the returned path will always be relative to basepath,
+On success, the returned path is always be relative to basepath,
 even if basepath and targpath share no elements.
 An error is returned if targpath can't be made relative to basepath or if
 knowing the current working directory would be necessary to compute it.
@@ -1617,7 +1617,7 @@ regexp.Split(pattern, count, input)
 ```
 
 - `pattern` is the regular expression pattern that separates the substrings.
-- `count` is the maximum number of splits. Use -1 for no limit.
+- `count` is the maximum number of splits. Use `-1` for no limit.
 - `input` is the string to split.
 
 ```javascript
@@ -1640,12 +1640,11 @@ regexp.Split("z", -1, "hello") // ["hello"]
 
 ### .abbrev
 
-`abbrev` on a string abbreviates the string using ellipses. Tl turn the string "Now is the time for all good men" into "...s the time for..."
-This function works like `Abbreviate(string, int)`, but allows you to specify a "left edge" offset. The left edge is not
-necessarily going to be the leftmost character in the result, or the first character following the ellipses, but it will appear
-somewhere in the result.
-In no case will it return a string of length greater than maxWidth.
+The `abbrev` function abbreviates a string using ellipses. For example, it transforms "Now is the time for all good men" into "...s the time for..."
 
+This function works like `Abbreviate(string, int)`, but allows you to specify a "left edge" offset. The left edge appears somewhere in the result, though not necessarily as the leftmost character or the first character following the ellipses.
+
+The function ensures the returned string length does not exceed maxWidth.
 ```javascript
 "string".abbrev(offset, maxWidth)
 ```
@@ -1688,9 +1687,8 @@ Examples:
 ```
 
 ### .charAt
-
 Returns the character at the given position. If the position is negative, or
-greater than the length of the string, the function will produce an error:
+greater than the length of the string, an error is thrown
 
 ```javascript
 "hello".charAt(4) // return 'o'
@@ -1706,7 +1704,7 @@ greater than the length of the string, the function will produce an error:
 
 ### .contains
 
-`contains` check if a string contains a given substring.
+`contains` checks if a string contains a given substring.
 
 ```javascript
 "apple".contains("app") // true
@@ -1721,19 +1719,17 @@ greater than the length of the string, the function will produce an error:
 ```
 
 ### .format
-
-`format` Returns a new string with substitutions being performed, printf-style.
+`format` creates a new string with substitutions performed in printf-style.
 The valid formatting clauses are:
 
-- `%s` substitutes a string. This can also be used on `bools`, `lists`, `maps`, `bytes`,
-  `Duration`, `Timestamp`,`int`, `double`
-  <br/>the dot/period decimal separator will always be used when printing a list or map that contains a double, and that null can be passed (which results in the string "null") in addition to types.
+- `%s` substitutes a string. Use this for `bools`, `lists`, `maps`, `bytes`, `Duration`, `Timestamp`,`int`, `double`
+  <br/>The dot/period decimal separator appears when printing a list or map containing a double. You can pass null, which outputs the string "null" in addition to types.
 - `%d` substitutes an integer.
-- `%f` substitutes a double with fixed-point precision. The default precision is 6, but this can be adjusted. The strings `Infinity`, `-Infinity`, and `NaN` are also valid input for this clause.
-- `%e` substitutes a double in scientific notation. The default precision is 6, but this can be adjusted.
-- `%b` substitutes an integer with its equivalent binary string. Can also be used on bools.
-- `%x` substitutes an integer with its equivalent in hexadecimal, or if given a string or bytes, will output each character's equivalent in hexadecimal.
-- `%X` same as above, but with A-F capitalized.
+- `%f` substitutes a double with fixed-point precision. The default precision is 6, but you can adjust this. The strings `Infinity`, `-Infinity`, and `NaN` are valid input for this clause.
+- `%e` substitutes a double in scientific notation. The default precision is 6, but you can adjust this.
+- `%b` substitutes an integer with its equivalent binary string. Use this for bools too.
+- `%x` substitutes an integer with its equivalent in hexadecimal. For strings or bytes, it outputs each character's hexadecimal equivalent.
+- `%X` same as `%x`, but with A-F capitalized.
 - `%o` substitutes an integer with its equivalent in octal.
 
 ```javascript

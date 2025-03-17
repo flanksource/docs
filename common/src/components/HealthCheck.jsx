@@ -10,6 +10,10 @@ export default function HealthCheck({ name, edition, rows, ...props }) {
 
   const { siteConfig } = useDocusaurusContext()
 
+  const oss = siteConfig.customFields.oss;
+
+  rows = rows.filter(row => row.field != null &&
+    (row.field != "artifacts" || !oss));
 
   const commonsRows = [
     {
@@ -51,7 +55,7 @@ export default function HealthCheck({ name, edition, rows, ...props }) {
     {
       field: "metrics",
       description: "Metrics to export from",
-      scheme: "[`[]Metrics`](../concepts/metrics/custom-metrics)"
+      scheme: "[`[]Metrics`](../concepts/metrics)"
     }
 
   ]

@@ -16,8 +16,56 @@ In this example we print out the exchange rates returned by an HTTP API Call
 
 <p/>
 
-<GoTemplate/>
+## Escaping
 
+If you need to pass a template through a Helm Chart and prevent Helm from templating you need to escape it:
+
+```
+{{`{{ .secret }}`}}
+```
+
+Alternatively [change the templating delimiters](#delimiters)
+
+
+## Multiline YAML
+
+If you are using a YAML multiline string use `|` and not `>` which strips newlines
+
+Instead of:
+
+```yaml
+exec:
+  //highlight-next-line
+  script: >
+    #! pwsh
+    Get-Items | ConvertTo-JSON
+```
+
+Do this:
+
+```yaml
+exec:
+  //highlight-next-line
+  script: |
+    #! pwsh
+    Get-Items | ConvertTo-JSON
+```
+
+
+## Delimiters
+
+The template delimiters can be changed from the defaults of `$()` and `{{}}` with `gotemplate` comments
+
+```yaml
+exec:
+  script: |
+    #! pwsh
+    //highlight-next-line
+    # gotemplate: left-delim=$[[ right-delim=]]
+    $message = "$[[.config.name]]"
+    Write-Host "{{  $message }}"
+    Write-Host  @{ Number = 1; Shape = "Square"; Color = "Blue"} | ConvertTo-JSON
+```
 
 ## base64
 
@@ -155,7 +203,7 @@ Where books is from [fantasy.json](https://openlibrary.org/subjects/fantasy.json
 
 Return a list of keys in one or more maps.
 
-The keys will be ordered first by map position (if multiple maps are given), then alphabetically.
+The keys are ordered first by map position (if multiple maps are given), then alphabetically.
 
 See also [`coll.Values`](#values).
 
@@ -168,7 +216,7 @@ See also [`coll.Values`](#values).
 
 Return a list of values in one or more maps.
 
-The values will be ordered first by map position (if multiple maps are given), then alphabetically by key.
+The values are ordered first by map position (if multiple maps are given), then alphabetically by key.
 
 See also [`coll.Keys`](#keys).
 
@@ -230,12 +278,11 @@ _this function does not change the given list; it always produces a new one._
 
 ### Sort
 
-Sort a given list. Uses the natural sort order if possible. For inputs that are not sortable (either because the elements are of different types, or of an un-sortable type), the input will simply be returned, unmodified.
+Sort a given list using the natural sort order when possible. For inputs that are not sortable (either because the elements are of different types, or of an un-sortable type), the input returns unmodified.
 
 Maps and structs can be sorted by a named key.
 
 _this function does not modify the input._
-
 ```go
 {{ slice "foo" "bar" "baz" | coll.Sort }} // [bar baz foo]
 ```
@@ -246,10 +293,9 @@ _this function does not modify the input._
 
 ### Merge
 
-Merge maps together by overriding src with dst. In other words, the src map can be configured the "default" map, whereas the dst
-map can be configured the "overrides". Many source maps can be provided. Precedence is in left-to-right order.
+Merge combines multiple maps by overriding values from left to right. The first map acts as the base "defaults", while subsequent maps provide overrides. Multiple source maps can be provided, with precedence given in left-to-right order.
 
-_this function does not modify the input._
+_This function does not modify the input maps._
 
 ```go
 {{ $default := dict "foo" 1 "bar" 2}}
@@ -313,10 +359,9 @@ Converts a true-ish string to a boolean. Can be used to simplify conditional sta
 ```
 
 ### default
-
 Provides a default value given an empty input. Empty inputs are `0` for numeric types, `""` for strings, `false` for booleans, empty arrays/maps, and `nil`.
 
-this will not provide a default for the case where the input is undefined (i.e. referencing things like `.foo` where there is no `foo` field of `.`), but [`conv.Has`](#has) can be used for that.
+This provides no default for cases where the input is undefined (that is, referencing things like `.foo` where there is no `foo` field of `.`), but [`conv.Has`](#has) can be used for that.
 
 ```go
 {{ "" | default "foo" }} // foo
@@ -526,7 +571,7 @@ This delegates to [`conv.ToFloat64`](#tofloat64) for each input argument.
 
 Converts the input (of any type) to a `string`.
 
-The input will always be represented in _some_ way.
+The input is always be represented in _some_ way.
 
 ```go
 {{ conv.ToString 0xFF }} // 255
@@ -561,7 +606,7 @@ _Warning: SHA-1 is cryptographically broken and should not be used for secure ap
 
 ### json
 
-Converts a JSON string into an object. Works for JSON Objects, but will also parse JSON Arrays. Will not parse other valid JSON types.
+Converts a JSON string into an object. Supports only JSON Objects and Arrays.
 
 For more explicit JSON Array support, see [`data.JSONArray`](#jsonarray).
 
@@ -579,7 +624,7 @@ Converts a JSON string into a slice. Only works for JSON Arrays.
 
 ### yaml
 
-Converts a YAML string into an object. Works for YAML Objects but will also parse YAML Arrays. This can be used to access properties of YAML objects.
+Converts a YAML string into an object. Supports only YAML Objects and Arrays.
 
 For more explicit YAML Array support, see [`data.JSONArray`](#yamlarray).
 
@@ -634,7 +679,7 @@ Converts a CSV-format string into a slice of maps.
 
 By default, the [RFC 4180](https://tools.ietf.org/html/rfc4180) format is supported, but any single-character delimiter can be specified.
 
-Also by default, the first line of the string will be assumed to be the header, but this can be overridden by providing an explicit header, or auto-indexing can be used.
+Also by default, the first line of the string is assumed to be the header, but this can be overridden by providing an explicit header, or auto-indexing can be used.
 
 ```
 {{ $c := `lang,keywords
@@ -701,7 +746,6 @@ The indent string must be provided as an argument.
 
 Converts an object to a YAML document. Input objects may be the result of `data.JSON`, `data.YAML`, `data.JSONArray`, or `data.YAMLArray` functions.
 
-_This is obviously contrived - `data.JSON` is used to create an object._
 
 ```go
 {{ (`{"foo":{"hello":"world"}}` | data.JSON).foo | data.ToYAML }} // hello: world
@@ -827,10 +871,9 @@ A wrapper for Go's [`filepath.Rel`](https://golang.org/pkg/path/filepath/#Rel) f
 ```
 
 ### Split
-
 Splits path immediately following the final path separator, separating it into a directory and file name component.
 
-The function returns an array with two values, the first being the diretory, and the second the file.
+The function returns an array with two values, the first being the directory, and the second the file.
 
 A wrapper for Go's [`filepath.Split`](https://golang.org/pkg/path/filepath/#Split) function.
 
@@ -861,7 +904,7 @@ A wrapper for Go's [`filepath.VolumeName`](https://golang.org/pkg/path/filepath/
 
 ## math
 
-Returns the absolute value of a given number. When the input is an integer, the result is `int64`, otherwise it will be a `float64`.
+Returns the absolute value of a given number. When the input is an integer, the result is `int64`, otherwise it is `float64`.
 
 ```go
 {{ math.Abs -3.5 }} {{ math.Abs 3.5 }} {{ math.Abs -42 }} // 3.5 3.5 42
@@ -869,7 +912,7 @@ Returns the absolute value of a given number. When the input is an integer, the 
 
 ### Add
 
-Adds all given operators. When one of the inputs is a floating-point number, the result will be a `float64`, otherwise it is `int64`.
+Adds all given operators. When one of the inputs is a floating-point number, the result is `float64`, otherwise it is `int64`.
 
 ```go
 {{ math.Add 1 2 3 4 }} {{ math.Add 1.5 2 3 }} // 10 6.5
@@ -895,7 +938,7 @@ Returns the least integer value greater than or equal to a given floating-point 
 
 ### Div
 
-Divide the first number by the second. Division by zero is disallowed. The result will be a `float64`.
+Divide the first number by the second. Division by zero is disallowed. The result is `float64`.
 
 ```go
 {{ math.Div 8 2 }} {{ math.Div 3 2 }} // 4 1.5
@@ -921,9 +964,9 @@ Returns the greatest integer value less than or equal to a given floating-point 
 
 ### IsFloat
 
-Returns whether or not the given number can be interpreted as a floating-point literal, as defined by the [Go language reference](https://golang.org/ref/spec#Floating-point_literals).
+Returns whether the given number can be interpreted as a floating-point literal, as defined by the [Go language reference](https://golang.org/ref/spec#Floating-point_literals).
 
-**Note:** If a decimal point is part of the input number, it will be considered a floating-point number, even if the decimal is `0`.
+**Note:** If a decimal point is part of the input number, it is considered a floating-point number, even if the decimal is `0`.
 
 ```go
 {{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsFloat .) }}{{.}} is a float{{"\n"}}{{ end }}{{end}}
@@ -938,7 +981,7 @@ Returns whether or not the given number can be interpreted as a floating-point l
 
 ### IsInt
 
-Returns whether or not the given number is an integer.
+Returns whether the given number is an integer.
 
 ```go
 {{ range (slice 1.0 "-1.0" 5.1 42 "3.14" "foo" "0xFF" "NaN" "Inf" "-0") }}{{ if (math.IsInt .) }}{{.}} is an integer{{"\n"}}{{ end }}{{end}}
@@ -959,7 +1002,7 @@ Returns whether the given input is a number. Useful for `if` conditions.
 
 ### Max
 
-Returns the largest number provided. If any values are floating-point numbers, a `float64` is returned, otherwise an `int64` is returned. The same special-cases as Go's [`math.Max`](https://golang.org/pkg/math/#Max) are followed.
+Returns the largest number provided. If any values are floating-point numbers, a `float64` is returned, otherwise an `int64` is returned. Follows the same syntax as Go's [`math.Max`](https://golang.org/pkg/math/#Max).
 
 ```go
 {{ math.Max 0 8.0 4.5 "-1.5e-11" }} // 8
@@ -967,7 +1010,7 @@ Returns the largest number provided. If any values are floating-point numbers, a
 
 ### Min
 
-Returns the smallest number provided. If any values are floating-point numbers, a `float64` is returned, otherwise an `int64` is returned. The same special-cases as Go's [`math.Min`](https://golang.org/pkg/math/#Min) are followed.
+Returns the smallest number provided. If any values are floating-point numbers, a `float64` is returned, otherwise an `int64` is returned. Follows the same syntax as Go's [`math.Min`](https://golang.org/pkg/math/#Min).
 
 ```go
 {{ math.Min 0 8 4.5 "-1.5e-11" }} // -1.5e-11
@@ -1151,7 +1194,7 @@ By default, the possible characters are those represented by the regular express
 
 A different set of characters can be specified with a regular expression, or by giving a range of possible characters by specifying the lower and upper bounds. Lower/upper bounds can be specified as characters (e.g. `"q"`, or escape sequences such as `"\U0001f0AF"`), or numeric Unicode code-points (e.g. `48` or `0x30` for the character `0`).
 
-When given a range of Unicode code-points, `random.String` will discard non-printable characters from the selection. This may result in a much smaller set of possible characters than intended, so check the [Unicode character code charts](http://www.unicode.org/charts/) to verify the correct code-points.
+When given a range of Unicode code-points, `random.String` discards non-printable characters from the selection. This may result in a much smaller set of possible characters than intended, so check the [Unicode character code charts](http://www.unicode.org/charts/) to verify the correct code-points.
 
 ```go
 {{ random.String 8 }} // FODZ01u_
@@ -1173,7 +1216,7 @@ Pick an element at a random from a given slice or array.
 
 Pick a random integer. By default, a number between `0` and `100` (inclusive) is chosen, but this range can be overridden.
 
-the difference between `min` and `max` can not be larger than a 63-bit integer (i.e. the unsigned portion of a 64-bit signed integer). The result is given as an `int64`.
+the difference between `min` and `max` can not be larger than a 63-bit integer (that is the unsigned portion of a 64-bit signed integer). The result is given as an `int64`.
 
 ```go
 {{ random.Number }} // 55
@@ -1183,7 +1226,7 @@ the difference between `min` and `max` can not be larger than a 63-bit integer (
 
 ### Float
 
-Pick a random decimal floating-point number. By default, a number between `0.0` and `1.0` (_exclusive_, i.e. `[0.0,1.0)`) is chosen, but this range can be overridden.
+Pick a random decimal floating-point number. By default, a number between `0.0` and `1.0` (_exclusive_, that is `[0.0,1.0)`) is chosen, but this range can be overridden.
 
 The result is given as a `float64`.
 
@@ -1212,7 +1255,7 @@ no {{ "will not match" | regexp.Find "[0-9]" }}numbers // no numbers
 
 Returns a list of all successive matches of the regular expression.
 
-This can be called with 2 or 3 arguments. When called with 2 arguments, the `n` argument (number of matches) will be set to `-1`, causing all matches to be returned.
+FindAll can be called with 2 or 3 arguments. When called with 2 arguments, the `n` argument (number of matches) is set to `-1`, causing all matches to be returned.
 
 This function provides the same behavior as Go's
 [`regexp.FindAllString`](https://golang.org/pkg/regexp/#Regexp.FindAllString) function.
@@ -1276,7 +1319,7 @@ This function provides the same behavior as Go's [`regexp.ReplaceAllLiteralStrin
 
 Splits `input` into sub-strings, separated by the expression.
 
-This can be called with 2 or 3 arguments. When called with 2 arguments, the `n` argument (number of matches) will be set to `-1`, causing all sub-strings to be returned.
+This can be called with 2 or 3 arguments. When called with 2 arguments, the `n` argument (number of matches) is set to `-1`, causing all sub-strings to be returned.
 
 This is equivalent to [`strings.SplitN`](#splitn), except that regular expressions are supported.
 
@@ -1330,7 +1373,7 @@ http://example.com:80
 
 ### Indent
 
-Indents a string. If the input string has multiple lines, each line will be indented.
+Indents a string. If the input string has multiple lines, each line is indented.
 
 This function can be especially useful when adding YAML snippets into other YAML documents, where indentation is important:
 
@@ -1356,7 +1399,7 @@ foo:
 
 **Deprecation Notice:** Use [`coll.Sort`](#sort) instead
 
-Returns an alphanumerically-sorted copy of a given string list.
+Returns an alphanumerically sorted copy of a given string list.
 
 ```go
 {{ (slice "foo" "bar" "baz") | strings.Sort }} // [bar baz foo]
@@ -1429,7 +1472,7 @@ Replaces all occurrences of a given string with another.
 
 ### Slug
 
-Creates a a "slug" from a given string - supports Unicode correctly. This wraps the [github.com/gosimple/slug](https://github.com/gosimple/slug) package. See [the github.com/gosimple/slug docs](https://godoc.org/github.com/gosimple/slug) for more information.
+Creates a "slug" from a given string - supports Unicode correctly. This wraps the [github.com/gosimple/slug](https://github.com/gosimple/slug) package. See [the github.com/gosimple/slug docs](https://godoc.org/github.com/gosimple/slug) for more information.
 
 ```go
 {{ "Hello, world!" | strings.Slug }} // hello-world
@@ -1437,8 +1480,8 @@ Creates a a "slug" from a given string - supports Unicode correctly. This wraps 
 
 ### shellQuote
 
-Given a string, emits a version of that string that will evaluate to its literal data when expanded by any POSIX-compliant shell.
-Given an array or slice, emit a single string which will evaluate to a series of shell words, one per item in that array or slice.
+Given a string, emits a version of that string that evaluates to its literal data when expanded by any POSIX-compliant shell.
+Given an array or slice, emits a single string which evaluates to a series of shell words, one per item in that array or slice.
 
 ```go
 {{ slice "one word" "foo='bar baz'" | shellQuote }}
@@ -1536,7 +1579,7 @@ _Also see [`strings.Abbrev`](#abbrev)._
 
 Converts a sentence to CamelCase, i.e. `The quick brown fox` becomes `TheQuickBrownFox`.
 
-All non-alphanumeric characters are stripped, and the beginnings of words are upper-cased. If the input begins with a lower-case letter, the result will also begin with a lower-case letter.
+All non-alphanumeric characters are stripped, and the beginnings of words are upper-cased. If the input begins with a lower-case letter, the result also begin with a lower-case letter.
 
 See [CamelCase on Wikipedia](https://en.wikipedia.org/wiki/Camel_case) for more details.
 
@@ -1550,7 +1593,7 @@ See [CamelCase on Wikipedia](https://en.wikipedia.org/wiki/Camel_case) for more 
 
 Converts a sentence to snake_case, i.e. `The quick brown fox` becomes `The_quick_brown_fox`.
 
-All non-alphanumeric characters are stripped, and spaces are replaced with an underscore (`_`). If the input begins with a lower-case letter, the result will also begin with a lower-case letter.
+All non-alphanumeric characters are stripped, and spaces are replaced with an underscore (`_`). If the input begins with a lower-case letter, the result also begin with a lower-case letter.
 
 See [Snake Case on Wikipedia](https://en.wikipedia.org/wiki/Snake_case) for more details.
 
@@ -1561,7 +1604,7 @@ See [Snake Case on Wikipedia](https://en.wikipedia.org/wiki/Snake_case) for more
 
 ### KebabCase
 
-Converts a sentence to kebab-case, i.e. `The quick brown fox` becomes `The-quick-brown-fox`. All non-alphanumeric characters are stripped, and spaces are replaced with a hyphen (`-`). If the input begins with a lower-case letter, the result will also begin with a lower-case letter.
+Converts a sentence to kebab-case, i.e. `The quick brown fox` becomes `The-quick-brown-fox`. All non-alphanumeric characters are stripped, and spaces are replaced with a hyphen (`-`). If the input begins with a lower-case letter, the result also begins with a lower-case letter.
 See [Kebab Case on Wikipedia](https://en.wikipedia.org/wiki/Kebab_case) for more details.
 
 ```go
@@ -1700,9 +1743,9 @@ See [the Go `reflect` source code](https://github.com/golang/go/blob/36fcde1676a
 - `float64`
 - `slice`
 - `map`
-- `invalid` (a catch-all, usually just `nil` values)
+- `invalid` (a catch-all, usually only `nil` values)
 
-In addition, the special kind `number` is accepted by this function, to represent _any_ numeric kind (whether `float32`, `uint8`, or whatever). This is useful when the specific numeric type is unknown.
+In addition, the kind `number` is accepted by this function, to represent _any_ numeric kind (whether `float32`, `uint8`, or whatever). This is useful when the specific numeric type is unknown.
 
 See also [`test.Kind`](#kind).
 
@@ -1731,7 +1774,7 @@ Got a number: {{ $object }}
 
 ### Kind
 
-Report the _kind_ of the given argument. This differs from the _type_ of the argument in specificity; for example, while a slice of strings may have a type of `[]string`, the _kind_ of that slice will simply be `slice`.
+Report the _kind_ of the given argument. This differs from the _type_ of the argument in specificity; for example, while a slice of strings may have a type of `[]string`, the _kind_ of that slice is `slice`.
 If you need to know the precise type of a value, use `printf "%T" $value`.
 
 See also [`test.IsKind`](#iskind)
@@ -1751,7 +1794,7 @@ This is effectively a short-form of the following template:
 {{ if conv.ToBool $condition }}{{ $truevalue }}{{ else }}{{ $falsevalue }}{{ end }}
 ```
 
-Keep in mind that using an explicit `if`/`else` block is often easier to understand than ternary expressions!
+Keep in mind that using an explicit `if`/`else` block is often easier to understand than ternary expressions.
 
 ```go
 {{ ternary "FOO" "BAR" false }} // BAR
@@ -1825,7 +1868,7 @@ time units are `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 
 ### ParseLocal
 
-Same as [`time.Parse`](#parse), except that in the absence of a time zone indicator, the timestamp wil be parsed in the local timezone.
+Same as [`time.Parse`](#parse), except that in the absence of a time zone indicator, the timestamp is parsed in the local timezone.
 
 Usage with [`Format`](https://golang.org/pkg/time/#Time.Format):
 

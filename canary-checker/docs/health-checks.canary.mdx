@@ -1,7 +1,10 @@
 ---
 slug: /overview
-title: Health Checks
+sidebar_position: 0
+title: Overview
 id: health-checks
+sidebar_custom_props:
+   icon: canary-checker
 ---
 
 <Screenshot img="/img/health-checks.svg" size="900px" />
@@ -45,7 +48,8 @@ The health checks page provides a high-level view of the overall health of all s
 
 ## Prometheus
 
-[Prometheus](canary-checker/concepts/metrics) metrics are exposed from health checks to provide high-level visibility into latency, error rates, and other metrics. This allows monitoring the health of services and applications using existing Prometheus alerts and [Grafana](canary-checker/concepts/metrics/grafana) dashboards.
+<CommonLink to="metrics">Prometheus</CommonLink> metrics are exposed from health checks to provide high-level visibility into latency, error rates, and other metrics. This allows monitoring the health of services and applications using existing Prometheus alerts and
+<CommonLink to="grafana">Grafana</CommonLink> dashboards.
 
 ## Synthetic
 

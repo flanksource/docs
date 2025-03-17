@@ -2,7 +2,9 @@
 title: Helm
 description: Recommended method for installing canary-checker
 sidebar_class_name: hidden-mission-control
-slug: /guide/canary-checker/helm
+slug: /installation/helm
+sidebar_custom_props:
+  icon: helm
 ---
 
 import Schema from '@site/modules/canary-checker/chart/values.schema.json'
@@ -22,7 +24,7 @@ The recommended method for installing Canary Checker is using [helm](https://hel
    />
 
    :::info
-   Note the default installation of canary-checker uses an embedded postgres database and does not persist history, see: [Database](database)
+   Note the default installation of canary-checker uses an embedded postgres database and does not persist history, see: [Database](/installation/database)
    :::
 
 1. Create a canary
@@ -41,14 +43,14 @@ The recommended method for installing Canary Checker is using [helm](https://hel
    EOF
    ```
 
-   <p/>
+   <p></p>
 
 1. Check the results via the [CLI](./cli)
 
-<TerminalOutput command="kubectl get canary" >
-NAME       INTERVAL     STATUS   LAST CHECK   UPTIME 1H       LATENCY 1H   LAST TRANSITIONED
-http-check   30         Passed   13s          18/18 (100.0%)   480ms        13s
-</TerminalOutput>
+  <TerminalOutput command="kubectl get canary" >
+  NAME       INTERVAL     STATUS   LAST CHECK   UPTIME 1H       LATENCY 1H   LAST TRANSITIONED
+  http-check   30         Passed   13s          18/18 (100.0%)   480ms        13s
+  </TerminalOutput>
 
 1. Access the dashboard
 

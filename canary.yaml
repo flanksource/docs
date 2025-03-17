@@ -1,0 +1,24 @@
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: http-crawl
+spec:
+  schedule: "@daily"
+  http:
+    - name: docs
+      url: http://localhost:3000/
+      crawl:
+        parallelism: 10
+        delay: 1ms
+        randomDelay: 1ms
+        depth: 10
+        disallowedURLFilters:
+          - http://localhost:8080
+
+    # - name: canary-checker
+    #   url: https://canarychecker.io
+    #   crawl:
+    #     parallelism: 10
+    #     delay: 1ms
+    #     randomDelay: 1ms
+    #     depth: 10

@@ -15,8 +15,8 @@ The Kubernetes check performs requests on Kubernetes resources such as Pods to g
 
 <HealthCheck name="kubernetes" edition="standard" connection="kubeconfig"  rows={[
   {field: "kind", description: "Kubernetes object kind", scheme: 'string', required: true},
-  {field: "resource", description: " Queries resources related to specified Kubernetes object ", scheme: 'ResourceSelector'},
-  {field: "namespaceSelector", description: "Namespace of the Kubernetes object",scheme: 'ResourceSelector'},
+  {field: "resource", description: " Queries resources related to specified Kubernetes object ", scheme: '[Resource Selector](#resource-selector)'},
+  {field: "namespaceSelector", description: "Namespace of the Kubernetes object",scheme: '[Resource Selector](#resource-selector)'},
   {field: "namespace", description: "Failing checks are placed in this namespace, useful if you have shared namespaces"},
   {field: "ignore", description: "Ignore the specified resources from the fetched resources. Can be a glob pattern.", scheme: '[]glob'},
   {field: "healthy", description: "Fail the check if any resources are unhealthy", scheme: 'bool'},
@@ -24,11 +24,43 @@ The Kubernetes check performs requests on Kubernetes resources such as Pods to g
 
 ]}/>
 
+
+
+## Resource Selector
+
+
+| Field           | Description                                                                                                                                                        | Scheme                                                                                              | Required |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- | -------- |
+| `name`          | Name of the component/config                                                                                                                                       | `string`                                                                                            | No       |
+| `namespace`     | Select resources in this namespace only, if empty find resources in all namespaces                                                                                 | `string`                                                                                            | No       |                                                                                          | No       |
+| `labelSelector` | Kubernetes Style Label Selector                                                                                                                                    | [LabelSelector](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)          | No       |
+| `fieldSelector` | Kubernetes Style Field Selector Property fields of the component in kubernetes format (or database columns: owner, topology_id, parent_id)                         | [FieldSelector](https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/) | No       |
+| `search`        | Search for resources via key value pairs using parsing expression grammar                                                                                          | [Search](#search)                                                                                     | No       |
+
+### Search
+
+The query syntax is `field1=value1 field2>value2 field3=value3* field4=*value4`. `*` is for prefix and suffix matching.
+
+Supported operators:
+
+| Operator | Syntax                           | Types                 |
+| -------- | -------------------------------- | --------------------- |
+| `=`      | `field=value`                    | `string` `int` `json` |
+| `!=`     | `field!=value`                   | `string` `int` `json` |
+| `*`      | `field=*value` or `field=value*` | `string` `int`        |
+| `>` `<`  | `field>value` or `field<value`   | `datetime` `int`      |
+
+
 ## Healthy
 
-Using `healthy: true` is functionally equivalent to the test expression above:
+Using `healthy: true` is functionally equivalent to:
 
 ```yaml
+  test:
+        expr: dyn(results).all(x, k8s.isHealthy(x))
+```
+
+```yaml title="kubnetes-healthy.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
@@ -45,15 +77,10 @@ spec:
         labelSelector: k8s-app=kube-dns
       namespaceSelector:
         name: kube-system
-      display:
-        expr: |
-          dyn(results).
-          map(i, i.Object).
-          filter(i, !k8s.isHealthy(i)).
-          map(i, "%s/%s -> %s".format([i.metadata.namespace, i.metadata.name, k8s.getHealth(i).message])).join('\n')
+
 ```
 
-See the CEL <CommonLink to="cel" anchor="kubernetes">_Kubernetes_</CommonLink> docs for more details on the `k8s.isHealthy` and other functions available
+See the CEL function <CommonLink to="cel" anchor="k8sishealthy">k8s.isHealthy</CommonLink> for more details
 
 ## Ready
 
@@ -68,7 +95,7 @@ dyn(results).all(x, k8s.isReady(x))
 <details summary="Checking for certificate readiness">
 <div>
 
-```yaml title="junit.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/certmanager.yaml
+```yaml title="cert-manager.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/certmanager.yaml
 ```
 </div>
 </details>

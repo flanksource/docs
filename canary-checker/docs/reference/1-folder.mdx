@@ -26,9 +26,34 @@ Checks the contents of a folder for size, age, and count. Folder based checks ar
   },
   {    field: 'sftpConnection',description: "Connection details", scheme: "[SFTP](#sftp)"  },
   { field: "gcpConnection", description: "Connection details for GCP", scheme: "[GCP](#gcp)" },
-{field: "awsConnection", description: "AWS Access credentials", scheme: "[AWS](#aws)" },
+{field: "awsConnection", description: "AWS Access credentials", scheme: "[S3](#s3)" },
   {field: "smbConnection", description: "SMB connection details", scheme: "[SMB](#smb)"},
-  {field: "filter", description: "Filter objects out before checking if they are valid", scheme: "[FolderFilter](#folderfilter)"},
+    {
+    field: "filter.maxAge",
+    description: "MaxAge the latest object should be younger than defined age",
+    scheme: "Duration"
+  },
+  {
+    field: "filter.maxSize",
+    description: "MaxSize of the files inside the searchPath",
+    scheme: "Size"
+  },
+  {
+    field: "filter.minAge",
+    description: "MinAge the latest object should be older than defined age",
+    scheme: "Duration"
+  },
+  {
+    field: "filter.minSize",
+    description: "MinSize of the files inside the searchPath",
+    scheme: "Size"
+  },
+  {
+    field: "filter.regex",
+    description: "Filter files based on regular expression",
+    scheme: "regex"
+  },
+
   {field: "minCount", description: "The minimum number of files inside the `path`", scheme: "int"},
   {field: "maxCount", description: "The maximum number of files inside the `path`, can be used in conjunction with `filter.regex` to detect error files", scheme: "int"},
   {field: "minAge", description: "The youngest age a file can be", scheme: "Duration"},
@@ -38,17 +63,11 @@ Checks the contents of a folder for size, age, and count. Folder based checks ar
 
 ]}/>
 
-## FolderFilter
 
-| Field     | Description                                                 | Scheme                                               | Required |
-| --------- | ----------------------------------------------------------- | ---------------------------------------------------- | -------- |
-| `maxAge`  | MaxAge the latest object should be younger than defined age | [Duration](/reference/types#duration)                |          |
-| `maxSize` | MaxSize of the files inside the searchPath                  | [Size](/reference/types#size)                        |          |
-| `minAge`  | MinAge the latest object should be older than defined age   | [Duration](/reference/types#duration)                |          |
-| `minSize` | MinSize of the files inside the searchPath                  | [Size](/reference/types#size)                        |          |
-| `regex`   | Filter files based on regular expression                    | _[regex](https://github.com/google/re2/wiki/Syntax)_ |          |
+In the example below it checks a local folder for files matching`pg-backups-.*.zip`, the check fails if:
+- No files is created within the last `1d`
+- The size of the matching files us smaller than `10mb`
 
-e.g. to verify that database backups are being performed
 
 ```yaml title="postgres-backup-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/folder_with_filter.yaml
 ```
@@ -69,15 +88,6 @@ The following fields are available in `test`, `display` and `transform` [express
 | `AvailableSize`                                     | int64                                              |
 | `Files`                                             | [[]os.FileInfo](https://pkg.go.dev/io/fs#FileInfo) |
 
-### FolderFilter
-
-| Field     | Description | Scheme                                  | Required |
-| --------- | ----------- | --------------------------------------- | -------- |
-| `minAge`  |             | [`Duration`](/reference/types#duration) |          |
-| `maxAge`  |             | [`Duration`](/reference/types#duration) |          |
-| `minSize` |             | [`Size`](/reference/types#size)         |          |
-| `maxSize` |             | [`Size`](/reference/types#size)         |          |
-| `regex`   |             | `string`                                |          |
 
 ## Connection Types
 

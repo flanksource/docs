@@ -23,6 +23,7 @@ The Flux topology provides a comprehensive view of your Flux-based GitOps infras
    - Associated pod relationships
 
 4. **Repositories**: Monitors Helm, OCI and Git repositories:
+
    - Helm repositories status and health
    - Git repository connections
    - Sync states
@@ -44,7 +45,6 @@ To enable the Flux Topology you need
 
 - Mission Control [installed](/installation/)
 - [kubectl](/installation/saas/kubectl) access to the Mission Control instance
-- A [kubernetes](/guide/config-db/scrapers/kubernetes/config) scraper already installed.
   :::
 
 1. Install the [mission-control-flux](https://artifacthub.io/packages/helm/flanksource/mission-control-flux) chart

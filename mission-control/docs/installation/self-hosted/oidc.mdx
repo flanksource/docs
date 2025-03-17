@@ -83,7 +83,7 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
       script: >
         {  
           "role": "sre" in identity.traits.groups ?  "admin":  "viewer"
-        }
+        }.toJSON()
     ```
     <p/>
 

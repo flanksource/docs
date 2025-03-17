@@ -1,6 +1,8 @@
 ---
 title: Security
 sidebar_class_name: hidden-mission-control
+sidebar_custom_props:
+  icon: shield
 ---
 
 Canary checker is essentially a remote command execution platform, which from a security perspective can be challenging

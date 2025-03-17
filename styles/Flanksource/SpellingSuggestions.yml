@@ -31,3 +31,4 @@ swap:
     pulldown:                   pull-down
     an URL:                     a URL
     sunset(?:|s|ed|ing)?:       deprecate(s)
+    configuration items:        config items
