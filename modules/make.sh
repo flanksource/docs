@@ -15,12 +15,6 @@ HELM_ARGS=$@
 OUTPUT_DIR="generated/playbooks"
 HELM=.bin/helm
 
-if ! command -v $(HELM) &> /dev/null; then
-  echo "helm is not installed. Run make .bin/helm"
-  exit 1
-fi
-
-
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
 
@@ -28,7 +22,7 @@ echo "Rendering Helm chart: $CHART_NAME"
 echo "Output directory: $OUTPUT_DIR"
 
 # Use helm template to render the chart and pipe to yq
-helm template "$CHART_NAME" $HELM_ARGS > rendered.yaml
+$HELM template "$CHART_NAME" $HELM_ARGS > rendered.yaml
 
 
 for playbook in $(yq e 'select(.kind =="Playbook") | .metadata.name '  -o json -r rendered.yaml); do
