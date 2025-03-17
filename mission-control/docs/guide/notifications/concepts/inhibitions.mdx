@@ -1,0 +1,48 @@
+---
+title: Inhibitions
+sidebar_custom_props:
+  icon: shield
+---
+
+Notification inhibitions allow you to intelligently suppress certain notifications when other related alerts are already firing. This helps reduce notification fatigue and keeps communication channels focused on root causes rather than symptoms.
+
+In modern distributed systems, components are highly interconnected. When a critical component fails, it often causes failures in dependent components. Without inhibition, this can lead to:
+
+1. **Alert Storms** - Dozens or hundreds of alerts flooding your notification channels
+2. **Alert Fatigue** - Team members becoming desensitized to alerts due to the volume
+3. **Root Cause Obscurity** - The original cause of the issue being buried among symptom alerts
+4. **Distracted Troubleshooting** - Time wasted investigating symptoms rather than root causes
+
+Notification inhibition solves these problems by intelligently suppressing secondary alerts while ensuring you're notified about the primary issue.
+
+```yaml file=<rootDir>/modules/mission-control/fixtures/notifications/deployment-with-inhibition.yaml
+```
+
+In this example:
+- Notifications are configured for `config.unhealthy` events
+- When a Kubernetes Pod becomes unhealthy and triggers a notification
+- Any subsequent unhealthy notifications from related Deployment or ReplicaSet will be inhibited
+- The inhibition traverses up 2 levels of relationships (Pod -> Deployment -> ReplicaSet)
+
+## How Inhibition Works
+
+When a resource triggers a notification, Mission Control checks if any related resources (based on configured inhibition rules) have already sent a notification within the **repeat interval** window. If a related notification is found, the current notification is suppressed and marked as "inhibited" in the system.
+
+:::important Relationship-Based Inhibition
+Mission Control's inhibition system works **exclusively through resource relationships**. For a notification to inhibit another notification, the resources must have an established relationship in the system.
+
+For example:
+- A Deployment is related to its ReplicaSets and Pods, so notifications about these resources can inhibit each other
+- A Node is related to the Pods running on it
+- One Deployment is generally not related to another Deployment, so they cannot inhibit each other
+
+This differs from systems like Alertmanager where inhibitions can be set up based on labels without requiring explicit relationships between the underlying resources.
+:::
+
+
+## Viewing Inhibited Notifications
+
+Inhibited notifications are not lost - they are recorded in the system with the status `inhibited` and include a reference to the parent notification that caused the inhibition. 
+This provides a complete audit trail while preventing notification spam.
+
+You can view inhibited notifications in the Mission Control UI, allowing you to understand the full scope of an incident.
