@@ -61,6 +61,11 @@
     scheme: "[]string"
   },
   {
+    field: "inhibitions",
+    description: "Controls notification suppression for related resources. Uses the repeat interval as the window for suppression as well as the wait for period.",
+    scheme: "[[]NotificationInhibition](#notification-inhibition)"
+  },
+  {
     field: "title",
     description: "Channel dependent e.g. subject for email",
     scheme: "GoTemplate",
@@ -100,3 +105,36 @@
 :::info Single Recipient
 Only one recipient can be specified
 :::
+
+## Notification Inhibition
+
+<Fields rows={[
+  {
+    field: "direction",
+    required: true,
+    description: "Specifies the traversal direction in relation to the 'From' resource:\n- 'outgoing': Looks for child resources originating from the 'From' resource\n- 'incoming': Looks for parent resources related to the 'From' resource\n- 'all': Considers both incoming and outgoing relationships",
+    scheme: "string"
+  },
+  {
+    field: "soft",
+    description: "When true, relates using soft relationships. Example: Deployment to Pod is hard relationship, but Node to Pod is soft relationship. _(Default: false)_",
+    scheme: "boolean"
+  },
+  {
+    field: "depth",
+    description: "Defines how many levels of child or parent resources to traverse _(Default: 5)_",
+    scheme: "integer"
+  },
+  {
+    field: "from",
+    required: true,
+    description: "Specifies the starting resource type (for example, 'Kubernetes::Deployment').",
+    scheme: "string"
+  },
+  {
+    field: "to",
+    required: true,
+    description: "Specifies the target resource types, which are determined based on the Direction. For outgoing direction these are child resources, for incoming these are parent resources.",
+    scheme: "[]string"
+  },
+]}/>
