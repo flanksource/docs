@@ -184,3 +184,15 @@ When this canary is deleted, the **test** namespace is deleted and consequently 
 
 </div>
 </details>
+
+<details summary="Testing Helm Deployments in a Virtual Cluster">
+<div>
+
+This example demonstrates how to test a Helm deployment in a virtual cluster. 
+
+It creates a vcluster, installs the canary-checker helm chart, and then verifies the deployment is working using an http check.
+
+```yaml title="vcluster-canary-checker.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/vcluster-canary-checker.yaml
+```
+</div>
+</details>
