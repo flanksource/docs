@@ -7,7 +7,6 @@ sidebar_custom_props:
   category: true
 ---
 
-
 import DocCardList from '@theme/DocCardList';
 
 <DocCardList />

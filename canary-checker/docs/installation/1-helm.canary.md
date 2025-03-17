@@ -47,10 +47,10 @@ The recommended method for installing Canary Checker is using [helm](https://hel
 
 1. Check the results via the [CLI](./cli)
 
-<TerminalOutput command="kubectl get canary" >
-NAME       INTERVAL     STATUS   LAST CHECK   UPTIME 1H       LATENCY 1H   LAST TRANSITIONED
-http-check   30         Passed   13s          18/18 (100.0%)   480ms        13s
-</TerminalOutput>
+  <TerminalOutput command="kubectl get canary" >
+  NAME       INTERVAL     STATUS   LAST CHECK   UPTIME 1H       LATENCY 1H   LAST TRANSITIONED
+  http-check   30         Passed   13s          18/18 (100.0%)   480ms        13s
+  </TerminalOutput>
 
 1. Access the dashboard
 

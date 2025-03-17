@@ -20,13 +20,13 @@ If you need to pass a template through a Helm Chart and prevent Helm from templa
 {{`{{ .secret }}`}}
 ```
 
-Alternatively [change the templating delimiters](#changing-templating-delimiters)
+Alternatively [change the templating delimiters](#delimiters)
 
 </Details>
 
 <Details summary="Multiline handling with YAML">
 
-If you are using a YAML multiline string use `|` and not `>` which will strip newlines
+If you are using a YAML multiline string use `|` and not `>` which strips newlines.
 
 Instead of:
 

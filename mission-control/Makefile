@@ -3,4 +3,6 @@ watch:
 
 .PHONY:
 sync:
-	git submodule update --init --recursive
+	cd modules && make -b all
+
+

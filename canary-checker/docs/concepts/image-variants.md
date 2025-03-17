@@ -33,7 +33,7 @@ Canary checker comes with 3 image variants:
 
 ## [Full](https://github.com/flanksource/canary-checker/blob/master/build/full/Dockerfile)
 
-Everthing in the minimal image plus:
+Everything in the minimal image plus:
 
 - [k6](https://github.com/grafana/k6)
 - OpenJDK Temurin 21

@@ -1,0 +1,108 @@
+---
+title: Expressions
+sidebar_custom_props:
+  icon: hugeicons:code
+---
+
+Playbook event filters use [Common Expression Language (CEL)](https://github.com/google/cel-go).
+
+> The Common Expression Language (CEL) is a non-Turing complete language designed for simplicity, speed, safety, and portability. CEL's C-like syntax is similar to expressions in C++, Go, Java, and TypeScript.
+
+**Examples:**
+
+```yaml title="notify-with-filter.yaml"
+---
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: notify-with-filter
+spec:
+  on:
+    config:
+      - event: created
+  configs:
+    - type: Kubernetes::Pod
+  actions:
+    - name: Send notification
+      exec:
+        script: notify-send "{{.config.name}} was created"
+    - name: Bad script to create a failing action
+      exec:
+        script: non-existing-command
+    - name: Send all success notification
+      if: success() # this filter practically skips this action as the second action above always fails
+      exec:
+        script: notify-send "Everything went successfully"
+    - name: Send notification regardless
+      if: always()
+      exec:
+        script: notify-send "a config was created"
+```
+
+## Conditionally running actions
+
+Playbook actions can be conditionally executed using CEL expressions. These expressions must return a `bool` value (return `false` to skip the action).
+
+Expressions support the following functions in addition to the standard <CommonLink to="cel">CEL</CommonLink> functions.
+
+| Function    | Description                                                 |
+| ----------- | ----------------------------------------------------------- |
+| `always()`  | Execute regardless of playbook state (cancelled/failed)      |
+| `failure()` | Execute if any previous actions failed                       |
+| `skip()`    | Skip execution of this action                               |
+| `success()` | Execute only if all previous actions succeeded (default)     |
+| `timeout()` | Execute only if any previous actions timed out               |
+
+
+**Examples**
+
+- `if: config.deleted_at ? true: false`
+- `if: always()`
+
+## Context
+
+Expressions have access to the following variables and functions:
+
+| Field | Description | Schema |
+| --- | --- | --- |
+| `config` | Configuration object passed to the playbook | [`ConfigItem`](/reference/config-db) |
+| `component` | Component object passed to the playbook | [`Component`](/reference/topology/components) |
+| `check` | Canary Check object passed to the playbook | [`Check`](/reference/canary-checker/check) |
+| `params` | User-provided parameters for the playbook | `map[string]string` |
+| `user.id` | Unique identifier of the user who triggered the action | `string` |
+| `user.name` | Full name of the user who triggered the action | `string` |
+| `user.email` | Email address of the user who triggered the action | `string` |
+| `action.name` | Name of the current action | `string` |
+| `action.status` | Current status of the action (`scheduled`, `running`, `succeeded`, `failed`, `skipped`, or `cancelled`) | `string` |
+| `action.scheduled_time` | Timestamp when the action was scheduled | `string` |
+| `action.start_time` | Timestamp when the action execution began | `string` |
+
+For playbooks triggered via webhooks, the following additional fields are available:
+<Fields
+rows={[
+{
+field: 'request.url',
+description: `Endpoint of the webhook. Example \`/playbook/webhook/test-webhook\``,
+    scheme: 'string'
+  },
+  {
+    field: 'request.headers',
+    description: `Headers sent on the webhook request`,
+    scheme: '`map[string]string`'
+  },
+  {
+    field: 'request.params',
+    description: `Query parameters sent on the webhook request`,
+    scheme: '`map[string]string`'
+  },
+  {
+    field: 'request.content',
+    description: `Content sent on the webhook request`,
+    scheme: 'string'
+  },
+  {
+    field: 'request.json',
+    description: `JSON content if the webhook content is JSON`,
+    scheme: '`map[string]any`',
+}
+]} />
