@@ -13,6 +13,12 @@ CHART_NAME=$1
 shift
 HELM_ARGS=$@
 OUTPUT_DIR="generated/playbooks"
+HELM=.bin/helm
+
+if ! command -v $(HELM) &> /dev/null; then
+  echo "helm is not installed. Run make .bin/helm"
+  exit 1
+fi
 
 
 # Create output directory
