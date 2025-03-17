@@ -31,7 +31,7 @@ export default async function createConfigAsync() {
         "gotemplate": "/scripting/gotemplate",
         "javascript": '/scripting/javascript',
         "types": "/types",
-        "image-variants": "/installation/image-variants",
+        "image-variants": "/concepts/image-variants",
         "grafana": "/concepts/metrics#grafana",
         "jsonpath": 'https://jsonpath.com/'
       }
@@ -57,6 +57,7 @@ export default async function createConfigAsync() {
             routeBasePath: '/',
             exclude: [
               "**/*.mc.mdx",
+              "**/*.mc.md",
               "**/modules/**",
               "**/_*.mdx",
               "**/_*.md",

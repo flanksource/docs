@@ -1,9 +1,9 @@
 ---
-title: Checks
-sidebar_position: 1
+title: Installation
+sidebar_position: 2
 sidebar_custom_props:
-  icon: codicon:pass
-slug: /reference
+  icon: package-install
+
 ---
 
 import DocCardList from '@theme/DocCardList';

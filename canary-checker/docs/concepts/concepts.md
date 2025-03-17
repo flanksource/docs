@@ -1,10 +1,11 @@
 ---
-title: Checks
+title: Concepts
 hide_sidebar: true
+sidebar_position: 2
 sidebar_custom_props:
-  icon: codicon:pass
-slug: /reference
+  icon: concepts
 ---
+
 
 import DocCardList from '@theme/DocCardList';
 

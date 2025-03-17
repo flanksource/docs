@@ -166,6 +166,7 @@ export default async function createConfigAsync() {
             routeBasePath: '/',
             exclude: [
               "**/*.canary.mdx",
+              "**/*.canary.md",
               "**/_*.mdx",
               "**/modules/**",
               "**/_*.md"

@@ -1,9 +1,10 @@
 ---
-title: Concepts
+title: Checks
+sidebar_position: 2
 hide_sidebar: true
-sidebar_position: 1
 sidebar_custom_props:
-  icon: concepts
+  icon: codicon:pass
+  category: true
 ---
 
 
