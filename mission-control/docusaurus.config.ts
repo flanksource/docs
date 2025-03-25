@@ -284,6 +284,12 @@ export default async function createConfigAsync() {
             { to: 'blog', label: 'Blog', position: 'left' }, // or position: 'right'
 
             {
+              href: "https://demo.flanksource.com/",
+              label: "Demo",
+              position: 'right',
+            },
+
+            {
               href: "https://app.flanksource.com/",
               label: "Login",
               // html: '<a href="https://app.flanksource.com/" class=" btn rounded bg-white px-2 py-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" style="border: 1px solid #e5e7eb;">Login</a>',
