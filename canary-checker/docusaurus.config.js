@@ -143,6 +143,11 @@ export default async function createConfigAsync() {
               label: 'Docs',
             },
             {
+              href: "https://demo.flanksource.com/",
+              label: "Demo",
+              position: 'right',
+            },
+            {
               href: 'https://github.com/flanksource/canary-checker',
               label: 'GitHub',
               position: 'right',
