@@ -61,7 +61,7 @@ This `config` object is used to find the config item to lookup a value from, if 
 
 ### External Source Lookup
 
-Property values can be lookup up from external sources (HTTP, SQL, Prometheus etc.) using the `lookup` field:
+Property values can be looked up from external sources (HTTP, SQL, Prometheus etc.) using the `lookup` field:
 
 ```yaml title="order-api.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -89,7 +89,7 @@ spec:
 
 ### Dynamically generating properties
 
-Properties' `expr` field can return a json object of `Property` or json list of `[]Property`
+Properties' can also use `lookup` with `expr` field which returns a json object of `Property` or json list of `[]Property`
 
 ```yaml title="order-api.yaml"
 apiVersion: canaries.flanksource.com/v1
