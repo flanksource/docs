@@ -1,7 +1,7 @@
 ---
 title: Expressions
 sidebar_custom_props:
-  icon: hugeicons:code
+  icon: code
 ---
 
 canary-checker can be extended using expressions in 3 ways:

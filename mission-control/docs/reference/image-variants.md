@@ -1,5 +1,7 @@
 ---
 title: Image Variants
+sidebar_custom_props:
+  icon: settings
 ---
 
 Canary checker comes with 2 image variants:

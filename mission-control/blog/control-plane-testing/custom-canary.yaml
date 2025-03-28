@@ -1,0 +1,61 @@
+
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: control-plane-tests
+  namespace: control-plane-tests
+spec:
+  schedule: "@every 1m"
+  kubernetesResource:
+    - name: helm-release-postgres-check
+      namespace: default
+      description: "Deploy postgresql via HelmRelease"
+      staticResources:
+        - apiVersion: source.toolkit.fluxcd.io/v1
+          kind: HelmRepository
+          metadata:
+            name: bitnami
+          spec:
+            type: oci
+            interval: 1h
+            url: oci://registry-1.docker.io/bitnamicharts
+      resources:
+        - apiVersion: helm.toolkit.fluxcd.io/v2
+          kind: HelmRelease
+          metadata:
+            name: postgresql
+            namespace: default
+          spec:
+            chart:
+              spec:
+                chart: postgresql
+                sourceRef:
+                  kind: HelmRepository
+                  name: bitnami
+                  namespace: control-plane-tests
+            interval: 5m
+            values:
+              auth:
+                username: admin
+                password: qwerty123
+                database: exampledb
+              primary:
+                persistence:
+                  enabled: true
+                  size: 8Gi
+      checks:
+        - postgres:
+            - name: postgres schemas check
+              url: "postgres://$(username):$(password)@postgresql.default.svc:5432/exampledb?sslmode=disable"
+              username:
+                value: admin
+              password:
+                value: qwerty123
+              # Since we just want to check if database is responding,
+              # a SELECT 1 query should suffice
+              query: SELECT 1
+
+      checkRetries:
+        delay: 15s
+        interval: 10s
+        timeout: 5m

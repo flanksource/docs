@@ -8,8 +8,7 @@ sidebar_custom_props:
 # <Icon name="k8s"/> Kubernetes
 
 :::tip Helm Chart
-
-See the [Kubernetes](/integrations/kubernetes/catalog) Helm chart that provides a pre-configured Scraper and Topology with some common defaults.
+See the [Kubernetes](/integrations/kubernetes/getting-started) Helm chart that provides a pre-configured Scraper and Topology with some common defaults.
 :::
 
 The `kubernetes` scraper collects all of the resources and events in a Kubernetes cluster, and then watches for changes.
@@ -21,7 +20,7 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
 | Field        | Description                                                                  | Scheme                                       |
 | ------------ | ---------------------------------------------------------------------------- | -------------------------------------------- |
 | `logLevel`   | Specify the level of logging.                                                | `string`                                     |
-| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                     |
+| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 15 minutes.  | `string`                                     |
 | `retention`  | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |
 | `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                   | [`[]Kubernetes`](#kubernetes)                |
 
@@ -40,18 +39,7 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
       description: 'Include resources only from this namespace',
       scheme: 'string'
     },
-    {
-      field: 'useCache',
-      description:
-        'Whether to use cache or not when fetching resources. Default: false',
-      scheme: 'bool'
-    },
-    {
-      field: 'allowIncomplete',
-      description:
-        "whether to fail scrape if all api resources weren't fetched successfully",
-      scheme: 'bool'
-    },
+
     {
       field: 'scope',
       description:
@@ -76,19 +64,13 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
       scheme: 'string'
     },
     {
-      field: 'maxInflight',
-      description:
-        'Concurrency level when resources are fetched one at a time.`',
-      scheme: 'int'
-    },
-    {
       field: 'kubeconfig',
       description: 'Kubeconfig to connect to the cluster',
       scheme: '_EnvVar_'
     },
     {
       field: 'watch',
-      description: 'Kubeconfig to connect to the cluster',
+      description: 'List of resources to watch for real-time changes',
       scheme: '[`[]WatchSelector`]()'
     },
     {
@@ -111,7 +93,26 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
 
 ### Event
 
-`Kubernetes::Event` resources are mapped to config changes. Events can be very verbose so they can be excluded or their severity level changed:
+`Kubernetes::Event` resources are mapped to config changes. Events can be verbose so they can be excluded or their severity level changed:
+
+
+```yaml
+spec:
+  kubernetes:
+    - event:
+        exclusions:
+          reason:
+            - SuccessfulCreate
+            - Created
+            - DNSConfigForming
+        severityKeywords:
+          error:
+            - failed
+            - error
+          warn:
+            - backoff
+            - nodeoutofmemory
+```
 
 | Field              | Description                                                                                | Scheme                                  | Required |
 | ------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------- | -------- |
@@ -131,6 +132,8 @@ While the kubernetes scraper runs on a schedule you've specified, it can also wa
 This allows near-real-time updates to your kubernetes catalogs with the flexibility of performing full scrape on a larger interval.
 
 This feature is enabled by default but can be disabled by setting the property `watch.disable=true`.
+
+Kubernetes events automatically trigger a re-scrape of involved objects, so even though not all resources are watched by default, the vast majority of changes still reflect in real-time due to associated events that fire at the same time as the update.
 
 #### Watch Selector
 
@@ -396,4 +399,14 @@ spec:
 
 ## Performance
 
+
+The scraper is highly reliant on the performance of the Kubernetes API server, and as such, it is recommended to run the scraper from within the cluster or as close as possible to the control pane.
+
+
+:::warning Overloading the API Server
+It is possible to overload the API server with too many requests, to reduce the load on the API Server:
+
+* Decentralize the scraper by running it on an agent, from-inside each cluster rather than remotely.
+* Increase the `schedule` to `1h` or more, real-time updates still be recorded by Kubernetes events and informers.
+* Filter out and exclude resources and events that have a high churn or verbosity
 

@@ -32,8 +32,8 @@ export default function Icon({ name, height = 22, className, url, children, ...p
     name ="carbon:lightning"
   }
 
-  if (name =="tutorial") {
-    name = "stash:graduation-cap-light"
+  if (name == "tutorial") {
+    name = "learning"
   }
 
 

@@ -32,6 +32,10 @@ canarySelector
 containerdSocket
 clusterName
 change_type
+Entra
+Signup
+JSONNET
+Goto
 JMESPath
 routable
 matchQuery

@@ -3,74 +3,55 @@ title: Getting Started
 show_title: true
 sidebar_custom_props:
   icon: getting-started
-
+pagination_next: installation/self-hosted/database
 sidebar_position: 0
 ---
-
 import AdminPassword from '@site/docs/partials/_admin-password.mdx'
 import Helm from "@site/src/components/Helm"
 
-export const toc = [
-  {
-    value: 'Prerequisites',
-    id: 'prerequisites',
-    level: 2
-  },
-  {
-    value: 'Step 1: Install Helm Repository',
-    id: 'step-1-install-helm-repository',
-    level: 2
-  },
-  {
-    value: 'Step 2: Install Helm Chart',
-    id: 'helm-chart',
-    level: 2
-  },
-  {
-    value: 'Cert Manager',
-    id: 'cert-manager',
-    level: 3
-  },
-  {
-    value: 'Optional Steps',
-    id: 'optional-steps',
-    level: 2
-  },
-  {
-    value: 'Step 3: Configure Email (SMTP)',
-    id: 'smtp',
-    level: 3
-  },
-  {
-    value: 'Step 4: Single Sign On',
-    id: 'sso',
-    level: 3
-  },
-  {
-    value: 'Step 5: External Database',
-    id: '-database',
-    level: 3
-  }
-]
+
+Mission Control is an internal developer platform built for operations. Built with a "self-hosted first" approach, Mission Control gives you complete control over your deployment environment while offering enterprise-grade features.
+
+## Self-Hosted Deployment
+
+When you self-host Mission Control, you maintain full ownership of your infrastructure and data while enjoying the same robust feature set available in the SaaS offering. In fact, some advanced features are exclusively available in the self-hosted version.
+
+<Screenshot img="/img/deployment-model-self-hosted.svg" size="400px" shadow={false} alt="Self-Hosted Deployment Model"/>
+
+### Why Self-Host Mission Control?
+
+**Key Benefits**
+- **Infrastructure Flexibility**: Deploy on your preferred infrastructure - whether on-premise, AWS, GCP, Azure, or any other Kubernetes environment
+- **Data Sovereignty**: Keep all your monitoring and operational data within your own environment
+- **Security Control**: Leverage your existing security practices and compliance frameworks
+- **Cost Efficiency**: Optimize resource allocation and scaling based on your specific needs
+- **Customization**: Tailor the platform to integrate with your specific infrastructure components
+
+**Implementation Considerations**
+- Configuration and management of authentication (SSO) is required
+- Database management responsibilities remain with your team
+- Updates and maintenance follow standard Kubernetes patterns
+<hr/>
 
 
 
-This tutorial guides you through setting up and configuring a self-hosted Mission Control environment.
+This guide walks you through the complete setup process for your self-hosted Mission Control environment.
+
 
 :::info Prerequisites
 To install and run Mission Control you need the following:
 
 - Kubernetes 1.26+ with an Ingress Controller
 - [cert-manager.io](https://cert-manager.io/docs/) or an existing TLS secret for ingress
-- 1 - 2 CPUs and 6-8GB of Memory (2-4GB if using an external DB)
+- 1 - 2 CPU's and 6-8GB of Memory (2-4GB if using an external DB)
 - Persistent Volumes with 20GB+ of storage or an external postgres database
 - (Optional) [prometheus operator](https://prometheus-operator.dev/)
 - (Optional) SMTP Server (For sending notifications and invites)
 :::
 
----
 
 1. Choose a routable `DOMAIN` for Mission Control
+    <p/>
     > See [Ingress](/reference/helm/mission-control#ingress) for more options on configuring the ingress including generating certs with cert-manager
     > <p>See [Local Testing](../local-testing) for testing using a kind or minikube without a routable domain</p>
 
@@ -88,50 +69,17 @@ To install and run Mission Control you need the following:
 2. Login @ https://DOMAIN/
    <AdminPassword/>
 
-## Optional Steps
+## Next Steps
 
-<Step step={3} name="Configure Email (SMTP)" anchor="smtp">
-
-An SMTP server is required for sending notifications, approvals, user invites and password resets.
-
-The format of `connection_uri` is `smtp|smtps://USER:PASS@host:PORT[?param=value]`
-
-Use `smtps` for implicit TLS sessions or `smtp` for explicit StartTLS/cleartext sessions.
-
-| Parameter | Description | Default |
-| --- | --- | --- |
-| `disable_starttls` | When using `smtp` scheme, set to `true` to allow cleartext sessions or `false` to enforce StartTLS | `false` |
-| `skip_ssl_verify` | Set to `true` to allow self-signed TLS certificates or `false` to enforce certificate verification. Applies to both implicit and explicit TLS sessions | `false` |
+<Cards className="border border-t border-solid border-gray-200">
 
 
-```yaml title="values.yaml"
-kratos:
-  kratos:
-    config:
-      courier:
-        smtp:
-          connection_uri: # smtp://user:pass@localhost:25
-          from_address: noreply@
-          from_name: Mission Control
-          # These headers will be passed in the SMTP conversation
-          # e.g. when using the AWS SES SMTP interface for cross-account sending.
-          headers: {}
-          # Identifier used in the SMTP HELO/EHLO command.
-          # Some SMTP relays require a unique identifier.
-          local_name: ""
-```
+  <Card size="sm" title="Use an External Database" icon="postgres" link="./database"/>
 
-See also [HTTP Webhooks](https://www.ory.sh/docs/kratos/self-hosted/email-http) for sending emails.
+  <Card size="sm" title="Configure Single Sign-On" icon="jwt" link="./sso"/>
+  <Card size="sm" title="Configure SMTP/Email" icon="email" link="./smtp"/>
 
-</Step>
-<Step step={4} name="Single Sign On" anchor="sso">
 
-See [SSO](./sso)
+</Cards>
 
-</Step>
 
-<Step step={5} name="External Database" anchor="database">
-
-See [Database](./database) to configure an external database such as AWS RDS or Google Cloud SQL, or to optimize the bundled PostgreSQL settings.
-
-</Step>

@@ -1,0 +1,47 @@
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: control-plane-tests
+  namespace: control-plane-tests
+spec:
+  schedule: "@every 1h"
+  kubernetesResource:
+    - name: helm-release-postgres-check
+      description: "Deploy postgresql via HelmRelease"
+      waitFor:
+        timeout: 1m
+      display:
+        template: |+
+          Helm release created: {{ .health | toYAML  }}
+      staticResources:
+        - apiVersion: source.toolkit.fluxcd.io/v1
+          kind: HelmRepository
+          metadata:
+            name: bitnami
+          spec:
+            type: oci
+            interval: 1h
+            url: oci://registry-1.docker.io/bitnamicharts
+      resources:
+        - apiVersion: helm.toolkit.fluxcd.io/v2
+          kind: HelmRelease
+          metadata:
+            name: postgresql
+          spec:
+            chart:
+              spec:
+                chart: postgresql
+                sourceRef:
+                  kind: HelmRepository
+                  name: bitnami
+            interval: 5m
+            values:
+              auth:
+                username: admin
+                password: qwerty123
+                database: exampledb
+              primary:
+                persistence:
+                  enabled: true
+                  size: 8Gi
+

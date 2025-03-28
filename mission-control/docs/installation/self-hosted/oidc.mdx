@@ -1,6 +1,8 @@
 ---
 title: Single Sign On (SSO)
 slug: sso
+sidebar_custom_props:
+  icon: jwt
 ---
 
 import Properties from '../_properties.mdx'
@@ -71,17 +73,17 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
     ```
     <p/>
 
-5. Optionally, create a cel expression to map identities from the OIDC provider to a mission control role & team. 
+5. Optionally, create a cel expression to map identities from the OIDC provider to a mission control role & team.
     The following script maps all Azure users in the `SRE` group to the `admin` role and everyone else to the `viewer` role.
 
     ```yaml
     apiVersion: v1
-    kind: ConfigMap                 
-    metadata:                       
+    kind: ConfigMap
+    metadata:
       name: azure-identity-mapper
     data:
       script: >
-        {  
+        {
           "role": "sre" in identity.traits.groups ?  "admin":  "viewer"
         }.toJSON()
     ```

@@ -1,6 +1,11 @@
 ---
 title: Agent Installation
+sidebar_custom_props:
+  icon: server
 ---
+
+import ReactMarkdown from 'react-markdown'
+import Link from '@docusaurus/Link';
 
 
 :::info Prerequisites
@@ -19,13 +24,16 @@ import OpenAPI from '@site/src/components/OpenAPI'
 The recommended way of installing an agent is generating the Helm/Flux install script on the UI:
 
 
+<Tabs>
 
-1. Navigate to **Settings** --> **Agents**
-2. Click on the <Icon name="plus"/> button
 
-    Enter the following:
+<TabItem value="UI">
+1. Navigate to {props.saas && <Link href="https://app.flanksource.com/settings/agents?addAgent=true">app.flanksource.com/settings/agents</Link>}{!props.saas &&  <><b>Settings</b> → <b>Agents</b></>}
+
+    <Screenshot img="/img/add-agent.png" size="800px" alt="Add Agent Dialog" className="pt-10"/>
+2. Click on the <Icon name="plus"/> button, and enter in the dialog:
     * **clusterName**
-    * Toggle **Kubernetes** to automatically scrape the cluster the agent is installed in, you can skip this step and perform it later by installing the [chart](/integrations/kubernets/catalog)
+    * Toggle **Kubernetes** to automatically scrape the cluster the agent is installed in, you can skip this step and perform it later by installing the [chart](/integrations/kubernetes/catalog)
     <p/>
 3. Click **Next**
 
@@ -33,12 +41,11 @@ The recommended way of installing an agent is generating the Helm/Flux install s
 
     <Screenshot img="/img/agent_settings.png" size="800px" alt="Generated Installation Script"/>
 
-4. Alternatively if you are installing the agent in multiple locations you can reuse the same token generated
-
-
-
+</TabItem>
+<TabItem value="Helm">
     <Helm chart="mission-control-agent"
-    createRepo={false} createNamespace={false}
+    mode="helm"
+    schema={Schema}
     values={{
       "clusterName": "<Unique name for this agent>",
       "upstream.agent": "YOUR_LOCAL_NAME",
@@ -48,37 +55,53 @@ The recommended way of installing an agent is generating the Helm/Flux install s
     }}
 
     />
+    </TabItem>
+
+    <TabItem value="Flux">
+        <Helm chart="mission-control-agent"
+    mode="flux"
+    schema={Schema}
+    values={{
+      "clusterName": "<Unique name for this agent>",
+      "upstream.agent": "YOUR_LOCAL_NAME",
+      "upstream.username": "token",
+      "upstream.password": "",
+      "upstream.host": ""
+    }}
+
+    />
+    </TabItem>
+
+     </Tabs>
 
 
 
+<p/>
+:::info  Encrypting the Token
+  We recommend that the upstream token be stored and encrypted using sops or similar
 
-:::info Externalize the token
-We recommend that the upstream token be stored separately and encrypted using sops or similar
-
-1. Create a new secret called `mission-control-upstream`
-     title=secret.yaml
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: upstream
-    stringData:
-      UPSTREAM_HOST: ""
-      UPSTREAM_USER: token
-      UPSTREAM_PASSWORD: ""
-      AGENT_NAME: "YOUR_LOCAL_NAME"
-
+1. Create a new secret called `mission-control-upstream`:
+    ```yaml title=secret.yaml
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: mission-control-upstream
+      stringData:
+        UPSTREAM_HOST: ""
+        UPSTREAM_USER: token
+        UPSTREAM_PASSWORD: ""
+        AGENT_NAME: "YOUR_LOCAL_NAME"
+    ```
     <p/>
 
 2. Update the chart values:
-     title=values.yaml
+
+    ```yaml title=values.yaml
     upstream:
       createSecret: false
       secretName: mission-control-upstream
+    ```
 
 :::
 
 
-
-### values.yaml
-
-<OpenAPI schema={Schema}/>

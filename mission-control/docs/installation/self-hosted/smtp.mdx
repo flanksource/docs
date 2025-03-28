@@ -1,0 +1,36 @@
+---
+title: SMTP / Email
+sidebar_custom_props:
+  icon: email
+---
+An SMTP server is required for sending notifications, approvals, user invites and password resets.
+
+The format of `connection_uri` is `smtp|smtps://USER:PASS@host:PORT[?param=value]`
+
+Use `smtps` for implicit TLS sessions or `smtp` for explicit StartTLS/cleartext sessions.
+
+| Parameter | Description | Default |
+| --- | --- | --- |
+| `disable_starttls` | When using `smtp` scheme, set to `true` to allow cleartext sessions or `false` to enforce StartTLS | `false` |
+| `skip_ssl_verify` | Set to `true` to allow self-signed TLS certificates or `false` to enforce certificate verification. Applies to both implicit and explicit TLS sessions | `false` |
+
+
+```yaml title="values.yaml"
+kratos:
+  kratos:
+    config:
+      courier:
+        smtp:
+          connection_uri: # smtp://user:pass@localhost:25
+          from_address: noreply@
+          from_name: Mission Control
+          # These headers will be passed in the SMTP conversation
+          # e.g. when using the AWS SES SMTP interface for cross-account sending.
+          headers: {}
+          # Identifier used in the SMTP HELO/EHLO command.
+          # Some SMTP relays require a unique identifier.
+          local_name: ""
+```
+
+See also [HTTP Webhooks](https://www.ory.sh/docs/kratos/self-hosted/email-http) for sending emails.
+

@@ -1,6 +1,8 @@
 ---
 title: Local Testing
 description: Run Mission Control Locally using minikube or kind
+sidebar_custom_props:
+  icon: lab
 ---
 
 import Tabs from '@theme/Tabs';
@@ -101,14 +103,14 @@ minikube addons enable ingress
 
 <Step step={3} name="Install Mission Control">
 
-[nip.io](http://nip.io) is simple wildcard DNS server that returns the ip provided in the host name, e.g.
+[nip.io](http://nip.io) is a wildcard DNS server that returns the ip provided in the host name, e.g.
 
 ```bash
 ❯ nslookup  127.0.0.1.nip.io
 Address: 127.0.0.1
 ```
 
-By using nip you will be able to access mission-control without any further networking / configuration setup.
+By using nip you can access mission-control without any further networking / configuration setup.
 
 ```yaml title="values.yaml"
 global:
@@ -155,7 +157,7 @@ See [values.yaml](/installation/helm#self-hosted) for more options.
 
 <Step step={4} name="Login">
 
-The default username is `admin@local` and the password can be retrived with:
+The default username is `admin@local` and the password can be retrieved with:
 
 ```
 kubectl get secret  mission-control-admin-password \
@@ -166,7 +168,7 @@ kubectl get secret  mission-control-admin-password \
 You can then goto [https://127.0.0.1.nip.io:8443](https://127.0.0.1.nip.io:8443) to login.
 
 :::info Self-Signed Certificate
-This example uses a self-signed certificate created by Nginx, We recommend using [cert-manager.io](https://cert-manager.io/).
+This example uses a self-signed certificate created by nginx, We recommend using [cert-manager.io](https://cert-manager.io/).
 :::
 
 </Step>
@@ -193,6 +195,6 @@ and apply to the cluster with:
 kubectl apply -f canaries.yaml
 ```
 
-When you goto the [Health](https://127.0.0.1.nip.io:8443/health) tab you can then see the check running:
+Navigate to the [Health](https://127.0.0.1.nip.io:8443/health) tab you can then see the check running:
 
 </Step>

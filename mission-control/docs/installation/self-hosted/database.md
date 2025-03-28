@@ -1,6 +1,8 @@
 ---
 title: Database
 description: Alternative methods for connecting to the db used for persistence
+sidebar_custom_props:
+  icon: postgres
 ---
 
 Mission Control stores all state in a Postgres Database, by default a Postgres StatefulSet is created.

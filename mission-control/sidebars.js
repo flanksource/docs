@@ -76,6 +76,9 @@ const sidebars = {
         {
           type: 'category',
           label: 'SaaS',
+          customProps: {
+            icon: 'cloud-done'
+          },
           link: {
             type: 'doc',
             id: 'installation/saas/getting-started',
@@ -90,12 +93,6 @@ const sidebars = {
 
             {
               type: 'doc',
-              id: 'installation/saas/eks',
-              label: 'AWS EKS'
-            },
-
-            {
-              type: 'doc',
               id: 'installation/saas/agent',
               label: 'Agent'
             },
@@ -103,19 +100,43 @@ const sidebars = {
             {
               type: 'doc',
               id: 'installation/saas/kubectl',
+              customProps: {
+                icon: 'console'
+              },
               label: 'Kubectl Access'
             },
+            {
+              type: 'html',
+              value: '<div class="bg-slate-200 w-full mt-2" style="height: 1px"/>'
+            },
+            {
+              type: 'doc',
+              id: 'installation/saas/eks',
+              customProps: {
+                icon: 'aws-eks-cluster'
+              },
+              label: 'AWS EKS'
+            },
+
+
 
           ]
         },
         {
           type: 'category',
           label: 'Self-Hosted',
+          customProps: {
+            icon: 'data-center'
+          },
+          link: {
+            type: 'doc',
+            id: 'installation/self-hosted/getting-started',
+          },
           items: [
             {
               type: 'doc',
               id: 'installation/self-hosted/getting-started',
-              label: 'Installation'
+              label: 'Getting Started'
             },
             {
               type: 'doc',
@@ -128,6 +149,15 @@ const sidebars = {
               label: 'SSO (OIDC)'
             },
 
+            {
+              type: 'doc',
+              id: 'installation/self-hosted/smtp',
+              label: 'Email'
+            },
+            {
+              type: 'html',
+              value: '<div class="bg-slate-200 w-full mt-2" style="height: 1px"/>'
+            },
             {
               type: 'doc',
               id: 'installation/self-hosted/eks',
