@@ -44,7 +44,7 @@ nodes:
         protocol: TCP
 ```
 
-A single node cluster will be provisioned, hosting both the control plane and workloads. Configure the hostPort bindings onto free ports, in this case `8080` and `8443` are used.
+A single node cluster is provisioned, hosting both the control plane and workloads. Configure the `hostPort` bindings onto free ports, in this case `8080` and `8443`
 
 Provision the kind cluster with
 
@@ -62,9 +62,7 @@ kubectl get nodes
 
 <Step step={2} name="Provision Ingress controller">
 
-Install [nginx](https://github.com/kubernetes/ingress-nginx) ingress controller with:
-
-The Kubernetes Nginx Ingress Controller maintains a kind-compatible manifest - deploy this to the cluster using:
+Install [ingress-nginx](https://github.com/kubernetes/ingress-nginx) controller with:
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
@@ -165,7 +163,7 @@ kubectl get secret  mission-control-admin-password \
   --template='{{.data.password | base64decode}}'
 ```
 
-You can then goto [https://127.0.0.1.nip.io:8443](https://127.0.0.1.nip.io:8443) to login.
+You can then go to [https://127.0.0.1.nip.io:8443](https://127.0.0.1.nip.io:8443) to login.
 
 :::info Self-Signed Certificate
 This example uses a self-signed certificate created by nginx, We recommend using [cert-manager.io](https://cert-manager.io/).

@@ -71,6 +71,7 @@ blackbox
 Blackbox
 bool
 boolean
+auditability
 booleans
 Booleans
 bools
