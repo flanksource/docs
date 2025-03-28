@@ -284,7 +284,7 @@ export default async function createConfigAsync() {
             { to: 'blog', label: 'Blog', position: 'left' }, // or position: 'right'
 
             {
-              href: "https://demo.flanksource.com/",
+              href: "https://demo.flanksource.com/login?username=demo@flanksource.com&password=demo@flanksource.com",
               label: "Demo",
               position: 'right',
             },
