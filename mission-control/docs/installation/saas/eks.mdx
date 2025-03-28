@@ -1,6 +1,8 @@
 ---
 title: AWS EKS
 slug: installation/eks
+sidebar_custom_props:
+  icon: aws-eks-cluster
 ---
 
 import Tabs from '@theme/Tabs'
@@ -28,6 +30,19 @@ To install and run Mission Control you need to have the following prerequisites:
   }}
 />
 
+
 ## Next Steps
 
-Install the [AWS](/registry/aws) registry chart to configure the AWS Scraper
+<Cards className="border border-t border-solid border-gray-200">
+
+
+  <Card size="sm" title="Scrape AWS Resources" icon="aws" link="/integrations/aws/getting-started">
+          <Tag label="Integration"/>
+  </Card>
+
+  <Card size="sm" title="Scraper" icon="k8s-customresourcedefinition" link="/guide/config-db/scrapers/aws">
+          <Tag label="CRD"/>
+  </Card>
+
+
+</Cards>

@@ -7,7 +7,7 @@ sidebar_custom_props:
 
 import Schema from '@site/modules/mission-control-registry/charts/aws/values.schema.json'
 
-The AWS chart catalog [scraper](/guide/config-db/scrapers/aws) that:
+Installs a [catalog scraper](/guide/config-db/scrapers/aws) that:
 
 - Scrapes AWS Resources and detects changes in the resource definition
 - Ingests changes from CloudTrail
@@ -41,7 +41,7 @@ For Cost & Usage Reporting
 
 <TabItem label="Access Keys" value="keys">
 1. Create a new connection for an [AWS Access Key](/integrations/aws/iam?type=accessKey)
-1. Install the  [mission-control-aws](https://artifacthub.io/packages/helm/flanksource/mission-control-aws) chart
+1. Install the [mission-control-aws](https://artifacthub.io/packages/helm/flanksource/mission-control-aws) chart
 
 <Helm chart="mission-control-aws"
 schema={Schema}
@@ -69,7 +69,7 @@ When you go to the catalog now, you can now see all the AWS Resources
   </Card>
 
   <Card size="sm" title="AWS Cloudwatch Alarms" icon="aws-cloudwatch" link="/guide/canary-checker/reference/aws-cloudwatch">
-  Aggregrate Alarms
+  Aggregate Alarms
         <Tag label="health-check"/>
 
   </Card>

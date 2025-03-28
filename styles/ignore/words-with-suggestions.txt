@@ -28,10 +28,16 @@ dockerSocket
 postgrest
 pprof
 canaryNamespace
+jmespath
+shellQuote
 canarySelector
 containerdSocket
 clusterName
 change_type
+Entra
+Signup
+JSONNET
+Goto
 JMESPath
 routable
 matchQuery
@@ -65,6 +71,7 @@ blackbox
 Blackbox
 bool
 boolean
+auditability
 booleans
 Booleans
 bools

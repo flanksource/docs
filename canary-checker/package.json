@@ -15,7 +15,7 @@
     "@docusaurus/core": "^3.7.0",
     "@docusaurus/plugin-client-redirects": "^3.7.0",
     "@docusaurus/preset-classic": "^3.7.0",
-    "@flanksource/icons": "^1.0.24",
+    "@flanksource/icons": "^1.0.34",
     "@floating-ui/react": "^0.26.28",
     "@mdx-js/react": "^3.0.0",
     "ansi-to-html": "^0.7.2",

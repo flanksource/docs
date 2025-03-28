@@ -22,11 +22,14 @@ export default function DocCardList(props) {
     return <DocCardListForCurrentSidebarCategory />
 
   }
-  const filteredItems = filterDocCardListItems(items);
+  const filteredItems = filterDocCardListItems(items).filter(i => !(i.customProps && i.customProps.category));
   return (
     <>
       <Cards>
         {props.items.map((item, index) => {
+          if (item.customProps && item.customProps.category) {
+            return null;
+          }
           return <Card sidebar={item} key={index} />
         })
         }

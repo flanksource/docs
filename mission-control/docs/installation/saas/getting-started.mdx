@@ -7,30 +7,13 @@ sidebar_custom_props:
 
 ---
 
+import Agent from './agent.mdx'
 import AgentToken from '@site/docs/partials/_agent_token.mdx'
 
-export const toc = [{
-        value: "Signup",
-        id: "signup",
-        level: 2,
-    },
-    {
-        value: "Agent Installation",
-        id: "agent-installation",
-        level: 2,
-    },
-
-       {
-        value: "Technology Bundles",
-        id: "registry",
-        level: 2,
-    }
-
-]
 
 When using the Mission Control SaaS the agent based approach is recommended for ingesting data, The agent is headless installation of mission-control that caches data locally in a postgres database and replicates it to the SaaS.
 
-<Screenshot img="/img/deployment-saas.svg" />
+<Screenshot img="/img/deployment-saas.svg" size="700px" shadow={false} alt="SaaS/Agent Deployment Architecture" />
 
 The agent based approach has the following benefits:
 
@@ -53,10 +36,12 @@ See [Installation](/installation) for other deployment models including [Self Ho
     Organization details and members can be changed by going to [accounts.flanksource.com/organization](https://accounts.flanksource.com/organization) <br/>or Clicking on **Manage Organization** when logged in
     :::
 
-4. Install an Agent
 
-## Agent Installation
+### Agent Installation
 
+Next an agent needs to deployed to scrape resources and execute playbooks:
+
+<Agent saas={true}/>
 
 
 

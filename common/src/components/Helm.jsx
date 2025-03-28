@@ -55,6 +55,7 @@ export default function Helm({
   repoName = "flanksource",
   chart = "mission-control",
   namespace = "mission-control",
+  mode = "tabs",
   createNamespace = true,
   createRepo = true,
   wait = true,
@@ -69,6 +70,48 @@ export default function Helm({
   const [state, setState] = useState(values)
   const [cli, setCli] = useState(generateCli(
     repo, repoName, chart, namespace, createNamespace, createRepo, wait, state, valueFile, args))
+
+
+  var flux = <CodeBlock language="yaml">
+    {createNamespace && `apiVersion: v1
+kind: Namespace
+metadata:
+name: ${namespace}
+---
+` || ""}
+    {createRepo && `apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+name: ${repoName}
+namespace: ${namespace}
+spec:
+interval: 5m0s
+url: ${repo}
+---
+` || ""}
+    {`apiVersion:  helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+name: ${chart}
+namespace: ${namespace}
+spec:
+chart:
+spec:
+chart: ${chart}
+sourceRef:
+  kind: HelmRepository
+  name: ${repoName}
+  namespace: ${namespace}
+interval: 1m
+`}
+    {valueFile || values && "values:\n"}
+    {valueFile && valueFile.replace(/^/gm, '   ')}
+    {values && Object.keys(values).map((k) => {
+      return `    ${k}: ${values[k]}\n`
+    }).join("")}
+  </CodeBlock>;
+
+
 
   return <>
 
@@ -123,62 +166,39 @@ export default function Helm({
       })}
     </form> */}
 
-    <Tabs>
-
-      <TabItem value="helm" label="Helm">
-        <CodeBlock language="bash">
-          {cli}
-        </CodeBlock>
-
-      </TabItem>
 
 
+    {mode == 'tabs' &&
 
-      <TabItem value="flux" label="Flux" default>
-        <CodeBlock language="yaml">
-          {createNamespace && `apiVersion: v1
-kind: Namespace
-metadata:
-  name: ${namespace}
----
-` || ""}
-          {createRepo && `apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: ${repoName}
-  namespace: ${namespace}
-spec:
-  interval: 5m0s
-  url: ${repo}
----
-` || ""}
-          {`apiVersion:  helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
-metadata:
-  name: ${chart}
-  namespace: ${namespace}
-spec:
-  chart:
-    spec:
-      chart: ${chart}
-      sourceRef:
-        kind: HelmRepository
-        name: ${repoName}
-        namespace: ${namespace}
-      interval: 1m
-  `}
-          {valueFile || values && "values:\n"}
-          {valueFile && valueFile.replace(/^/gm, '   ')}
-          {values && Object.keys(values).map((k) => {
-            return `    ${k}: ${values[k]}\n`
-          }).join("")}
-        </CodeBlock>
-      </TabItem>
-    </Tabs >
+      <Tabs>
+
+        <TabItem value="helm" label="Helm">
+          <CodeBlock language="bash">
+            {cli}
+          </CodeBlock>
+
+        </TabItem>
+
+
+
+        <TabItem value="flux" label="Flux" default>
+          {flux}
+        </TabItem>
+      </Tabs >
+    }
+
+    {mode == "helm" &&
+      <CodeBlock language="bash">
+        {cli}
+      </CodeBlock>
+    }
+
+    {mode == "flux" && flux}
 
 
     {schema && <OpenAPISchema schema={schema} />}
     {!schema && (chart == "mission-control" || chart == "mission-control-agent") &&
+
 
       <>See < Link to={`/reference/helm/${chart}`}>values.yaml</Link ></>
 

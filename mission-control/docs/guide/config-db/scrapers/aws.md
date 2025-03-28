@@ -11,7 +11,7 @@ This config type is used to scrape information about your AWS infrastructure.
 
 :::tip Registry
 
-The registry has an [AWS](/registry/aws) Helm chart that provides a pre-configured Scraper with some common defaults
+The Mission Control Registry includes an [AWS](/integration/aws) Helm chart that provides a pre-configured Scraper with common defaults
 
 :::
 

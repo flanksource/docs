@@ -1,7 +1,7 @@
 ---
 title: Env Vars
 sidebar_custom_props:
-  icon: stash:search-box-light
+  icon: shield-lock
 sidebar_position: 1
 ---
 

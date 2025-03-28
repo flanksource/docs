@@ -3,7 +3,7 @@ hide_title: true
 title: Common Types
 sidebar_position: 3
 sidebar_custom_props:
-  icon: fluent:library-16-regular
+  icon: library
 ---
 
 import Types from '@site/docs/snippets/\_types.md'

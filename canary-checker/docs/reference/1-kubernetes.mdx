@@ -4,6 +4,7 @@ sidebar_position: 0
 sidebar_custom_props:
   icon: k8s
 ---
+import ReactMarkdown from 'react-markdown';
 
 # <Icon name="k8s" /> Kubernetes
 
@@ -15,9 +16,14 @@ The Kubernetes check performs requests on Kubernetes resources such as Pods to g
 
 <HealthCheck name="kubernetes" edition="standard" connection="kubeconfig"  rows={[
   {field: "kind", description: "Kubernetes object kind", scheme: 'string', required: true},
-  {field: "resource", description: " Queries resources related to specified Kubernetes object ", scheme: '[Resource Selector](#resource-selector)'},
-  {field: "namespaceSelector", description: "Namespace of the Kubernetes object",scheme: '[Resource Selector](#resource-selector)'},
-  {field: "namespace", description: "Failing checks are placed in this namespace, useful if you have shared namespaces"},
+  {field: "resource", description: "Filters resources by name, namespace, or labels", scheme: '[Resource Selector](#resource-selector)'},
+  {field: "namespaceSelector", description: "Filters namespaces by name or labels", scheme: '[Resource Selector](#resource-selector)'},
+  {field: "namespace", description:
+    <ReactMarkdown>
+    Failing checks are placed in this namespace, useful if you have shared namespaces.
+
+    **NOTE:** this does not change the namespace of the resources being queried</ReactMarkdown>
+  },
   {field: "ignore", description: "Ignore the specified resources from the fetched resources. Can be a glob pattern.", scheme: '[]glob'},
   {field: "healthy", description: "Fail the check if any resources are unhealthy", scheme: 'bool'},
   {field: "ready", description: "Fail the check if any resources are not ready", scheme: 'bool'},
