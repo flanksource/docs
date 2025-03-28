@@ -19,7 +19,22 @@ exceptions:
   - CRUD
   - CSS
   - CSV
+  - RDS
+  - SQS
+  - Subnet
+  - IAMRole
+  - ECSTask
+  - ECSCluster
+  - EBSVolume
+  - EBSVolume
+  - DNSZone
+  - DHCP
+  - ECS
   - DNS
+  - EKS
+  - IAM
+  - IRSA
+  - VPC
   - DEBUG
   - DOM
   - DPI

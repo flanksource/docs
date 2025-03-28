@@ -1,10 +1,3 @@
----
-hide_title: true
-title: Common Types
-sidebar_position: 2
-sidebar_custom_props:
-  icon: library
----
 # Common Types
 
 This document provides a reference for common types used in the configuration and operation of the system.
