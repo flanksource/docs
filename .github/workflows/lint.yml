@@ -28,7 +28,8 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-          cd ${{ matrix.repo }}
+          cd modules && make all
+          cd  ../${{ matrix.repo }}
           echo "Installing packages in $(pwd)"
           npm ci
           echo "Building $(pwd)"
