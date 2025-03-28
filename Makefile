@@ -1,8 +1,8 @@
 .PHONY: lint
 lint:
 	vale sync
-	vale canary-checker/docs
-	vale mission-control/docs
+	vale canary-checker/docs  --glob='!**/{README,CHANGELOG,readme,security,SECURITY,CONTRIBUTING,benchmark,development,LICENSE}.md'
+	vale mission-control/docs  --glob='!**/{README,CHANGELOG,readme,security,SECURITY,CONTRIBUTING,benchmark,development,LICENSE}.md'
 	markdownlint mission-control/docs
 	markdownlint canary-checker/docs
 

@@ -179,10 +179,12 @@ Reports whether a given object has a property with the given key, or whether a g
 
 ### jq
 
-Filters an input object or list using the [jq](https://stedolan.github.io/jq/) language, as implemented by [gojq](https://github.com/itchyny/gojq).
+The `jq` function filters input using the [jq query language](https://stedolan.github.io/jq/), implemented via [gojq](https://github.com/itchyny/gojq).
 
-Any JSON datatype may be used as input (NOTE: strings are not JSON-parsed but passed in as is). If the expression results in multiple items (no matter if streamed or as an array) they are wrapped in an array. Otherwise a single item is returned (even if resulting in an array with a single contained element).
+Input can be any valid JSON data type, strings are passed directly without JSON parsing. The function returns:
 
+- A single value for single results
+- An array for multiple results (whether streamed or array output)
 JQ filter expressions can be tested at [jqplay](https://jqplay.org/)
 
 See also:
@@ -922,7 +924,7 @@ Adds all given operators. When one of the inputs is a floating-point number, the
 
 Returns the least integer value greater than or equal to a given floating-point number. This wraps Go's [`math.Ceil`](https://golang.org/pkg/math/#Ceil).
 
-**Note:** the return value of this function is a `float64` so that the special-cases `NaN` and `Inf` can be returned appropriately.
+**Note:** the return value of this function is a `float64` so that the cases of `NaN` and `Inf` can be returned appropriately.
 
 ```go
 {{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}ceil {{ printf "%#v" . }} = {{ math.Ceil . }}{{"\n"}}{{ end }}
@@ -948,7 +950,7 @@ Divide the first number by the second. Division by zero is disallowed. The resul
 
 Returns the greatest integer value less than or equal to a given floating-point number. This wraps Go's [`math.Floor`](https://golang.org/pkg/math/#Floor).
 
-**Note:** the return value of this function is a `float64` so that the special-cases `NaN` and `Inf` can be returned appropriately.
+**Note:** the return value of this function is a `float64` so that the cases of `NaN` and `Inf` can be returned appropriately.
 
 ```go
 {{ range (slice 5.1 42 "3.14" "0xFF" "NaN" "Inf" "-0") }}floor {{ printf "%#v" . }} = {{ math.Floor . }}{{"\n"}}{{ end }}
@@ -1047,7 +1049,7 @@ Return the remainder from an integer division operation.
 
 Returns the nearest integer, rounding half away from zero.
 
-**Note:** the return value of this function is a `float64` so that the special-cases `NaN` and `Inf` can be returned appropriately.
+**Note:** the return value of this function is a `float64` so that the cases of `NaN` and `Inf` can be returned appropriately.
 
 ```go
 {{ range (slice -6.5 5.1 42.9 "3.5" 6.5) }}round {{ printf "%#v" . }} = {{ math.Round . }}{{"\n"}}{{ end }}
@@ -1635,7 +1637,7 @@ broken
 
 Return the number of _runes_ (Unicode code-points) contained within the input. This is similar to the built-in `len` function, but `len` counts the length in _bytes_. The length of an input containing multi-byte code-points should therefore be measured with `strings.RuneCount`.
 
-Inputs will first be converted to strings, and multiple inputs are concatenated.
+Inputs are first converted to strings, and multiple inputs are concatenated.
 
 This wraps Go's [`utf8.RuneCountInString`](https://golang.org/pkg/unicode/utf8/#RuneCountInString) function.
 
@@ -1840,10 +1842,7 @@ It is{{ if not $t.IsDST }} not{{ end }} daylight savings time.
 
 Parses a timestamp defined by the given layout. This wraps [`time.Parse`](https://golang.org/pkg/time/#Parse).
 
-A number of pre-defined layouts are provided as constants, defined
-[here](https://golang.org/pkg/time/#pkg-constants).
-
-Just like [`time.Now`](#now), this is usually used in conjunction with other functions.
+A number of pre-defined layouts are provided as [constants](https://golang.org/pkg/time/#pkg-constants)
 
 _Note: In the absence of a time zone indicator, `time.Parse` returns a time in UTC._
 
@@ -1952,15 +1951,14 @@ Return the local system's time zone offset, in seconds east of UTC.
 
 Create a version 1 UUID (based on the current MAC address and the current date/time).
 
-Use [`uuid.V4`](#v4) instead in most cases.
-
+_Note:_ [`uuid.V4`](#v4) is recommended instead
 ```go
 {{ uuid.V1 }} // 4d757e54-446d-11e9-a8fa-72000877c7b0
 ```
 
 ### V4
 
-Create a version 4 UUID (randomly generated).
+Create a version 4 UUID
 
 This function consumes entropy.
 

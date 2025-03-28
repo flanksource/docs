@@ -19,6 +19,7 @@ exceptions:
   - CRUD
   - CSS
   - CSV
+  - DNS
   - DEBUG
   - DOM
   - DPI

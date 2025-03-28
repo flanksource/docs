@@ -26,5 +26,6 @@ manifests: .bin/helm .bin/yq
 	tar -xzf .bin/helm.tar.gz -C .bin --strip-components 1
 
 .bin/yq: .bin
-	wget -nv   https://github.com/mikefarah/yq/releases/download/v4.37.4/yq_$(OS)_$(ARCH).tar.gz  -O .bin/yq.tar.gz
-	tar -xzf .bin/yq.tar.gz -C .bin --strip-components 1
+
+	wget -nv   https://github.com/mikefarah/yq/releases/download/v4.37.4/yq_$(OS)_$(ARCH) -O .bin/yq
+	chmod +x .bin/yq

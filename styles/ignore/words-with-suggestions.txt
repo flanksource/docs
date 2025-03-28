@@ -28,6 +28,8 @@ dockerSocket
 postgrest
 pprof
 canaryNamespace
+jmespath
+shellQuote
 canarySelector
 containerdSocket
 clusterName
