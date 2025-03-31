@@ -4,11 +4,11 @@ sidebar_custom_props:
   icon: timer
 ---
 
-Playbooks can be configured with timeouts to automatically cancel their execution after a specified duration. This helps prevent playbooks from running indefinitely and consuming resources unnecessarily.
+Set timeouts on playbooks to automatically cancel their execution after a specified duration. This helps prevent playbooks from running for too long and consuming resources.
 
 #### Default timeout
 
-Playbooks are configured with a default timeout of **30 minutes** if not otherwise specified. You can modify this default globally by setting the `playbook.run.timeout` property in your Mission Control configuration.
+Mission Control sets a default timeout of **30 minutes** for all playbooks. You can change this default globally by setting the `playbook.run.timeout` property in your Mission Control configuration.
 
 The timeout accepts any valid [duration](/reference/types#duration) format. This global timeout setting serves as the fallback for all playbooks that don't define their own specific timeout value.
 
@@ -53,4 +53,4 @@ spec:
           ... # longer task
 ```
 
-If an action specifies a timeout longer than the playbook's timeout, the playbook timeout takes precedence. The action will be terminated when the playbook timeout is reached.
+If an action specifies a timeout longer than the playbook's timeout, the playbook timeout takes precedence. Mission Control stops the action when it reaches the playbook timeout.
