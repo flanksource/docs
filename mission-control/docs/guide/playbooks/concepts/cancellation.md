@@ -4,7 +4,7 @@ sidebar_custom_props:
   icon: cancel
 ---
 
-You can manually terminate running playbooks at any time through the Mission Control interface. 
+You can manually terminate running playbooks at any time through the Mission Control interface.
 You need the `playbook:cancel` permission to perform this action.
 
 :::warning Cancellation Behavior

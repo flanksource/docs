@@ -18,7 +18,7 @@ AI Action allows you to integrate AI capabilities into your playbooks by leverag
 This comprehensive context enables AI models to provide more informed analysis and insights about your infrastructure state and relationships.
 For example, when a Kubernetes pod fails, it examines the pod spec, ConfigMap changes, service logs together, revealing patterns that single-component analysis might overlook.
 
-```yaml title="diagnose-kubernetes-resource.yaml"  file=<rootDir>/modules/mission-control/fixtures/playbooks/ai-diagnose-kubernetes-resource.yaml
+```yaml title="context-provider-playbook.yaml" file=<rootDir>/modules/generated/playbooks/recommend-playbook.yaml
 ```
 
 <Action rows={[
@@ -32,7 +32,21 @@ For example, when a Kubernetes pod fails, it examines the pod spec, ConfigMap ch
  {field: "model", description: "LLM model (e.g. gpt-4)", scheme: "string"},
  {field: "prompt", description: "Main prompt", scheme: "string", required: true},
  {field: "relationships", description: "Select the related configs and their changes and analysis to feed into the AI", scheme: "[[]Relationship](#relationship)"},
- {field: "systemPrompt", description: "Context-setting system prompt", scheme: "string", required: true}
+ {field: "systemPrompt", description: "Context-setting system prompt", scheme: "string", required: true},
+ {field: "playbooks", description: "List of playbooks to execute and use as context", scheme: "[[]ContextProviderPlaybook](#context-provider-playbook)"}
+]}/>
+
+### Context provider playbook
+
+These playbooks are executed concurrently and their output is used as context for the AI action.
+If any of these playbooks fail, it does not affect the execution of the main playbook -
+ the AI action will continue with whatever context is available from the successful playbooks.
+
+<Fields rows={[
+  {field: "namespace", description: "Namespace of the playbook", scheme: "string", required: true},
+  {field: "name", description: "Name of the playbook", scheme: "string", required: true},
+  {field: "if", description: "If is a CEL expression that decides if this playbook should be included in the context", scheme: "cel"},
+  {field: "params", description: "Parameters to pass to the playbook", scheme: "map[string]string"}
 ]}/>
 
 ### Relationship
