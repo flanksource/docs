@@ -11,29 +11,29 @@ sidebar_custom_props:
 
 ## Permission
 
-In Mission Control, Permission provides a flexible and robust security model that combines two powerful approaches:
+In Mission Control, Permission provides a flexible and strong security model that combines two powerful methods:
 Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC).
-This unified permission system allows you to implement precise and granular access policies.
-For instance, while RBAC can control whether a user can execute any playbooks in the system,
-more refined ABAC policies allow you to specify exactly which playbooks specific users or teams can access.
+This combined permission system helps you set up detailed access rules.
+For instance, while RBAC can control if a user can run any playbooks in the system,
+detailed ABAC rules let you define exactly which playbooks specific users or teams can access.
 
-Permissions are manageable via the UI as well as via CRDs.
+You can manage Permissions through the UI and using CRDs.
 
 ```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/allow-person-playbook.yaml
 ```
 
-A Permission consists of 4 components
+A Permission has 4 parts:
 
-- **Subject**: the entity requesting access (person, team, or a service)
-- **Object**: Target resources this permission applies to (playbooks, configs, or components)
-- **Effect**: Whether to allow or deny access (Default: allow)
-- **Actions**: [Concerned list of actions](/reference/permissions/actions)
+- **Subject**: The user or service requesting access.
+- **Object**: The resources this permission affects (playbooks, connections, configs, or components).
+- **Effect**: Whether to allow or deny access (Default: allow).
+- **Actions**: The [list of allowed actions](/reference/permissions/actions).
 
 :::info
-Deny rules always take precedence over Allow rules
+Deny rules always override Allow rules.
 :::
 
-### CRD
+## CRD
 
 <Fields
   rows={[
@@ -59,8 +59,18 @@ Deny rules always take precedence over Allow rules
       scheme: 'string',
     },
     {
+      field: 'subject.group',
+      description: 'Name of a permission group',
+      scheme: 'string',
+    },
+    {
       field: 'subject.notification',
       description: '`<namespace>/<name>` of the notification',
+      scheme: 'string',
+    },
+    {
+      field: 'subject.playbook',
+      description: '`<namespace>/<name>` of the playbook',
       scheme: 'string',
     },
     {
@@ -79,14 +89,19 @@ Deny rules always take precedence over Allow rules
       scheme: 'resourceselectors',
     },
     {
+      field: 'object.connections',
+      description: 'List of connection resource selectors',
+      scheme: 'resourceselectors',
+    },
+    {
       field: 'deny',
-      description: 'Whether this is a deny rule. _(Default: False)_',
+      description: 'Specifies if this is a deny rule. _(Default: False)_',
       scheme: 'bool',
     },
   ]}
 />
 
-Additionally, for [tag-agent based ABAC](./concepts/multi-tenancy.md), these fields are also available.
+Additionally, for [tag-agent based ABAC](./concepts/multi-tenancy.md), you can also use these fields.
 
 <Fields
   rows={[
@@ -103,12 +118,117 @@ Additionally, for [tag-agent based ABAC](./concepts/multi-tenancy.md), these fie
   ]}
 />
 
+## Subjects
+
+Subjects define WHO or WHAT gets the permission. The `subject` field can contain **only one** of the following:
+
+### Individual User
+
+Specify a human user by their email address or name (if the name is unique) to grant permission.
+
+```yaml
+subject:
+  person: jane.doe@example.com
+```
+
+OR
+
+```yaml
+subject:
+  person: "Jane Doe"
+```
+
+### Team
+
+Specify a team by its name to grant permission to all its members.
+
+```yaml
+subject:
+  team: sre-team
+```
+
+### Group
+
+Specify a defined `PermissionGroup` to grant permission. Groups bundle different items (like specific playbooks, notifications) or lists of users/teams.
+
+```yaml
+subject:
+  group: system-administrators
+```
+
+### System Services
+
+Sometimes, a specific system service needs permission to act *for* a particular resource instance. Mission Control often uses this for automation or to allow one part of Mission Control to interact with another. The service gains permission only when it acts for the specified resource, identified by its `<namespace>/<name>`.
+
+- **Notification Service**:
+
+  Specify a notification to grant permission to the notification service when it processes that notification.
+  Example: A notification might need access to read a connection or trigger a playbook run.
+
+  ```yaml
+  subject:
+    notification: monitoring/critical-alerts
+  ```
+
+- **Playbook Service**:
+
+  Specify a playbook to grant permission to the playbook runner service when it runs that playbook.
+  Example: A playbook needs access to a specific resource it acts on.
+
+  ```yaml
+  subject:
+    playbook: automation/cleanup-pods
+  ```
+
+## Objects
+
+Objects define the resources the permission targets. You can define Objects using [Resource Selectors](/reference/resource-selector).
+There are 4 types of objects:
+
+- **Playbooks** - Automation playbooks in the system
+- **Configs** - Configuration items in the catalog
+- **Connections** - Connection configurations for external systems
+- **Components** - Topology components
+
+A permission can target multiple objects, while a subject can only target one.
+If you define multiple objects, Mission Control grants the permission only if the request matches all defined objects.
+In other words, Mission Control applies an AND condition to the objects.
+
+```yaml file=<rootDir>/modules/mission-control/fixtures/permissions/allow-person-playbook.yaml {14-20}
+```
+
+This permission object allows running all playbooks but **only on configs in the "mission-control" namespace**.
+
+```yaml file=<rootDir>/modules/mission-control/fixtures/permissions/notification-playbook-permission.yaml {14-22}
+```
+
+This permission, on the other hand, allows running the "echo-config" playbook on all configs & components.
+
+## Permission Actions
+
+The following actions can be used in the `actions` field of a Permission:
+
+- **`read`** - Allows reading resources
+- **`write`** - Allows creating or modifying resources
+- **`delete`** - Allows deleting resources
+- **`playbook:run`** - Allows running playbooks
+- **`playbook:approve`** - Allows approving playbook runs that require approval
+- **`playbook:cancel`** - Allows canceling playbook runs
+
+You can also use wildcards to grant multiple permissions at once:
+
+- **`playbook:*`** - Grants all playbook-related permissions
+- **`*`** - Grants all permissions (use with caution)
 
 ## Permission Groups
 
-Permission Groups allow you to organize subjects (people, teams, or notifications) under a common label for easier permission management.
-Permissions applied to the group are then inherited by the encompassed subjects.
+Permission Groups let you group subjects (people, teams, or system services) under one name for simpler permission setup.
+The subjects included in the group then inherit the permissions applied to it.
 
+Permission Groups are particularly useful when:
+- You need to manage permissions for many users with similar roles
+- You want to grant the same permissions to multiple system services
+- You need to update permissions for a set of users all at once
 ### CRD
 
 ```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/config-notification-group-playbook-permission.yaml
@@ -137,5 +257,12 @@ Permissions applied to the group are then inherited by the encompassed subjects.
       description: 'List of notification `<namespace>/<name>`',
       scheme: '`[]string`',
     },
+    {
+      field: 'playbooks',
+      description: 'List of playbook `<namespace>/<name>`',
+      scheme: '`[]string`',
+    },
   ]}
 />
+
+
