@@ -54,7 +54,23 @@ The Mission Control Registry includes an [AWS](/integration/aws) Helm chart that
 | `database`       | Specify database containing cost and usage data                | `string` |
 | `region`         | Specify region for S3 bucket                                   | `string` |
 
-### Supported Resources
+## Trusted Advisor
+
+The scraper integrates with AWS Trusted Advisor to collect real-time guidance across cost optimization, performance, fault tolerance, security, and service limits to help optimize your AWS infrastructure.
+
+:::warning Rate Limitations
+Trusted Advisor checks run with a minimum interval of 16 hours (due to API rate limitations).
+This can be overridden by setting the property `scraper.aws.trusted_advisor.minInterval`.
+:::
+
+To disable Trusted Advisor altogether, you can add an exclusion rule:
+
+```yaml
+exclude:
+  - trusted_advisor
+```
+
+## Supported Resources
 
 | Resource Type       | AWS Type                                  | Config Class       | Description                             |
 | ------------------- | ----------------------------------------- | ------------------ | --------------------------------------- |
