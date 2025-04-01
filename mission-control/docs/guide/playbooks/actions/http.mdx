@@ -13,7 +13,6 @@ HTTP action makes an HTTP request.
 ```yaml title=http..yaml"  file=<rootDir>/modules/mission-control/fixtures/playbooks/http.yaml
 ```
 
-
 <Action  rows={[
   {field: "url", description: "Url to make the request to", scheme: "string", required: true},
   {field: "method", description: "HTTP method to use", scheme: "string", required: true, default: "GET"},
@@ -23,6 +22,14 @@ HTTP action makes an HTTP request.
   {field: "connection", description: "Connection name. e.g. connection://http/google", scheme: "Connection"},
   {field: "username", description: "Username to authenticate with", scheme: "EnvVar"},
   {field: "password", description: "Password to authenticate with", scheme: "EnvVar"},
+]}/>
+
+## Output
+
+<Action  rows={[
+  {field: "body", description: "Response Body Contents", scheme: "string"},
+  {field: "headers", description: "Response headers", scheme: "map[string]string"},
+  {field: "statusCode", description: "Response status code", scheme: "int"},
 ]}/>
 
 ## Templating

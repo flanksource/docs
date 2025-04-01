@@ -26,6 +26,16 @@ Exec action allows you to executes a command or a script file on the target host
   {field: 'connections', scheme: '[Connections](#connections)', description: 'Connections used by the action'}
 ]}/>
 
+## Output
+
+<Action  rows={[
+  {field: "stdout", description: "Stdout of command", scheme: "string"},
+  {field: "stderr", description: "Stderr of command", scheme: "string"},
+  {field: "exitCode", description: "Exit code of command", scheme: "int"},
+  {field: "path", description: "Path for command context", scheme: "string"},
+  {field: "args", description: "Args for the command", scheme: "[]string"},
+]}/>
+
 ## Templating
 
 Scripts are templatable with [Go Templates](/reference/scripting/gotemplate)
