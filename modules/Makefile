@@ -7,7 +7,7 @@ all: sync manifests
 
 .PHONY: sync
 sync:
-	    git submodule update --remote --merge && git submodule sync
+	git submodule update --remote --recursive && git submodule sync
 
 
 .PHONY: manifests
