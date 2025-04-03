@@ -29,6 +29,13 @@ SQL action makes a SQL query on the provided database.
   {field: "driver", description: "Database driver", scheme: "`postgres`, `mysql`, `mssql`", required: true},
 ]}/>
 
+## Output
+
+<Fields  rows={[
+  {field: "rows", description: "List of rows with column name as keys and column data as values", scheme: "[]map[string]any"},
+  {field: "count", description: "Number of rows returned", scheme: "int"},
+]}/>
+
 
 ## Templating
 
