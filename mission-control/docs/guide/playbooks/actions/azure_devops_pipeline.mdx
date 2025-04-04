@@ -16,6 +16,12 @@ This action allows you to invoke pipelines in your Azure DevOps project.
 ```
 
 <Action rows={[
+    {field: "azureDevopsPipeline", description: "Azure Devops Pipeline Action", scheme: "[AzureDevopsPipeline](#azuredevopspipeline)"},
+]} />
+
+## AzureDevopsPipeline 
+
+<Fields rows={[
   {field: "org", scheme: "string", description: "Azure DevOps org name", required: true},
   {field: "project", scheme: "string", description: "Azure DevOps project name", required: true},
   {field: "token", scheme: "[EnvVar](/reference/env-var)", description: "Azure DevOps PAT", required: true},

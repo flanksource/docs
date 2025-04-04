@@ -20,8 +20,13 @@ Common use cases:
 ```yaml title="edit-kubernetes-manifests-gitops.yaml" file=<rootDir>/modules/generated/playbooks/kustomize-edit.yaml
 ```
 
+<Action rows={[
+    {field: "gitops", description: "Gitops Action", scheme: "[Gitops](#gitops)"},
+]} />
 
-<Action
+## Gitops
+
+<Fields
   anyOf={['patches', 'files']}
   rows={[
     {
