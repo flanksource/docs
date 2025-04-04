@@ -143,7 +143,7 @@ export default async function createConfigAsync() {
               label: 'Docs',
             },
             {
-              href: "https://demo.flanksource.com/",
+              href: "https://demo.flanksource.com/login?username=demo@flanksource.com&password=demo@flanksource.com&return_to=/health",
               label: "Demo",
               position: 'right',
             },
