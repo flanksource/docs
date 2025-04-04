@@ -13,7 +13,13 @@ HTTP action makes an HTTP request.
 ```yaml title=http..yaml"  file=<rootDir>/modules/mission-control/fixtures/playbooks/http.yaml
 ```
 
-<Action  rows={[
+<Action rows={[
+    {field: "http", description: "HTTP Action", scheme: "[HTTP](#http)"},
+]} />
+
+## HTTP
+
+<Fields rows={[
   {field: "url", description: "Url to make the request to", scheme: "string", required: true},
   {field: "method", description: "HTTP method to use", scheme: "string", required: true, default: "GET"},
   {field: "headers", description: "Header fields to be used in the request", scheme: "[]EnvVar"},

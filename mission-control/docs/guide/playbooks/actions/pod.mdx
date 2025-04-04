@@ -12,9 +12,13 @@ Pod action allows you to run an arbitrary pod on your kubernetes cluster.
 
 ```yaml title="ping-database-from-pod.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/pod.yaml
 ```
+<Action rows={[
+    {field: "pod", description: "Pod Action", scheme: "[Pod](#pod)"},
+]} />
 
+## Pod
 
-<Action  rows={[
+<Fields  rows={[
   {field: "spec", description: "Full pod specification", scheme: "[PodSpec](https://pkg.go.dev/k8s.io/api@v0.28.2/core/v1#PodSpec)", required: true},
   {field: "maxLength", description: "Maximum length of the logs to show", scheme: "integer", default: "3kb"},
   {field: "artifacts", description: "File generated in the pod that need to be saved", scheme: "[[]Artifact](#artifact)"}

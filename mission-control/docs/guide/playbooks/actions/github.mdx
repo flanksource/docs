@@ -18,6 +18,12 @@ You must configure your GitHub Actions workflow to run when the [workflow_dispat
 ```
 
 <Action rows={[
+    {field: "github", description: "Github Action", scheme: "[Github](#github)"},
+]} />
+
+## GitHub
+
+<Fields rows={[
   {field: "username", description: "The account owner of the repository (case insensitive)", scheme: "string", required: true},
   {field: "repo", description: "The name of the repository without the `.git` extension", scheme: "string", required: true},
   {field: "token", description: "Github personal access token", scheme: "[EnvVar](/reference/env-var)", required: true},

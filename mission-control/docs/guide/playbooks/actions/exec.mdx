@@ -19,6 +19,12 @@ Exec action allows you to executes a command or a script file on the target host
 ```
 
 <Action rows={[
+    {field: "exec", description: "Exec Action", scheme: "[Exec](#exec)"},
+]} />
+
+## Exec
+
+<Fields rows={[
   {field: 'script', scheme: 'string', description: 'The script to execute', required: true},
   {field: 'env', scheme: '[[]EnvVar](/reference/env-var)', description: 'Environment variables to set during execution'},
   {field: 'checkout', scheme: '[Checkout](#git-checkout)', description: 'Checkout a git repository before running the script'},
