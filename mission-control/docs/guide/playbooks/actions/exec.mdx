@@ -71,11 +71,43 @@ exec:
 Exec connections allow you to specify credentials for a list of CLI tools that are needed by your scripts. Eg: You can specify the AWS connection name and the credential files along with the necessary environment variables
 will be setup on the host running the script.
 
-| Field   | Description      | Type                                                            | Required |
-| ------- | ---------------- | --------------------------------------------------------------- | -------- |
-| `aws`   | AWS connection   | [`AWSConnection`](/reference/connections/aws)     |          |
-| `gcp`   | GCP connection   | [`GCPConnection`](/reference/connections/gcp)     |          |
-| `azure` | Azure connection | [`AzureConnection`](/reference/connections/azure) |          |
+<Fields rows={[
+  {
+    field: "aws",
+    description: "AWS connection",
+    scheme: "[AWSConnection](/reference/connections/aws)",
+  },
+  {
+    field: "gcp",
+    description: "GCP connection",
+    scheme: "[GCPConnection](/reference/connections/gcp)",
+  },
+  {
+    field: "azure",
+    description: "Azure connection",
+    scheme: "[AzureConnection](/reference/connections/azure)",
+  },
+  {
+    field: "kubernetes",
+    description: "Kubernetes connection",
+    scheme: "[KubernetesConnection](/reference/connections/kubernetes)",
+  },
+  {
+    field: "eksPodIdentity",
+    description: "EKSPodIdentity when enabled will allow access to AWS_* env vars",
+    scheme: "bool",
+  },
+  {
+    field: "serviceAccount",
+    description: "ServiceAccount when enabled will allow access to KUBERNETES env vars",
+    scheme: "bool",
+  },
+  {
+    field: "fromConfigItem",
+    description: "Fetch connection from a Config item's scraper",
+    scheme: "uuid",
+  }
+]}/>
 
 ### Artifacts
 
