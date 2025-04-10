@@ -14,7 +14,7 @@ The Kubernetes check performs requests on Kubernetes resources such as Pods to g
 ```yaml title="kubernetes.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-minimal_pass.yaml
 ```
 
-<HealthCheck name="kubernetes" edition="standard" connection="kubeconfig"  rows={[
+<HealthCheck name="kubernetes" edition="standard" connection="kubernetes"  rows={[
   {field: "kind", description: "Kubernetes object kind", scheme: 'string', required: true},
   {field: "resource", description: "Filters resources by name, namespace, or labels", scheme: '[Resource Selector](#resource-selector)'},
   {field: "namespaceSelector", description: "Filters namespaces by name or labels", scheme: '[Resource Selector](#resource-selector)'},

@@ -91,7 +91,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     (row.field != "artifacts" || !oss));
 
 
-  var fieldSorter = function (a, b) {
+  var fieldSorter = function(a, b) {
     if (a.required && !b.required) {
       return -1;
     }
@@ -323,6 +323,33 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
         field: "kubeconfig",
         description: "Path to a kubeconfig on disk, or a reference to an existing secret",
         scheme: "EnvVar",
+      }])
+  } else if (connection == "kubernetes") {
+    rows = rows.concat([
+      {
+        field: "connection",
+        description: "The connection url to use, mutually exclusive with `kubeconfig`",
+        scheme: "Connection",
+      },
+      {
+        field: "kubeconfig",
+        description: "Source for kubeconfig",
+        scheme: "EnvVar"
+      },
+      {
+        field: "eks",
+        description: "EKS connection details",
+        scheme: "[EKS](/reference/connections/kubernetes/#eks-connection)",
+      },
+      {
+        field: "gke",
+        description: "GKE connection details",
+        scheme: "[GKE](/reference/connections/kubernetes/#gke-connection)",
+      },
+      {
+        field: "cnrm",
+        description: "CNRM connection details",
+        scheme: "[CNRM](/reference/connections/kubernetes/#cnrm-connection)",
       }])
   } else if (connection == "azure") {
     rows = rows.concat([
