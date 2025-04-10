@@ -14,7 +14,7 @@ The Pod check creates a new pod and verifies that it can be reached via an Ingre
 ```yaml title="tcp.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/pod_pass.yaml
 ```
 
-<HealthCheck name="pod"  rows={[
+<HealthCheck name="pod" connection="kubernetes"  rows={[
 {field: "namespace", description: "Namespace where the pod is created", scheme: 'string'},
 {field: "spec", description: "Pod spec to create", scheme: '[Spec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core) ', required: true},
 {field: "port", description: "Port on which the created pod serves traffic", scheme: 'int'},

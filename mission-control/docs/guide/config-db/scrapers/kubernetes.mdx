@@ -26,8 +26,7 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
 
 ## Kubernetes
 
-<Scraper
-  rows={[
+<Scraper connection="kubernetes" rows={[
     {
       field: 'clusterName',
       description: 'A unique name for the cluster config.',
@@ -62,11 +61,6 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
       field: 'fieldSelector',
       description: 'Resources to be included e.g `status.Phase=Running`',
       scheme: 'string'
-    },
-    {
-      field: 'kubeconfig',
-      description: 'Kubeconfig to connect to the cluster',
-      scheme: '_EnvVar_'
     },
     {
       field: 'watch',
