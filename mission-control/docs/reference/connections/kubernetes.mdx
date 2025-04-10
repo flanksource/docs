@@ -7,34 +7,7 @@ sidebar_custom_props:
 Kubernetes connections enable integration with Kubernetes clusters across different cloud providers and environments. 
 You can configure connections to AWS EKS clusters, Google Cloud GKE instances, and Config Connector (CNRM) implementations.
 
-<Fields connection="kubernetes" rows={[
-  {
-    field: "connection",
-    description: "The connection url to use, mutually exclusive with `kubeconfig`",
-    scheme: "Connection",
-  },
-  {
-    field: "kubeconfig",
-    description: "Source for kubeconfig",
-    scheme: "EnvVar"
-  },
-  {
-    field: "eks",
-    description: "EKS connection details", 
-    scheme: "[EKS](#eks-connection)",
-  },
-  {
-    field: "gke",
-    description: "GKE connection details", 
-    scheme: "[GKE](#gke-connection)",
-  },
-  {
-    field: "cnrm",
-    description: "CNRM connection details", 
-    scheme: "[CNRM](#cnrm-connection)",
-  }
-]}
-/>
+<Fields connection="kubernetes" />
 
 :::note
 One of the four sources of connection details must be provided.

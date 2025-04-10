@@ -39,18 +39,16 @@ spec:
 
 ### KubernetesFile
 
-<CustomScraper rows={[
-
+<CustomScraper connection="kubernetes" rows={[
   {
     "field": "selector",
     "description": "Pods to extract files from",
     "scheme": "ResourceSelector",
     "required": true,
   },
-    {
+  {
     "field": "container",
     "description": "Name of container",
-
   },
   {
     "field": "files",
@@ -58,7 +56,6 @@ spec:
     "scheme": "[[]File](#file)",
     "required": "true"
   },
-
 ]}/>
 
 
