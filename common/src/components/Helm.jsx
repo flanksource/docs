@@ -76,39 +76,40 @@ export default function Helm({
     {createNamespace && `apiVersion: v1
 kind: Namespace
 metadata:
-name: ${namespace}
+  name: ${namespace}
 ---
 ` || ""}
     {createRepo && `apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-name: ${repoName}
-namespace: ${namespace}
+  name: ${repoName}
+  namespace: ${namespace}
 spec:
-interval: 5m0s
-url: ${repo}
+  interval: 5m0s
+  url: ${repo}
 ---
 ` || ""}
     {`apiVersion:  helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-name: ${chart}
-namespace: ${namespace}
-spec:
-chart:
-spec:
-chart: ${chart}
-sourceRef:
-  kind: HelmRepository
-  name: ${repoName}
+  name: ${chart}
   namespace: ${namespace}
-interval: 1m
+spec:
+  chart:
+    spec:
+      chart: ${chart}
+      sourceRef:
+        kind: HelmRepository
+        name: ${repoName}
+        namespace: ${namespace}
+  interval: 5m
 `}
-    {valueFile || values && "values:\n"}
-    {valueFile && valueFile.replace(/^/gm, '   ')}
+
+    {(valueFile || values) && "values:\n"}
     {values && Object.keys(values).map((k) => {
-      return `    ${k}: ${values[k]}\n`
-    }).join("")}
+      return `  ${k}: ${values[k]}`
+    }).join("\n")}
+    {valueFile && valueFile.split('\n').map(line => `  ${line}\n`).join('')}
   </CodeBlock>;
 
 

@@ -73,85 +73,85 @@ You can also create a new policy with only the permissions required by Mission C
 ## Configure IAM Roles for Mission Control
 
 <Tabs>
-<TabItem label="IAM Roles for Service Accounts" value="IRSA">
+  <TabItem label="IAM Roles for Service Accounts" value="IRSA">
 
-<Tabs>
-<TabItem label="eksctl" value="cli">
-2. Setup variables
-	```bash
-	# The name of the EKS cluster mission control is being deployed to
-	export CLUSTER= <CLUSTER_NAME>
-	# the default namespace the mission-control helm chart uses
-	export NAMESPACE=mission-control
-	export ACCOUNT=$(aws sts get-caller-identity  --query 'Account' --output text)
-	```
-	<p/>
+    <Tabs>
+      <TabItem label="eksctl" value="cli">
+        2. Setup variables
+            ```bash
+            # The name of the EKS cluster mission control is being deployed to
+            export CLUSTER= <CLUSTER_NAME>
+            # the default namespace the mission-control helm chart uses
+            export NAMESPACE=mission-control
+            export ACCOUNT=$(aws sts get-caller-identity  --query 'Account' --output text)
+            ```
+            <p/>
 
-1. Enable [EKS IAM Roles for Service Accounts](https://eksctl.io/usage/iamserviceaccounts/)
+        1. Enable [EKS IAM Roles for Service Accounts](https://eksctl.io/usage/iamserviceaccounts/)
 
-   ```bash
-   eksctl utils associate-iam-oidc-provider --cluster=$CLUSTER
-   ```
+           ```bash
+           eksctl utils associate-iam-oidc-provider --cluster=$CLUSTER
+           ```
 
-   <p />
+           <p />
 
-2. Create the IAM Role mappings
+        2. Create the IAM Role mappings
 
-   ```yaml title="eksctl.yaml"
-   iam:
-   	withOIDC: true
-   	serviceAccounts:
-   	- metadata:
-   			name: mission-control-sa
-   			namespace: mission-control
-   		roleName: MissionControlRole
-   		roleOnly: true
-   		attachPolicyARNs:
-   		- "arn:aws:iam::aws:policy/ReadOnlyAccess"
-   	- metadata:
-   			name: canary-checker-sa
-   			namespace: mission-control
-   		roleName: CanaryCheckerRole
-   		roleOnly: true
-   		attachPolicyARNs:
-   		- "arn:aws:iam::aws:policy/ReadOnlyAccess"
-   	- metadata:
-   			name: config-db-sa
-   			namespace: mission-control
-   		roleName: ConfigDBRole
-   		roleOnly: true
-   		attachPolicyARNs:
-   		- "arn:aws:iam::aws:policy/ReadOnlyAccess"
+           ```yaml title="eksctl.yaml"
+           iam:
+            withOIDC: true
+            serviceAccounts:
+            - metadata:
+                    name: mission-control-sa
+                    namespace: mission-control
+                roleName: MissionControlRole
+                roleOnly: true
+                attachPolicyARNs:
+                - "arn:aws:iam::aws:policy/ReadOnlyAccess"
+            - metadata:
+                    name: canary-checker-sa
+                    namespace: mission-control
+                roleName: CanaryCheckerRole
+                roleOnly: true
+                attachPolicyARNs:
+                - "arn:aws:iam::aws:policy/ReadOnlyAccess"
+            - metadata:
+                    name: config-db-sa
+                    namespace: mission-control
+                roleName: ConfigDBRole
+                roleOnly: true
+                attachPolicyARNs:
+                - "arn:aws:iam::aws:policy/ReadOnlyAccess"
 
-   ```
+           ```
 
-   ```bash
-   eksctl create iamserviceaccount --cluster $CLUSTER -c eksctl.yaml
-   ```
+           ```bash
+           eksctl create iamserviceaccount --cluster $CLUSTER -c eksctl.yaml
+           ```
 
-3. <Domain />
+        3. <Domain />
 
-4. Install Mission Control
+        4. Install Mission Control
 
-	<Helm chart={props.chart} values={props.values} valueFile={`
-	serviceAccount:
-		annotations:
-			# used by mission control for notifications / playbooks
-			eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/MissionControlRole
+            <Helm chart={props.chart} values={props.values} valueFile={`
+            serviceAccount:
+              annotations:
+                # used by mission control for notifications / playbooks
+                eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/MissionControlRole
 
-	canary-checker:
-		serviceAccount:
-			annotations:
-				# used for cloudwatch, S3 and other AWS health checks
-				eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/CanaryCheckerRole
+            canary-checker:
+              serviceAccount:
+                annotations:
+                  # used for cloudwatch, S3 and other AWS health checks
+                  eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/CanaryCheckerRole
 
-	config-db:
-		serviceAccount:
-			annotations:
-				# used to scrape AWS resources, change history via AWS CloudTrail and cost via Athena
-				eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/ConfigDBRole`}   />
+            config-db:
+              serviceAccount:
+                annotations:
+                  # used to scrape AWS resources, change history via AWS CloudTrail and cost via Athena
+                  eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/ConfigDBRole`}   />
 
-</TabItem>
+       </TabItem>
 </Tabs>
 
 </TabItem>
