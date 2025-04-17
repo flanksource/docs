@@ -117,14 +117,14 @@ const sidebars = {
               },
               label: 'AWS EKS'
             },
-            //{
-            //type: 'doc',
-            //id: 'installation/saas/gke',
-            //customProps: {
-            //icon: 'gke'
-            //},
-            //label: 'GCP GKE'
-            //},
+            {
+              type: 'doc',
+              id: 'installation/saas/gke',
+              customProps: {
+                icon: 'gke'
+              },
+              label: 'GCP GKE'
+            },
           ]
         },
         {

@@ -1,0 +1,48 @@
+---
+title: GCP GKE
+slug: installation/gke
+sidebar_custom_props:
+  icon: gke
+---
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+import GkeIam from '../_gke_iam.mdx'
+import Helm from '@site/src/components/Helm'
+
+# Install Mission Control Agent on an AWS EKS cluster
+
+:::info Prerequisites
+To install and run Mission Control you need to have the following prerequisites:
+
+- GKE 1.28+ with an Ingress Controller
+- 500-1000m of CPU and 4GB of Memory
+- Persistent Volumes with 20GB+ of storage or an external postgres database like CloudSQL
+  :::
+
+<GkeIam
+  chart="mission-control-agent"
+  values={{
+    'upstream.agent': 'YOUR_LOCAL_NAME',
+    'upstream.username': 'token',
+    'upstream.password': '',
+    'upstream.host': ''
+  }}
+/>
+
+
+## Next Steps
+
+<Cards className="border border-t border-solid border-gray-200">
+
+
+  <Card size="sm" title="Scrape GCP Resources" icon="gcp" link="/integrations/gcp/getting-started">
+          <Tag label="Integration"/>
+  </Card>
+
+  <Card size="sm" title="Scraper" icon="gcp" link="/guide/config-db/scrapers/gcp">
+          <Tag label="CRD"/>
+  </Card>
+
+
+</Cards>
