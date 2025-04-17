@@ -1,0 +1,122 @@
+import Domain from '@site/docs/partials/_domain.mdx'
+
+## Create an IAM Role
+
+Depending on how you want to use Mission Control you need to create an IAM role for mission control to use:
+
+| Use Case                                     | Role           |
+| -------------------------------------------- | ---------------|
+| Read Only Scraping                           | `roles/viewer` |
+| Playbooks to create and update GCP Resources | `roles/editor` |
+
+## Configure IAM Roles for Mission Control
+
+<Tabs>
+  <TabItem label="Workload Identity" value="Workload Identity">
+
+    <Tabs>
+      <TabItem label="Bind policy to service account" value="cli">
+        https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
+
+        1. Enable workload identity
+            ```bash
+            # The name of the GKE cluster mission control is being deployed to
+            export CLUSTER=<CLUSTER_NAME>
+            # the default namespace the mission-control helm chart uses
+            export NAMESPACE=mission-control
+            export ACCOUNT=$(aws sts get-caller-identity  --query 'Account' --output text)
+
+            gcloud container clusters update CLUSTER_NAME \
+                --location=$LOCATION \
+                --workload-pool=PROJECT_ID.svc.id.goog
+            ```
+            <p/>
+
+        1. Enable [EKS IAM Roles for Service Accounts](https://eksctl.io/usage/iamserviceaccounts/)
+
+           ```bash
+            gcloud iam service-accounts create IAM_SA_NAME \
+                --project=IAM_SA_PROJECT_ID
+           ```
+
+           <p />
+
+        2. Grant
+            ```bash
+            gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
+                --role=$ROLE \
+                --member=principal://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$PROJECT_ID.svc.id.goog/subject/ns/$NAMESPACE/sa/KSA_NAME \
+                --condition=None
+
+            ```
+
+        3. <Domain />
+
+        4. Install Mission Control
+
+            <Helm chart={props.chart}  values={props.values}/>
+
+       </TabItem>
+
+
+<TabItem label="Allow ServiceAccount to impresonate IAM Role" value="accessKey">
+
+1. Create a new IAM User and Access Key
+
+   ```bash
+    gcloud iam service-accounts create IAM_SA_NAME \
+        --project=IAM_SA_PROJECT_ID
+   ```
+	 <p/>
+
+2. Bind GCP Service Account to IAM Role
+
+    ```bash
+    gcloud projects add-iam-policy-binding IAM_SA_PROJECT_ID \
+    --member "serviceAccount:IAM_SA_NAME@IAM_SA_PROJECT_ID.iam.gserviceaccount.com" \
+    --role "ROLE_NAME"
+    ```
+3. Create an IAM allow policy that gives the Kubernetes ServiceAccount access to impersonate the IAM service account:
+
+   ```bash
+    gcloud iam service-accounts add-iam-policy-binding IAM_SA_NAME@IAM_SA_PROJECT_ID.iam.gserviceaccount.com \
+        --role roles/iam.workloadIdentityUser \
+        --member "serviceAccount:PROJECT_ID.svc.id.goog[NAMESPACE/KSA_NAME]"
+   ```
+
+4. Install Mission Control
+    <Helm chart={props.chart} values={props.values} valueFile={`
+    serviceAccount:
+        annotations:
+            # used by mission control for notifications / playbooks
+            eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/MissionControlRole
+
+    canary-checker:
+        serviceAccount:
+            annotations:
+                # used for cloudwatch, S3 and other AWS health checks
+                eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/CanaryCheckerRole
+
+    config-db:
+        serviceAccount:
+            annotations:
+                # used to scrape AWS resources, change history via AWS CloudTrail and cost via Athena
+                eks.amazonaws.com/role-arn: arn:aws:iam::$ACCOUNT:role/ConfigDBRole`}   />
+
+
+5. Annotate the Kubernetes ServiceAccount so that GKE sees the link between the service accounts:
+
+   ```bash
+    kubectl annotate serviceaccount KSA_NAME \
+        --namespace NAMESPACE \
+        iam.gke.io/gcp-service-account=IAM_SA_NAME@IAM_SA_PROJECT_ID.iam.gserviceaccount.com
+   ```
+
+
+6. <Domain/>
+</TabItem>
+</Tabs>
+
+
+</TabItem>
+</Tabs>

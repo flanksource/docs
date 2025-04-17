@@ -1,0 +1,46 @@
+---
+title: GCP GKE
+sidebar_custom_props:
+  icon: gke
+---
+
+import GcpIam from "../_gke_iam.mdx"
+import Helm from "@site/src/components/Helm"
+import AdminPassword from '@site/docs/partials/_admin-password.mdx'
+
+# Self Hosted Installation on GCP GKE
+
+:::info Prerequisites
+To install and run a self-hosted Mission Control on GCP GKE you need to have the following prerequisites:
+
+- GKE 1.28+ with an Ingress Controller
+- 500m - 2000m of CPU and 6 - 8GB of Memory (2 - 4GB if using an external DB)
+- Persistent Volumes with 20GB+ of storage or an external postgres database like CloudSQL
+- Access to create
+- (Optional) SMTP Server (For sending notifications and invites)
+:::
+
+
+
+<GcpIam values={{
+  "global.ui.host": "DOMAIN"
+}}/>
+
+
+## Next Steps
+
+<Cards className="border border-t border-solid border-gray-200">
+
+
+  <Card size="sm" title="Scrape GCP Resources" icon="aws" link="/integrations/aws/getting-started">
+          <Tag label="Integration"/>
+  </Card>
+
+  <Card size="sm" title="Scraper" icon="aws" link="/guide/config-db/scrapers/aws">
+          <Tag label="CRD"/>
+  </Card>
+
+
+</Cards>
+
+

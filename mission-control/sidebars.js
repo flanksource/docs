@@ -117,9 +117,14 @@ const sidebars = {
               },
               label: 'AWS EKS'
             },
-
-
-
+            //{
+            //type: 'doc',
+            //id: 'installation/saas/gke',
+            //customProps: {
+            //icon: 'gke'
+            //},
+            //label: 'GCP GKE'
+            //},
           ]
         },
         {
@@ -162,9 +167,12 @@ const sidebars = {
               type: 'doc',
               id: 'installation/self-hosted/eks',
               label: 'AWS EKS'
-            }
-
-
+            },
+            {
+              type: 'doc',
+              id: 'installation/self-hosted/gke',
+              label: 'GCP GKE'
+            },
           ]
         },
 

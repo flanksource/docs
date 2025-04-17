@@ -1,4 +1,4 @@
-[*.{md,js,ts,jsx}]
+[*.{md,mdx,js,ts,jsx}]
 quote_type = single
 indent_size = 2
 end_of_line = lf
