@@ -1,0 +1,33 @@
+<Fields 
+  rows={[
+    {
+      field: 'depth',
+      scheme: 'int',
+      description: 'Defines how many levels of child or parent resources to traverse.'
+    },
+    {
+      field: 'direction',
+      scheme: '`string`',
+      required: true,
+      description: 'Specifies the traversal direction in relation to the "From" resource. Can be "outgoing" (looks for child resources), "incoming" (looks for parent resources), or "all" (considers both).'
+    },
+    {
+      field: 'from',
+      scheme: '`string`',
+      required: true,
+      description: 'Specifies the starting resource type (for example, "Kubernetes::Deployment").'
+    },
+    {
+      field: 'soft',
+      scheme: 'bool',
+      description: 'When true, relates using soft relationships. Example: Deployment to Pod is hard relationship, but Node to Pod is soft relationship.'
+    },
+    {
+      field: 'to',
+      scheme: '`[]string`',
+      required: true,
+      description: 'Specifies the target resource types, determined based on the Direction. For "outgoing" these are child resources, for "incoming" these are parent resources.'
+    }
+  ]}
+/>
+

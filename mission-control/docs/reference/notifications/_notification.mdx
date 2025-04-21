@@ -1,3 +1,5 @@
+import Inhibition from '../../reference/notifications/_inhibition.mdx';
+
 <Fields withTemplates="true" rows={[
   {
     field: "events",
@@ -95,8 +97,17 @@
     description: "specify the `<namespace>/<name>` of the playbook that should be triggered when this notification fires.",
     scheme: "string",
   },
+  {
+    field: "inhibitions",
+    description: "Inhibitions are used to inhibit notifications based on the resource hierarchy.",
+    scheme: "[`[]Inhibition`](#inhibition)",
+  }
 ]}/>
 
 :::info Single Recipient
 Only one recipient can be specified
 :::
+
+## Inhibition
+
+<Inhibition />

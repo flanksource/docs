@@ -1,0 +1,20 @@
+---
+title: Inhibition
+sidebar_custom_props:
+  icon: block
+---
+
+import Inhibition from '../../../reference/notifications/_inhibition.mdx';
+
+Multiple related notifications may be generated within a short time window. Instead of sending each alert separately,
+you can use notification inhibition to inhibit notifications based on the resource hierarchy.
+
+_Example_: When a Kubernetes pod becomes unhealthy, its replicaset and the deployment will also become unhealthy.
+If you have a notification set up to alert on `config.unhealthy`, you'll receive 3 different notifications for the same cause.
+
+```yaml title="deployment-with-inhibition.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/deployment-with-inhibition.yaml
+```
+
+<Inhibition />
+
+
