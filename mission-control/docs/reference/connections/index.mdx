@@ -93,3 +93,8 @@ spec:
 | properties   | Property fields                                       | map[string]string                              |              |
 | insecure_tls | Allow insecure tls                                    | bool                                           |              |
 
+## Permission
+
+To use a connection, a principal needs to have the `read` permission on the connection.
+
+```yaml title="connection-permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/playbook-connection.yaml

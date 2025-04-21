@@ -77,9 +77,7 @@ The parameters to the playbooks are available in the [Context](reference/playboo
 ![Playbook Action Logs](/img/playbook-action-logs.png)
 
 
-### Runners
-
-## Approvals
+## Approval
 
 Playbooks can require approval before execution by configuring an `approval` block:
 
@@ -103,5 +101,34 @@ spec:
 | `approvers.[]people` | Login or id of a person| `People` | `false`  |
 | `approvers.[]teams` | Name or id of a team | `Team` | `false`  |
 
+## Permissions
 
+Playbook permissions control who can perform various actions on playbooks.
 
+```yaml title="playbook-permissions.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/allow-person-playbook.yaml
+```
+
+### Required Permissions
+
+To run a playbook, a principal (user, team, or service account) needs:
+1. The `playbook:run` permission on the playbook
+2. A `read` permission on the resource the playbook targets
+
+For example, to run a playbook that scales a Kubernetes deployment, the principal needs:
+- `playbook:run` permission on the scaling playbook
+- `read` permission on the target Kubernetes deployment resource
+
+### Permission Types
+
+| Permission | Description |
+|------------|-------------|
+| `playbook:run` | Run a playbook |
+| `playbook:approve` | Approve a playbook run |
+| `playbook:cancel` | Cancel a running playbook |
+
+### Permission Inheritance
+
+:::info
+When a playbook triggers another playbook, the permissions are evaluated using the playbook's identity, not the original user who initiated the first playbook. 
+This means the triggering playbook must have permission to run the target playbook and to read the resources.
+:::
