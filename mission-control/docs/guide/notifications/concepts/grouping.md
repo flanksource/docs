@@ -16,8 +16,8 @@ Grouping can be done via
 - `type` (type of the config)
 - `description`
 - `status_reason`
-- `labels` in the format `labels:app`
-- `tags` in the format `tag:namespace`
+- `label` in the format `label:app`
+- `tag` in the format `tag:namespace`
 
 ```yaml title="" file=<rootDir>/modules/mission-control/fixtures/notifications/config-health.yaml {11-12}
 
