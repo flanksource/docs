@@ -16,8 +16,8 @@ Depending on how you want to use Mission Control you need to create an IAM role 
 
     <Tabs>
       <TabItem label="Bind policy to service account" value="federation">
-        
-        You can also refer the official docs: https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
+
+        You can also refer the official docs for [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
 
         1. Enable workload identity
             ```bash
@@ -27,6 +27,8 @@ Depending on how you want to use Mission Control you need to create an IAM role 
             export NAMESPACE=mission-control
             # GCP Project ID
             export PROJECT_ID=gcp-project-id
+            # GCP Project Number
+            export PROJECT_NUMBER=gcp-project-number
             # Location of GKE Cluster
             LOCATION=us-east1
 
@@ -38,12 +40,22 @@ Depending on how you want to use Mission Control you need to create an IAM role 
 
         2. Bind IAM Policy
 
-           The `$KSA_NAME` refers to the Kubernetes service account name. In our case, we need to bind to 3 service accounts: `mission-control`, `canary-checker` and `config-db`
+           The `$KSA_NAME` refers to the Kubernetes service account name. In our case, we need to bind to 3 service accounts: `mission-control-sa`, `canary-checker-sa` and `config-db-sa`
 
             ```bash
             gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
                 --role=$ROLE \
-                --member=principal://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$PROJECT_ID.svc.id.goog/subject/ns/$NAMESPACE/sa/$KSA_NAME \
+                --member=principal://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$PROJECT_ID.svc.id.goog/subject/ns/$NAMESPACE/sa/mission-control-sa \
+                --condition=None
+
+            gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
+                --role=$ROLE \
+                --member=principal://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$PROJECT_ID.svc.id.goog/subject/ns/$NAMESPACE/sa/canary-checker-sa \
+                --condition=None
+
+            gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
+                --role=$ROLE \
+                --member=principal://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$PROJECT_ID.svc.id.goog/subject/ns/$NAMESPACE/sa/config-db-sa \
                 --condition=None
             ```
             <p/>
