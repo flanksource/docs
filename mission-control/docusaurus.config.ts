@@ -83,7 +83,416 @@ export default async function createConfigAsync() {
               to: '/guide/topology',
               from: '/topology',
             },
-
+            
+            // Added redirects for missing links
+            {
+              to: '/guide/canary-checker',
+              from: [
+                '/canary-checker',
+                '/docs/guide/canary-checker/overview',
+                '/docs/guide/canary-checker/examples/concepts/expressions/display-formatting',
+                '/docs/guide/canary-checker/examples/concepts/expressions/health-evaluation',
+                '/docs/guide/canary-checker/examples/concepts/expressions/transforms',
+                '/docs/guide/canary-checker/examples/concepts/metrics'
+              ],
+            },
+            {
+              to: '/guide/canary-checker/reference',
+              from: [
+                '/docs/reference/canary-checker/reference/alert-manager',
+                '/docs/reference/canary-checker/reference/aws-cloudwatch',
+                '/docs/reference/canary-checker/reference/aws-config',
+                '/docs/reference/canary-checker/reference/aws-config-rule',
+                '/docs/reference/canary-checker/reference/catalog',
+                '/docs/reference/canary-checker/reference/containerd',
+                '/docs/reference/canary-checker/reference/dns',
+                '/docs/reference/canary-checker/reference/elasticsearch',
+                '/docs/reference/canary-checker/reference/exec',
+                '/docs/reference/canary-checker/reference/folder',
+                '/docs/reference/canary-checker/reference/gcs-database-backup',
+                '/docs/reference/canary-checker/reference/git',
+                '/docs/reference/canary-checker/reference/helm',
+                '/docs/reference/canary-checker/reference/http',
+                '/docs/reference/canary-checker/reference/icmp',
+                '/docs/reference/canary-checker/reference/jmeter',
+                '/docs/reference/canary-checker/reference/junit',
+                '/docs/reference/canary-checker/reference/kubernetes',
+                '/docs/reference/canary-checker/reference/kubernetes-resource',
+                '/docs/reference/canary-checker/reference/ldap',
+                '/docs/reference/canary-checker/reference/mongo',
+                '/docs/reference/canary-checker/reference/prometheus',
+                '/docs/reference/canary-checker/reference/redis',
+                '/docs/reference/canary-checker/reference/restic',
+                '/docs/reference/canary-checker/reference/s3-protocol',
+                '/docs/reference/canary-checker/reference/sql',
+                '/docs/reference/canary-checker/reference/tcp'
+              ],
+            },
+            {
+              to: '/guide/canary-checker/concepts/metrics',
+              from: [
+                '/docs/concepts/metrics',
+                '/docs/guides/canary-checker/concepts/metrics'
+              ],
+            },
+            {
+              to: '/guide/canary-checker/reference/concepts/expressions/display-formatting',
+              from: [
+                '/docs/guide/canary-checker/reference/concepts/expressions/display-formatting',
+                '/docs/guide/topology/lookups/concepts/expressions/display-formatting'
+              ],
+            },
+            {
+              to: '/guide/canary-checker/reference/concepts/expressions/health-evaluation',
+              from: [
+                '/docs/guide/canary-checker/reference/concepts/expressions/health-evaluation'
+              ],
+            },
+            {
+              to: '/guide/canary-checker/reference/concepts/expressions/transforms',
+              from: [
+                '/docs/guide/canary-checker/reference/concepts/expressions/transforms',
+                '/docs/guide/topology/lookups/concepts/expressions/transforms'
+              ],
+            },
+            {
+              to: '/guide/canary-checker/reference/concepts/metrics',
+              from: [
+                '/docs/guide/canary-checker/reference/concepts/metrics'
+              ],
+            },
+            
+            // Config DB redirects
+            {
+              to: '/guide/config-db',
+              from: [
+                '/config-db',
+                '/docs/config-db'
+              ],
+            },
+            {
+              to: '/guide/config-db/getting-started',
+              from: [
+                '/docs/guide/config-db/getting-started'
+              ],
+            },
+            {
+              to: '/guide/config-db/concepts/plugins/relationships',
+              from: [
+                '/docs/guide/config-db/concepts/plugins/relationships'
+              ],
+            },
+            {
+              to: '/guide/config-db/scrapers/gcp',
+              from: [
+                '/docs/guide/config-db/scrapers/gcp'
+              ],
+            },
+            
+            // Playbooks redirects
+            {
+              to: '/guide/playbooks/actions/ai/context',
+              from: [
+                '/docs/guide/playbooks/actions/ai/context'
+              ],
+            },
+            {
+              to: '/guide/playbooks/actions/azure_devops_pipeline/context',
+              from: [
+                '/docs/guide/playbooks/actions/azure_devops_pipeline/context'
+              ],
+            },
+            {
+              to: '/guide/playbooks/actions/exec/context',
+              from: [
+                '/docs/guide/playbooks/actions/exec/context'
+              ],
+            },
+            {
+              to: '/guide/playbooks/actions/github/context',
+              from: [
+                '/docs/guide/playbooks/actions/github/context'
+              ],
+            },
+            {
+              to: '/guide/playbooks/actions/gitops/context',
+              from: [
+                '/docs/guide/playbooks/actions/gitops/context'
+              ],
+            },
+            {
+              to: '/guide/playbooks/actions/http/context',
+              from: [
+                '/docs/guide/playbooks/actions/http/context'
+              ],
+            },
+            {
+              to: '/guide/playbooks/actions/notification/context',
+              from: [
+                '/docs/guide/playbooks/actions/notification/context'
+              ],
+            },
+            {
+              to: '/guide/playbooks/actions/pod/context',
+              from: [
+                '/docs/guide/playbooks/actions/pod/context'
+              ],
+            },
+            {
+              to: '/guide/playbooks/actions/sql/context',
+              from: [
+                '/docs/guide/playbooks/actions/sql/context'
+              ],
+            },
+            {
+              to: '/guide/playbooks/reference/env-vars',
+              from: [
+                '/docs/guide/playbooks/reference/env-vars'
+              ],
+            },
+            {
+              to: '/guide/playbooks/concepts/runners',
+              from: [
+                '/guide/playbooks/concepts/runners'
+              ],
+            },
+            
+            // Installation and reference redirects
+            {
+              to: '/installation/deployment-models',
+              from: [
+                '/docs/installation/deployment-models'
+              ],
+            },
+            {
+              to: '/installation/saas/fully-hosted',
+              from: [
+                '/docs/installation/saas/fully-hosted'
+              ],
+            },
+            {
+              to: '/installation/self-hosted/ingress',
+              from: [
+                '/docs/installation/self-hosted/ingress'
+              ],
+            },
+            {
+              to: '/integration',
+              from: [
+                '/docs/integration',
+                '/integrations'
+              ],
+            },
+            {
+              to: '/integration/aws',
+              from: [
+                '/docs/integration/aws'
+              ],
+            },
+            {
+              to: '/integrations/kubernetes/catalog',
+              from: [
+                '/docs/integrations/kubernetes/catalog'
+              ],
+            },
+            {
+              to: '/integrations/kubernetes/flux',
+              from: [
+                '/docs/integrations/kubernetes/flux'
+              ],
+            },
+            {
+              to: '/integrations/flux/azure-devops',
+              from: [
+                '/docs/integrations/flux/azure-devops'
+              ],
+            },
+            {
+              to: '/integrations/flux/github',
+              from: [
+                '/docs/integrations/flux/github'
+              ],
+            },
+            {
+              to: '/integrations/flux/gitlab',
+              from: [
+                '/docs/integrations/flux/gitlab'
+              ],
+            },
+            {
+              to: '/integrations/gcp/getting-started',
+              from: [
+                '/docs/integrations/gcp/getting-started'
+              ],
+            },
+            
+            // Guide and reference redirects
+            {
+              to: '/guide/reference/http',
+              from: [
+                '/docs/guide/reference/http'
+              ],
+            },
+            {
+              to: '/guide/reference/playbooks/context',
+              from: [
+                '/docs/guide/reference/playbooks/context'
+              ],
+            },
+            {
+              to: '/guide/reference/pod',
+              from: [
+                '/docs/guide/reference/pod'
+              ],
+            },
+            {
+              to: '/guide/notifications',
+              from: [
+                '/guide/notifications',
+                '/reference/guide/notifications/'
+              ],
+            },
+            {
+              to: '/guide/topology/concepts/templating',
+              from: [
+                '/guide/topology/concepts/templating'
+              ],
+            },
+            {
+              to: '/guide/config-db/concepts/tags',
+              from: [
+                '/guide/config-db/concepts/tags'
+              ],
+            },
+            {
+              to: '/guide/config-db/concepts/transform',
+              from: [
+                '/guide/config-db/concepts/transform'
+              ],
+            },
+            
+            // Reference redirects
+            {
+              to: '/reference/config-db/config-types/file/',
+              from: [
+                '/docs/reference/config-db/config-types/file/'
+              ],
+            },
+            {
+              to: '/reference/helm/Pganalyze.com',
+              from: [
+                '/docs/reference/helm/Pganalyze.com'
+              ],
+            },
+            {
+              to: '/reference/helm/mission-control-agent',
+              from: [
+                '/docs/reference/helm/mission-control-agent'
+              ],
+            },
+            {
+              to: '/reference/config-db/changes',
+              from: [
+                '/reference/config-db/changes'
+              ],
+            },
+            {
+              to: '/reference/config-db/properties',
+              from: [
+                '/reference/config-db/properties'
+              ],
+            },
+            {
+              to: '/reference/connections',
+              from: [
+                '/reference/connections'
+              ],
+            },
+            {
+              to: '/reference/connections/aws',
+              from: [
+                '/reference/connections/aws'
+              ],
+            },
+            {
+              to: '/reference/connections/azure',
+              from: [
+                '/reference/connections/azure'
+              ],
+            },
+            {
+              to: '/reference/connections/gcp',
+              from: [
+                '/reference/connections/gcp'
+              ],
+            },
+            {
+              to: '/reference/connections/kubernetes',
+              from: [
+                '/reference/connections/kubernetes',
+                '/reference/connections/kubernetes/'
+              ],
+            },
+            {
+              to: '/reference/env-var',
+              from: [
+                '/reference/env-var'
+              ],
+            },
+            {
+              to: '/reference/login',
+              from: [
+                '/reference/login'
+              ],
+            },
+            {
+              to: '/reference/notifications/template_vars',
+              from: [
+                '/reference/notifications/template_vars'
+              ],
+            },
+            {
+              to: '/reference/old-home',
+              from: [
+                '/reference/old-home'
+              ],
+            },
+            {
+              to: '/reference/permissions/actions',
+              from: [
+                '/reference/permissions/actions'
+              ],
+            },
+            {
+              to: '/reference/rbac',
+              from: [
+                '/reference/rbac'
+              ],
+            },
+            {
+              to: '/reference/scripting/cel',
+              from: [
+                '/reference/scripting/cel'
+              ],
+            },
+            {
+              to: '/reference/types',
+              from: [
+                '/reference/types'
+              ],
+            },
+            {
+              to: '/topology',
+              from: [
+                '/topology'
+              ],
+            },
+            {
+              to: '/registry/azure',
+              from: [
+                '/docs/registry/azure'
+              ],
+            }
           ],
 
         }],
