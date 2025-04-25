@@ -67,22 +67,23 @@ export default async function createConfigAsync() {
             //   from: '/guide/canary-checker/reference/s3-bucket',
             // },
 
-            {
-              to: '/guide/canary-checker',
-              from: '/canary-checker',
-            },
-            {
-              to: '/guide/playbooks',
-              from: '/playbooks',
-            },
-            {
-              to: '/guide/notifications/',
-              from: '/notifications',
-            },
-            {
-              to: '/guide/topology',
-              from: '/topology',
-            },
+            // These redirects are no longer needed as we've created the source files
+            // {
+            //   to: '/guide/canary-checker',
+            //   from: '/canary-checker',
+            // },
+            // {
+            //   to: '/guide/playbooks',
+            //   from: '/playbooks',
+            // },
+            // {
+            //   to: '/guide/notifications/',
+            //   from: '/notifications',
+            // },
+            // {
+            //   to: '/guide/topology',
+            //   from: '/topology',
+            // },
 
           ],
 
