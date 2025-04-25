@@ -1,10 +1,10 @@
 import Domain from '@site/docs/partials/_domain.mdx'
 
-## Create an IAM Role
+## Choosing an IAM Role
 
-Depending on how you want to use Mission Control you need to create an IAM role for mission control to use:
+Depending on usecase, Mission Control can be associated with the following GCP IAM roles:
 
-| Use Case                                     | Role           |
+| Use Case                                     | Role Name      |
 | -------------------------------------------- | ---------------|
 | Read Only Scraping                           | `roles/viewer` |
 | Playbooks to create and update GCP Resources | `roles/editor` |
@@ -15,7 +15,7 @@ Depending on how you want to use Mission Control you need to create an IAM role 
   <TabItem label="Workload Identity" value="Workload Identity">
 
     <Tabs>
-      <TabItem label="Bind policy to service account" value="federation">
+      <TabItem label="Assign Role to Kubernetes service account principle" value="federation">
 
         You can also refer the official docs for [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
 
@@ -23,40 +23,33 @@ Depending on how you want to use Mission Control you need to create an IAM role 
             ```bash
             # The name of the GKE cluster mission control is being deployed to
             export CLUSTER=<CLUSTER_NAME>
-            # the default namespace the mission-control helm chart uses
-            export NAMESPACE=mission-control
             # GCP Project ID
             export PROJECT_ID=gcp-project-id
             # GCP Project Number
             export PROJECT_NUMBER=gcp-project-number
             # Location of GKE Cluster
             LOCATION=us-east1
+            # the default namespace the mission-control helm chart uses
+            export NAMESPACE=mission-control
 
+            # enable workload identity in the host cluster
             gcloud container clusters update $CLUSTER \
                 --location=$LOCATION \
-                --workload-pool=PROJECT_ID.svc.id.goog
+                --workload-pool=$PROJECT_ID.svc.id.goog
             ```
             <p/>
 
         2. Bind IAM Policy
 
-           The `$KSA_NAME` refers to the Kubernetes service account name. In our case, we need to bind to 3 service accounts: `mission-control-sa`, `canary-checker-sa` and `config-db-sa`
+           `$KSA_NAME` refers to the Kubernetes service account name. In our case, we need to bind to 3 service accounts: `mission-control-sa`, `canary-checker-sa` and `config-db-sa`
 
             ```bash
-            gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
-                --role=$ROLE \
-                --member=principal://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$PROJECT_ID.svc.id.goog/subject/ns/$NAMESPACE/sa/mission-control-sa \
-                --condition=None
-
-            gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
-                --role=$ROLE \
-                --member=principal://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$PROJECT_ID.svc.id.goog/subject/ns/$NAMESPACE/sa/canary-checker-sa \
-                --condition=None
-
-            gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
-                --role=$ROLE \
-                --member=principal://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$PROJECT_ID.svc.id.goog/subject/ns/$NAMESPACE/sa/config-db-sa \
-                --condition=None
+            for KSA_NAME in "mission-control-sa" "canary-checker-sa" "config-db-sa"; do
+                gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
+                    --role=$ROLE_NAME \
+                    --member=principal://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$PROJECT_ID.svc.id.goog/subject/ns/$NAMESPACE/sa/$KSA_NAME \
+                    --condition=None
+            done
             ```
             <p/>
 
@@ -69,53 +62,75 @@ Depending on how you want to use Mission Control you need to create an IAM role 
        </TabItem>
 
 
-<TabItem label="Allow ServiceAccount to impresonate IAM Role" value="impersonate">
+<TabItem label="Allow Kubernetes service account to impersonate GCP service account" value="impersonate">
 
 You can also refer the official docs: https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
-1. Create a new IAM ServiceAccount
+1. Enable workload identity in the host cluster
+    ```bash
+    # The name of the GKE cluster mission control is being deployed to
+    export CLUSTER=<CLUSTER_NAME>
+    # GCP Project ID
+    export PROJECT_ID=gcp-project-id
+    # Location of GKE Cluster
+    LOCATION=us-east1
+    # the default namespace the mission-control helm chart uses
+    export NAMESPACE=mission-control
+    # IAM service account name
+    export IAM_SA_NAME=mission-control
+
+    # enable workload identity in the host cluster
+    gcloud container clusters update $CLUSTER \
+        --location=$LOCATION \
+        --workload-pool=$PROJECT_ID.svc.id.goog
+    ```
+    <p/>
+
+2. Create a new IAM ServiceAccount
 
    ```bash
     gcloud iam service-accounts create $IAM_SA_NAME \
-        --project=$IAM_SA_PROJECT_ID
+        --project=$PROJECT_ID
    ```
 	 <p/>
 
-2. Bind GCP Service Account to IAM Role
+3. Bind GCP Service Account to IAM Role
 
     ```bash
-    gcloud projects add-iam-policy-binding $IAM_SA_PROJECT_ID \
-    --member "serviceAccount:$IAM_SA_NAME@IAM_SA_PROJECT_ID.iam.gserviceaccount.com" \
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member "serviceAccount:$IAM_SA_NAME@PROJECT_ID.iam.gserviceaccount.com" \
     --role "$ROLE_NAME"
     ```
-3. Create an IAM allow policy that gives the Kubernetes ServiceAccount access to impersonate the IAM service account:
+4. Create an IAM allow policy that gives the Kubernetes service account access to impersonate the IAM service account:
 
    The `$KSA_NAME` refers to the Kubernetes service account name. In our case, we need to bind to 3 service accounts: `mission-control`, `canary-checker` and `config-db`
 
    ```bash
-    gcloud iam service-accounts add-iam-policy-binding IAM_SA_NAME@IAM_SA_PROJECT_ID.iam.gserviceaccount.com \
-        --role roles/iam.workloadIdentityUser \
-        --member "serviceAccount:$PROJECT_ID.svc.id.goog[$NAMESPACE/$KSA_NAME]"
+    for KSA_NAME in "mission-control-sa" "canary-checker-sa" "config-db-sa"; do
+        gcloud iam service-accounts add-iam-policy-binding IAM_SA_NAME@PROJECT_ID.iam.gserviceaccount.com \
+            --role roles/iam.workloadIdentityUser \
+            --member "serviceAccount:$PROJECT_ID.svc.id.goog[$NAMESPACE/$KSA_NAME]"
+    done
    ```
 
-4. Install Mission Control
+5. Install Mission Control
     <Helm chart={props.chart} values={props.values} valueFile={`
     serviceAccount:
       annotations:
-        iam.gke.io/gcp-service-account=IAM_SA_NAME@IAM_SA_PROJECT_ID.iam.gserviceaccount.com
+        iam.gke.io/gcp-service-account=IAM_SA_NAME@PROJECT_ID.iam.gserviceaccount.com
 
     canary-checker:
       serviceAccount:
         annotations:
-          iam.gke.io/gcp-service-account=IAM_SA_NAME@IAM_SA_PROJECT_ID.iam.gserviceaccount.com
+          iam.gke.io/gcp-service-account=IAM_SA_NAME@PROJECT_ID.iam.gserviceaccount.com
 
     config-db:
       serviceAccount:
         annotations:
-          iam.gke.io/gcp-service-account=IAM_SA_NAME@IAM_SA_PROJECT_ID.iam.gserviceaccount.com
+          iam.gke.io/gcp-service-account=IAM_SA_NAME@PROJECT_ID.iam.gserviceaccount.com
     `}/>
 
 
-5. <Domain/>
+6. <Domain/>
 </TabItem>
 </Tabs>
 
