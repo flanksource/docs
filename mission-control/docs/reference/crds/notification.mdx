@@ -1,0 +1,230 @@
+---
+title: Notification CRD
+---
+
+# Notification
+
+The `Notification` CRD allows you to configure notification channels and rules for alerts, incidents, and other events in Mission Control.
+
+## Definition
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: example-notification
+spec:
+  # Type of notification channel
+  type: slack
+  
+  # Selector for events to match
+  selector:
+    severity: critical
+    labels:
+      service: api
+      
+  # Channel-specific configuration
+  slack:
+    channel: "#alerts"
+    username: "Mission Control"
+    icon: ":warning:"
+    
+  # Templates for notification content
+  templates:
+    title: "Critical Alert: {{.alert.name}}"
+    body: "Service: {{.component.name}}\nStatus: {{.status}}\nMessage: {{.message}}"
+```
+
+## Schema
+
+The `Notification` resource supports the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.type` | Type of notification channel (slack, email, teams, webhook, etc.) |
+| `spec.selector` | Selector for matching events to notify about |
+| `spec.selector.severity` | Severity level to match (critical, high, medium, low) |
+| `spec.selector.status` | Status to match (healthy, unhealthy, warning, etc.) |
+| `spec.selector.labels` | Labels to match on events |
+| `spec.selector.components` | Components to match |
+| `spec.selector.expression` | CEL expression for complex matching |
+| `spec.templates` | Templates for notification content |
+| `spec.templates.title` | Template for notification title |
+| `spec.templates.body` | Template for notification body |
+| `spec.templates.button` | Template for notification action button |
+| `spec.templates.footer` | Template for notification footer |
+| `spec.slack` | Slack-specific configuration |
+| `spec.email` | Email-specific configuration |
+| `spec.teams` | Microsoft Teams-specific configuration |
+| `spec.webhook` | Webhook-specific configuration |
+| `spec.pagerduty` | PagerDuty-specific configuration |
+| `spec.connection` | Reference to a Connection resource |
+| `spec.throttle` | Throttling configuration |
+| `spec.throttle.period` | Time period for throttling (e.g., 1h, 24h) |
+| `spec.throttle.count` | Maximum number of notifications in the period |
+
+## Notification Channel Types
+
+The Notification CRD supports various channel types:
+
+| Type | Description |
+|------|-------------|
+| `slack` | Slack channel notifications |
+| `email` | Email notifications |
+| `teams` | Microsoft Teams notifications |
+| `webhook` | Custom webhook notifications |
+| `pagerduty` | PagerDuty incidents |
+| `sms` | SMS text messages |
+| `discord` | Discord notifications |
+| `telegram` | Telegram messages |
+
+## Examples
+
+### Slack Channel for Critical Alerts
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: critical-alerts-slack
+spec:
+  type: slack
+  selector:
+    severity: critical
+  slack:
+    channel: "#critical-alerts"
+    username: "Alert Bot"
+    icon: ":rotating_light:"
+  templates:
+    title: ":red_circle: CRITICAL ALERT: {{.alert.name}}"
+    body: |
+      *Component:* {{.component.name}}
+      *Status:* {{.status}}
+      *Time:* {{.time | formatTime "Jan 02, 15:04:05 MST"}}
+      *Details:* {{.message}}
+      
+      {{if .runbook}}*Runbook:* {{.runbook}}{{end}}
+```
+
+### Email Notifications for Production Components
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: production-email-alerts
+spec:
+  type: email
+  selector:
+    labels:
+      environment: production
+  email:
+    to:
+      - "ops-team@example.com"
+      - "{{.component.owner}}@example.com"
+    from: "mission-control@example.com"
+    subject: "[{{.severity | upper}}] Alert: {{.alert.name}}"
+  templates:
+    body: |
+      <h2>Alert: {{.alert.name}}</h2>
+      <p><strong>Component:</strong> {{.component.name}}</p>
+      <p><strong>Status:</strong> {{.status}}</p>
+      <p><strong>Time:</strong> {{.time | formatTime "Jan 02, 15:04:05 MST"}}</p>
+      <p><strong>Details:</strong> {{.message}}</p>
+      
+      {{if .dashboard}}<p><a href="{{.dashboard}}">View Dashboard</a></p>{{end}}
+  throttle:
+    period: 1h
+    count: 10
+```
+
+### Microsoft Teams Notification with Adaptive Card
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: teams-notifications
+spec:
+  type: teams
+  selector:
+    severity: 
+      - high
+      - critical
+  teams:
+    webhookUrl: "https://outlook.office.com/webhook/..."
+  templates:
+    title: "{{.severity | title}} Alert: {{.alert.name}}"
+    body: |
+      {
+        "type": "AdaptiveCard",
+        "body": [
+          {
+            "type": "TextBlock",
+            "size": "Medium",
+            "weight": "Bolder",
+            "text": "{{.severity | title}} Alert: {{.alert.name}}"
+          },
+          {
+            "type": "FactSet",
+            "facts": [
+              {
+                "title": "Component",
+                "value": "{{.component.name}}"
+              },
+              {
+                "title": "Status",
+                "value": "{{.status}}"
+              },
+              {
+                "title": "Time",
+                "value": "{{.time | formatTime 'Jan 02, 15:04:05 MST'}}"
+              }
+            ]
+          },
+          {
+            "type": "TextBlock",
+            "text": "{{.message}}",
+            "wrap": true
+          }
+        ],
+        "actions": [
+          {
+            "type": "Action.OpenUrl",
+            "title": "View Component",
+            "url": "{{.component.url}}"
+          }
+        ],
+        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        "version": "1.2"
+      }
+```
+
+### PagerDuty Integration with Connection
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: pagerduty-critical
+spec:
+  type: pagerduty
+  selector:
+    severity: critical
+    expression: "component.labels.tier == 'production' && status == 'unhealthy'"
+  connection: pagerduty-service
+  templates:
+    title: "{{.component.name}} - {{.alert.name}}"
+    body: "{{.message}}"
+  pagerduty:
+    severity: critical
+    component: "{{.component.name}}"
+    group: "{{.component.labels.team}}"
+    class: "{{.alert.labels.type}}"
+```
+
+## See Also
+
+- [NotificationSilence CRD](./notification-silence.mdx)
+- [Connection CRD](./connection.mdx)
+- [Incident Management](../../incidents/index.mdx)
