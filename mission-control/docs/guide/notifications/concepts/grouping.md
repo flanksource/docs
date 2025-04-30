@@ -19,11 +19,6 @@ Grouping can be done via
 - `labels` in the format `labels:app`
 - `tags` in the format `tag:namespace`
 
-:::info
-Grouping only works with waitFor.
-Hence, a waitFor duration is required
-:::
-
 ```yaml title="" file=<rootDir>/modules/mission-control/fixtures/notifications/config-health.yaml {11-12}
 
 ```

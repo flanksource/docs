@@ -63,6 +63,11 @@ import Inhibition from '../../reference/notifications/_inhibition.mdx';
     scheme: "[]string"
   },
   {
+    field: "groupByInterval",
+    description: "The maximum duration for which notifications will be grouped together before creating a new group. _(Default: 24h)_",
+    scheme: "duration"
+  },
+  {
     field: "title",
     description: "Channel dependent e.g. subject for email",
     scheme: "GoTemplate",
@@ -108,6 +113,6 @@ import Inhibition from '../../reference/notifications/_inhibition.mdx';
 Only one recipient can be specified
 :::
 
-## Inhibition
+### Inhibition
 
 <Inhibition />
