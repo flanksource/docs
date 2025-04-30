@@ -4,14 +4,14 @@ sidebar_custom_props:
   icon: group
 ---
 
-Multiple related notifications may be generated within a short time window. Instead of sending each alert separately,
-you can use notification grouping to consolidate multiple events into a single message.
+Mission Control may generate multiple related notifications within a short time window. Instead of sending each alert,
+you can use notification grouping to merge multiple events into a single message.
 
-_Example_: When a multiple Helm releases are failing to upgrade because of common dependency not being available,
-you can use notification grouping to consolidate the notifications for all the affected helm releases into a single message.
+_Example_: When multiple Helm releases fail to upgrade because of a common unavailable dependency,
+you can use notification grouping to merge the notifications for all the affected helm releases into a single message.
 
-The `groupBy` parameter allows you to define how notifications should be grouped.
-Grouping can be done via
+The `groupBy` parameter lets you define how to group notifications.
+You can group by:
 
 - `type` (type of the config)
 - `description`
