@@ -1,3 +1,5 @@
+import Link from '@docusaurus/Link';
+
 Resource Selectors are used in multiple places including:
 
 - Attaching components to a topology
@@ -50,36 +52,44 @@ Supported fields for:
 | `updated_at` | `datetime` |
 | `deleted_at` | `datetime` |
 
-- [Components](/reference/topology/components):
+{!props.hideComponent && (
+<Link to="/reference/topology/components">Components</Link>
+)}
 
-| Field         | Type       |
-| ------------- | ---------- |
-| `name`        | `string`   |
-| `topology_id` | `string`   |
-| `namespace`   | `string`   |
-| `type`        | `string`   |
-| `status`      | `string`   |
-| `labels`      | `json`     |
-| `health`      | `string`   |
-| `agent`       | `string`   |
-| `created_at`  | `datetime` |
-| `updated_at`  | `datetime` |
-| `deleted_at`  | `datetime` |
+{!props.hideComponent && (
+<Fields rows={[
+  {field: "name", scheme: "string"},
+  {field: "topology_id", scheme: "string"},
+  {field: "namespace", scheme: "string"},
+  {field: "type", scheme: "string"},
+  {field: "status", scheme: "string"},
+  {field: "labels", scheme: "json"},
+  {field: "health", scheme: "string"},
+  {field: "agent", scheme: "string"},
+  {field: "created_at", scheme: "datetime"},
+  {field: "updated_at", scheme: "datetime"},
+  {field: "deleted_at", scheme: "datetime"},
+]}/>
 
-- [Health Checks](/reference/canary-checker/check):
+)}
 
-| Field        | Type       |
-| ------------ | ---------- |
-| `name`       | `string`   |
-| `canary_id`  | `string`   |
-| `namespace`  | `string`   |
-| `type`       | `string`   |
-| `status`     | `string`   |
-| `health`     | `string`   |
-| `labels`     | `json`     |
-| `agent`      | `string`   |
-| `created_at` | `datetime` |
-| `updated_at` | `datetime` |
-| `deleted_at` | `datetime` |
+{!props.hideCheck && (
+<CommonLink to="/reference/canary-checker/check">Health Checks</CommonLink>
+)}
 
+{!props.hideCheck && (
+<Fields rows={[
+  {field: "name", scheme: "string"},
+  {field: "canary_id", scheme: "string"},
+  {field: "namespace", scheme: "string"},
+  {field: "type", scheme: "string"},
+  {field: "status", scheme: "string"},
+  {field: "health", scheme: "string"},
+  {field: "labels", scheme: "json"},
+  {field: "agent", scheme: "string"},
+  {field: "created_at", scheme: "datetime"},
+  {field: "updated_at", scheme: "datetime"},
+  {field: "deleted_at", scheme: "datetime"},
+]}/>
 
+)}
