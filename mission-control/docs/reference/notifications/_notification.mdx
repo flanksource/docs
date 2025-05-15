@@ -1,3 +1,5 @@
+import Inhibition from '../../reference/notifications/_inhibition.mdx';
+
 <Fields withTemplates="true" rows={[
   {
     field: "events",
@@ -61,6 +63,11 @@
     scheme: "[]string"
   },
   {
+    field: "groupByInterval",
+    description: "The maximum duration for which notifications will be grouped together before creating a new group. _(Default: 24h)_",
+    scheme: "duration"
+  },
+  {
     field: "title",
     description: "Channel dependent e.g. subject for email",
     scheme: "GoTemplate",
@@ -95,8 +102,17 @@
     description: "specify the `<namespace>/<name>` of the playbook that should be triggered when this notification fires.",
     scheme: "string",
   },
+  {
+    field: "inhibitions",
+    description: "Inhibitions are used to inhibit notifications based on the resource hierarchy.",
+    scheme: "[`[]Inhibition`](#inhibition)",
+  }
 ]}/>
 
 :::info Single Recipient
 Only one recipient can be specified
 :::
+
+### Inhibition
+
+<Inhibition />

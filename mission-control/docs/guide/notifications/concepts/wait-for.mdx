@@ -52,29 +52,3 @@ spec:
   //highlight-next-line
   waitForEvalPeriod: 30s
 ```
-:::
-
-### Grouping Notifications
-
-Multiple related notifications may be generated within a short time window. Instead of sending each alert separately, 
-you can use notification grouping to consolidate multiple events into a single message.
-
-_Example_: When a Kubernetes deployment becomes unhealthy, its replicaset and associated pods will also become unhealthy. 
-If you have a notification set up to alert on `config.unhealthy`, you'll receive 3 different notifications at the very least for the same cause.
-
-The `groupBy` parameter allows you to define how notifications should be grouped. 
-Grouping can be done via 
-- `type` (type of the config)
-- `description`
-- `status_reason`
-- `labels` in the format `labels:app`
-- `tags` in the format `tag:namespace`
-
-:::info
-Grouping only works with waitFor. 
-Hence, a waitFor duration is required 
-:::
-
-
-```yaml title="" file=<rootDir>/modules/mission-control/fixtures/notifications/config-health.yaml {11-12}
-```

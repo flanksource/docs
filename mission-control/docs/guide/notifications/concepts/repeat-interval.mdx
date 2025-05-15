@@ -4,7 +4,7 @@ sidebar_custom_props:
   icon: dedupe
 ---
 
-The repeat interval determines the duration between subsequent notifications after an initial successful delivery.
+The repeat interval determines the duration between subsequent related notifications after an initial successful delivery. 
 
 ```yaml title="deployment-failed.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -14,24 +14,33 @@ metadata:
   namespace: default
 spec:
   events:
-    - config.healthy
     - config.unhealthy
-    - config.warning
-    - config.unknown
   filter: config.type == "Kubernetes::Deployment"
   to:
     email: alerts@acme.com
   repeatInterval: 2h
+  groupBy:
+    - type
+  groupByInterval: 12h
 ```
 
-## Grouping Per Resource per Source Event
+With the above notification in place, if a Kubernetes Deployment's health fluctuates between `healthy` and `unhealthy` multiple times within a 2-hour window, the system only sends one notification in that period.
 
-The `repeatInterval` applies per unique resource per unique event source. This prevents duplicate notifications when the same resource triggers the same event type multiple times within the interval window. It still allows notifications for different event types on the same resource within the window.
+### Repeat groups
 
-### Example:
+Repeat interval works in tandem with [notification grouping](./grouping.md).
+If multiple notifications fall in the same group, only one notification will be sent for the group within the repeat interval.
 
-With the above notification in place, if a Kubernetes Helm release's health fluctuates between `healthy` and `unhealthy` multiple times within a 2-hour window, the system limits notifications to just two: one for the `config.healthy` event and one for the `config.unhealthy` event.
+#### Example:
 
-However, if the Helm release health shifts to `warning` during this same period, it triggers an additional notification. This occurs because the warning status is considered a separate event source.
+Deployment A becomes unhealthy due to a missing storage class, triggering a notification.
+Soon after, Deployment B also turns unhealthy for the same reason. Since it’s grouped with A, no additional notification is sent during the repeat interval.
+After the 2-hour interval passes, if Deployment C also becomes unhealthy for the same issue, a new notification is sent for C but A & B will also be included in the notification.
 
-The notification throttling mechanism operates independently for each distinct resource. As a result, other Helm releases are not affected by this limitation.
+
+
+| Time   | Deployment | Status     | Action Taken                                       |
+|--------|------------|------------|----------------------------------------------------|
+| 10:00  | A          | Unhealthy  | Notification sent _(first in group)_                 |
+| 10:15  | B          | Unhealthy  | Supressed due to repeat interval _(grouped with A for 12h)_ |
+| 12:10  | C          | Unhealthy  | Notification sent _(repeat interval expired)_ Includes A, B, and C in the message _(group is still active since groupByInterval is 12h)_ |
