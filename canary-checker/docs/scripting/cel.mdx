@@ -1556,6 +1556,21 @@ k8s.isHealthy(deployment) // true if the deployment is healthy
 k8s.labels(pod) // {"namespace": "kube-system", "app": "kube-dns"}
 ```
 
+### labelsMatch
+
+`labelsMatch` returns true if a label map matches the provided selector or query.
+
+This function can be used to check if a set of labels on a resource satisfy a standard Kubernetes selector or a comma-separated query string.
+
+```javascript
+labelsMatch({"app": "nginx", "env": "prod"}, "app=nginx") // true
+labelsMatch({"app": "nginx", "env": "prod"}, "env=dev") // false
+labelsMatch(k8s.labels(pod), "app=nginx,env=prod") // true or false depending on labels
+```
+
+- The first argument is a labels map (such as from `k8s.labels`).
+- The second argument is a selector or query string (e.g., `"app=nginx"` or `"env=prod"`).
+
 ### k8s.memoryAsBytes
 
 `k8s.memoryAsBytes` converts the memory string to bytes.
