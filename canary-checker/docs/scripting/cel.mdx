@@ -4,6 +4,368 @@ sidebar_custom_props:
   icon: gravity-ui:curly-brackets-function
 ---
 
+<!--
+  AUTO-GENERATED/IMPORTED CEL FUNCTION DOCS (additional exports in cel_exports.go)
+  The following blocks supplement or clarify CEL-exposed functions that were not previously documented.
+  See https://github.com/flanksource/gomplate/blob/main/funcs/cel_exports.go for upstream source.
+-->
+
+## Additional AWS Aliases
+
+### fromAWSMap
+
+Alias for `aws.fromAWSMap`. See [`aws.fromAWSMap`](#awsfromawsmap).
+
+### arnToMap
+
+Alias for `aws.arnToMap`. See [`aws.arnToMap`](#awsarntomap).
+
+---
+
+## Additional Collection Helpers
+
+### .append
+
+Appends one or more elements to the end of a list.
+
+```javascript
+[1, 2, 3].append(4) // [1, 2, 3, 4]
+```
+
+### .prepend
+
+Prepends one or more elements to the start of a list.
+
+```javascript
+[2, 3].prepend(1) // [1, 2, 3]
+```
+
+### .sortBy
+
+Sorts a list of maps/objects by a given field.
+
+```javascript
+[{x: 2}, {x: 1}].sortBy("x") // [{x: 1}, {x: 2}]
+```
+
+### .pick
+
+Returns a new map including only the specified keys.
+
+```javascript
+{"a": 1, "b": 2, "c": 3}.pick(["a", "c"]) // {"a": 1, "c": 3}
+```
+
+### keyValToMap
+
+Converts a list of key-value pairs (as maps or arrays) into a single map.
+
+```javascript
+[{"key": "a", "value": 1}, {"key": "b", "value": 2}].keyValToMap() // {"a": 1, "b": 2}
+```
+
+### mapToKeyVal
+
+Converts a map into a list of key-value pair maps.
+
+```javascript
+{"a": 1, "b": 2}.mapToKeyVal() // [{"key": "a", "value": 1}, {"key": "b", "value": 2}]
+```
+
+---
+
+## Data/CSV Helpers
+
+### CSVByRow
+
+Parses a CSV string into rows.
+
+```javascript
+CSVByRow("a,b\n1,2") // [["a","b"],["1","2"]]
+```
+
+### CSVByColumn
+
+Parses a CSV string into columns.
+
+```javascript
+CSVByColumn("a,b\n1,2") // [["a","1"],["b","2"]]
+```
+
+### toCSV
+
+Converts a list or map into a CSV string.
+
+```javascript
+toCSV([["a","b"],["1","2"]]) // "a,b\n1,2"
+```
+
+---
+
+## TOML Helpers
+
+### TOML
+
+Parses a TOML string into an object/map.
+
+```javascript
+TOML('name = "Alice"\nage = 30') // {"name": "Alice", "age": 30}
+```
+
+### toTOML
+
+Converts a map or list into a TOML string.
+
+```javascript
+toTOML({ name: "Alice", age: 30 }) // 'name = "Alice"\nage = 30'
+```
+
+---
+
+## Filepath Helpers
+
+### filepath.FromSlash
+
+Converts slashes in the path to the OS-specific separator.
+
+```javascript
+filepath.FromSlash("foo/bar") // "foo\\bar" (on Windows)
+```
+
+### filepath.ToSlash
+
+Converts OS-specific path separators to slashes.
+
+```javascript
+filepath.ToSlash("foo\\bar") // "foo/bar" (on Windows)
+```
+
+### filepath.VolumeName
+
+Returns the leading volume name.
+
+```javascript
+filepath.VolumeName("C:\\foo\\bar") // "C:"
+```
+
+---
+
+## Math Helpers
+
+### math.isInt
+
+Returns true if the argument is an integer.
+
+```javascript
+math.isInt(42) // true
+math.isInt(3.14) // false
+```
+
+### math.isFloat
+
+Returns true if the argument is a float.
+
+```javascript
+math.isFloat(3.14) // true
+math.isFloat(42) // false
+```
+
+### math.isNum
+
+Returns true if the argument is a number (integer or float).
+
+```javascript
+math.isNum(3.14) // true
+math.isNum(42) // true
+math.isNum("foo") // false
+```
+
+### math.containsFloat
+
+Returns true if the list contains at least one float.
+
+```javascript
+math.containsFloat([1, 2.0, 3]) // true
+```
+
+---
+
+## String Helpers
+
+### .abbrevWidth
+
+Abbreviates a string to a given width with ellipsis.
+
+```javascript
+"Now is the time for all good men".abbrevWidth(10) // "...all good men"
+```
+
+### .abbrevWidthAndOffset
+
+Abbreviates a string to a given width and offset.
+
+```javascript
+"Now is the time for all good men".abbrevWidthAndOffset(5, 10) // "...the time..."
+```
+
+### .toUpper
+
+Converts a string to uppercase.
+
+```javascript
+"hello".toUpper() // "HELLO"
+```
+
+### .toLower
+
+Converts a string to lowercase.
+
+```javascript
+"HELLO".toLower() // "hello"
+```
+
+### .trimSpace
+
+Trims all leading and trailing whitespace.
+
+```javascript
+"  hello  ".trimSpace() // "hello"
+```
+
+### .trunc
+
+Truncates a string to the given length, adding "..." if necessary.
+
+```javascript
+"hello world".trunc(5) // "he..."
+```
+
+### .indentWithWidth
+
+Indents text by a given width.
+
+```javascript
+"line\nnext".indentWithWidth(2) // "  line\n  next"
+```
+
+---
+
+## Test Helpers
+
+### test.assert
+
+Asserts that a condition is true. Throws an error if it's false.
+
+```javascript
+test.assert(1 == 1) // passes
+test.assert(1 == 2) // error
+```
+
+### test.fail
+
+Fails the test with an optional message.
+
+```javascript
+test.fail("Something went wrong")
+```
+
+### test.required
+
+Asserts that a value is not null/empty.
+
+```javascript
+test.required("foo") // passes
+test.required("") // error
+```
+
+### test.ternary
+
+Evaluates a ternary conditional (if-then-else).
+
+```javascript
+test.ternary(true, "yes", "no") // "yes"
+```
+
+### test.kind
+
+Returns the type name of the argument.
+
+```javascript
+test.kind(10) // "int"
+test.kind("foo") // "string"
+```
+
+### test.isKind
+
+Checks if the value is of the given kind/type.
+
+```javascript
+test.isKind(10, "int") // true
+test.isKind("foo", "string") // true
+```
+
+---
+
+## Time Helpers
+
+### time.Unix
+
+Converts a UNIX timestamp (seconds since epoch) to a time object.
+
+```javascript
+time.Unix(1698787200) // timestamp for 2023-11-01T00:00:00Z
+```
+
+### time.Nanosecond
+
+Returns a duration representing one nanosecond.
+
+```javascript
+time.Nanosecond() // 1ns
+```
+
+### time.Microsecond
+
+Returns a duration representing one microsecond.
+
+```javascript
+time.Microsecond() // 1µs
+```
+
+### time.Millisecond
+
+Returns a duration representing one millisecond.
+
+```javascript
+time.Millisecond() // 1ms
+```
+
+### time.Second
+
+Returns a duration representing one second.
+
+```javascript
+time.Second() // 1s
+```
+
+### time.Minute
+
+Returns a duration representing one minute.
+
+```javascript
+time.Minute() // 1m0s
+```
+
+### time.Hour
+
+Returns a duration representing one hour.
+
+```javascript
+time.Hour() // 1h0m0s
+```
+
+---
+
 `expr` expressions use the [Common Expression Language (CEL)](https://cel.dev/)
 
 :::tip
