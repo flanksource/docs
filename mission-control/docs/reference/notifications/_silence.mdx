@@ -1,0 +1,52 @@
+<Fields withTemplates="true" rows={[
+  {
+    field: "description",
+    description: "A description explaining the purpose of the silence",
+    scheme: "string"
+  },
+  {
+    field: "from",
+    description: "Start time of the silence period in RFC3339 format or datetime",
+    scheme: "string"
+  },
+  {
+    field: "until",
+    description: "End time of the silence period in RFC3339 format or datetime",
+    scheme: "string"
+  },
+  {
+    field: "recursive",
+    description: "When true, the silence applies to all child resources of the matched resources. For example, silencing a namespace would silence all deployments, statefulsets, pods, etc. within it.",
+    scheme: "boolean"
+  },
+  {
+    field: "filter",
+    description: "A CEL expression that determines whether to apply the silence. The silence is only applied if the filter evaluates to true.",
+    scheme: "CEL",
+    templateEnv: [
+      {"name": "CheckEvents", "url": "/reference/notifications/template_vars/checks"},
+      {"name": "ConfigEvents", "url": "/reference/notifications/template_vars/config"},
+      {"name": "ComponentEvents", "url": "/reference/notifications/template_vars/components"},
+    ],
+  },
+  {
+    field: "selectors",
+    description: "List of resource selectors to target specific resources by their kind and name",
+    scheme: "[[]ResourceSelector](#resource-selector)"
+  }
+]}/>
+
+### Resource Selector
+
+<Fields rows={[
+  {
+    field: "kind",
+    description: "The kind of resource to select (e.g., 'Kubernetes::StatefulSet', 'Kubernetes::Pod')",
+    scheme: "string"
+  },
+  {
+    field: "name",
+    description: "The name of the resource to select",
+    scheme: "string"
+  }
+]}/>
