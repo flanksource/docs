@@ -5,6 +5,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 let schemes = {
   envvar: '[EnvVar](/reference/env-var)',
+  "map[string]string": '`[map[string]string]`',
   matchpattern: '[MatchPattern](/reference/types#match-pattern)',
   '[]envvar': '[[]EnvVar](/reference/env-var)',
   cel: '[CEL](/reference/scripting/cel)',
@@ -65,7 +66,7 @@ function useSchemeUrl(value, oss) {
   let mapping = schemes[value.toLowerCase()]
 
   if (mapping == null || !mapping.includes('](/')) {
-    return value
+    return mapping
   }
 
   value = mapping;
@@ -213,12 +214,12 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       },
       {
         field: "accessKey",
-        description: "",
+        description: "Access Key ID",
         scheme: "EnvVar"
       },
       {
         field: "secretKey",
-        description: "",
+        description: "Secret Access Key",
         scheme: "EnvVar"
       },
       {
