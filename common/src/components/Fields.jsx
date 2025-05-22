@@ -441,95 +441,95 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     rows = rows.concat([
       {
         field: 'tls.insecureSkipVerify',
-        description: 'Skip TLS certificate verification',
+        description: 'Skip TLS certificate verification. Use with caution - only enable in trusted environments or for testing',
         scheme: 'boolean'
       },
       {
         field: 'tls.handshakeTimeout',
-        description: 'The handshake timeout for the HTTP request',
+        description: 'Maximum time to wait for TLS handshake completion. Example: "30s", "1m"',
         scheme: 'duration'
       },
       {
         field: 'tls.ca',
-        description: 'The CA certificate to use for the HTTP request',
+        description: 'Custom Certificate Authority (CA) certificate for TLS verification. Used for self-signed or internal certificates',
         scheme: 'EnvVar'
       },
       {
         field: 'tls.cert',
-        description: 'The client certificate to use for the HTTP request',
+        description: 'Client TLS certificate for mutual TLS authentication (mTLS)',
         scheme: 'EnvVar'
       },
       {
         field: 'tls.key',
-        description: 'The client private key to use for the HTTP request',
+        description: 'Private key corresponding to the client TLS certificate for mTLS',
         scheme: 'EnvVar'
       },
       {
-        field: 'connnection',
-        description: 'The connection to use for the HTTP request',
+        field: 'connection',
+        description: 'Reference to a pre-configured HTTP connection. Use this to reuse connection settings across multiple scrapers',
         scheme: 'string'
       },
       {
         field: 'bearer',
-        description: 'The bearer token to use for the HTTP request',
+        description: 'Bearer token for authentication',
         scheme: 'EnvVar'
       },
       {
         field: 'username',
-        description: 'The username to use for the HTTP request',
+        description: 'Username for Basic or Digest authentication.',
         scheme: 'EnvVar'
       },
       {
         field: 'password',
-        description: 'The password to use for the HTTP request',
+        description: 'Password for Basic or Digest authentication.',
         scheme: 'EnvVar'
       },
       {
         field: 'ntlm',
-        description: 'Enable NTLM authentication',
+        description: 'Enable Windows NTLM authentication protocol. Typically used in corporate environments',
         scheme: 'boolean'
       },
       {
         field: 'ntlmv2',
-        description: 'Enable NTLM v2 authentication',
+        description: 'Enable NTLMv2 authentication protocol, a more secure version of NTLM',
         scheme: 'boolean'
       },
       {
         field: 'digest',
-        description: 'Enable digest authentication',
+        description: 'Enable Digest authentication, a more secure alternative to Basic authentication',
         scheme: 'boolean'
       },
       {
         field: 'oauth.clientID',
-        description: 'The client ID for the OAuth authentication',
+        description: 'OAuth 2.0 client identifier',
         scheme: 'EnvVar'
       },
       {
         field: 'oauth.clientSecret',
-        description: 'The client secret for the OAuth authentication',
+        description: 'OAuth 2.0 client secret',
         scheme: 'EnvVar'
       },
       {
         field: 'oauth.tokenURL',
-        description: 'The token URL for the OAuth authentication',
+        description: 'OAuth 2.0 token endpoint URL',
         scheme: 'string'
       },
       {
         field: 'oauth.scopes',
-        description: 'The scopes for the OAuth authentication',
+        description: 'List of OAuth 2.0 scopes',
         scheme: '[]string'
       },
       {
         field: 'oauth.params',
-        description: 'The parameters for the OAuth authentication',
+        description: 'Additional OAuth 2.0 parameters to include in the token request',
         scheme: 'map[string]string'
       },
       {
         field: 'url',
-        description: 'The URL to scrape',
+        description: 'The URL to send the HTTP request to. Must include the scheme (http:// or https://)',
         scheme: 'string',
         required: true
-      },
+      }
     ])
   }
 
