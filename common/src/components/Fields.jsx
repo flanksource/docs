@@ -26,6 +26,7 @@ let schemes = {
   icon: '[Icon](/reference/types#icon)',
   bool: '`boolean`',
   int: '`integer`',
+  "map[string]EnvVar": '`[map[string]EnvVar](/reference/env-var)`',
   notificationurl: '[Notification](/reference/notifications)',
   notificationconnection: '[Connection](/reference/connections)',
   notificationproperties:
@@ -435,6 +436,100 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
         scheme: "EnvVar",
         required: true
       }
+    ])
+  } else if (connection == "http") {
+    rows = rows.concat([
+      {
+        field: 'tls.insecureSkipVerify',
+        description: 'Skip TLS certificate verification',
+        scheme: 'boolean'
+      },
+      {
+        field: 'tls.handshakeTimeout',
+        description: 'The handshake timeout for the HTTP request',
+        scheme: 'duration'
+      },
+      {
+        field: 'tls.ca',
+        description: 'The CA certificate to use for the HTTP request',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'tls.cert',
+        description: 'The client certificate to use for the HTTP request',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'tls.key',
+        description: 'The client private key to use for the HTTP request',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'connnection',
+        description: 'The connection to use for the HTTP request',
+        scheme: 'string'
+      },
+      {
+        field: 'bearer',
+        description: 'The bearer token to use for the HTTP request',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'username',
+        description: 'The username to use for the HTTP request',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'password',
+        description: 'The password to use for the HTTP request',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'ntlm',
+        description: 'Enable NTLM authentication',
+        scheme: 'boolean'
+      },
+      {
+        field: 'ntlmv2',
+        description: 'Enable NTLM v2 authentication',
+        scheme: 'boolean'
+      },
+      {
+        field: 'digest',
+        description: 'Enable digest authentication',
+        scheme: 'boolean'
+      },
+      {
+        field: 'oauth.clientID',
+        description: 'The client ID for the OAuth authentication',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'oauth.clientSecret',
+        description: 'The client secret for the OAuth authentication',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'oauth.tokenURL',
+        description: 'The token URL for the OAuth authentication',
+        scheme: 'string'
+      },
+      {
+        field: 'oauth.scopes',
+        description: 'The scopes for the OAuth authentication',
+        scheme: '[]string'
+      },
+      {
+        field: 'oauth.params',
+        description: 'The parameters for the OAuth authentication',
+        scheme: 'map[string]string'
+      },
+      {
+        field: 'url',
+        description: 'The URL to scrape',
+        scheme: 'string',
+        required: true
+      },
     ])
   }
 

@@ -1,0 +1,46 @@
+---
+title: HTTP
+sidebar_position: 4
+sidebar_custom_props:
+  icon: http
+---
+
+# <Icon name="http"/> HTTP
+
+The HTTP scraper allows you to collect data from HTTP endpoints and APIs. It supports various authentication methods and data transformation capabilities.
+
+```yaml title="aws-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/http-lastfm.yaml
+```
+
+| Field       | Description                                                                  | Scheme                                             | Required |
+| ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 15 minutes. | [Cron](/reference/types#cron)                      |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `http`      | Specifies the list of HTTP configurations to scrape.                         | [`[]HTTP`](#http)                                  |          |
+
+## HTTP Configuration
+
+<Scraper connection="http"
+  rows={[
+    {
+      field: 'method',
+      description: 'HTTP method to use (GET, POST, etc.)',
+      scheme: 'string'
+    },
+    {
+      field: "env",
+      description: "Environment variables to be used in the templating",
+      scheme: '[]EnvVar'
+    },
+    {
+      field: 'body',
+      description: 'Request body for POST/PUT requests',
+      scheme: 'string'
+    },
+    {
+      field: 'headers',
+      description: 'HTTP headers to include in the request',
+      scheme: '[`map[string]EnvVar`](/reference/env-var)'
+    }
+  ]}
+/>
