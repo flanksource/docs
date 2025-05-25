@@ -35,8 +35,19 @@ function ansi2HTML(str, command) {
 
 
 export default function Ansi({ command, children }) {
+  let txt = ""
+  try {
 
-  let txt = `[92m❯[0m [37m${command}[0m<br/>` + children.props.children.replaceAll("\n", "<br/>")
+
+    if (children?.props?.children) {
+      txt = `[92m❯[0m [37m${command}[0m<br/>` + children.props.children.replaceAll("\n", "<br/>")
+    } else {
+      txt = `[92m❯[0m [37m${command}[0m`
+    }
+  } catch (e) {
+    console.error(e)
+    txt = ""
+  }
 
   let html = new Convert().toHtml(txt, command)
   return (
