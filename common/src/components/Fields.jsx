@@ -5,7 +5,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 let schemes = {
   envvar: '[EnvVar](/reference/env-var)',
-  "map[string]string": '`[map[string]string]`',
+  "map[string]string": '`map[string]string`',
+  "map[string]any": '`map[string]any`',
   matchpattern: '[MatchPattern](/reference/types#match-pattern)',
   '[]envvar': '[[]EnvVar](/reference/env-var)',
   cel: '[CEL](/reference/scripting/cel)',
