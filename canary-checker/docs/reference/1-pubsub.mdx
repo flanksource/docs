@@ -12,7 +12,6 @@ This check connects to a PubSub Queue (SQS, GCP PubSub, RabbitMQ, Kafka, NATs) a
   {field: "sqs", description: "Amazon SQS queue configuration", scheme: "[SQS](#sqs)"},
   {field: "pubsub", description: "Google Cloud Pub/Sub configuration", scheme: "[GCP PubSub](#gcp-pubsub)"},
   {field: "rabbitmq", description: "RabbitMQ queue configuration", scheme: "[RabbitMQ](#rabbitmq)"},
-  {field: "memory", description: "In-memory queue configuration", scheme: "[Memory](#memory)"},
   {field: "kafka", description: "Apache Kafka queue configuration", scheme: "[Kafka](#kafka)"},  
   {field: "nats", description: "NATS messaging system configuration", scheme: "[NATS](#nats)"}
 ]}/>
@@ -20,8 +19,8 @@ This check connects to a PubSub Queue (SQS, GCP PubSub, RabbitMQ, Kafka, NATs) a
 ## SQS
 
 <Fields connection="aws" rows={[
-  {field: "queue", description: "Amazon SQS queue ARN", scheme: "string"},
-  {field: "raw", description: "Enable raw message delivery without JSON wrapping", scheme: "bool"},
+  {field: "queue", description: "Amazon SQS queue ARN", scheme: "string", required: true},
+  {field: "raw", description: "Enable raw message delivery without JSON wrapping", scheme: "bool", required: true},
   {field: "waitTime", description: "Time in seconds to long-poll for messages (default: 15, max: 20)", scheme: "int"}
 ]}/>
 
@@ -29,38 +28,32 @@ This check connects to a PubSub Queue (SQS, GCP PubSub, RabbitMQ, Kafka, NATs) a
 ## Kafka
 
 <Fields rows={[
-  {field: "brokers", description: "List of Kafka broker addresses", scheme: "[]string"},
-  {field: "topic", description: "Kafka topic name", scheme: "string"},
-  {field: "group", description: "Kafka consumer group ID", scheme: "string"}
+  {field: "brokers", description: "List of Kafka broker addresses", scheme: "[]string", required: true},
+  {field: "topic", description: "Kafka topic name", scheme: "string", required: true},
+  {field: "group", description: "Kafka consumer group ID", scheme: "string", required: true}
 ]}/>
 
 ## GCP PubSub
 
 <Fields connection="gcp" rows={[
-  {field: "project_id", description: "Google Cloud project ID", scheme: "string"},
-  {field: "subscription", description: "Pub/Sub subscription name", scheme: "string"}
+  {field: "project_id", description: "Google Cloud project ID", scheme: "string", required: true},
+  {field: "subscription", description: "Pub/Sub subscription name", scheme: "string", required: true}
 ]}/>
 
 ## NATS
 
 <Fields rows={[
-  {field: "url", description: "NATS server URL", scheme: "string"},
-  {field: "subject", description: "NATS subject pattern", scheme: "string"},
-  {field: "queue", description: "NATS queue group name for load balancing", scheme: "string"}
+  {field: "url", description: "NATS server URL", scheme: "string", required: true},
+  {field: "subject", description: "NATS subject pattern", scheme: "string", required: true},
+  {field: "queue", description: "NATS queue group name for load balancing", scheme: "string", required: true}
 ]}/>
 
 ## RabbitMQ
 
 <Fields rows={[
-  {field: "host", description: "RabbitMQ server hostname", scheme: "string"},
+  {field: "host", description: "RabbitMQ server hostname", scheme: "string", required: true},
   {field: "port", description: "RabbitMQ server port", scheme: "int"},
   {field: "username", description: "RabbitMQ authentication username", scheme: "string"},
   {field: "password", description: "RabbitMQ authentication password", scheme: "string"},
-  {field: "queue", description: "RabbitMQ queue name", scheme: "string"}
-]}/>
-
-## Memory
-
-<Fields rows={[
-  {field: "queue", description: "Memory queue name identifier", scheme: "string"}
+  {field: "queue", description: "RabbitMQ queue name", scheme: "string", required: true}
 ]}/>
