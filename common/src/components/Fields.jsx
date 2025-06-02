@@ -111,7 +111,6 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       return -1
     }
 
-
     if (a.priority && b.priority && a.priority < b.priority) {
       return 1
     }
@@ -527,12 +526,13 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     ])
   }
 
-  rows = rows.concat(common.filter(row => row.required))
+  rows = rows.concat(common.filter(row => row.required)).filter(i => i.field != null)
   rows.sort(fieldSorter);
-  common = common.filter(row => !row.required)
+
+  common = common.filter(row => !row.required).filter(i => i.field != null)
   common.sort(fieldSorter)
+  
   rows = rows.concat(common)
-  rows = rows.filter(i => i.field != null)
 
   return (
     <>
