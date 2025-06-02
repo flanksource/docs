@@ -118,12 +118,6 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
 
     return a.field.localeCompare(b.field)
   }
-  rows = rows.concat(common.filter(row => row.required))
-  rows.sort(fieldSorter);
-  common = common.filter(row => !row.required)
-  common.sort(fieldSorter)
-  rows = rows.concat(common)
-
 
   if (connection == "url") {
     rows = rows.concat([
@@ -526,13 +520,18 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       },
       {
         field: 'url',
-        description: 'The URL to send the HTTP request to. Must include the scheme (http:// or https://)',
+        description: 'The URL to send the HTTP request to. Must include the scheme _(http:// or https://)_',
         scheme: 'string',
         required: true
-      }
+      },
     ])
   }
 
+  rows = rows.concat(common.filter(row => row.required))
+  rows.sort(fieldSorter);
+  common = common.filter(row => !row.required)
+  common.sort(fieldSorter)
+  rows = rows.concat(common)
   rows = rows.filter(i => i.field != null)
 
   return (
