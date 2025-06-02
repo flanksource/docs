@@ -1,6 +1,7 @@
 ## Mapping
 
-Custom scrapers require defining the `id`, `type`, and `class` for each scraped item. For example, when scraping a file containing a JSON array, where each array element represents a config item, you need to specify the `id`, `type`, and config `class` for these items. Achieve this by utilizing mappings in your custom scraper configuration.
+Custom scrapers require defining the `id` and `type` for each scraped item. For example, when scraping a file containing a JSON array, where each array element represents a config item, you need to specify the `id` and `type` for those items.
+You can achieve this by utilizing mappings in your custom scraper configuration.
 
 | Field             | Description                                                                                                                                                    | Scheme                                                    | Required |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | -------- |
@@ -39,21 +40,10 @@ The UI formats and render XML appropriately.
 
 ## Change Extraction
 
-Custom scrapers can also be used to ingest changes from external systems, by using the `full` option. In this example, the scraped JSON contains the actual config under `config` and a list of changes under `changes`.
+Custom scrapers can also be used to ingest changes from external systems by using the `full` option.
 
-```yaml
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: file-scraper
-spec:
-  full: true
-  file:
-    - type: Car
-      id: $.reg_no
-      paths:
-        - fixtures/data/car_changes.json
-```
+Consider a file containing the following json data.
+It contains the actual config under `config` field and a list of changes under the `changes` field.
 
 ```json title=fixtures/data/car_changes.json
 {
@@ -71,7 +61,24 @@ spec:
 }
 ```
 
-Since `full=true`, `Config DB` extracts the `config` and `changes` from the scraped JSON config, the resulting config is:
+A regular scraper would save the entire json as a config.
+However, with the `full` option, the scraper extracts the config from the `config` field and the changes from the `changes` field.
+
+```yaml {6}
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: file-scraper
+spec:
+  full: true
+  file:
+    - type: Car
+      id: $.reg_no
+      paths:
+        - fixtures/data/car_changes.json
+```
+
+The resulting config is:
 
 ```json
 {
@@ -79,7 +86,7 @@ Since `full=true`, `Config DB` extracts the `config` and `changes` from the scra
 }
 ```
 
-and the following new config change is recorded:
+and the following new config change is recorded on that config:
 
 ```json
 {
