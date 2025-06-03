@@ -1,7 +1,7 @@
 ---
 title: Clickhouse
 sidebar_custom_props:
-  icon: clickhouse
+  icon: clickhouse-icon
 ---
 
 The Clickhouse scraper will execute a query and then create a catalog item for each returned row.
@@ -10,6 +10,58 @@ The example below creates a new `Order` config for each row, with name as `order
 
 ```yaml title="clickhouse-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/clickhouse.yaml
 ```
+
+Objects in external storages like AzureBlobStorage or AWS S3 can also be queried
+
+```yaml title="azure-blob-storage-scraper.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: azure-prod
+spec:
+  azure:
+    clientID:
+      valueFrom:
+        secretKeyRef:
+          name: azure-creds
+          key: CLIENT_ID
+    clientSecret:
+      valueFrom:
+        secretKeyRef:
+          name: azure-creds
+          key: CLIENT_SECRET
+    tenantID:
+      valueFrom:
+        secretKeyRef:
+          name: azure-creds
+          key: TENANT_ID
+---
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: audit-logs
+spec:
+  clickhouse:
+    - query: SELECT * FROM azureBlobStorage(azure_prod_audit_data);
+      type: AuditRecord
+      id: $.user_id
+      transform:
+        expr: "[config].toJSON()"
+      azureBlobStorage:
+        connection: azure-prod
+        account: acme-logs
+        container: audit
+        path: audit-data.csv
+        collection: azure_prod_audit_data
+```
+
+:::info
+An instance of clichkouse server needs to be deployed for this scraper to function.
+
+Mission Control can deploy an instance by setting `config-db.clichkouse.enabled: true` in the helm chart.
+
+An external clichkouse server can also be used via the `clickhouseURL` parameter
+:::
 
 ## Scraper
 
@@ -46,5 +98,5 @@ The example below creates a new `Order` config for each row, with name as `order
   {field: "container", description: "Azure Blob Storage container name", scheme: "string"},
   {field: "path", description: "Path within the container", scheme: "string"},
   {field: "endpointSuffix", description: "Azure endpoint suffix", scheme: "string"},
-  {field: "collectionName", description: "Name of the collection in Azure Blob Storage", scheme: "string", required: true}
+  {field: "collectionName", description: "Name of the collection in Clickhouse. See [Named Collections](https://clickhouse.com/docs/operations/named-collections)", scheme: "string", required: true}
 ]}/>
