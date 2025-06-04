@@ -103,7 +103,7 @@ To enable the Flux integration you need
     ```
   - Are compatible with your kubernetes API versions and CRD's with:
     ```shell
-    kustomization build | kubectl apply -f - --dry-run=service
+    kustomization build | kubectl apply -f - --dry-run=server
     ```
   - Passes all compliance and governance rule
 - Auto Merge PR's that are safe
