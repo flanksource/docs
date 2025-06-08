@@ -19,25 +19,24 @@ exceptions:
   - CRUD
   - CSS
   - CSV
-  - RDS
-  - SQS
-  - Subnet
-  - IAMRole
-  - ECSTask
-  - ECSCluster
-  - EBSVolume
-  - EBSVolume
-  - DNSZone
-  - DHCP
-  - ECS
-  - DNS
-  - EKS
-  - IAM
-  - IRSA
-  - VPC
   - DEBUG
+  - DHCP
+  - DNS
+  - DNSZone
   - DOM
   - DPI
+  - EBS
+  - EBSVolume
+  - ECR
+  - ECS
+  - ECSCluster
+  - ECSService
+  - ECSTask
+  - ECSTask
+  - EFS
+  - EKS
+  - EKSCluster
+  - EKSCluster
   - FAQ
   - GCC
   - GDB
@@ -48,7 +47,11 @@ exceptions:
   - HTML
   - HTTP
   - HTTPS
+  - IAM
+  - IAMRole
+  - IAMUser
   - IDE
+  - IRSA
   - JAR
   - JPG
   - JSON
@@ -65,14 +68,21 @@ exceptions:
   - POST
   - RAM
   - RBAC
+  - RDS
+  - RDSInstance
   - REPL
   - RSA
   - SCM
   - SCSS
   - SDK
+  - SNS
+  - SNSTopic
   - SQL
+  - SQS
+  - SQSQueue
   - SSH
   - SSL
+  - Subnet
   - SVG
   - TBD
   - TCP
@@ -82,6 +92,7 @@ exceptions:
   - USB
   - UTF
   - UUID
+  - VPC
   - XML
   - XSS
   - YAML
