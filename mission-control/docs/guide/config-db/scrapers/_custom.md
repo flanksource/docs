@@ -3,18 +3,18 @@
 Custom scrapers require you to define the `id` and `type` for each scraped item. For example, when you scrape a file containing a JSON array, where each array element represents a config item, you must specify the `id` and `type` for those items.
 You can achieve this by using mappings in your custom scraper configuration.
 
-| Field             | Description                                                                                                                                                                                      | Scheme                                                    | Required |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------- | -------- |
-| `items`           | A path that points to an array. The scraper creates each item as a separate config item. The scraper evaluates all other JSONPath from the new item's root.                                      | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       | `true`   |
-| `id`              | ID for the config item.                                                                                                                                                                          | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       | `true`   |
-| `type`            | Type for the config item.                                                                                                                                                                        | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       | `true`   |
-| `class`           | Class for the config item. _(Defaults to `type`)_                                                                                                                                                | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       |          |
-| `name`            | Name for the config item.                                                                                                                                                                        | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       |          |
-| `format`          | format of the config source. Defaults to `json`.                                                                                                                                                 | `json`, `xml` or `properties` See [Formats](#formats)     |          |
-| `createFields`    | The scraper uses these fields to determine the item's created date. If you do not specify them or the field is not found, the scraper uses the scrape time.                                      | <CommonLink to="jsonpath">_`[]JSONPath`_</CommonLink>     |          |
-| `deleteFields`    | The scraper uses these fields to determine when an item was deleted. If you do not specify them or the field is not found, the scraper uses the scrape time when the item is no longer detected. | <CommonLink to="jsonpath">_`[]JSONPath`_</CommonLink>     |          |
-| `timestampFormat` | timestamp format of `createFields` and `deleteFields`. _(Default 2006-01-02T15:04:05Z07:00)_                                                                                                     | [`time.Format`](https://golang.org/pkg/time/#Time.Format) |          |
-| `full`            | The scraper includes the full metadata of a config in the scrape result, including possible changes. See [Change Extraction](#change-extraction).                                                | `bool`                                                    |          |
+| Field             | Description                                                                                                                                                                                         | Scheme                                                    | Required |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | -------- |
+| `items`           | A path that points to an array. The scraper creates each item as a separate config item. The scraper evaluates all other JSONPath from the new item's root.                                         | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       | `true`   |
+| `id`              | ID for the config item.                                                                                                                                                                             | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       | `true`   |
+| `type`            | Type for the config item.                                                                                                                                                                           | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       | `true`   |
+| `class`           | Class for the config item. _(Defaults to `type`)_                                                                                                                                                   | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       |          |
+| `name`            | Name for the config item.                                                                                                                                                                           | <CommonLink to="jsonpath">_`JSONPath`_</CommonLink>       |          |
+| `format`          | format of the config source. Defaults to `json`.                                                                                                                                                    | `json`, `xml` or `properties` See [Formats](#formats)     |          |
+| `createFields`    | The scraper uses these fields to find the item's created date. If you do not specify them or the field is not found, the scraper uses the scrape time.                                              | <CommonLink to="jsonpath">_`[]JSONPath`_</CommonLink>     |          |
+| `deleteFields`    | The scraper uses these fields to find when the scraper deleted an item. If you do not specify them or the field is not found, the scraper uses the scrape time when the item is no longer detected. | <CommonLink to="jsonpath">_`[]JSONPath`_</CommonLink>     |          |
+| `timestampFormat` | timestamp format of `createFields` and `deleteFields`. _(Default 2006-01-02T15:04:05Z07:00)_                                                                                                        | [`time.Format`](https://golang.org/pkg/time/#Time.Format) |          |
+| `full`            | The scraper includes the full metadata of a config in the scrape result, including possible changes. See [Change Extraction](#change-extraction).                                                   | `bool`                                                    |          |
 
 ## Formats
 
@@ -42,7 +42,7 @@ The UI formats and renders XML appropriately.
 
 Custom scrapers ingest changes & access logs from external systems when you enable the `full` option.
 
-Every single config is expected to have at these 3 top-level fields
+Every single config should have these 3 top-level fields
 
 - `config`
 - `changes`
@@ -50,7 +50,7 @@ Every single config is expected to have at these 3 top-level fields
 
 :::note info
 They could have more fields or even missing some of these fields.
-The point is that only these fields are extracted.
+The point is that the scraper extracts only these fields.
 :::
 
 Consider a file that contains the following json data.
@@ -118,7 +118,7 @@ and the scraper records the following new config change on that config:
 }
 ```
 
-and the access logs are saved to
+and the scraper saves the access logs to
 
 ```json
 [
