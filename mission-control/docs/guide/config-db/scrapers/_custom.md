@@ -118,7 +118,7 @@ and the scraper records the following new config change on that config:
 }
 ```
 
-and the access logs will be saved to
+and the access logs are saved to
 
 ```json
 [
