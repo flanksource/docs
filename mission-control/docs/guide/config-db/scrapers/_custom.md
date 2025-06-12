@@ -38,14 +38,24 @@ You can still access non-JSON content in scripts using `config.content`.
 
 The UI formats and renders XML appropriately.
 
-## Change Extraction
+## Extracting Changes & Access Logs
 
-Custom scrapers ingest changes from external systems when you enable the `full` option.
+Custom scrapers ingest changes & access logs from external systems when you enable the `full` option.
+
+Every single config is expected to have at these 3 top-level fields
+
+- `config`
+- `changes`
+- `access_logs`
+
+:::note info
+They could have more fields or even missing some of these fields.
+The point is that only these fields are extracted.
+:::
 
 Consider a file that contains the following json data.
-It contains the actual config under the `config` field and a list of changes under the `changes` field.
 
-```json title=fixtures/data/car_changes.json
+```json title=fixtures/data/car.json {3,6,13}
 {
   "reg_no": "A123",
   "config": {
@@ -57,12 +67,24 @@ It contains the actual config under the `config` field and a list of changes und
       "summary": "car color changed to blue",
       "unrelated_stuff": 123
     }
+  ],
+  "access_logs": [
+    {
+      "config_id": "99024949-9118-4dcb-a3a0-b8f1536bebd0",
+      "external_user_id": "a3542241-4750-11f0-8000-e0146ce375e6",
+      "created_at": "2025-01-01"
+    },
+    {
+      "config_id": "9d9e51a7-6956-413e-a07e-a6aeb3f4877f",
+      "external_user_id": "a5c2e8e3-4750-11f0-8000-f4eaacabd632",
+      "created_at": "2025-01-02"
+    }
   ]
 }
 ```
 
 A regular scraper saves the entire json as a config.
-However, with the `full` option, the scraper extracts the config from the `config` field and the changes from the `changes` field.
+However, with the `full` option, the scraper extracts the config, changes and access logs.
 
 ```yaml {6}
 apiVersion: configs.flanksource.com/v1
@@ -94,4 +116,21 @@ and the scraper records the following new config change on that config:
   "summary": "car color changed to blue",
   "unrelated_stuff": 123
 }
+```
+
+and the access logs will be saved to
+
+```json
+[
+  {
+    "config_id": "99024949-9118-4dcb-a3a0-b8f1536bebd0",
+    "external_user_id": "a3542241-4750-11f0-8000-e0146ce375e6",
+    "created_at": "2025-01-01"
+  },
+  {
+    "config_id": "9d9e51a7-6956-413e-a07e-a6aeb3f4877f",
+    "external_user_id": "a5c2e8e3-4750-11f0-8000-f4eaacabd632",
+    "created_at": "2025-01-02"
+  }
+]
 ```

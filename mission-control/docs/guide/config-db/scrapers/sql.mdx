@@ -4,6 +4,8 @@ sidebar_custom_props:
   icon: database
 ---
 
+import Custom from './_custom.md'
+
 The SQL configuration scraper will execute a SQL query and then create a configuration item for each returned row.
 
 The example below creates a new `MSSQL::Database` configuration for each database on the sql server, and then creates a roles object container the SQL Server login to database role mapping. With change detection this will highlight when new users are added / modified / removed on an individual databases.
@@ -81,7 +83,7 @@ spec:
 | ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
 | `logLevel`  | Specify the level of logging.                                                      | `string`                                     |          |
 | `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
-| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
+| `full`      | Set to `true` to extract changes & access logs from scraped configurations. Defaults to `false`. | `bool`                                       |          |
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/guide/config-db/concepts/retention) |          |
 | `sql`       | Specifies the list of SQL configurations to scrape.                                | [`[]SQL`](#sql)                            |          |
 
@@ -98,4 +100,6 @@ spec:
 
 
 ]}/>
+
+<Custom/>
 
