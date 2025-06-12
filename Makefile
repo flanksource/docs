@@ -13,15 +13,15 @@ $(VALE): $(LOCALBIN)
 	@if ! test -s $(LOCALBIN)/vale; then \
 		echo "Downloading vale for $(OS)-$(ARCH)..."; \
 		if [ "$(OS)" = "darwin" ]; then \
-			curl -sfL https://github.com/errata-ai/vale/releases/download/v3.1.0/vale_3.1.0_macOS_$(ARCH).tar.gz | tar -xz -C $(LOCALBIN) vale; \
+			curl -sfL https://github.com/errata-ai/vale/releases/download/v3.12.0/vale_3.12.0_macOS_$(ARCH).tar.gz | tar -xz -C $(LOCALBIN) vale; \
 		else \
-			curl -sfL https://github.com/errata-ai/vale/releases/download/v3.1.0/vale_3.1.0_Linux_$(ARCH).tar.gz | tar -xz -C $(LOCALBIN) vale; \
+			curl -sfL https://github.com/errata-ai/vale/releases/download/v3.12.0/vale_3.12.0_Linux_$(ARCH).tar.gz | tar -xz -C $(LOCALBIN) vale; \
 		fi \
 	fi
 
 .PHONY: lint
 lint: vale
-	$(VALE) sync
+	# $(VALE) sync
 	$(VALE) canary-checker/docs  --glob='!**/{README,CHANGELOG,readme,security,SECURITY,CONTRIBUTING,benchmark,development,LICENSE}.md'
 	$(VALE) mission-control/docs  --glob='!**/{README,CHANGELOG,readme,security,SECURITY,CONTRIBUTING,benchmark,development,LICENSE}.md'
 	markdownlint mission-control/docs
@@ -29,7 +29,7 @@ lint: vale
 
 .PHONY: vale-changed
 vale-changed: vale ## Run vale on markdown files changed in current branch
-	$(VALE) sync
+	# $(VALE) sync
 	@files=$$(git diff --name-only main...HEAD | grep -E '\.(md|mdx)$$'); \
 	if [ -n "$$files" ]; then \
 		echo "Running vale on changed files: $$files"; \
