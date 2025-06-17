@@ -13,7 +13,7 @@ The registry has an [GCP](/registry/gcp) Helm chart that provides a pre-configur
 
 The GCP scrapers scrapes your GCP account to fetch all the resources & save them as configs.
 
-```yaml title="gcp-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/azure.yaml
+```yaml title="gcp-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/gcp.yaml
 ```
 
 ## Scraper
@@ -35,17 +35,18 @@ Either the `connection` name or the `credentials` are required (if Workload Iden
   {
     field: 'project',
     description: 'GCP Project ID',
-    scheme: 'string'
+    scheme: 'string',
+    required: true
   },
   {
     field: 'include',
     description: 'GCP resources to include for scraping',
-    scheme: '`[]string`'
+    scheme: '[]string'
   },
   {
     field: 'exclude',
     description: 'GCP resources to exclude from scraping',
-    scheme: '`[]string`'
+    scheme: '[]string'
   },
 ]}
 />
