@@ -1,0 +1,49 @@
+---
+title: GCP
+sidebar_custom_props:
+  icon: google-cloud
+---
+
+import Schema from '@site/modules/mission-control-registry/charts/gcp/values.schema.json'
+
+Mission Control integrates with Google Cloud Platform to scrape and monitor your GCP cloud resources. The integration supports:
+
+- GCP project monitoring via project ID
+- Organization and folder-based access
+- Configurable exclusions and transformations
+- Authentication via service account keys or Workload Identity
+- Custom connection settings
+
+## Getting Started
+
+:::info Prerequisites
+To enable the GCP integration you need:
+
+- Mission Control [installed](/installation/)
+- [kubectl](/installation/saas/kubectl) access to the Mission Control instance
+- GCP service account credentials or GKE Workload Identity configured for the `config-db` service.
+:::
+
+1. Install the [mission-control-gcp](https://artifacthub.io/packages/helm/flanksource/mission-control-gcp) chart
+
+   <Helm chart="mission-control-gcp"
+   createRepo={false}
+   schema={Schema}
+   createNamespace={false}
+   values={{
+    "project": "<your-project-name>",
+   }}/>
+
+## Next Steps
+
+<Cards>
+    <Card size="sm" title="ScrapeConfig" icon="k8s-customresourcedefinition" link="/guide/config-db/scrapers/gcp">
+      <Tag label="CRD"/>
+  </Card>
+
+  <Card size="sm" title="GCP Cloud Storage" icon="google-cloud-storage" link="/guide/canary-checker/reference/folder">
+    Check GCS buckets and objects
+    <Tag label="health-check"/>
+  </Card>
+
+</Cards>

@@ -1,0 +1,51 @@
+---
+title: GCP
+sidebar_position: 2
+sidebar_custom_props:
+  icon: google-cloud
+---
+
+# <Icon name="google-cloud"/> GCP
+
+:::tip Registry
+The registry has an [GCP](/registry/gcp) Helm chart that provides a pre-configured Scraper with some common defaults
+:::
+
+The GCP scrapers scrapes your GCP account to fetch all the resources & save them as configs.
+
+```yaml title="gcp-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/azure.yaml
+```
+
+## Scraper
+
+| Field       | Description                                                                  | Scheme                                             | Required |
+| ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `logLevel`  | Specify the level of logging.                                                | `string`                                           |          |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                           |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `gcp`       | GCP scrape config                                                            | [`[]GCP`](#gcp)                                    |          |
+
+### GCP
+
+:::note
+Either the `connection` name or the `credentials` are required (if Workload Identity is not being used)
+:::
+
+<Scraper connection="gcp" rows={[
+  {
+    field: 'project',
+    description: 'GCP Project ID',
+    scheme: 'string'
+  },
+  {
+    field: 'include',
+    description: 'GCP resources to include for scraping',
+    scheme: '`[]string`'
+  },
+  {
+    field: 'exclude',
+    description: 'GCP resources to exclude from scraping',
+    scheme: '`[]string`'
+  },
+]}
+/>
