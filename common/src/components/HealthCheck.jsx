@@ -45,7 +45,12 @@ export default function HealthCheck({ name, edition, rows, ...props }) {
     {
       field: "display",
       description: "Expression to change the formatting of the display",
-      scheme: "[`Expression`](../concepts/expressions/display-formatting )"
+      scheme: "[`Expression`](../concepts/expressions/display-formatting)"
+    },
+    {
+      field: "markFailOnEmpty",
+      description: "If a transformation or datasource returns empty results, the check should fail",
+      scheme: "bool"
     },
     {
       field: "transform",
