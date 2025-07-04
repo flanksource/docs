@@ -18,7 +18,8 @@ export default async function createConfigAsync() {
     tagline: '',
     // staticDirectories: ['images', 'static'],
     url: 'https://flanksource.com',
-    baseUrl: process.env.NODE_ENV == "development" || process.env.PREVIEW == "true" ? '/' : '/docs',
+    //baseUrl: process.env.NODE_ENV == "development" || process.env.PREVIEW == "true" ? '/' : '/docs',
+    baseUrl: '/',
     organizationName: 'flanksource', // Usually your GitHub org/user name.
     projectName: 'docs', // Usually your repo name.
     favicon: 'img/flanksource-icon.png',
