@@ -9,21 +9,18 @@ The Flux topology provides a comprehensive view of your Flux-based GitOps infras
 1. **Controllers**: Monitors Flux system pods in the `flux-system` namespace.
 
 2. **Releases**: Tracks HelmReleases with detailed information including:
-
    - Release status and health
    - Version information
    - Configuration details
    - Related pod connections
 
 3. **Kustomizations**: Visualizes Kustomization resources showing:
-
    - Deployment status
    - Health metrics
    - Configuration state
    - Associated pod relationships
 
 4. **Repositories**: Monitors Helm, OCI and Git repositories:
-
    - Helm repositories status and health
    - Git repository connections
    - Sync states
