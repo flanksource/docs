@@ -6,7 +6,7 @@ export function Feature({ image, title, subtitle, url, left = true, children, })
   var icon = image
   if ((typeof image) === 'string') {
     icon = <img
-      className="relative mx-auto rounded-lg shadow-lg image-rendering-crisp"
+      className="relative mx-auto rounded-lg  image-rendering-crisp max-h-80 object-contain"
       src={`/img/${image}`}
       alt={title}
     />

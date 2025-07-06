@@ -2,6 +2,10 @@ const { addIconSelectors, addDynamicIconSelectors } = require('@iconify/tailwind
 
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./docs/**.{md,mdx}"],
+  colors: {
+    "cta": "#0053f8"
+  },
+
   plugins: [require('@tailwindcss/typography')],
   theme: {
     extend: {},
@@ -28,7 +32,12 @@ module.exports = {
       pattern: /border-zinc/,
     },
 
-
+    {
+      pattern: /bg-sky/,
+    },
+    {
+      pattern: /bg-indigo/,
+    },
     {
       pattern: /bg-zinc/,
     },

@@ -4,6 +4,7 @@ import React from 'react';
 import Icon from './Icon';
 import { Feature } from './Feature';
 import { Integrations } from './Integrations';
+import { Hero } from './flanksource/Hero';
 
 
 
@@ -19,51 +20,7 @@ function Home() {
   //   }
   // }, [colorMode]);
 
-  function Header() {
-    return (
 
-      <>
-        <div className="relative isolate overflow-hidden bg-white hero-pattern">
-
-          <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
-            <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
-              <img
-                className="h-11"
-                src="/img/canary-checker.svg"
-                alt="Canary Checker"
-              />
-              <h1 className="mt-10 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                Kubernetes Native <br></br> Health Check Platform
-              </h1>
-              <p className="mt-6 text-lg leading-8 text-gray-600">
-
-              </p>
-              <div className="mt-10 flex items-center gap-x-6">
-                <a
-                  href="/getting-started"
-                  className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Get started
-                </a>
-
-              </div>
-            </div>
-            <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
-              <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
-                <div className="-m-2 rounded-xl bg-gray-900/5 p-2  lg:-m-4 lg:rounded-2xl lg:p-4" >
-                  <img
-                    src="/img/canary-ui.png"
-                    alt="canary checker"
-                    className="w-[60rem] rounded-md shadow-2xl ring-1 ring-gray-900/10"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
 
   function Description() {
     return (
@@ -381,7 +338,15 @@ function Home() {
 
   return (
     <div id="tailwind">
-      <Header />
+      <Hero
+        logo="/img/canary-checker.svg"
+        logoAlt="Canary Checker"
+        title="Kubernetes Native Health Check Platform"
+        ctaText="Get started"
+        ctaLink="/getting-started"
+        image="/img/canary-ui.png"
+        imageAlt="canary checker"
+      />
       <Description />
     </div>
   );
