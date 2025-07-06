@@ -4,9 +4,9 @@ import {
   FaHandshake,
   FaRocket,
   FaLinkedin,
-  FaGithub,
-  FaExternalLinkAlt
+  FaGithub
 } from 'react-icons/fa';
+import CTA from './CTA';
 
 const About = () => {
   const teamMembers = [
@@ -100,7 +100,7 @@ const About = () => {
             }}
           />
         ) : null}
-        <div className="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full" style={{ display: person.image ? 'none' : 'flex' }}>
+        <div className="flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full" style={{ display: person.image ? 'none' : 'flex' }}>
           <FaUsers className="w-8 h-8 text-blue-600" />
         </div>
       </div>
@@ -123,32 +123,7 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <img
-                src="/img/flanksource/logo.svg"
-                alt="Flanksource"
-                className="h-8 w-auto"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  e.target.nextSibling.style.display = 'inline';
-                }}
-              />
-              <span className="ml-2 text-xl font-bold text-gray-900 hidden">Flanksource</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <a href="/" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-              <a href="/docs" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Docs</a>
-              <a href="/blog" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Blog</a>
-              <a href="/careers" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Careers</a>
-              <a href="/contact" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
-            </div>
-          </div>
-        </div>
-      </nav>
+
 
       {/* Hero Section */}
       <section className="bg-white py-20">
@@ -224,24 +199,13 @@ const About = () => {
         </div>
       </section>
 
-      {/* Hiring Section */}
-      <section className="py-20 bg-blue-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">We're Hiring!</h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Want to join the Flanksource team? We're always looking for talented individuals to help us build the future of operational resilience.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/careers"
-              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 inline-flex items-center justify-center"
-            >
-              Explore Open Positions
-              <FaExternalLinkAlt className="ml-2 w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </section>
+      {/* CTA Section */}
+      <CTA
+        title="We're Hiring!"
+        description="Want to join the Flanksource team? We're always looking for talented individuals to help us build the future of operational resilience."
+        primaryButton={{ text: "Explore Open Positions", href: "/careers" }}
+        secondaryButton={{ text: "Learn More", href: "/about" }}
+      />
     </div>
   );
 };
