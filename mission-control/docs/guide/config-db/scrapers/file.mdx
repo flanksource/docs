@@ -6,7 +6,7 @@ sidebar_custom_props:
 ---
 
 
-import Custom from './_custom.md'
+import Custom from './_custom.mdx'
 
 
 The `file` scraper is used to create config items from files in a local folder (or git). This can be used to track changes in files like `/etc/hosts` or `/etc/passwd`, or for service metadata stored in git.
@@ -33,9 +33,10 @@ spec:
 | Field       | Description                                                                        | Scheme                                       | Required |
 | ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
 | `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
-| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
+| `full`      | Set to `true` to extract changes & access logs from scraped configurations. Defaults to `false`. | `bool`                                       |          |
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/guide/config-db/concepts/retention) |          |
 | `file`      | Specifies the list of File configurations to scrape.                               | [`[]File`](#file)                          |          |
+| `logLevel`  | Specify the level of logging.                                                      | `string`                                     |          |
 
 ### File
 

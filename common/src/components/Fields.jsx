@@ -26,6 +26,7 @@ let schemes = {
   icon: '[Icon](/reference/types#icon)',
   bool: '`boolean`',
   int: '`integer`',
+  "map[string]EnvVar": '`[map[string]EnvVar](/reference/env-var)`',
   notificationurl: '[Notification](/reference/notifications)',
   notificationconnection: '[Connection](/reference/connections)',
   notificationproperties:
@@ -110,19 +111,12 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       return -1
     }
 
-
     if (a.priority && b.priority && a.priority < b.priority) {
       return 1
     }
 
     return a.field.localeCompare(b.field)
   }
-  rows = rows.concat(common.filter(row => row.required))
-  rows.sort(fieldSorter);
-  common = common.filter(row => !row.required)
-  common.sort(fieldSorter)
-  rows = rows.concat(common)
-
 
   if (connection == "url") {
     rows = rows.concat([
@@ -436,9 +430,109 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
         required: true
       }
     ])
+  } else if (connection == "http") {
+    rows = rows.concat([
+      {
+        field: 'tls.insecureSkipVerify',
+        description: 'Skip TLS certificate verification. Use with caution - only enable in trusted environments or for testing',
+        scheme: 'boolean'
+      },
+      {
+        field: 'tls.handshakeTimeout',
+        description: 'Maximum time to wait for TLS handshake completion. Example: "30s", "1m"',
+        scheme: 'duration'
+      },
+      {
+        field: 'tls.ca',
+        description: 'Custom Certificate Authority (CA) certificate for TLS verification. Used for self-signed or internal certificates',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'tls.cert',
+        description: 'Client TLS certificate for mutual TLS authentication (mTLS)',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'tls.key',
+        description: 'Private key corresponding to the client TLS certificate for mTLS',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'connection',
+        description: 'Reference to a pre-configured HTTP connection. Use this to reuse connection settings across multiple scrapers',
+        scheme: 'string'
+      },
+      {
+        field: 'bearer',
+        description: 'Bearer token for authentication',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'username',
+        description: 'Username for Basic or Digest authentication.',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'password',
+        description: 'Password for Basic or Digest authentication.',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'ntlm',
+        description: 'Enable Windows NTLM authentication protocol. Typically used in corporate environments',
+        scheme: 'boolean'
+      },
+      {
+        field: 'ntlmv2',
+        description: 'Enable NTLMv2 authentication protocol, a more secure version of NTLM',
+        scheme: 'boolean'
+      },
+      {
+        field: 'digest',
+        description: 'Enable Digest authentication, a more secure alternative to Basic authentication',
+        scheme: 'boolean'
+      },
+      {
+        field: 'oauth.clientID',
+        description: 'OAuth 2.0 client identifier',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'oauth.clientSecret',
+        description: 'OAuth 2.0 client secret',
+        scheme: 'EnvVar'
+      },
+      {
+        field: 'oauth.tokenURL',
+        description: 'OAuth 2.0 token endpoint URL',
+        scheme: 'string'
+      },
+      {
+        field: 'oauth.scopes',
+        description: 'List of OAuth 2.0 scopes',
+        scheme: '[]string'
+      },
+      {
+        field: 'oauth.params',
+        description: 'Additional OAuth 2.0 parameters to include in the token request',
+        scheme: 'map[string]string'
+      },
+      {
+        field: 'url',
+        description: 'The URL to send the HTTP request to. Must include the scheme _(http:// or https://)_',
+        scheme: 'string',
+        required: true
+      },
+    ])
   }
 
-  rows = rows.filter(i => i.field != null)
+  rows = rows.concat(common.filter(row => row.required)).filter(i => i.field != null)
+  rows.sort(fieldSorter);
+
+  common = common.filter(row => !row.required).filter(i => i.field != null)
+  common.sort(fieldSorter)
+  
+  rows = rows.concat(common)
 
   return (
     <>
