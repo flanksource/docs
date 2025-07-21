@@ -1,0 +1,54 @@
+---
+title: Config Access
+sidebar_custom_props:
+  icon: lock # TODO
+sidebar_position: 2
+---
+
+### Access Log
+
+<Fields rows={[
+  {
+    field: "config_id",
+    description: "The time the check or event logically started (e.g if coming from an external source)",
+    scheme: "uuid",
+     priority: 1,
+    required: true
+  },
+	{
+    field: "external_user_id",
+    description: "The time the check or event logically started (e.g if coming from an external source)",
+    scheme: "uuid",
+     priority: 1,
+    required: true
+  },
+	{
+    field: "scraper_id",
+    description: "The time the check or event logically started (e.g if coming from an external source)",
+    scheme: "uuid",
+     priority: 1,
+    required: false
+  },
+	{
+    field: "created_at",
+    description: "The time the check or event logically started (e.g if coming from an external source)",
+    scheme: "time.Time",
+     priority: 1,
+    required: false
+  },
+	{
+    field: "mfa",
+    description: "The time the check or event logically started (e.g if coming from an external source)",
+    scheme: "bool",
+     priority: 1,
+    required: false
+  },
+	{
+    field: "properties",
+    description: "The time the check or event logically started (e.g if coming from an external source)",
+    scheme: "map[string]string",
+     priority: 1,
+    required: false
+  }
+]}/>
+	
