@@ -1,6 +1,6 @@
 ---
 title: Columns
-sidebar_position: 1
+sidebar_position: 2
 sidebar_custom_props:
   icon: material-symbols:table-chart
 ---
@@ -153,5 +153,5 @@ columns:
 
 When mapping data to columns, ensure the source data matches the expected type:
 
-```yaml title="database.yaml" file=<rootDir>/modules/mission-control/fixtures/views/database.yaml {25-30}
+```yaml title="database.yaml" file=<rootDir>/modules/mission-control/fixtures/views/database.yaml {20-29}
 ```

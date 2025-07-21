@@ -18,16 +18,10 @@ Views support the following panel types:
 
 ## Basic Panel Structure
 
-All panels share a common structure:
+All panels share a common structure. Here's an example from the gauge panel fixture:
 
-```yaml
-panels:
-  - name: 'Panel Name'
-    description: 'Panel description'
-    type: piechart
-    source: configs
-    query:
-      # Query configuration
+```yaml title="gauge.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/gauge.yaml {12-26}
+
 ```
 
 ## Panel Configuration
@@ -36,27 +30,8 @@ panels:
 
 Pie charts show data distribution across categories:
 
-```yaml
-panels:
-  - name: 'Health Distribution'
-    description: 'Services grouped by health status'
-    type: piechart
-    source: configs
-    piechart:
-      showLabels: true
-      colors:
-        healthy: '#28C19B'
-        unhealthy: '#F04E6E'
-        warning: '#F4B23C'
-    query:
-      groupBy:
-        - health
-      aggregates:
-        - function: COUNT
-          alias: count
-          field: '*'
-      types:
-        - 'Kubernetes::Service'
+```yaml title="piechart.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/piechart.yaml
+
 ```
 
 #### Piechart Properties
@@ -68,27 +43,8 @@ panels:
 
 Gauges display metrics with threshold-based color coding:
 
-```yaml
-panels:
-  - name: 'Resource Usage'
-    description: 'CPU usage percentage'
-    type: gauge
-    source: configs
-    gauge:
-      min: 0
-      max: 100
-      thresholds:
-        - value: 70
-          color: yellow
-        - value: 90
-          color: red
-    query:
-      groupBy:
-        - type
-      aggregates:
-        - function: COUNT
-          alias: value
-          field: '*'
+```yaml title="gauge.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/gauge.yaml
+
 ```
 
 #### Gauge Properties
@@ -109,21 +65,8 @@ panels:
 
 Number panels display single metrics with units:
 
-```yaml
-panels:
-  - name: 'Average Duration'
-    description: 'Average pipeline duration'
-    type: number
-    source: changes
-    number:
-      unit: seconds
-      precision: 2
-    query:
-      search: change_type=PipelineRun
-      aggregates:
-        - function: AVG
-          alias: value
-          field: 'duration'
+```yaml title="number.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/number.yaml
+
 ```
 
 #### Number Properties
@@ -135,78 +78,18 @@ panels:
 
 Tables display aggregated data in rows and columns:
 
-```yaml
-panels:
-  - name: 'Repository Activity'
-    type: table
-    source: changes
-    query:
-      search: change_type=GitHubActionRun
-      groupBy:
-        - repository
-      aggregates:
-        - function: COUNT
-          alias: runs
-          field: '*'
-        - function: AVG
-          alias: avg_duration
-          field: 'duration'
+```yaml title="table.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/table.yaml
+
 ```
 
-## Data Sources
+## Panel Queries
 
-Panels support two main data sources:
+Panels use SQL queries to aggregate data from the view's named queries. Each panel executes its SQL query against the data sources defined in the view's `queries` section.
 
-### Config Source (`configs`)
+### Query Structure
 
-Query configuration items from your catalog:
+Panels reference query names as tables in SQL. Here's how the gauge example works:
 
-```yaml
-source: configs
-query:
-  types:
-    - 'Kubernetes::Deployment'
-    - 'Kubernetes::Service'
-  groupBy:
-    - namespace
-  aggregates:
-    - function: COUNT
-      alias: count
-      field: '*'
+```yaml title="gauge.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/gauge.yaml {7-26}
+
 ```
-
-### Change Source (`changes`)
-
-Query change tracking and audit data:
-
-```yaml
-source: changes
-query:
-  search: change_type=GitHubActionRun
-  types:
-    - 'GitHubAction::Workflow'
-  groupBy:
-    - repository
-  aggregates:
-    - function: COUNT
-      alias: runs
-      field: '*'
-```
-
-## Query Configuration
-
-### Aggregation Functions
-
-- `COUNT` - Count of items
-- `AVG` - Average value
-- `SUM` - Sum of values
-- `MIN` - Minimum value
-- `MAX` - Maximum value
-
-### Grouping and Filtering
-
-- `groupBy`: Array of fields to group results by
-- `types`: Filter by resource types
-- `search`: Search query string
-- `tagSelector`: Tag-based filtering
-- `labelSelector`: Label-based filtering
