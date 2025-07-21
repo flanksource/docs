@@ -1,5 +1,5 @@
 ---
-title: Panel Types
+title: Panels
 sidebar_position: 3
 sidebar_custom_props:
   icon: material-symbols:dashboard
@@ -20,7 +20,7 @@ Views support the following panel types:
 
 All panels share a common structure. Here's an example from the gauge panel fixture:
 
-```yaml title="gauge.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/gauge.yaml {12-26}
+```yaml title="gauge.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/gauge.yaml
 
 ```
 
@@ -90,6 +90,6 @@ Panels use SQL queries to aggregate data from the view's named queries. Each pan
 
 Panels reference query names as tables in SQL. Here's how the gauge example works:
 
-```yaml title="gauge.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/gauge.yaml {7-26}
+```yaml title="gauge.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/gauge.yaml
 
 ```
