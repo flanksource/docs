@@ -6,19 +6,20 @@ sidebar_custom_props:
   icon: view-details
 ---
 
-Views are a powerful feature that allows you to create custom, dynamic dashboards from your Mission Control data. They enable you to transform and present data from various sources (configs, changes, metrics, etc.) in a structured, tabular format with rich visualizations.
+Views are a SQL-powered feature that allows you to create custom, dynamic dashboards from your Mission Control data. They collect data from multiple sources into an in-memory SQLite database, enabling you to run any SQL query for filtering, joining, and aggregating your observability data.
 
 <Screenshot img="/img/views.svg" className="h-auto" alt="Views Concept" shadow="false" size="800px"/>
+
+This view creates a dashboard showing Helm releases with their current status, health, and deployment information.
 
 ## Overview
 
 Views solve the challenge of creating custom dashboards and reports by providing:
 
-- **Dynamic Data Aggregation**: Combine data from multiple sources using flexible query mechanisms
+- **Dynamic Data Aggregation**: Combine data from multiple sources using SQL
 - **Rich Visualizations**: Display data with gauges, charts, status indicators, and more
 - **Structured Schema**: Define column types and constraints for consistent data presentation
-- **Real-time Updates**: Automatically refresh data based on configurable schedules
-- **GitOps Integration**: Define views as Kubernetes Custom Resources for version control
+- **Cached Results**: Views work like materialized views, caching query results in dedicated database tables for fast retrieval
 
 ## Key Features
 
@@ -28,91 +29,57 @@ Views can query data from multiple sources:
 
 - **Config Items**: Infrastructure components and configurations via the `configs` selector
 - **Changes**: Configuration change tracking and audit data via the `changes` selector
-- **Custom Queries**: SQL queries for complex data joins and transformations across query results
-- **Panel Queries**: SQL aggregations executed against query result sets
+- **Metrics**: Time-series data from Prometheus using PromQL queries
 
-_Note: Metric queries are planned but not yet implemented in the current version._
+### Output Types
 
-### Column Types
+Views can generate:
 
-Views support various column types for rich data presentation:
-
-- `string` - Text data
-- `number` - Numeric values
-- `boolean` - True/false values
-- `datetime` - Timestamp data
-- `duration` - Time duration values
-- `health` - Health status indicators with color coding
-- `status` - Status information with visual indicators
-- `gauge` - Gauge visualizations with thresholds
-- `bytes` - Byte data with automatic formatting
-- `decimal` - Decimal numbers with precision control
-- `millicore` - CPU millicore values
-
-### Visualization Panels
-
-Generate interactive panels from your data:
-
-- **Pie Charts**: Distribution visualizations with custom colors
-- **Gauges**: Threshold-based metrics with min/max ranges
-- **Number Displays**: Single metric displays with units
-- **Tables**: Tabular data breakdowns
-- **Text Displays**: Formatted text presentations
+- **One Table**: Structured data with typed columns for detailed data presentation
+- **Multiple Panels**: Interactive visualizations including pie charts, gauges, numbers, and summary tables
 
 ## How Views Work
 
-Views follow a simple but powerful pattern:
+Views transform your data into an in-memory SQL database, giving you the full power of SQL to slice, dice, and analyze your infrastructure:
 
-1. **Define** your view schema with columns and named data source queries
-2. **Execute** queries against configs or changes to collect raw data
-3. **Transform** the data using CEL expressions in the mapping section
-4. **Aggregate** panel data using SQL queries against the collected datasets
-5. **Cache** results in dedicated database tables for fast retrieval
-6. **Refresh** automatically based on cache expiration and configured schedules
+### 1. Named Queries (Required)
 
-## Basic Example
+Every view **must** define queries with unique names:
 
-Here's a simple view that shows deployment status:
-
-```yaml title="deployments.yaml" file=<rootDir>/modules/mission-control/fixtures/views/deployments.yaml
-
+```yaml
+queries:
+  deployments: # Table name in SQL
+    configs:
+      types: ['Kubernetes::Deployment']
+  pipelines: # Another table name
+    changes:
+      search: change_type=GitHubActionRun
 ```
 
-This view creates a dashboard showing Helm releases with their current status, health, and deployment information.
+### 2. In-Memory SQL Database
 
-## Advanced Features
+Views execute your named queries and create an **SQLite database in memory**:
 
-### Multi-Source Queries
+- Each query becomes a **table** with the query's name
+- Table schema is dynamically generated from the query results
+- Example: queries named `deployments`, `pipelines`, `metrics` create 3 SQL tables
 
-Views can combine data from multiple sources including configs, changes, and metrics. See the [Queries Guide](./queries) for detailed examples.
+### 3. SQL-Powered Data Processing
 
-### Rich Visualizations
+Once data is loaded, you can run **any SQL query** against it to combine data from multiple sources:
 
-Create interactive panels with pie charts, gauges, and tables. The deployments example above shows pie charts for health and status distribution.
+```yaml
+# View table data (optional)
+merge: |
+  SELECT d.name, d.status, p.duration 
+  FROM deployments d 
+  LEFT JOIN pipelines p ON d.name = p.app
 
-### Custom Panels
+# Panel queries (required for panels)
+panels:
+  - name: 'Status Distribution'
+    type: piechart
+    query: 'SELECT COUNT(*) AS count, status FROM deployments GROUP BY status'
+```
 
-Generate visualization panels with aggregated data from your queries. Views support pie charts, gauges, number displays, and tables.
-
-## Getting Started
-
-1. **Define Your View**: Create a View Custom Resource with your desired schema
-2. **Configure Data Sources**: Set up queries for configs, changes, or metrics
-3. **Map Your Data**: Transform source data to match your column schema
-4. **Deploy**: Apply your view to your Kubernetes cluster
-5. **Access**: View your dashboard through the Mission Control UI
-
-## Best Practices
-
-- **Start Simple**: Begin with basic views and add complexity gradually
-- **Use Primary Keys**: Define primary keys for efficient data updates
-- **Leverage Types**: Use appropriate column types for better visualization
-- **Regular Refresh**: Set appropriate refresh intervals for your data
-- **Test Queries**: Validate your queries return expected data structures
-
-## Next Steps
-
-- Learn about [Column Types](./columns) for rich data presentation
-- Explore [Query Patterns](./queries) for advanced data aggregation
-- See [Visualization Examples](./examples) for common use cases
-- Check [API Reference](../../reference/views) for complete configuration options
+This SQL-first approach gives you unlimited flexibility to slice, filter, and aggregate your data.
