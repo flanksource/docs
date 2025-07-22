@@ -5,7 +5,7 @@ sidebar_custom_props:
   icon: material-symbols:table-chart
 ---
 
-A view can generate a single table. The table supports a rich set of column types that determine how data persisted and displayed and formatted in your dashboards.
+A view can generate a single table. The table supports a rich set of column types that determine how data is persisted, displayed, and formatted in your dashboards.
 Each column type provides specific formatting and visualization capabilities.
 
 ## Columns
@@ -18,9 +18,9 @@ Column names must be valid SQL identifiers as they map directly to table columns
 
 ### Column Types
 
-#### String
+#### `string`
 
-Simple text data with no special formatting.
+Text data with no additional formatting.
 
 ```yaml
 columns:
@@ -28,7 +28,7 @@ columns:
     type: string
 ```
 
-#### Number
+#### `number`
 
 Numeric values with automatic formatting.
 
@@ -38,7 +38,7 @@ columns:
     type: number
 ```
 
-#### Boolean
+#### `boolean`
 
 True/false values displayed as checkmarks or status indicators.
 
@@ -48,7 +48,7 @@ columns:
     type: boolean
 ```
 
-#### Datetime
+#### `datetime`
 
 Timestamp values with automatic date/time formatting.
 
@@ -58,7 +58,7 @@ columns:
     type: datetime
 ```
 
-#### Duration
+#### `duration`
 
 Time duration values with human-readable formatting (e.g., "2h 30m").
 
@@ -68,7 +68,7 @@ columns:
     type: duration
 ```
 
-#### Health
+#### `health`
 
 Health status indicators with color-coded visual representation.
 
@@ -78,7 +78,7 @@ columns:
     type: health
 ```
 
-#### Status
+#### `status`
 
 General status information with visual indicators.
 
@@ -88,7 +88,7 @@ columns:
     type: status
 ```
 
-#### Decimal
+#### `decimal`
 
 Decimal numbers with configurable precision.
 
@@ -98,7 +98,7 @@ columns:
     type: decimal
 ```
 
-#### Bytes
+#### `bytes`
 
 Byte values with automatic unit conversion (B, KB, MB, GB).
 
@@ -108,9 +108,9 @@ columns:
     type: bytes
 ```
 
-#### Millicore
+#### `millicore`
 
-CPU millicore values with proper formatting.
+CPU `millicore` values with proper formatting.
 
 ```yaml
 columns:
@@ -118,7 +118,7 @@ columns:
     type: millicore
 ```
 
-#### Gauge
+#### `gauge`
 
 Rich gauge visualizations with thresholds and color coding.
 
@@ -148,7 +148,7 @@ columns:
 
 ### Primary Keys
 
-Each view table must specify at least one column as the primary key. Primary keys are used for internal purposes including data deduplication and table operations. You can have multiple primary keys to create composite primary keys.
+Each view table must specify at least one column as the primary key. Primary keys are used for internal purposes including data `deduplication` and table operations. You can have multiple primary keys to create composite primary keys.
 
 #### Single Primary Key
 
@@ -195,7 +195,7 @@ The basic flow is:
 
 ### Basic Mapping
 
-Here's a simple example from the database backup view showing how to map query results to table columns:
+Here's an example from the database backup view showing how to map query results to table columns:
 
 ```yaml title="database.yaml" file=<rootDir>/modules/mission-control/fixtures/views/database.yaml {25-29}
 

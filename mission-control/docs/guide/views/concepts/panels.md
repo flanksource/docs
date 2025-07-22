@@ -26,7 +26,7 @@ All panels share a common structure. Here's an example from the gauge panel fixt
 
 ## Panel Configuration
 
-### Piechart
+### Pie Chart
 
 Pie charts show data distribution across categories:
 
@@ -34,7 +34,7 @@ Pie charts show data distribution across categories:
 
 ```
 
-#### Piechart Properties
+#### Pie Chart Properties
 
 - `showLabels`: Display labels on pie slices
 - `colors`: Custom color mapping for categories

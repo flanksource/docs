@@ -5,13 +5,13 @@ sidebar_custom_props:
   icon: material-symbols:query-stats
 ---
 
-Views use a powerful query system to aggregate and transform data from multiple sources. You can query configuration items, changes, and metrics to populate your views.
+Views use a powerful query system to aggregate and transform data from multiple sources. You can query config items, changes, and metrics to populate your views.
 
 ## Query Types
 
 ### Config Queries
 
-Query configuration items from your catalog:
+Query config items from your catalog:
 
 ```yaml title="deployments.yaml" file=<rootDir>/modules/mission-control/fixtures/views/deployments.yaml {54-60}
 

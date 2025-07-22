@@ -20,7 +20,7 @@ This example demonstrates:
 - **Status Tracking**: Monitoring Helm release status (InstallSucceeded, UpgradeFailed, etc.)
 - **Multiple Panel Types**: Both health and status pie charts with different color schemes
 - **Config Queries**: Querying Kubernetes::HelmRelease components with tag selectors
-- **Column Types**: String, status, health, and datetime columns with descriptions
+- **Column Types**: String, status, health, and `datetime` columns with descriptions
 - **Data Mapping**: Transforming Helm release data using CEL expressions to access nested config data
 - **SQL Panel Queries**: Aggregating data with GROUP BY clauses
 
@@ -52,8 +52,8 @@ Track database backup operations and status:
 This example demonstrates:
 
 - **Change Events**: Querying BackupSuccessful change events with search filters
-- **Simple Queries**: Straightforward change-based queries without complex joins
+- **Straightforward Queries**: Direct change-based queries without complex joins
 - **Status Monitoring**: Extracting backup status from change details
 - **Result Limiting**: Using `max: 10` to limit query results
-- **Datetime Handling**: Direct mapping of created_at timestamps
+- **`datetime` Handling**: Direct mapping of created_at timestamps
 - **Minimal Configuration**: Basic view setup for operational monitoring without panels
