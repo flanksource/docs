@@ -11,12 +11,13 @@ This page provides practical examples of Views for common use cases. Each exampl
 Track Helm releases with health and status indicators:
 
 ```yaml title="deployments.yaml" file=<rootDir>/modules/mission-control/fixtures/views/deployments.yaml
+
 ```
 
 This example demonstrates:
 
 - **Health Status Visualization**: Pie chart showing deployment health distribution with custom colors
-- **Status Tracking**: Monitoring Helm release status (InstallSucceeded, UpgradeFailed, etc.) 
+- **Status Tracking**: Monitoring Helm release status (InstallSucceeded, UpgradeFailed, etc.)
 - **Multiple Panel Types**: Both health and status pie charts with different color schemes
 - **Config Queries**: Querying Kubernetes::HelmRelease components with tag selectors
 - **Column Types**: String, status, health, and datetime columns with descriptions
@@ -28,12 +29,13 @@ This example demonstrates:
 Monitor CI/CD pipeline performance and status:
 
 ```yaml title="pipelines.yaml" file=<rootDir>/modules/mission-control/fixtures/views/pipelines.yaml
+
 ```
 
 This example shows:
 
 - **Change-Based Queries**: Querying GitHubActionRun changes with search filters and ordering
-- **JSON Field Access**: Using PostgreSQL JSON operators to extract repository and duration data  
+- **JSON Field Access**: Using PostgreSQL JSON operators to extract repository and duration data
 - **Duration Calculations**: CEL expressions for timestamp arithmetic
 - **Mixed Panel Types**: Table panels for repository counts and number panels for averages
 - **Column Mapping**: Complex field mappings from nested JSON structures
@@ -44,6 +46,7 @@ This example shows:
 Track database backup operations and status:
 
 ```yaml title="database.yaml" file=<rootDir>/modules/mission-control/fixtures/views/database.yaml
+
 ```
 
 This example demonstrates:
