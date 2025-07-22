@@ -46,4 +46,4 @@ This example shows:
 - **Multiple query sources**: Combining workflow runs from changes
 - **Panel queries**: Using SQL to aggregate repository data
 - **CEL expressions**: Complex duration calculations in mappings
-- **Data aggregation**: COUNT and AVG functions in panel queries
+- **Data aggregation**: `COUNT` (count) and `AVG` (average) functions in panel queries

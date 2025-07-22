@@ -5,7 +5,7 @@ sidebar_custom_props:
   icon: material-symbols:cached
 ---
 
-Views implement a caching system that stores query results in dedicated database tables for fast retrieval and additional filtering.
+Views implement a caching system that stores query results in dedicated database tables for fast retrieval and extra filtering.
 You can control cache behavior through both view configuration and HTTP headers.
 
 ## How View Caching Works
@@ -42,8 +42,8 @@ spec:
 
 ### Default Values
 
-| Setting          | Default    | Description                               |
-| ---------------- | ---------- | ----------------------------------------- |
-| `maxAge`         | 15 minutes | Cache expires after this duration         |
-| `minAge`         | 10 seconds | Minimum cache age that can be requested   |
-| `refreshTimeout` | 5 seconds  | Timeout for background refresh operations |
+| Setting          | Default    | Description                                |
+| ---------------- | ---------- | ------------------------------------------ |
+| `maxAge`         | 15 minutes | Cache expires after this duration          |
+| `minAge`         | 10 seconds | Minimum cache age that clients can request |
+| `refreshTimeout` | 5 seconds  | Timeout for background refresh operations  |

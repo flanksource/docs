@@ -22,7 +22,7 @@ This example demonstrates:
 - **Config Queries**: Querying Kubernetes::HelmRelease components with tag selectors
 - **Column Types**: String, status, health, and `datetime` columns with descriptions
 - **Data Mapping**: Transforming Helm release data using CEL expressions to access nested config data
-- **SQL Panel Queries**: Aggregating data with GROUP BY clauses
+- **SQL Panel Queries**: Aggregating data with `GROUP` BY clauses
 
 ## Pipeline Monitoring
 
@@ -39,7 +39,7 @@ This example shows:
 - **Duration Calculations**: CEL expressions for timestamp arithmetic
 - **Mixed Panel Types**: Table panels for repository counts and number panels for averages
 - **Column Mapping**: Complex field mappings from nested JSON structures
-- **SQL Aggregations**: COUNT and AVG functions with JSON field extraction
+- **SQL Aggregations**: `COUNT` (count) and `AVG` (average) functions with JSON field extraction
 
 ## Database Operations
 

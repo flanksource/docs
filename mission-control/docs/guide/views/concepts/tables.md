@@ -5,12 +5,12 @@ sidebar_custom_props:
   icon: material-symbols:table-chart
 ---
 
-A view can generate a single table. The table supports a rich set of column types that determine how data is persisted, displayed, and formatted in your dashboards.
+A view can generate a single table. The table supports a rich set of column types that decide how data persists, displays, and formats in your dashboards.
 Each column type provides specific formatting and visualization capabilities.
 
 ## Columns
 
-Columns define the structure and data types of your view table. Each column has a name and type that determines how the data is stored, displayed, and formatted in your dashboards.
+Columns define the structure and data types of your view table. Each column has a name and type that determines how the data stores, displays, and formats in your dashboards.
 
 :::info
 Column names must be valid SQL identifiers as they map directly to table columns in the underlying database.
@@ -20,7 +20,7 @@ Column names must be valid SQL identifiers as they map directly to table columns
 
 #### `string`
 
-Text data with no additional formatting.
+Text data with no extra formatting.
 
 ```yaml
 columns:
@@ -148,7 +148,7 @@ columns:
 
 ### Primary Keys
 
-Each view table must specify at least one column as the primary key. Primary keys are used for internal purposes including data `deduplication` and table operations. You can have multiple primary keys to create composite primary keys.
+Each view table must specify at least one column as the primary key. Primary keys support internal purposes including data `deduplication` and table operations. You can have multiple primary keys to create composite primary keys.
 
 #### Single Primary Key
 

@@ -5,7 +5,8 @@ sidebar_custom_props:
   icon: material-symbols:dashboard
 ---
 
-Views support different panel types for visualizing aggregated data. Panels create interactive visualizations from your data sources and can be configured with various display options.
+Views support different panel types for visualizing aggregated data.
+Panels create interactive visualizations from your data sources and you can configure them with various display options.
 
 ## Panel Types
 

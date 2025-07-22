@@ -61,12 +61,12 @@ queries:
 Views execute your named queries and create an **SQLite database in memory**:
 
 - Each query becomes a **table** with the query's name
-- Table schema is dynamically generated from the query results
+- Table schema gets generated dynamically from the query results
 - Example: queries named `deployments`, `pipelines`, `metrics` create 3 SQL tables
 
 ### 3. SQL-Powered Data Processing
 
-Once data is loaded, you can run **any SQL query** against it to combine data from multiple sources:
+Once you load data, you can run **any SQL query** against it to combine data from multiple sources:
 
 ```yaml
 # View table data (optional)
