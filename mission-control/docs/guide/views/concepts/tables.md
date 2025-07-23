@@ -169,7 +169,7 @@ columns:
 
 ### Helper Columns
 
-Helper columns are special columns that provide additional data for other columns without being rendered directly in the UI. They use the `for` field to reference the column they support.
+Helper columns are extra columns that give data for other columns without rendering directly in the UI. They use the `for` field to reference the column they support.
 
 The most common use case is providing URLs for other columns. When a column has a helper column of type `url`, the main column becomes clickable and links to the URL provided by the helper column.
 
@@ -191,7 +191,7 @@ In this example:
 
 ### Hidden Columns
 
-Columns can be marked as `hidden: true` to prevent them from appearing as separate columns in the table while still being available for internal operations. Primary keys like UUIDs are good candidates to hide since they're needed for data operations but not useful for display.
+You can mark columns as `hidden: true` to prevent them from appearing as separate columns in the table while still being available for internal operations. Primary keys like `UUIDs` are good candidates to hide since they're needed for data operations but not useful for display.
 
 ```yaml
 columns:
@@ -242,14 +242,14 @@ columns:
 Data mapping defines how data from your query results gets transformed and assigned to specific table columns.
 
 :::info
-Mapping is **optional** - if not specified, Mission Control will automatically look for column names directly in the query results.
+Mapping is **optional** - if not specified, Mission Control automatically looks for column names directly in the query results.
 :::
 
 ### How Data Mapping Works
 
 When Mission Control executes your queries, it returns raw data objects. For each column, the system:
 
-1. **Checks for explicit mapping** → If a CEL expression is defined for the column
+1. **Checks for explicit mapping** → If a CEL expression defines the column
 2. **Falls back to direct lookup** → Looks for the column name directly in the query results
 3. **Defaults to null** → If neither mapping nor direct column name exists
 
@@ -259,7 +259,7 @@ The mapping section uses [CEL (Common Expression Language)](/reference/scripting
 
 #### Automatic Column Mapping
 
-If no mapping is specified, columns are automatically populated from query results:
+If you specify no mapping, columns are automatically populated from query results:
 
 ```yaml
 columns:
