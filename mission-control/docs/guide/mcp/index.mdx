@@ -1,0 +1,118 @@
+---
+pagination_prev: guide/canary-checker/health-checks
+title: MCP (Model Context Protocol)
+sidebar_position: 4
+sidebar_custom_props:
+  icon: ai
+---
+
+# MCP
+
+Mission Control supports MCP for those who want to link it with their LLM Clients.
+
+## Setup
+
+The MCP HTTP Server runs at the `/mcp` endpoint.
+
+For SaaS users: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
+
+For self hosted users: `https://your.domain.com/api/mcp`
+
+## Permissions
+
+To access the mcp server, `Authorization` header can be used with a token. The token must have `mcp.*` permission.
+
+## Resources
+
+### Config Item
+
+**URI Template:** `config_item://{id}`
+
+Access detailed configuration item data from the catalog using the config item's unique ID
+
+### Connection
+
+**URI Template:** `connection://{namespace}/{name}`
+
+Retrieve connection configuration details by specifying the namespace and name
+
+### Playbooks
+
+**URI:** `playbooks://{id}`
+
+Get playbook with their parameters and metadata
+
+## Tools
+
+### Catalog Tools
+
+#### list_catalog_types
+List all available configuration types in the system
+
+#### catalog_search
+
+Search across the entire configuration catalog
+
+<Fields rows={[
+  {field: "query", scheme: "[ResourceSelector#search](/reference/resource-selector#search)", description: "Search query using the supported grammar", required: true}
+]} />
+
+**Features:**
+- Supports complex filtering by type, name, namespace, labels, tags, health status, and dates
+- Wildcard matching for flexible searches
+- Date range queries with relative date math
+
+#### catalog_changes_search
+
+Search for configuration changes across the catalog
+
+<Fields rows={[
+  {field: "query", scheme: "[ResourceSelector#search](/reference/resource-selector#search)", description: "Search query using the supported grammar", required: true},
+  {field: "limit", scheme: "number", description: "Maximum number of results to return"}
+]} />
+
+**Features:**
+- Search by change-specific fields like severity, change type, and summary
+- Same query syntax as catalog_search with additional change-related fields
+
+#### related_configs
+
+Find configurations related to a specific config item
+
+<Fields rows={[
+  {field: "id", scheme: "string", description: "Config item ID (UUID format)", required: true}
+]} />
+
+### Connection Tools
+
+#### list_connections
+List all available connections in the system
+
+### Playbook Tools
+
+#### playbook_list_all
+List all available playbooks
+
+#### playbook_recent_runs
+Get recent playbook execution runs
+
+<Fields rows={[
+  {field: "limit", scheme: "integer", description: "Number of recent runs to retrieve", default: 20, required: true}
+]} />
+
+#### playbook_failed_runs
+Get recent failed playbook execution runs
+
+<Fields rows={[
+  {field: "limit", scheme: "number", description: "Number of failed runs to retrieve", default: 20, required: true}
+]} />
+
+#### playbook_exec_run
+Execute a playbook with specified parameters
+
+<Fields rows={[
+  {field: "id", scheme: "string", description: "Playbook ID (UUID format)", required: true},
+  {field: "params", scheme: "object", description: "Parameters required for playbook execution", required: true}
+]} />
+
+**Note:** This is a destructive operation that will modify system state. Parameters are playbook-specific and can be found using the all_playbooks tool.
