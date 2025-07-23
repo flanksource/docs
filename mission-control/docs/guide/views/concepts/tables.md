@@ -180,10 +180,11 @@ columns:
     primaryKey: true
   - name: component_url
     type: url
-    for: component_name  # This URL will make component_name clickable
+    for: component_name # This URL will make component_name clickable
 ```
 
 In this example:
+
 - `component_name` displays as a regular string column
 - `component_url` provides the URL data but doesn't render as a separate column
 - When rendered, `component_name` becomes a clickable link using the URL from `component_url`
@@ -238,61 +239,59 @@ columns:
 
 ## Data Mapping
 
-Data mapping is the bridge between your query results and your table structure. It defines how data from your queries gets transformed and assigned to specific table columns. This mapping is essential for tables, as it determines what data appears in each column of your view.
+Data mapping defines how data from your query results gets transformed and assigned to specific table columns.
+
+:::info
+Mapping is **optional** - if not specified, Mission Control will automatically look for column names directly in the query results.
+:::
 
 ### How Data Mapping Works
 
-When Mission Control executes your queries, it returns raw data objects. The mapping section uses CEL (Common Expression Language) expressions to extract and transform this data into your table columns.
+When Mission Control executes your queries, it returns raw data objects. For each column, the system:
 
-The basic flow is:
+1. **Checks for explicit mapping** → If a CEL expression is defined for the column
+2. **Falls back to direct lookup** → Looks for the column name directly in the query results
+3. **Defaults to null** → If neither mapping nor direct column name exists
 
-1. **Query execution** → Returns data objects (referenced as `row`)
-2. **Mapping evaluation** → CEL expressions extract values from `row`
-3. **Column population** → Extracted values fill your table columns
+The mapping section uses [CEL (Common Expression Language)](/reference/scripting/cel) expressions where the query result data is available as `row`.
 
-### Basic Mapping
+### Mapping Behavior
 
-Here's an example from the database backup view showing how to map query results to table columns:
+#### Automatic Column Mapping
 
-```yaml title="backups.yaml" file=<rootDir>/modules/mission-control/fixtures/views/backups.yaml {25-29}
-
-```
-
-In this example:
-
-- `row.name` extracts the `name` field from each query result into the `database` column
-- `row.created_at` maps the creation timestamp into the `date` column
-- `row.details.status` navigates into nested objects to get the backup status and maps it to the `status` column
-- `row.source` directly maps the source field into the `source` column
-
-### Advanced Mapping Examples
-
-#### Helper Column Mapping
-
-When using helper columns, you need to map data to both the main column and its helper:
+If no mapping is specified, columns are automatically populated from query results:
 
 ```yaml
 columns:
-  - name: pod_name
+  - name: name
     type: string
     primaryKey: true
-  - name: pod_url
-    type: url
-    for: pod_name
-    hidden: true
-
-mapping:
-  pod_name: row.name
-  pod_url: '"https://dashboard.example.com/pods/" + row.namespace + "/" + row.name'
+  - name: status
+    type: string
+  - name: created_at
+    type: datetime
+# No mapping section needed - columns will be populated from query results automatically
 ```
 
-#### Conditional Mapping
+#### Explicit Mapping
 
-Use CEL expressions for conditional data mapping:
+When you need data transformation or the column names don't match query results:
 
 ```yaml
 mapping:
-  status: 'row.health == "healthy" ? "Running" : "Failed"'
-  cost: 'has(row.cost_total_30d) ? row.cost_total_30d : "0"'
-  memory_usage: 'row.memory_bytes / 1024 / 1024'  # Convert bytes to MB
+  name: row.component_name # Map from different field name
+  status: row.health # Map from different field name
+  created_at: row.created_at # Direct mapping (same as automatic)
+```
+
+### CEL Expression Context
+
+In mapping expressions, query result data is available as `row`:
+
+```yaml
+mapping:
+  database: row.name # Access top-level fields
+  date: row.created_at # Direct field access
+  status: row.details.status # Navigate nested objects
+  source: row.source # Simple field mapping
 ```
