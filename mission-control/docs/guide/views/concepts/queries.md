@@ -21,7 +21,7 @@ Query config items from your catalog:
 
 Query configuration changes and audit data:
 
-```yaml title="database.yaml" file=<rootDir>/modules/mission-control/fixtures/views/database.yaml {29-33}
+```yaml title="backups.yaml" file=<rootDir>/modules/mission-control/fixtures/views/backups.yaml {29-33}
 
 ```
 
@@ -29,7 +29,7 @@ Query configuration changes and audit data:
 
 Query time-series data from Prometheus and other sources. Metric queries are not yet implemented in the current version, but the structure would be:
 
-```yaml title="database.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/resource-usage.yaml {7-15}
+```yaml title="resource-usage.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/resource-usage.yaml {7-15}
 
 ```
 

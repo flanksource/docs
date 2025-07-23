@@ -45,7 +45,7 @@ This example shows:
 
 Track database backup operations and status:
 
-```yaml title="database.yaml" file=<rootDir>/modules/mission-control/fixtures/views/database.yaml
+```yaml title="backups.yaml" file=<rootDir>/modules/mission-control/fixtures/views/backups.yaml
 
 ```
 
