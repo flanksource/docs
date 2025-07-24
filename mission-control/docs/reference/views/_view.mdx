@@ -1,0 +1,287 @@
+<Fields rows={[
+  {
+    field: "display.title",
+    description: "Human-readable title displayed in the UI _(defaults to view name)_",
+    scheme: "string"
+  },
+  {
+    field: "display.icon", 
+    description: "Icon identifier for navigation and visual identification",
+    scheme: "icon"
+  },
+  {
+    field: "display.sidebar",
+    description: "Whether the view appears in sidebar navigation _(default: false)_",
+    scheme: "bool"
+  },
+  {
+    field: "display.ordinal",
+    description: "Sort order for navigation, lower numbers appear first _(default: 0)_",
+    scheme: "int"
+  },
+  {
+    field: "panels",
+    description: "Interactive visualizations for aggregated data",
+    scheme: "[[]PanelDef](#panel-definition)"
+  },
+  {
+    field: "columns",
+    description: "Define the structure and data types of the view table",
+    scheme: "[[]ViewColumnDef](#view-column-definition)"
+  },
+  {
+    field: "queries",
+    required: true,
+    description: "Named queries that populate the view data sources",
+    scheme: "[`map[string]Query`](#query)"
+  },
+  {
+    field: "merge",
+    description: "SQL query to merge/join data from multiple named queries. Required when using multiple queries with table output _(columns only)_.",
+    scheme: "string"
+  },
+  {
+    field: "mapping",
+    description: "CEL expressions to map query results to view columns. _If not specified, columns are automatically populated from query results._",
+    scheme: "[`map[string]CELExpression`](/reference/scripting/cel)"
+  },
+  {
+    field: "cache.maxAge",
+    description: "Maximum age of cache before it's deemed stale _(default: 15m)_",
+    scheme: "duration"
+  },
+  {
+    field: "cache.minAge",
+    description: "Minimum age of cache a user can request _(default: 10s)_",
+    scheme: "duration"
+  },
+  {
+    field: "cache.refreshTimeout",
+    description: "Duration to wait for a view to process before returning stale data _(default: 5s)_",
+    scheme: "duration"
+  }
+]}/> 
+
+:::note Validation Requirements
+- **At least one query**: Views must define at least one named query
+- **Output definition**: Views must have either `panels` or `columns` (or both)  
+- **Merge requirement**: When using multiple queries with table output (columns only), you must provide a `merge` SQL query
+:::
+
+### Query
+
+Query definition for data sources.
+
+<Fields rows={[
+  {
+    field: "configs",
+    description: "Query config items from the catalog",
+    scheme: "[ResourceSelector](/reference/resource-selector)"
+  },
+  {
+    field: "changes",
+    description: "Query configuration changes and audit data",
+    scheme: "[ResourceSelector](/reference/resource-selector)"
+  },
+  {
+    field: "prometheus",
+    description: "Query time-series data from Prometheus",
+    scheme: "[Prometheus Query](#prometheus-query)"
+  }
+]}/>
+
+#### Prometheus Query
+
+Query configuration for Prometheus metrics.
+
+<Fields rows={[
+  {
+    field: "query",
+    required: true,
+    description: "PromQL query string",
+    scheme: "string"
+  },
+  {
+    field: "url",
+    description: "Prometheus server URL",
+    scheme: "string"
+  },
+  {
+    field: "connection",
+    description: "Reference to a connection for authentication",
+    scheme: "string"
+  },
+  {
+    field: "username",
+    description: "Basic auth username",
+    scheme: "EnvVar"
+  },
+  {
+    field: "password",
+    description: "Basic auth password", 
+    scheme: "EnvVar"
+  },
+  {
+    field: "bearer",
+    description: "Bearer token for authentication",
+    scheme: "EnvVar"
+  }
+]}/>
+
+### View Column Definition
+
+Column definition for view tables with data types and visualization properties.
+
+<Fields rows={[
+  {
+    field: "name",
+    required: true,
+    description: "Column name _(must be a valid SQL identifier)_",
+    scheme: "string"
+  },
+  {
+    field: "type",
+    required: true,
+    description: "Data type that determines formatting and visualization",
+    scheme: "`string`, `number`, `boolean`, `datetime`, `duration`, `health`, `status`, `gauge`, `bytes`, `decimal`, `millicore`, `url`"
+  },
+  {
+    field: "primaryKey",
+    description: "Whether this column is part of the primary key _(default: false)_. At least one column must be marked as primary key.",
+    scheme: "bool"
+  },
+  {
+    field: "description",
+    description: "Human-readable description of the column",
+    scheme: "string"
+  },
+  {
+    field: "hidden",
+    description: "Whether to hide the column from the UI _(default: false)_",
+    scheme: "bool"
+  },
+  {
+    field: "for",
+    description: "Reference to another column this column provides data for _(helper columns)_. Only applicable for type=url.",
+    scheme: "string"
+  },
+  {
+    field: "gauge",
+    description: "Configuration for gauge visualization _(required when type=gauge)_",
+    scheme: "[GaugeConfig](#gauge-configuration)"
+  }
+]}/>
+
+:::note Primary Key Requirement
+If `columns` are defined, at least one must be marked as `primaryKey: true`.
+:::
+
+### Panel Definition
+
+Panel definition for interactive visualizations.
+
+<Fields rows={[
+  {
+    field: "name",
+    required: true,
+    description: "Name of the panel",
+    scheme: "string"
+  },
+  {
+    field: "description",
+    description: "Description of the panel",
+    scheme: "string"
+  },
+  {
+    field: "type",
+    required: true,
+    description: "Type of panel visualization",
+    scheme: "`piechart`, `table`, `number`, `gauge`"
+  },
+  {
+    field: "query",
+    required: true,
+    description: "SQL query to aggregate data from the view's named queries",
+    scheme: "string"
+  },
+  {
+    field: "piechart",
+    description: "Configuration for pie chart panels",
+    scheme: "[Pie Chart Configuration](#pie-chart-configuration)"
+  },
+  {
+    field: "gauge",
+    description: "Configuration for gauge panels",
+    scheme: "[Gauge Configuration](#gauge-configuration)"
+  },
+  {
+    field: "number",
+    description: "Configuration for number panels",
+    scheme: "[Panel Number Configuration](#panel-number-configuration)"
+  }
+]}/>
+
+#### Pie Chart Configuration
+
+Configuration for pie chart panels.
+
+<Fields rows={[
+  {
+    field: "showLabels",
+    description: "Display labels on pie slices",
+    scheme: "bool"
+  },
+  {
+    field: "colors",
+    description: "Custom color mapping for categories",
+    scheme: "map[string]string"
+  }
+]}/>
+
+#### Gauge Configuration
+
+Configuration for gauge visualizations with thresholds and color coding.
+
+<Fields rows={[
+  {
+    field: "min",
+    required: true,
+    description: "Minimum value for the gauge",
+    scheme: "int"
+  },
+  {
+    field: "max", 
+    required: true,
+    description: "Maximum value for the gauge",
+    scheme: "int"
+  },
+  {
+    field: "thresholds[].value",
+    description: "Threshold value",
+    scheme: "int"
+  },
+  {
+    field: "thresholds[].color",
+    description: "Color for this threshold",
+    scheme: "string"
+  }
+]}/>
+
+#### Panel Number Configuration
+
+Configuration for number panels.
+
+<Fields rows={[
+  {
+    field: "unit",
+    description: "Display unit _(e.g., 'seconds', 'MB', '%')_",
+    scheme: "string"
+  },
+  {
+    field: "precision",
+    description: "Number of decimal places",
+    scheme: "int"
+  }
+]}/>
+
+

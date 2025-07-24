@@ -6,6 +6,8 @@ sidebar_custom_props:
   icon: view-details
 ---
 
+import View from "@site/docs/reference/views/\_view.mdx"
+
 Views are a SQL-powered feature that allows you to create custom, dynamic dashboards from your Mission Control data. They collect data from multiple sources into an in-memory SQLite database, enabling you to run any SQL query for filtering, joining, and aggregating your observability data.
 
 <Screenshot img="/img/views.svg" className="h-auto" alt="Views Concept" shadow="false" size="800px"/>
@@ -83,3 +85,7 @@ panels:
 ```
 
 This SQL-first approach gives you unlimited flexibility to slice, filter, and aggregate your data.
+
+## API Reference
+
+<View/>

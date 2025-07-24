@@ -151,6 +151,10 @@ columns:
           color: 'red'
 ```
 
+:::note Gauge Configuration Required
+When using `type: gauge`, the `gauge` configuration block is **required**.
+:::
+
 ##### Gauge Properties
 
 - `min`: Minimum value for the gauge

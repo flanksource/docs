@@ -19,6 +19,7 @@ Views work like materialized views in traditional databases:
 4. **Timeout Handling**: If refresh exceeds timeout:
    - Return stale data if available
    - Return error if no cached data exists
+5. **Hard Timeout Limit**: Refresh operations have a hard limit of 1 minute regardless of configuration
 
 ## Cache Configuration
 
@@ -47,3 +48,7 @@ spec:
 | `maxAge`         | 15 minutes | Cache expires after this duration          |
 | `minAge`         | 10 seconds | Minimum cache age that clients can request |
 | `refreshTimeout` | 5 seconds  | Timeout for background refresh operations  |
+
+:::info Hard Timeout Limit
+Regardless of the configured `refreshTimeout`, view refresh operations have a hard limit of **1 minute**. This prevents long-running queries from blocking the system.
+:::
