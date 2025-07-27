@@ -1,0 +1,106 @@
+---
+title: Clickhouse
+show_title: false
+sidebar_custom_props:
+  icon: clickhouse-icon
+---
+
+
+# <Icon name="clickhouse-icon"/> Clickhouse
+
+The Clickhouse scraper will execute a query and then create a catalog item for each returned row.
+
+The example below creates a new `Order` config for each row, with name as `order_id` and the row in json format as the config.
+
+```yaml title="clickhouse-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/clickhouse.yaml
+```
+
+Objects in external storages like AzureBlobStorage or AWS S3 can also be queried
+
+```yaml title="azure-blob-storage-scraper.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: azure-prod
+spec:
+  azure:
+    clientID:
+      valueFrom:
+        secretKeyRef:
+          name: azure-creds
+          key: CLIENT_ID
+    clientSecret:
+      valueFrom:
+        secretKeyRef:
+          name: azure-creds
+          key: CLIENT_SECRET
+    tenantID:
+      valueFrom:
+        secretKeyRef:
+          name: azure-creds
+          key: TENANT_ID
+---
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: audit-logs
+spec:
+  clickhouse:
+    - query: SELECT * FROM azureBlobStorage(azure_prod_audit_data);
+      type: AuditRecord
+      id: $.user_id
+      transform:
+        expr: "[config].toJSON()"
+      azureBlobStorage:
+        connection: azure-prod
+        account: acme-logs
+        container: audit
+        path: audit-data.csv
+        collection: azure_prod_audit_data
+```
+
+:::info
+An instance of clichkouse server needs to be deployed for this scraper to function.
+
+Mission Control can deploy an instance by setting `config-db.clichkouse.enabled: true` in the helm chart.
+
+An external clichkouse server can also be used via the `clickhouseURL` parameter
+:::
+
+## Scraper
+
+| Field       | Description                                                                        | Scheme                                       | Required |
+| ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| `logLevel`  | Specify the level of logging.                                                      | `string`                                     |          |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
+| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                       |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `clickhouse`| Specifies the list of SQL configurations to scrape.                                | [`[]Clickhouse`](#clickhouse)                            |          |
+
+## Clickhouse
+
+<CustomScraper rows={[
+  {field: "awsS3", description: "AWS S3 configuration for accessing buckets", scheme: "[AWSS3](#awss3)"},
+  {field: "azureBlobStorage", description: "Azure Blob Storage configuration for accessing storage", scheme: "[AzureBlobStorage](#azureblobstorage)"},
+  {field: "clickhouseURL", description: "ClickHouse connection URL in format: clickhouse://<user>:<password>@<host>:<port>/<database>?param1=value1&param2=value2", scheme: "string"},
+  {field: "query", description: "Query to execute", scheme: "string", required: true}
+]}/>
+
+
+## AWSS3
+
+<Fields connection="aws" rows={[
+  {field: "bucket", description: "AWS S3 bucket name", scheme: "string"},
+  {field: "path", description: "Path within the S3 bucket", scheme: "string"},
+  {field: "endpoint", description: "Custom endpoint URL for AWS S3", scheme: "string"}
+]}/>
+
+## AzureBlobStorage
+
+<Fields connection="azure" rows={[
+  {field: "account", description: "Azure storage account name", scheme: "string"},
+  {field: "container", description: "Azure Blob Storage container name", scheme: "string"},
+  {field: "path", description: "Path within the container", scheme: "string"},
+  {field: "endpointSuffix", description: "Azure endpoint suffix", scheme: "string"},
+  {field: "collectionName", description: "Name of the collection in Clickhouse. See [Named Collections](https://clickhouse.com/docs/operations/named-collections)", scheme: "string", required: true}
+]}/>
