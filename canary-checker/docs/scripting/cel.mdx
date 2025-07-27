@@ -136,6 +136,41 @@ matchQuery(.config, "type=Kubernetes::Pod")
 matchQuery(.config, "type=Kubernetes::Pod tags.cluster=homelab")
 ```
 
+## matchLabel
+
+`matchLabel` matches a map's key against one or more patterns. It's particularly useful for matching against labels in Kubernetes objects or configuration items.
+
+Syntax:
+
+```javascript
+matchLabel(labels, key, patterns)
+
+// Where
+//  labels = map of labels
+//  key = the label key to check
+//  patterns = comma-separated patterns to match against
+```
+
+**Pattern Syntax:**
+- Use `*` for wildcards (e.g., `us-*` matches `us-east-1`, `us-west-2`)
+- Use `!` for exclusion (e.g., `!production` matches any value except `production`)
+- Use `!*` to match when the label doesn't exist
+- Multiple patterns are evaluated as OR conditions
+
+Example:
+```javascript
+// Match labels with wildcards
+matchLabel(config.labels, "region", "us-*") // true if region starts with "us-"
+matchLabel(config.labels, "env", "prod,staging") // true if env is "prod" OR "staging"
+
+// Exclusion patterns
+matchLabel(config.labels, "env", "!production") // true if env is NOT "production"
+matchLabel(config.labels, "optional", "!*") // true if "optional" label doesn't exist
+
+// Complex matching
+matchLabel(config.tags, "cluster", "*-prod,*-staging") // true if cluster ends with "-prod" OR "-staging"
+```
+
 ## aws
 
 ### aws.arnToMap
@@ -345,6 +380,24 @@ Examples:
 
 ```javascript
 {'a': 1, 'b': 2}.values().sum() // 3
+```
+
+### keyValToMap
+
+`keyValToMap` converts a string in key=value,key2=value2 format into a map.
+
+```javascript
+keyValToMap("a=b,c=d") // {"a": "b", "c": "d"}
+keyValToMap("env=prod,region=us-east-1") // {"env": "prod", "region": "us-east-1"}
+```
+
+### mapToKeyVal
+
+`mapToKeyVal` converts a map into a string in key=value,key2=value2 format.
+
+```javascript
+{"a": "b", "c": "d"}.mapToKeyVal() // "a=b,c=d"
+{"env": "prod", "region": "us-east-1"}.mapToKeyVal() // "env=prod,region=us-east-1"
 ```
 
 ### all
@@ -765,6 +818,7 @@ The format is an integer followed by a unit: `s` for seconds, `m` for minutes, `
 // Creating a duration of 5 hours:
 duration("5h") // Represents a duration of 5 hours
 duration("30m") // Represents a duration of 30 minutes
+duration("7d") // Represents a duration of 7 days
 ```
 
 Durations can also be crated using arithmetic:
@@ -895,7 +949,7 @@ time.Now() // the current date and time
 
 ### time.ParseDuration
 
-`time.ParseDuration` parses a string into a duration. It supports various units like "s" for seconds, "m" for minutes, "h" for hours, etc.
+`time.ParseDuration` parses a string into a duration. It supports various units like "s" for seconds, "m" for minutes, "h" for hours, and "d" for days.
 
 ```javascript
 // Parsing a duration string:
@@ -905,6 +959,12 @@ time.ParseDuration("1h30m") // a duration of 1 hour and 30 minutes
 ```javascript
 // Another example with a different format:
 time.ParseDuration("15m30s") // a duration of 15 minutes and 30 seconds
+```
+
+```javascript
+// Parsing a duration with days:
+time.ParseDuration("7d") // a duration of 7 days (168 hours)
+time.ParseDuration("30d12h") // a duration of 30 days and 12 hours
 ```
 
 ```javascript
@@ -1147,16 +1207,30 @@ jmespath("city", { name: "John", age: 30, city: "NY" }) // "NY"
 ```
 ### jsonpath
 
-`jsonpath` evaluates a [JSONPath](https://datatracker.ietf.org/doc/draft-ietf-jsonpath-base) expression against an object or JSON string
+`jsonpath` evaluates a [JSONPath](https://datatracker.ietf.org/doc/draft-ietf-jsonpath-base) expression against an object or JSON string.
 
 ```javascript
-// Get all book titles
-jmespath("city", { name: "John", age: 30, city: "NY" }) // "NY"
+// Basic property access
+jsonpath("$.name", { name: "John", age: 30 }) // "John"
+
+// Array access
+jsonpath("$.items[0]", { items: ["apple", "banana"] }) // "apple"
+
+// Slice notation - get last element
+jsonpath("$.addresses[-1:].city", { 
+  addresses: [
+    { city: "NYC" }, 
+    { city: "SF" }
+  ] 
+}) // "SF"
+
+// Working with JSON strings
+jsonpath("$.user.email", '{"user": {"email": "john@example.com"}}') // "john@example.com"
 ```
 
 ### jq
 
-`jq` applies a jq expression to filter or transform data.
+`jq` applies a jq expression to filter or transform data. It now supports both objects and JSON strings as input.
 
 ```javascript
 // Filtering data with a jq expression:
@@ -1174,6 +1248,11 @@ jq(".[] | select(.age > 25)", [
   { name: "John", age: 30 },
   { name: "Jane", age: 25 }
 ]) // [{"name": "John", "age": 30}]
+```
+
+```javascript
+// Working with JSON strings:
+jq(".address.city", '{"name": "John", "address": {"city": "NYC"}}') // "NYC"
 ```
 
 ---
@@ -2600,6 +2679,19 @@ toTOML({}) // an empty string
 
 
 ---
+## gcp
+
+### gcp.ParseIncidentTime
+
+`gcp.ParseIncidentTime` parses a GCP incident time string and returns a timestamp.
+
+```javascript
+// Parse a GCP incident time
+gcp.ParseIncidentTime("7 May 2024 18:32 PDT") // Returns a timestamp object
+```
+
+---
+
 ## uuid
 
 ### uuid.Nil
