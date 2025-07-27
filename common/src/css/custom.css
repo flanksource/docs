@@ -1,5 +1,11 @@
-@tailwind utilities;
+@tailwind base;
 @tailwind components;
+@tailwind utilities;
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
 
 :root {
   --gray-50: #f9fafb;

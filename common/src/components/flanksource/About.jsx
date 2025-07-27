@@ -7,7 +7,7 @@ import {
   FaGithub
 } from 'react-icons/fa';
 import CTA from './CTA';
-
+import Navigation from './Navigation';
 const About = () => {
   const teamMembers = [
     {
@@ -123,7 +123,7 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-
+      <Navigation />
 
       {/* Hero Section */}
       <section className="bg-white py-20">
