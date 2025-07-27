@@ -1,11 +1,13 @@
 import Layout from '@theme/Layout';
 import React from 'react';
 
-import About from '../../../../common/src/components/flanksource/About';
+import About from '@site/src/components/flanksource/About';
 
 function AboutPage() {
   return (
     <Layout
+      noHeader
+      title="About Us"
 
     >
       <About />
