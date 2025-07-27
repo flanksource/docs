@@ -32,6 +32,71 @@ Values in CEL represent any of the following:
 
 ---
 
+## Standard Operators
+
+### Arithmetic Operators
+
+| Operator | Description | Example |
+| -------- | ----------- | ------- |
+| `+` | Addition (also string/list concatenation) | `2 + 3` → `5`<br/>`"hello" + " world"` → `"hello world"`<br/>`[1, 2] + [3, 4]` → `[1, 2, 3, 4]` |
+| `-` | Subtraction (also negation) | `5 - 3` → `2`<br/>`-5` → `-5` |
+| `*` | Multiplication | `3 * 4` → `12` |
+| `/` | Division | `10 / 2` → `5` |
+| `%` | Remainder (modulo) | `10 % 3` → `1` |
+
+### Comparison Operators
+
+| Operator | Description | Example |
+| -------- | ----------- | ------- |
+| `==` | Equal | `5 == 5` → `true` |
+| `!=` | Not equal | `5 != 3` → `true` |
+| `<` | Less than | `3 < 5` → `true` |
+| `<=` | Less than or equal | `5 <= 5` → `true` |
+| `>` | Greater than | `5 > 3` → `true` |
+| `>=` | Greater than or equal | `5 >= 5` → `true` |
+
+### Logical Operators
+
+| Operator | Description | Example |
+| -------- | ----------- | ------- |
+| `&&` | Logical AND | `true && false` → `false` |
+| `\|\|` | Logical OR | `true \|\| false` → `true` |
+| `!` | Logical NOT | `!true` → `false` |
+| `? :` | Ternary conditional | `true ? "yes" : "no"` → `"yes"` |
+
+---
+
+## Type Conversion Functions
+
+| Function | Description | Example |
+| -------- | ----------- | ------- |
+| `bool()` | Convert to boolean | `bool("true")` → `true` |
+| `bytes()` | Convert to bytes | `bytes("hello")` → `b'hello'` |
+| `double()` | Convert to double | `double(5)` → `5.0` |
+| `duration()` | Convert to duration | `duration("1h")` → 1 hour duration |
+| `int()` | Convert to integer | `int(5.7)` → `5` |
+| `string()` | Convert to string | `string(123)` → `"123"` |
+| `timestamp()` | Convert to timestamp | `timestamp("2023-01-01T00:00:00Z")` |
+| `uint()` | Convert to unsigned integer | `uint(5)` → `5u` |
+| `type()` | Get the type of a value | `type(5)` → `int` |
+| `dyn()` | Create a dynamic value | `dyn({"key": "value"})` |
+
+---
+
+## Built-in Functions
+
+### Type Checking
+
+```javascript
+// Get the type of any value
+type(5) // "int"
+type("hello") // "string"
+type([1, 2, 3]) // "list"
+type({"key": "value"}) // "map"
+```
+
+---
+
 ## Handling null types and missing keys
 
 When dealing with CEL objects, we might get errors where a key doesn't exist or if you're chaining keys, then one of the keys in the middle is missing.
@@ -199,6 +264,48 @@ Examples:
 ```javascript
 [3, 2, 1].sort() // [1, 2, 3]
 ['c', 'b', 'a'].sort() // ['a', 'b', 'c']
+```
+
+### .distinct
+
+The `distinct` method on a list returns a new list with duplicate elements removed.
+
+```javascript
+[1, 2, 2, 3, 3, 3].distinct() // [1, 2, 3]
+["a", "b", "a", "c"].distinct() // ["a", "b", "c"]
+```
+
+### .flatten
+
+The `flatten` method recursively flattens nested lists.
+
+```javascript
+[[1, 2], [3, 4]].flatten() // [1, 2, 3, 4]
+[1, [2, [3, 4]]].flatten() // [1, 2, 3, 4]
+```
+
+### .reverse
+
+The `reverse` method returns a new list with elements in reverse order.
+
+```javascript
+[1, 2, 3, 4].reverse() // [4, 3, 2, 1]
+["a", "b", "c"].reverse() // ["c", "b", "a"]
+```
+
+### .range
+
+The `range` function generates a list of integers.
+
+```javascript
+// Generate integers from 0 to n-1
+range(5) // [0, 1, 2, 3, 4]
+
+// Generate integers from start to end-1
+range(2, 5) // [2, 3, 4]
+
+// Generate integers with a step
+range(0, 10, 2) // [0, 2, 4, 6, 8]
 ```
 
 ### .uniq
@@ -1357,7 +1464,75 @@ math.Floor(2.3) // 2
 
 ```javascript
 math.Round(2.3) // 2
+math.Round(2.7) // 3
+math.Round(2.5) // 3
 ```
+
+### math.Trunc
+
+`math.Trunc` returns the integer part of a float, truncating towards zero.
+
+```javascript
+math.Trunc(2.7) // 2
+math.Trunc(-2.7) // -2
+```
+
+### math.Sign
+
+`math.Sign` returns the sign of a number: -1 for negative, 0 for zero, 1 for positive.
+
+```javascript
+math.Sign(-5) // -1
+math.Sign(0) // 0
+math.Sign(5) // 1
+```
+
+### math.Sqrt
+
+`math.Sqrt` returns the square root of a number.
+
+```javascript
+math.Sqrt(16) // 4
+math.Sqrt(2) // 1.4142135623730951
+```
+
+### math.IsNaN
+
+`math.IsNaN` checks if a value is Not-a-Number.
+
+```javascript
+math.IsNaN(0.0 / 0.0) // true
+math.IsNaN(5.0) // false
+```
+
+### math.IsInf
+
+`math.IsInf` checks if a value is infinite.
+
+```javascript
+math.IsInf(1.0 / 0.0) // true
+math.IsInf(5.0) // false
+```
+
+### math.IsFinite
+
+`math.IsFinite` checks if a value is finite (not NaN or infinite).
+
+```javascript
+math.IsFinite(5.0) // true
+math.IsFinite(1.0 / 0.0) // false
+```
+
+### Bitwise Operations
+
+| Function | Description | Example |
+| -------- | ----------- | ------- |
+| `math.bitOr(x, y)` | Bitwise OR | `math.bitOr(5, 3)` → `7` |
+| `math.bitAnd(x, y)` | Bitwise AND | `math.bitAnd(5, 3)` → `1` |
+| `math.bitXor(x, y)` | Bitwise XOR | `math.bitXor(5, 3)` → `6` |
+| `math.bitNot(x)` | Bitwise NOT | `math.bitNot(5)` → `-6` |
+| `math.bitShiftLeft(x, n)` | Left shift | `math.bitShiftLeft(5, 1)` → `10` |
+| `math.bitShiftRight(x, n)` | Right shift | `math.bitShiftRight(10, 1)` → `5` |
 
 ---
 
@@ -1688,18 +1863,18 @@ Examples:
 
 ### .charAt
 Returns the character at the given position. If the position is negative, or
-greater than the length of the string, an error is thrown
+greater than the length of the string, an error is thrown.
 
 ```javascript
 "hello".charAt(4) // return 'o'
 ```
 
 ```javascript
-"hello".charAt(5) // return ''
+"hello".charAt(5) // error - out of range
 ```
 
 ```javascript
-"hello".charAt(-1) // error
+"hello".charAt(-1) // error - negative index
 ```
 
 ### .contains
