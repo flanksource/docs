@@ -1,0 +1,58 @@
+---
+title: Config Item
+---
+
+# Config Item Resource
+
+Access detailed configuration item data from the catalog using the config item's unique ID.
+
+## URI Template
+
+`config_item://{id}`
+
+**MIME Type:** `application/json`
+
+## Description
+
+This resource allows you to retrieve comprehensive information about a specific configuration item from the Mission Control catalog. Each config item has a unique UUID identifier that can be used to fetch detailed metadata, relationships, health status, and configuration data.
+
+## Example Usage
+
+### Sample Request
+
+**URI:** `config_item://550e8400-e29b-41d4-a716-446655440000`
+
+### Sample Response
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "web-server-prod-01",
+  "type": "AWS::EC2::Instance",
+  "health": "healthy",
+  "status": "running",
+  "created_at": "2025-01-15T10:30:00Z",
+  "updated_at": "2025-01-20T14:22:15Z",
+  "config": {
+    "instance_id": "i-0123456789abcdef0",
+    "instance_type": "t3.medium",
+    "availability_zone": "us-west-2a",
+    "vpc_id": "vpc-12345678",
+    "subnet_id": "subnet-87654321",
+    "public_ip": "203.0.113.12",
+    "private_ip": "10.0.1.15"
+  },
+  "tags": {
+    "Environment": "production",
+    "Team": "platform",
+    "Application": "web-server"
+  }
+}
+```
+
+## Use Cases
+
+- **Detailed Investigation**: Get complete configuration details for a specific resource
+- **Health Monitoring**: Check the current health and status of a specific resource
+- **Change Tracking**: View when a configuration was last updated
+- **Compliance Auditing**: Access full configuration data for compliance checks

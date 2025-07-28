@@ -1,0 +1,44 @@
+---
+title: Connection Tools
+---
+
+# Connection Tools
+
+Tools for managing connections in Mission Control.
+
+## list_connections
+
+List all available connections in the system
+
+### Example Usage
+
+**Prompt:** "What connections are configured in the system?"
+
+**AI Response:** "I'll list all the available connections configured in your Mission Control system."
+
+**Result:** Returns a list of all connections with details like:
+- Connection names and namespaces
+- Connection types (Slack, AWS, Azure, database connections, etc.)
+- Status information
+- Configuration metadata
+
+**Example Output:**
+```json
+[
+  {
+    "name": "slack-alerts",
+    "namespace": "default",
+    "type": "slack",
+  },
+  {
+    "name": "aws-prod",
+    "namespace": "production",
+    "type": "aws",
+  },
+  {
+    "name": "postgres-main",
+    "namespace": "database",
+    "type": "postgres",
+  }
+]
+```

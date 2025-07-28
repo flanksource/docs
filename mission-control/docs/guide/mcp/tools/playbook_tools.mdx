@@ -1,0 +1,180 @@
+---
+title: Playbook Tools
+---
+
+# Playbook Tools
+
+Tools for working with playbooks in Mission Control.
+
+## playbook_list_all
+
+List all available playbooks
+
+### Example Usage
+
+**Prompt:** "What playbooks are available in the system?"
+
+**AI Response:** "I'll list all the available playbooks in your Mission Control system."
+
+**Result:** Returns a list of all playbooks with their metadata, parameters, and descriptions.
+
+**Example Output:**
+```json
+[
+  {
+    "id": "delete-pod",
+    "name": "Delete Kubernetes Pod",
+    "description": "Delete a specific Kubernetes pod",
+    "parameters": [
+      {
+        "name": "namespace",
+        "type": "text"
+      },
+      {
+        "name": "pod_name",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "id": "scale-deployment",
+    "name": "Scale Deployment",
+    "description": "Scale a Kubernetes deployment up or down",
+    "parameters": [
+      {
+        "name": "namespace",
+        "type": "text"
+      },
+      {
+        "name": "deployment_name",
+        "type": "text"
+      },
+      {
+        "name": "replicas",
+        "type": "text"
+      }
+    ]
+  }
+]
+```
+
+## playbook_recent_runs
+
+Get recent playbook execution runs
+
+<Fields rows={[
+  {field: "limit", scheme: "integer", description: "Number of recent runs to retrieve", default: 20, required: true}
+]} />
+
+### Example Usage
+
+**Prompt:** "Show me the last 5 playbook runs"
+
+**AI Response:** "I'll get the 5 most recent playbook execution runs for you."
+
+**Result:** Returns recent playbook runs with execution details, status, and results.
+
+**Example Output:**
+```json
+[
+  {
+    "id": "run-123",
+    "playbook_name": "Restart Pod",
+    "status": "success",
+    "started_at": "2025-01-20T10:30:00Z",
+    "completed_at": "2025-01-20T10:32:15Z",
+    "duration": "2m15s"
+  },
+  {
+    "id": "run-122",
+    "playbook_name": "Scale Deployment",
+    "status": "failed",
+    "started_at": "2025-01-20T09:15:00Z",
+    "error": "Insufficient permissions"
+  }
+]
+```
+
+## playbook_failed_runs
+
+Get recent failed playbook execution runs
+
+<Fields rows={[
+  {field: "limit", scheme: "number", description: "Number of failed runs to retrieve", default: 20, required: true}
+]} />
+
+### Example Usage
+
+**Prompt:** "Show me recent playbook failures so I can investigate what went wrong"
+
+**AI Response:** "I'll get the recent failed playbook runs to help you identify issues."
+
+**Result:** Returns failed playbook runs with error details and failure reasons.
+
+**Example Output:**
+```json
+[
+  {
+    "id": "run-122",
+    "playbook_name": "Scale Deployment",
+    "status": "failed",
+    "started_at": "2025-01-20T09:15:00Z",
+    "error": "Insufficient permissions to scale deployment in namespace 'production'",
+    "parameters": {
+      "namespace": "production",
+      "deployment_name": "web-app",
+      "replicas": 5
+    }
+  }
+]
+```
+
+## playbook_exec_run
+
+Execute a playbook with specified parameters
+
+<Fields rows={[
+  {field: "id", scheme: "string", description: "Playbook ID (UUID format)", required: true},
+  {field: "params", scheme: "object", description: "Parameters required for playbook execution", required: true}
+]} />
+
+**Note:** This is a destructive operation that will modify system state. Parameters are playbook-specific and can be found using the playbook_list_all tool.
+
+### Example Usage
+
+**Prompt:** "Restart the nginx pod in the production namespace"
+
+**AI Response:** "I'll execute the restart pod playbook for the nginx pod in the production namespace. This will cause a brief service interruption."
+
+**Parameters Used:**
+```json
+{
+  "id": "delete-pod",
+  "params": {
+    "namespace": "default",
+    "pod_name": "httpbin"
+  }
+}
+```
+
+**Result:** Returns execution status and progress updates as the playbook runs.
+
+---
+
+**Prompt:** "Scale the web-app deployment to 3 replicas in the staging environment"
+
+**AI Response:** "I'll scale the web-app deployment to 3 replicas in the staging namespace."
+
+**Parameters Used:**
+```json
+{
+  "id": "scale-deployment",
+  "params": {
+    "namespace": "staging",
+    "deployment_name": "web-app",
+    "replicas": 3
+  }
+}
+```
+
+**Result:** Executes the scaling operation and returns the updated deployment status.
