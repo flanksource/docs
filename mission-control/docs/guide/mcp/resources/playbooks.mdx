@@ -1,0 +1,102 @@
+---
+title: Playbooks
+---
+
+# Playbooks Resource
+
+Get playbook with their parameters and metadata.
+
+## URI Template
+
+`playbooks://{id}`
+
+**MIME Type:** `application/json`
+
+## Description
+
+This resource allows you to retrieve detailed information about a specific playbook, including its parameters, description, execution requirements, and metadata. Each playbook has a unique identifier that can be used to fetch its complete configuration.
+
+## Example Usage
+
+### Sample Request
+
+**URI:** `playbooks://restart-pod`
+
+### Sample Response
+
+```json
+{
+  "id": "delete-pod",
+  "name": "Delete Kubernetes Pod",
+  "description": "Safely delete a specific Kubernetes pod",
+  "category": "Kubernetes",
+  "created_at": "2025-01-10T09:00:00Z",
+  "updated_at": "2025-01-18T15:30:00Z",
+  "parameters": [
+    {
+      "name": "namespace",
+      "type": "text",
+      "required": true,
+      "description": "The Kubernetes namespace where the pod is located",
+      "example": "production"
+    },
+    {
+      "name": "pod_name",
+      "type": "text",
+      "required": true,
+      "description": "The name of the pod to delete",
+      "example": "nginx-deployment-7d8c6db4d6-abc123"
+    },
+    {
+      "name": "grace_period",
+      "type": "integer",
+      "required": false,
+      "default": 30,
+      "description": "Graceful termination period in seconds",
+      "example": 60
+    }
+  ],
+}
+```
+
+### Sample Request (Complex Playbook)
+
+**URI:** `playbooks://database-backup`
+
+### Sample Response
+
+```json
+{
+  "id": "database-backup",
+  "name": "Database Backup",
+  "description": "Create a backup of the specified database and store it in the configured backup location",
+  "category": "Database",
+  "created_at": "2025-01-05T12:00:00Z",
+  "updated_at": "2025-01-20T10:15:00Z",
+  "parameters": [
+    {
+      "name": "database_name",
+      "type": "text",
+      "required": true,
+      "description": "The name of the database to backup",
+      "example": "production_app_db"
+    },
+    {
+      "name": "backup_type",
+      "type": "list",
+      "required": true,
+      "options": ["full", "incremental", "differential"],
+      "default": "full",
+      "description": "Type of backup to perform"
+    },
+  ],
+}
+```
+
+## Use Cases
+
+- **Parameter Discovery**: Find out what parameters a playbook requires before execution
+- **Risk Assessment**: Understand the risk level and permissions needed for a playbook
+- **Documentation**: Get detailed descriptions of what a playbook does
+- **Validation**: Verify parameter types and constraints before execution
+- **Approval Planning**: Check if a playbook requires approval and what roles can approve it

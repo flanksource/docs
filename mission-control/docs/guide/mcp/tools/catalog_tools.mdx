@@ -1,0 +1,101 @@
+---
+title: Catalog Tools
+---
+
+# Catalog Tools
+
+Tools for searching and exploring configuration items in the catalog.
+
+## list_catalog_types
+
+List all available configuration types in the system
+
+### Example Usage
+
+**Prompt:** "What configuration types are available?"
+
+**AI Response:** "I'll list all the available configuration types for you."
+
+**Result:** Returns a list of all configuration types like `AWS::EC2::Instance`, `Kubernetes::Pod`, `Azure::VM::Instance`, etc.
+
+## catalog_search
+
+Search across the entire configuration catalog
+
+<Fields rows={[
+  {field: "query", scheme: "[ResourceSelector#search](/reference/resource-selector#search)", description: "Search query using the supported grammar", required: true}
+]} />
+
+**Features:**
+- Supports complex filtering by type, name, namespace, labels, tags, health status, and dates
+- Wildcard matching for flexible searches
+- Date range queries with relative date math
+
+### Example Usage
+
+**Prompt:** "Find all unhealthy AWS EC2 instances"
+
+**AI Response:** "I'll search for unhealthy AWS EC2 instances in your configuration catalog."
+
+**Query Used:** `type=AWS::EC2::Instance health=unhealthy`
+
+**Result:** Returns all EC2 instances that have an unhealthy status with details like instance ID, region, and other information.
+
+---
+
+**Prompt:** "Show me all Kubernetes pods in the production namespace created in the last 24 hours"
+
+**AI Response:** "I'll find all Kubernetes pods in the production namespace that were created in the last 24 hours."
+
+**Query Used:** `type=Kubernetes::Pod namespace=production created_at>now-24h`
+
+**Result:** Returns recent pods with full resource data
+
+## catalog_changes_search
+
+Search for configuration changes across the catalog
+
+<Fields rows={[
+  {field: "query", scheme: "[ResourceSelector#search](/reference/resource-selector#search)", description: "Search query using the supported grammar", required: true},
+  {field: "limit", scheme: "number", description: "Maximum number of results to return"}
+]} />
+
+**Features:**
+- Search by change-specific fields like severity, change type, and summary
+- Same query syntax as catalog_search with additional change-related fields
+
+### Example Usage
+
+**Prompt:** "Show me critical changes from the last week"
+
+**AI Response:** "I'll search for critical severity changes that occurred in the last week."
+
+**Query Used:** `severity=critical first_observed>now-7d`
+
+**Result:** Returns critical configuration changes with details about what changed, when, and the impact severity.
+
+---
+
+**Prompt:** "Find the last 10 changes to AWS resources"
+
+**AI Response:** "I'll find the most recent 10 changes made to AWS resources."
+
+**Query Used:** `type=AWS::*` with `limit=10`
+
+**Result:** Returns the 10 most recent changes to any AWS resources including the change type, summary, and affected resources.
+
+## related_configs
+
+Find configurations related to a specific config item
+
+<Fields rows={[
+  {field: "id", scheme: "string", description: "Config item ID (UUID format)", required: true}
+]} />
+
+### Example Usage
+
+**Prompt:** "What resources are related to this EC2 instance?" (with config ID: `550e8400-e29b-41d4-a716-446655440000`)
+
+**AI Response:** "I'll find all configurations related to this EC2 instance."
+
+**Result:** Returns related resources like security groups, VPC, subnets, load balancers, and other dependent or associated AWS resources with their relationships explained.
