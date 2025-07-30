@@ -1,0 +1,469 @@
+---
+title: PDF & Report Guidelines
+sidebar_position: 2
+---
+
+# PDF & Report Guidelines
+
+Comprehensive guidelines for creating consistent, professional PDF reports and documents for Flanksource products.
+
+## Report Layout
+
+### Page Structure
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Page Dimensions</h5>
+    <ul className="text-sm space-y-2">
+      <li>• Standard margins: 1 inch (72pt) all sides</li>
+      <li>• Header height: 0.5 inch (36pt)</li>
+      <li>• Footer height: 0.5 inch (36pt)</li>
+      <li>• Body text leading: 1.5x line spacing</li>
+      <li>• Page size: Letter (8.5" × 11") or A4</li>
+    </ul>
+  </div>
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Typography</h5>
+    <ul className="text-sm space-y-2">
+      <li>• Body text: Open Sans Regular, 11pt</li>
+      <li>• Headings: Open Sans Semibold, 14-18pt</li>
+      <li>• Captions: Open Sans Regular, 9pt</li>
+      <li>• Code/Data: Fira Code, 10pt</li>
+      <li>• Color: #061431 (dark text on white)</li>
+    </ul>
+  </div>
+</div>
+
+## Header & Footer Design
+
+### Standard Header Layout
+
+<div className="bg-gray-50 rounded-lg p-6 mb-8">
+  <h5 className="font-semibold mb-4">Header Template</h5>
+  <div className="bg-white border border-gray-200 rounded p-4 mb-4">
+    <div className="flex justify-between items-center pb-2 border-b border-gray-200">
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 bg-blue-500 rounded"></div>
+        <span className="font-semibold">Flanksource Report</span>
+      </div>
+      <span className="text-sm text-gray-600">Generated: {new Date().toLocaleDateString()}</span>
+    </div>
+  </div>
+  
+  <h5 className="font-semibold mb-4">Footer Template</h5>
+  <div className="bg-white border border-gray-200 rounded p-4">
+    <div className="flex justify-between items-center pt-2 border-t border-gray-200 text-sm text-gray-600">
+      <span>© {new Date().getFullYear()} Flanksource</span>
+      <span>flanksource.com</span>
+      <span>Page 1 of 5</span>
+    </div>
+  </div>
+</div>
+
+### Header Components
+
+<div className="space-y-4 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-2">Logo Placement</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Position: Top-left corner of header</li>
+      <li>• Size: 32px height maximum</li>
+      <li>• Margins: 8px from page edge</li>
+      <li>• Use product-specific logo when appropriate</li>
+    </ul>
+  </div>
+  
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-2">Report Title</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Font: Open Sans Semibold, 16pt</li>
+      <li>• Position: Center-left, aligned with logo</li>
+      <li>• Color: Primary text (#061431)</li>
+      <li>• Format: "Product Name - Report Type"</li>
+    </ul>
+  </div>
+  
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-2">Generation Info</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Font: Open Sans Regular, 10pt</li>
+      <li>• Position: Top-right corner</li>
+      <li>• Color: Secondary text (#666666)</li>
+      <li>• Include: Generation date and time</li>
+    </ul>
+  </div>
+</div>
+
+## Color Usage in Reports
+
+### Primary Colors
+
+<div className="space-y-4 mb-8">
+  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <h5 className="font-semibold text-blue-800 mb-2">Document Structure</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Headers and section dividers: Primary Blue (#3578e5)</li>
+      <li>• Table headers: Primary Blue background</li>
+      <li>• Important callouts: Blue accent borders</li>
+      <li>• Links and references: Primary Blue text</li>
+    </ul>
+  </div>
+  
+  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-2">Status Indicators</h5>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+      <div className="text-center">
+        <div className="h-12 rounded mb-2" style={{backgroundColor: '#10b981'}}></div>
+        <p className="text-xs font-medium">Success</p>
+        <code className="text-xs">#10b981</code>
+      </div>
+      <div className="text-center">
+        <div className="h-12 rounded mb-2" style={{backgroundColor: '#f59e0b'}}></div>
+        <p className="text-xs font-medium">Warning</p>
+        <code className="text-xs">#f59e0b</code>
+      </div>
+      <div className="text-center">
+        <div className="h-12 rounded mb-2" style={{backgroundColor: '#dc2626'}}></div>
+        <p className="text-xs font-medium">Error</p>
+        <code className="text-xs">#dc2626</code>
+      </div>
+      <div className="text-center">
+        <div className="h-12 rounded mb-2" style={{backgroundColor: '#6b7280'}}></div>
+        <p className="text-xs font-medium">Neutral</p>
+        <code className="text-xs">#6b7280</code>
+      </div>
+    </div>
+  </div>
+</div>
+
+### Grayscale Usage
+
+<div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
+  <h5 className="font-semibold mb-3">Data Presentation</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Table borders: Gray 200 (#e5e7eb)</li>
+    <li>• Alternating row background: Gray 50 (#f9fafb)</li>
+    <li>• Secondary text: Gray 600 (#4b5563)</li>
+    <li>• Chart grid lines: Gray 300 (#d1d5db)</li>
+    <li>• Divider lines: Gray 200 (#e5e7eb)</li>
+    <li>• Background sections: Gray 50 (#f9fafb)</li>
+  </ul>
+</div>
+
+## Tables & Data Presentation
+
+### Standard Table Design
+
+<div className="mb-8">
+  <h5 className="font-semibold mb-4">Example Table Layout</h5>
+  <div className="overflow-x-auto">
+    <table className="w-full border-collapse border border-gray-200">
+      <thead>
+        <tr className="bg-blue-500 text-white">
+          <th className="border border-gray-300 px-4 py-2 text-left font-semibold">Metric</th>
+          <th className="border border-gray-300 px-4 py-2 text-left font-semibold">Value</th>
+          <th className="border border-gray-300 px-4 py-2 text-left font-semibold">Status</th>
+          <th className="border border-gray-300 px-4 py-2 text-left font-semibold">Trend</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr className="bg-gray-50">
+          <td className="border border-gray-300 px-4 py-2">System Uptime</td>
+          <td className="border border-gray-300 px-4 py-2">99.9%</td>
+          <td className="border border-gray-300 px-4 py-2">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+              Healthy
+            </span>
+          </td>
+          <td className="border border-gray-300 px-4 py-2">↗️ +0.1%</td>
+        </tr>
+        <tr>
+          <td className="border border-gray-300 px-4 py-2">Response Time</td>
+          <td className="border border-gray-300 px-4 py-2">120ms</td>
+          <td className="border border-gray-300 px-4 py-2">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800">
+              Warning
+            </span>
+          </td>
+          <td className="border border-gray-300 px-4 py-2">↘️ +15ms</td>
+        </tr>
+        <tr className="bg-gray-50">
+          <td className="border border-gray-300 px-4 py-2">Error Rate</td>
+          <td className="border border-gray-300 px-4 py-2">0.01%</td>
+          <td className="border border-gray-300 px-4 py-2">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+              Healthy
+            </span>
+          </td>
+          <td className="border border-gray-300 px-4 py-2">→ No change</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <h5 className="font-semibold text-blue-800 mb-2">Table Guidelines</h5>
+      <ul className="text-sm space-y-1">
+        <li>• Header row: Primary blue background (#3578e5)</li>
+        <li>• Header text: White, Open Sans Semibold, 11pt</li>
+        <li>• Alternating row colors: White and Gray 50</li>
+        <li>• Cell padding: 8px horizontal, 6px vertical</li>
+        <li>• Border: 1px solid Gray 300</li>
+      </ul>
+    </div>
+    
+    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+      <h5 className="font-semibold mb-2">Status Badges</h5>
+      <ul className="text-sm space-y-1">
+        <li>• Round corners: 12px border radius</li>
+        <li>• Padding: 4px horizontal, 2px vertical</li>
+        <li>• Font: Open Sans Regular, 9pt</li>
+        <li>• Use semantic colors for backgrounds</li>
+        <li>• Text color: Dark variant of background color</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+## Charts & Visualizations
+
+### Chart Color Palette
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Data Series Colors</h5>
+    <div className="space-y-2">
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded" style={{backgroundColor: '#3578e5'}}></div>
+        <span className="text-sm">Primary data series</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded" style={{backgroundColor: '#0ea5e9'}}></div>
+        <span className="text-sm">Secondary data series</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded" style={{backgroundColor: '#6366f1'}}></div>
+        <span className="text-sm">Tertiary data series</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded" style={{backgroundColor: '#8b5cf6'}}></div>
+        <span className="text-sm">Additional series</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded" style={{backgroundColor: '#06b6d4'}}></div>
+        <span className="text-sm">Comparison data</span>
+      </div>
+    </div>
+  </div>
+  
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Status Colors</h5>
+    <div className="space-y-2">
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded" style={{backgroundColor: '#10b981'}}></div>
+        <span className="text-sm">Success/Healthy metrics</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded" style={{backgroundColor: '#f59e0b'}}></div>
+        <span className="text-sm">Warning metrics</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded" style={{backgroundColor: '#dc2626'}}></div>
+        <span className="text-sm">Error/Critical metrics</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded" style={{backgroundColor: '#6b7280'}}></div>
+        <span className="text-sm">Neutral/Unknown</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+### Chart Styling Guidelines
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Visual Elements</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Grid lines: Gray 300 (#d1d5db), 1px stroke</li>
+      <li>• Axis lines: Gray 400 (#9ca3af), 1px stroke</li>
+      <li>• Data points: 4px radius minimum</li>
+      <li>• Line thickness: 2-3px for trend lines</li>
+      <li>• Bar/area opacity: 90% for primary, 70% for secondary</li>
+      <li>• Background: White or transparent</li>
+    </ul>
+  </div>
+  
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Text & Labels</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Axis labels: Open Sans Regular, 9pt</li>
+      <li>• Axis titles: Open Sans Semibold, 10pt</li>
+      <li>• Legend: Open Sans Regular, 10pt</li>
+      <li>• Data labels: Open Sans Regular, 8pt</li>
+      <li>• Chart title: Open Sans Semibold, 12pt</li>
+      <li>• Color: Gray 700 (#374151)</li>
+    </ul>
+  </div>
+</div>
+
+## Report Sections
+
+### Executive Summary
+
+<div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+  <h5 className="font-semibold text-blue-800 mb-3">Summary Section Requirements</h5>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h6 className="font-medium mb-2">Content Structure</h6>
+      <ul className="text-sm space-y-1">
+        <li>• First page, prominent placement</li>
+        <li>• Key metrics in callout boxes</li>
+        <li>• High-level status indicators</li>
+        <li>• Maximum 300 words</li>
+        <li>• 2-3 key findings highlighted</li>
+      </ul>
+    </div>
+    <div>
+      <h6 className="font-medium mb-2">Visual Elements</h6>
+      <ul className="text-sm space-y-1">
+        <li>• Large metric cards with icons</li>
+        <li>• Status indicators with colors</li>
+        <li>• Simple charts or gauges</li>
+        <li>• Consistent spacing and alignment</li>
+        <li>• Clear visual hierarchy</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+### Technical Details
+
+<div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-6">
+  <h5 className="font-semibold mb-3">Technical Section Guidelines</h5>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h6 className="font-medium mb-2">Code & Configuration</h6>
+      <ul className="text-sm space-y-1">
+        <li>• Syntax highlighting for code blocks</li>
+        <li>• Fira Code font for all code</li>
+        <li>• Configuration examples in YAML/JSON</li>
+        <li>• Line numbers for long code blocks</li>
+        <li>• Proper indentation and formatting</li>
+      </ul>
+    </div>
+    <div>
+      <h6 className="font-medium mb-2">Documentation</h6>
+      <ul className="text-sm space-y-1">
+        <li>• Step-by-step procedures with numbers</li>
+        <li>• Screenshots with descriptive captions</li>
+        <li>• Cross-references to other sections</li>
+        <li>• Clear section headers and subheaders</li>
+        <li>• Consistent formatting throughout</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+### Recommendations
+
+<div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+  <h5 className="font-semibold text-green-800 mb-3">Recommendations Section</h5>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h6 className="font-medium mb-2">Action Items</h6>
+      <ul className="text-sm space-y-1">
+        <li>• Prioritized list (High, Medium, Low)</li>
+        <li>• Clear next steps with owners</li>
+        <li>• Timeline and urgency indicators</li>
+        <li>• Impact assessment for each item</li>
+        <li>• Dependencies between actions</li>
+      </ul>
+    </div>
+    <div>
+      <h6 className="font-medium mb-2">References</h6>
+      <ul className="text-sm space-y-1">
+        <li>• Links to relevant documentation</li>
+        <li>• Contact information for stakeholders</li>
+        <li>• Related tools and resources</li>
+        <li>• Best practices references</li>
+        <li>• Follow-up meeting suggestions</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+## File Management
+
+### PDF Properties
+
+<div className="bg-gray-50 rounded-lg p-6 mb-6">
+  <h5 className="font-semibold mb-3">Required PDF Metadata</h5>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h6 className="font-medium mb-2">Document Properties</h6>
+      <ul className="text-sm space-y-1">
+        <li>• <strong>Title:</strong> Descriptive report name</li>
+        <li>• <strong>Author:</strong> "Flanksource"</li>
+        <li>• <strong>Subject:</strong> Brief content description</li>
+        <li>• <strong>Keywords:</strong> Relevant search terms</li>
+        <li>• <strong>Creator:</strong> "Mission Control" or product name</li>
+      </ul>
+    </div>
+    <div>
+      <h6 className="font-medium mb-2">Security Settings</h6>
+      <ul className="text-sm space-y-1">
+        <li>• Allow printing: Yes</li>
+        <li>• Allow copying: Yes (unless confidential)</li>
+        <li>• Allow editing: No</li>
+        <li>• Allow form filling: No</li>
+        <li>• Password protection: As required</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+### File Naming Convention
+
+<div className="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+  <h5 className="font-semibold mb-3">Standard Naming Format</h5>
+  <div className="font-mono text-lg bg-gray-50 p-3 rounded border mb-3">
+    flanksource-[product]-[report-type]-[date].pdf
+  </div>
+  
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h6 className="font-medium mb-2">Components</h6>
+      <ul className="text-sm space-y-1">
+        <li>• <strong>product:</strong> mission-control, canary-checker</li>
+        <li>• <strong>report-type:</strong> health, performance, security</li>
+        <li>• <strong>date:</strong> YYYY-MM-DD format</li>
+        <li>• Use hyphens between components</li>
+        <li>• All lowercase letters</li>
+      </ul>
+    </div>
+    <div>
+      <h6 className="font-medium mb-2">Examples</h6>
+      <ul className="text-sm space-y-1 font-mono">
+        <li>flanksource-mission-control-health-report-2025-01-30.pdf</li>
+        <li>flanksource-canary-checker-performance-2025-01-30.pdf</li>
+        <li>flanksource-config-db-audit-report-2025-01-30.pdf</li>
+        <li>flanksource-incident-summary-2025-01-30.pdf</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+### Version Control
+
+<div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+  <h5 className="font-semibold text-yellow-800 mb-2">Versioning Guidelines</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Include version suffix for multiple versions: <code>-v1</code>, <code>-v2</code></li>
+    <li>• Use revision suffix for minor updates: <code>-rev1</code>, <code>-rev2</code></li>
+    <li>• Archive previous versions in dated folders</li>
+    <li>• Maintain change log for significant revisions</li>
+    <li>• Use descriptive commit messages in version control</li>
+  </ul>
+</div>

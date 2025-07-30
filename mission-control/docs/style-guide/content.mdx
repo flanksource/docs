@@ -1,0 +1,452 @@
+---
+title: Content Guidelines
+sidebar_position: 4
+---
+
+# Content Guidelines
+
+Comprehensive writing and content standards for all Flanksource documentation, marketing materials, and user communications.
+
+## Writing Principles
+
+### Voice & Tone
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+    <h5 className="font-semibold text-green-800 mb-2">Our Voice</h5>
+    <ul className="text-sm space-y-1">
+      <li>• <strong>Professional yet approachable:</strong> Expert but not intimidating</li>
+      <li>• <strong>Technically accurate:</strong> Precise without unnecessary jargon</li>
+      <li>• <strong>Clear and concise:</strong> Direct communication without fluff</li>
+      <li>• <strong>Confident:</strong> Authoritative but not arrogant</li>
+      <li>• <strong>Helpful:</strong> Always focused on user success</li>
+    </ul>
+  </div>
+
+  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <h5 className="font-semibold text-blue-800 mb-2">Tone Variations</h5>
+    <ul className="text-sm space-y-1">
+      <li>• <strong>Documentation:</strong> Instructional, step-by-step, methodical</li>
+      <li>• <strong>Marketing:</strong> Enthusiastic, benefit-focused, persuasive</li>
+      <li>• <strong>Support:</strong> Empathetic, patient, solution-oriented</li>
+      <li>• <strong>Error messages:</strong> Clear, actionable, non-blaming</li>
+      <li>• <strong>Onboarding:</strong> Encouraging, progressive, confidence-building</li>
+    </ul>
+  </div>
+</div>
+
+### Writing Style Standards
+
+<div className="space-y-6 mb-8">
+  <div className="bg-white border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Grammar & Style</h5>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <h6 className="font-medium text-green-600 mb-2">✓ Do</h6>
+        <ul className="text-sm space-y-1">
+          <li>• Use active voice: "Configure the settings"</li>
+          <li>• Write in present tense: "The system validates"</li>
+          <li>• Address users directly: "You can configure"</li>
+          <li>• Use parallel structure in lists</li>
+          <li>• Write conversationally but professionally</li>
+        </ul>
+      </div>
+      <div>
+        <h6 className="font-medium text-red-600 mb-2">✗ Don't</h6>
+        <ul className="text-sm space-y-1">
+          <li>• Avoid passive voice: "Settings will be configured"</li>
+          <li>• Don't use future tense: "The system will validate"</li>
+          <li>• Don't use first person: "We recommend"</li>
+          <li>• Avoid inconsistent list formatting</li>
+          <li>• Don't be overly formal or robotic</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+## Documentation Standards
+
+### Structure & Organization
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Page Structure</h5>
+    <ol className="text-sm space-y-1 list-decimal list-inside">
+      <li><strong>Title:</strong> Clear, descriptive H1</li>
+      <li><strong>Introduction:</strong> Brief overview (2-3 sentences)</li>
+      <li><strong>Prerequisites:</strong> What users need before starting</li>
+      <li><strong>Main content:</strong> Step-by-step instructions</li>
+      <li><strong>Examples:</strong> Practical code samples</li>
+      <li><strong>Troubleshooting:</strong> Common issues and solutions</li>
+      <li><strong>Next steps:</strong> Related topics and links</li>
+    </ol>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Heading Hierarchy</h5>
+    <div className="space-y-2 text-sm">
+      <div><code className="bg-gray-100 px-2 py-1 rounded"># H1</code> - Page title (one per page)</div>
+      <div><code className="bg-gray-100 px-2 py-1 rounded">## H2</code> - Major sections</div>
+      <div><code className="bg-gray-100 px-2 py-1 rounded">### H3</code> - Subsections</div>
+      <div><code className="bg-gray-100 px-2 py-1 rounded">#### H4</code> - Sub-subsections (rarely needed)</div>
+      <p className="text-gray-600 mt-2">Always use sequential heading levels</p>
+    </div>
+  </div>
+</div>
+
+### Code Documentation
+
+<div className="space-y-4 mb-8">
+  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Code Block Guidelines</h5>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <h6 className="font-medium mb-2">Best Practices</h6>
+        <ul className="text-sm space-y-1">
+          <li>• Always specify language for syntax highlighting</li>
+          <li>• Include descriptive titles when helpful</li>
+          <li>• Use consistent indentation (2 spaces)</li>
+          <li>• Add comments for complex logic</li>
+          <li>• Keep examples focused and minimal</li>
+        </ul>
+      </div>
+      <div>
+        <h6 className="font-medium mb-2">Example Format</h6>
+        <div className="bg-white border rounded p-2 text-xs">
+          <code>```yaml title="config.yaml"</code><br/>
+          <code>apiVersion: v1</code><br/>
+          <code>kind: ConfigMap</code><br/>
+          <code># Configuration details here</code><br/>
+          <code>```</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+    <h5 className="font-semibold text-yellow-800 mb-2">Code Explanation Pattern</h5>
+    <ol className="text-sm space-y-1 list-decimal list-inside">
+      <li><strong>Context:</strong> Explain what the code does and why</li>
+      <li><strong>Code block:</strong> Show the complete, working example</li>
+      <li><strong>Breakdown:</strong> Explain key parts line-by-line if complex</li>
+      <li><strong>Usage:</strong> Show how to apply or modify the example</li>
+    </ol>
+  </div>
+</div>
+
+### Instructional Writing
+
+<div className="space-y-4 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Step-by-Step Instructions</h5>
+    <div className="space-y-3">
+      <div className="bg-green-50 border border-green-200 rounded p-3">
+        <h6 className="font-medium text-green-800 mb-1">Good Example:</h6>
+        <div className="text-sm">
+          <p className="mb-2">To configure Mission Control authentication:</p>
+          <ol className="list-decimal list-inside space-y-1">
+            <li>Open the <code>values.yaml</code> file in your editor</li>
+            <li>Navigate to the <code>auth</code> section</li>
+            <li>Set <code>enabled: true</code> to activate authentication</li>
+            <li>Configure your OIDC provider settings</li>
+          </ol>
+        </div>
+      </div>
+
+      <div className="bg-red-50 border border-red-200 rounded p-3">
+        <h6 className="font-medium text-red-800 mb-1">Poor Example:</h6>
+        <div className="text-sm">
+          <p>You need to configure authentication. Edit the values file and enable auth settings.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+## Language Standards
+
+### Terminology & Consistency
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Product Names</h5>
+    <ul className="text-sm space-y-1">
+      <li>• <strong>Mission Control</strong> (not "the system" or "MC")</li>
+      <li>• <strong>Canary Checker</strong> (not "canary" or "checker")</li>
+      <li>• <strong>Config DB</strong> (not "configuration database")</li>
+      <li>• <strong>Flanksource</strong> (always capitalized)</li>
+      <li>• <strong>Kubernetes</strong> (not "K8s" in formal docs)</li>
+    </ul>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Technical Terms</h5>
+    <ul className="text-sm space-y-1">
+      <li>• <strong>health check</strong> (not "healthcheck")</li>
+      <li>• <strong>configuration</strong> (not "config" in headings)</li>
+      <li>• <strong>dashboard</strong> (not "Dashboard" unless UI element)</li>
+      <li>• <strong>API endpoint</strong> (not "API call")</li>
+      <li>• <strong>YAML file</strong> (not "yaml configuration")</li>
+    </ul>
+  </div>
+</div>
+
+### Forbidden Words & Phrases
+
+<div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
+  <h5 className="font-semibold text-red-800 mb-3">Avoid These Terms</h5>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h6 className="font-medium mb-2">Condescending Language</h6>
+      <ul className="text-sm space-y-1">
+        <li>• ~~"Simply"~~ → (remove entirely)</li>
+        <li>• ~~"Just"~~ → (remove or use "only")</li>
+        <li>• ~~"Obviously"~~ → (remove entirely)</li>
+        <li>• ~~"Easy"~~ → "straightforward"</li>
+        <li>• ~~"Trivial"~~ → (remove entirely)</li>
+      </ul>
+    </div>
+    <div>
+      <h6 className="font-medium mb-2">Unclear References</h6>
+      <ul className="text-sm space-y-1">
+        <li>• ~~"It"~~ → Use specific noun</li>
+        <li>• ~~"This"~~ → "This configuration"</li>
+        <li>• ~~"They"~~ → Name the specific items</li>
+        <li>• ~~"i.e."~~ → "that is" or "for example"</li>
+        <li>• ~~"etc."~~ → List specific items</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+### Inclusive Language
+
+<div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+  <h5 className="font-semibold text-blue-800 mb-3">Inclusive Writing Guidelines</h5>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h6 className="font-medium mb-2">Preferred Terms</h6>
+      <ul className="text-sm space-y-1">
+        <li>• "allowlist" instead of "whitelist"</li>
+        <li>• "blocklist" instead of "blacklist"</li>
+        <li>• "main branch" instead of "master branch"</li>
+        <li>• "primary/secondary" instead of "master/slave"</li>
+        <li>• "placeholder text" instead of "dummy text"</li>
+      </ul>
+    </div>
+    <div>
+      <h6 className="font-medium mb-2">People-First Language</h6>
+      <ul className="text-sm space-y-1">
+        <li>• "users with disabilities" not "disabled users"</li>
+        <li>• Avoid assumptions about user abilities</li>
+        <li>• Use neutral pronouns when possible</li>
+        <li>• Consider diverse perspectives and use cases</li>
+        <li>• Test content with diverse audiences</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+## Content Types
+
+### API Documentation
+
+<div className="space-y-4 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">API Reference Structure</h5>
+    <div className="space-y-2 text-sm">
+      <div><strong>Endpoint description:</strong> What it does and when to use it</div>
+      <div><strong>HTTP method and URL:</strong> Clear, properly formatted</div>
+      <div><strong>Parameters:</strong> Required vs optional, data types, examples</div>
+      <div><strong>Request body:</strong> Schema with example JSON/YAML</div>
+      <div><strong>Response:</strong> Success and error examples with status codes</div>
+      <div><strong>Code examples:</strong> cURL, SDK examples in multiple languages</div>
+    </div>
+  </div>
+
+  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-2">Example API Documentation</h5>
+    <div className="text-sm">
+      <div className="mb-2"><strong>GET /api/v1/health</strong></div>
+      <p className="mb-2">Retrieves the current health status of all monitored services.</p>
+      <div className="bg-white border rounded p-2 mb-2">
+        <code className="text-xs">curl -X GET https://api.example.com/api/v1/health \<br/>
+          &nbsp;&nbsp;-H "Authorization: Bearer YOUR_TOKEN"</code>
+      </div>
+      <p><strong>Response:</strong> Returns a JSON object with service health information.</p>
+    </div>
+  </div>
+</div>
+
+### Troubleshooting Guides
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Problem-Solution Format</h5>
+    <div className="space-y-2 text-sm">
+      <div><strong>1. Symptom:</strong> What the user sees/experiences</div>
+      <div><strong>2. Cause:</strong> Why this happens (if helpful)</div>
+      <div><strong>3. Solution:</strong> Step-by-step fix</div>
+      <div><strong>4. Prevention:</strong> How to avoid in future</div>
+      <div><strong>5. Related:</strong> Links to relevant docs</div>
+    </div>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Error Message Guidelines</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Use exact error text in headings</li>
+      <li>• Include error codes when applicable</li>
+      <li>• Provide context about when errors occur</li>
+      <li>• Offer multiple solutions when possible</li>
+      <li>• Link to deeper troubleshooting resources</li>
+    </ul>
+  </div>
+</div>
+
+### Tutorial Content
+
+<div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
+  <h5 className="font-semibold text-green-800 mb-3">Tutorial Best Practices</h5>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h6 className="font-medium mb-2">Structure</h6>
+      <ul className="text-sm space-y-1">
+        <li>• Start with learning objectives</li>
+        <li>• List prerequisites clearly</li>
+        <li>• Break into digestible sections</li>
+        <li>• Include checkpoints and validation steps</li>
+        <li>• End with next steps and resources</li>
+      </ul>
+    </div>
+    <div>
+      <h6 className="font-medium mb-2">Content</h6>
+      <ul className="text-sm space-y-1">
+        <li>• Use realistic, practical examples</li>
+        <li>• Explain the "why" behind each step</li>
+        <li>• Include screenshots for UI interactions</li>
+        <li>• Provide complete, tested code samples</li>
+        <li>• Address common mistakes and gotchas</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+## Formatting Standards
+
+### Lists & Bullets
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">When to Use Each Type</h5>
+    <div className="space-y-2 text-sm">
+      <div><strong>Bulleted lists:</strong> Unordered items, features, options</div>
+      <div><strong>Numbered lists:</strong> Sequential steps, procedures, rankings</div>
+      <div><strong>Definition lists:</strong> Terms and definitions, parameter descriptions</div>
+      <div><strong>Checkboxes:</strong> Action items, requirements, validation steps</div>
+    </div>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Formatting Rules</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Use parallel structure (same grammar pattern)</li>
+      <li>• Start each item with same part of speech</li>
+      <li>• Use sentence case, not title case</li>
+      <li>• No periods unless items are complete sentences</li>
+      <li>• Keep items roughly similar in length</li>
+    </ul>
+  </div>
+</div>
+
+### Code & Commands
+
+<div className="space-y-4 mb-8">
+  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Inline Code</h5>
+    <div className="text-sm space-y-2">
+      <p>Use backticks for: <code>file names</code>, <code>variable names</code>, <code>API endpoints</code>, <code>command names</code></p>
+      <p><strong>Examples:</strong></p>
+      <ul className="space-y-1">
+        <li>• Edit the <code>config.yaml</code> file</li>
+        <li>• Set the <code>replicas</code> parameter to <code>3</code></li>
+        <li>• Run the <code>kubectl apply</code> command</li>
+        <li>• Access the <code>/health</code> endpoint</li>
+      </ul>
+    </div>
+  </div>
+
+  <div className="bg-white border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Command Line Examples</h5>
+    <div className="text-sm">
+      <p className="mb-2">Format commands consistently:</p>
+      <div className="bg-gray-900 text-green-400 p-2 rounded font-mono text-xs mb-2">
+        $ kubectl get pods -n flanksource-system<br/>
+        $ helm install mission-control flanksource/mission-control
+      </div>
+      <ul className="space-y-1">
+        <li>• Include <code>$</code> prompt for clarity</li>
+        <li>• Use realistic example values</li>
+        <li>• Show expected output when helpful</li>
+        <li>• Break long commands across multiple lines with `<code>\</code>`</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+### Links & References
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Link Text Guidelines</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Use descriptive text, not "click here"</li>
+      <li>• Make link purpose clear from text alone</li>
+      <li>• Keep link text concise but meaningful</li>
+      <li>• Use sentence case, not title case</li>
+      <li>• Avoid generic phrases like "read more"</li>
+    </ul>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Examples</h5>
+    <div className="text-sm space-y-2">
+      <div className="text-green-600">✓ <a href="#">Mission Control installation guide</a></div>
+      <div className="text-green-600">✓ <a href="#">Configure OIDC authentication</a></div>
+      <div className="text-green-600">✓ <a href="#">Kubernetes deployment options</a></div>
+      <div className="text-red-600">✗ <a href="#">Click here</a> for more information</div>
+      <div className="text-red-600">✗ Learn more <a href="#">here</a></div>
+    </div>
+  </div>
+</div>
+
+## Content Review Checklist
+
+### Before Publishing
+
+<div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+  <h5 className="font-semibold text-blue-800 mb-3">Final Review Checklist</h5>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h6 className="font-medium mb-2">Content Quality</h6>
+      <ul className="text-sm space-y-1">
+        <li>□ Information is accurate and up-to-date</li>
+        <li>□ All code examples are tested and working</li>
+        <li>□ Screenshots match current UI</li>
+        <li>□ Links are functional and relevant</li>
+        <li>□ No placeholder or "lorem ipsum" text</li>
+      </ul>
+    </div>
+    <div>
+      <h6 className="font-medium mb-2">Style & Standards</h6>
+      <ul className="text-sm space-y-1">
+        <li>□ Follows voice and tone guidelines</li>
+        <li>□ Uses approved terminology consistently</li>
+        <li>□ No forbidden words or phrases</li>
+        <li>□ Proper heading hierarchy (H1 → H2 → H3)</li>
+        <li>□ Consistent formatting throughout</li>
+      </ul>
+    </div>
+  </div>
+</div>
