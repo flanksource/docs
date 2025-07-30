@@ -11,7 +11,8 @@
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
-    "write-heading-ids": "docusaurus write-heading-ids"
+    "write-heading-ids": "docusaurus write-heading-ids",
+    "render-for-context7": "node ../scripts/render-for-context7.js"
   },
   "dependencies": {
     "@docusaurus/core": "3.7.0",
@@ -52,7 +53,14 @@
     "@tailwindcss/typography": "^0.5.15",
     "remark-code-import": "^1.2.0",
     "stylelint": "^16.11.0",
-    "stylelint-config-standard": "^36.0.1"
+    "stylelint-config-standard": "^36.0.1",
+    "unified": "^11.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-mdx": "^3.0.0",
+    "remark-stringify": "^11.0.0",
+    "unist-util-visit": "^5.0.0",
+    "gray-matter": "^4.0.3",
+    "glob": "^10.0.0"
   },
   "browserslist": {
     "production": [

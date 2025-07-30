@@ -11,5 +11,5 @@ node_modules
 .venv/
 .cursor
 .bin/
-
 claude.md
+common/
