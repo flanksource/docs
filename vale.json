@@ -1,0 +1,1012 @@
+{
+  "canary-checker/docs/scripting/gotemplate.mdx": [
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "data type(s)"
+        ]
+      },
+      "Span": [
+        10,
+        17
+      ],
+      "Check": "Flanksource.SpellingSuggestions",
+      "Description": "",
+      "Link": "",
+      "Message": "Use 'data type(s)' instead of 'datatype'.",
+      "Severity": "error",
+      "Match": "datatype",
+      "Line": 127
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        10,
+        13
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 149
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        12,
+        15
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 162
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        185,
+        188
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 224
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        190,
+        195
+      ],
+      "Check": "Flanksource.DictateFeelings",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs/tone#empathize-with-the-reader",
+      "Message": "Don't tell people how they feel with words like 'simply'.",
+      "Severity": "error",
+      "Match": "simply",
+      "Line": 224
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        190,
+        195
+      ],
+      "Check": "Flanksource.Condescending",
+      "Description": "",
+      "Link": "https://css-tricks.com/words-avoid-educational-writing/",
+      "Message": "Using 'simply' may come across as condescending.",
+      "Severity": "error",
+      "Match": "simply",
+      "Line": 224
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        190,
+        195
+      ],
+      "Check": "alex.Condescending",
+      "Description": "",
+      "Link": "https://css-tricks.com/words-avoid-educational-writing/",
+      "Message": "Using 'simply' may come across as condescending.",
+      "Severity": "error",
+      "Match": "simply",
+      "Line": 224
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        6,
+        9
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 310
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "that is"
+        ]
+      },
+      "Span": [
+        76,
+        80
+      ],
+      "Check": "Flanksource.Foreign",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs",
+      "Message": "Use 'that is' instead of 'i.e.'.",
+      "Severity": "error",
+      "Match": "i.e. ",
+      "Line": 310
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        11,
+        14
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 520
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        68,
+        71
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 555
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        97,
+        100
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'Will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "Will",
+      "Line": 555
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        67,
+        70
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 573
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        47,
+        50
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 628
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        10,
+        18
+      ],
+      "Check": "alex.Condescending",
+      "Description": "",
+      "Link": "https://css-tricks.com/words-avoid-educational-writing/",
+      "Message": "Using 'obviously' may come across as condescending.",
+      "Severity": "error",
+      "Match": "obviously",
+      "Line": 695
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        10,
+        18
+      ],
+      "Check": "Flanksource.DictateFeelings",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs/tone#empathize-with-the-reader",
+      "Message": "Don't tell people how they feel with words like 'obviously'.",
+      "Severity": "error",
+      "Match": "obviously",
+      "Line": 695
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        10,
+        18
+      ],
+      "Check": "Flanksource.Condescending",
+      "Description": "",
+      "Link": "https://css-tricks.com/words-avoid-educational-writing/",
+      "Message": "Using 'obviously' may come across as condescending.",
+      "Severity": "error",
+      "Match": "obviously",
+      "Line": 695
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        113,
+        116
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 855
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        89,
+        92
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 863
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "has a disability",
+          "person with a disability",
+          "people with disabilities"
+        ]
+      },
+      "Span": [
+        72,
+        78
+      ],
+      "Check": "alex.Ablist",
+      "Description": "",
+      "Link": "",
+      "Message": "When referring to a person, consider using 'has a disability', 'person with a disability', or 'people with disabilities' instead of 'special'.",
+      "Severity": "warning",
+      "Match": "special",
+      "Line": 873
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        83,
+        86
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 889
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "has a disability",
+          "person with a disability",
+          "people with disabilities"
+        ]
+      },
+      "Span": [
+        72,
+        78
+      ],
+      "Check": "alex.Ablist",
+      "Description": "",
+      "Link": "",
+      "Message": "When referring to a person, consider using 'has a disability', 'person with a disability', or 'people with disabilities' instead of 'special'.",
+      "Severity": "warning",
+      "Match": "special",
+      "Line": 899
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "whether"
+        ]
+      },
+      "Span": [
+        9,
+        22
+      ],
+      "Check": "Flanksource.Wordiness",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs/tone",
+      "Message": "Consider using 'whether' instead of 'whether or not'.",
+      "Severity": "warning",
+      "Match": "whether or not",
+      "Line": 915
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        62,
+        65
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 917
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "whether"
+        ]
+      },
+      "Span": [
+        9,
+        22
+      ],
+      "Check": "Flanksource.Wordiness",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs/tone",
+      "Message": "Consider using 'whether' instead of 'whether or not'.",
+      "Severity": "warning",
+      "Match": "whether or not",
+      "Line": 932
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "has a disability",
+          "person with a disability",
+          "people with disabilities"
+        ]
+      },
+      "Span": [
+        148,
+        154
+      ],
+      "Check": "alex.Ablist",
+      "Description": "",
+      "Link": "",
+      "Message": "When referring to a person, consider using 'has a disability', 'person with a disability', or 'people with disabilities' instead of 'special'.",
+      "Severity": "warning",
+      "Match": "special",
+      "Line": 953
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "has a disability",
+          "person with a disability",
+          "people with disabilities"
+        ]
+      },
+      "Span": [
+        149,
+        155
+      ],
+      "Check": "alex.Ablist",
+      "Description": "",
+      "Link": "",
+      "Message": "When referring to a person, consider using 'has a disability', 'person with a disability', or 'people with disabilities' instead of 'special'.",
+      "Severity": "warning",
+      "Match": "special",
+      "Line": 961
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "has a disability",
+          "person with a disability",
+          "people with disabilities"
+        ]
+      },
+      "Span": [
+        72,
+        78
+      ],
+      "Check": "alex.Ablist",
+      "Description": "",
+      "Link": "",
+      "Message": "When referring to a person, consider using 'has a disability', 'person with a disability', or 'people with disabilities' instead of 'special'.",
+      "Severity": "warning",
+      "Match": "special",
+      "Line": 998
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        60,
+        63
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 1145
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "that is"
+        ]
+      },
+      "Span": [
+        81,
+        85
+      ],
+      "Check": "Flanksource.Foreign",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs",
+      "Message": "Use 'that is' instead of 'i.e.'.",
+      "Severity": "error",
+      "Match": "i.e. ",
+      "Line": 1167
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "that is"
+        ]
+      },
+      "Span": [
+        105,
+        109
+      ],
+      "Check": "Flanksource.Foreign",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs",
+      "Message": "Use 'that is' instead of 'i.e.'.",
+      "Severity": "error",
+      "Match": "i.e. ",
+      "Line": 1177
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        110,
+        113
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 1206
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        110,
+        113
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 1270
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        69,
+        72
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 1324
+    },
+    {
+      "Action": {
+        "Name": "edit",
+        "Params": [
+          "replace",
+          "-",
+          " "
+        ]
+      },
+      "Span": [
+        11,
+        28
+      ],
+      "Check": "Flanksource.Hyphens",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/grammar/hyphens",
+      "Message": "' alphanumerically-' doesn't need a hyphen.",
+      "Severity": "warning",
+      "Match": " alphanumerically-",
+      "Line": 1350
+    },
+    {
+      "Action": {
+        "Name": "edit",
+        "Params": [
+          "truncate",
+          " "
+        ]
+      },
+      "Span": [
+        9,
+        11
+      ],
+      "Check": "Vale.Repetition",
+      "Description": "",
+      "Link": "",
+      "Message": "'a' is repeated!",
+      "Severity": "error",
+      "Match": "a a",
+      "Line": 1423
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        53,
+        56
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 1431
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        53,
+        56
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 1432
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "that is"
+        ]
+      },
+      "Span": [
+        35,
+        39
+      ],
+      "Check": "Flanksource.Foreign",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs",
+      "Message": "Use 'that is' instead of 'i.e.'.",
+      "Severity": "error",
+      "Match": "i.e. ",
+      "Line": 1528
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        149,
+        152
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 1530
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "that is"
+        ]
+      },
+      "Span": [
+        36,
+        40
+      ],
+      "Check": "Flanksource.Foreign",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs",
+      "Message": "Use 'that is' instead of 'i.e.'.",
+      "Severity": "error",
+      "Match": "i.e. ",
+      "Line": 1542
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        154,
+        157
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 1544
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        242,
+        245
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 1555
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "that is"
+        ]
+      },
+      "Span": [
+        204,
+        208
+      ],
+      "Check": "Flanksource.Foreign",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs",
+      "Message": "Use 'that is' instead of 'i.e.'.",
+      "Severity": "error",
+      "Match": "i.e. ",
+      "Line": 1565
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "that is"
+        ]
+      },
+      "Span": [
+        43,
+        47
+      ],
+      "Check": "Flanksource.Foreign",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs",
+      "Message": "Use 'that is' instead of 'i.e.'.",
+      "Severity": "error",
+      "Match": "i.e. ",
+      "Line": 1567
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        8,
+        11
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 1586
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        35,
+        38
+      ],
+      "Check": "Flanksource.DictateFeelings",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs/tone#empathize-with-the-reader",
+      "Message": "Don't tell people how they feel with words like 'just'.",
+      "Severity": "error",
+      "Match": "just",
+      "Line": 1694
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "has a disability",
+          "person with a disability",
+          "people with disabilities"
+        ]
+      },
+      "Span": [
+        18,
+        24
+      ],
+      "Check": "alex.Ablist",
+      "Description": "",
+      "Link": "",
+      "Message": "When referring to a person, consider using 'has a disability', 'person with a disability', or 'people with disabilities' instead of 'special'.",
+      "Severity": "warning",
+      "Match": "special",
+      "Line": 1696
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        197,
+        200
+      ],
+      "Check": "Flanksource.FutureTense",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/digitalocean/language/verbs",
+      "Message": "Use present tense verbs, not future tense verbs like 'will'. Say '(event) happens' instead of '(event) will happen'.",
+      "Severity": "warning",
+      "Match": "will",
+      "Line": 1725
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        202,
+        207
+      ],
+      "Check": "Flanksource.Condescending",
+      "Description": "",
+      "Link": "https://css-tricks.com/words-avoid-educational-writing/",
+      "Message": "Using 'simply' may come across as condescending.",
+      "Severity": "error",
+      "Match": "simply",
+      "Line": 1725
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        202,
+        207
+      ],
+      "Check": "alex.Condescending",
+      "Description": "",
+      "Link": "https://css-tricks.com/words-avoid-educational-writing/",
+      "Message": "Using 'simply' may come across as condescending.",
+      "Severity": "error",
+      "Match": "simply",
+      "Line": 1725
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        202,
+        207
+      ],
+      "Check": "Flanksource.DictateFeelings",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs/tone#empathize-with-the-reader",
+      "Message": "Don't tell people how they feel with words like 'simply'.",
+      "Severity": "error",
+      "Match": "simply",
+      "Line": 1725
+    },
+    {
+      "Action": {
+        "Name": "edit",
+        "Params": [
+          "trim_right",
+          "!"
+        ]
+      },
+      "Span": [
+        98,
+        109
+      ],
+      "Check": "Flanksource.Exclamation",
+      "Description": "",
+      "Link": "https://developers.google.com/style/exclamation-points",
+      "Message": "Don't use exclamation points in text.",
+      "Severity": "error",
+      "Match": "expressions!",
+      "Line": 1745
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        1,
+        4
+      ],
+      "Check": "Flanksource.DictateFeelings",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs/tone#empathize-with-the-reader",
+      "Message": "Don't tell people how they feel with words like 'Just'.",
+      "Severity": "error",
+      "Match": "Just",
+      "Line": 1794
+    },
+    {
+      "Action": {
+        "Name": "replace",
+        "Params": [
+          "usually"
+        ]
+      },
+      "Span": [
+        30,
+        42
+      ],
+      "Check": "Flanksource.Wordiness",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs/tone",
+      "Message": "Consider using 'usually' instead of 'in most cases'.",
+      "Severity": "warning",
+      "Match": "in most cases",
+      "Line": 1903
+    },
+    {
+      "Action": {
+        "Name": "remove",
+        "Params": null
+      },
+      "Span": [
+        26,
+        33
+      ],
+      "Check": "Flanksource.Adverbs",
+      "Description": "",
+      "Link": "https://docs.digitalocean.com/style/pdocs/tone#be-clear-about-who-our-audience-is",
+      "Message": "Consider removing 'randomly'.",
+      "Severity": "warning",
+      "Match": "randomly",
+      "Line": 1911
+    }
+  ]
+}

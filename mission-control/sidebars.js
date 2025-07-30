@@ -204,9 +204,33 @@ const sidebars = {
       ]
     },
     {
-      type: 'doc',
-      id: 'brand-guidelines',
-      label: 'Brand Guidelines'
+      type: 'category',
+      label: 'Style Guide',
+      customProps: {
+        icon: 'palette'
+      },
+      items: [
+        {
+          type: 'doc',
+          id: 'style-guide/brand',
+          label: 'Brand Guidelines'
+        },
+        {
+          type: 'doc',
+          id: 'style-guide/pdf',
+          label: 'PDF & Reports'
+        },
+        {
+          type: 'doc',
+          id: 'style-guide/web',
+          label: 'Web Guidelines'
+        },
+        {
+          type: 'doc',
+          id: 'style-guide/content',
+          label: 'Content Guidelines'
+        }
+      ]
     }
   ]
 }

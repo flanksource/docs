@@ -1,0 +1,14 @@
+{
+  "name": "mdx-renderer",
+  "version": "1.0.0",
+  "description": "MDX to Markdown renderer using goja",
+  "private": true,
+  "dependencies": {
+    "unified": "^11.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-mdx": "^3.0.0",
+    "remark-stringify": "^11.0.0",
+    "unist-util-visit": "^5.0.0",
+    "gray-matter": "^4.0.3"
+  }
+}
