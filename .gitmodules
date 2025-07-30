@@ -23,3 +23,6 @@
 [submodule "modules/mission-control-registry"]
 	path = modules/mission-control-registry
 	url = https://github.com/flanksource/mission-control-registry.git
+[submodule "modules/gomplate"]
+	path = modules/gomplate
+	url = https://github.com/flanksource/gomplate

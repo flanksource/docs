@@ -126,20 +126,38 @@ footer {
   }
 }
 
+/* Ensure footer links are white on all pages */
+.blog-list-page footer a,
+.blog-authors-posts-page footer a,
+.blog-post-page footer a {
+  color: white !important;
+}
+
+.blog-list-page footer a:hover,
+.blog-authors-posts-page footer a:hover,
+.blog-post-page footer a:hover {
+  color: rgba(255, 255, 255, 0.5) !important;
+  text-decoration: none;
+}
+
+.blog-list-page footer a.secondary,
+.blog-authors-posts-page footer a.secondary,
+.blog-post-page footer a.secondary {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.blog-list-page footer a.secondary:hover,
+.blog-authors-posts-page footer a.secondary:hover,
+.blog-post-page footer a.secondary:hover {
+  color: white !important;
+}
+
 .blog-list-page, .blog-authors-posts-page  {
   h2 {
     font-size: 1.25em;
     margin-bottom: 6px;
     a {
       color: var(--ifm-link-color);
-      text-decoration: none;
-      transition: color 0.2s ease-in-out;
-    }
-  }
-  footer {
-    a {
-      color: var(--ifm-link-color);
-      font-size: 1em;
       text-decoration: none;
       transition: color 0.2s ease-in-out;
     }
