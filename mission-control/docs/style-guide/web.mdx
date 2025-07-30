@@ -1,0 +1,571 @@
+---
+title: Web Guidelines
+sidebar_position: 3
+---
+
+# Web Guidelines
+
+Comprehensive design guidelines for web interfaces, documentation sites, and digital experiences across Flanksource products.
+
+## UI Components
+
+### Buttons
+
+<div className="space-y-6 mb-8">
+  <div>
+    <h4 className="font-semibold mb-3">Primary Button</h4>
+    <button className="bg-blue-500 text-white px-4 py-3 rounded-md hover:bg-blue-700 transition-colors h-10">
+      Primary Action
+    </button>
+    <div className="mt-3 text-sm text-gray-600">
+      <p>Background: <code>#3578e5</code> → Hover: <code>#1e40af</code></p>
+      <p>Border radius: 6px • Padding: 8px 16px • Height: 40px • Font: 14px medium</p>
+    </div>
+  </div>
+  
+  <div>
+    <h4 className="font-semibold mb-3">Secondary Button</h4>
+    <button className="bg-blue-100 text-blue-500 px-4 py-3 rounded-md hover:bg-blue-200 transition-colors h-10">
+      Secondary Action
+    </button>
+    <div className="mt-3 text-sm text-gray-600">
+      <p>Background: <code>#dbeafe</code> → Hover: <code>#bfdbfe</code></p>
+      <p>Text: <code>#3b82f6</code> • Height: 40px • No border</p>
+    </div>
+  </div>
+  
+  <div>
+    <h4 className="font-semibold mb-3">White Button</h4>
+    <button className="bg-white text-gray-700 border border-gray-300 px-4 py-3 rounded-md hover:bg-gray-100 transition-colors h-10">
+      White Button
+    </button>
+    <div className="mt-3 text-sm text-gray-600">
+      <p>Background: White → Hover: <code>#f3f4f6</code></p>
+      <p>Border: 1px solid <code>#d1d5db</code> • Height: 40px</p>
+    </div>
+  </div>
+  
+  <div>
+    <h4 className="font-semibold mb-3">Danger Button</h4>
+    <button className="bg-red-600 text-white px-4 py-3 rounded-md hover:bg-red-700 transition-colors h-10">
+      Danger Action
+    </button>
+    <div className="mt-3 text-sm text-gray-600">
+      <p>Background: <code>#dc2626</code> → Hover: <code>#b91c1c</code></p>
+      <p>Height: 40px</p>
+    </div>
+  </div>
+</div>
+
+### Button Variations
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Size Variants</h5>
+    <div className="space-y-3">
+      <button className="bg-blue-500 text-white px-3 py-2 rounded text-sm h-8">Small Button</button>
+      <button className="bg-blue-500 text-white px-4 py-3 rounded h-10">Default Button</button>
+      <button className="bg-blue-500 text-white px-6 py-4 rounded text-lg h-12">Large Button</button>
+    </div>
+    <div className="mt-3 text-xs text-gray-600">
+      <p>Small: 32px height • Default: 40px height • Large: 48px height</p>
+    </div>
+  </div>
+  
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">State Variations</h5>
+    <div className="space-y-3">
+      <button className="bg-blue-500 text-white px-4 py-3 rounded h-10">Normal</button>
+      <button className="bg-blue-600 text-white px-4 py-3 rounded h-10">Hover</button>
+      <button className="bg-blue-400 text-white px-4 py-3 rounded h-10 opacity-50 cursor-not-allowed">Disabled</button>
+    </div>
+    <div className="mt-3 text-xs text-gray-600">
+      <p>Disabled state: 50% opacity, no pointer events</p>
+    </div>
+  </div>
+</div>
+
+### Links
+
+<div className="mb-8">
+  <h4 className="font-semibold mb-3">Link Styles</h4>
+  <div className="space-y-4">
+    <div>
+      <p className="mb-2">
+        Standard link: <a href="#" className="text-blue-500 hover:text-blue-700 underline">Click here</a>
+      </p>
+      <p className="text-sm text-gray-600">
+        Color: <code>#3578e5</code> • Hover: <code>#1d4ed8</code> • Underline on hover
+      </p>
+    </div>
+    
+    <div>
+      <p className="mb-2">
+        Navigation link: <a href="#" className="text-gray-700 hover:text-blue-500 no-underline">Navigation Item</a>
+      </p>
+      <p className="text-sm text-gray-600">
+        Color: <code>#374151</code> • Hover: <code>#3578e5</code> • No underline
+      </p>
+    </div>
+    
+    <div>
+      <p className="mb-2">
+        Markdown content link: <a href="#" className="text-gray-900 border-b-2 border-sky-500 hover:border-sky-600 no-underline">Content Link</a>
+      </p>
+      <p className="text-sm text-gray-600">
+        Color: <code>#111827</code> • Border: sky-500 bottom border
+      </p>
+    </div>
+  </div>
+</div>
+
+### Forms
+
+<div className="mb-8">
+  <h4 className="font-semibold mb-3">Form Elements</h4>
+  <div className="max-w-md space-y-4">
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">Text Input</label>
+      <input 
+        type="text" 
+        placeholder="Enter text here"
+        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      />
+    </div>
+    
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">Select Dropdown</label>
+      <select className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        <option>Choose an option</option>
+        <option>Option 1</option>
+        <option>Option 2</option>
+      </select>
+    </div>
+    
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">Textarea</label>
+      <textarea 
+        placeholder="Enter description"
+        rows={3}
+        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      />
+    </div>
+  </div>
+  
+  <div className="mt-4 text-sm text-gray-600">
+    <p><strong>Form Guidelines:</strong></p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Border radius: 4px for inputs</li>
+      <li>Border color: Gray 300 (#d1d5db)</li>
+      <li>Focus ring: Blue 500 with 2px width</li>
+      <li>Padding: 8px horizontal, 8px vertical</li>
+      <li>Font: Open Sans Regular, 14px</li>
+    </ul>
+  </div>
+</div>
+
+### Badges & Status Indicators
+
+<div className="mb-8">
+  <h4 className="font-semibold mb-3">Status Badges</h4>
+  <div className="flex flex-wrap gap-3 mb-4">
+    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Healthy</span>
+    <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">Warning</span>
+    <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">Error</span>
+    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">Info</span>
+    <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">Neutral</span>
+  </div>
+  
+  <div className="text-sm text-gray-600">
+    <p><strong>Badge Guidelines:</strong></p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Border radius: 9999px (fully rounded)</li>
+      <li>Padding: 4px horizontal, 2px vertical</li>
+      <li>Font: Open Sans Medium, 14px</li>
+      <li>Use semantic color backgrounds with darker text</li>
+    </ul>
+  </div>
+</div>
+
+### Product-Specific Badges
+
+<div className="mb-8">
+  <h4 className="font-semibold mb-3">Feature Badges</h4>
+  <div className="flex flex-wrap gap-3 mb-4">
+    <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Beta</span>
+    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">Popular</span>
+    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">New</span>
+    <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">Featured</span>
+  </div>
+</div>
+
+## Layout Patterns
+
+### Container Widths
+
+<div className="space-y-4 mb-8">
+  <div className="bg-gray-100 p-4 rounded" style={{maxWidth: '1100px'}}>
+    <p className="text-sm font-medium">Maximum content width: <strong>1100px</strong></p>
+    <p className="text-xs text-gray-600">For main application layouts and wide content areas</p>
+  </div>
+  <div className="bg-gray-100 p-4 rounded" style={{maxWidth: '900px'}}>
+    <p className="text-sm font-medium">Article width: <strong>900px</strong></p>
+    <p className="text-xs text-gray-600">For blog posts, documentation, and reading content</p>
+  </div>
+  <div className="bg-gray-100 p-4 rounded" style={{maxWidth: '700px'}}>
+    <p className="text-sm font-medium">Narrow content: <strong>700px</strong></p>
+    <p className="text-xs text-gray-600">For forms, narrow layouts, and focused content</p>
+  </div>
+  <div className="bg-gray-100 p-4 rounded" style={{maxWidth: '600px'}}>
+    <p className="text-sm font-medium">Form max width: <strong>600px</strong></p>
+    <p className="text-xs text-gray-600">For forms, modals, and input-focused interfaces</p>
+  </div>
+</div>
+
+### Grid System
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="bg-gray-50 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Grid Fundamentals</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Based on CSS Grid and Flexbox</li>
+      <li>• Standard gap: 1.5rem (24px)</li>
+      <li>• Large gap: 2rem (32px)</li>
+      <li>• Mobile-first responsive design</li>
+      <li>• 12-column grid for complex layouts</li>
+    </ul>
+  </div>
+  
+  <div className="bg-gray-50 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Breakpoints</h5>
+    <ul className="text-sm space-y-1">
+      <li>• <code>sm:</code> 640px and up</li>
+      <li>• <code>md:</code> 768px and up</li>
+      <li>• <code>lg:</code> 1024px and up</li>
+      <li>• <code>xl:</code> 1280px and up</li>
+      <li>• <code>2xl:</code> 1536px and up</li>
+    </ul>
+  </div>
+</div>
+
+### Spacing System
+
+<div className="mb-8">
+  <h4 className="font-semibold mb-3">Standard Spacing Scale</h4>
+  <div className="grid grid-cols-5 gap-4 mb-4">
+    {[
+      {name: 'xs', value: '0.5rem', px: '8px'},
+      {name: 'sm', value: '1rem', px: '16px'},
+      {name: 'md', value: '1.5rem', px: '24px'},
+      {name: 'lg', value: '2rem', px: '32px'},
+      {name: 'xl', value: '3rem', px: '48px'},
+    ].map(space => (
+      <div key={space.name} className="text-center">
+        <div className="bg-blue-500 mb-2 mx-auto" style={{height: space.value, width: space.value}}></div>
+        <p className="font-semibold text-sm">{space.name}</p>
+        <p className="text-xs text-gray-600">{space.value}</p>
+        <p className="text-xs text-gray-500">{space.px}</p>
+      </div>
+    ))}
+  </div>
+  
+  <div className="bg-gray-50 rounded-lg p-4">
+    <h5 className="font-semibold mb-2">Component Spacing</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Paragraph margins: 20px top</li>
+      <li>• List item spacing: 8px between items</li>
+      <li>• Section padding: 24px vertical, 16px horizontal</li>
+      <li>• Card padding: 24px all sides</li>
+      <li>• Button spacing: 16px between buttons</li>
+    </ul>
+  </div>
+</div>
+
+## Shadows & Elevation
+
+### Shadow Scale
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+  <div>
+    <div className="bg-white p-6 rounded-lg mb-3" style={{boxShadow: '0px 1px 1px hsla(0, 0%, 0%, 0.06), 0px 2px 1px hsla(0, 0%, 0%, 0.06)'}}>
+      <h5 className="font-semibold">Small Shadow</h5>
+      <p className="text-sm text-gray-600">Subtle elevation</p>
+    </div>
+    <code className="text-xs">shadow-sm</code>
+  </div>
+  <div>
+    <div className="bg-white p-6 rounded-lg mb-3" style={{boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'}}>
+      <h5 className="font-semibold">Medium Shadow</h5>
+      <p className="text-sm text-gray-600">Standard elevation</p>
+    </div>
+    <code className="text-xs">shadow-md</code>
+  </div>
+  <div>
+    <div className="bg-white p-6 rounded-lg mb-3" style={{boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}}>
+      <h5 className="font-semibold">Large Shadow</h5>
+      <p className="text-sm text-gray-600">High elevation</p>
+    </div>
+    <code className="text-xs">shadow-lg</code>
+  </div>
+</div>
+
+### Usage Guidelines
+
+<div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+  <h5 className="font-semibold text-blue-800 mb-2">Shadow Application</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Cards and panels: Small to medium shadows</li>
+    <li>• Dropdowns and modals: Large shadows</li>
+    <li>• Buttons on hover: Increase shadow slightly</li>
+    <li>• Interactive elements: Shadow on focus/hover</li>
+    <li>• Avoid shadows on flat design elements</li>
+  </ul>
+</div>
+
+## Dark Mode
+
+### Dark Mode Colors
+
+<div className="bg-gray-900 text-white rounded-lg p-6 mb-6">
+  <h4 className="text-lg font-semibold mb-4">Dark Theme Palette</h4>
+  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+    <div>
+      <div className="h-12 rounded mb-2" style={{backgroundColor: '#1a1a1a'}}></div>
+      <p>Background</p>
+      <code className="text-gray-400">#1a1a1a</code>
+    </div>
+    <div>
+      <div className="h-12 rounded mb-2" style={{backgroundColor: '#21243d'}}></div>
+      <p>Surface</p>
+      <code className="text-gray-400">#21243d</code>
+    </div>
+    <div>
+      <div className="h-12 rounded mb-2 border border-gray-600" style={{backgroundColor: '#e3e3e3'}}></div>
+      <p>Text</p>
+      <code className="text-gray-400">#e3e3e3</code>
+    </div>
+    <div>
+      <div className="h-12 rounded mb-2 border border-gray-600" style={{backgroundColor: '#d1d5db'}}></div>
+      <p>Muted Text</p>
+      <code className="text-gray-400">#d1d5db</code>
+    </div>
+    <div>
+      <div className="h-12 rounded mb-2" style={{backgroundColor: '#374151'}}></div>
+      <p>Borders</p>
+      <code className="text-gray-400">#374151</code>
+    </div>
+    <div>
+      <div className="h-12 rounded mb-2" style={{backgroundColor: '#2d3748'}}></div>
+      <p>Input Backgrounds</p>
+      <code className="text-gray-400">#2d3748</code>
+    </div>
+  </div>
+</div>
+
+### Dark Mode Components
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="bg-gray-900 text-white rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Dark Mode Buttons</h5>
+    <div className="space-y-3">
+      <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Primary</button>
+      <button className="bg-gray-700 text-gray-200 px-4 py-2 rounded hover:bg-gray-600">Secondary</button>
+      <button className="bg-transparent border border-gray-600 text-gray-200 px-4 py-2 rounded hover:bg-gray-800">Outline</button>
+    </div>
+  </div>
+  
+  <div className="bg-gray-900 text-white rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Dark Mode Forms</h5>
+    <div className="space-y-3">
+      <input 
+        type="text" 
+        placeholder="Dark mode input"
+        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400"
+      />
+      <select className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white">
+        <option>Dark option</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+### Dark Mode Adjustments
+
+<div className="bg-gray-50 rounded-lg p-4">
+  <h5 className="font-semibold mb-2">Implementation Guidelines</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Increased contrast for readability</li>
+    <li>• Adjusted opacity for overlays (darker base)</li>
+    <li>• White logos and icons on dark backgrounds</li>
+    <li>• Softer shadows with gray tones instead of black</li>
+    <li>• Maintain semantic colors but adjust brightness</li>
+    <li>• Use CSS custom properties for theme switching</li>
+  </ul>
+</div>
+
+## Animation & Transitions
+
+### Standard Transitions
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="bg-gray-50 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Default Transition Properties</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Duration: <code>0.2s</code> (200ms)</li>
+      <li>• Easing: <code>ease-in-out</code></li>
+      <li>• Properties: <code>color, background-color, border-color, transform</code></li>
+      <li>• Hover states: Immediate feedback</li>
+      <li>• Loading states: 0.3s duration</li>
+    </ul>
+  </div>
+  
+  <div className="bg-gray-50 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Animation Guidelines</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Keep animations subtle and functional</li>
+      <li>• Avoid excessive or distracting motion</li>
+      <li>• Respect user's motion preferences</li>
+      <li>• Use consistent timing across similar elements</li>
+      <li>• Loading animations: 1-2s loops maximum</li>
+    </ul>
+  </div>
+</div>
+
+### Interactive States
+
+<div className="space-y-4 mb-8">
+  <div>
+    <h5 className="font-semibold mb-2">Button Interactions</h5>
+    <div className="flex gap-4">
+      <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 hover:shadow-md transition-all duration-200">
+        Hover Me
+      </button>
+      <button className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded hover:shadow-lg hover:border-gray-400 transition-all duration-200">
+        Hover Shadow
+      </button>
+    </div>
+  </div>
+  
+  <div>
+    <h5 className="font-semibold mb-2">Card Interactions</h5>
+    <div className="inline-block bg-white border border-gray-200 rounded-lg p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+      <h6 className="font-medium">Interactive Card</h6>
+      <p className="text-sm text-gray-600">Hover for elevation effect</p>
+    </div>
+  </div>
+</div>
+
+## Accessibility
+
+### Color Contrast
+
+<div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+  <h4 className="text-lg font-semibold mb-3">WCAG Compliance</h4>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h5 className="font-semibold mb-2">Minimum Standards</h5>
+      <ul className="text-sm space-y-1">
+        <li>• WCAG AA: 4.5:1 contrast ratio for normal text</li>
+        <li>• WCAG AA: 3:1 contrast ratio for large text</li>
+        <li>• WCAG AAA: 7:1 contrast ratio for enhanced accessibility</li>
+        <li>• Test all color combinations</li>
+      </ul>
+    </div>
+    <div>
+      <h5 className="font-semibold mb-2">Implementation</h5>
+      <ul className="text-sm space-y-1">
+        <li>• Use contrast checking tools</li>
+        <li>• Avoid relying solely on color for information</li>
+        <li>• Provide alternative indicators (icons, text)</li>
+        <li>• Test with colorblind simulation</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+### Focus States
+
+<div className="space-y-4 mb-8">
+  <div>
+    <h5 className="font-semibold mb-3">Focus Indicators</h5>
+    <div className="space-y-3">
+      <button className="bg-blue-500 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+        Focusable Button
+      </button>
+      <input 
+        type="text" 
+        placeholder="Focusable input"
+        className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      />
+      <a href="#" className="text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">
+        Focusable Link
+      </a>
+    </div>
+  </div>
+  
+  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+    <h5 className="font-semibold text-yellow-800 mb-2">Focus Requirements</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Visible focus rings on all interactive elements</li>
+      <li>• Blue focus color (#3578e5) for consistency</li>
+      <li>• 2px ring width with 2px offset</li>
+      <li>• Never remove focus indicators without replacement</li>
+      <li>• Ensure focus order follows logical tab sequence</li>
+    </ul>
+  </div>
+</div>
+
+### Keyboard Navigation
+
+<div className="bg-gray-50 rounded-lg p-4">
+  <h5 className="font-semibold mb-2">Navigation Guidelines</h5>
+  <ul className="text-sm space-y-1">
+    <li>• All interactive elements must be keyboard accessible</li>
+    <li>• Tab order should follow visual hierarchy</li>
+    <li>• Provide skip links for navigation</li>
+    <li>• Use appropriate ARIA labels and roles</li>
+    <li>• Test navigation with keyboard only</li>
+    <li>• Support standard keyboard shortcuts where applicable</li>
+  </ul>
+</div>
+
+## Responsive Design
+
+### Mobile-First Approach
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Mobile Considerations</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Touch targets: Minimum 44px × 44px</li>
+      <li>• Adequate spacing between interactive elements</li>
+      <li>• Readable text without zooming (16px minimum)</li>
+      <li>• Optimize for one-handed use</li>
+      <li>• Fast loading and minimal data usage</li>
+    </ul>
+  </div>
+  
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3">Tablet & Desktop</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Utilize larger screen real estate efficiently</li>
+      <li>• Multi-column layouts where appropriate</li>
+      <li>• Hover states for desktop interactions</li>
+      <li>• Keyboard shortcuts and power user features</li>
+      <li>• Contextual menus and advanced controls</li>
+    </ul>
+  </div>
+</div>
+
+### Responsive Patterns
+
+<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+  <h5 className="font-semibold text-blue-800 mb-2">Common Patterns</h5>
+  <ul className="text-sm space-y-1">
+    <li>• <strong>Stack to Grid:</strong> Single column on mobile, multi-column on larger screens</li>
+    <li>• <strong>Hide/Show:</strong> Progressive disclosure of features</li>
+    <li>• <strong>Navigation:</strong> Hamburger menu on mobile, full nav on desktop</li>
+    <li>• <strong>Typography:</strong> Fluid scaling based on screen size</li>
+    <li>• <strong>Images:</strong> Responsive images with appropriate sizes</li>
+  </ul>
+</div>
