@@ -10,7 +10,7 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "render-for-context7": "node ../scripts/render-for-context7.js"
+    "render-for-context7": "INIT_CWD=$(pwd) go run ../scripts/render-for-context7/main.go"
   },
   "dependencies": {
     "@docusaurus/core": "^3.7.0",

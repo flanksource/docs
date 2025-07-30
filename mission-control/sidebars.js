@@ -202,6 +202,11 @@ const sidebars = {
           id: 'hardening',
         },
       ]
+    },
+    {
+      type: 'doc',
+      id: 'brand-guidelines',
+      label: 'Brand Guidelines'
     }
   ]
 }
