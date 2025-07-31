@@ -1,0 +1,230 @@
+---
+title: Clickhouse
+sidebar_position: 7
+show_title: false
+sidebar_custom_props:
+  icon: clickhouse-icon
+---
+
+import Custom from './_custom.mdx'
+
+# <Icon name="clickhouse-icon"/> Clickhouse
+
+<!-- Source: modules/config-db/api/v1/clickhouse.go:9#Clickhouse -->
+
+The Clickhouse scraper executes SQL queries against a Clickhouse database or cloud storage systems (AWS S3, Azure Blob Storage) and creates configuration items from the query results. This allows you to treat data stored in Clickhouse or cloud storage as configuration items that can be tracked and monitored.
+
+## Use Cases
+
+- **Data Warehouse Integration**: Treat analytical data as configuration items
+- **Business Logic Tracking**: Monitor business rule changes stored in Clickhouse
+- **Cloud Storage Monitoring**: Track files and data stored in S3 or Azure Blob Storage
+- **Data Pipeline Monitoring**: Monitor data transformation results as configuration changes
+- **Historical Data Analysis**: Create configuration items from time-series data
+
+```yaml title="clickhouse-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/clickhouse.yaml
+```
+
+| Field       | Description                                                                        | Scheme                                             | Required |
+| ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `logLevel`  | Specify the level of logging.                                                      | `string`                                           |          |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | [Cron](/reference/types#cron)                      |          |
+| `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                             |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `clickhouse`| Specifies the list of Clickhouse configurations to scrape.                         | [`[]Clickhouse`](#clickhouse-1)                    | `true`   |
+
+### Clickhouse
+
+<Fields rows={[
+  {
+    field: "clickhouseURL",
+    description: "Clickhouse connection URL in format: clickhouse://user:password@host:port/database?param1=value1&param2=value2",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "query",
+    description: "SQL query to execute against Clickhouse",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "awsS3",
+    description: "AWS S3 configuration for cloud storage access",
+    scheme: "[AWSS3](#awss3)",
+    required: false
+  },
+  {
+    field: "azureBlobStorage",
+    description: "Azure Blob Storage configuration for cloud storage access",
+    scheme: "[AzureBlobStorage](#azureblobstorage)",
+    required: false
+  }
+]} />
+
+<Custom/>
+
+### AWSS3
+
+<Fields rows={[
+  {
+    field: "bucket",
+    description: "S3 bucket name",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "path",
+    description: "Path within the S3 bucket",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "endpoint",
+    description: "Custom S3 endpoint URL",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "accessKey",
+    description: "AWS access key for authentication",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  },
+  {
+    field: "secretKey",
+    description: "AWS secret key for authentication",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  },
+  {
+    field: "region",
+    description: "AWS region",
+    scheme: "string",
+    required: false
+  }
+]} />
+
+### AzureBlobStorage
+
+<Fields rows={[
+  {
+    field: "account",
+    description: "Azure storage account name",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "container",
+    description: "Azure blob container name",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "path",
+    description: "Path within the container",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "endpoint",
+    description: "Azure endpoint suffix (default: core.windows.net)",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "collection",
+    description: "Name of the collection in Clickhouse. See [Named Collections](https://clickhouse.com/docs/operations/named-collections)",
+    scheme: "string",
+    required: true
+  }
+]} />
+
+
+
+:::info
+An instance of Clickhouse server needs to be deployed for this scraper to function.
+
+Mission Control can deploy an instance by setting `config-db.clickhouse.enabled: true` in the helm chart.
+
+An external Clickhouse server can also be used via the `clickhouseURL` parameter
+:::
+
+## Configuration Examples
+
+### Direct Clickhouse Connection
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: clickhouse-orders
+spec:
+  clickhouse:
+    - clickhouseURL: "clickhouse://user:password@localhost:9000/ecommerce"
+      query: |
+        SELECT
+          order_id,
+          customer_id,
+          status,
+          total_amount,
+          created_at
+        FROM orders
+        WHERE status = 'completed'
+        ORDER BY created_at DESC
+        LIMIT 1000
+      type: Order
+      id: $.order_id
+```
+
+### AWS S3 Integration
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: clickhouse-s3-data
+spec:
+  clickhouse:
+    - awsS3:
+        bucket: analytics-data
+        path: exports/
+        connection: connection://aws
+      query: |
+        SELECT *
+        FROM s3('s3://analytics-data/exports/*.parquet')
+        LIMIT 100
+      type: AnalyticsData
+      id: $.record_id
+```
+
+### Azure Blob Storage Integration
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: clickhouse-azure-logs
+spec:
+  clickhouse:
+    - azureBlobStorage:
+        account: mystorageaccount
+        container: logs
+        path: application-logs/
+        collectionName: ApplicationLogs
+        connectionString:
+          valueFrom:
+            secretKeyRef:
+              name: azure-storage
+              key: connection-string
+      query: |
+        SELECT
+          timestamp,
+          level,
+          message,
+          application
+        FROM azure_blob_storage_table
+        WHERE level IN ('ERROR', 'WARN')
+      type: LogEntry
+      id: $.timestamp
+```

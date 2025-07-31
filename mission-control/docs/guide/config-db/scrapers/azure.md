@@ -7,6 +7,8 @@ sidebar_custom_props:
 
 # <Icon name="azure"/> Azure
 
+<!-- Source: modules/config-db/api/v1/azure.go:25#Azure -->
+
 :::tip Registry
 The registry has an [Azure](/registry/azure) Helm chart that provides a pre-configured Scraper with some common defaults
 :::

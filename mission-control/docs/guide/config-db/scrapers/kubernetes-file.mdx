@@ -6,23 +6,11 @@ sidebar_custom_props:
 
 # <Icon name="k8s-pod"/> Kubernetes File
 
+<!-- Source: modules/config-db/api/v1/kubernetes.go:271#KubernetesFile -->
+
 The KubernetesFile config type is used to scrape the contents of files inside Kubernetes Pods.
 
-```yaml title='k8s-file-scraper.yaml'
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: k8s-file-scraper
-spec:
-  kubernetesFile:
-    - selector:
-        namespace: demo
-        kind: Statefulset
-        name: postgresql
-    files:
-      - path:
-          - /var/lib/postgresql/data/pgdata/postgresql.conf
-        format: properties
+```yaml title='k8s-file-scraper.yaml' file=<rootDir>/modules/config-db/fixtures/kubernetes_file.yaml
 ```
 
 ## Scraper

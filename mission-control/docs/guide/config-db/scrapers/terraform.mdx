@@ -1,0 +1,368 @@
+---
+title: Terraform
+sidebar_position: 10
+sidebar_custom_props:
+  icon: terraform
+---
+
+
+# <Icon name="terraform"/> Terraform
+
+<!-- Source: modules/config-db/api/v1/terraform.go:72#Terraform -->
+
+The Terraform scraper reads Terraform state files and creates configuration items from the resources defined in the state. This enables you to track your infrastructure as code resources and monitor changes to your Terraform-managed infrastructure.
+
+
+## Use Cases
+
+- **Infrastructure Tracking**: Monitor all resources managed by Terraform
+- **State Drift Detection**: Track changes between Terraform state and actual infrastructure
+- **Multi-Environment Management**: Track resources across different environments and stages
+- **Resource Dependency Mapping**: Understand relationships between Terraform-managed resources
+- **Compliance Monitoring**: Ensure infrastructure remains compliant with defined configurations
+
+```yaml title="terraform-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/terraform.yaml
+```
+
+| Field       | Description                                                                  | Scheme                                             | Required |
+| ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/reference/types#cron)                      |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `terraform` | Specifies the list of Terraform configurations to scrape.                    | [`[]Terraform`](#terraform-1)                      | `true`   |
+
+### Terraform
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Template for naming the configuration items created from Terraform resources",
+    scheme: "[GoTemplate](/reference/types#gotemplate)",
+    required: true
+  },
+  {
+    field: "state",
+    description: "Configuration for accessing Terraform state files",
+    scheme: "[TerraformStateSource](#terraformstatesource)",
+    required: true
+  },
+  {
+    field: "transform",
+    description: "Transformations to apply to scraped items",
+    scheme: "[Transform](/guide/config-db/concepts/transform)",
+    required: false
+  }
+]} />
+
+### TerraformStateSource
+
+<Fields rows={[
+  {
+    field: "s3",
+    description: "S3 backend configuration for accessing state files stored in AWS S3",
+    scheme: "[S3Connection](#s3connection)",
+    required: false
+  },
+  {
+    field: "gcs",
+    description: "Google Cloud Storage backend configuration for accessing state files",
+    scheme: "[GCSConnection](#gcsconnection)",
+    required: false
+  },
+  {
+    field: "local",
+    description: "Local file path to Terraform state file",
+    scheme: "string",
+    required: false
+  }
+]} />
+
+### S3Connection
+
+<Fields rows={[
+  {
+    field: "connection",
+    description: "Connection reference for AWS credentials",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "bucket",
+    description: "S3 bucket name containing the state files",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "objectPath",
+    description: "Path pattern to state files (supports glob patterns like states/**/*.tfstate)",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "region",
+    description: "AWS region where the bucket is located",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "accessKey",
+    description: "AWS access key for authentication",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  },
+  {
+    field: "secretKey",
+    description: "AWS secret key for authentication",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  }
+]} />
+
+### GCSConnection
+
+<Fields rows={[
+  {
+    field: "bucket",
+    description: "GCS bucket name containing the state files",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "objectPath",
+    description: "Path pattern to state files in the bucket",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "credentials",
+    description: "GCP service account credentials JSON",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  }
+]} />
+
+
+
+## Configuration Examples
+
+### S3 Backend
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: terraform-s3-states
+spec:
+  schedule: '@every 5m'
+  terraform:
+    - name: '{{ filepath.Base .path }}'
+      state:
+        s3:
+          bucket: terraform-state-bucket
+          connection: connection://aws
+          objectPath: 'environments/**/*.tfstate'
+```
+
+### Multiple Environment Tracking
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: terraform-multi-env
+spec:
+  terraform:
+    - name: 'prod-{{ filepath.Base .path }}'
+      state:
+        s3:
+          bucket: terraform-prod-states
+          connection: connection://aws-prod
+          objectPath: 'prod/**/*.tfstate'
+    - name: 'staging-{{ filepath.Base .path }}'
+      state:
+        s3:
+          bucket: terraform-staging-states
+          connection: connection://aws-staging
+          objectPath: 'staging/**/*.tfstate'
+    - name: 'dev-{{ filepath.Base .path }}'
+      state:
+        s3:
+          bucket: terraform-dev-states
+          connection: connection://aws-dev
+          objectPath: 'dev/**/*.tfstate'
+```
+
+### GCS Backend
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: terraform-gcs-states
+spec:
+  terraform:
+    - name: 'gcp-{{ filepath.Base .path }}'
+      state:
+        gcs:
+          bucket: terraform-state-gcs
+          objectPath: 'projects/**/*.tfstate'
+          credentials:
+            valueFrom:
+              secretKeyRef:
+                name: gcp-credentials
+                key: service-account.json
+```
+
+### Local State Files
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: terraform-local-state
+spec:
+  terraform:
+    - name: 'local-terraform'
+      state:
+        local: '/path/to/terraform.tfstate'
+```
+
+
+## Masking Sensitive Data
+
+Terraform state files store all resource attributes in plain text JSON, including sensitive values like passwords, API keys, and connection strings. For example, an AWS RDS instance in the state file contains:
+
+```json
+{
+  "mode": "managed",
+  "type": "aws_db_instance",
+  "name": "example",
+  "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+  "instances": [
+    {
+      "attributes": {
+        "address": "mydb.123456789012.us-east-1.rds.amazonaws.com",
+        "engine": "mysql",
+        "engine_version": "5.7",
+        "master_username": "admin",
+        "master_password": "MyPa$$w0rd123!",  // Stored in plain text!
+        "endpoint": "mydb.123456789012.us-east-1.rds.amazonaws.com:3306"
+      }
+    }
+  ]
+}
+```
+
+### Default Masking Behavior
+
+:::info
+The Terraform scraper **automatically masks** common sensitive patterns by default. You don't need to configure anything for basic secret protection.
+:::
+
+The following patterns are automatically masked:
+
+| Pattern | Fields Masked | Example |
+|---------|--------------|---------|
+| Passwords | `*password*`, `*passwd*`, `*pwd*` | `master_password`, `db_password`, `user_pwd` |
+| Keys | `*private_key*`, `*secret_key*`, `*api_key*`, `*access_key*` | `aws_secret_access_key`, `private_key_pem` |
+| Tokens | `*token*`, `*auth*` | `github_token`, `auth_token`, `bearer_token` |
+| Secrets | `*secret*` | `client_secret`, `webhook_secret` |
+| Connection Strings | Fields containing connection URIs | `connection_string`, `database_url` |
+
+### Custom Masking Examples
+
+For additional masking beyond the defaults, you can add custom rules. Note that Mission Control uses specific resource type formats (e.g., `AWS::RDS::DBInstance`, `AWS::IAM::User`):
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: terraform-security-masking
+spec:
+  terraform:
+    - name: '{{ .path | filepath.Base }}'
+      state:
+        s3:
+          bucket: terraform-states
+          connection: connection://aws
+          objectPath: '**/*.tfstate'
+      transform:
+        mask:
+          # Mask RDS and Aurora passwords with hash for change detection
+          - selector: |
+              config.type == 'AWS::RDS::DBInstance' ||
+              config.type == 'AWS::RDS::DBCluster' ||
+              config.type == 'AWS::RDS::DBProxy'
+            jsonpath: $.config.master_password
+            value: md5sum
+
+          # Mask DocumentDB passwords
+          - selector: config.type == 'AWS::DocDB::DBCluster'
+            jsonpath: $.config.master_password
+            value: md5sum
+
+          # Mask ElastiCache auth tokens
+          - selector: config.type == 'AWS::ElastiCache::CacheCluster'
+            jsonpath: $.config.auth_token
+            value: '***REDACTED***'
+
+          # Mask IAM user access keys
+          - selector: config.type == 'AWS::IAM::User'
+            jsonpath: $.config.access_key_id
+            value: '***ACCESS_KEY***'
+
+          # Mask Lambda environment variables
+          - selector: config.type == 'AWS::Lambda::Function'
+            jsonpath: $.config.environment.variables[?(@.key =~ /.*secret.*|.*password.*|.*key.*/i)]
+            value: md5sum
+
+          # Mask custom application secrets in EC2 user data
+          - selector: config.type == 'AWS::EC2::Instance'
+            jsonpath: $.config.user_data
+            value: '***USER_DATA_REDACTED***'
+```
+
+### Excluding Sensitive Resources
+
+For highly sensitive resources that shouldn't be tracked at all:
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: terraform-exclude-secrets
+spec:
+  terraform:
+    - name: '{{ .path | filepath.Base }}'
+      state:
+        s3:
+          bucket: terraform-states
+          connection: connection://aws
+          objectPath: '**/*.tfstate'
+      transform:
+        exclude:
+          # Exclude all AWS Secrets Manager resources
+          - types:
+              - 'AWS::SecretsManager::Secret'
+              - 'AWS::SecretsManager::SecretVersion'
+            jsonpath: '$'
+
+          # Exclude IAM access keys
+          - types:
+              - 'AWS::IAM::AccessKey'
+            jsonpath: '$'
+
+          # Exclude specific sensitive fields from all resources
+          - jsonpath: '$..master_password'
+          - jsonpath: '$..auth_token'
+          - jsonpath: '$..private_key_pem'
+          - jsonpath: '$..client_secret'
+```
+
+## Best Practices
+
+- **Leverage Default Masking**: The scraper automatically masks common sensitive patterns - verify these meet your needs before adding custom rules
+- **State File Protection**: Always encrypt state files at rest and in transit, use remote backends with proper access controls
+- **Use AWS Secrets Manager**: For RDS instances, use `manage_master_user_password = true` to avoid storing passwords in state
+- **Regular Rotation**: Rotate credentials regularly and update masking rules accordingly
+- **Audit Access**: Monitor and audit who has access to state files and scraped configurations
+- **Test Masking Rules**: Regularly verify that sensitive data is properly masked in scraped configurations

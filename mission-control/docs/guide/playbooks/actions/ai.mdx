@@ -6,6 +6,8 @@ sidebar_custom_props:
 ---
 import Templating from '@site/docs/reference/playbooks/context.mdx'
 
+<!-- Source: modules/mission-control/api/v1/playbook_actions.go:438#AIAction -->
+
 # <Icon name="cpu"/> AI Action
 
 AI Action allows you to integrate AI capabilities into your playbooks by leveraging the rich context that Mission Control maintains about your infrastructure. When executed against configs or components, the AI action automatically injects:
@@ -34,9 +36,11 @@ For example, when a Kubernetes pod fails, it examines the pod spec, ConfigMap ch
  {field: "backend", description: "LLM provider", scheme: "`openai` | `anthropic` | `ollama`"},
  {field: "changes.since", description: "Select the changes of the playbook resource to feed into the AI", scheme: "duration"},
  {field: "connection", description: "Connection string for the LLM", scheme: "string"},
- {field: "formats", description: "Output format. _(Only `markdown` supported as of now)_", scheme: "`[]string`"},
+ {field: "dryRun", description: "When enabled, the prompt is simply saved without passing it on to the LLM", scheme: "bool"},
+ {field: "formats", description: "Output format", scheme: "[]AIActionFormat"},
  {field: "model", description: "LLM model (e.g. gpt-4)", scheme: "string"},
- {field: "prompt", description: "Main prompt", scheme: "string", required: true},
+ {field: "prompt", description: "Main prompt", scheme: "string", required: true, templatable: true},
+ {field: "recommendPlaybooks", description: "Specify selectors for playbooks. The LLM will recommend the best suited playbooks", scheme: "[]ResourceSelector"},
  {field: "relationships", description: "Select the related configs and their changes and analysis to feed into the AI", scheme: "[[]Relationship](#relationship)"},
  {field: "systemPrompt", description: "Context-setting system prompt", scheme: "string", required: true},
  {field: "playbooks", description: "List of playbooks to execute and use as context", scheme: "[[]ContextProviderPlaybook](#context-provider-playbook)"}

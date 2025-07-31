@@ -1,0 +1,370 @@
+---
+title: Client Setup
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# MCP Client Setup
+
+This guide provides step-by-step instructions for connecting popular MCP clients to Mission Control.
+
+## Prerequisites
+
+Before connecting any client, you'll need:
+
+1. **MCP Server URL**
+   - SaaS users: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
+   - Self-hosted users: `https://your.domain.com/api/mcp`
+
+2. **Authorization Token**
+   - Create a token with `mcp.*` permissions in Mission Control
+   - Navigate to Settings → API Tokens → Create New Token
+   - Select "MCP" permissions scope
+
+## Client Setup Instructions
+
+<Tabs>
+<TabItem value="claude-desktop" label="Claude Desktop">
+
+Claude Desktop supports MCP connections through its configuration file.
+
+### Setup Steps
+
+1. Open Claude Desktop settings
+2. Navigate to Developer → Edit Config
+3. Add the Mission Control MCP server:
+
+```json
+{
+  "mcpServers": {
+    "mission-control": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-http",
+        "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
+      ],
+      "env": {
+        "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
+      }
+    }
+  }
+}
+```
+
+4. Restart Claude Desktop
+5. The Mission Control tools will appear in the tools menu
+
+</TabItem>
+<TabItem value="claude-code" label="Claude Code">
+
+Claude Code (claude.ai) supports MCP through browser-based configuration.
+
+### Setup Steps
+
+1. Visit [claude.ai](https://claude.ai)
+2. Click on your profile icon → Settings
+3. Navigate to Developer → MCP Settings
+4. Click "Add Server" and configure:
+
+```json
+{
+  "name": "mission-control",
+  "type": "http",
+  "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN_HERE"
+  }
+}
+```
+
+5. Click "Save" and refresh the page
+6. Mission Control tools will be available in new conversations
+
+### Alternative Setup (via URL)
+
+You can also connect by visiting:
+```
+https://claude.ai/settings/mcp?server=mission-control&url=https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp
+```
+
+Then add your authorization token in the settings.
+
+</TabItem>
+<TabItem value="vscode-copilot" label="VS Code Copilot">
+
+GitHub Copilot Chat in VS Code supports MCP through the Copilot extensibility API.
+
+### Setup Steps
+
+1. Ensure you have GitHub Copilot Chat installed in VS Code
+2. Install the MCP extension for Copilot:
+   ```bash
+   code --install-extension github.copilot-mcp
+   ```
+
+3. Open VS Code settings (Cmd/Ctrl + ,)
+4. Search for "Copilot MCP"
+5. Add Mission Control configuration:
+
+```json
+{
+  "github.copilot.mcp.servers": {
+    "mission-control": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-http",
+        "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
+      ],
+      "env": {
+        "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
+      }
+    }
+  }
+}
+```
+
+6. Reload VS Code window
+7. In Copilot Chat, type `@mcp` to access Mission Control tools
+
+### Using MCP in Copilot Chat
+
+- Use `@mcp list` to see available tools
+- Use `@mcp mission-control <command>` to execute specific tools
+- Example: `@mcp mission-control query-catalog namespace=production`
+
+</TabItem>
+<TabItem value="cline" label="Cline">
+
+Cline supports MCP through its settings configuration.
+
+### Setup Steps
+
+1. Install Cline extension in VS Code
+2. Open VS Code settings (Cmd/Ctrl + ,)
+3. Search for "Cline MCP"
+4. Add Mission Control server configuration:
+
+```json
+{
+  "cline.mcpServers": {
+    "mission-control": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-http",
+        "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
+      ],
+      "env": {
+        "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
+      }
+    }
+  }
+}
+```
+
+5. Reload VS Code window
+6. Mission Control tools will be available in Cline chat
+
+</TabItem>
+<TabItem value="continue" label="Continue.dev">
+
+Continue.dev supports MCP servers through its configuration file.
+
+### Setup Steps
+
+1. Open Continue configuration
+   - Click the gear icon in Continue sidebar
+   - Or edit `~/.continue/config.json` directly
+
+2. Add Mission Control to the `mcpServers` section:
+
+```json
+{
+  "mcpServers": [
+    {
+      "name": "mission-control",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-http",
+        "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
+      ],
+      "env": {
+        "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
+      }
+    }
+  ]
+}
+```
+
+3. Restart Continue
+4. Mission Control tools will be available in chat
+
+</TabItem>
+<TabItem value="zed" label="Zed Editor">
+
+Zed supports MCP through its assistant configuration.
+
+### Setup Steps
+
+1. Open Zed settings (Cmd/Ctrl + ,)
+2. Navigate to Assistant settings
+3. Add Mission Control MCP configuration:
+
+```json
+{
+  "assistant": {
+    "mcp": {
+      "servers": {
+        "mission-control": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "@modelcontextprotocol/server-http",
+            "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
+          ],
+          "env": {
+            "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+4. Restart Zed
+5. Mission Control tools will be available in the assistant
+
+</TabItem>
+<TabItem value="direct" label="Direct HTTP">
+
+For custom integrations or clients that support direct HTTP connections:
+
+### Connection Details
+
+- **Base URL**: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
+- **Protocol**: HTTP with SSE (Server-Sent Events)
+- **Authentication**: Bearer token in Authorization header
+
+### Example Request
+
+```bash
+curl -X POST https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2024-11-05",
+      "capabilities": {}
+    },
+    "id": 1
+  }'
+```
+
+### WebSocket Connection
+
+For clients supporting WebSocket:
+
+```javascript
+const ws = new WebSocket('wss://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp/ws', {
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN_HERE'
+  }
+});
+
+ws.on('open', () => {
+  ws.send(JSON.stringify({
+    jsonrpc: '2.0',
+    method: 'initialize',
+    params: {
+      protocolVersion: '2024-11-05',
+      capabilities: {}
+    },
+    id: 1
+  }));
+});
+```
+
+</TabItem>
+</Tabs>
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Connection Refused**
+   - Verify the server URL is correct
+   - Check if you're behind a firewall or proxy
+   - Ensure the token has proper permissions
+
+2. **Authentication Failed**
+   - Verify token is valid and not expired
+   - Ensure token has `mcp.*` permissions
+   - Check if Bearer prefix is included
+
+3. **Tools Not Appearing**
+   - Restart the client application
+   - Check client logs for errors
+   - Verify MCP server is properly configured
+
+### Testing Connection
+
+You can test your MCP connection using the MCP CLI:
+
+```bash
+npx @modelcontextprotocol/cli connect \
+  --transport http \
+  --url https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
+  --header "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+## Next Steps
+
+Once connected, explore the available tools:
+- [Catalog Tools](./tools/catalog_tools.mdx) - Query and manage configuration items
+- [Connection Tools](./tools/connection_tools.mdx) - Manage connections and integrations
+- [Playbook Tools](./tools/playbook_tools.mdx) - Execute and manage playbooks
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Connection Refused**
+   - Verify the server URL is correct
+   - Check if you're behind a firewall or proxy
+   - Ensure the token has proper permissions
+
+2. **Authentication Failed**
+   - Verify token is valid and not expired
+   - Ensure token has `mcp.*` permissions
+   - Check if Bearer prefix is included
+
+3. **Tools Not Appearing**
+   - Restart the client application
+   - Check client logs for errors
+   - Verify MCP server is properly configured
+
+### Testing Connection
+
+You can test your MCP connection using the MCP CLI:
+
+```bash
+npx @modelcontextprotocol/cli connect \
+  --transport http \
+  --url https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
+  --header "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+## Next Steps
+
+Once connected, explore the available tools:
+- [Catalog Tools](./tools/catalog_tools.mdx) - Query and manage configuration items
+- [Connection Tools](./tools/connection_tools.mdx) - Manage connections and integrations
+- [Playbook Tools](./tools/playbook_tools.mdx) - Execute and manage playbooks

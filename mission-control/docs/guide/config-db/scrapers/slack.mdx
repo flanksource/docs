@@ -1,0 +1,129 @@
+---
+title: Slack
+sidebar_position: 6
+sidebar_custom_props:
+  icon: slack
+---
+
+import Custom from './_custom.mdx'
+
+# <Icon name="slack"/> Slack
+
+<!-- Source: modules/config-db/api/v1/slack.go:5#Slack -->
+
+The Slack scraper monitors Slack channels for messages that contain configuration change information. It uses regular expressions to extract structured data from messages and creates configuration changes based on the extracted information.
+
+## Use Cases
+
+- **Deployment Tracking**: Monitor deployment announcements in DevOps channels
+- **Configuration Changes**: Track configuration updates announced via ChatOps
+- **Alert Processing**: Convert alert notifications into configuration changes
+- **Team Communication**: Parse structured messages about system changes
+
+
+```yaml title="slack-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/slack.yaml
+```
+
+| Field       | Description                                                                  | Scheme                                             | Required |
+| ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/reference/types#cron)                      |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `slack`     | Specifies the list of Slack configurations to scrape.                        | [`[]Slack`](#slack-1)                              | `true`   |
+
+### Slack
+
+<Custom rows={[
+  {
+    field: "token",
+    description: "Slack bot token for API access",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: true
+  },
+  {
+    field: "since",
+    description: "Fetch messages since this period. Default: 7d",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "channels",
+    description: "Process messages from these channels. If empty, all channels are matched",
+    scheme: "[MatchExpressions](/reference/types#matchexpressions)",
+    required: false
+  },
+  {
+    field: "rules",
+    description: "Change extraction rules to process messages",
+    scheme: "[[]ChangeExtractionRule](#changeextractionrule)",
+    required: true
+  }
+]} />
+
+### ChangeExtractionRule
+
+<Custom rows={[
+  {
+    field: "regexp",
+    description: "Regular expression to extract data from messages with named capture groups",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "config",
+    description: "Configuration items to create from extracted data",
+    scheme: "[[]ConfigItems](/guide/config-db/concepts/config-items)",
+    required: true
+  },
+  {
+    field: "mapping",
+    description: "Mapping to transform extracted data into change fields",
+    scheme: "[ChangeMapping](/guide/config-db/concepts/change-mapping)",
+    required: false
+  },
+  {
+    field: "filter",
+    description: "Filter to determine which messages to process",
+    scheme: "[Filter](#filter)",
+    required: false
+  }
+]} />
+
+### Filter
+
+<Custom rows={[
+  {
+    field: "bot",
+    description: "Bot name to match",
+    scheme: "[MatchExpression](/reference/types#matchexpression)",
+    required: false
+  },
+  {
+    field: "user",
+    description: "Slack user to match",
+    scheme: "[UserFilter](#userfilter)",
+    required: false
+  },
+  {
+    field: "expr",
+    description: "CEL expression to evaluate for message acceptance",
+    scheme: "[CelExpression](/reference/types#celexpression)",
+    required: false
+  }
+]} />
+
+### UserFilter
+
+<Custom rows={[
+  {
+    field: "name",
+    description: "Username to match",
+    scheme: "[MatchExpression](/reference/types#matchexpression)",
+    required: false
+  },
+  {
+    field: "displayName",
+    description: "Display name to match",
+    scheme: "[MatchExpression](/reference/types#matchexpression)",
+    required: false
+  }
+]} />
