@@ -524,6 +524,100 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
         required: true
       },
     ])
+  } else if (connection == "s3") {
+    rows = rows.concat([
+      {
+        field: "bucket",
+        description: "S3 bucket name",
+        scheme: "string",
+        required: true
+      },
+      {
+        field: "objectPath",
+        description: "Glob path to restrict matches to a subset of objects",
+        scheme: "string"
+      },
+      {
+        field: "usePathStyle",
+        description: "Use path style URL (http://s3.amazonaws.com/BUCKET/KEY) instead of virtual hosted-style (http://BUCKET.s3.amazonaws.com/KEY)",
+        scheme: "bool"
+      }
+    ])
+  } else if (connection == "eks") {
+    rows = rows.concat([
+      {
+        field: "cluster",
+        description: "Name of the EKS cluster",
+        scheme: "string",
+        required: true
+      }
+    ])
+  } else if (connection == "gke") {
+    rows = rows.concat([
+      {
+        field: "projectID",
+        description: "Google Cloud project ID containing the GKE cluster",
+        scheme: "string",
+        required: true
+      },
+      {
+        field: "zone",
+        description: "Zone or region where the GKE cluster is located",
+        scheme: "string",
+        required: true
+      },
+      {
+        field: "cluster",
+        description: "Name of the GKE cluster",
+        scheme: "string",
+        required: true
+      }
+    ])
+  } else if (connection == "gcs") {
+    rows = rows.concat([
+      {
+        field: "bucket",
+        description: "GCS bucket name",
+        scheme: "string",
+        required: true
+      }
+    ])
+  } else if (connection == "cnrm") {
+    rows = rows.concat([
+      {
+        field: "gke.projectID",
+        description: "Google Cloud project ID containing the management GKE cluster",
+        scheme: "string",
+        required: true
+      },
+      {
+        field: "gke.zone",
+        description: "Zone or region where the management GKE cluster is located",
+        scheme: "string",
+        required: true
+      },
+      {
+        field: "gke.cluster",
+        description: "Name of the management GKE cluster",
+        scheme: "string",
+        required: true
+      },
+      {
+        field: "clusterResource",
+        description: "Name of the ContainerCluster resource managed by Config Connector",
+        scheme: "string",
+        required: true
+      },
+      {
+        field: "clusterResourceNamespace",
+        description: "Namespace containing the ContainerCluster resource",
+        scheme: "string",
+        required: true
+      }
+    ])
+  } else if (connection == "prometheus") {
+    // Prometheus extends HTTP connection, so HTTP fields will be included
+    rows = rows.concat([])
   }
 
   rows = rows.concat(common.filter(row => row.required)).filter(i => i.field != null)

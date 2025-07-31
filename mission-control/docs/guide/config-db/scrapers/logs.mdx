@@ -1,0 +1,327 @@
+---
+title: Logs
+sidebar_position: 8
+sidebar_custom_props:
+  icon: logs
+---
+
+import Custom from './_custom.mdx'
+
+# <Icon name="logs"/> Logs
+
+<!-- Source: modules/config-db/api/v1/logs.go:12#Logs -->
+
+The Logs scraper queries log aggregation systems to extract configuration changes from log entries. It supports multiple log backends including Loki, GCP Cloud Logging, OpenSearch, and BigQuery. This allows you to create configuration items and track changes based on log data.
+
+## Use Cases
+
+- **Application Configuration Changes**: Track config reloads and updates from application logs
+- **Deployment Tracking**: Monitor deployment events from CI/CD pipeline logs
+- **Error Analysis**: Create configuration items from error patterns in logs
+- **Audit Trail**: Track security and compliance events from audit logs
+- **Performance Monitoring**: Extract performance metrics as configuration changes
+
+```yaml title="logs-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/logs-app-config-changes.yaml
+```
+
+| Field       | Description                                                                  | Scheme                                             | Required |
+| ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/reference/types#cron)                      |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `logs`      | Specifies the list of log configurations to scrape.                          | [`[]Logs`](#logs-1)                                | `true`   |
+
+### Logs
+
+<Custom rows={[
+  {
+    field: "loki",
+    description: "Loki configuration for log scraping",
+    scheme: "[LokiConfig](#lokiconfig)",
+    required: false
+  },
+  {
+    field: "gcpCloudLogging",
+    description: "GCP Cloud Logging configuration",
+    scheme: "[GCPCloudLoggingConfig](#gcpcloudloggingconfig)",
+    required: false
+  },
+  {
+    field: "openSearch",
+    description: "OpenSearch configuration for log scraping",
+    scheme: "[OpenSearchConfig](#opensearchconfig)",
+    required: false
+  },
+  {
+    field: "bigQuery",
+    description: "BigQuery configuration for log scraping",
+    scheme: "[BigQueryConfig](#bigqueryconfig)",
+    required: false
+  },
+  {
+    field: "fieldMapping",
+    description: "Defines how source log fields map to canonical LogLine fields",
+    scheme: "[FieldMappingConfig](#fieldmappingconfig)",
+    required: false
+  }
+]} />
+
+### LokiConfig
+
+<Custom rows={[
+  {
+    field: "url",
+    description: "Loki server URL",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "query",
+    description: "LogQL query to execute",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "start",
+    description: "Start time for the query (e.g., '24h', '7d')",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "end",
+    description: "End time for the query",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "limit",
+    description: "Maximum number of log entries to return",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "username",
+    description: "Basic auth username",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  },
+  {
+    field: "password",
+    description: "Basic auth password",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  }
+]} />
+
+### GCPCloudLoggingConfig
+
+<Custom rows={[
+  {
+    field: "project",
+    description: "GCP project ID",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "filter",
+    description: "Cloud Logging filter query",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "orderBy",
+    description: "Field to order results by",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "pageSize",
+    description: "Number of entries per page",
+    scheme: "int",
+    required: false
+  },
+  {
+    field: "credentials",
+    description: "GCP service account credentials",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  }
+]} />
+
+### OpenSearchConfig
+
+<Custom rows={[
+  {
+    field: "url",
+    description: "OpenSearch cluster URL",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "index",
+    description: "Index name or pattern",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "query",
+    description: "OpenSearch query DSL",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "size",
+    description: "Number of results to return",
+    scheme: "int",
+    required: false
+  },
+  {
+    field: "username",
+    description: "Basic auth username",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  },
+  {
+    field: "password",
+    description: "Basic auth password",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  }
+]} />
+
+### BigQueryConfig
+
+<Custom rows={[
+  {
+    field: "project",
+    description: "GCP project ID containing the BigQuery dataset",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "query",
+    description: "SQL query to execute against BigQuery",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "credentials",
+    description: "GCP service account credentials",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  }
+]} />
+
+### FieldMappingConfig
+
+<Custom rows={[
+  {
+    field: "timestamp",
+    description: "Field names that contain timestamp information",
+    scheme: "[]string",
+    required: false
+  },
+  {
+    field: "severity",
+    description: "Field names that contain severity/level information",
+    scheme: "[]string",
+    required: false
+  },
+  {
+    field: "message",
+    description: "Field names that contain the main log message",
+    scheme: "[]string",
+    required: false
+  },
+  {
+    field: "id",
+    description: "Field names that contain unique identifiers",
+    scheme: "[]string",
+    required: false
+  }
+]} />
+
+
+
+## Configuration Examples
+
+### Loki Integration
+
+```yaml title="loki-config-changes.yaml" file=<rootDir>/modules/config-db/fixtures/logs-app-config-changes.yaml
+```
+
+### BigQuery Log Analysis
+
+```yaml title="bigquery-github-commits.yaml" file=<rootDir>/modules/config-db/fixtures/bigquery-logs.yaml
+```
+
+### GCP Cloud Logging
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: gcp-audit-logs
+spec:
+  logs:
+    - gcpCloudLogging:
+        project: my-gcp-project
+        filter: |
+          protoPayload.serviceName="compute.googleapis.com"
+          protoPayload.methodName:"compute.instances"
+        orderBy: timestamp desc
+        pageSize: 100
+      transform:
+        expr: |
+          dyn(config.logs).map(line, {
+            "changes": [{
+              "change_type": "GCPResourceChange",
+              "external_id": line.resource.labels.instance_id,
+              "config_type": "GCP::Instance",
+              "created_at": line.timestamp,
+              "summary": line.protoPayload.methodName
+            }]
+          }).toJSON()
+```
+
+### OpenSearch Log Mining
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: opensearch-security-events
+spec:
+  logs:
+    - openSearch:
+        url: https://opensearch-cluster:9200
+        index: security-logs-*
+        query: |
+          {
+            "query": {
+              "bool": {
+                "must": [
+                  {"term": {"event_type": "authentication"}},
+                  {"range": {"@timestamp": {"gte": "now-1h"}}}
+                ]
+              }
+            }
+          }
+        size: 1000
+        username:
+          valueFrom:
+            secretKeyRef:
+              name: opensearch-creds
+              key: username
+        password:
+          valueFrom:
+            secretKeyRef:
+              name: opensearch-creds
+              key: password
+      fieldMapping:
+        timestamp: ['@timestamp', 'timestamp']
+        message: ['message', 'event_description']
+        severity: ['severity', 'log_level']
+        id: ['event_id', 'transaction_id']
+```
+
+The Logs scraper provides powerful integration with various log aggregation systems, enabling you to transform log data into actionable configuration insights and change tracking.

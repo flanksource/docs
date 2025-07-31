@@ -1,0 +1,121 @@
+---
+title: Logs
+sidebar_custom_props:
+  icon: logs
+
+---
+import Templating from "@site/docs/reference/playbooks/context.mdx"
+
+<!-- Source: modules/mission-control/api/v1/playbook_actions.go:80#LogsAction -->
+
+# <Icon name="logs"/> Logs Action
+
+Logs action allows you to fetch and query logs from various backends including Loki, CloudWatch, OpenSearch, and Kubernetes.
+
+<Action rows={[
+    {field: "logs", description: "Logs Action", scheme: "[Logs](#logs)"},
+]} />
+
+## Logs
+
+<Fields oneOf={["loki", "cloudwatch", "opensearch", "kubernetes"]} rows={[
+  {field: "loki", description: "Loki backend configuration", scheme: "[Loki](#loki)"},
+  {field: "cloudwatch", description: "CloudWatch logs backend configuration", scheme: "[CloudWatch](#cloudwatch)"},
+  {field: "opensearch", description: "OpenSearch logs backend configuration", scheme: "[OpenSearch](#opensearch)"},
+  {field: "kubernetes", description: "Kubernetes logs backend configuration", scheme: "[Kubernetes](#kubernetes)"}
+]}/>
+
+### Loki
+
+<Fields rows={[
+  {field: "connection", description: "Loki connection details", scheme: "Connection"},
+  {field: "url", description: "Loki URL", scheme: "string"},
+  {field: "username", description: "Basic auth username", scheme: "EnvVar"},
+  {field: "password", description: "Basic auth password", scheme: "EnvVar"},
+  {field: "query", description: "LogQL query", scheme: "string", required: true, templatable: true},
+  {field: "start", description: "Start time for query", scheme: "string", templatable: true},
+  {field: "end", description: "End time for query", scheme: "string", templatable: true},
+  {field: "limit", description: "Maximum number of entries to return", scheme: "int"},
+  {field: "direction", description: "Query direction", scheme: "`forward` | `backward`"},
+  {field: "dedupe", description: "Log deduplication settings", scheme: "[Dedupe](#dedupe)"},
+  {field: "match", description: "CEL expressions to filter logs", scheme: "[]MatchExpression"},
+  {field: "mapping", description: "Field mapping configuration", scheme: "FieldMappingConfig"}
+]}/>
+
+### CloudWatch
+
+<Fields rows={[
+  {field: "connection", description: "AWS connection details", scheme: "AWSConnection"},
+  {field: "accessKey", description: "AWS access key", scheme: "EnvVar"},
+  {field: "secretKey", description: "AWS secret key", scheme: "EnvVar"},
+  {field: "region", description: "AWS region", scheme: "string"},
+  {field: "logGroup", description: "CloudWatch log group name", scheme: "string", required: true, templatable: true},
+  {field: "logStream", description: "CloudWatch log stream name", scheme: "string", templatable: true},
+  {field: "filterPattern", description: "CloudWatch filter pattern", scheme: "string", templatable: true},
+  {field: "startTime", description: "Start time for query", scheme: "string", templatable: true},
+  {field: "endTime", description: "End time for query", scheme: "string", templatable: true},
+  {field: "limit", description: "Maximum number of events to return", scheme: "int"},
+  {field: "dedupe", description: "Log deduplication settings", scheme: "[Dedupe](#dedupe)"},
+  {field: "match", description: "CEL expressions to filter logs", scheme: "[]MatchExpression"},
+  {field: "mapping", description: "Field mapping configuration", scheme: "FieldMappingConfig"}
+]}/>
+
+### OpenSearch
+
+<Fields rows={[
+  {field: "connection", description: "OpenSearch connection details", scheme: "Connection"},
+  {field: "url", description: "OpenSearch URL", scheme: "string"},
+  {field: "username", description: "Basic auth username", scheme: "EnvVar"},
+  {field: "password", description: "Basic auth password", scheme: "EnvVar"},
+  {field: "index", description: "OpenSearch index pattern", scheme: "string", required: true, templatable: true},
+  {field: "query", description: "OpenSearch query", scheme: "string", templatable: true},
+  {field: "timeField", description: "Time field name", scheme: "string"},
+  {field: "from", description: "Start time for query", scheme: "string", templatable: true},
+  {field: "to", description: "End time for query", scheme: "string", templatable: true},
+  {field: "size", description: "Maximum number of hits to return", scheme: "int"},
+  {field: "sort", description: "Sort configuration", scheme: "[]map[string]any"},
+  {field: "dedupe", description: "Log deduplication settings", scheme: "[Dedupe](#dedupe)"},
+  {field: "match", description: "CEL expressions to filter logs", scheme: "[]MatchExpression"},
+  {field: "mapping", description: "Field mapping configuration", scheme: "FieldMappingConfig"}
+]}/>
+
+### Kubernetes
+
+<Fields rows={[
+  {field: "connection", description: "Kubernetes connection details", scheme: "KubernetesConnection"},
+  {field: "kubeconfig", description: "Kubeconfig source", scheme: "EnvVar"},
+  {field: "namespace", description: "Kubernetes namespace", scheme: "string", templatable: true},
+  {field: "pod", description: "Pod name", scheme: "string", templatable: true},
+  {field: "container", description: "Container name", scheme: "string", templatable: true},
+  {field: "labelSelector", description: "Label selector for pods", scheme: "string", templatable: true},
+  {field: "fieldSelector", description: "Field selector for pods", scheme: "string", templatable: true},
+  {field: "since", description: "Only return logs newer than a relative duration", scheme: "string", templatable: true},
+  {field: "sinceTime", description: "Only return logs after a specific date", scheme: "string", templatable: true},
+  {field: "tailLines", description: "Number of lines from the end of the logs", scheme: "int"},
+  {field: "follow", description: "Follow log output", scheme: "bool"},
+  {field: "previous", description: "Return previous terminated container logs", scheme: "bool"},
+  {field: "timestamps", description: "Include timestamps in log output", scheme: "bool"},
+  {field: "dedupe", description: "Log deduplication settings", scheme: "[Dedupe](#dedupe)"},
+  {field: "match", description: "CEL expressions to filter logs", scheme: "[]MatchExpression"},
+  {field: "mapping", description: "Field mapping configuration", scheme: "FieldMappingConfig"}
+]}/>
+
+### Dedupe
+
+Log deduplication removes duplicate log entries based on specified fields.
+
+<Fields rows={[
+  {field: "window", description: "Time window for deduplication", scheme: "duration"},
+  {field: "fields", description: "Fields to use for deduplication", scheme: "[]string", required: true}
+]}/>
+
+## Output
+
+<Fields rows={[
+  {field: "logs", description: "Retrieved log entries", scheme: "[]LogEntry"},
+  {field: "count", description: "Number of log entries returned", scheme: "int"}
+]}/>
+
+## Templating
+
+<Templating/>

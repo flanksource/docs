@@ -13,6 +13,8 @@ sidebar_custom_props:
 
 # <Icon name="prometheus">Alertmanager</Icon>
 
+<!-- Source: modules/canary-checker/api/v1/checks.go:576#AlertManagerCheck -->
+
 Checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/) for any firing alerts.
 
 The following example [transforms](../concepts/expressions/transforms) the list of alerts so that each alert becomes a single check result. Without the transform the health check fails if any alerts are firing.
@@ -40,6 +42,11 @@ The following example [transforms](../concepts/expressions/transforms) the list 
   {
     field: "filters",
     description: "A map of label to value prefixes to find alerts on",
+    scheme: "map[string]string"
+  },
+  {
+    field: "exclude_filters",
+    description: "A map of label to value prefixes to exclude alerts on",
     scheme: "map[string]string"
   }
 ]}/>
