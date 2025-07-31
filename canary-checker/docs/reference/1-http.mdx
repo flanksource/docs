@@ -7,6 +7,8 @@ sidebar_custom_props:
 
 # <Icon name="http"/> HTTP
 
+<!-- Source: modules/canary-checker/api/v1/checks.go:116#HTTPCheck -->
+
 This check performs queries on HTTP to monitor their activity.
 
 ```yaml title=http-check.yaml file=<rootDir>/modules/canary-checker/fixtures/minimal/http_single_pass.yaml
@@ -15,17 +17,24 @@ This check performs queries on HTTP to monitor their activity.
 <HealthCheck name="http" connection="url"  rows={[
   {field: "url", description: "HTTP URL", scheme: "string", required: true},
   {field: "method", description: "HTTP Request method", default: "GET", scheme: "string"},
-  {field: "headers", description: "Header fields", scheme: "map[string]string"},
+  {field: "headers", description: "Header fields", scheme: "[]EnvVar"},
   {field: "body", description: "Request Body Contents", scheme: "string"},
+  {field: "connection", description: "Connection name e.g. connection://http/google", scheme: "string"},
+  {field: "username", description: "Username for authentication", scheme: "EnvVar"},
+  {field: "password", description: "Password for authentication", scheme: "EnvVar"},
+  {field: "oauth2", description: "OAuth2 configuration", scheme: "[OAuth2Config](#oauth)"},
   {field: "tlsConfig", description: "TLS config", scheme: "[TLSConfig](#tls-config)"},
   {field: "templateBody", description: "If true body is templated", default: false, scheme: "bool"},
-  {field: "responseCodes", description: <>Expected http response codes<br/>Equivalent to <code>test.expr: code in [200, 201]</code></>, scheme: "[]int"},
+  {field: "responseCodes", description: <>Expected HTTP response codes<br/>Equivalent to <code>test.expr: code in [200, 201]</code></>, scheme: "[]int"},
   {field: "responseContent", description: <>Expected response body content<br/>Equivalent to <code>test.expr: content.contains("value")</code></>, scheme: "string"},
-  {field: "thresholdMillis", description: "Request timeout", default: 5000, scheme: "int"},
-  {field: "maxSSLExpiry", description: <>Max SSL expiry days<br/>Equivalent  to <code>test.expr: sslAge &lt; Age("7d")</code></>, scheme: "int"},
-  {field: "insecureSkipVerify", description: "Skip TLS verification", scheme: "bool"},
-  {field: "env", description: "Setup environment variables that are accessible while templating", scheme: "[]EnvVar"},
-  {field: "endpoint", description: "Deprecated use `url`", scheme: "string", required: true},
+  {field: "responseJSONContent", description: "Deprecated: Use expr and jsonpath function", scheme: "JSONCheck", deprecated: true},
+  {field: "thresholdMillis", description: "Maximum duration in milliseconds for the HTTP request. It will fail the check if it takes longer", default: 5000, scheme: "int"},
+  {field: "maxSSLExpiry", description: <>Maximum number of days until the SSL Certificate expires<br/>Equivalent to <code>test.expr: sslAge &lt; Age("7d")</code></>, scheme: "int"},
+  {field: "envVars", description: "Setup environment variables that are accessible while templating", scheme: "[]EnvVar"},
+  {field: "ntlm", description: "When set to true will authenticate using NTLM v1 protocol", scheme: "bool"},
+  {field: "ntlmv2", description: "When set to true will authenticate using NTLM v2 protocol", scheme: "bool"},
+  {field: "crawl", description: "Crawl configuration for following links", scheme: "[Crawl](#crawl-configuration)"},
+  {field: "endpoint", description: "Deprecated: Use url instead", scheme: "string", deprecated: true},
 ]}/>
 
 ### TLS Config
@@ -51,6 +60,20 @@ This check performs queries on HTTP to monitor their activity.
   {field: "tokenURL", description: "URL for OAuth Token", scheme: "string"},
   {field: "scope", description: "Scope for OAuth token request", scheme: "[]string"},
   {field: "params", description: "Parameters for OAuth", scheme: "map[string]string"},
+]}/>
+
+### Crawl Configuration
+
+<Fields rows={[
+  {field: "filters", description: "List of regex filters to apply to the crawled links", scheme: "[]string"},
+  {field: "depth", description: "Maximum number of links to follow", scheme: "int"},
+  {field: "allowedDomains", description: "List of domains to crawl", scheme: "[]string"},
+  {field: "disallowedDomains", description: "List of domains to exclude from crawling", scheme: "[]string"},
+  {field: "allowedURLFilters", description: "List of URL regex patterns to include", scheme: "[]string"},
+  {field: "disallowedURLFilters", description: "List of URL regex patterns to exclude", scheme: "[]string"},
+  {field: "delay", description: "Duration to wait before creating a new request to the matching domains", default: "500ms", scheme: "Duration"},
+  {field: "randomDelay", description: "Extra randomized duration to wait added to Delay before creating a new request", default: "100ms", scheme: "Duration"},
+  {field: "parallelism", description: "Number of the maximum allowed concurrent requests", default: 2, scheme: "int"},
 ]}/>
 
 ### Result Variables
@@ -88,10 +111,10 @@ The above canary (`http-check.yaml`) is functionally equivalent to `http-check-e
 | `metadata.name`               | string              |
 | `metadata.namespace` | _string_            |
 | `metadata.labels`             | _map[string]string_ |
-| `{fields from []env}`         | any                 |
+| `{fields from []envVars}`         | any                 |
 
-Variables defined in `env` are available to template with the name that's configured on the spec.
-Eg: In the following spec, the vars `my_secret_path` and `my_secret_var`, defined in `env`, are available during templating.
+Variables defined in `envVars` are available to template with the name that's configured on the spec.
+Eg: In the following spec, the vars `my_secret_path` and `my_secret_var`, defined in `envVars`, are available during templating.
 
 <details summary="Templating request body from env variables">
 

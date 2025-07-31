@@ -9,6 +9,8 @@ tags:
 
 # <Icon name="aws-s3" /> S3 Protocol
 
+<!-- Source: modules/canary-checker/api/v1/checks.go:205#S3Check -->
+
 Checks if S3 compatible endpoints (like Minio, EMC ECS) are functioning correctly,
 
 :::info
@@ -26,9 +28,10 @@ The S3 check:
 ```
 <HealthCheck name="s3" edition="enterprise" connection="aws" rows={[
 
-  {field: "bucket", description: "Bucket name to test against", scheme: "string", required: true},
-  {field: "objectPath", description: "Path of object to upload/download for test", scheme: "string", required: true},
+  {field: "bucketName", description: "Bucket name to test against", scheme: "string", required: true},
   {field: "storageClass", description: "Storage Class of the test object to create", scheme: "string"},
+  {field: "objectPath", description: "Glob path to restrict matches to a subset", scheme: "string"},
+  {field: "usePathStyle", description: "Use path style path: http://s3.amazonaws.com/BUCKET/KEY instead of http://BUCKET.s3.amazonaws.com/KEY", scheme: "boolean"},
 
 ]}/>
 

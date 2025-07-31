@@ -6,13 +6,19 @@ sidebar_custom_props:
 
 # <Icon name="redis" /> Redis
 
+<!-- Source: modules/canary-checker/api/v1/checks.go:372#RedisCheck -->
+
 The Redis check connects to a specified Redis database instance to check its availability.
 
 ```yaml title="redis.yaml"  file=<rootDir>/modules/canary-checker/fixtures/datasources/redis_pass.yaml
 ```
 <HealthCheck name="redis" connection="url" rows={[
-  {field: "url", description: "Redis instance", required: true},
-  {field: "db", description: "Database to be selected after connecting to the server", scheme: 'int', required: true},
+  {field: "url", description: "Redis connection URL", scheme: 'string'},
+  {field: "connection", description: "Connection name e.g. connection://redis/prod", scheme: 'string'},
+  {field: "username", description: "Username for authentication", scheme: 'EnvVar'},
+  {field: "password", description: "Password for authentication", scheme: 'EnvVar'},
+  {field: "db", description: "Database to be selected after connecting to the server", scheme: 'int'},
+  {field: "addr", description: "Redis address (deprecated - use url instead)", scheme: 'string'},
 
 ]}/>
 

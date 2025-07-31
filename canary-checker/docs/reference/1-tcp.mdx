@@ -6,6 +6,8 @@ sidebar_custom_props:
 
 # <Icon name="network" /> TCP
 
+<!-- Source: modules/canary-checker/api/v1/checks.go:166#TCPCheck -->
+
 Checks if a network port is reachable.
 
 
@@ -16,8 +18,13 @@ Checks if a network port is reachable.
   {    field: "endpoint", description: "Host to ping", scheme: 'string', required: true  },
   {
     field: "thresholdMillis",
-    description: "Threshold response time from DNS server",
+    description: "Maximum response time in milliseconds",
     scheme: 'int'
+  },
+  {
+    field: "relationships",
+    description: "Link check results to components and configs",
+    scheme: '[`Relationships`](../concepts/relationships)'
   }
 
 ]}/>

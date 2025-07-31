@@ -1,0 +1,165 @@
+---
+title: PubSub
+sidebar_position: 9
+sidebar_custom_props:
+  icon: pubsub
+---
+
+import Custom from './_custom.mdx'
+
+# <Icon name="pubsub"/> PubSub
+
+<!-- Source: modules/config-db/api/v1/pubsub.go:7#PubSub -->
+
+The PubSub scraper subscribes to message queues and pub/sub systems to consume messages and create configuration items from them. This enables real-time configuration tracking based on events and messages published to various messaging systems.
+
+```yaml title="pubsub-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/pubsub-gcp.yaml
+```
+
+| Field       | Description                                                                  | Scheme                                             | Required |
+| ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/reference/types#cron)                      |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `pubsub`    | Specifies the list of PubSub configurations to scrape.                       | [`[]PubSub`](#pubsub-1)                            | `true`   |
+
+### PubSub
+
+<Custom rows={[
+  {
+    field: "maxMessages",
+    description: "Maximum number of messages to process per scrape cycle",
+    scheme: "int",
+    required: false
+  },
+  {
+    field: "pubsub",
+    description: "Pub/Sub configuration (currently supports GCP Pub/Sub)",
+    scheme: "[QueueConfig](#queueconfig)",
+    required: true
+  }
+]} />
+
+### QueueConfig
+
+The PubSub scraper supports various message queue systems. Currently, GCP Pub/Sub is the primary supported system.
+
+#### GCP Pub/Sub Configuration
+
+<Custom rows={[
+  {
+    field: "project_id",
+    description: "GCP project ID containing the Pub/Sub subscription",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "subscription",
+    description: "Name of the Pub/Sub subscription to consume from",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "credentials",
+    description: "GCP service account credentials JSON",
+    scheme: "[EnvVar](/reference/types#envvar)",
+    required: false
+  }
+]} />
+
+## Use Cases
+
+- **Event-Driven Configuration**: React to configuration changes published to message queues
+- **Microservices Communication**: Track service state changes communicated via pub/sub
+- **Alert Processing**: Convert alert notifications into configuration changes
+- **Real-time Monitoring**: Process streaming configuration data from various sources
+- **Integration Hub**: Consume configuration events from multiple systems through a unified queue
+
+## Configuration Examples
+
+### GCP Pub/Sub Integration
+
+```yaml title="pubsub-gcp.yaml" file=<rootDir>/modules/config-db/fixtures/pubsub-gcp.yaml
+```
+
+### Multi-Message Processing
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: pubsub-deployment-events
+spec:
+  pubsub:
+    - pubsub:
+        project_id: devops-project
+        subscription: deployment-events
+        credentials:
+          valueFrom:
+            secretKeyRef:
+              name: gcp-credentials
+              key: service-account.json
+      maxMessages: 50
+      type: DeploymentEvent
+      id: $.deployment_id
+      transform:
+        expr: |
+          dyn(config).map(msg, {
+            "name": msg.service_name + "-" + msg.version,
+            "type": "Service::Deployment",
+            "config": msg,
+            "changes": [{
+              "change_type": msg.event_type,
+              "external_id": msg.deployment_id,
+              "summary": "Deployed " + msg.service_name + " version " + msg.version,
+              "severity": msg.event_type == "deployment_failed" ? "high" : "info",
+              "created_at": msg.timestamp
+            }]
+          })
+```
+
+### Message Filtering and Processing
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: pubsub-config-changes
+spec:
+  pubsub:
+    - pubsub:
+        project_id: config-management
+        subscription: config-change-notifications
+      maxMessages: 200
+      type: ConfigurationChange
+      id: $.change_id
+      transform:
+        expr: |
+          dyn(config).
+          filter(msg, msg.event_type == "configuration_updated").
+          map(msg, {
+            "name": msg.component_name,
+            "type": "Configuration",
+            "config": {
+              "component": msg.component_name,
+              "environment": msg.environment,
+              "old_config": msg.previous_config,
+              "new_config": msg.current_config
+            },
+            "changes": [{
+              "change_type": "ConfigurationUpdate",
+              "external_id": msg.change_id,
+              "summary": "Configuration updated for " + msg.component_name,
+              "severity": msg.impact_level,
+              "created_at": msg.timestamp,
+              "diff": msg.config_diff
+            }]
+          })
+```
+
+
+## Best Practices
+
+- **Message Acknowledgment**: Messages are automatically acknowledged after successful processing
+- **Error Handling**: Failed message processing will be retried based on the Pub/Sub subscription settings
+- **Batch Processing**: Use `maxMessages` to control throughput and resource usage
+- **Transform Expressions**: Use CEL expressions to filter and transform messages into the desired configuration format

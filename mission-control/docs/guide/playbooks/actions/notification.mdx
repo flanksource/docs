@@ -6,6 +6,8 @@ sidebar_custom_props:
 ---
 import Templating from "@site/docs/reference/playbooks/context.mdx"
 
+<!-- Source: modules/mission-control/api/v1/playbook_actions.go:87#NotificationAction -->
+
 # <Icon name="bell-dark"/> Notification
 
 Notification action sends notification.
@@ -24,7 +26,7 @@ Notification action sends notification.
     {field: "connection", description: "Connection to use to send the notification", scheme: "NotificationConnection"},
     {field: "title", description: "Title of the notification", scheme: "string", required: true, templatable: true},
     {field: "message", description: "Message is the body of the notification", scheme: "string", required: true, templatable: true},
-    {field: "properties", description: "Notification channel properties", scheme: "NotificationProperties", templatable: true}
+    {field: "properties", description: "Notification channel properties", scheme: "map[string]string", templatable: true}
 ]}/>
 
 

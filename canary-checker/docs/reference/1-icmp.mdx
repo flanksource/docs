@@ -6,6 +6,8 @@ sidebar_custom_props:
 
 # <Icon name="icmp" /> ICMP
 
+<!-- Source: modules/canary-checker/api/v1/checks.go:182#ICMPCheck -->
+
 Performs ICMP (ping) requests for information on ICMP packet loss, duration, and response.
 
 :::info
@@ -24,15 +26,10 @@ sudo sysctl -w net.ipv4.ping_group_range="0 2147483647"
 
 
 <HealthCheck name="icmp"  rows={[
-  {    field: "endpoint", description: "Host to ping", scheme: 'string', required: true  },
-  { field: "packetCount", description: "Total number of packets to send per check", default: '5', scheme: 'int'},
-  { field: "packetLossThreshold", description: "Percent of total packets that are allowed to be lost", scheme: 'int64'},
-  {
-    field: "thresholdMillis",
-    description: "Threshold response time from DNS server",
-    scheme: 'int'
-  }
-
+  {field: "endpoint", description: "Host to ping", scheme: 'string', required: true},
+  {field: "packetCount", description: "Total number of packets to send per check", default: '5', scheme: 'int'},
+  {field: "packetLossThreshold", description: "Percent of total packets that are allowed to be lost", scheme: 'int64'},
+  {field: "thresholdMillis", description: "Maximum response time in milliseconds", scheme: 'int64'}
 ]}/>
 
 ## Metrics

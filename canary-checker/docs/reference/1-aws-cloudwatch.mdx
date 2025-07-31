@@ -7,27 +7,33 @@ sidebar_custom_props:
 
 # <Icon name="aws-cloudwatch" size={32}> CloudWatch</Icon>
 
-Cloudwatch checks for all active alarms
+<!-- Source: modules/canary-checker/api/v1/checks.go:221#CloudWatchCheck -->
+
+The CloudWatch check monitors the status of CloudWatch alarms in AWS. It can filter alarms by various criteria and supports transforming alarm data for custom health checks.
 
 ```yaml title="cloudwatch.yaml"  file=<rootDir>/modules/canary-checker/fixtures/aws/cloudwatch_pass.yaml
 ```
 
 <HealthCheck name="cloudwatch" connection="aws" rows={[
   {
-    field: "actionPrefix" ,
-    description: "Use to filter the results of the operation to only those alarms that use a certain alarm action. Fr example you could specify the ARN of an SNS topic to find all alarms that send notifications to that topic"
+    field: "actionPrefix",
+    description: "Filter alarms that use a specific action prefix. For example, specify the ARN of an SNS topic to find all alarms that send notifications to that topic",
+    scheme: "*string"
   },
   {
     field: "alarmPrefix",
-    description: "Specify to receive information about all alarms that have names that start with this prefix."
-  },
-  {
-    field: "state",
-    description: "Specify to retrieve state value of alarm",
+    description: "Filter alarms whose names start with this prefix",
+    scheme: "*string"
   },
   {
     field: "alarms",
-    description: "Set field to retrieve information about alarm",
+    description: "List of specific alarm names to check",
+    scheme: "[]string"
+  },
+  {
+    field: "state",
+    description: "Filter alarms by state value (e.g., 'OK', 'ALARM', 'INSUFFICIENT_DATA')",
+    scheme: "string"
   }
 ]}/>
 

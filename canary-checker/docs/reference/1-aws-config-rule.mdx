@@ -6,6 +6,8 @@ sidebar_custom_props:
 
 # <Icon name="aws-config" /> AWS Config Rule
 
+<!-- Source: modules/canary-checker/api/v1/checks.go:1224#AwsConfigRuleCheck -->
+
 Check if any AWS resources are failing AWS config rule checks.
 
 ```yaml title="aws-config-rule.yaml"  file=<rootDir>/modules/canary-checker/fixtures/aws/aws_config_rule_pass.yaml
@@ -18,14 +20,14 @@ Check if any AWS resources are failing AWS config rule checks.
     scheme: '[]string'
   },
   {
-    field: "ignoredRules",
+    field: "ignoreRules",
     description: "List of rules which would be omitted from the fetch result",
     scheme: '[]string'
   },
   {
     field: "complianceTypes",
     description: "Filters the results by compliance. The allowed values are `INSUFFICIENT_DATA`, `NON_COMPLIANT`, `NOT_APPLICABLE`, `COMPLIANT`",
-    scheme: "string"
+    scheme: "[]string"
   }
 ]}/>
 
