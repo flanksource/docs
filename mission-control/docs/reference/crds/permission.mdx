@@ -1,0 +1,205 @@
+---
+title: Permission CRD
+---
+
+# Permission
+
+The `Permission` CRD allows you to define individual permissions for role-based access control (RBAC) in Mission Control.
+
+## Definition
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: example-permission
+spec:
+  # Human-readable name of the permission
+  name: View Components
+  
+  # Description of the permission
+  description: Allows viewing component details
+  
+  # Resources the permission applies to
+  resources:
+    - components
+    
+  # Actions allowed on the resources
+  verbs:
+    - get
+    - list
+    
+  # User groups that have this permission
+  groups:
+    - viewers
+    - developers
+```
+
+## Schema
+
+The `Permission` resource supports the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.name` | Human-readable name of the permission |
+| `spec.description` | Description of the permission |
+| `spec.resources` | Resources the permission applies to |
+| `spec.verbs` | Actions allowed on the resources |
+| `spec.resourceNames` | Specific resource names the permission applies to |
+| `spec.labels` | Label selectors for resources |
+| `spec.expression` | CEL expression for complex permission rules |
+| `spec.groups` | User groups that have this permission |
+| `spec.users` | Individual users that have this permission |
+
+## Resource Types
+
+Common resource types include:
+
+| Resource | Description |
+|----------|-------------|
+| `components` | Component resources |
+| `canaries` | Canary health check resources |
+| `connections` | Connection resources |
+| `incidents` | Incident resources |
+| `notifications` | Notification resources |
+| `notificationsilences` | Notification silence resources |
+| `playbooks` | Playbook resources |
+| `topologies` | Topology resources |
+
+## Verbs
+
+Allowed verbs (actions) include:
+
+| Verb | Description |
+|------|-------------|
+| `get` | Retrieve a specific resource |
+| `list` | List resources |
+| `watch` | Watch for changes to resources |
+| `create` | Create new resources |
+| `update` | Update existing resources |
+| `patch` | Partially update resources |
+| `delete` | Delete resources |
+| `*` | All actions |
+
+## Examples
+
+### Basic View Permission
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: view-components
+spec:
+  name: View Components
+  description: Allows viewing component details
+  resources:
+    - components
+  verbs:
+    - get
+    - list
+  groups:
+    - viewers
+    - developers
+```
+
+### Resource Management Permission
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: manage-canaries
+spec:
+  name: Manage Canaries
+  description: Full management of canary checks
+  resources:
+    - canaries
+  verbs:
+    - get
+    - list
+    - create
+    - update
+    - delete
+  groups:
+    - operators
+  users:
+    - sre-lead@example.com
+```
+
+### Team-Specific Resource Permission
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: frontend-components
+spec:
+  name: Manage Frontend Components
+  description: Manage components related to the frontend
+  resources:
+    - components
+  verbs:
+    - get
+    - list
+    - update
+    - patch
+  labels:
+    team: frontend
+  groups:
+    - frontend-team
+```
+
+### Specific Resource Names
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: manage-production-db
+spec:
+  name: Manage Production Database
+  description: Manage the production database component
+  resources:
+    - components
+  resourceNames:
+    - production-database
+    - db-replica
+  verbs:
+    - get
+    - update
+    - patch
+  groups:
+    - database-admins
+```
+
+### Complex Expression
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: manage-non-production
+spec:
+  name: Manage Non-Production Resources
+  description: Manage resources in non-production environments
+  resources:
+    - components
+    - canaries
+    - connections
+  verbs:
+    - get
+    - list
+    - create
+    - update
+    - delete
+  expression: "resource.labels.environment != 'production'"
+  groups:
+    - developers
+    - testers
+```
+
+## See Also
+
+- [PermissionGroup CRD](./permission-group.mdx)
+- [Role-Based Access Control](../rbac.mdx)
