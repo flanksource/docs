@@ -1,0 +1,47 @@
+---
+title: Custom Metrics
+slug: /concepts/metrics/custom-metrics
+---
+
+# Custom Metrics
+
+Canary checker can export custom metrics from any check type, replacing and/or consolidating multiple standalone Prometheus Exporters into a single exporter.
+
+In the example below, exchange rates against USD are exported by first calling an HTTP api and then using the values from the JSON response to create the metrics:
+
+```yaml title="exchange-rates-exporter.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: exchange-rates
+spec:
+  interval: 30
+  http:
+    - name: exchange-rates-api
+      url: https://api.exchangerate-api.com/v4/latest/USD
+      responseTime: 300
+      metrics:
+        - name: exchange_rate_api
+          type: gauge
+          value: duration
+        - name: exchange_rate
+          type: gauge
+          value: "1.0"
+          labels:
+            - name: from
+              value: USD
+            - name: to
+              valueExpr: key
+              values: json.rates.*
+```
+
+Which would output:
+
+```shell
+exchange_rate{from=USD, to=GBP} 0.819
+exchange_rate{from=USD, to=EUR} 0.949
+exchange_rate{from=USD, to=ILS} 3.849
+exchange_rate_api 260.000
+```
+
+For more information about custom metrics, please visit the [main metrics page](/concepts/metrics#custom-metrics).
