@@ -1,0 +1,135 @@
+---
+title: Setup
+sidebar_position: 1
+hide_table_of_contents: true
+---
+
+MCP is supported for both [SaaS](/installation/saas/getting-started) and [Self-Hosted](/installation/self-hosted/getting-started) installations.
+
+<Tabs>
+<TabItem value="saas" label="SaaS" default>
+
+The MCP HTTP Server runs at: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
+
+<Tabs>
+<TabItem value="claude" label="Claude" default>
+
+### Setting up MCP with Claude
+
+1. Install the Claude Desktop app
+2. Open Claude Desktop settings
+3. Add MCP server configuration:
+  ```json
+  {
+    "mcpServers": {
+      "mission-control": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-http"],
+        "env": {
+          "MCP_SERVER_URL": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
+          "MCP_SERVER_TOKEN": "your-token-here"
+        }
+      }
+    }
+  }
+  ```
+4. Restart Claude Desktop
+5. Your Mission Control data will be available in Claude conversations
+
+</TabItem>
+<TabItem value="windsurf" label="Windsurf">
+
+### Setting up MCP with Windsurf
+
+1. Open Windsurf IDE
+2. Navigate to Settings > Extensions > MCP
+3. Add new MCP server:
+   - **Name**: Mission Control
+   - **URL**: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
+   - **Token**: Your authorization token
+4. Enable the server
+5. Mission Control context will be available in Windsurf AI chat
+
+</TabItem>
+<TabItem value="vscode" label="VSCode">
+
+### Setting up MCP with VSCode
+
+1. Install the MCP extension from the marketplace
+2. Open VSCode settings (Ctrl/Cmd + ,)
+3. Search for "MCP"
+4. Add server configuration:
+   - **Server URL**: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
+   - **Authorization Token**: Your token
+5. Reload VSCode
+6. Access Mission Control data through the MCP panel
+
+</TabItem>
+</Tabs>
+
+</TabItem>
+<TabItem value="selfhosted" label="Self-Hosted">
+
+The MCP HTTP Server runs at: `https://your.domain.com/api/mcp`
+
+<Tabs>
+<TabItem value="claude" label="Claude" default>
+
+### Setting up MCP with Claude
+
+1. Install the Claude Desktop app
+2. Open Claude Desktop settings
+3. Add MCP server configuration:
+
+```json
+{
+  "mcpServers": {
+    "mission-control": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-http"],
+      "env": {
+        "MCP_SERVER_URL": "https://your.domain.com/api/mcp",
+        "MCP_SERVER_TOKEN": "your-token-here"
+      }
+    }
+  }
+}
+```
+
+4. Restart Claude Desktop
+5. Your Mission Control data will be available in Claude conversations
+
+</TabItem>
+<TabItem value="windsurf" label="Windsurf">
+
+### Setting up MCP with Windsurf
+
+1. Open Windsurf IDE
+2. Navigate to Settings > Extensions > MCP
+3. Add new MCP server:
+   - **Name**: Mission Control
+   - **URL**: `https://your.domain.com/api/mcp`
+   - **Token**: Your authorization token
+4. Enable the server
+5. Mission Control context will be available in Windsurf AI chat
+
+</TabItem>
+<TabItem value="vscode" label="VSCode">
+
+### Setting up MCP with VSCode
+
+1. Install the MCP extension from the marketplace
+2. Open VSCode settings (Ctrl/Cmd + ,)
+3. Search for "MCP"
+4. Add server configuration:
+   - **Server URL**: `https://your.domain.com/api/mcp`
+   - **Authorization Token**: Your token
+5. Reload VSCode
+6. Access Mission Control data through the MCP panel
+
+</TabItem>
+</Tabs>
+
+</TabItem>
+</Tabs>
+
