@@ -6,50 +6,69 @@ sidebar_custom_props:
 
 A silence is a way to temporarily suppress notifications. Each silence has:
 
-- A set duration - like an expiration timer
-- A scope - it can be applied to either:
-  - Individual resources (a specific catalog, health check, or component)
-  - Multiple matching resources using filters
+- A description - explaining why the silence was created
+- A duration - specified by `from` and `until` timestamps in RFC3339 format
+- A scope - defined through selectors and filters to target specific resources
+- A recursive flag - to apply silence to child resources
 
 :::note
 Notifications that aren't sent due to silence are still visible in the notification history for auditing purposes.
 :::
 
+
+```yaml title="" file=<rootDir>/modules/mission-control/fixtures/silences/silence-test-env.yaml
+``` 
+
 ## Use cases
 
-- Planned maintenance or deployments. Eg: You can silence a namespace or a helm release and automatically silence notifications from all their children.
-- Non-critical resources: Notifications from resources that routinely trigger alerts but are expected and harmless can be silenced.
-- Known issues: If there's a known issue that can't be immediately resolved (e.g., due to dependencies or resource constraints), you might silence related alerts until a fix can be implemented.
+- Planned maintenance or deployments - Silence notifications from a namespace or helm release and optionally all their children
+- Non-critical resources - Suppress notifications from resources that routinely trigger expected and harmless alerts
+- Known issues - Temporarily silence alerts for known issues that can't be immediately resolved due to dependencies or resource constraints
 
-## Add Silence
+## Creating Silences
 
-Silences can be added from the notification page. Alternatively, if you're using the default slack notification templates, you get a silence button
-on each notification.
+Silences can be created in multiple ways:
+1. Through the notification page UI
+2. Using the silence button on Slack notifications (when using default templates)
+3. By applying a NotificationSilence custom resource
 
-![Silence Notification form](./silence-notification-form.png)
+### Resource Selection
 
-### Filters
+Silences can target resources in two ways:
 
-A silence can optionally contain a filter. A filter is a cel-expression that results in a boolean value.
-If a filter return true, the notification is silenced.
+1. **Selectors**: Direct resource matching using kind and name
+2. **Filters**: Complex matching using CEL expressions
 
-#### Examples
+#### Selectors
 
-| Filter | description |
+Selectors provide a straightforward way to target specific resources by their kind and name. Multiple selectors can be specified to target different resources.
+
+#### Filters
+
+A filter is a CEL expression that evaluates to a boolean value. The notification is silenced when the filter returns true. Filters provide powerful, flexible matching capabilities.
+
+##### Filter Examples
+
+| Filter | Description |
 |--------|-------------|
-| `check.type == 'http'`                                                    | silences only HTTP check related notifications. |
-| `regexp.Match("^check-[0-9]+", check.name)`                               | matches any check with the prefix `check-` |
-| `config.name == "postgresql" && config.type == "Kubernetes::StatefulSet"` | silences notifications from a stateful set named "postgresql" |
-| `config.type == "Kubernetes::Pod" && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming").size > 0 && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming")[0].tags.?env.orValue("") == "prod"` | matches kubernetes pod in a prod namespace |
+| `check.type == 'http'` | Silences HTTP check notifications |
+| `regexp.Match("^check-[0-9]+", check.name)` | Matches checks with prefix `check-` |
+| `config.name == "postgresql" && config.type == "Kubernetes::StatefulSet"` | Silences notifications from a specific StatefulSet |
+| `config.type == "Kubernetes::Pod" && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming").size > 0 && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming")[0].tags.?env.orValue("") == "prod"` | Matches pods in production namespaces |
 
-#### Template variables
+##### Available Template Variables
 
+Filters can reference these variables:
 - [CheckEvents](/docs/reference/notifications/template_vars/checks)
 - [ConfigEvents](/docs/reference/notifications/template_vars/config)
+- [ComponentEvents](/docs/reference/notifications/template_vars/components)
 
-### Recursive mode
+### Recursive Mode
 
-When a silence is recursively applied, it applies to its all children.
-So silencing a namespace would silence all deployments, statefulsets, pods, etc in that namespace.
+When `recursive: true` is set, the silence applies to all child resources of the matched resources. For example:
+- Silencing a namespace affects all deployments, statefulsets, pods, etc. within it
+- Silencing a statefulset affects all its pods
+
+![Silence Notification form](./silence-notification-form.png)
 
 
