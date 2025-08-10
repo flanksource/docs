@@ -1,0 +1,148 @@
+---
+title: Canary CRD
+---
+
+# Canary
+
+The `Canary` CRD allows you to define health checks for monitoring the availability and performance of your services and infrastructure.
+
+## Definition
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: example-canary
+spec:
+  # Schedule on which to execute the canary
+  interval: 30s
+  
+  # Specify the number of replicas for this canary
+  replicas: 1
+  
+  # Checks to run for this canary
+  http:
+    - name: example-http-check
+      url: https://example.com
+      
+  dns:
+    - name: example-dns-check
+      server: 8.8.8.8
+      query: example.com
+      querytype: A
+```
+
+## Schema
+
+The `Canary` resource supports the following top-level fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.interval` | The schedule on which to execute the canary checks |
+| `spec.replicas` | The number of replicas for this canary |
+| `spec.cloudwatch` | AWS CloudWatch checks |
+| `spec.containerdPull` | Containerd image pull checks |
+| `spec.containerdPush` | Containerd image push checks |
+| `spec.dns` | DNS resolution checks |
+| `spec.dockerPull` | Docker image pull checks |
+| `spec.dockerPush` | Docker image push checks |
+| `spec.elasticsearch` | Elasticsearch health and query checks |
+| `spec.exec` | Command execution checks |
+| `spec.folder` | File system and folder checks |
+| `spec.git` | Git repository checks |
+| `spec.github` | GitHub actions and repository checks |
+| `spec.helm` | Helm chart checks |
+| `spec.http` | HTTP endpoint checks |
+| `spec.icmp` | ICMP/Ping checks |
+| `spec.jmeter` | JMeter performance tests |
+| `spec.junit` | JUnit test checks |
+| `spec.kubernetes` | Kubernetes resource checks |
+| `spec.ldap` | LDAP connectivity checks |
+| `spec.mongodb` | MongoDB health and query checks |
+| `spec.mssql` | Microsoft SQL Server checks |
+| `spec.mysql` | MySQL database checks |
+| `spec.postgres` | PostgreSQL database checks |
+| `spec.redis` | Redis health checks |
+| `spec.restic` | Restic backup checks |
+| `spec.s3` | S3 bucket checks |
+| `spec.tcp` | TCP connection checks |
+| `spec.webhook` | Webhook checks |
+
+## Status
+
+The Canary controller updates the resource with status information, including:
+
+| Status Field | Description |
+|--------------|-------------|
+| `status.lastCheck` | The time of the last check |
+| `status.status` | The overall status of the canary (Healthy, Unhealthy) |
+| `status.message` | A descriptive message about the current status |
+| `status.errorMessage` | Detailed error message when checks fail |
+| `status.uptime1h` | Availability percentage over the last hour |
+| `status.latency1h` | Average response time over the last hour |
+| `status.lastTransitionedTime` | The time when the status last changed |
+
+## Example
+
+### Basic HTTP Check
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: website-check
+spec:
+  interval: 1m
+  http:
+    - name: website
+      url: https://example.com
+      thresholdMillis: 500
+      responseCodes: [200]
+      responseContent: "Welcome"
+      maxSSLExpiry: 7d
+```
+
+### DNS Check
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: dns-check
+spec:
+  interval: 2m
+  dns:
+    - name: google-dns
+      server: 8.8.8.8:53
+      query: google.com
+      querytype: A
+      minrecords: 1
+```
+
+### Multiple Check Types
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: multi-check
+spec:
+  interval: 5m
+  http:
+    - name: api-check
+      url: https://api.example.com/health
+      thresholdMillis: 200
+  tcp:
+    - name: database-connection
+      host: db.example.com
+      port: 5432
+  icmp:
+    - name: network-check
+      endpoint: 192.168.1.1
+```
+
+## See Also
+
+- [Canary Checker Documentation](../../canary-checker/index.mdx)
+- [HTTP Checks Reference](../../canary-checker/docs/reference/1-http.mdx)
+- [TCP Checks Reference](../../canary-checker/docs/reference/1-tcp.mdx)
