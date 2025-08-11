@@ -32,6 +32,12 @@ Supported operators:
 | `*`      | `field=*value` or `field=value*` | `string` `int`        |
 | `>` `<`  | `field>value` or `field<value`   | `datetime` `int`      |
 
+#### Date Queries
+- **Absolute dates**: `2025-01-15`
+- **Relative dates**: `now-24h`, `now-7d`, `now+1w`
+- **Supported units**: s (seconds), m (minutes), h (hours), d (days), w (weeks), y (years)
+
+
 Supported fields for:
 
 - [Catalog/Config](/reference/config-db/config):
@@ -51,6 +57,48 @@ Supported fields for:
 | `created_at` | `datetime` |
 | `updated_at` | `datetime` |
 | `deleted_at` | `datetime` |
+
+
+- [Catalog/Config Changes](/reference/config-db/changes):
+
+| Field           | Type       |
+| --------------- | ---------- |
+| `id`            | `string`   |
+| `config_id`     | `string`   |
+| `name`          | `string`   |
+| `type`          | `string`   |
+| `created_at`    | `datetime` |
+| `severity`      | `string`   |
+| `change_type`   | `string`   |
+| `summary`       | `string`   |
+| `count`         | `int`      |
+| `first_observed`| `datetime` |
+| `agent_id`      | `string`   |
+| `tags`          | `json`     |
+| `details`       | `json`     |
+
+
+### Example Queries
+
+```
+# Find all Kubernetes namespaces starting with "kube"
+type=Kubernetes::Namespace name=kube*
+
+# Find unhealthy AWS EC2 instances
+type=AWS::EC2::Instance health=unhealthy
+
+# Find critical severity changes for AWS resources
+type=AWS::* severity=critical
+
+# Find configs created in the last 24 hours
+created_at>now-24h
+
+# Find nginx pods with prod cluster tag
+type=Kubernetes::Pod label.app=nginx tags.cluster=prod
+
+# Complex query with date range
+updated_at>2025-01-01 updated_at<2025-01-31 type=Kubernetes::Deployment
+```
 
 {!props.hideComponent && (
 <Link to="/reference/topology/components">Components</Link>
