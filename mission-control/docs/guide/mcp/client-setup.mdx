@@ -1,6 +1,7 @@
 ---
 title: Client Setup
 sidebar_position: 1
+hide_table_of_contents: true
 ---
 
 import Tabs from '@theme/Tabs';
@@ -23,7 +24,30 @@ Before connecting any client, you'll need:
    - Navigate to Settings → API Tokens → Create New Token
    - Select "MCP" permissions scope
 
+:::info
+The authorization token is a Basic token with credentials - user: `token` & password: `<token value>`
+
+Hence, it needs to be encoded to base64(`token:<token_value>`) when using the `Authorization: Basic <base64_token>` header.
+:::
+
+## Creating a token
+To generate a token for MCP, a setup wizard is available.
+
+Click on the user avatar and choose "Setup MCP"
+
+<Screenshot img="/img/mcp-user-profile.png" size="300px" alt="User profile"/>
+
+Choose the name for the token
+
+<Screenshot img="/img/mcp-create-token.png" size="600px" alt="Create token"/>
+
+Copy the generated config for your relevant client, or use the token directly
+
+<Screenshot img="/img/mcp-copy-token.png" size="600px" alt="Use token"/>
+
 ## Client Setup Instructions
+
+<!-- Source: modules/flanksource-ui/src/components/Tokens/Add/TokenDisplayModal.tsx:138#McpSetupTabs -->
 
 <Tabs>
 <TabItem value="claude-desktop" label="Claude Desktop">
@@ -47,7 +71,7 @@ Claude Desktop supports MCP connections through its configuration file.
         "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
       ],
       "env": {
-        "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
+        "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
       }
     }
   }
@@ -75,7 +99,7 @@ Claude Code (claude.ai) supports MCP through browser-based configuration.
   "type": "http",
   "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
   "headers": {
-    "Authorization": "Bearer YOUR_TOKEN_HERE"
+    "Authorization": "Basic YOUR_TOKEN_HERE"
   }
 }
 ```
@@ -120,7 +144,7 @@ GitHub Copilot Chat in VS Code supports MCP through the Copilot extensibility AP
         "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
       ],
       "env": {
-        "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
+        "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
       }
     }
   }
@@ -159,7 +183,7 @@ Cline supports MCP through its settings configuration.
         "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
       ],
       "env": {
-        "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
+        "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
       }
     }
   }
@@ -194,7 +218,7 @@ Continue.dev supports MCP servers through its configuration file.
         "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
       ],
       "env": {
-        "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
+        "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
       }
     }
   ]
@@ -228,7 +252,7 @@ Zed supports MCP through its assistant configuration.
             "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
           ],
           "env": {
-            "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
+            "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
           }
         }
       }
@@ -249,13 +273,13 @@ For custom integrations or clients that support direct HTTP connections:
 
 - **Base URL**: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
 - **Protocol**: HTTP with SSE (Server-Sent Events)
-- **Authentication**: Bearer token in Authorization header
+- **Authentication**: Basic token in Authorization header
 
 ### Example Request
 
 ```bash
 curl -X POST https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Authorization: Basic YOUR_TOKEN_HERE" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -275,7 +299,7 @@ For clients supporting WebSocket:
 ```javascript
 const ws = new WebSocket('wss://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp/ws', {
   headers: {
-    'Authorization': 'Bearer YOUR_TOKEN_HERE'
+    'Authorization': 'Basic YOUR_TOKEN_HERE'
   }
 });
 
@@ -307,7 +331,7 @@ ws.on('open', () => {
 2. **Authentication Failed**
    - Verify token is valid and not expired
    - Ensure token has `mcp.*` permissions
-   - Check if Bearer prefix is included
+   - Check if Basic prefix is included
 
 3. **Tools Not Appearing**
    - Restart the client application
@@ -322,7 +346,7 @@ You can test your MCP connection using the MCP CLI:
 npx @modelcontextprotocol/cli connect \
   --transport http \
   --url https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
-  --header "Authorization: Bearer YOUR_TOKEN_HERE"
+  --header "Authorization: Basic YOUR_TOKEN_HERE"
 ```
 
 ## Next Steps
@@ -344,7 +368,7 @@ Once connected, explore the available tools:
 2. **Authentication Failed**
    - Verify token is valid and not expired
    - Ensure token has `mcp.*` permissions
-   - Check if Bearer prefix is included
+   - Check if Basic prefix is included
 
 3. **Tools Not Appearing**
    - Restart the client application
@@ -359,7 +383,7 @@ You can test your MCP connection using the MCP CLI:
 npx @modelcontextprotocol/cli connect \
   --transport http \
   --url https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
-  --header "Authorization: Bearer YOUR_TOKEN_HERE"
+  --header "Authorization: Basic YOUR_TOKEN_HERE"
 ```
 
 ## Next Steps
