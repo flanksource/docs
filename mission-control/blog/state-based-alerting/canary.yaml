@@ -1,0 +1,16 @@
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: kubernetes-checks
+  annotations:
+    trace: "true"
+spec:
+  schedule: "@every 5m"
+  kubernetes:
+    - name: pods
+      kind: Pod
+      namespaceSelector:
+        name: default
+      resource:
+        name: test-pod
+      healthy: true # use the is-healthy library to check the health of pods
