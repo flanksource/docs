@@ -31,6 +31,8 @@ All panels share a common structure. Here's an example from the gauge panel fixt
 
 Pie charts show data distribution across categories:
 
+<Screenshot img="/img/panel-piechart.png" size="300" shadow={false}/>
+
 ```yaml title="piechart.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/piechart.yaml
 
 ```
@@ -66,6 +68,8 @@ Gauges display metrics with threshold-based color coding:
 
 Number panels display single metrics with units:
 
+<Screenshot img="/img/panel-number.png" size="300" shadow={false}/>
+
 ```yaml title="number.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/number.yaml
 
 ```
@@ -78,6 +82,8 @@ Number panels display single metrics with units:
 ### Table
 
 Tables display aggregated data in rows and columns:
+
+<Screenshot img="/img/panel-table.png" size="400" shadow={false}/>
 
 ```yaml title="table.yaml" file=<rootDir>/modules/mission-control/fixtures/views/panels/table.yaml
 
