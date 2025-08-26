@@ -1,0 +1,33 @@
+---
+title: Azure Key Vault
+sidebar_custom_props:
+  icon: azure
+---
+
+<!-- Source: modules/duty/connection/azurekeyvault.go:14#AzureKeyVault -->
+
+<Fields connection="azure_key_vault"/>
+
+## Example
+
+```yaml title="azure-key-vault-connection.yaml"
+apiVersion: v1
+kind: Connection
+metadata:
+  name: azure-key-vault-connection
+spec:
+  type: azure_key_vault
+  clientID:
+    valueFrom:
+      secretKeyRef:
+        name: azure-credentials
+        key: AZURE_CLIENT_ID
+  clientSecret:
+    valueFrom:
+      secretKeyRef:
+        name: azure-credentials
+        key: AZURE_CLIENT_SECRET
+  tenantID: your-tenant-id
+  properties:
+    keyID: https://your-vault.vault.azure.net/keys/mission-control-key
+```

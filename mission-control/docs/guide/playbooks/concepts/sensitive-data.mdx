@@ -1,0 +1,43 @@
+---
+title: Sensitive Data
+sidebar_custom_props:
+  icon: material-symbols-light:security
+---
+
+Sensitive data includes passwords, API keys, tokens, and other confidential information that requires protection from unauthorized access or exposure. Mission Control provides comprehensive protection for sensitive data throughout the entire playbook lifecycle.
+
+## Secret Parameters
+
+Use `secret` type parameters to handle sensitive data in playbooks:
+
+```yaml
+parameters:
+  - name: database_password
+    type: secret
+    label: "Database Password"
+    description: "Password for database connection"
+    required: true
+```
+
+## KMS Connection
+
+:::info
+Your Mission Control instance **must** have a KMS connection configured to use secret parameters. 
+:::
+
+Configure this using the `--secret-keeper-connection` flag:
+
+```bash
+mission-control serve --secret-keeper-connection "connection://default/my-kms-key"
+```
+
+or in the helm chart:
+
+```yaml
+kmsConnection: "connection://default/my-kms-key"
+```
+
+Supported connection types:
+- AWS KMS
+- Azure Key Vault  
+- GCP KMS
