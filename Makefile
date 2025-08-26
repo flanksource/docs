@@ -30,6 +30,26 @@ fmt-check: ## Check markdown formatting without making changes
 check: ## Run all checks (lint + formatting + file references)
 	task check
 
+.PHONY: build
+build:
+	@echo "Building mission-control documentation..."
+	@cd modules && make all
+	@cd mission-control && npm ci && npm run build
+
+.PHONY: file-ref-check
+file-ref-check: ## Check for broken file references in build output
+	@echo "Checking for broken files in mission-control/build"
+	@cd mission-control/build && \
+		echo "Total files: $$(ls -alh . | wc -l)" && \
+		echo "Total HTML files: $$(find . -type f -name "*.html" | wc -l)" && \
+		if rg 'file=../../../modules' -g '*.html' | grep -q .; then \
+			echo "ERROR: Found broken file references:" && \
+			rg 'file=../../../modules' -g '*.html' && \
+			exit 1; \
+		else \
+			echo "No broken file references found"; \
+		fi
+
 .PHONY:
 sync:
 	git submodule update --init --recursive

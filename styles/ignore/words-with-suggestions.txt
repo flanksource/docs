@@ -262,6 +262,7 @@ JUnit
 kafka
 keypair
 keypairs
+kmsConnection
 knowledgebase
 knowledgebases
 Kratos
