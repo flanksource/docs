@@ -4,13 +4,14 @@ sidebar_custom_props:
   icon: octicon:gear
 ---
 
-Scrape Plugins are resources that modify the behavior of other scrapers. 
-They can transform changes, add properties to configs, and even set up relationships between configs. 
+Scrape Plugins are resources that modify the behavior of other scrapers.
+They can transform changes, add properties to configs, and even set up relationships between configs.
 These behaviors can also be defined on a ScrapeConfig, but using a scrape plugin makes them global, eliminating the need to define them in all scrapers.
 
 For example, if you want to exclude all events with severity="info", a scrape plugin can help you achieve that.
 
-```yaml title="plugin-change-exclusion.yaml" file=<rootDir>/modules/config-db/fixtures/plugin-change-exclusion.yaml
+```yaml title="plugin-change-exclusion.yaml" file=<rootDir>/modules/config-db/fixtures/plugins/exclude-info-changes.yaml
+
 ```
 
 ### Spec
@@ -46,7 +47,7 @@ For example, if you want to exclude all events with severity="info", a scrape pl
 When you encounter a diff change, unlike an event-based change, it can sometimes appear unclear. The summary of the change may not immediately indicate its purpose.
 For example, the change 'status.images' might not be self-explanatory. To clarify this, you can assign types to these diff changes using mapping.
 
-```yaml title="plugin-change-mapping.yaml" file=<rootDir>/modules/config-db/fixtures/plugin-change-mapping.yaml
+```yaml title="plugin-change-mapping.yaml" file=<rootDir>/modules/config-db/fixtures/plugins/kubernetes-change-type-mapping.yaml
 ```
 
 <Fields
