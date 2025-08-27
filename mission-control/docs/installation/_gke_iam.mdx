@@ -4,10 +4,11 @@ import Domain from '@site/docs/partials/_domain.mdx'
 
 Depending on usecase, Mission Control can be associated with the following GCP IAM roles:
 
-| Use Case                                     | Role Name      |
-| -------------------------------------------- | ---------------|
-| Read Only Scraping                           | `roles/viewer` |
-| Playbooks to create and update GCP Resources | `roles/editor` |
+| Use Case                                     | Role Name                    |
+| -------------------------------------------- | -----------------------------|
+| Read Only Scraping                           | `roles/viewer`               |
+| Playbooks to create and update GCP Resources | `roles/editor`               |
+| Secret Management (optional)                 | `roles/cloudkms.cryptoKeyEncrypterDecrypter` |
 
 ## Configure IAM Roles for Mission Control
 
@@ -21,14 +22,18 @@ Depending on usecase, Mission Control can be associated with the following GCP I
 
         1. Enable workload identity
             ```bash
-            # The name of the GKE cluster mission control is being deployed to
-            export CLUSTER=<CLUSTER_NAME>
+            # The name of your existing GKE cluster where mission control is to be deployed to
+            export CLUSTER=cluster-name
+            
             # GCP Project ID
             export PROJECT_ID=gcp-project-id
+            
             # GCP Project Number
             export PROJECT_NUMBER=gcp-project-number
+            
             # Location of GKE Cluster
-            LOCATION=us-east1
+            export LOCATION=us-east1
+            
             # the default namespace the mission-control helm chart uses
             export NAMESPACE=mission-control
 
@@ -44,6 +49,8 @@ Depending on usecase, Mission Control can be associated with the following GCP I
            `$KSA_NAME` refers to the Kubernetes service account name. In our case, we need to bind to 3 service accounts: `mission-control-sa`, `canary-checker-sa` and `config-db-sa`
 
             ```bash
+            export ROLE_NAME=roles/viewer
+
             for KSA_NAME in "mission-control-sa" "canary-checker-sa" "config-db-sa"; do
                 gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
                     --role=$ROLE_NAME \
@@ -68,13 +75,17 @@ You can also refer the official docs: https://cloud.google.com/kubernetes-engine
 1. Enable workload identity in the host cluster
     ```bash
     # The name of the GKE cluster mission control is being deployed to
-    export CLUSTER=<CLUSTER_NAME>
+    export CLUSTER=cluster-name
+    
     # GCP Project ID
     export PROJECT_ID=gcp-project-id
+    
     # Location of GKE Cluster
-    LOCATION=us-east1
+    export LOCATION=us-east1
+    
     # the default namespace the mission-control helm chart uses
     export NAMESPACE=mission-control
+    
     # IAM service account name
     export IAM_SA_NAME=mission-control
 
@@ -137,3 +148,92 @@ You can also refer the official docs: https://cloud.google.com/kubernetes-engine
 
 </TabItem>
 </Tabs>
+
+## KMS Setup for Secret Management
+
+If you plan to use secret parameters in playbooks, create a KMS key to encrypt and manage sensitive data.
+This requires creating a new mission control connection and updating the helm chart to point mission control to the KMS connection.
+
+### Create a KMS Key
+
+```bash
+# Set your project ID (if not already set)
+export PROJECT_ID=gcp-project-id
+
+# Create a key ring
+gcloud kms keyrings create mission-control-keyring \
+    --location=global \
+    --project=$PROJECT_ID
+
+# Create a KMS key for Mission Control
+gcloud kms keys create mission-control-key \
+    --keyring=mission-control-keyring \
+    --location=global \
+    --purpose=encryption \
+    --project=$PROJECT_ID
+```
+
+### Bind GCP Service Account to IAM Role
+
+```bash
+gcloud projects add-iam-policy-binding projects/$PROJECT_ID \
+    --role=roles/cloudkms.cryptoKeyEncrypterDecrypter \
+    --member=principal://iam.googleapis.com/projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$PROJECT_ID.svc.id.goog/subject/ns/$NAMESPACE/sa/$KSA_NAME \
+    --condition=None
+```
+
+### Create a Mission Control connection
+
+
+```yaml title="gcpkms.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: flanksource-gcpkms
+spec:
+  gcpkms:
+    keyID: projects/<PROJECT_ID>/locations/global/keyRings/mission-control-keyring/cryptoKeys/mission-control-key
+```
+
+### Update Mission Control helm chart
+
+    <Tabs>
+      <TabItem label="Helm" value="Helm">
+        ```bash
+          helm upgrade mission-control-agent flanksource/mission-control-agent \
+          --set upstream.agent=<YOUR_LOCAL_NAME> \
+          --set upstream.username='token' \
+          --set upstream.password=<YOUR_AGENT_PASSWORD> \
+          --set upstream.host=<UPSTREAM_HOST> \
+          --set kmsConnection='connection://mission-control/flanksource-gcpkms' \
+          -n mission-control \
+          --wait 
+        ```
+      </TabItem>
+
+      <TabItem label="Flux" value="Flux">
+        ```yaml
+        ---
+        apiVersion:  helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: mission-control-agent
+          namespace: mission-control
+        spec:
+          chart:
+            spec:
+              chart: mission-control-agent
+              sourceRef:
+                kind: HelmRepository
+                name: flanksource
+                namespace: mission-control
+          interval: 5m
+        values:
+          upstream.agent: YOUR_LOCAL_NAME
+          upstream.username: token
+          upstream.password: <YOUR_AGENT_PASSWORD>
+          upstream.host: <UPSTREAM_HOST>
+          kmsConnection: 'connection://mission-control/flanksource-gcpkms'
+        ```
+      </TabItem>
+    </Tabs>
