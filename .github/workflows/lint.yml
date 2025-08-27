@@ -36,22 +36,7 @@ jobs:
           npm run build
 
       - name: Check for broken file references
-        run: |
-          cd "${{ matrix.repo }}/build"
-          echo "Checking for broken files in $(pwd)"
-
-          echo "Total files: $(ls -alh . | wc -l)"
-          echo "Total HTML files: $(find . -type f -name "*.html" | wc -l)"
-
-          echo "Ripgrep"
-          if rg 'file=../../../modules' -g '*.html' | grep -q .; then
-            echo "Matches found. Exiting with code 0."
-            rg 'file=../../../modules' -g '*.html'
-            exit 1
-          else
-            echo "No matches found"
-            exit 0
-          fi
+        run: make file-ref-check
 
   prettier:
     name: prettier
