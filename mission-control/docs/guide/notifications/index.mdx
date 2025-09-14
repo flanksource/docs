@@ -87,12 +87,15 @@ In this example:
 
 <details summary="Sophisticated Filters">
 For a more sophisticated filter, you can also use the handy [`matchQuery`](/reference/scripting/cel#matchquery) cel function that supports search query.
-Example:
+In this example, the filter matches all unhealthy or warning deployments and pods in the prod cluster except for the postgres deployment.
 
 ```yaml title="config.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/config-health-match-query.yaml {9}
 ```
 
-In this example, the filter matches all unhealthy or warning deployments and pods in the prod cluster except for the postgres deployment.
+Health checks can also be filtered in a similar way. In this example we only want alerts for checks without the label `Expected-Fail: true` and which are not of `http` type
+
+```yaml title="config.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/check-label-match-query.yaml {8}
+```
 
 </details>
 
