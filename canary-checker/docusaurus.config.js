@@ -91,22 +91,23 @@ export default async function createConfigAsync() {
       ['@docusaurus/plugin-client-redirects',
         {
           redirects: [
-            {
-              to: '/getting-started',
-              from: '/docs/getting-started/installation',
-            },
-            {
-              to: '/concepts/metrics#grafana',
-              from: '/concepts/metrics/grafana',
-            },
-            {
-              to: '/concepts/metrics',
-              from: '/concepts/metrics/custom-metrics',
-            },
-            {
-              to: '/concepts/metrics',
-              from: '/concepts/metrics-exporter',
-            }
+            // These redirects are no longer needed as we've created the source files
+            // {
+            //   to: '/getting-started',
+            //   from: '/docs/getting-started/installation',
+            // },
+            // {
+            //   to: '/concepts/metrics#grafana',
+            //   from: '/concepts/metrics/grafana',
+            // },
+            // {
+            //   to: '/concepts/metrics',
+            //   from: '/concepts/metrics/custom-metrics',
+            // },
+            // {
+            //   to: '/concepts/metrics',
+            //   from: '/concepts/metrics-exporter',
+            // }
           ],
         }
 

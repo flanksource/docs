@@ -1,0 +1,18 @@
+---
+title: Metrics Exporter
+slug: /concepts/metrics-exporter
+---
+
+# Metrics Exporter
+
+Canary Checker works well with Prometheus and exports metrics for every check, the standard metrics included are:
+
+| Metric                                         | Type      | Description                                 |
+| ---------------------------------------------- | --------- | ------------------------------------------- |
+| canary_check                                   | Gauge     | Set to 0 when passing and 1 when failing    |
+| canary_check_success_count                     | Counter   |                                             |
+| canary_check_failed_count                      | Counter   |                                             |
+| canary_check_info                              | Info      |                                             |
+| canary_check_duration                          | Histogram | Histogram of canary durations               |
+
+For more information about metrics, including custom metrics and Grafana integration, please visit the [metrics page](/concepts/metrics).
