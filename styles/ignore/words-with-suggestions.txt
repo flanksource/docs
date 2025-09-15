@@ -242,6 +242,7 @@ Junit
 JUnit
 keypair
 keypairs
+kmsConnection
 knowledgebase
 knowledgebases
 Kratos
