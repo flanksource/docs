@@ -1,0 +1,80 @@
+---
+sidebar_custom_props:
+  icon: gotify
+---
+
+# Gotify
+
+Gotify is a self-hosted push notification service.
+
+:::info URL Format
+gotify://**`host`**/**`token`**
+:::
+
+import Fields from '@site/src/components/Fields';
+
+<Fields rows={[
+  {
+    field: "host",
+    description: "The Gotify server hostname, optionally with a port",
+    required: true,
+    scheme: "string",
+  },
+  {
+    field: "token",
+    description: "The application token generated in Gotify for sending notifications",
+    required: true,
+    scheme: "string",
+  },
+  {
+    field: "port",
+    description: "The port for your Gotify server",
+    default: "80 (HTTP) or 443 (HTTPS)",
+    scheme: "int",
+  },
+  {
+    field: "path",
+    description: "Any subpath if your Gotify is running under a URL base path",
+    scheme: "string",
+  },
+  {
+    field: "title",
+    description: "Title of your notification",
+    default: "Shoutrrr notification",
+    scheme: "string",
+  },
+  {
+    field: "priority",
+    description: "Notification priority",
+    default: "0",
+    scheme: "int",
+  },
+  {
+    field: "DisableTLS",
+    description: "Disable TLS verification (useful for self-signed certificates)",
+    default: "false",
+    scheme: "bool",
+  },
+]} />
+
+## Examples
+
+Standard usage:
+
+```uri
+gotify://gotify.example.com:443/AzyoeNS.D4iJLVa/?title=Alert&priority=1
+```
+
+With a base path (behind reverse proxy):
+
+```uri
+gotify://example.com:443/path/to/gotify/AzyoeNS.D4iJLVa/?title=Update&priority=2
+```
+
+## Creating an application token
+
+1. Log in to your Gotify server
+2. Navigate to **Apps**
+3. Click **Create Application**
+4. Give it a name and save
+5. Copy the generated application token

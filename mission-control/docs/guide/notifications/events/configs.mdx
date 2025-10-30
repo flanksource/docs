@@ -15,6 +15,7 @@ Configs emit events when their health changes or when they are created, modified
 
 - `config.healthy`
 - `config.unhealthy`
+- `config.degraded`
 - `config.warning`
 - `config.unknown`
 
@@ -56,6 +57,7 @@ The default notification template for health events is:
 
 - `config.created`
 - `config.updated`
+- `config.changed`
 - `config.deleted`
 
 ```yaml title="ec2-instance-updates.yaml"
@@ -68,6 +70,7 @@ spec:
   events:
     - config.created
     - config.updated
+    - config.changed
     - config.deleted
   filter: config.type == 'AWS::EC2::Instance'
   to:

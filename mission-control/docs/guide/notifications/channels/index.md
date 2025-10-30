@@ -7,7 +7,7 @@ sidebar_custom_props:
   icon: octicon:broadcast-24
 ---
 
-:::tip Shoutrr
+:::tip Shoutrrr
 Notifications in Mission Control are powered by [github.com/containrrr/shoutrrr](https://github.com/containrrr/shoutrrr)
 :::
 
@@ -17,9 +17,13 @@ When creating a notification you can either specify a connection or a custom URL
 
 | Service                      | URL format                                                                                                                      |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| [Bark](./bark)               | _bark://**`devicekey`**@**`host`**_                                                                                             |
 | [Discord](./discord)         | _discord://**`token`**@**`id`**_                                                                                                |
 | [Email](./email)             | _smtp://**`username`**:**`password`**@**`host`**:**`port`**/?from=**`fromAddress`**&to=**`recipient1`**[,__`recipient2`__,...]_ |
+| [Google Chat](./googlechat)  | _googlechat://chat.googleapis.com/v1/spaces/**`FOO`**/messages?key=**`bar`**&token=**`baz`**_                                   |
+| [Gotify](./gotify)           | _gotify://**`host`**/**`token`**_                                                                                               |
 | [IFTTT](./ifttt)             | _ifttt://**`key`**/?events=**`event1`**[,__`event2`__,...]&value1=**`value1`**&value2=**`value2`**&value3=**`value3`**_         |
+| [Join](./join)               | _join://shoutrrr:**`api-key`**@join/?devices=**`device1`**[,__`device2`__,...]_                                                 |
 | [Mattermost](./mattermost)   | _mattermost://[__`username`__@]**`mattermost-host`**/**`token`**[/__`channel`__]_                                               |
 | [Matrix](./matrix)           | _matrix://**`username`**:**`password`**@**`host`**:**`port`**/[?rooms=**`!roomID1`**[,__`roomAlias2`__]]_                       |
 | [Ntfy](./ntfy)               | _ntfy://**`username`**:**`password`**@ntfy.sh/**`topic`**_                                                                      |
