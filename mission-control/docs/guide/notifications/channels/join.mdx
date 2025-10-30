@@ -1,0 +1,52 @@
+---
+sidebar_custom_props:
+  icon: join
+---
+
+# Join
+
+Join is a notification service that syncs notifications across your devices.
+
+:::info URL Format
+join://shoutrrr:**`api-key`**@join/?devices=**`device1`**[,**`device2`**,...]
+:::
+
+import Fields from '@site/src/components/Fields';
+
+<Fields rows={[
+  {
+    field: "api-key",
+    description: "Your Join API key",
+    required: true,
+    scheme: "string",
+  },
+  {
+    field: "devices",
+    description: "Comma-separated list of device IDs to send the notification to",
+    required: true,
+    scheme: "string",
+  },
+  {
+    field: "icon",
+    description: "URL of an icon to display with the notification",
+    scheme: "string",
+  },
+  {
+    field: "title",
+    description: "Title for the notification",
+    scheme: "string",
+  },
+]} />
+
+## Example
+
+```uri
+join://shoutrrr:YOUR_API_KEY@join/?devices=deviceA,deviceB&icon=https://link.to/icon.png&title=Alert
+```
+
+## Getting your API key and device IDs
+
+1. Visit [Join by joaoapps](https://joaoapps.com/join/)
+2. Sign in with your Google account
+3. Your API key is displayed in your account settings
+4. Device IDs are shown for each registered device

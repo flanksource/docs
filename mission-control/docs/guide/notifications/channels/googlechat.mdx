@@ -1,0 +1,67 @@
+---
+sidebar_custom_props:
+  icon: google-chat
+---
+
+# Google Chat
+
+:::info URL Format
+googlechat://chat.googleapis.com/v1/spaces/**`FOO`**/messages?key=**`bar`**&token=**`baz`**
+:::
+
+import Fields from '@site/src/components/Fields';
+
+<Fields rows={[
+  {
+    field: "space",
+    description: "The unique identifier for your Google Chat space (room)",
+    required: true,
+    scheme: "string",
+  },
+  {
+    field: "key",
+    description: "Security parameter from webhook configuration",
+    required: true,
+    scheme: "string",
+  },
+  {
+    field: "token",
+    description: "Security parameter from webhook configuration",
+    required: true,
+    scheme: "string",
+  },
+]} />
+
+## Setting up a webhook
+
+To use Google Chat notifications, you need to create an Incoming Webhook:
+
+1. Open your Google Chat room
+2. Go to the room's menu and select **Configure webhooks**
+3. Name the webhook and save it
+4. Copy the generated incoming webhook URL
+
+## Extracting the service URL
+
+The webhook URL from Google Chat looks like:
+
+```
+https://chat.googleapis.com/v1/spaces/<space-id>/messages?key=<key>&token=<token>
+```
+
+For Mission Control, convert it to the Shoutrrr format by replacing `https` with `googlechat`:
+
+```
+googlechat://chat.googleapis.com/v1/spaces/<space-id>/messages?key=<key>&token=<token>
+```
+
+## Example
+
+```uri
+googlechat://chat.googleapis.com/v1/spaces/AAAADdBz1Mk/messages?key=AIzaSyDd-example&token=aX6LdZNnexample
+```
+
+![Google Chat Webhook Setup 1](/img/notifications/channels/googlechat/hangouts-1.png)
+![Google Chat Webhook Setup 2](/img/notifications/channels/googlechat/hangouts-2.png)
+![Google Chat Webhook Setup 3](/img/notifications/channels/googlechat/hangouts-3.png)
+![Google Chat Webhook Setup 4](/img/notifications/channels/googlechat/hangouts-4.png)

@@ -1,0 +1,60 @@
+---
+sidebar_custom_props:
+  icon: bark
+---
+
+# Bark
+
+Bark is a push notification service for iOS devices.
+
+:::info URL Format
+bark://**`devicekey`**@**`host`**
+:::
+
+import Fields from '@site/src/components/Fields';
+
+<Fields rows={[
+  {
+    field: "devicekey",
+    description: "The authentication key for your Bark app installation",
+    required: true,
+    scheme: "string",
+  },
+  {
+    field: "host",
+    description: "Bark server hostname",
+    default: "api.day.app",
+    scheme: "string",
+  },
+  {
+    field: "title",
+    description: "The title of your notification",
+    scheme: "string",
+  },
+  {
+    field: "body",
+    description: "The message or body content",
+    scheme: "string",
+  },
+  {
+    field: "group",
+    description: "Bark notification group name",
+    scheme: "string",
+  },
+  {
+    field: "icon",
+    description: "URL to an image to show as an icon",
+    scheme: "string",
+  },
+  {
+    field: "url",
+    description: "A URL that opens when the notification is tapped",
+    scheme: "string",
+  },
+]} />
+
+## Example
+
+```uri
+bark://DEVICEKEY@api.day.app/?title=Alert&body=Check+failed&group=monitoring
+```
