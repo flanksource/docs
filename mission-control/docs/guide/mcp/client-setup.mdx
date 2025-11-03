@@ -86,37 +86,28 @@ Claude Desktop supports MCP connections through its configuration file.
 </TabItem>
 <TabItem value="claude-code" label="Claude Code">
 
-Claude Code (claude.ai) supports MCP through browser-based configuration.
+Claude Code CLI supports MCP through the `.mcp.json` configuration file.
 
 ### Setup Steps
 
-1. Visit [claude.ai](https://claude.ai)
-2. Click on your profile icon → Settings
-3. Navigate to Developer → MCP Settings
-4. Click "Add Server" and configure:
-
-```json
-{
-  "name": "mission-control",
-  "type": "http",
-  "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
-  "headers": {
-    "Authorization": "Basic YOUR_TOKEN_HERE"
+1. Create or edit the `.mcp.json` file in your project root or home directory
+2. Add the Mission Control MCP server configuration:
+  ```json title=".mcp.json"
+  {
+    "mcpServers": {
+      "mission-control": {
+        "name": "mission-control",
+        "type": "http",
+        "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
+        "headers": {
+          "Authorization": "Bearer YOUR_TOKEN_HERE"
+        }
+      }
+    }
   }
-}
-```
-
-5. Click "Save" and refresh the page
-6. Mission Control tools will be available in new conversations
-
-### Alternative Setup (via URL)
-
-You can also connect by visiting:
-```
-https://claude.ai/settings/mcp?server=mission-control&url=https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp
-```
-
-Then add your authorization token in the settings.
+  ```
+3. Save the file and restart Claude Code
+4. Mission Control tools will be available in your sessions
 
 </TabItem>
 <TabItem value="vscode-copilot" label="VS Code Copilot">
