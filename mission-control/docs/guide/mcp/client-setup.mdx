@@ -13,7 +13,7 @@ This guide provides step-by-step instructions for connecting popular MCP clients
 
 ## Prerequisites
 
-Before connecting any client, you'll need:
+Before connecting any client, you need:
 
 1. **MCP Server URL**
    - SaaS users: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
@@ -79,7 +79,7 @@ Claude Desktop supports MCP connections through its configuration file.
 ```
 
 4. Restart Claude Desktop
-5. The Mission Control tools will appear in the tools menu
+5. The Mission Control tools appear in the tools menu
 
 </TabItem>
 <TabItem value="claude-code" label="Claude Code">
@@ -105,7 +105,7 @@ Claude Code CLI supports MCP through the `.mcp.json` configuration file.
   }
   ```
 3. Save the file and restart Claude Code
-4. Mission Control tools will be available in your sessions
+4. Mission Control tools are available in your sessions
 
 </TabItem>
 <TabItem value="vscode-copilot" label="VS Code Copilot">
@@ -182,7 +182,7 @@ Cline supports MCP through its settings configuration.
 ```
 
 5. Reload VS Code window
-6. Mission Control tools will be available in Cline chat
+6. Mission Control tools are available in Cline chat
 
 </TabItem>
 <TabItem value="continue" label="Continue.dev">
@@ -217,7 +217,7 @@ Continue.dev supports MCP servers through its configuration file.
 ```
 
 3. Restart Continue
-4. Mission Control tools will be available in chat
+4. Mission Control tools are available in chat
 
 </TabItem>
 <TabItem value="zed" label="Zed Editor">
@@ -253,7 +253,7 @@ Zed supports MCP through its assistant configuration.
 ```
 
 4. Restart Zed
-5. Mission Control tools will be available in the assistant
+5. Mission Control tools are available in the assistant
 
 </TabItem>
 <TabItem value="direct" label="Direct HTTP">
@@ -327,7 +327,7 @@ ws.on('open', () => {
 3. **Tools Not Appearing**
    - Restart the client application
    - Check client logs for errors
-   - Verify MCP server is properly configured
+   - Verify MCP server is configured correctly
 
 ### Testing Connection
 
@@ -343,43 +343,6 @@ npx @modelcontextprotocol/cli connect \
 ## Next Steps
 
 Once connected, explore the available tools:
-- [Catalog Tools](./tools/catalog_tools.mdx) - Query and manage configuration items
-- [Connection Tools](./tools/connection_tools.mdx) - Manage connections and integrations
-- [Playbook Tools](./tools/playbook_tools.mdx) - Execute and manage playbooks
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Connection Refused**
-   - Verify the server URL is correct
-   - Check if you're behind a firewall or proxy
-   - Ensure the token has proper permissions
-
-2. **Authentication Failed**
-   - Verify token is valid and not expired
-   - Ensure token has `mcp.*` permissions
-   - Check if Basic prefix is included
-
-3. **Tools Not Appearing**
-   - Restart the client application
-   - Check client logs for errors
-   - Verify MCP server is properly configured
-
-### Testing Connection
-
-You can test your MCP connection using the MCP CLI:
-
-```bash
-npx @modelcontextprotocol/cli connect \
-  --transport http \
-  --url https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
-  --header "Authorization: Basic YOUR_TOKEN_HERE"
-```
-
-## Next Steps
-
-Once connected, explore the available tools:
-- [Catalog Tools](./tools/catalog_tools.mdx) - Query and manage configuration items
+- [Catalog Tools](./tools/catalog_tools.mdx) - Query and manage config items
 - [Connection Tools](./tools/connection_tools.mdx) - Manage connections and integrations
 - [Playbook Tools](./tools/playbook_tools.mdx) - Execute and manage playbooks

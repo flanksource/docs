@@ -16,7 +16,7 @@ For example, you might have:
 - Regional teams that should only see resources from agents in their geographic location
 - Client-specific teams that should only interact with agents deployed in their infrastructure
 
-```yaml title="agent-based-permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/agent-based-permission.yaml
+```yaml title="agent-based-permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/scope.yaml
 
 ```
 
@@ -32,7 +32,7 @@ Tags can represent various attributes such as:
 - Client identifier (client-a, client-b)
 - Clusters
 
-```yaml title="tag-based-permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/tag-based-permission.yaml
+```yaml title="tag-based-permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/scope.yaml
 
 ```
 
