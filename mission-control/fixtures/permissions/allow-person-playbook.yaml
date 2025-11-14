@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=../../config/schemas/permission.schema.json
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: allow-user-foo-playbook-run
+spec:
+  description: allow user foo to run playbooks
+  subject:
+    person: foo@bar.com
+  actions:
+    - playbook:*
+  object:
+    playbooks:
+      - name: "*" # this is a wildcard selector that matches any playbook

@@ -1,0 +1,15 @@
+---
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: allow-dev-team-agent-access
+spec:
+  description: Allow development team to access resources from development environment agents
+  subject:
+    person: dev-team@example.com
+  actions:
+    - read
+    - playbook:*
+  object:
+    agents:
+      - name: dev-*  # Wildcard selector for development agents
