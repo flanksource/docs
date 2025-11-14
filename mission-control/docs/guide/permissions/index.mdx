@@ -19,7 +19,7 @@ detailed ABAC rules let you define exactly which playbooks specific users or tea
 
 You can manage Permissions through the UI and using CRDs.
 
-```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/allow-person-playbook.yaml
+```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/deny-person-playbook.yaml
 ```
 
 A Permission has 4 parts:
@@ -194,7 +194,7 @@ A permission can target multiple objects, while a subject can only target one.
 If you define multiple objects, Mission Control grants the permission only if the request matches all defined objects.
 In other words, Mission Control applies an AND condition to the objects.
 
-```yaml file=<rootDir>/modules/mission-control/fixtures/permissions/allow-person-playbook.yaml {14-20}
+```yaml file=<rootDir>/modules/mission-control/fixtures/permissions/deny-person-playbook.yaml {14-16}
 ```
 
 This permission object allows running all playbooks but **only on configs in the "mission-control" namespace**.
