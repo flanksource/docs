@@ -6,7 +6,7 @@ title: Playbook Tools
 
 Tools for working with playbooks in Mission Control.
 
-## playbook_list_all
+## `playbook_list_all`
 
 List all available playbooks
 
@@ -14,7 +14,7 @@ List all available playbooks
 
 **Prompt:** "What playbooks are available in the system?"
 
-**AI Response:** "I'll list all the available playbooks in your Mission Control system."
+**AI Response:** "Here are all the available playbooks in your Mission Control system."
 
 **Result:** Returns a list of all playbooks with their metadata, parameters, and descriptions.
 
@@ -58,7 +58,7 @@ List all available playbooks
 ]
 ```
 
-## playbook_recent_runs
+## `playbook_recent_runs`
 
 Get recent playbook execution runs
 
@@ -68,9 +68,9 @@ Get recent playbook execution runs
 
 ### Example Usage
 
-**Prompt:** "Show me the last 5 playbook runs"
+**Prompt:** "Show the last 5 playbook runs"
 
-**AI Response:** "I'll get the 5 most recent playbook execution runs for you."
+**AI Response:** "Getting the 5 most recent playbook execution runs."
 
 **Result:** Returns recent playbook runs with execution details, status, and results.
 
@@ -95,7 +95,7 @@ Get recent playbook execution runs
 ]
 ```
 
-## playbook_failed_runs
+## `playbook_failed_runs`
 
 Get recent failed playbook execution runs
 
@@ -105,9 +105,9 @@ Get recent failed playbook execution runs
 
 ### Example Usage
 
-**Prompt:** "Show me recent playbook failures so I can investigate what went wrong"
+**Prompt:** "Show recent playbook failures for investigation"
 
-**AI Response:** "I'll get the recent failed playbook runs to help you identify issues."
+**AI Response:** "Getting the recent failed playbook runs to help identify issues."
 
 **Result:** Returns failed playbook runs with error details and failure reasons.
 
@@ -129,7 +129,7 @@ Get recent failed playbook execution runs
 ]
 ```
 
-## playbook_exec_run
+## `playbook_exec_run`
 
 Execute a playbook with specified parameters
 
@@ -138,13 +138,13 @@ Execute a playbook with specified parameters
   {field: "params", scheme: "object", description: "Parameters required for playbook execution", required: true}
 ]} />
 
-**Note:** This is a destructive operation that will modify system state. Parameters are playbook-specific and can be found using the playbook_list_all tool.
+**Note:** This is a destructive operation that modifies system state. Parameters are playbook-specific and can be found using the `playbook_list_all` tool.
 
 ### Example Usage
 
 **Prompt:** "Restart the nginx pod in the production namespace"
 
-**AI Response:** "I'll execute the restart pod playbook for the nginx pod in the production namespace. This will cause a brief service interruption."
+**AI Response:** "Executing the restart pod playbook for the nginx pod in the production namespace. This causes a brief service interruption."
 
 **Parameters Used:**
 ```json
@@ -163,7 +163,7 @@ Execute a playbook with specified parameters
 
 **Prompt:** "Scale the web-app deployment to 3 replicas in the staging environment"
 
-**AI Response:** "I'll scale the web-app deployment to 3 replicas in the staging namespace."
+**AI Response:** "Scaling the web-app deployment to 3 replicas in the staging namespace."
 
 **Parameters Used:**
 ```json
