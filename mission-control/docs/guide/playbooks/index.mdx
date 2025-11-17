@@ -5,7 +5,7 @@ sidebar_position: 1
 hide_title: true
 # hide_table_of_contents: true
 pagination_prev: guide/config-db/index
-pagination_next: guide/topology/index
+pagination_next: guide/notifications/index
 sidebar_custom_props:
   icon: playbook
 ---
@@ -34,14 +34,14 @@ Some key benefits include:
 
 ### Day 2 Operations
 
-Day 2 operations can be added onto existing resources (`configs`, `components` or health `checks`) using [resource selectors](/reference/resource-selector).
+Day 2 operations can be added onto existing resources (`configs`, `components` or health `checks`) using [resource selectors](/docs/reference/resource-selector).
 
 For example scaling a Kubernetes Deployment is only applicable to config items of type: `Kubernetes::Deployment`
 
 ```yaml title='scale-deployment.yaml' file=<rootDir>/modules/mission-control/fixtures/playbooks/scale-deployment.yaml
 ```
 
-Before running a playbook, users can provide input using [`parameters`](/reference/playbooks/parameters).
+Before running a playbook, users can provide input using [`parameters`](/docs/reference/playbooks/parameters).
 In the playbook above, the user can decide the new number of replicas before running the playbook.
 
 
@@ -55,7 +55,7 @@ Playbooks execute a sequence of actions (steps), these actions can update git re
 
 ### Templating
 
-The actions values can be templated using [Go Templates](/reference/scripting/gotemplate)
+The actions values can be templated using [Go Templates](/docs/reference/scripting/gotemplate)
 
 ```yaml title="restart-deployment.yaml"
 #...
@@ -71,7 +71,7 @@ spec:
         script: kubectl rollout restart deployment {{.config.name}} -n {{.config.tags.namespace}}
 ```
 
-The parameters to the playbooks are available in the [Context](reference/playbooks/context)
+The parameters to the playbooks are available in the [Context](/docs/reference/playbooks/context)
 
 
 ![Playbook Action Logs](/img/playbook-action-logs.png)
@@ -105,7 +105,7 @@ spec:
 
 Playbook permissions control who can perform various actions on playbooks.
 
-```yaml title="playbook-permissions.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/allow-person-playbook.yaml
+```yaml
 ```
 
 ### Required Permissions
@@ -129,6 +129,6 @@ For example, to run a playbook that scales a Kubernetes deployment, the principa
 ### Permission Inheritance
 
 :::info
-When a playbook triggers another playbook, the permissions are evaluated using the playbook's identity, not the original user who initiated the first playbook. 
+When a playbook triggers another playbook, the permissions are evaluated using the playbook's identity, not the original user who initiated the first playbook.
 This means the triggering playbook must have permission to run the target playbook and to read the resources.
 :::

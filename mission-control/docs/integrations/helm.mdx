@@ -6,15 +6,15 @@ sidebar_custom_props:
 
 import Schema from '@site/modules/mission-control-registry/charts/helm/values.schema.json'
 
-Install helm charts on the cluster and add them to the [Catalog](/guide/config-db).
+Install helm charts on the cluster and add them to the [Catalog](/docs/guide/config-db).
 
 ## Getting Started
 
 :::info Prerequisites
 To enable the Helm integration you need:
 
-- Mission Control [installed](/installation/)
-- [kubectl](/installation/saas/kubectl) access to the Mission Control instance
+- Mission Control [installed](/docs/installation/)
+- [kubectl](/docs/installation/saas/kubectl) access to the Mission Control instance
 - FluxCD running in the cluster
 :::
 
@@ -46,4 +46,4 @@ The `Install Helm Chart` playbook can install the charts into any Kubernetes nam
 
 <Screenshot img="/img/helm-integration-playbook.png" />
 
-The [Kubernetes](/integrations/kubernetes/playbooks) and [Flux](/integrations/flux/playbooks) playbooks can further help with operations on these charts and resources created by them.
+The [Kubernetes](/docs/integrations/kubernetes/playbooks) and [Flux](/docs/integrations/flux/playbooks) playbooks can further help with operations on these charts and resources created by them.

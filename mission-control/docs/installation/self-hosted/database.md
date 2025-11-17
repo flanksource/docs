@@ -19,12 +19,12 @@ db:
   storageClass: # optional storage class for PVC volume
   storage: 20Gi
   shmVolume: 256Mi # size of shm memory file to be mounted
-  resources: # resources to assign to the postgres /guide/canary-checker/reference/database pod
+  resources: # resources to assign to the postgres /docs/guide/canary-checker/reference/database pod
     requests:
       memory: 4Gi
 ```
 
-The /guide/canary-checker/reference/database password can then be retrieved using
+The /docs/guide/canary-checker/reference/database password can then be retrieved using
 
 ```shell
 kubectl get secret incident-commander-postgres -o json | jq -r '.data.POSTGRES_PASSWORD' | base64 -d
@@ -32,7 +32,7 @@ kubectl get secret incident-commander-postgres -o json | jq -r '.data.POSTGRES_P
 
 :::info Connecting
 
-If you ever need to connect to the /guide/canary-checker/reference/database, you can do so by forwarding the port:
+If you ever need to connect to the /docs/guide/canary-checker/reference/database, you can do so by forwarding the port:
 
 ```shell
 kubectl port-forward svc/postgres 5432:5432
@@ -45,7 +45,7 @@ psql -U postgres localhost -p 5432 mission_control
 
 ## Using an External Database
 
-In order to connect to an existing /guide/canary-checker/reference/database a secret needs to be created with the following key:
+In order to connect to an existing /docs/guide/canary-checker/reference/database a secret needs to be created with the following key:
 
 - `DB_URL`
 

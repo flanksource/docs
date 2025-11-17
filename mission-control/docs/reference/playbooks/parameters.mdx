@@ -20,7 +20,7 @@ Playbook parameter defines a parameter that a playbook needs to run.
     description: "Default value of the parameter.",
     scheme: "gotemplate",
     templateEnv: [
-      {"name": "Context", "url": "//guide/playbooks/reference/context"},
+      {"name": "Context", "url": "//docs/guide/playbooks/reference/context"},
     ]
   },
   {
@@ -80,7 +80,6 @@ When running the playbook on a `Deployment` named `mysql` the following is pre-p
 | `check`      | Limits the value to a check.       | Dropdown     | `string`  | [`Check`](#checks)        |
 | `checkbox`   | Boolean value toggle               | Checkbox     | `boolean` | -                         |
 | `code`       | Text area                          | Code Editor  | `string`  | [`Code`](#code)           |
-| `component`  | Limits the value to a component.   | Dropdown     | `string`  | [`Component`](#component) |
 | `config`     | Limits the value to a config item. | Dropdown     | `string`  | [`Config`](#config)       |
 | `list`       | Specify a custom list of values    | Dropdown     | `string`  | [`List`](#list)           |
 | `people`     | Limits the value to people.        | Dropdown     | `string`  | [`People`](#people)       |
@@ -93,23 +92,17 @@ When running the playbook on a `Deployment` named `mysql` the following is pre-p
 
 ```
 
-### component
-
-| Field      | Description                            | Schema                                             |
-| ---------- | -------------------------------------- | -------------------------------------------------- |
-| `filter[]` | Limit the components to these resources | [`ResourceSelector`](/reference/resource-selector) |
-
 ### config
 
 | Field         | Description                              | Schema                                             |
 | ------------- | ---------------------------------------- | -------------------------------------------------- |
-| `filter[]` | Limit the config items to these resources | [`ResourceSelector`](/reference/resource-selector) |
+| `filter[]` | Limit the config items to these resources | [`ResourceSelector`](/docs/reference/resource-selector) |
 
 ### checks
 
 | Field         | Description                        | Schema                                             |
 | ------------- | ---------------------------------- | -------------------------------------------------- |
-| `filter[]` | Limit the checks to these resources | [`ResourceSelector`](/reference/resource-selector) |
+| `filter[]` | Limit the checks to these resources | [`ResourceSelector`](/docs/reference/resource-selector) |
 
 ### code
 

@@ -73,8 +73,8 @@ Once you load data, you can run **any SQL query** against it to combine data fro
 ```yaml
 # View table data (optional)
 merge: |
-  SELECT d.name, d.status, p.duration 
-  FROM deployments d 
+  SELECT d.name, d.status, p.duration
+  FROM deployments d
   LEFT JOIN pipelines p ON d.name = p.app
 
 # Panel queries (required for panels)

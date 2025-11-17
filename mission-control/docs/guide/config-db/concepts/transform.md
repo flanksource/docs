@@ -15,9 +15,9 @@ Transformations allow you to modify scraped config items before they are saved, 
 | --------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | `transform.exclude`         | Remove fields from a scraped `config`                                      | [[]Exclude](#field-exclusions)                                           |
 | `transform.mask`            | Replace sensitive fields with a hash to enable change detection on secrets | [[]Mask](#masking)                                                       |
-| `transform.changes.exclude` | Ignore changes                                                             | [[]CEL](#exclusions) with [Change Context](/reference/config-db/changes) |
+| `transform.changes.exclude` | Ignore changes                                                             | [[]CEL](#exclusions) with [Change Context](/docs/reference/config-db/changes) |
 | `transform.changes.mapping` | Categorize changes                                                         | [Mapping](#mapping)                                                      |
-| `transform.expr`            |                                                                            | [CEL](/reference/scripting/cel)                                          |
+| `transform.expr`            |                                                                            | [CEL](/docs/reference/scripting/cel)                                          |
 | `transform.relationship`    | Create relationships between items                                         | [Relationships](./relationships)                                         |
 
 ## Config Items
@@ -78,7 +78,7 @@ spec:
 
 | Field      | Description                                 | Scheme                                                                                                  |
 | ---------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `selector` | Filter which config items to apply masks on | <CommonLink to="cel">`CEL`</CommonLink> with [ScrapeResult](/reference/config-db/scrape-result) context |
+| `selector` | Filter which config items to apply masks on | <CommonLink to="cel">`CEL`</CommonLink> with [ScrapeResult](/docs/reference/config-db/scrape-result) context |
 | `jsonpath` | Values to mask                              | <CommonLink to="jsonpath">`JSONPath`</CommonLink>                                                       |
 | `value`    | The replacement value of matched elements   | `md5` or any static string e.g. `***`                                                                   |
 
@@ -140,10 +140,10 @@ spec:
 
 | Field     | Description                                                                                            | Scheme                                                                                                   |
 | --------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| `filter`  | Selects changes to apply the mapping                                                                   | <CommonLink to="cel">CEL</CommonLink> with [Change Context](/reference/config-db/changes)                |
+| `filter`  | Selects changes to apply the mapping                                                                   | <CommonLink to="cel">CEL</CommonLink> with [Change Context](/docs/reference/config-db/changes)                |
 | `action`  | What action to take on the change, if `delete` then the corresponding config item is marked as deleted | `delete` or `ignore`                                                                                     |
 | `type`    | New change type                                                                                        | `string`                                                                                                 |
-| `summary` | New summary of the change                                                                              | <CommonLink to="gotemplate">Go Template</CommonLink> with [Change Context](/reference/config-db/changes) |
+| `summary` | New summary of the change                                                                              | <CommonLink to="gotemplate">Go Template</CommonLink> with [Change Context](/docs/reference/config-db/changes) |
 
 ## Scripting
 
@@ -151,7 +151,7 @@ Scripting modifies the scraped configuration using CEL before saving it to the d
 
 | Field  | Description             | Scheme                                                                                                  | Context                                                                          |
 | ------ | ----------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `expr` | Transform a config item | <CommonLink to="cel">CEL</CommonLink> that returns [[]ScrapeResult](/reference/config-db/scrape-result) | `config` `JSON`<br/>`result` [Scrape Result](/reference/config-db/scrape-result) |
+| `expr` | Transform a config item | <CommonLink to="cel">CEL</CommonLink> that returns [[]ScrapeResult](/docs/reference/config-db/scrape-result) | `config` `JSON`<br/>`result` [Scrape Result](/docs/reference/config-db/scrape-result) |
 
 ```yaml title="file-scraper.yaml"
 apiVersion: configs.flanksource.com/v1

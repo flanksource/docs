@@ -4,7 +4,7 @@ title: Permissions
 sidebar_position: 6
 hide_title: true
 # hide_table_of_contents: true
-pagination_prev: guide/topology/index
+pagination_prev: guide/mcp/index
 sidebar_custom_props:
   icon: shield-user
 ---
@@ -19,15 +19,15 @@ detailed ABAC rules let you define exactly which playbooks specific users or tea
 
 You can manage Permissions through the UI and using CRDs.
 
-```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/allow-person-playbook.yaml
+```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/deny-person-playbook.yaml
 ```
 
 A Permission has 4 parts:
 
 - **Subject**: The user or service requesting access.
-- **Object**: The resources this permission affects (playbooks, connections, configs, or components).
+- **Object**: The resources this permission affects (playbooks, connections or configs).
 - **Effect**: Whether to allow or deny access (Default: allow).
-- **Actions**: The [list of allowed actions](/reference/permissions/actions).
+- **Actions**: The [list of allowed actions](/docs/reference/permissions/actions).
 
 :::info
 Deny rules always override Allow rules.
@@ -45,7 +45,7 @@ Deny rules always override Allow rules.
     {
       field: 'actions',
       required: true,
-      description: 'List of [allowed actions](/reference/permissions/actions)',
+      description: 'List of [allowed actions](/docs/reference/permissions/actions)',
       scheme: '`[]string`',
     },
     {
@@ -83,11 +83,7 @@ Deny rules always override Allow rules.
       description: 'List of config resource selectors',
       scheme: 'resourceselectors',
     },
-    {
-      field: 'object.components',
-      description: 'List of component resource selectors',
-      scheme: 'resourceselectors',
-    },
+
     {
       field: 'object.connections',
       description: 'List of connection resource selectors',
@@ -182,19 +178,19 @@ Sometimes, a specific system service needs permission to act *for* a particular 
 
 ## Objects
 
-Objects define the resources the permission targets. You can define Objects using [Resource Selectors](/reference/resource-selector).
+Objects define the resources the permission targets. You can define Objects using [Resource Selectors](/docs/reference/resource-selector).
 There are 4 types of objects:
 
 - **Playbooks** - Automation playbooks in the system
 - **Configs** - Configuration items in the catalog
 - **Connections** - Connection configurations for external systems
-- **Components** - Topology components
 
 A permission can target multiple objects, while a subject can only target one.
 If you define multiple objects, Mission Control grants the permission only if the request matches all defined objects.
 In other words, Mission Control applies an AND condition to the objects.
 
-```yaml file=<rootDir>/modules/mission-control/fixtures/permissions/allow-person-playbook.yaml {14-20}
+```yaml
+
 ```
 
 This permission object allows running all playbooks but **only on configs in the "mission-control" namespace**.

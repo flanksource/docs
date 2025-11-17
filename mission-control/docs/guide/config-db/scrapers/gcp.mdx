@@ -9,10 +9,6 @@ sidebar_custom_props:
 
 <!-- Source: modules/config-db/api/v1/gcp.go:47#GCP -->
 
-:::tip Registry
-The registry has an [GCP](/registry/gcp) Helm chart that provides a pre-configured Scraper with some common defaults
-:::
-
 The GCP scrapers scrapes your GCP account to fetch all the resources & save them as configs.
 
 ```yaml title="gcp-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/gcp.yaml
@@ -24,7 +20,7 @@ The GCP scrapers scrapes your GCP account to fetch all the resources & save them
 | ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
 | `logLevel`  | Specify the level of logging.                                                | `string`                                           |          |
 | `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                           |          |
-| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
 | `gcp`       | GCP scrape config                                                            | [`[]GCP`](#gcp)                                    |          |
 
 ### GCP

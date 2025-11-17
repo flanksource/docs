@@ -11,7 +11,7 @@ Filters can give you fine-grained control over the events that can trigger the p
 | Field    | Description                                                                           | Scheme                          | Required |
 | -------- | ------------------------------------------------------------------------------------- | ------------------------------- | -------- |
 | `event`  | Event to listen for.                                                                  | `string`                        | `true`   |
-| `filter` | Filter events to trigger on                                                           | [CEL](/reference/scripting/cel) | `true`   |
+| `filter` | Filter events to trigger on                                                           | [CEL](/docs/reference/scripting/cel) | `true`   |
 | `labels` | Labels specifies the key-value pairs that the associated event's resource must match. | `map[string]string`             | `false`  |
 
 ## Canary
@@ -42,29 +42,17 @@ spec:
         message: 'Description: {{.check.description}}'
 ```
 
-## Component
-
-Component events relate to activities on Topology components.
-
-| Event       | Description                        |
-| ----------- | ---------------------------------- |
-| `healthy`   | when a component becomes healthy   |
-| `unhealthy` | when a component becomes unhealthy |
-| `info`      | when a component has info          |
-| `warning`   | when a component has warning       |
-| `error`     | when a component has error         |
-
-```yaml title="notify-unhealthy-/guide/canary-checker/reference/database-component.yaml"
+```yaml title="notify-unhealthy-/docs/guide/canary-checker/reference/database-component.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Playbook
 metadata:
-  name: notify-unhealthy-/guide/canary-checker/reference/database-component
+  name: notify-unhealthy-/docs/guide/canary-checker/reference/database-component
 spec:
-  description: Notify when a /guide/canary-checker/reference/database component goes unhealthy
+  description: Notify when a /docs/guide/canary-checker/reference/database component goes unhealthy
   on:
     component:
       - event: unhealthy
-        filter: component.type == '/guide/canary-checker/reference/database'
+        filter: component.type == '/docs/guide/canary-checker/reference/database'
         labels:
           env: production
   actions:

@@ -13,16 +13,16 @@ The retention rules are applied for each unique catalog item. If `changes` is sp
 | -------------- | ------------------------------------------------------------------ | ------------------------------------- |
 | `types`        | Specify retention rules for config items                           | [`[]ConfigItem`](#config-items)       |
 | `changes`      | Specify retention rules for changes                                | [`[]Change`](#changes)                |
-| `staleItemAge` | Config items that were last scraped after this age will be deleted | [Duration](/reference/types#duration) |
+| `staleItemAge` | Config items that were last scraped after this age will be deleted | [Duration](/docs/reference/types#duration) |
 
 ## Config Items
 
 | Field        | Description                                                       | Scheme                                |
 | ------------ | ----------------------------------------------------------------- | ------------------------------------- |
 | `name`       | Specify retention rules for changes                               | `string`                              |
-| `createdAge` | Age after a config item is created it will be deleted             | [Duration](/reference/types#duration) |
-| `updatedAge` | Age after a config item last updated, that it will be deleted     | [Duration](/reference/types#duration) |
-| `deletedAge` | Age after a config item is soft deleted, will it be hard deleted. | [Duration](/reference/types#duration) |
+| `createdAge` | Age after a config item is created it will be deleted             | [Duration](/docs/reference/types#duration) |
+| `updatedAge` | Age after a config item last updated, that it will be deleted     | [Duration](/docs/reference/types#duration) |
+| `deletedAge` | Age after a config item is soft deleted, will it be hard deleted. | [Duration](/docs/reference/types#duration) |
 
 ```yaml title="kubernetes-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -66,7 +66,7 @@ Changes can quickly accumulate and grow large over time. While it's important to
 | Field   | Description                                             | Scheme                                | Required |
 | ------- | ------------------------------------------------------- | ------------------------------------- | -------- |
 | `name`  | Name of the change type                                 | `string`                              | `true`   |
-| `age`   | Maximum age of the change type to retain (`12h`, `30d`) | [Duration](/reference/types#duration) |          |
+| `age`   | Maximum age of the change type to retain (`12h`, `30d`) | [Duration](/docs/reference/types#duration) |          |
 | `count` | Maximum count to retain the change type                 | `int`                                 |          |
 
 ```yaml title="kubernetes-scraper.yaml"

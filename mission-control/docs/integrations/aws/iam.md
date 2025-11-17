@@ -301,7 +301,7 @@ First we create a secret called `aws` containing the access key and secret.
 
     <p/>
 
-3. Create a new [connection](/reference/connections)
+3. Create a new [connection](/docs/reference/connections)
 
    ```yaml title="aws-connection.yaml"
    apiVersion: mission-control.flanksource.com/v1

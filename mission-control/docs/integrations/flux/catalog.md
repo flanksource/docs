@@ -23,15 +23,12 @@ Mission Control provides built-in support for relating Flux resources to each ot
 
 <Cards className="border border-t border-solid border-gray-200">
 
-  <Card size="sm" title="GitOps Actions" icon="git" link="/guide/playbooks/actions/gitops">
+  <Card size="sm" title="GitOps Actions" icon="git" link="/docs/guide/playbooks/actions/gitops">
 
           <Tag label="action"/>
 
   </Card>
- <Card size="sm" title="Topology" icon="topology" link="topology">
-      Manage & Monitor flux instances.
-          <Tag label="topology"/>
-  </Card>
+
 
     <Card size="sm" title="GitOps Playbooks" icon="playbook" link="./playbooks">
     Enable ClickOps workflows backed by git.

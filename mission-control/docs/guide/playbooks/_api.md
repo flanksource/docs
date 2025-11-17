@@ -45,13 +45,12 @@ curl -sL -X POST -u 'admin@local:admin' \
 
 ## Listing playbooks
 
-As Playbooks are defined for components, checks and config items, it is possible to list what playbooks are available them.
+As Playbooks are defined for checks and config items, it is possible to list what playbooks are available them.
 This filtering of playbooks is done by the [`ResourceFilter`](./concepts/playbook.md#resourcefilter) in the [`PlaybookSpec`](./concepts/playbook.md#playbookspec) object.
 
 ```
 POST `/playbook/list?config_id={config_id}`
 POST `/playbook/list?check_id={check_id}`
-POST `/playbook/list?component_id={component_id}`
 ```
 
 ### Query Parameters
@@ -60,7 +59,6 @@ POST `/playbook/list?component_id={component_id}`
 | -------------- | ------------------------ | -------- |
 | `config_id`    | ID of the config item    | `string` |
 | `check_id`     | ID of the Check          | `string` |
-| `component_id` | ID of the component item | `string` |
 
 > Provide only 1 parameter
 
@@ -134,7 +132,6 @@ GET /playbook/run/{id}
 | `start_time`   | `string`            | The time the run started (_in RFC3339_)               |
 | `end_time`     | `string`            | The time the run ended (_in RFC3339_)                 |
 | `created_by`   | `string`            | The ID of the user that created the run.              |
-| `component_id` | `string`            | The ID of the component that ran the playbook.        |
 | `config_id`    | `string`            | The ID of the config item that ran the playbook.      |
 | `parameters`   | `map[string]string` | The parameters to pass to the playbook.               |
 | `agent_id`     | `string`            | The ID of the agent that ran the playbook.            |

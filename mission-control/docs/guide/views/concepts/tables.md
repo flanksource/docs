@@ -257,7 +257,7 @@ When Mission Control executes your queries, it returns raw data objects. For eac
 2. **Falls back to direct lookup** → Looks for the column name directly in the query results
 3. **Defaults to null** → If neither mapping nor direct column name exists
 
-The mapping section uses [CEL (Common Expression Language)](/reference/scripting/cel) expressions where the query result data is available as `row`.
+The mapping section uses [CEL (Common Expression Language)](/docs/reference/scripting/cel) expressions where the query result data is available as `row`.
 
 ### Mapping Behavior
 

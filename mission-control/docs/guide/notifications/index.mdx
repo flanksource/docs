@@ -49,7 +49,7 @@ spec:
   title: Check {{.check.name}} is {{.check.health}}
 ```
 
-In this example `{{.check.name}}` and `{{.check.health}}` are placeholders that gets replaced with the actual values of the `name` and `health` fields from the [check](/reference/canary-checker/check) object associated with the event.
+In this example `{{.check.name}}` and `{{.check.health}}` are placeholders that gets replaced with the actual values of the `name` and `health` fields from the [check](/docs/reference/canary-checker/check) object associated with the event.
 
 
 :::tip Markdown
@@ -82,11 +82,11 @@ spec:
 In this example:
 
 - The `filter` field specifies the CEL expression `check.type == 'http'`.
-- This expression evaluates to true only when the `type` attribute of the [check](/reference/canary-checker/check) object is equal to `'http'`.
+- This expression evaluates to true only when the `type` attribute of the [check](/docs/reference/canary-checker/check) object is equal to `'http'`.
 - So, Mission Control only sends notifications for events that meet this condition, which alerts you when HTTP checks fail.
 
 <details summary="Sophisticated Filters">
-For a more sophisticated filter, you can also use the handy [`matchQuery`](/reference/scripting/cel#matchquery) cel function that supports search query.
+For a more sophisticated filter, you can also use the handy [`matchQuery`](/docs/reference/scripting/cel#matchquery) cel function that supports search query.
 Example:
 
 ```yaml title="config.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/config-health-match-query.yaml {9}
@@ -99,7 +99,7 @@ In this example, the filter matches all unhealthy or warning deployments and pod
 
 ## Triggering Playbooks
 
-Playbooks can be configured as recipients for notifications, allowing you to trigger automated workflows instead of sending notifications to traditional channels like email or Slack. 
+Playbooks can be configured as recipients for notifications, allowing you to trigger automated workflows instead of sending notifications to traditional channels like email or Slack.
 
 While playbooks themselves are capable of listening to events like notifications - this approach leverages the full capabilities of notifications, including:
 

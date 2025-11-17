@@ -26,8 +26,8 @@ The Logs scraper queries log aggregation systems to extract configuration change
 
 | Field       | Description                                                                  | Scheme                                             | Required |
 | ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/reference/types#cron)                      |          |
-| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/docs/reference/types#cron)                      |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
 | `logs`      | Specifies the list of log configurations to scrape.                          | [`[]Logs`](#logs-1)                                | `true`   |
 
 ### Logs
@@ -101,13 +101,13 @@ The Logs scraper queries log aggregation systems to extract configuration change
   {
     field: "username",
     description: "Basic auth username",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   },
   {
     field: "password",
     description: "Basic auth password",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   }
 ]} />
@@ -142,7 +142,7 @@ The Logs scraper queries log aggregation systems to extract configuration change
   {
     field: "credentials",
     description: "GCP service account credentials",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   }
 ]} />
@@ -177,13 +177,13 @@ The Logs scraper queries log aggregation systems to extract configuration change
   {
     field: "username",
     description: "Basic auth username",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   },
   {
     field: "password",
     description: "Basic auth password",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   }
 ]} />
@@ -206,7 +206,7 @@ The Logs scraper queries log aggregation systems to extract configuration change
   {
     field: "credentials",
     description: "GCP service account credentials",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   }
 ]} />

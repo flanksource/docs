@@ -12,7 +12,7 @@ description: Property fields for config items
 | `unit`     | Unit for component property e.g. milliseconds, bytes, millicores, epoch etc. | `string`                        |            |
 | `color`    | Set color for component property.                                            | `string`                        |            |
 | `headline` | Toggle headline for component property.                                      | `bool`                          |            |
-| `icon`     | Specify icon for component.                                                  | [`Icon`](/reference/types#icon) |            |
+| `icon`     | Specify icon for component.                                                  | [`Icon`](/docs/reference/types#icon) |            |
 | `label`    | Specify label for component property.                                        | `string`                        |            |
 | `links`    | Set links pertaining to component.                                           | [`[]Link`](#link)               |            |
 | `max`      | Set maximum value for components to display.                                 | `int64`                         | `optional` |
@@ -27,6 +27,6 @@ description: Property fields for config items
 | `type`    | The type of the link.    | `string`                        |          |
 | `url`     | The url of the link.     | `string`                        |          |
 | `tooltip` | The tooltip of the link. | `string`                        |          |
-| `icon`    | The icon of the link.    | [`Icon`](/reference/types#icon) |          |
+| `icon`    | The icon of the link.    | [`Icon`](/docs/reference/types#icon) |          |
 | `text`    | The text of the link.    | `string`                        |          |
 | `label`   | The label of the link.   | `string`                        |          |

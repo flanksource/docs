@@ -28,9 +28,9 @@ The Clickhouse scraper executes SQL queries against a Clickhouse database or clo
 | Field       | Description                                                                        | Scheme                                             | Required |
 | ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
 | `logLevel`  | Specify the level of logging.                                                      | `string`                                           |          |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | [Cron](/reference/types#cron)                      |          |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | [Cron](/docs/reference/types#cron)                      |          |
 | `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                             |          |
-| `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
 | `clickhouse`| Specifies the list of Clickhouse configurations to scrape.                         | [`[]Clickhouse`](#clickhouse-1)                    | `true`   |
 
 ### Clickhouse
@@ -88,13 +88,13 @@ The Clickhouse scraper executes SQL queries against a Clickhouse database or clo
   {
     field: "accessKey",
     description: "AWS access key for authentication",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   },
   {
     field: "secretKey",
     description: "AWS secret key for authentication",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   },
   {
