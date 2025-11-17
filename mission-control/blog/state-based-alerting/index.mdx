@@ -1,3 +1,6 @@
+---
+draft: true
+---
 # State-Based Alerting: Understanding Why Kubernetes Deployments Fail
 
 

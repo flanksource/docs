@@ -19,7 +19,7 @@ export default function Action({ rows, ...props }) {
     {
       field: "runsOn",
       description: "Which [runner](/docs/guide/playbooks/concepts/runners) (agent) to run the action on",
-      scheme: "[`[]Agent`](/reference/types#agent)",
+      scheme: "[`[]Agent`](/docs/reference/types#agent)",
       required: false
     },
     {
@@ -31,13 +31,13 @@ export default function Action({ rows, ...props }) {
     {
       field: "delay",
       description: "A delay before running the action e.g. `8h`",
-      scheme: "[`Duration`](/reference/types#duration)  or  [CEL](/reference/scripting/cel) with [Playbook Context](./context)",
+      scheme: "[`Duration`](/docs/reference/types#duration)  or  [CEL](/docs/reference/scripting/cel) with [Playbook Context](/docs/reference/playbooks/context)",
 
     },
     {
       field: "filter",
       description: "Conditionally run an action",
-      scheme: "[CEL](/reference/scripting/cel) with [Playbook Context](./context)",
+      scheme: "[CEL](/docs/reference/scripting/cel) with [Playbook Context](/docs/reference/playbooks/context)",
 
     },
     {

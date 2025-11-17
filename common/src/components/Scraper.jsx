@@ -11,7 +11,7 @@ const commonsRows = [
   {
     field: 'properties',
     description: 'Custom templatable properties for the scraped config items.',
-    scheme: '[`[]ConfigProperty`](/reference/config-db/properties)'
+    scheme: '[`[]ConfigProperty`](/docs/reference/config-db/properties)'
   },
   {
     field: 'labels',
