@@ -15,7 +15,7 @@ title: Check
 | `status`               | The status of the check _(healthy/unhealthy)_               | `string`                        |
 | `owner`                | The owner of the check                                      | `string`                        |
 | `severity`             | The severity of the check _(info/low/medium/high/critical)_ | `string`                        |
-| `icon`                 | The icon of the check                                       | [`Icon`](/reference/types#icon) |
+| `icon`                 | The icon of the check                                       | [`Icon`](/docs/reference/types#icon) |
 | `transformed`          | The transformed of the check                                | `bool`                          |
 | `last_runtime`         | The last runtime of the check                               | `*time`                         |
 | `next_runtime`         | The next runtime of the check                               | `*time`                         |

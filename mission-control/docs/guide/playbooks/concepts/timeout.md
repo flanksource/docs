@@ -10,7 +10,7 @@ Set timeouts on playbooks to automatically cancel their execution after a specif
 
 Mission Control sets a default timeout of **30 minutes** for all playbooks. You can change this default globally by setting the `playbook.run.timeout` property in your Mission Control configuration.
 
-The timeout accepts any valid [duration](/reference/types#duration) format. This global timeout setting serves as the fallback for all playbooks that don't define their own specific timeout value.
+The timeout accepts any valid [duration](/docs/reference/types#duration) format. This global timeout setting serves as the fallback for all playbooks that don't define their own specific timeout value.
 
 ## Playbook-level timeout
 

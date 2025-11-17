@@ -18,7 +18,7 @@ export default function Action({ rows, ...props }) {
     },
     {
       field: "runsOn",
-      description: "Which [runner](/guide/playbooks/concepts/runners) (agent) to run the action on",
+      description: "Which [runner](/docs/guide/playbooks/concepts/runners) (agent) to run the action on",
       scheme: "[`[]Agent`](/reference/types#agent)",
       required: false
     },

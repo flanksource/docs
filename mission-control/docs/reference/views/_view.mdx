@@ -5,7 +5,7 @@
     scheme: "string"
   },
   {
-    field: "display.icon", 
+    field: "display.icon",
     description: "Icon identifier for navigation and visual identification",
     scheme: "icon"
   },
@@ -43,7 +43,7 @@
   {
     field: "mapping",
     description: "CEL expressions to map query results to view columns. _If not specified, columns are automatically populated from query results._",
-    scheme: "[`map[string]CELExpression`](/reference/scripting/cel)"
+    scheme: "[`map[string]CELExpression`](/docs/reference/scripting/cel)"
   },
   {
     field: "cache.maxAge",
@@ -60,11 +60,11 @@
     description: "Duration to wait for a view to process before returning stale data _(default: 5s)_",
     scheme: "duration"
   }
-]}/> 
+]}/>
 
 :::note Validation Requirements
 - **At least one query**: Views must define at least one named query
-- **Output definition**: Views must have either `panels` or `columns` (or both)  
+- **Output definition**: Views must have either `panels` or `columns` (or both)
 - **Merge requirement**: When using multiple queries with table output (columns only), you must provide a `merge` SQL query
 :::
 
@@ -76,12 +76,12 @@ Query definition for data sources.
   {
     field: "configs",
     description: "Query config items from the catalog",
-    scheme: "[ResourceSelector](/reference/resource-selector)"
+    scheme: "[ResourceSelector](/docs/reference/resource-selector)"
   },
   {
     field: "changes",
     description: "Query configuration changes and audit data",
-    scheme: "[ResourceSelector](/reference/resource-selector)"
+    scheme: "[ResourceSelector](/docs/reference/resource-selector)"
   },
   {
     field: "prometheus",
@@ -118,7 +118,7 @@ Query configuration for Prometheus metrics.
   },
   {
     field: "password",
-    description: "Basic auth password", 
+    description: "Basic auth password",
     scheme: "EnvVar"
   },
   {
@@ -250,7 +250,7 @@ Configuration for gauge visualizations with thresholds and color coding.
     scheme: "int"
   },
   {
-    field: "max", 
+    field: "max",
     required: true,
     description: "Maximum value for the gauge",
     scheme: "int"

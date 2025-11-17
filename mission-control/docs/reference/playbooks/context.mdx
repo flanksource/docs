@@ -4,17 +4,16 @@ title: Context
 
 ### CEL Expressions
 
-The following variables can be used within the [CEL](/reference/scripting/cel) expressions of `filter`, `if`, `delays` and `parameters.default`:
+The following variables can be used within the [CEL](/docs/reference/scripting/cel) expressions of `filter`, `if`, `delays` and `parameters.default`:
 
 | Field        | Description                                   | Schema                                             |
 | ------------ | --------------------------------------------- | -------------------------------------------------- |
-| `config`     | Config passed to the playbook                 | [`ConfigItem`](/reference/config-db)               |
-| `component`  | Component passed to the playbook              | [`Component`](/reference/topology/components)      |
-| `check`      | Canary Check passed to the playbook           | [`Check`](/reference/canary-checker/check)         |
-| `playbook`   | Playbook passed to the playbook               | [`Playbook`](/reference/playbooks)                  |
-| `run`        | Current run                                   | [`Run`](/reference/playbooks/#run)                            |
+| `config`     | Config passed to the playbook                 | [`ConfigItem`](/docs/reference/config-db)               |
+| `check`      | Canary Check passed to the playbook           | [`Check`](/docs/reference/canary-checker/check)         |
+| `playbook`   | Playbook passed to the playbook               | [`Playbook`](/docs/reference/playbooks)                  |
+| `run`        | Current run                                   | [`Run`](/docs/reference/playbooks/#run)                            |
 | `params`     | User provided parameters to the playbook      | `map[string]any`                                   |
-| `request`    | Webhook request                               | [`Webhook Request`](/reference/playbooks/webhooks) |
+| `request`    | Webhook request                               | [`Webhook Request`](/docs/reference/playbooks/webhooks) |
 | `env`        | Environment variables defined on the playbook | `map[string]any`                                   |
 | `user.name`  | Name of the user who invoked the action       | `string`                                           |
 | `user.email` | Email of the user who invoked the action      | `string`                                           |
@@ -64,7 +63,7 @@ Playbook actions can be selectively executed based on CEL expressions. These exp
 
 ### Go Templating
 
-When templating `actions` with [Go Templates](/reference/scripting/gotemplate), the context variables are available as fields of the template's context object `.` eg `.config`, `.user.email`
+When templating `actions` with [Go Templates](/docs/reference/scripting/gotemplate), the context variables are available as fields of the template's context object `.` eg `.config`, `.user.email`
 
 <details summary="Templating Actions">
   <div>

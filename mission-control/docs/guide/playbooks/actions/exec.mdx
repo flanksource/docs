@@ -28,7 +28,7 @@ Exec action allows you to executes a command or a script file on the target host
 
 <Fields rows={[
   {field: 'script', scheme: 'string', description: 'The script to execute', required: true},
-  {field: 'env', scheme: '[[]EnvVar](/reference/env-var)', description: 'Environment variables to set during execution'},
+  {field: 'env', scheme: '[[]EnvVar](/docs/reference/env-var)', description: 'Environment variables to set during execution'},
   {field: 'checkout', scheme: '[Checkout](#git-checkout)', description: 'Checkout a git repository before running the script'},
   {field: 'artifacts', scheme: '[Artifacts](#artifacts)', description: 'Artifacts produced by the action'},
   {field: 'connections', scheme: '[Connections](#connections)', description: 'Connections used by the action'}
@@ -46,7 +46,7 @@ Exec action allows you to executes a command or a script file on the target host
 
 ## Templating
 
-Scripts are templatable with [Go Templates](/reference/scripting/gotemplate)
+Scripts are templatable with [Go Templates](/docs/reference/scripting/gotemplate)
 
 ```yaml
 exec:
@@ -77,22 +77,22 @@ will be setup on the host running the script.
   {
     field: "aws",
     description: "AWS connection",
-    scheme: "[AWSConnection](/reference/connections/aws)",
+    scheme: "[AWSConnection](/docs/reference/connections/aws)",
   },
   {
     field: "gcp",
     description: "GCP connection",
-    scheme: "[GCPConnection](/reference/connections/gcp)",
+    scheme: "[GCPConnection](/docs/reference/connections/gcp)",
   },
   {
     field: "azure",
     description: "Azure connection",
-    scheme: "[AzureConnection](/reference/connections/azure)",
+    scheme: "[AzureConnection](/docs/reference/connections/azure)",
   },
   {
     field: "kubernetes",
     description: "Kubernetes connection",
-    scheme: "[KubernetesConnection](/reference/connections/kubernetes)",
+    scheme: "[KubernetesConnection](/docs/reference/connections/kubernetes)",
   },
   {
     field: "eksPodIdentity",

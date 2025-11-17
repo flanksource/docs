@@ -38,8 +38,8 @@ We are happy to announce the latest release of canary-checker, the highlight of 
 
 ## Templating
 
-- ⛰️ Added [`k8s.isHealthy`](/reference/scripting/cel#k8sishealthy)
-- ⛰️ Added [`jq`](/reference/scripting/cel#jq)
+- ⛰️ Added [`k8s.isHealthy`](/docs/reference/scripting/cel#k8sishealthy)
+- ⛰️ Added [`jq`](/docs/reference/scripting/cel#jq)
 - ⛰️ Added support for custom delimiters using `# gotemplate: left-delim=$[[ right-delim=]]`
 
 ## Breaking

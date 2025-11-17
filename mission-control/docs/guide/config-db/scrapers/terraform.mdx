@@ -26,8 +26,8 @@ The Terraform scraper reads Terraform state files and creates configuration item
 
 | Field       | Description                                                                  | Scheme                                             | Required |
 | ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/reference/types#cron)                      |          |
-| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/docs/reference/types#cron)                      |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
 | `terraform` | Specifies the list of Terraform configurations to scrape.                    | [`[]Terraform`](#terraform-1)                      | `true`   |
 
 ### Terraform
@@ -36,7 +36,7 @@ The Terraform scraper reads Terraform state files and creates configuration item
   {
     field: "name",
     description: "Template for naming the configuration items created from Terraform resources",
-    scheme: "[GoTemplate](/reference/types#gotemplate)",
+    scheme: "[GoTemplate](/docs/reference/types#gotemplate)",
     required: true
   },
   {
@@ -48,7 +48,7 @@ The Terraform scraper reads Terraform state files and creates configuration item
   {
     field: "transform",
     description: "Transformations to apply to scraped items",
-    scheme: "[Transform](/guide/config-db/concepts/transform)",
+    scheme: "[Transform](/docs/guide/config-db/concepts/transform)",
     required: false
   }
 ]} />
@@ -106,13 +106,13 @@ The Terraform scraper reads Terraform state files and creates configuration item
   {
     field: "accessKey",
     description: "AWS access key for authentication",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   },
   {
     field: "secretKey",
     description: "AWS secret key for authentication",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   }
 ]} />
@@ -135,7 +135,7 @@ The Terraform scraper reads Terraform state files and creates configuration item
   {
     field: "credentials",
     description: "GCP service account credentials JSON",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   }
 ]} />

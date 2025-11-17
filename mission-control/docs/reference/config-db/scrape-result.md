@@ -16,7 +16,7 @@ description: Fields available during scrape transform
 | `source`       | Source of the config item                              | `string`                        |
 | `config`       | Configuration details                                  | `interface{}`                   |
 | `format`       | Format of the config item                              | `string`                        |
-| `icon`         | Icon associated with the config item                   | [`Icon`](/reference/types#icon) |
+| `icon`         | Icon associated with the config item                   | [`Icon`](/docs/reference/types#icon) |
 | `tags`         | Tags associated with the config item                   | `JSONStringMap`                 |
 | `analysis`     | Analysis result of the config item                     | `*AnalysisResult`               |
 | `action`       | Action related to the config item                      | `string`                        |

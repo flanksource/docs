@@ -13,7 +13,7 @@ This config type is used to scrape information about your AWS infrastructure.
 
 :::tip Registry
 
-The Mission Control Registry includes an [AWS](/integration/aws) Helm chart that provides a pre-configured Scraper with common defaults
+The Mission Control Registry includes an [AWS](/docs/integrations/aws) Helm chart that provides a pre-configured Scraper with common defaults
 
 :::
 
@@ -23,8 +23,8 @@ The Mission Control Registry includes an [AWS](/integration/aws) Helm chart that
 
 | Field       | Description                                                                  | Scheme                                             | Required |
 | ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/reference/types#cron)                      |          |
-| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/docs/reference/types#cron)                      |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
 | `aws`       | Specifies the list of AWS configurations to scrape.                          | [`[]AWS`](#aws)                                    |          |
 
 ### AWS
@@ -63,7 +63,7 @@ The Mission Control Registry includes an [AWS](/integration/aws) Helm chart that
 | Field     | Description                                              | Scheme                                |
 | --------- | -------------------------------------------------------- | ------------------------------------- |
 | `exclude` | Set events to be excluded from scraping                  | `[]string`                            |
-| `maxAge` | Set maximum age of events for scraping, Defaults to `7d` | [Duration](/reference/types#duration) |
+| `maxAge` | Set maximum age of events for scraping, Defaults to `7d` | [Duration](/docs/reference/types#duration) |
 
 ## Cost Reporting
 

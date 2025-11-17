@@ -10,7 +10,7 @@ Actions are the fundamental tasks executed by a playbook. A playbook can compris
 | Field                 | Description                                                                                                                                                                    | Scheme                                               | Required |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- | -------- |
 | `name`                | Name of action.                                                                                                                                                                | `string`                                             | `true`   |
-| `runsOn`              | Specify the [runners](/guide/playbooks/concepts/runners) that can run this action. One will be chosen on random. When empty, the playbook will run on the main instance itself | `[]string`                                           |          |
+| `runsOn`              | Specify the [runners](/docs/guide/playbooks/concepts/runners) that can run this action. One will be chosen on random. When empty, the playbook will run on the main instance itself | `[]string`                                           |          |
 | `templatesOn`         | Specify where the templating of the action spec should occur                                                                                                                   | `host` or `agent`                                    |          |
 | `delay`               | A delay before running the action e.g. `8h`                                                                                                                                    | `Duration` or [`Expression`](../concepts/expression) |          |
 | `filter`              | Whether to run the step or not                                                                                                                                                 | [`Expression`](../concepts/expression)               |          |
@@ -79,9 +79,8 @@ Templates receive a context variable that contain details about the config or co
 
 | Field         | Description                              | Schema                                        |
 | ------------- | ---------------------------------------- | --------------------------------------------- |
-| `.config`     | Config passed to the playbook            | [`ConfigItem`](/reference/config-db)          |
-| `.component`  | Component passed to the playbook         | [`Component`](/reference/topology/components) |
-| `.check`      | Canary Check passed to the playbook      | [`Check`](/reference/canary-checker/check)    |
+| `.config`     | Config passed to the playbook            | [`ConfigItem`](/docs/reference/config-db)          |
+| `.check`      | Canary Check passed to the playbook      | [`Check`](/docs/reference/canary-checker/check)    |
 | `.params`     | User provided parameters to the playbook | `map[string]string`                           |
 | `.user.name`  | Name of the user who invoked the action  | `string`                                      |
 | `.user.email` | Email of the user who invoked the action | `string`                                      |

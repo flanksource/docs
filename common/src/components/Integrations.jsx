@@ -51,7 +51,7 @@ export function Integrations() {
   return (
     <div className="mx-auto grid w-full max-w-xl grid-cols-6 items-center gap-y-3  lg:mx-0 lg:max-w-none lg:pl-8">
       {integrations.map((integration) => {
-        let base = "/reference/";
+        let base = "/docs/reference/";
         if (integration.url && integration.url.startsWith("/")) {
           base = integration.url
         } else if (integration.url) {

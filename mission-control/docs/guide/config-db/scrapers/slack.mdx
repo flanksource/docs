@@ -26,8 +26,8 @@ The Slack scraper monitors Slack channels for messages that contain configuratio
 
 | Field       | Description                                                                  | Scheme                                             | Required |
 | ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/reference/types#cron)                      |          |
-| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/docs/reference/types#cron)                      |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
 | `slack`     | Specifies the list of Slack configurations to scrape.                        | [`[]Slack`](#slack-1)                              | `true`   |
 
 ### Slack
@@ -36,7 +36,7 @@ The Slack scraper monitors Slack channels for messages that contain configuratio
   {
     field: "token",
     description: "Slack bot token for API access",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: true
   },
   {
@@ -48,7 +48,7 @@ The Slack scraper monitors Slack channels for messages that contain configuratio
   {
     field: "channels",
     description: "Process messages from these channels. If empty, all channels are matched",
-    scheme: "[MatchExpressions](/reference/types#matchexpressions)",
+    scheme: "[MatchExpressions](/docs/reference/types#matchexpressions)",
     required: false
   },
   {
@@ -71,13 +71,13 @@ The Slack scraper monitors Slack channels for messages that contain configuratio
   {
     field: "config",
     description: "Configuration items to create from extracted data",
-    scheme: "[[]ConfigItems](/guide/config-db/concepts/config-items)",
+    scheme: "[[]ConfigItems](/docs/guide/config-db/concepts/config-items)",
     required: true
   },
   {
     field: "mapping",
     description: "Mapping to transform extracted data into change fields",
-    scheme: "[ChangeMapping](/guide/config-db/concepts/change-mapping)",
+    scheme: "[ChangeMapping](/docs/guide/config-db/concepts/change-mapping)",
     required: false
   },
   {
@@ -94,7 +94,7 @@ The Slack scraper monitors Slack channels for messages that contain configuratio
   {
     field: "bot",
     description: "Bot name to match",
-    scheme: "[MatchExpression](/reference/types#matchexpression)",
+    scheme: "[MatchExpression](/docs/reference/types#matchexpression)",
     required: false
   },
   {
@@ -106,7 +106,7 @@ The Slack scraper monitors Slack channels for messages that contain configuratio
   {
     field: "expr",
     description: "CEL expression to evaluate for message acceptance",
-    scheme: "[CelExpression](/reference/types#celexpression)",
+    scheme: "[CelExpression](/docs/reference/types#celexpression)",
     required: false
   }
 ]} />
@@ -117,13 +117,13 @@ The Slack scraper monitors Slack channels for messages that contain configuratio
   {
     field: "name",
     description: "Username to match",
-    scheme: "[MatchExpression](/reference/types#matchexpression)",
+    scheme: "[MatchExpression](/docs/reference/types#matchexpression)",
     required: false
   },
   {
     field: "displayName",
     description: "Display name to match",
-    scheme: "[MatchExpression](/reference/types#matchexpression)",
+    scheme: "[MatchExpression](/docs/reference/types#matchexpression)",
     required: false
   }
 ]} />

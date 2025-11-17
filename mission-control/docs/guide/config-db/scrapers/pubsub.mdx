@@ -18,8 +18,8 @@ The PubSub scraper subscribes to message queues and pub/sub systems to consume m
 
 | Field       | Description                                                                  | Scheme                                             | Required |
 | ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/reference/types#cron)                      |          |
-| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | [Cron](/docs/reference/types#cron)                      |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
 | `pubsub`    | Specifies the list of PubSub configurations to scrape.                       | [`[]PubSub`](#pubsub-1)                            | `true`   |
 
 ### PubSub
@@ -61,7 +61,7 @@ The PubSub scraper supports various message queue systems. Currently, GCP Pub/Su
   {
     field: "credentials",
     description: "GCP service account credentials JSON",
-    scheme: "[EnvVar](/reference/types#envvar)",
+    scheme: "[EnvVar](/docs/reference/types#envvar)",
     required: false
   }
 ]} />

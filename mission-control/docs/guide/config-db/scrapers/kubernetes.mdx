@@ -10,7 +10,7 @@ sidebar_custom_props:
 <!-- Source: modules/config-db/api/v1/kubernetes.go:237#Kubernetes -->
 
 :::tip Helm Chart
-See the [Kubernetes](/integrations/kubernetes/getting-started) Helm chart that provides a pre-configured Scraper and Topology with some common defaults.
+See the [Kubernetes](/docs/integrations/kubernetes/getting-started) Helm chart that provides a pre-configured Scraper and Topology with some common defaults.
 :::
 
 The `kubernetes` scraper collects all of the resources and events in a Kubernetes cluster, and then watches for changes.
@@ -23,7 +23,7 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
 | ------------ | ---------------------------------------------------------------------------- | -------------------------------------------- |
 | `logLevel`   | Specify the level of logging.                                                | `string`                                     |
 | `schedule`   | Specify the interval to scrape in cron format. Defaults to every 15 minutes.  | `string`                                     |
-| `retention`  | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |
+| `retention`  | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/docs/guide/config-db/concepts/retention) |
 | `kubernetes` | Specifies the list of Kubernetes configurations to scrape.                   | [`[]Kubernetes`](#kubernetes)                |
 
 ## Kubernetes

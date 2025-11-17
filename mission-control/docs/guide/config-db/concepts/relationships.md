@@ -7,7 +7,7 @@ sidebar_custom_props:
 
 :::tip Integarations
 
-The integration [charts](/integration) include many common relationships for Argo, Flux, etc out of the box.
+The integration [charts](/docs/integrations) include many common relationships for Argo, Flux, etc out of the box.
 
 :::
 
@@ -55,11 +55,11 @@ You can see changes on the incoming relationships (and their parents) by choosin
 
 | Field    | Description                                            | Scheme                                                                                          | Required |
 | -------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | -------- |
-| `filter` | Which config items to form relationships with          | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](/reference/config-db/scrape-result) | `true`   |
+| `filter` | Which config items to form relationships with          | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](/docs/reference/config-db/scrape-result) | `true`   |
 | `id`     | The ID or Alias (External ID) of the config to link to | [Lookup](#lookup)                                                                               |          |
 | `name`   |                                                        | [Lookup](#lookup)                                                                               |          |
 | `type`   | Config Type                                            | [Lookup](#lookup)                                                                               |          |
-| `agent`  | agent of the config to link to                         | [Lookup](#lookup) that returns an [Agent](/reference/types#agent)                               |          |
+| `agent`  | agent of the config to link to                         | [Lookup](#lookup) that returns an [Agent](/docs/reference/types#agent)                               |          |
 | `labels` | Labels of the config to link to                        | `map[string]`[Lookup](#lookup)                                                                  |          |
 
 ### Lookup
@@ -68,7 +68,7 @@ RelationshipLookup offers different ways to specify a lookup value
 
 | Field   | Description                                   | Scheme                                                                                          | Variables                                            |
 | ------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `expr`  | An expression that returns a value to be used | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](/reference/config-db/scrape-result) | [`ScrapeResult`](/reference/config-db/scrape-result) |
+| `expr`  | An expression that returns a value to be used | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](/docs/reference/config-db/scrape-result) | [`ScrapeResult`](/docs/reference/config-db/scrape-result) |
 | `value` | A static value to use in the lookup           | `string`                                                                                        |                                                      |
 | `label` | Get the value to use from an existing label   | `label name`                                                                                    |                                                      |
 
@@ -78,7 +78,7 @@ Sometimes the logic for when to a form a relationship is complex, a CEL expressi
 
 | Field  | Description                                                                            | Scheme                                | Variables                                            |
 | ------ | -------------------------------------------------------------------------------------- | ------------------------------------- | ---------------------------------------------------- |
-| `expr` | An expression that returns a list of [ResourceSelectors](/reference/resource-selector) | <CommonLink to="cel">CEL</CommonLink> | [`ScrapeResult`](/reference/config-db/scrape-result) |
+| `expr` | An expression that returns a list of [ResourceSelectors](/docs/reference/resource-selector) | <CommonLink to="cel">CEL</CommonLink> | [`ScrapeResult`](/docs/reference/config-db/scrape-result) |
 
 ```yaml title=link-pvc-to-pod.yaml
 apiVersion: configs.flanksource.com/v1

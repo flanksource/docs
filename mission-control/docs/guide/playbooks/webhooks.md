@@ -42,10 +42,10 @@ A webhook playbook doesn't accept any parameters and resources unlike a regular 
 
 By default, the webhook calls are not protected via authentication. However, there are various authentication methods available as listed below.
 
-- [Basic Auth](/reference/playbooks/webhooks.md#basic)
-- [GitHub](/reference/playbooks/webhooks.md#github)
-- [Svix](/reference/playbooks/webhooks.md#svix)
-- [JWT](/reference/playbooks/webhooks.md#jwt)
+- [Basic Auth](/docs/reference/playbooks/webhooks.md#basic)
+- [GitHub](/docs/reference/playbooks/webhooks.md#github)
+- [Svix](/docs/reference/playbooks/webhooks.md#svix)
+- [JWT](/docs/reference/playbooks/webhooks.md#jwt)
 
 ## Webhook Data
 

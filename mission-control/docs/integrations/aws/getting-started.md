@@ -7,7 +7,7 @@ sidebar_custom_props:
 
 import Schema from '@site/modules/mission-control-registry/charts/aws/values.schema.json'
 
-Installs a [catalog scraper](/guide/config-db/scrapers/aws) that:
+Installs a [catalog scraper](/docs/guide/config-db/scrapers/aws) that:
 
 - Scrapes AWS Resources and detects changes in the resource definition
 - Ingests changes from CloudTrail
@@ -28,7 +28,7 @@ For Cost & Usage Reporting
 <Tabs>
 
 <TabItem label="Pod Identity" value="role" default >
-1. Configure the `config-db-sa` service account with a [AWS IAM Pod Identity / Role](/integrations/aws/iam?type=pod)
+1. Configure the `config-db-sa` service account with a [AWS IAM Pod Identity / Role](/docs/integrations/aws/iam?type=pod)
 2. Install the  [mission-control-aws](https://artifacthub.io/packages/helm/flanksource/mission-control-aws) chart
 
 <Helm chart="mission-control-aws"
@@ -40,7 +40,7 @@ For Cost & Usage Reporting
 </TabItem>
 
 <TabItem label="Access Keys" value="keys">
-1. Create a new connection for an [AWS Access Key](/integrations/aws/iam?type=accessKey)
+1. Create a new connection for an [AWS Access Key](/docs/integrations/aws/iam?type=accessKey)
 1. Install the [mission-control-aws](https://artifacthub.io/packages/helm/flanksource/mission-control-aws) chart
 
 <Helm chart="mission-control-aws"
@@ -68,23 +68,23 @@ When you go to the catalog now, you can now see all the AWS Resources
           <Tag label="relationship"/>
   </Card>
 
-  <Card size="sm" title="AWS Cloudwatch Alarms" icon="aws-cloudwatch" link="/guide/canary-checker/reference/aws-cloudwatch">
+  <Card size="sm" title="AWS Cloudwatch Alarms" icon="aws-cloudwatch" link="/docs/guide/canary-checker/reference/aws-cloudwatch">
   Aggregate Alarms
         <Tag label="health-check"/>
 
   </Card>
 
-   <Card size="sm" title="AWS Config" icon="aws-config" link="/guide/canary-checker/reference/aws-config">
+   <Card size="sm" title="AWS Config" icon="aws-config" link="/docs/guide/canary-checker/reference/aws-config">
       Check for AWS resources matching a query
             <Tag label="health-check"/>
 
   </Card>
-   <Card size="sm" title="AWS Config Rules" icon="aws-config" link="/guide/canary-checker/reference/aws-config-rule">
+   <Card size="sm" title="AWS Config Rules" icon="aws-config" link="/docs/guide/canary-checker/reference/aws-config-rule">
       Check for non-compliant AWS resources
       <Tag label="health-check"/>
   </Card>
 
-    <Card size="sm" title="ScrapeConfig" icon="k8s-customresourcedefinition" link="/guide/config-db/scrapers/aws">
+    <Card size="sm" title="ScrapeConfig" icon="k8s-customresourcedefinition" link="/docs/guide/config-db/scrapers/aws">
       <Tag label="CRD"/>
 
   </Card>

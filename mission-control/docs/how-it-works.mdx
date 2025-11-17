@@ -33,16 +33,15 @@ Mission Control uses Kubernetes Custom Resources Definitions as the underlying c
 
 | Resource                                                                                                                                                                         | Description                                                                                                              | Output                               |
 | -----------------------------------------------------------------------------------------------------------------------                                                          | -------------------------------------------------------------------------------------------------------------------------| ------------------------------------ |
-| [<Icon name="k8s-customresourcedefinition">Canary</Icon>](/guide/canary-checker)                                                                                                 | Runs health checks using HTTP, SQL, S3, kubectl, etc.                                                                    | 1 or more checks (Health)            |
-| [<Icon name="k8s-customresourcedefinition">Connections</Icon>](/reference/connections)                                                                                           | Re-usable connections with secure external lookup to Kubernetes secrets, configmaps, service accounts and Helm values    | URL, username, password, etc         |
-| [<Icon name="k8s-customresourcedefinition">Playbook</Icon>](/guide/playbooks)                                                                                                    | Defines playbooks that can be run on config items, health checks and components                                          | Pull Request, CLI,  Webhook          |
-| [<Icon name="k8s-customresourcedefinition">Notification</Icon>](/guide/notifications)                                                                                            | Sends notifications based on events                                                                                      | Email, Slack, etc                    |
-| <div style={{ whiteSpace: "nowrap", overflowX: "auto" }}> [<Icon name="k8s-customresourcedefinition">NotificationSilences</Icon>](/guide/notifications/concepts/silences) </div> | Silences notifications based on rules                                                                                    | Silence notifications                |
-| [<Icon name="k8s-customresourcedefinition">Permissions</Icon>](/guide/permission)                                                                                                | Configure RBAC and ABAC rules for users and agents                                                                       | Create permissions for user          |
-| [<Icon name="k8s-customresourcedefinition">PermissionGroups</Icon>](/guide/permission#permission-groups)                                                                         | Group subjects (people, teams, or system services) under one name for simpler permission setup                           | Create permissions for group         |
-| [<Icon name="k8s-customresourcedefinition">ScrapeConfig</Icon>](/guide/config-db)                                                                                                | Configures scrapers to run periodically                                                                                  | Config items, analysis, change, cost |
-| [<Icon name="k8s-customresourcedefinition">ScrapePlugins</Icon>](/guide/config-db/concepts/plugins)                                                                              | Modify scraper behaviour (eg. transform changes, add properties to configs, set up relationships                         | Modify scraper behaviour             |
-| [<Icon name="k8s-customresourcedefinition">Topology</Icon>](/guide/topology)                                                                                                     | Combines configs, health checks and lookups to form cards                                                                | Component                            |
+| [<Icon name="k8s-customresourcedefinition">Canary</Icon>](/docs/guide/canary-checker)                                                                                                 | Runs health checks using HTTP, SQL, S3, kubectl, etc.                                                                    | 1 or more checks (Health)            |
+| [<Icon name="k8s-customresourcedefinition">Connections</Icon>](/docs/reference/connections)                                                                                           | Re-usable connections with secure external lookup to Kubernetes secrets, configmaps, service accounts and Helm values    | URL, username, password, etc         |
+| [<Icon name="k8s-customresourcedefinition">Playbook</Icon>](/docs/guide/playbooks)                                                                                                    | Defines playbooks that can be run on config items, health checks and components                                          | Pull Request, CLI,  Webhook          |
+| [<Icon name="k8s-customresourcedefinition">Notification</Icon>](/docs/guide/notifications)                                                                                            | Sends notifications based on events                                                                                      | Email, Slack, etc                    |
+| <div style={{ whiteSpace: "nowrap", overflowX: "auto" }}> [<Icon name="k8s-customresourcedefinition">NotificationSilences</Icon>](/docs/guide/notifications/concepts/silences) </div> | Silences notifications based on rules                                                                                    | Silence notifications                |
+| [<Icon name="k8s-customresourcedefinition">Permissions</Icon>](/docs/guide/permission)                                                                                                | Configure RBAC and ABAC rules for users and agents                                                                       | Create permissions for user          |
+| [<Icon name="k8s-customresourcedefinition">PermissionGroups</Icon>](/docs/guide/permission#permission-groups)                                                                         | Group subjects (people, teams, or system services) under one name for simpler permission setup                           | Create permissions for group         |
+| [<Icon name="k8s-customresourcedefinition">ScrapeConfig</Icon>](/docs/guide/config-db)                                                                                                | Configures scrapers to run periodically                                                                                  | Config items, analysis, change, cost |
+| [<Icon name="k8s-customresourcedefinition">ScrapePlugins</Icon>](/docs/guide/config-db/concepts/plugins)                                                                              | Modify scraper behaviour (eg. transform changes, add properties to configs, set up relationships                         | Modify scraper behaviour             |
 
 ## Glossary
 
@@ -56,8 +55,6 @@ Mission Control uses Kubernetes Custom Resources Definitions as the underlying c
  <dt>Relationships</dt>
   <dd>Links between config items based upon how they are logically related and categorized</dd>
 
-<dt>Component</dt>
-<dd>A logical entity that often corresponds 1-1 with a config item, but not always e.g. `Pod`, `Finance Application`</dd>
 
 <dt>Health</dt>
 <dd>The RAG (Red, Amber, Green) status of a component or config item e.g. <Healthy>Healthy</Healthy>, <Unhealthy>Unhealthy</Unhealthy>, <Warning>Warning</Warning></dd>
@@ -73,9 +70,6 @@ Mission Control uses Kubernetes Custom Resources Definitions as the underlying c
 
 <dt>Check</dt>
 <dd>The output of a Canary (Health Check) that includes Health, Latency, and other runtime details</dd>
-
-<dt>Topology</dt>
-<dd>The arrangement and interconnection of various components and config items within the system</dd>
 
 <dt>Webhook</dt>
 <dd>An HTTP-based callback that allows real-time updates</dd>

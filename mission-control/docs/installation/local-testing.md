@@ -149,7 +149,7 @@ helm install mission-control  \
  -f values.yaml
 ```
 
-See [values.yaml](/installation/helm#self-hosted) for more options.
+See [values.yaml](/docs/installation/helm#self-hosted) for more options.
 
 </Step>
 

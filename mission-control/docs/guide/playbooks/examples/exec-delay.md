@@ -63,4 +63,4 @@ This example
 2. Introduces a `delay` based on the `initialDelaySeconds` to allow the Pod to restart.
 3. Checks the status of the Pod to ensure it has restarted.
 
-See [duration](/reference/types#duration) for support formats.
+See [duration](/docs/reference/types#duration) for support formats.

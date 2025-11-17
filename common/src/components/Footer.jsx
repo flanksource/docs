@@ -23,7 +23,7 @@ export default function Footer() {
             <a className="mb-3" href="/blog">
               Blog
             </a>
-            <a className="mb-3" href="/">
+            <a className="mb-3" href="/docs">
               Docs
             </a>
             <a className="mb-3" href="/careers">

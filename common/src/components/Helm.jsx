@@ -201,7 +201,7 @@ spec:
     {!schema && (chart == "mission-control" || chart == "mission-control-agent") &&
 
 
-      <>See < Link to={`/reference/helm/${chart}`}>values.yaml</Link ></>
+      <>See < Link to={`/docs/reference/helm/${chart}`}>values.yaml</Link ></>
 
     }
 
