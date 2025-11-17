@@ -1,469 +1,1214 @@
 ---
-title: PDF & Report Guidelines
+title: Print & Datasheet Guidelines
 sidebar_position: 2
+draft: true
+
 ---
 
-# PDF & Report Guidelines
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-Comprehensive guidelines for creating consistent, professional PDF reports and documents for Flanksource products.
+# Print & Datasheet Guidelines
 
-## Report Layout
+Comprehensive design guidelines for creating professional print datasheets and marketing materials for Flanksource products. Optimized for LLM-driven content generation.
 
-### Page Structure
+---
+
+## Part 1: Foundation - Print Specifications
+
+### Page Setup
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
   <div className="border border-gray-200 rounded-lg p-6">
-    <h5 className="font-semibold mb-3">Page Dimensions</h5>
-    <ul className="text-sm space-y-2">
-      <li>• Standard margins: 1 inch (72pt) all sides</li>
-      <li>• Header height: 0.5 inch (36pt)</li>
-      <li>• Footer height: 0.5 inch (36pt)</li>
-      <li>• Body text leading: 1.5x line spacing</li>
-      <li>• Page size: Letter (8.5" × 11") or A4</li>
-    </ul>
-  </div>
-  <div className="border border-gray-200 rounded-lg p-6">
-    <h5 className="font-semibold mb-3">Typography</h5>
-    <ul className="text-sm space-y-2">
-      <li>• Body text: Open Sans Regular, 11pt</li>
-      <li>• Headings: Open Sans Semibold, 14-18pt</li>
-      <li>• Captions: Open Sans Regular, 9pt</li>
-      <li>• Code/Data: Fira Code, 10pt</li>
-      <li>• Color: #061431 (dark text on white)</li>
-    </ul>
-  </div>
-</div>
-
-## Header & Footer Design
-
-### Standard Header Layout
-
-<div className="bg-gray-50 rounded-lg p-6 mb-8">
-  <h5 className="font-semibold mb-4">Header Template</h5>
-  <div className="bg-white border border-gray-200 rounded p-4 mb-4">
-    <div className="flex justify-between items-center pb-2 border-b border-gray-200">
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 bg-blue-500 rounded"></div>
-        <span className="font-semibold">Flanksource Report</span>
-      </div>
-      <span className="text-sm text-gray-600">Generated: {new Date().toLocaleDateString()}</span>
-    </div>
-  </div>
-  
-  <h5 className="font-semibold mb-4">Footer Template</h5>
-  <div className="bg-white border border-gray-200 rounded p-4">
-    <div className="flex justify-between items-center pt-2 border-t border-gray-200 text-sm text-gray-600">
-      <span>© {new Date().getFullYear()} Flanksource</span>
-      <span>flanksource.com</span>
-      <span>Page 1 of 5</span>
-    </div>
-  </div>
-</div>
-
-### Header Components
-
-<div className="space-y-4 mb-8">
-  <div className="border border-gray-200 rounded-lg p-4">
-    <h5 className="font-semibold mb-2">Logo Placement</h5>
-    <ul className="text-sm space-y-1">
-      <li>• Position: Top-left corner of header</li>
-      <li>• Size: 32px height maximum</li>
-      <li>• Margins: 8px from page edge</li>
-      <li>• Use product-specific logo when appropriate</li>
-    </ul>
-  </div>
-  
-  <div className="border border-gray-200 rounded-lg p-4">
-    <h5 className="font-semibold mb-2">Report Title</h5>
-    <ul className="text-sm space-y-1">
-      <li>• Font: Open Sans Semibold, 16pt</li>
-      <li>• Position: Center-left, aligned with logo</li>
-      <li>• Color: Primary text (#061431)</li>
-      <li>• Format: "Product Name - Report Type"</li>
-    </ul>
-  </div>
-  
-  <div className="border border-gray-200 rounded-lg p-4">
-    <h5 className="font-semibold mb-2">Generation Info</h5>
-    <ul className="text-sm space-y-1">
-      <li>• Font: Open Sans Regular, 10pt</li>
-      <li>• Position: Top-right corner</li>
-      <li>• Color: Secondary text (#666666)</li>
-      <li>• Include: Generation date and time</li>
-    </ul>
-  </div>
-</div>
-
-## Color Usage in Reports
-
-### Primary Colors
-
-<div className="space-y-4 mb-8">
-  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-    <h5 className="font-semibold text-blue-800 mb-2">Document Structure</h5>
-    <ul className="text-sm space-y-1">
-      <li>• Headers and section dividers: Primary Blue (#3578e5)</li>
-      <li>• Table headers: Primary Blue background</li>
-      <li>• Important callouts: Blue accent borders</li>
-      <li>• Links and references: Primary Blue text</li>
-    </ul>
-  </div>
-  
-  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-    <h5 className="font-semibold mb-2">Status Indicators</h5>
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
-      <div className="text-center">
-        <div className="h-12 rounded mb-2" style={{backgroundColor: '#10b981'}}></div>
-        <p className="text-xs font-medium">Success</p>
-        <code className="text-xs">#10b981</code>
-      </div>
-      <div className="text-center">
-        <div className="h-12 rounded mb-2" style={{backgroundColor: '#f59e0b'}}></div>
-        <p className="text-xs font-medium">Warning</p>
-        <code className="text-xs">#f59e0b</code>
-      </div>
-      <div className="text-center">
-        <div className="h-12 rounded mb-2" style={{backgroundColor: '#dc2626'}}></div>
-        <p className="text-xs font-medium">Error</p>
-        <code className="text-xs">#dc2626</code>
-      </div>
-      <div className="text-center">
-        <div className="h-12 rounded mb-2" style={{backgroundColor: '#6b7280'}}></div>
-        <p className="text-xs font-medium">Neutral</p>
-        <code className="text-xs">#6b7280</code>
-      </div>
-    </div>
-  </div>
-</div>
-
-### Grayscale Usage
-
-<div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
-  <h5 className="font-semibold mb-3">Data Presentation</h5>
-  <ul className="text-sm space-y-1">
-    <li>• Table borders: Gray 200 (#e5e7eb)</li>
-    <li>• Alternating row background: Gray 50 (#f9fafb)</li>
-    <li>• Secondary text: Gray 600 (#4b5563)</li>
-    <li>• Chart grid lines: Gray 300 (#d1d5db)</li>
-    <li>• Divider lines: Gray 200 (#e5e7eb)</li>
-    <li>• Background sections: Gray 50 (#f9fafb)</li>
-  </ul>
-</div>
-
-## Tables & Data Presentation
-
-### Standard Table Design
-
-<div className="mb-8">
-  <h5 className="font-semibold mb-4">Example Table Layout</h5>
-  <div className="overflow-x-auto">
-    <table className="w-full border-collapse border border-gray-200">
-      <thead>
-        <tr className="bg-blue-500 text-white">
-          <th className="border border-gray-300 px-4 py-2 text-left font-semibold">Metric</th>
-          <th className="border border-gray-300 px-4 py-2 text-left font-semibold">Value</th>
-          <th className="border border-gray-300 px-4 py-2 text-left font-semibold">Status</th>
-          <th className="border border-gray-300 px-4 py-2 text-left font-semibold">Trend</th>
-        </tr>
-      </thead>
+    <h5 className="font-semibold mb-3">A4 Format (International)</h5>
+    <table className="w-full text-sm">
       <tbody>
-        <tr className="bg-gray-50">
-          <td className="border border-gray-300 px-4 py-2">System Uptime</td>
-          <td className="border border-gray-300 px-4 py-2">99.9%</td>
-          <td className="border border-gray-300 px-4 py-2">
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-              Healthy
-            </span>
-          </td>
-          <td className="border border-gray-300 px-4 py-2">↗️ +0.1%</td>
+        <tr className="border-b">
+          <td className="py-2">Page Size</td>
+          <td className="text-right font-mono">210mm × 297mm</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Bleed</td>
+          <td className="text-right font-mono">3mm all sides</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Trim Size</td>
+          <td className="text-right font-mono">204mm × 291mm</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Safe Zone</td>
+          <td className="text-right font-mono">5mm from trim</td>
         </tr>
         <tr>
-          <td className="border border-gray-300 px-4 py-2">Response Time</td>
-          <td className="border border-gray-300 px-4 py-2">120ms</td>
-          <td className="border border-gray-300 px-4 py-2">
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800">
-              Warning
-            </span>
-          </td>
-          <td className="border border-gray-300 px-4 py-2">↘️ +15ms</td>
-        </tr>
-        <tr className="bg-gray-50">
-          <td className="border border-gray-300 px-4 py-2">Error Rate</td>
-          <td className="border border-gray-300 px-4 py-2">0.01%</td>
-          <td className="border border-gray-300 px-4 py-2">
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-              Healthy
-            </span>
-          </td>
-          <td className="border border-gray-300 px-4 py-2">→ No change</td>
+          <td className="py-2">Resolution</td>
+          <td className="text-right font-mono">300 DPI minimum</td>
         </tr>
       </tbody>
     </table>
   </div>
-  
-  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-      <h5 className="font-semibold text-blue-800 mb-2">Table Guidelines</h5>
+
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Letter Format (US)</h5>
+    <table className="w-full text-sm">
+      <tbody>
+        <tr className="border-b">
+          <td className="py-2">Page Size</td>
+          <td className="text-right font-mono">8.5" × 11"</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Bleed</td>
+          <td className="text-right font-mono">0.125" all sides</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Trim Size</td>
+          <td className="text-right font-mono">8.25" × 10.75"</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Safe Zone</td>
+          <td className="text-right font-mono">0.25" from trim</td>
+        </tr>
+        <tr>
+          <td className="py-2">Resolution</td>
+          <td className="text-right font-mono">300 DPI minimum</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+### Grid System
+
+<div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+  <h5 className="font-semibold text-blue-800 mb-3">12-Column Modular Grid</h5>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h6 className="font-medium mb-2">Grid Specifications</h6>
       <ul className="text-sm space-y-1">
-        <li>• Header row: Primary blue background (#3578e5)</li>
-        <li>• Header text: White, Open Sans Semibold, 11pt</li>
-        <li>• Alternating row colors: White and Gray 50</li>
-        <li>• Cell padding: 8px horizontal, 6px vertical</li>
-        <li>• Border: 1px solid Gray 300</li>
+        <li>• Total columns: 12</li>
+        <li>• Gutter width: 5mm (A4) / 0.2" (Letter)</li>
+        <li>• Column width: Variable based on layout</li>
+        <li>• Baseline grid: 6pt for text alignment</li>
+        <li>• Modular scale: 8pt base unit for spacing</li>
       </ul>
     </div>
-    
-    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-      <h5 className="font-semibold mb-2">Status Badges</h5>
+    <div>
+      <h6 className="font-medium mb-2">Margin Specifications</h6>
       <ul className="text-sm space-y-1">
-        <li>• Round corners: 12px border radius</li>
-        <li>• Padding: 4px horizontal, 2px vertical</li>
-        <li>• Font: Open Sans Regular, 9pt</li>
-        <li>• Use semantic colors for backgrounds</li>
-        <li>• Text color: Dark variant of background color</li>
+        <li>• Top margin: 20mm (0.75")</li>
+        <li>• Bottom margin: 20mm (0.75")</li>
+        <li>• Left margin: 15mm (0.5")</li>
+        <li>• Right margin: 15mm (0.5")</li>
+        <li>• Inside safe zone: 5mm from all edges</li>
       </ul>
     </div>
   </div>
 </div>
 
-## Charts & Visualizations
+### Typography for Print
 
-### Chart Color Palette
-
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+<div className="space-y-4 mb-8">
   <div className="border border-gray-200 rounded-lg p-4">
-    <h5 className="font-semibold mb-3">Data Series Colors</h5>
-    <div className="space-y-2">
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded" style={{backgroundColor: '#3578e5'}}></div>
-        <span className="text-sm">Primary data series</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded" style={{backgroundColor: '#0ea5e9'}}></div>
-        <span className="text-sm">Secondary data series</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded" style={{backgroundColor: '#6366f1'}}></div>
-        <span className="text-sm">Tertiary data series</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded" style={{backgroundColor: '#8b5cf6'}}></div>
-        <span className="text-sm">Additional series</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded" style={{backgroundColor: '#06b6d4'}}></div>
-        <span className="text-sm">Comparison data</span>
-      </div>
-    </div>
+    <h5 className="font-semibold mb-3">Type Scale</h5>
+    <table className="w-full text-sm">
+      <thead>
+        <tr className="border-b">
+          <th className="text-left py-2">Element</th>
+          <th className="text-right py-2">Size (pt)</th>
+          <th className="text-right py-2">Weight</th>
+          <th className="text-right py-2">Leading</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr className="border-b">
+          <td className="py-2">Display Headline</td>
+          <td className="text-right font-mono">48pt</td>
+          <td className="text-right">Bold (700)</td>
+          <td className="text-right font-mono">52pt</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Page Title</td>
+          <td className="text-right font-mono">32pt</td>
+          <td className="text-right">Bold (700)</td>
+          <td className="text-right font-mono">38pt</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Section Heading (H2)</td>
+          <td className="text-right font-mono">18pt</td>
+          <td className="text-right">Semibold (600)</td>
+          <td className="text-right font-mono">24pt</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Subheading (H3)</td>
+          <td className="text-right font-mono">14pt</td>
+          <td className="text-right">Semibold (600)</td>
+          <td className="text-right font-mono">18pt</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Body Text</td>
+          <td className="text-right font-mono">10pt</td>
+          <td className="text-right">Regular (400)</td>
+          <td className="text-right font-mono">14pt</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Small Text</td>
+          <td className="text-right font-mono">9pt</td>
+          <td className="text-right">Regular (400)</td>
+          <td className="text-right font-mono">12pt</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Caption/Legal</td>
+          <td className="text-right font-mono">7pt</td>
+          <td className="text-right">Regular (400)</td>
+          <td className="text-right font-mono">9pt</td>
+        </tr>
+        <tr>
+          <td className="py-2">Code/Monospace</td>
+          <td className="text-right font-mono">9pt</td>
+          <td className="text-right">Regular (400)</td>
+          <td className="text-right font-mono">12pt</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
-  <div className="border border-gray-200 rounded-lg p-4">
-    <h5 className="font-semibold mb-3">Status Colors</h5>
-    <div className="space-y-2">
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded" style={{backgroundColor: '#10b981'}}></div>
-        <span className="text-sm">Success/Healthy metrics</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded" style={{backgroundColor: '#f59e0b'}}></div>
-        <span className="text-sm">Warning metrics</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded" style={{backgroundColor: '#dc2626'}}></div>
-        <span className="text-sm">Error/Critical metrics</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded" style={{backgroundColor: '#6b7280'}}></div>
-        <span className="text-sm">Neutral/Unknown</span>
-      </div>
-    </div>
-  </div>
-</div>
 
-### Chart Styling Guidelines
-
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-  <div className="border border-gray-200 rounded-lg p-4">
-    <h5 className="font-semibold mb-3">Visual Elements</h5>
+  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-2">Font Family</h5>
     <ul className="text-sm space-y-1">
-      <li>• Grid lines: Gray 300 (#d1d5db), 1px stroke</li>
-      <li>• Axis lines: Gray 400 (#9ca3af), 1px stroke</li>
-      <li>• Data points: 4px radius minimum</li>
-      <li>• Line thickness: 2-3px for trend lines</li>
-      <li>• Bar/area opacity: 90% for primary, 70% for secondary</li>
-      <li>• Background: White or transparent</li>
+      <li>• <strong>Primary:</strong> Open Sans (body, headings, UI)</li>
+      <li>• <strong>Monospace:</strong> Fira Code (code, technical data)</li>
+      <li>• <strong>Fallback:</strong> Arial, Helvetica, sans-serif</li>
+      <li>• <strong>Embedding:</strong> Subset and embed all fonts in PDF</li>
     </ul>
   </div>
-  
-  <div className="border border-gray-200 rounded-lg p-4">
-    <h5 className="font-semibold mb-3">Text & Labels</h5>
+</div>
+
+### Color Management
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">CMYK Conversions</h5>
+    <table className="w-full text-sm">
+      <thead>
+        <tr className="border-b">
+          <th className="text-left py-2">Color</th>
+          <th className="text-right py-2">RGB/Hex</th>
+          <th className="text-right py-2">CMYK</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr className="border-b">
+          <td className="py-2">Primary Blue</td>
+          <td className="text-right font-mono">#3578e5</td>
+          <td className="text-right font-mono text-xs">79/53/0/0</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Dark Navy</td>
+          <td className="text-right font-mono">#131f3b</td>
+          <td className="text-right font-mono text-xs">81/68/51/60</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Gray 700</td>
+          <td className="text-right font-mono">#374151</td>
+          <td className="text-right font-mono text-xs">68/59/52/25</td>
+        </tr>
+        <tr>
+          <td className="py-2">Rich Black</td>
+          <td className="text-right font-mono">#000000</td>
+          <td className="text-right font-mono text-xs">60/40/40/100</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Color Mode</h5>
     <ul className="text-sm space-y-1">
-      <li>• Axis labels: Open Sans Regular, 9pt</li>
-      <li>• Axis titles: Open Sans Semibold, 10pt</li>
-      <li>• Legend: Open Sans Regular, 10pt</li>
-      <li>• Data labels: Open Sans Regular, 8pt</li>
-      <li>• Chart title: Open Sans Semibold, 12pt</li>
-      <li>• Color: Gray 700 (#374151)</li>
+      <li>• <strong>Print:</strong> CMYK color mode</li>
+      <li>• <strong>Digital PDF:</strong> RGB color mode</li>
+      <li>• <strong>Black Text:</strong> Use rich black (C:60 M:40 Y:40 K:100)</li>
+      <li>• <strong>Images:</strong> Convert to CMYK before embedding</li>
+      <li>• <strong>Pantone Option:</strong> Spot colors for special printing</li>
     </ul>
   </div>
 </div>
 
-## Report Sections
+---
 
-### Executive Summary
+## Part 2: Two-Page Datasheet Format
 
-<div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-  <h5 className="font-semibold text-blue-800 mb-3">Summary Section Requirements</h5>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <h6 className="font-medium mb-2">Content Structure</h6>
-      <ul className="text-sm space-y-1">
-        <li>• First page, prominent placement</li>
-        <li>• Key metrics in callout boxes</li>
-        <li>• High-level status indicators</li>
-        <li>• Maximum 300 words</li>
-        <li>• 2-3 key findings highlighted</li>
-      </ul>
-    </div>
-    <div>
-      <h6 className="font-medium mb-2">Visual Elements</h6>
-      <ul className="text-sm space-y-1">
-        <li>• Large metric cards with icons</li>
-        <li>• Status indicators with colors</li>
-        <li>• Simple charts or gauges</li>
-        <li>• Consistent spacing and alignment</li>
-        <li>• Clear visual hierarchy</li>
-      </ul>
-    </div>
+### Overview
+
+Two-page datasheets provide concise, high-impact product information ideal for trade shows, sales meetings, and quick reference. Page 1 focuses on value proposition, Page 2 on technical specifications.
+
+### Page 1: Executive Overview Layout
+
+#### Hero Section (Top Third)
+
+<div className="border-l-4 border-blue-500 pl-4 mb-6 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">Specifications</h5>
+  <table className="w-full text-sm">
+    <tbody>
+      <tr className="border-b">
+        <td className="py-1"><strong>Logo</strong></td>
+        <td className="text-right font-mono">Top-left, 40mm × 12mm</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-1"><strong>Headline</strong></td>
+        <td className="text-right">Open Sans Bold, 32pt, #131f3b</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-1"><strong>Max Lines</strong></td>
+        <td className="text-right">2 lines maximum</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-1"><strong>Tagline</strong></td>
+        <td className="text-right">Open Sans Regular, 14pt, #4b5563</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-1"><strong>Hero Image</strong></td>
+        <td className="text-right font-mono">80mm × 60mm, right-aligned</td>
+      </tr>
+      <tr>
+        <td className="py-1"><strong>White Space</strong></td>
+        <td className="text-right font-mono">10mm minimum around all elements</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+#### Value Proposition Block (Middle Third)
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  <div className="border border-gray-300 rounded p-4 text-center">
+    <div className="text-4xl mb-2 text-blue-500">⚡</div>
+    <h6 className="font-semibold text-base mb-1">Feature Title</h6>
+    <p className="text-sm text-gray-600">Brief description of value proposition in 2-3 lines maximum</p>
+  </div>
+  <div className="border border-gray-300 rounded p-4 text-center">
+    <div className="text-4xl mb-2 text-blue-500">🔒</div>
+    <h6 className="font-semibold text-base mb-1">Feature Title</h6>
+    <p className="text-sm text-gray-600">Brief description of value proposition in 2-3 lines maximum</p>
+  </div>
+  <div className="border border-gray-300 rounded p-4 text-center">
+    <div className="text-4xl mb-2 text-blue-500">📊</div>
+    <h6 className="font-semibold text-base mb-1">Feature Title</h6>
+    <p className="text-sm text-gray-600">Brief description of value proposition in 2-3 lines maximum</p>
   </div>
 </div>
 
-### Technical Details
-
-<div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-6">
-  <h5 className="font-semibold mb-3">Technical Section Guidelines</h5>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <h6 className="font-medium mb-2">Code & Configuration</h6>
-      <ul className="text-sm space-y-1">
-        <li>• Syntax highlighting for code blocks</li>
-        <li>• Fira Code font for all code</li>
-        <li>• Configuration examples in YAML/JSON</li>
-        <li>• Line numbers for long code blocks</li>
-        <li>• Proper indentation and formatting</li>
-      </ul>
-    </div>
-    <div>
-      <h6 className="font-medium mb-2">Documentation</h6>
-      <ul className="text-sm space-y-1">
-        <li>• Step-by-step procedures with numbers</li>
-        <li>• Screenshots with descriptive captions</li>
-        <li>• Cross-references to other sections</li>
-        <li>• Clear section headers and subheaders</li>
-        <li>• Consistent formatting throughout</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-### Recommendations
-
-<div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
-  <h5 className="font-semibold text-green-800 mb-3">Recommendations Section</h5>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <h6 className="font-medium mb-2">Action Items</h6>
-      <ul className="text-sm space-y-1">
-        <li>• Prioritized list (High, Medium, Low)</li>
-        <li>• Clear next steps with owners</li>
-        <li>• Timeline and urgency indicators</li>
-        <li>• Impact assessment for each item</li>
-        <li>• Dependencies between actions</li>
-      </ul>
-    </div>
-    <div>
-      <h6 className="font-medium mb-2">References</h6>
-      <ul className="text-sm space-y-1">
-        <li>• Links to relevant documentation</li>
-        <li>• Contact information for stakeholders</li>
-        <li>• Related tools and resources</li>
-        <li>• Best practices references</li>
-        <li>• Follow-up meeting suggestions</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-## File Management
-
-### PDF Properties
-
-<div className="bg-gray-50 rounded-lg p-6 mb-6">
-  <h5 className="font-semibold mb-3">Required PDF Metadata</h5>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <h6 className="font-medium mb-2">Document Properties</h6>
-      <ul className="text-sm space-y-1">
-        <li>• <strong>Title:</strong> Descriptive report name</li>
-        <li>• <strong>Author:</strong> "Flanksource"</li>
-        <li>• <strong>Subject:</strong> Brief content description</li>
-        <li>• <strong>Keywords:</strong> Relevant search terms</li>
-        <li>• <strong>Creator:</strong> "Mission Control" or product name</li>
-      </ul>
-    </div>
-    <div>
-      <h6 className="font-medium mb-2">Security Settings</h6>
-      <ul className="text-sm space-y-1">
-        <li>• Allow printing: Yes</li>
-        <li>• Allow copying: Yes (unless confidential)</li>
-        <li>• Allow editing: No</li>
-        <li>• Allow form filling: No</li>
-        <li>• Password protection: As required</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-### File Naming Convention
-
-<div className="bg-white border border-gray-200 rounded-lg p-4 mb-6">
-  <h5 className="font-semibold mb-3">Standard Naming Format</h5>
-  <div className="font-mono text-lg bg-gray-50 p-3 rounded border mb-3">
-    flanksource-[product]-[report-type]-[date].pdf
-  </div>
-  
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <h6 className="font-medium mb-2">Components</h6>
-      <ul className="text-sm space-y-1">
-        <li>• <strong>product:</strong> mission-control, canary-checker</li>
-        <li>• <strong>report-type:</strong> health, performance, security</li>
-        <li>• <strong>date:</strong> YYYY-MM-DD format</li>
-        <li>• Use hyphens between components</li>
-        <li>• All lowercase letters</li>
-      </ul>
-    </div>
-    <div>
-      <h6 className="font-medium mb-2">Examples</h6>
-      <ul className="text-sm space-y-1 font-mono">
-        <li>flanksource-mission-control-health-report-2025-01-30.pdf</li>
-        <li>flanksource-canary-checker-performance-2025-01-30.pdf</li>
-        <li>flanksource-config-db-audit-report-2025-01-30.pdf</li>
-        <li>flanksource-incident-summary-2025-01-30.pdf</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-### Version Control
-
-<div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-  <h5 className="font-semibold text-yellow-800 mb-2">Versioning Guidelines</h5>
+<div className="border-l-4 border-blue-500 pl-4 mb-6 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">3-Column Layout Specifications</h5>
   <ul className="text-sm space-y-1">
-    <li>• Include version suffix for multiple versions: <code>-v1</code>, <code>-v2</code></li>
-    <li>• Use revision suffix for minor updates: <code>-rev1</code>, <code>-rev2</code></li>
-    <li>• Archive previous versions in dated folders</li>
-    <li>• Maintain change log for significant revisions</li>
-    <li>• Use descriptive commit messages in version control</li>
+    <li>• Column width: Each column spans 4 grid columns</li>
+    <li>• Icon size: 40mm × 40mm</li>
+    <li>• Heading: Open Sans Semibold, 16pt</li>
+    <li>• Body text: Open Sans Regular, 10pt, line height 14pt</li>
+    <li>• Column spacing: 8mm gutters between columns</li>
+    <li>• Alignment: Center-aligned text and icons</li>
   </ul>
+</div>
+
+#### Key Features Grid (Bottom Third)
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+  <div className="border border-gray-200 rounded p-3 flex items-start gap-2">
+    <span className="text-blue-500 text-xl">✓</span>
+    <div>
+      <h6 className="font-semibold text-sm">Feature Title</h6>
+      <p className="text-xs text-gray-600">Feature description in one sentence explaining the benefit</p>
+    </div>
+  </div>
+  <div className="border border-gray-200 rounded p-3 flex items-start gap-2">
+    <span className="text-blue-500 text-xl">✓</span>
+    <div>
+      <h6 className="font-semibold text-sm">Feature Title</h6>
+      <p className="text-xs text-gray-600">Feature description in one sentence explaining the benefit</p>
+    </div>
+  </div>
+  <div className="border border-gray-200 rounded p-3 flex items-start gap-2">
+    <span className="text-blue-500 text-xl">✓</span>
+    <div>
+      <h6 className="font-semibold text-sm">Feature Title</h6>
+      <p className="text-xs text-gray-600">Feature description in one sentence explaining the benefit</p>
+    </div>
+  </div>
+  <div className="border border-gray-200 rounded p-3 flex items-start gap-2">
+    <span className="text-blue-500 text-xl">✓</span>
+    <div>
+      <h6 className="font-semibold text-sm">Feature Title</h6>
+      <p className="text-xs text-gray-600">Feature description in one sentence explaining the benefit</p>
+    </div>
+  </div>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-6 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">Feature Grid Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Layout: 2 or 3 columns (2-column for detailed features)</li>
+    <li>• Feature boxes: 5mm padding, 1pt border #e5e7eb</li>
+    <li>• Feature title: Open Sans Semibold, 12pt</li>
+    <li>• Feature description: Open Sans Regular, 9pt</li>
+    <li>• Checkmark bullets: #3578e5, 14pt (or custom icon)</li>
+    <li>• Spacing between items: 4mm vertical</li>
+  </ul>
+</div>
+
+#### Call-to-Action Footer
+
+<div className="bg-gradient-to-r from-gray-100 to-gray-50 border-t border-gray-200 p-4 flex justify-between items-center">
+  <div>
+    <p className="text-sm font-semibold">Ready to get started?</p>
+    <p className="text-xs text-gray-600">Contact us for a demo or free trial</p>
+  </div>
+  <button className="bg-blue-500 text-white px-6 py-2 rounded text-sm font-medium">
+    Learn More
+  </button>
+  <div className="text-right text-xs text-gray-600">
+    <p>flanksource.com</p>
+    <p>hello@flanksource.com</p>
+  </div>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mt-4 mb-8 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">Footer Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Height: 20mm fixed</li>
+    <li>• Background: Gradient or solid #f3f4f6</li>
+    <li>• CTA button: 60mm × 12mm, #3578e5 background</li>
+    <li>• Contact info: Right-aligned, 8pt</li>
+    <li>• CTA text: Open Sans Medium, 10pt</li>
+    <li>• Padding: 5mm all sides</li>
+  </ul>
+</div>
+
+### Page 2: Technical Details Layout
+
+#### Header Bar
+
+<div className="bg-blue-500 text-white p-4 flex justify-between items-center mb-6">
+  <h5 className="text-lg font-semibold">Technical Specifications</h5>
+  <div className="text-sm">Mission Control</div>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-6 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">Header Bar Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Height: 15mm fixed</li>
+    <li>• Background: #3578e5 (Primary Blue)</li>
+    <li>• Section title: Open Sans Semibold, 18pt, white</li>
+    <li>• Logo/Product name: 8mm height, right-aligned</li>
+    <li>• Padding: 3mm horizontal, centered vertically</li>
+  </ul>
+</div>
+
+#### Technical Specifications Table
+
+<div className="overflow-x-auto mb-6">
+  <table className="w-full border-collapse border border-gray-300">
+    <thead>
+      <tr className="bg-blue-500 text-white">
+        <th className="border border-gray-300 px-3 py-2 text-left text-sm">Specification</th>
+        <th className="border border-gray-300 px-3 py-2 text-left text-sm">Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-gray-50">
+        <td className="border border-gray-300 px-3 py-2 text-sm font-medium">Deployment</td>
+        <td className="border border-gray-300 px-3 py-2 text-sm">Kubernetes-native, self-hosted</td>
+      </tr>
+      <tr>
+        <td className="border border-gray-300 px-3 py-2 text-sm font-medium">Requirements</td>
+        <td className="border border-gray-300 px-3 py-2 text-sm">Kubernetes 1.20+, PostgreSQL 12+</td>
+      </tr>
+      <tr className="bg-gray-50">
+        <td className="border border-gray-300 px-3 py-2 text-sm font-medium">Integrations</td>
+        <td className="border border-gray-300 px-3 py-2 text-sm">AWS, Azure, GCP, Kubernetes, Git</td>
+      </tr>
+      <tr>
+        <td className="border border-gray-300 px-3 py-2 text-sm font-medium">Monitoring</td>
+        <td className="border border-gray-300 px-3 py-2 text-sm">30+ health check types, Prometheus</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-6 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">Table Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Layout: Full-width or 2-column layout</li>
+    <li>• Header row: #3578e5 background, white text, 10pt</li>
+    <li>• Row height: 8mm minimum</li>
+    <li>• Alternating row colors: White / #f9fafb</li>
+    <li>• Cell padding: 3mm horizontal, 2mm vertical</li>
+    <li>• Border: 0.5pt solid #d1d5db</li>
+    <li>• Font: Open Sans Regular, 10pt</li>
+  </ul>
+</div>
+
+#### Comparison Matrix
+
+<div className="overflow-x-auto mb-6">
+  <table className="w-full border-collapse border border-gray-300">
+    <thead>
+      <tr className="bg-blue-500 text-white">
+        <th className="border border-gray-300 px-3 py-2 text-left text-sm w-1/3">Feature</th>
+        <th className="border border-gray-300 px-3 py-2 text-center text-sm">Mission Control</th>
+        <th className="border border-gray-300 px-3 py-2 text-center text-sm">Competitor A</th>
+        <th className="border border-gray-300 px-3 py-2 text-center text-sm">Competitor B</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-blue-50">
+        <td className="border border-gray-300 px-3 py-2 text-sm font-medium">GitOps-Native</td>
+        <td className="border border-gray-300 px-3 py-2 text-center text-green-600 text-lg">✓</td>
+        <td className="border border-gray-300 px-3 py-2 text-center text-red-600 text-lg">✗</td>
+        <td className="border border-gray-300 px-3 py-2 text-center text-yellow-600">Partial</td>
+      </tr>
+      <tr>
+        <td className="border border-gray-300 px-3 py-2 text-sm font-medium">Self-Hosted</td>
+        <td className="border border-gray-300 px-3 py-2 text-center text-green-600 text-lg">✓</td>
+        <td className="border border-gray-300 px-3 py-2 text-center text-green-600 text-lg">✓</td>
+        <td className="border border-gray-300 px-3 py-2 text-center text-red-600 text-lg">✗</td>
+      </tr>
+      <tr className="bg-blue-50">
+        <td className="border border-gray-300 px-3 py-2 text-sm font-medium">AI Integration</td>
+        <td className="border border-gray-300 px-3 py-2 text-center text-green-600 text-lg">✓</td>
+        <td className="border border-gray-300 px-3 py-2 text-center text-red-600 text-lg">✗</td>
+        <td className="border border-gray-300 px-3 py-2 text-center text-red-600 text-lg">✗</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-6 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">Comparison Matrix Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Feature column: 40mm wide (fixed)</li>
+    <li>• Product columns: Equal width distribution</li>
+    <li>• Checkmarks: 12pt, #10b981 (green)</li>
+    <li>• X marks: 12pt, #dc2626 (red)</li>
+    <li>• "Best in class" highlighting: #dbeafe background</li>
+    <li>• Text alignment: Left for features, center for products</li>
+  </ul>
+</div>
+
+#### Contact Footer
+
+<div className="border-t border-gray-300 mt-8 pt-3 flex justify-between items-center text-xs text-gray-600">
+  <div>
+    <p className="font-semibold">Flanksource</p>
+    <p>© 2025 Flanksource. All rights reserved.</p>
+  </div>
+  <div className="text-right">
+    <p>flanksource.com</p>
+    <p>hello@flanksource.com</p>
+  </div>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mt-4 mb-8 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">Footer Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Height: 15mm fixed</li>
+    <li>• Border: 1pt top border, #d1d5db</li>
+    <li>• Font: Open Sans Regular, 7pt</li>
+    <li>• Color: #6b7280 (Gray 600)</li>
+    <li>• Copyright: Left-aligned</li>
+    <li>• Contact: Right-aligned</li>
+  </ul>
+</div>
+
+---
+
+## Part 3: Multi-Page Datasheet Format
+
+### Cover Page Design
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Full-Bleed Hero Image</h5>
+    <ul className="text-sm space-y-2">
+      <li>• Image dimensions: 210mm × 100mm (half page)</li>
+      <li>• Image position: Top of page, full bleed</li>
+      <li>• Gradient overlay: Optional #131f3b to transparent</li>
+      <li>• Product name: Open Sans Bold, 48pt, white or #131f3b</li>
+      <li>• Position: Centered or left-aligned over image</li>
+    </ul>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Minimal Cover</h5>
+    <ul className="text-sm space-y-2">
+      <li>• Logo: Top-left, 50mm × 15mm</li>
+      <li>• Product name: Open Sans Bold, 48pt, centered</li>
+      <li>• Tagline: Open Sans Regular, 18pt, centered</li>
+      <li>• Version/Date: 9pt, bottom-right corner</li>
+      <li>• Accent shape: Optional geometric element</li>
+    </ul>
+  </div>
+</div>
+
+### Table of Contents (4+ pages)
+
+<div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
+  <h5 className="font-semibold mb-4">Table of Contents Example</h5>
+  <div className="space-y-2 text-sm">
+    <div className="flex justify-between border-b border-gray-300 pb-2">
+      <span><span className="text-blue-500 font-bold text-lg mr-2">01</span> Executive Overview</span>
+      <span className="font-mono">3</span>
+    </div>
+    <div className="flex justify-between border-b border-gray-300 pb-2">
+      <span><span className="text-blue-500 font-bold text-lg mr-2">02</span> Core Capabilities</span>
+      <span className="font-mono">5</span>
+    </div>
+    <div className="flex justify-between border-b border-gray-300 pb-2">
+      <span><span className="text-blue-500 font-bold text-lg mr-2">03</span> Technical Specifications</span>
+      <span className="font-mono">7</span>
+    </div>
+    <div className="flex justify-between pb-2">
+      <span><span className="text-blue-500 font-bold text-lg mr-2">04</span> Getting Started</span>
+      <span className="font-mono">9</span>
+    </div>
+  </div>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-8 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">TOC Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• TOC placement: Left 2/3 of page or full-width</li>
+    <li>• Section numbers: 24pt, #3578e5, bold</li>
+    <li>• Section titles: 14pt, linked with dotted leaders</li>
+    <li>• Page numbers: Right-aligned, Open Sans Regular</li>
+    <li>• Spacing: 5mm between entries</li>
+    <li>• Quick reference box: Optional right 1/3, key metrics</li>
+  </ul>
+</div>
+
+### Section Divider Pages
+
+<div className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-lg p-12 mb-6 text-center relative">
+  <div className="absolute top-4 left-4 text-9xl font-bold text-gray-200">02</div>
+  <h3 className="text-3xl font-bold text-gray-900 mb-2 relative z-10">Core Capabilities</h3>
+  <p className="text-lg text-gray-600 relative z-10">Unified catalog, health monitoring, and automation</p>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-8 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">Section Divider Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Large section number: 120pt, light gray (#e5e7eb) watermark</li>
+    <li>• Section title: 36pt, #131f3b, centered or left</li>
+    <li>• Section subtitle: 14pt, #4b5563, below title</li>
+    <li>• Minimal decoration: Geometric shape or 3pt line accent</li>
+    <li>• Whitespace: Generous spacing around all elements</li>
+  </ul>
+</div>
+
+### Content Page Templates
+
+#### Standard Content Page
+
+<div className="border border-gray-200 rounded-lg p-6 mb-6">
+  <h6 className="text-lg font-semibold mb-3 text-gray-900">Page Title</h6>
+  <p className="text-sm mb-4 text-gray-700 leading-relaxed">
+    Body text flows in either single or double-column layout. Use single column for narrative content,
+    double column for dense technical information. Maintain consistent margins and spacing throughout.
+  </p>
+  <h6 className="text-base font-semibold mb-2 text-gray-900">Subheading</h6>
+  <p className="text-sm mb-3 text-gray-700 leading-relaxed">
+    Additional content continues with proper hierarchy. Use bullet points or numbered lists for clarity.
+  </p>
+  <ul className="text-sm space-y-1 text-gray-700 ml-4">
+    <li>• Key point one with concise explanation</li>
+    <li>• Key point two with supporting detail</li>
+    <li>• Key point three summarizing benefit</li>
+  </ul>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-6 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">Standard Page Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Column width: 80mm single, 85mm each for double</li>
+    <li>• Column gap: 10mm for double-column</li>
+    <li>• H2 headers: 18pt, #131f3b</li>
+    <li>• H3 headers: 14pt, #374151</li>
+    <li>• H4 headers: 12pt, #4b5563</li>
+    <li>• Body text: 10pt, line height 14pt</li>
+    <li>• Paragraph spacing: 4mm between paragraphs</li>
+    <li>• Image captions: 8pt italic, #6b7280</li>
+  </ul>
+</div>
+
+#### Technical Deep-Dive Page
+
+<div className="border border-gray-200 rounded-lg p-6 mb-6">
+  <h6 className="text-base font-semibold mb-3">Configuration Example</h6>
+  <div className="bg-gray-900 text-gray-100 p-4 rounded text-xs font-mono mb-3">
+    <div className="text-gray-500"># Example YAML configuration</div>
+    <div><span className="text-purple-400">apiVersion:</span> v1</div>
+    <div><span className="text-purple-400">kind:</span> Canary</div>
+    <div><span className="text-purple-400">metadata:</span></div>
+    <div className="ml-4"><span className="text-purple-400">name:</span> http-check</div>
+    <div><span className="text-purple-400">spec:</span></div>
+    <div className="ml-4"><span className="text-purple-400">http:</span></div>
+    <div className="ml-8"><span className="text-purple-400">- url:</span> https://api.example.com/health</div>
+  </div>
+  <p className="text-sm text-gray-700">
+    Code blocks use syntax highlighting and Fira Code monospace font at 9pt for readability.
+  </p>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-6 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">Technical Page Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Code blocks: Fira Code 9pt, #f3f4f6 background (or dark theme)</li>
+    <li>• Syntax highlighting: Use consistent color palette</li>
+    <li>• Line numbers: Optional, 7pt, right-aligned in margin</li>
+    <li>• Inline code: Fira Code 9pt, #e5e7eb background, 1pt border</li>
+    <li>• Code block padding: 5mm all sides</li>
+    <li>• Border radius: 2mm for code blocks</li>
+  </ul>
+</div>
+
+#### Case Study/Results Page
+
+<div className="border border-gray-200 rounded-lg p-6 mb-6">
+  <div className="grid grid-cols-3 gap-4 mb-6">
+    <div className="text-center">
+      <div className="text-4xl font-bold text-blue-500">60%</div>
+      <div className="text-sm text-gray-600">Reduced MTTR</div>
+    </div>
+    <div className="text-center">
+      <div className="text-4xl font-bold text-blue-500">10hr</div>
+      <div className="text-sm text-gray-600">Time Saved/Week</div>
+    </div>
+    <div className="text-center">
+      <div className="text-4xl font-bold text-blue-500">99.9%</div>
+      <div className="text-sm text-gray-600">Uptime SLA</div>
+    </div>
+  </div>
+  <div className="border-l-4 border-blue-500 pl-4 bg-blue-50 p-4 italic text-sm">
+    "Mission Control gave us the operational visibility we needed to scale confidently.
+    We reduced our incident response time by 60% in the first month."
+    <div className="mt-2 not-italic font-semibold text-gray-900">— DevOps Lead, Fortune 500 Company</div>
+  </div>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-8 bg-blue-50 p-4">
+  <h5 className="font-semibold mb-3">Case Study Page Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Large pull quote: 18pt italic, 4pt left border #3578e5</li>
+    <li>• Metric callouts: 36pt numbers, #3578e5 color</li>
+    <li>• Metric labels: 9pt, #6b7280</li>
+    <li>• Attribution: 10pt bold, #131f3b</li>
+    <li>• Customer logo: 60mm × 20mm maximum</li>
+    <li>• Quote background: #f0f9ff, 5mm padding</li>
+  </ul>
+</div>
+
+### Back Cover Page
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Contact Block</h5>
+    <ul className="text-sm space-y-2">
+      <li><strong>Company:</strong> Flanksource</li>
+      <li><strong>Address:</strong> 3-4 lines, 10pt</li>
+      <li><strong>Phone:</strong> +1 (555) 123-4567</li>
+      <li><strong>Email:</strong> hello@flanksource.com</li>
+      <li><strong>Website:</strong> flanksource.com</li>
+      <li><strong>QR Code:</strong> 30mm × 30mm linking to website</li>
+    </ul>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Legal Footer</h5>
+    <ul className="text-sm space-y-2">
+      <li>• Copyright notice: 7pt, bottom left</li>
+      <li>• Trademark disclaimers: 7pt</li>
+      <li>• Compliance logos: 15mm × 15mm</li>
+      <li>• Version number: Document version and date</li>
+      <li>• All legal text: #6b7280, justified</li>
+    </ul>
+  </div>
+</div>
+
+---
+
+## Part 4: Design Patterns Library
+
+### Layout Patterns
+
+<Tabs>
+  <TabItem value="z-pattern" label="Z-Pattern" default>
+    <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-4">
+      <h5 className="font-semibold mb-3">Z-Pattern Reading Flow</h5>
+      <p className="text-sm mb-3">
+        Ideal for single-page designs where you want to guide the eye from top-left to top-right,
+        then diagonally to bottom-left, and finally to bottom-right (forming a Z shape).
+      </p>
+      <h6 className="font-medium mb-2">Usage:</h6>
+      <ul className="text-sm space-y-1">
+        <li>• Landing pages and cover pages</li>
+        <li>• Advertisement layouts</li>
+        <li>• Quick-scan documents</li>
+      </ul>
+    </div>
+  </TabItem>
+
+  <TabItem value="f-pattern" label="F-Pattern">
+    <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-4">
+      <h5 className="font-semibold mb-3">F-Pattern Reading Flow</h5>
+      <p className="text-sm mb-3">
+        Natural reading pattern for text-heavy content. Readers scan horizontally at the top,
+        move down vertically, then scan horizontally again (forming an F shape).
+      </p>
+      <h6 className="font-medium mb-2">Usage:</h6>
+      <ul className="text-sm space-y-1">
+        <li>• Multi-column text layouts</li>
+        <li>• Technical documentation</li>
+        <li>• Detailed specification sheets</li>
+      </ul>
+    </div>
+  </TabItem>
+
+  <TabItem value="modular" label="Modular Grid">
+    <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-4">
+      <h5 className="font-semibold mb-3">Modular Grid Layout</h5>
+      <p className="text-sm mb-3">
+        Flexible grid system allowing varied content blocks of different sizes.
+        Components can span multiple columns and rows for maximum flexibility.
+      </p>
+      <h6 className="font-medium mb-2">Usage:</h6>
+      <ul className="text-sm space-y-1">
+        <li>• Mixed content pages (text, images, callouts)</li>
+        <li>• Dashboard-style layouts</li>
+        <li>• Feature comparison pages</li>
+      </ul>
+    </div>
+  </TabItem>
+</Tabs>
+
+### Content Blocks
+
+#### Callout Box
+
+<div className="border-l-4 border-blue-500 bg-blue-50 p-4 mb-6 relative">
+  <div className="absolute top-2 left-2 text-blue-500 text-3xl">💡</div>
+  <div className="ml-8">
+    <h6 className="font-semibold text-blue-800 mb-1">Pro Tip</h6>
+    <p className="text-sm text-gray-700">
+      Use callout boxes to highlight important information, tips, warnings, or notes
+      that deserve special attention from readers.
+    </p>
+  </div>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-6 bg-gray-50 p-4">
+  <h5 className="font-semibold mb-3">Callout Box Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Border: 2pt left border, color varies by type</li>
+    <li>• Background: Light tint of border color (#f0f9ff, #fef3c7, etc.)</li>
+    <li>• Padding: 5mm all sides</li>
+    <li>• Icon: Optional, 20mm, top-left</li>
+    <li>• Title: Open Sans Semibold, 12pt</li>
+    <li>• Body: Open Sans Regular, 10pt</li>
+    <li>• Types: Info (blue), Warning (yellow), Error (red), Success (green)</li>
+  </ul>
+</div>
+
+#### Stat Card
+
+<div className="grid grid-cols-3 gap-4 mb-6">
+  <div className="border border-gray-200 rounded-lg p-4 text-center bg-white shadow-sm">
+    <div className="text-4xl font-bold text-blue-500 mb-1">300+</div>
+    <div className="text-sm text-gray-600">Customers</div>
+  </div>
+  <div className="border border-gray-200 rounded-lg p-4 text-center bg-white shadow-sm">
+    <div className="text-4xl font-bold text-blue-500 mb-1">99.9%</div>
+    <div className="text-sm text-gray-600">Uptime SLA</div>
+  </div>
+  <div className="border border-gray-200 rounded-lg p-4 text-center bg-white shadow-sm">
+    <div className="text-4xl font-bold text-blue-500 mb-1">24/7</div>
+    <div className="text-sm text-gray-600">Support</div>
+  </div>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-6 bg-gray-50 p-4">
+  <h5 className="font-semibold mb-3">Stat Card Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Size: 50mm × 50mm (flexible based on layout)</li>
+    <li>• Large number: 48pt bold, #3578e5</li>
+    <li>• Label: 10pt, #4b5563</li>
+    <li>• Background: White with 0.5pt border or subtle shadow</li>
+    <li>• Border radius: 4mm (rounded corners)</li>
+    <li>• Padding: 5mm all sides</li>
+    <li>• Alignment: Center-aligned text and numbers</li>
+  </ul>
+</div>
+
+#### Feature List
+
+<div className="border border-gray-200 rounded-lg p-6 mb-6">
+  <ul className="space-y-2">
+    <li className="flex items-start gap-2">
+      <span className="text-blue-500 text-xl mt-0.5">✓</span>
+      <span className="text-sm">GitOps-native automation with full audit trails</span>
+    </li>
+    <li className="flex items-start gap-2">
+      <span className="text-blue-500 text-xl mt-0.5">✓</span>
+      <span className="text-sm">Real-time discovery across AWS, Azure, GCP, and Kubernetes</span>
+    </li>
+    <li className="flex items-start gap-2">
+      <span className="text-blue-500 text-xl mt-0.5">✓</span>
+      <span className="text-sm">30+ health check types with customizable thresholds</span>
+    </li>
+    <li className="flex items-start gap-2">
+      <span className="text-blue-500 text-xl mt-0.5">✓</span>
+      <span className="text-sm">AI-powered troubleshooting with MCP integration</span>
+    </li>
+  </ul>
+</div>
+
+<div className="border-l-4 border-blue-500 pl-4 mb-6 bg-gray-50 p-4">
+  <h5 className="font-semibold mb-3">Feature List Specifications</h5>
+  <ul className="text-sm space-y-1">
+    <li>• Checkmark bullets: Custom SVG or Unicode, #3578e5, 14pt</li>
+    <li>• Hanging indent: 8mm (aligns text past bullet)</li>
+    <li>• Item spacing: 3mm between list items</li>
+    <li>• Layout: Single, 2, or 3 columns based on space</li>
+    <li>• Font: Open Sans Regular, 10pt</li>
+    <li>• Line height: 14pt for readability</li>
+  </ul>
+</div>
+
+### Visual Elements
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3 text-sm">Divider Lines</h5>
+    <div className="space-y-3">
+      <div>
+        <div className="border-t border-gray-300 mb-1"></div>
+        <p className="text-xs text-gray-600">Thin: 0.5pt #d1d5db</p>
+      </div>
+      <div>
+        <div className="border-t-2 border-blue-500 mb-1"></div>
+        <p className="text-xs text-gray-600">Medium: 1pt #3578e5</p>
+      </div>
+      <div>
+        <div className="border-t-4 border-blue-500 mb-1"></div>
+        <p className="text-xs text-gray-600">Thick: 3pt #3578e5</p>
+      </div>
+    </div>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3 text-sm">Background Patterns</h5>
+    <ul className="text-xs space-y-1">
+      <li>• Subtle dot grid: 1mm dots, #f3f4f6</li>
+      <li>• Diagonal lines: 45°, 0.5pt, #f3f4f6</li>
+      <li>• Geometric shapes: Low opacity brand colors</li>
+      <li>• Gradient overlays: Subtle, 10-20% opacity</li>
+    </ul>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-4">
+    <h5 className="font-semibold mb-3 text-sm">Icons & Badges</h5>
+    <div className="space-y-2">
+      <div className="inline-flex items-center gap-2">
+        <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">✓</div>
+        <span className="text-xs">Circular: 25mm diameter</span>
+      </div>
+      <div className="inline-flex items-center gap-2">
+        <div className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">New</div>
+        <span className="text-xs">Ribbon badge</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+---
+
+## Part 5: Production Specifications
+
+### File Formats
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Print-Ready Files</h5>
+    <table className="w-full text-sm">
+      <tbody>
+        <tr className="border-b">
+          <td className="py-2">Source Files</td>
+          <td className="text-right">InDesign (.indd), Illustrator (.ai)</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Print PDF</td>
+          <td className="text-right">PDF/X-1a or PDF/X-4</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Digital PDF</td>
+          <td className="text-right">PDF/A for accessibility</td>
+        </tr>
+        <tr className="border-b">
+          <td className="py-2">Images</td>
+          <td className="text-right">TIFF or high-res JPEG, embedded</td>
+        </tr>
+        <tr>
+          <td className="py-2">Color Mode</td>
+          <td className="text-right">CMYK (print), RGB (digital)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Export Settings</h5>
+    <ul className="text-sm space-y-1">
+      <li>• Resolution: 300 DPI minimum</li>
+      <li>• Compression: Lossless or high quality</li>
+      <li>• Fonts: Embedded and subset</li>
+      <li>• Bleed: 3mm (0.125") included</li>
+      <li>• Crop marks: Optional, outside bleed</li>
+      <li>• Color profile: ISO Coated v2 (CMYK)</li>
+    </ul>
+  </div>
+</div>
+
+### Paper & Printing
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Paper Stock</h5>
+    <ul className="text-sm space-y-2">
+      <li><strong>Cover:</strong> 300gsm coated silk or gloss</li>
+      <li><strong>Interior:</strong> 150gsm coated silk or uncoated</li>
+      <li><strong>Finish:</strong> Matte or gloss lamination optional</li>
+      <li><strong>Alternative:</strong> 250gsm for premium 2-page sheets</li>
+    </ul>
+  </div>
+
+  <div className="border border-gray-200 rounded-lg p-6">
+    <h5 className="font-semibold mb-3">Binding Options</h5>
+    <ul className="text-sm space-y-2">
+      <li><strong>2-page:</strong> Single sheet, no binding</li>
+      <li><strong>4-8 pages:</strong> Saddle-stitch (stapled)</li>
+      <li><strong>12-16 pages:</strong> Saddle-stitch or perfect bound</li>
+      <li><strong>16+ pages:</strong> Perfect bound or wire-o</li>
+    </ul>
+  </div>
+</div>
+
+### Print Checklist
+
+<div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+  <h5 className="font-semibold text-yellow-800 mb-3">Pre-Press Checklist</h5>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <ul className="text-sm space-y-1">
+      <li className="flex items-start gap-2">
+        <span>☐</span>
+        <span>All fonts embedded and subset</span>
+      </li>
+      <li className="flex items-start gap-2">
+        <span>☐</span>
+        <span>Images at 300 DPI or higher</span>
+      </li>
+      <li className="flex items-start gap-2">
+        <span>☐</span>
+        <span>Color mode: CMYK for print</span>
+      </li>
+      <li className="flex items-start gap-2">
+        <span>☐</span>
+        <span>Bleed: 3mm added all sides</span>
+      </li>
+      <li className="flex items-start gap-2">
+        <span>☐</span>
+        <span>Safe zone: 5mm from trim respected</span>
+      </li>
+    </ul>
+    <ul className="text-sm space-y-1">
+      <li className="flex items-start gap-2">
+        <span>☐</span>
+        <span>No RGB or spot colors (unless intended)</span>
+      </li>
+      <li className="flex items-start gap-2">
+        <span>☐</span>
+        <span>Overprint settings verified</span>
+      </li>
+      <li className="flex items-start gap-2">
+        <span>☐</span>
+        <span>Transparency flattened</span>
+      </li>
+      <li className="flex items-start gap-2">
+        <span>☐</span>
+        <span>PDF/X-1a compliance checked</span>
+      </li>
+      <li className="flex items-start gap-2">
+        <span>☐</span>
+        <span>Proof reviewed and approved</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+---
+
+## Part 6: Templates for LLM Generation
+
+### Quick Reference: Common Layouts
+
+<div className="overflow-x-auto mb-8">
+  <table className="w-full border-collapse border border-gray-300 text-sm">
+    <thead>
+      <tr className="bg-blue-500 text-white">
+        <th className="border border-gray-300 px-3 py-2 text-left">Layout Type</th>
+        <th className="border border-gray-300 px-3 py-2 text-left">Best For</th>
+        <th className="border border-gray-300 px-3 py-2 text-left">Key Elements</th>
+        <th className="border border-gray-300 px-3 py-2 text-left">Margins</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="bg-gray-50">
+        <td className="border border-gray-300 px-3 py-2 font-medium">2-Page Hero</td>
+        <td className="border border-gray-300 px-3 py-2">Quick reference, trade shows</td>
+        <td className="border border-gray-300 px-3 py-2">Hero, 3-col features, CTA</td>
+        <td className="border border-gray-300 px-3 py-2 font-mono">20mm/15mm</td>
+      </tr>
+      <tr>
+        <td className="border border-gray-300 px-3 py-2 font-medium">2-Page Technical</td>
+        <td className="border border-gray-300 px-3 py-2">Detailed specs, comparisons</td>
+        <td className="border border-gray-300 px-3 py-2">Header bar, tables, footer</td>
+        <td className="border border-gray-300 px-3 py-2 font-mono">20mm/15mm</td>
+      </tr>
+      <tr className="bg-gray-50">
+        <td className="border border-gray-300 px-3 py-2 font-medium">Multi-Page Cover</td>
+        <td className="border border-gray-300 px-3 py-2">Comprehensive guides</td>
+        <td className="border border-gray-300 px-3 py-2">Hero image, title, version</td>
+        <td className="border border-gray-300 px-3 py-2 font-mono">15mm all</td>
+      </tr>
+      <tr>
+        <td className="border border-gray-300 px-3 py-2 font-medium">Content Page</td>
+        <td className="border border-gray-300 px-3 py-2">Body content, case studies</td>
+        <td className="border border-gray-300 px-3 py-2">1-2 col text, images, callouts</td>
+        <td className="border border-gray-300 px-3 py-2 font-mono">20mm/15mm</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+### Color Decision Matrix
+
+<div className="border border-gray-200 rounded-lg p-6 mb-8">
+  <h5 className="font-semibold mb-4">When to Use Which Color</h5>
+  <table className="w-full text-sm">
+    <thead>
+      <tr className="border-b">
+        <th className="text-left py-2">Element</th>
+        <th className="text-left py-2">Primary Use</th>
+        <th className="text-left py-2">Alternative</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="border-b">
+        <td className="py-2">Headers/Dividers</td>
+        <td className="py-2">#3578e5 (Primary Blue)</td>
+        <td className="py-2">#131f3b (Dark Navy)</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-2">Body Text</td>
+        <td className="py-2">#131f3b or #374151</td>
+        <td className="py-2">Rich Black (print)</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-2">Secondary Text</td>
+        <td className="py-2">#6b7280 (Gray 600)</td>
+        <td className="py-2">#4b5563 (Gray 700)</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-2">Backgrounds</td>
+        <td className="py-2">#f9fafb (Gray 50)</td>
+        <td className="py-2">#f3f4f6 (Gray 100)</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-2">Borders/Lines</td>
+        <td className="py-2">#e5e7eb (Gray 200)</td>
+        <td className="py-2">#d1d5db (Gray 300)</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-2">Callouts</td>
+        <td className="py-2">#dbeafe (Blue 100 bg)</td>
+        <td className="py-2">#fef3c7 (Yellow 100)</td>
+      </tr>
+      <tr>
+        <td className="py-2">Status/Success</td>
+        <td className="py-2">#10b981 (Green 500)</td>
+        <td className="py-2">#dcfce7 (Green 100 bg)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+### Typography Decision Matrix
+
+<div className="border border-gray-200 rounded-lg p-6">
+  <h5 className="font-semibold mb-4">When to Use Which Type Size</h5>
+  <table className="w-full text-sm">
+    <thead>
+      <tr className="border-b">
+        <th className="text-left py-2">Content Type</th>
+        <th className="text-left py-2">Size (pt)</th>
+        <th className="text-left py-2">Weight</th>
+        <th className="text-left py-2">Context</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="border-b">
+        <td className="py-2">Cover Title</td>
+        <td className="py-2 font-mono">48pt</td>
+        <td className="py-2">Bold (700)</td>
+        <td className="py-2">Product name on cover</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-2">Page Title</td>
+        <td className="py-2 font-mono">32pt</td>
+        <td className="py-2">Bold (700)</td>
+        <td className="py-2">Section opener headlines</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-2">Section Heading</td>
+        <td className="py-2 font-mono">18pt</td>
+        <td className="py-2">Semibold (600)</td>
+        <td className="py-2">Major section breaks (H2)</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-2">Subheading</td>
+        <td className="py-2 font-mono">14pt</td>
+        <td className="py-2">Semibold (600)</td>
+        <td className="py-2">Subsections (H3)</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-2">Body Text</td>
+        <td className="py-2 font-mono">10pt</td>
+        <td className="py-2">Regular (400)</td>
+        <td className="py-2">Paragraphs, descriptions</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-2">Table Text</td>
+        <td className="py-2 font-mono">9pt</td>
+        <td className="py-2">Regular (400)</td>
+        <td className="py-2">Dense data tables</td>
+      </tr>
+      <tr className="border-b">
+        <td className="py-2">Caption</td>
+        <td className="py-2 font-mono">8pt</td>
+        <td className="py-2">Italic (400)</td>
+        <td className="py-2">Image captions, notes</td>
+      </tr>
+      <tr>
+        <td className="py-2">Legal/Footer</td>
+        <td className="py-2 font-mono">7pt</td>
+        <td className="py-2">Regular (400)</td>
+        <td className="py-2">Copyright, disclaimers</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

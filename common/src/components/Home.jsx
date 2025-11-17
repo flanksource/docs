@@ -12,6 +12,7 @@ function Home() {
   const { withBaseUrl } = useBaseUrlUtils();
   const { colorMode } = useColorMode();
 
+  const referenceUrl = './reference';
   // React.useEffect(() => {
   //   if (colorMode === 'dark') {
   //     document.querySelector('html').classList.add('dark');
@@ -150,7 +151,7 @@ function Home() {
 
               <p class="mt-6 text-lg leading-8 text-gray-600">
                 Canary checker is 100% open source under the Apache 2.0 license. We welcome contributions from our awesome community.
-                <div>
+                <div className='flex flex-row justify-center'>
                   <img alt="GitHub" src="https://img.shields.io/github/license/flanksource/canary-checker?style=for-the-badge" />
                   <img className="pl-2" alt="GitHub Repo stars" src="https://img.shields.io/github/stars/flanksource/canary-checker?style=for-the-badge" />
                   <img className="pl-2" alt="GitHub contributors" src="https://img.shields.io/github/contributors/flanksource/canary-checker?style=for-the-badge" />
@@ -185,7 +186,7 @@ function Home() {
           image="display-format.png"
           url="/concepts/expressions/display-formatting">
           Evaluate the health of checks using scripts in CEL, Javascript or Go Templating. Templates can also be used to format the output of checks.
-          <div className='space-x-2' >
+          <div className='space-x-2 flex flex-row' >
 
             <img className="my-auto" src="/img/icons/cel.svg" />      <img src="/img/icons/javascript.svg" />  <img src="/img/icons/go.svg" />
           </div>
@@ -197,7 +198,7 @@ function Home() {
           title="Fallback to shell scripts"
           left={false}
           image="exec-check.png"
-          url="/reference/exec">
+          url={`${referenceUrl}/exec`}>
           When the builtin integrations are not enough, run scripts using bash or powershell.
           <div className='mt-3'>
             <Icon name="console" height={32} />     <Icon name="powershell" height={32} /></div>
@@ -209,12 +210,12 @@ function Home() {
           image="infrastructure-check.png"
           url="https://flanksource.com/docs/blog/infrastructure-testing-with-canary-checker-and-flux">
           Proactive infrastructure checks ensure your control plane has ample buffer/ or capacity. These checks validate the ability to schedule new pods, launch EC2 instances, and  push/pull to docker and helm repositories.
-          <div className='pt-2 spacing-x-2' >
-            <Icon name="k8s" url="/reference/kubernetes-resource" height={32} />
-            <Icon name="docker" url="/reference/containerd" height={32} />
-            <Icon name="helm" url="/reference/helm" height={32} />
+          <div className='space-x-2 flex flex-row' >
+            <Icon name="k8s" url={`./reference/kubernetes-resource`} height={32} />
+            <Icon name="docker" url={`./reference/containerd`} height={32} />
+            <Icon name="helm" url={`./reference/helm`} height={32} />
           </div>
-        </Feature>
+        </Feature >
 
 
 
@@ -224,9 +225,9 @@ function Home() {
           left={false}
 
           image="exec-check.png"
-          url="/scripting">
+          url={`./scripting`}>
           Evaluate the health of checks using scripts in CEL, Javascript or Go Templating. Templates can also be used to format the output of checks.
-          <div className='space-x-2' >
+          <div className='space-x-2 flex flex-row' >
 
             <img className="my-auto" src="/img/icons/cel.svg" />      <img src="/img/icons/javascript.svg" />  <img src="/img/icons/go.svg" />
           </div>
