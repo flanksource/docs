@@ -4,33 +4,33 @@ import ReactMarkdown from 'react-markdown'
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
 let schemes = {
-  envvar: '[EnvVar](/reference/env-var)',
+  envvar: '[EnvVar](/docs/reference/env-var)',
   "map[string]string": '`[map[string]string]`',
-  matchpattern: '[MatchPattern](/reference/types#match-pattern)',
-  '[]envvar': '[[]EnvVar](/reference/env-var)',
-  cel: '[CEL](/reference/scripting/cel)',
-  javascript: '[Javascript](/reference/scripting/javascript)',
-  gotemplate: '[Go Template](/reference/scripting/gotemplate)',
-  duration: '[Duration](/reference/types#duration)',
+  matchpattern: '[MatchPattern](/docs/reference/types#match-pattern)',
+  '[]envvar': '[[]EnvVar](/docs/reference/env-var)',
+  cel: '[CEL](/docs/reference/scripting/cel)',
+  javascript: '[Javascript](/docs/reference/scripting/javascript)',
+  gotemplate: '[Go Template](/docs/reference/scripting/gotemplate)',
+  duration: '[Duration](/docs/reference/types#duration)',
   jsonpathorstring: '`string` or [JSONPath](https://jsonpath.com/)',
   '[]jsonpathorstring': '`[]string` or [[]JSONPath](https://jsonpath.com/)',
   jsonpath: '[JSONPath](https://jsonpath.com/)',
-  size: '[Size](/reference/types#size)',
+  size: '[Size](/docs/reference/types#size)',
   "[]metric": '[[]Metric](/docs/guides/canary-checker/concepts/metrics#custom-metrics)',
-  agent: '[Agent](/reference/types#agent)',
-  resourceselector: '[ResourceSelector](/reference/resource-selector)',
-  resourceselectors: '[[]ResourceSelector](/reference/resource-selector)',
-  connection: '[Connection](/reference/connections)',
+  agent: '[Agent](/docs/reference/types#agent)',
+  resourceselector: '[ResourceSelector](/docs/reference/resource-selector)',
+  resourceselectors: '[[]ResourceSelector](/docs/reference/resource-selector)',
+  connection: '[Connection](/docs/reference/connections)',
   string: '`string`',
   "[]string": '`[]string`',
-  icon: '[Icon](/reference/types#icon)',
+  icon: '[Icon](/docs/reference/types#icon)',
   bool: '`boolean`',
   int: '`integer`',
-  "map[string]EnvVar": '`[map[string]EnvVar](/reference/env-var)`',
-  notificationurl: '[Notification](/reference/notifications)',
-  notificationconnection: '[Connection](/reference/connections)',
+  "map[string]EnvVar": '`[map[string]EnvVar](/docs/reference/env-var)`',
+  notificationurl: '[Notification](/docs/reference/notifications)',
+  notificationconnection: '[Connection](/docs/reference/connections)',
   notificationproperties:
-    '[map[string]string](/reference/notifications#properties)'
+    '[map[string]string](/docs/reference/notifications#properties)'
 }
 
 let ossSchemes = {
@@ -334,17 +334,17 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       {
         field: "eks",
         description: "EKS connection details",
-        scheme: "[EKS](/reference/connections/kubernetes/#eks-connection)",
+        scheme: "[EKS](/docs/reference/connections/kubernetes/#eks-connection)",
       },
       {
         field: "gke",
         description: "GKE connection details",
-        scheme: "[GKE](/reference/connections/kubernetes/#gke-connection)",
+        scheme: "[GKE](/docs/reference/connections/kubernetes/#gke-connection)",
       },
       {
         field: "cnrm",
         description: "CNRM connection details",
-        scheme: "[CNRM](/reference/connections/kubernetes/#cnrm-connection)",
+        scheme: "[CNRM](/docs/reference/connections/kubernetes/#cnrm-connection)",
       }])
   } else if (connection == "azure") {
     rows = rows.concat([

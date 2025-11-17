@@ -31,7 +31,7 @@ The Clickhouse scraper executes SQL queries against a Clickhouse database or clo
 | `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | [Cron](/docs/reference/types#cron)                      |          |
 | `full`      | Set to `true` to extract changes from scraped configurations. Defaults to `false`. | `bool`                                             |          |
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
-| `clickhouse`| Specifies the list of Clickhouse configurations to scrape.                         | [`[]Clickhouse`](#clickhouse-1)                    | `true`   |
+| `clickhouse`| Specifies the list of Clickhouse configurations to scrape.                         | [`[]Clickhouse`](#clickhouse)                      | `true`   |
 
 ### Clickhouse
 

@@ -116,7 +116,7 @@ const Home = () => {
             image="flanksource/self-hosted.svg"
             title="Self-Hosted First"
             subtitle="SECURITY & CONTROL"
-            url="/docs/installation/deployment-models"
+            url="/docs/installation"
             left={true}
           >
             Mission Control is self-hosted first, and easy to install using a Helm Chart. Self-Hosted, SaaS or Hybrid Deployment Models with no network or proxy access required and no secrets stored in the SaaS.
@@ -126,6 +126,7 @@ const Home = () => {
             image="flanksource/gitops.png"
             title="GitOps Preferred*"
             subtitle="KUBERNETES-NATIVE"
+            url="/docs/guide/playbooks/actions/gitops"
             left={false}
           >
             Mission Control is a suite of Kubernetes Operators, that work together using GitOps principles to enable the configuration of an internal developer platform in a decentralized way. Seamless integration with Helm, Argo and Kustomize with secure secret management out of the box.
@@ -136,6 +137,7 @@ const Home = () => {
           <Feature
             image="flanksource/catalog.svg"
             title="Unified Catalog"
+            url="/docs/guide/config-db"
             subtitle="COMPREHENSIVE VISIBILITY"
             left={true}
           >
@@ -146,7 +148,7 @@ const Home = () => {
             image="flanksource/status_pages.png"
             title="Internal Status Pages"
             subtitle="HEALTH MONITORING"
-            url="https://canarychecker.io/"
+            url="/docs/guide/canary-checker"
             left={false}
           >
             Understand the health of complex services at a glance with red, amber, green statuses which leverage active/passive health checks and consolidated alerts from Prometheus, AWS, Dynatrace, and more.
@@ -156,6 +158,7 @@ const Home = () => {
             image="flanksource/playbooks.svg"
             title="Playbooks"
             subtitle="DEVELOPER ENABLEMENT"
+            url="/docs/guide/playbooks"
             left={true}
           >
             Empower developers to be more self-sufficient without the need to become experts in the Cloud and Kubernetes. Run playbooks automatically on failing health checks/alerts, implement security best practices of least privilege and just in time (JIT) access, and use the built-in library of actions.
@@ -165,6 +168,7 @@ const Home = () => {
             image="flanksource/cli.png"
             title="Local Development"
             subtitle="DEVELOPER EXPERIENCE"
+            url="/docs/guide/canary-checker/troubleshooting"
             left={false}
           >
             Mission Control provides open-source CLI's for all the major components, this provides a setup-free, rapid feedback loop when building health checks and rules. Integration tests can be created to run inside CI/CD pipelines.
@@ -204,9 +208,8 @@ const Home = () => {
 
       {/* CTA Section */}
       <CTA
-        title="Ready to get started?"
-        description="Join thousands of teams already using Mission Control to improve their developer experience"
-        primaryButton={{ text: "Get Started", href: "/docs" }}
+        title="Want to learn more?"
+        primaryButton={{ text: "See Docs", href: "/docs" }}
         secondaryButton={{ text: "Contact Sales", href: "/contact" }}
         backgroundClass="bg-blue-600"
       />

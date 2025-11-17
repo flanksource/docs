@@ -59,7 +59,7 @@ import Inhibition from '../../reference/notifications/_inhibition.mdx';
   },
   {
     field: "groupBy",
-    description: "Group notifications that are in waiting stage based on labels, tags and attributes. Only applicable when `waitFor` is provided. See [Grouping attributes](../../docs/guide/notifications/concepts/wait-for#grouping-notifications)",
+    description: "Group notifications that are in waiting stage based on labels, tags and attributes. Only applicable when `waitFor` is provided. See [Grouping attributes](/docs/guide/notifications/concepts/wait-for#grouping-notifications)",
     scheme: "[]string"
   },
   {
@@ -72,9 +72,8 @@ import Inhibition from '../../reference/notifications/_inhibition.mdx';
     description: "Channel dependent e.g. subject for email",
     scheme: "GoTemplate",
     templateEnv: [
-      {"name": "CheckEvents", "url": "/docs/reference/notifications/template_vars#check-health-env"},
-      {"name": "ConfigEvents", "url": "/docs/reference/notifications/template_vars#config-health-env"},
-      {"name": "ComponentEvents", "url": "/docs/reference/notifications/template_vars#component-health-env"},
+      {"name": "CheckEvents", "url": "/docs/reference/notifications/template_vars/checks"},
+      {"name": "ConfigEvents", "url": "/docs/reference/notifications/template_vars/config"},
     ],
   },
   {
@@ -82,9 +81,8 @@ import Inhibition from '../../reference/notifications/_inhibition.mdx';
     description: "Channel dependent e.g. email body for email",
     scheme: "GoTemplate",
     templateEnv: [
-      {"name": "CheckEvents", "url": "/docs/reference/notifications/template_vars#check-health-env"},
-      {"name": "ConfigEvents", "url": "/docs/reference/notifications/template_vars#config-health-env"},
-      {"name": "ComponentEvents", "url": "/docs/reference/notifications/template_vars#component-health-env"},
+      {"name": "CheckEvents", "url": "/docs/reference/notifications/template_vars/checks"},
+      {"name": "ConfigEvents", "url": "/docs/reference/notifications/template_vars/config"},
     ],
   },
   {
@@ -92,9 +90,8 @@ import Inhibition from '../../reference/notifications/_inhibition.mdx';
     description: "Filter narrows down the event trigger.\n\nExample: `check.type == 'http'` filter on `check.failed` event will only send notification for failing http checks.",
     scheme: "CEL",
     templateEnv: [
-      {"name": "CheckEvents", "url": "/docs/reference/notifications/template_vars#check-health-env"},
-      {"name": "ConfigEvents", "url": "/docs/reference/notifications/template_vars#config-health-env"},
-      {"name": "ComponentEvents", "url": "/docs/reference/notifications/template_vars#component-health-env"},
+      {"name": "CheckEvents", "url": "/docs/reference/notifications/template_vars/checks"},
+      {"name": "ConfigEvents", "url": "/docs/reference/notifications/template_vars/config"},
     ],
   },
   {
