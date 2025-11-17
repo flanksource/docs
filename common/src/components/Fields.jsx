@@ -16,7 +16,7 @@ let schemes = {
   '[]jsonpathorstring': '`[]string` or [[]JSONPath](https://jsonpath.com/)',
   jsonpath: '[JSONPath](https://jsonpath.com/)',
   size: '[Size](/reference/types#size)',
-  "[]metric": '[[]Metric](/guides/canary-checker/concepts/metrics#custom-metrics)',
+  "[]metric": '[[]Metric](/docs/guides/canary-checker/concepts/metrics#custom-metrics)',
   agent: '[Agent](/reference/types#agent)',
   resourceselector: '[ResourceSelector](/reference/resource-selector)',
   resourceselectors: '[[]ResourceSelector](/reference/resource-selector)',
@@ -93,7 +93,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     (row.field != "artifacts" || !oss));
 
 
-  var fieldSorter = function(a, b) {
+  var fieldSorter = function (a, b) {
     if (a.required && !b.required) {
       return -1;
     }
@@ -625,7 +625,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
 
   common = common.filter(row => !row.required).filter(i => i.field != null)
   common.sort(fieldSorter)
-  
+
   rows = rows.concat(common)
 
   return (

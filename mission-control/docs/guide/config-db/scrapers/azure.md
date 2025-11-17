@@ -9,10 +9,6 @@ sidebar_custom_props:
 
 <!-- Source: modules/config-db/api/v1/azure.go:25#Azure -->
 
-:::tip Registry
-The registry has an [Azure](/registry/azure) Helm chart that provides a pre-configured Scraper with some common defaults
-:::
-
 The Azure scrapers scrapes your azure account to fetch all the resources & save them as configs.
 
 ```yaml title="azure-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/azure.yaml
@@ -25,7 +21,7 @@ The Azure scrapers scrapes your azure account to fetch all the resources & save 
 | ----------- | ---------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
 | `logLevel`  | Specify the level of logging.                                                | `string`                                           |          |
 | `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes. | `string`                                           |          |
-| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/guide/config-db/concepts/retention) |          |
+| `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
 | `azure`     | Azure scrape config                                                          | [`[]Azure`](#azure)                                |          |
 
 ### Azure
@@ -39,8 +35,8 @@ The Azure scrapers scrapes your azure account to fetch all the resources & save 
 | `clientID`       | Microsoft Entra ID app client id                                           | <CommonLink to="secrets">_EnvVar_</CommonLink>        |          |
 | `clientSecret`   | Microsoft Entra ID app client secret                                       | <CommonLink to="secrets">_EnvVar_</CommonLink>        |          |
 | `exclusions`     | Specifies the Azure projects to scrape                                     | [`Exclusion`](#exclusion)                             |          |
-| `properties`     | Custom templatable properties for the scraped config items.                | [`[]ConfigProperty`](/reference/config-db/properties) |          |
-| `transform`      | Field to transform result                                                  | [`Transform`](/guide/config-db/concepts/transform)    |          |
+| `properties`     | Custom templatable properties for the scraped config items.                | [`[]ConfigProperty`](/docs/reference/config-db/properties) |          |
+| `transform`      | Field to transform result                                                  | [`Transform`](/docs/guide/config-db/concepts/transform)    |          |
 | `tags`           | Set custom tags on the scraped config items                                | `map[string]string`                                   |          |
 
 :::note
