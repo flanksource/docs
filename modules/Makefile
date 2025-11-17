@@ -11,15 +11,18 @@ sync:
 
 
 LOCALBIN=.bin
-EGET=$(LOCALBIN)/eget
-EGET_BIN=$(LOCALBIN)
-$(EGET): $(LOCALBIN)
-	GOBIN=$(shell pwd)/$(LOCALBIN) go install github.com/zyedidia/eget@v1.3.4
+DEPS=$(LOCALBIN)/deps
 
-$(LOCALBIN)/helm: 	$(EGET)
-	$(EGET) https://get.helm.sh/helm-v3.18.2-$(OS)-$(ARCH).tar.gz --upgrade-only --to $(LOCALBIN) --file helm
-$(LOCALBIN)/yq: $(EGET)
-	$(EGET) -t v4.45.1 mikefarah/yq --upgrade-only --to $(LOCALBIN) -a "^.tar.gz"
+$(DEPS): $(LOCALBIN)
+
+	which $(DEPS) || curl -sSL https://github.com/flanksource/deps/releases/latest/download/deps-$(OS)-$(ARCH).tar.gz |  tar -xz  -C $(LOCALBIN)
+	chmod +x $(DEPS)
+
+$(LOCALBIN)/helm: $(DEPS)
+	$(DEPS) install helm@3 --bin-dir $(LOCALBIN) --no-progress
+
+$(LOCALBIN)/yq: $(DEPS)
+	$(DEPS) install yq --bin-dir $(LOCALBIN) --no-progress
 
 
 .PHONY: manifests
