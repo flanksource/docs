@@ -1,6 +1,6 @@
 ---
 pagination_next: guide/notifications/index
-pagination_prev: guide/topology/index
+pagination_prev: guide/playbooks/index
 slug: /guide/canary-checker
 id: health-checks
 title: Health Checks
@@ -33,21 +33,15 @@ In addition to returning a pass/fail status, health checks can export metrics to
 Evaluate the health of checks using scripts in CEL, Javascript or Go Templating. Scripts can also be used to filter and transform alerts from external systems.
 
 
-
  ### Dashboard
 The health checks page provides a high level view of the overall health of all services, infrastructure, and applications. It surfaces recent failures and provides a high level latency and reliability metrics.
 
 ![](./images/canary-dashboard.png)
 
-### Topology
-
-Health checks can be associated with components in a [topology](topology/concepts/health-checks) and then show up in the topology card:
-
-![](./images/topology-health-checks.png)
 
 ### Prometheus
 
-[Prometheus](/concepts/metrics) metrics are exposed from health checks to provide high level visibility into latency, error rates and other metrics. This allows monitoring the health of services and applications using existing Prometheus alerts and <CommonLink to="grafana">Grafana</CommonLink> dashboards.
+[Prometheus](/docs/guide/canary-checker/concepts/metrics) metrics are exposed from health checks to provide high level visibility into latency, error rates and other metrics. This allows monitoring the health of services and applications using existing Prometheus alerts and <CommonLink to="grafana">Grafana</CommonLink> dashboards.
 
 ### Synthetic
 

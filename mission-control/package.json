@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "tailwindcss -i ./src/css/custom.css -o ./src/css/out.css && docusaurus start -p 3001",
+    "start": "tailwindcss -i ./src/css/custom.css -o ./src/css/out.css && docusaurus start -p 3005",
     "build": "tailwindcss -i ./src/css/custom.css -o ./src/css/out.css && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

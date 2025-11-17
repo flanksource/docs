@@ -2,7 +2,6 @@ import Link from '@docusaurus/Link';
 
 Resource Selectors are used in multiple places including:
 
-- Attaching components to a topology
 - Creating relationships between configs and configs/components
 - Finding resources to run health checks or playbooks on
 
@@ -40,7 +39,7 @@ Supported operators:
 
 Supported fields for:
 
-- [Catalog/Config](/reference/config-db/config):
+- [Catalog/Config](/docs/reference/config-db/config):
 
 | Field        | Type       |
 | ------------ | ---------- |
@@ -59,7 +58,7 @@ Supported fields for:
 | `deleted_at` | `datetime` |
 
 
-- [Catalog/Config Changes](/reference/config-db/changes):
+- [Catalog/Config Changes](/docs/reference/config-db/changes):
 
 | Field           | Type       |
 | --------------- | ---------- |
@@ -100,29 +99,9 @@ type=Kubernetes::Pod label.app=nginx tags.cluster=prod
 updated_at>2025-01-01 updated_at<2025-01-31 type=Kubernetes::Deployment
 ```
 
-{!props.hideComponent && (
-<Link to="/reference/topology/components">Components</Link>
-)}
-
-{!props.hideComponent && (
-<Fields rows={[
-  {field: "name", scheme: "string"},
-  {field: "topology_id", scheme: "string"},
-  {field: "namespace", scheme: "string"},
-  {field: "type", scheme: "string"},
-  {field: "status", scheme: "string"},
-  {field: "labels", scheme: "json"},
-  {field: "health", scheme: "string"},
-  {field: "agent", scheme: "string"},
-  {field: "created_at", scheme: "datetime"},
-  {field: "updated_at", scheme: "datetime"},
-  {field: "deleted_at", scheme: "datetime"},
-]}/>
-
-)}
 
 {!props.hideCheck && (
-<CommonLink to="/reference/canary-checker/check">Health Checks</CommonLink>
+<CommonLink to="/docs/reference/canary-checker/check">Health Checks</CommonLink>
 )}
 
 {!props.hideCheck && (
