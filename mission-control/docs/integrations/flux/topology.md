@@ -40,8 +40,8 @@ Benefits:
 :::info Prerequisites
 To enable the Flux Topology you need
 
-- Mission Control [installed](/installation/)
-- [kubectl](/installation/saas/kubectl) access to the Mission Control instance
+- Mission Control [installed](/docs/installation/)
+- [kubectl](/docs/installation/saas/kubectl) access to the Mission Control instance
   :::
 
 1. Install the [mission-control-flux](https://artifacthub.io/packages/helm/flanksource/mission-control-flux) chart
