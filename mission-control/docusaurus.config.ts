@@ -18,7 +18,8 @@ export default async function createConfigAsync() {
     tagline: '',
     // staticDirectories: ['images', 'static'],
     url: 'https://flanksource.com',
-    baseUrl: process.env.NODE_ENV == "development" || process.env.PREVIEW == "true" ? '/' : '/docs',
+    // Site hosted at root - documentation at /docs/, marketing pages at /
+    baseUrl: '/',
     organizationName: 'flanksource', // Usually your GitHub org/user name.
     projectName: 'docs', // Usually your repo name.
     favicon: 'img/flanksource-icon.png',
@@ -32,12 +33,12 @@ export default async function createConfigAsync() {
       oss: false,
       productName: 'Mission Control',
       links: {
-        authentication: '/reference/env-var',
-        secrets: '/reference/env-var',
-        connection: '/reference/connections',
-        cel: '/reference/scripting/cel',
-        gotemplate: '/reference/scripting/gotemplate',
-        javascript: '/reference/scripting/javascript',
+        authentication: '/docs/reference/env-var',
+        secrets: '/docs/reference/env-var',
+        connection: '/docs/reference/connections',
+        cel: '/docs/reference/scripting/cel',
+        gotemplate: '/docs/reference/scripting/gotemplate',
+        javascript: '/docs/reference/scripting/javascript',
         jsonpath: 'https://jsonpath.com/'
       }
     },
@@ -58,31 +59,16 @@ export default async function createConfigAsync() {
           redirects: [
             // /docs/oldDoc -> /docs/newDoc
             // {
-            //   to: '/guide/canary-checker/reference/sql',
-            //   from: ['/guide/canary-checker/reference/postgres', '/guide/canary-checker/reference/mysql', '/guide/canary-checker/reference/mssql'],
+            //   to: '/docs/guide/canary-checker/reference/sql',
+            //   from: ['/docs/guide/canary-checker/reference/postgres', '/docs/guide/canary-checker/reference/mysql', '/docs/guide/canary-checker/reference/mssql'],
             // },
 
             // {
-            //   to: '/guide/canary-checker/reference/folder#s3',
-            //   from: '/guide/canary-checker/reference/s3-bucket',
+            //   to: '/docs/guide/canary-checker/reference/folder#s3',
+            //   from: '/docs/guide/canary-checker/reference/s3-bucket',
             // },
 
-            {
-              to: '/guide/canary-checker',
-              from: '/canary-checker',
-            },
-            {
-              to: '/guide/playbooks',
-              from: '/playbooks',
-            },
-            {
-              to: '/guide/notifications/',
-              from: '/notifications',
-            },
-            {
-              to: '/guide/topology',
-              from: '/topology',
-            },
+            // Redirects removed - marketing pages now at root, docs at /docs/
 
           ],
 
@@ -105,30 +91,35 @@ export default async function createConfigAsync() {
         return {
           name: 'node-polyfill-plugin',
           configureWebpack(config, isServer) {
-            if (!isServer) {
-              return {
-                resolve: {
-                  fallback: {
-                    path: require.resolve('path-browserify'),
-                    util: require.resolve('util/'),
-                    process: require.resolve('process/browser'),
-                    buffer: require.resolve('buffer/'),
-                    fs: require.resolve("browserify-fs"),
-                    url: require.resolve("url/")
-                  },
+            const webpackConfig = {
+              resolve: {
+                fallback: {
+                  path: require.resolve('path-browserify'),
+                  util: require.resolve('util/'),
+                  process: require.resolve('process/browser'),
+                  buffer: require.resolve('buffer/'),
+                  fs: require.resolve("browserify-fs"),
+                  url: require.resolve("url/")
                 },
-
-                plugins: [
-                  new (require('webpack').ProvidePlugin)({
-                    process: ['process'],
-
-                    Buffer: ['buffer', 'Buffer'],
-                  }),
+              },
+              module: {
+                rules: [
+                  {
+                    test: /\.html$/,
+                    exclude: /node_modules/,
+                    type: 'asset/source',
+                  },
                 ],
-              };
-            }
-            return {};
+              },
+              plugins: [
+                new (require('webpack').ProvidePlugin)({
+                  process: ['process'],
+                  Buffer: ['buffer', 'Buffer'],
+                }),
+              ],
+            };
 
+            return webpackConfig;
           },
         };
       },
@@ -163,7 +154,8 @@ export default async function createConfigAsync() {
             containerId: 'GTM-KZHC2BXZ',
           },
           docs: {
-            routeBasePath: '/',
+            // Documentation served under /docs/ subdirectory
+            routeBasePath: '/docs',
             exclude: [
               "**/*.canary.mdx",
               "**/*.canary.md",
@@ -228,22 +220,22 @@ export default async function createConfigAsync() {
           },
           items: [
             {
-              to: '/',
+              to: '/docs',
               sidebarId: 'overview',
-              activeBasePath: 'null',
+              activeBasePath: '/docs',
               position: 'left',
               label: 'Overview'
             },
             {
-              to: 'integrations',
-              activeBasePath: '/integrations',
+              to: '/docs/integrations',
+              activeBasePath: '/docs/integrations',
               // sidebarId: 'integrationsSidebar',
               position: 'left',
               label: 'Integrations'
             },
             {
-              to: 'guide',
-              activeBasePath: '/guide',
+              to: '/docs/guide',
+              activeBasePath: '/docs/guide',
               // activeBasePath: '/config-db',
               label: 'User Guide',
               position: 'left'
@@ -275,8 +267,8 @@ export default async function createConfigAsync() {
             // },
 
             {
-              to: 'reference',
-              activeBasePath: '/reference',
+              to: '/docs/reference',
+              activeBasePath: '/docs/reference',
               label: 'Reference',
               position: 'left'
             },

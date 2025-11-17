@@ -224,11 +224,6 @@ const sidebars = {
           type: 'doc',
           id: 'style-guide/web',
           label: 'Web Guidelines'
-        },
-        {
-          type: 'doc',
-          id: 'style-guide/content',
-          label: 'Content Guidelines'
         }
       ]
     }
