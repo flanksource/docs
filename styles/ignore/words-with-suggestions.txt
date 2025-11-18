@@ -1,11 +1,16 @@
 actionPrefix
+addr
 agent_id
 aggregatorName
 AIOps
+allowedDomains
+allowedURLFilters
 eks
 gke
 aks
 datasource
+disallowedDomains
+disallowedURLFilters
 fblog
 Temurin
 dev
@@ -67,6 +72,7 @@ awsConnection
 basepath
 bash_exporter
 Bitnami
+Bitwise
 blackbox
 Blackbox
 bool
@@ -78,6 +84,7 @@ bools
 botfather
 botkey
 botmail
+bucketName
 buildMetadata
 caCert
 camelCase
@@ -86,6 +93,7 @@ canary_check_duration
 canary_check_failed_count
 canary_check_info
 canary_check_success_count
+canary_id
 capitalizations
 cel
 CEL's
@@ -157,9 +165,11 @@ Dynatrace
 enum
 env
 envvar
+envVars
 envvar
 etcd
 exactreply
+exclude_filters
 exists_one
 expectedContent
 expectedContent
@@ -179,6 +189,7 @@ fluxcd
 forEach
 fromAddress
 fromName
+gcp
 gcpConnection
 GCPDatabase
 getAction
@@ -190,8 +201,10 @@ githubToken
 Gitlab
 gitops
 Gitops
+gocontext
 gojq
 golang
+gomega
 gomplate
 gotemplate
 Gotify
@@ -200,6 +213,7 @@ Grafana
 handshakeTimeout
 handshakeTimeout
 hardcoded
+hcl
 hostname
 http
 HTTPConnection
@@ -212,6 +226,7 @@ hyperthread
 hyperthreaded
 hyperthreading
 hyperthreads
+ignoreRules
 ignoredRules
 imcp
 incidentcommander
@@ -230,6 +245,7 @@ jmeter
 Jmx
 jq
 jq
+JSONCheck
 jqplay
 json
 json_exporter
@@ -240,6 +256,7 @@ JSONPath
 junit
 Junit
 JUnit
+kafka
 keypair
 keypairs
 knowledgebase
@@ -264,6 +281,7 @@ lt
 macos
 mailserver
 mailservers
+matchLabel
 Mattermost
 maxAge
 maxCount
@@ -288,6 +306,8 @@ mysql
 nameOverride
 nameserver
 nameservers
+NATs
+nats
 namespace
 namespaced
 namespaces
@@ -297,6 +317,7 @@ newman
 nginx
 nginx's
 nodeSelector
+ntlm
 Ntfy
 oauth
 OAuth
@@ -321,21 +342,26 @@ postgresql
 powershell
 Powershell
 prepends
+project_id
 priorityClass
 priorityClass
 prometheus
 promethus
 protobuf
 providesApis
+pubsub
 pulldown
 Pushbullet
 querytype
+rabbitmq
+randomDelay
 ratelimit
 ratelimited
 ratelimiting
 ratelimits
 reachability
 readonly
+Readme
 readyTimeout
 readyTimeout
 redis
@@ -346,6 +372,7 @@ responseCodes
 responseCodes
 responseContent
 responseContent
+responseJSONContent
 restic
 Restic
 Rocketchat
@@ -368,6 +395,7 @@ snake_case
 splitLines
 sql
 sql_exporter
+sqs
 squote
 src
 ssl_exporter
@@ -427,9 +455,11 @@ urlParse
 urlPart
 userSearch
 uuid
+variadic
 vCluster
 volumeMounts
 waitFor
+waitTime
 walkthrough
 walkthroughs
 webpage
