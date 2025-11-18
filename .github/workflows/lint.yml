@@ -6,52 +6,20 @@ jobs:
   file-ref-check:
     name: file-ref-check
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        repo: [mission-control]
     steps:
-      - name: Install ripgrep
-        run: |
-          curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz
-          tar xzf ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz
-          mv ripgrep-14.1.1-x86_64-unknown-linux-musl/rg /usr/local/bin/rg
-          rg --version
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
-      - uses: actions/setup-node@v4
+      - name: Install Task
+        uses: arduino/setup-task@v2
         with:
-          node-version: '20.11.1'
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies and build
-        run: |
-          cd modules && make all
-          cd  ../${{ matrix.repo }}
-          echo "Installing packages in $(pwd)"
-          npm ci
-          echo "Building $(pwd)"
-          npm run build
-
-      - name: Check for broken file references
-        run: |
-          cd "${{ matrix.repo }}/build"
-          echo "Checking for broken files in $(pwd)"
-
-          echo "Total files: $(ls -alh . | wc -l)"
-          echo "Total HTML files: $(find . -type f -name "*.html" | wc -l)"
-
-          echo "Ripgrep"
-          if rg 'file=../../../modules' -g '*.html' | grep -q .; then
-            echo "Matches found. Exiting with code 0."
-            rg 'file=../../../modules' -g '*.html'
-            exit 1
-          else
-            echo "No matches found"
-            exit 0
-          fi
+      - name: Check file references in source docs
+        run: task check:files
 
   prettier:
     name: prettier
@@ -63,15 +31,21 @@ jobs:
         with:
           node-version: '20.11.1'
 
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run format check
-        run: make fmt-check
+        run: task fmt:check
         continue-on-error: true
         id: fmt-check
 
       - name: Run formatter and show diff if check failed
         if: steps.fmt-check.outcome == 'failure'
         run: |
-          make fmt
+          task fmt
           git diff
 
       - name: Exit with error if format check failed

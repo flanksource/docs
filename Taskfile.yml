@@ -1,0 +1,161 @@
+version: "3"
+
+vars:
+  LOCALBIN: '{{default ".bin" .LOCALBIN}}'
+  VALE: "{{.LOCALBIN}}/vale"
+  OS:
+    sh: uname -s | tr '[:upper:]' '[:lower:]'
+  ARCH:
+    sh: uname -m | sed 's/x86_64/64-bit/' | sed 's/arm64/ARM64/'
+
+tasks:
+  # Vale tasks
+  vale:install:
+    desc: Download vale binary locally
+    cmds:
+      - mkdir -p {{.LOCALBIN}}
+      - |
+        if ! test -s {{.VALE}}; then
+          echo "Downloading vale for {{.OS}}-{{.ARCH}}..."
+          if [ "{{.OS}}" = "darwin" ]; then
+            curl -sfL https://github.com/errata-ai/vale/releases/download/v3.1.0/vale_3.1.0_macOS_{{.ARCH}}.tar.gz | tar -xz -C {{.LOCALBIN}} vale
+          else
+            curl -sfL https://github.com/errata-ai/vale/releases/download/v3.1.0/vale_3.1.0_Linux_{{.ARCH}}.tar.gz | tar -xz -C {{.LOCALBIN}} vale
+          fi
+        fi
+    status:
+      - test -s {{.VALE}}
+
+  vale:sync:
+    desc: Download vale packages
+    deps: [vale:install]
+    cmds:
+      - "{{.VALE}} sync"
+
+  vale:lint:
+    desc: Run vale on all documentation
+    deps: [vale:sync]
+    cmds:
+      - '{{.VALE}} canary-checker/docs --glob="!**/{README,CHANGELOG,readme,security,SECURITY,CONTRIBUTING,benchmark,development,LICENSE}.md"'
+      - '{{.VALE}} mission-control/docs --glob="!**/{README,CHANGELOG,readme,security,SECURITY,CONTRIBUTING,benchmark,development,LICENSE}.md"'
+
+  vale:changed:
+    desc: Run vale on markdown files changed in current branch
+    deps: [vale:sync]
+    cmds:
+      - |
+        files=$(git diff --name-only main...HEAD | grep -E '\.(md|mdx)$' || true)
+        if [ -n "$files" ]; then
+          echo "Running vale on changed files: $files"
+          {{.VALE}} $files --glob='!**/{README,CHANGELOG,readme,security,AGENTS,Readme,SECURITY,CONTRIBUTING,benchmark,development,LICENSE}.md'
+        else
+          echo "No markdown/mdx files changed"
+        fi
+
+  # Markdownlint tasks
+  markdown:lint:
+    desc: Run markdownlint on all documentation
+    cmds:
+      - markdownlint mission-control/docs
+      - markdownlint canary-checker/docs
+
+  # Prettier tasks
+  fmt:
+    desc: Format all markdown files with prettier
+    cmds:
+      - npx prettier --write "**/*.md"
+
+  fmt:check:
+    desc: Check markdown formatting without making changes
+    cmds:
+      - npx prettier --check --log-level=debug "**/*.md"
+
+  # File reference validation
+  check:files:
+    desc: Check file references in source MDX/MD files
+    vars:
+      DOCS_DIRS: '{{default "mission-control/docs canary-checker/docs" .DOCS_DIRS}}'
+      ROOT_DIR: '{{default "." .ROOT_DIR}}'
+    cmds:
+      - |
+        echo "=== Validating file=<rootDir>/modules references in source docs ==="
+        echo ""
+
+        MISSING_FILES_LIST=$(mktemp)
+        VALID_FILES_LIST=$(mktemp)
+        trap "rm -f $MISSING_FILES_LIST $VALID_FILES_LIST" EXIT
+
+        TOTAL_REFS=0
+        VALID_REFS=0
+        MISSING_REFS=0
+
+        # Search for file=<rootDir> references in MDX/MD source files
+        for docs_dir in {{.DOCS_DIRS}}; do
+          if [ ! -d "$docs_dir" ]; then
+            echo "⚠️  Skipping $docs_dir (directory not found)"
+            continue
+          fi
+
+          echo "Checking $docs_dir/"
+
+          # Find all file=<rootDir>/modules references
+          rg 'file=<rootDir>/modules/[^ ]+' -g '*.{md,mdx}' "$docs_dir" --no-heading --with-filename 2>/dev/null | while IFS=: read -r sourcefile match; do
+            TOTAL_REFS=$((TOTAL_REFS + 1))
+
+            # Extract the file path from the match
+            filepath=$(echo "$match" | grep -o 'file=<rootDir>/[^ ]*' | sed 's/file=<rootDir>//' | sed 's/[{}].*$//')
+
+            # Check if file exists (relative to repository root)
+            if [ -f "{{.ROOT_DIR}}$filepath" ]; then
+              echo "  ✓ $filepath" >> "$VALID_FILES_LIST"
+              echo "      (in: $sourcefile)" >> "$VALID_FILES_LIST"
+              VALID_REFS=$((VALID_REFS + 1))
+            else
+              echo "  ✗ $filepath" >> "$MISSING_FILES_LIST"
+              echo "      (in: $sourcefile)" >> "$MISSING_FILES_LIST"
+              echo "$filepath|$sourcefile" >> "$MISSING_FILES_LIST"
+              MISSING_REFS=$((MISSING_REFS + 1))
+            fi
+          done
+        done
+
+        echo ""
+
+        # Show valid references if any
+        if [ -s "$VALID_FILES_LIST" ]; then
+          echo "Valid file references:"
+          cat "$VALID_FILES_LIST"
+          echo ""
+        fi
+
+        # Show summary
+        # Note: Because we're in a subshell loop, counters don't persist
+        # So we count from the temp files instead
+        TOTAL_COUNT=$(grep -c "✓\|✗" "$VALID_FILES_LIST" "$MISSING_FILES_LIST" 2>/dev/null || echo "0")
+        VALID_COUNT=$(grep -c "✓" "$VALID_FILES_LIST" 2>/dev/null || echo "0")
+        MISSING_COUNT=$(grep -c "✗" "$MISSING_FILES_LIST" 2>/dev/null || echo "0")
+
+        echo "Summary: Found $TOTAL_COUNT file reference(s)"
+        echo "  ✓ Valid: $VALID_COUNT"
+        echo "  ✗ Missing: $MISSING_COUNT"
+        echo ""
+
+        # Check for missing files
+        if [ "$MISSING_COUNT" -gt 0 ]; then
+          echo "ERROR: Missing file references:"
+          cat "$MISSING_FILES_LIST"
+          echo ""
+          echo "ERROR: Found $MISSING_COUNT missing file reference(s)"
+          exit 1
+        fi
+
+        echo "✓ All file references are valid"
+
+  # Meta tasks
+  lint:
+    desc: Run all linting (vale + markdownlint)
+    deps: [vale:lint, markdown:lint]
+
+  check:
+    desc: Run all checks (lint + formatting + file references)
+    deps: [lint, fmt:check, check:files]
