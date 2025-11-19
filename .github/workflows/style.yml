@@ -7,26 +7,16 @@ jobs:
     name: runner / vale
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Get all changed md/mdx files
-        id: changed-files
-        uses: masesgroup/retrieve-changed-files@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          format: csv
-          # files: |
-          #   **/*.md
-          #   **/*.mdx
+          submodules: 'recursive'
 
-      - name: List changed files
-        run: |
-          echo "Files changed:"
-          echo "${{ steps.changed-files.outputs.added_modified }}"
-
-      - name: Run Vale on changed files
-        uses: errata-ai/vale-action@v2.1.1
+      - name: Install Task
+        uses: arduino/setup-task@v2
         with:
-          files: ${{ steps.changed-files.outputs.added_modified }}
-          reporter: github-pr-check
-          separator: ','
-          fail_on_error: true
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check file references in source docs
+        run: task vale:changed
