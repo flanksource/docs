@@ -20,7 +20,7 @@ const Home = () => {
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               Internal Developer
-              <span className="block text-blue-600">Portal for Operations</span>
+              <span className="block text-blue-600 ml-2">Portal for Operations</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
               Flanksource Mission Control is a source-open Kubernetes-native internal developer portal
