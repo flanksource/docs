@@ -40,13 +40,11 @@ const About = () => {
       linkedin: "https://www.linkedin.com/in/moshe-immerman/",
       image: "/img/flanksource/team/moshe-immerman.jpg"
     },
-
-
     {
       name: "Yash Mehrotra",
-      role: "Senior Backend Engineer (Go)",
-      linkedin: "#",
-      image: "/img/flanksource/team/yash-mehrotra.jpg"
+      role: "Senior Backend Engineer",
+      linkedin: "https://www.linkedin.com/in/yashmehrotra/",
+      image: "/img/flanksource/team/yash-mehrotra.png"
     }
   ];
 
@@ -104,7 +102,7 @@ const About = () => {
           <FaUsers className="w-8 h-8 text-blue-600" />
         </div>
       </div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2 text-center">{person.name}</h3>
+      <p className="text-xl font-semibold text-gray-900 mb-2 text-center">{person.name}</p>
       <p className="text-blue-600 font-medium mb-3 text-center">{person.role}</p>
       {person.linkedin && person.linkedin !== '#' && (
         <div className="flex justify-center">
