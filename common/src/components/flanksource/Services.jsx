@@ -24,7 +24,7 @@ import {
   FaClock,
   FaHeadset
 } from 'react-icons/fa';
-import { SiKubernetes, SiPrometheus, SiGrafana, SiTerraform, SiHelm, SiArgo, SiGitlab, SiGithub, SiDocker, SiAmazonaws, SiMicrosoftazure, SiGooglecloud } from 'react-icons/si';
+import { SiKubernetes, SiPrometheus, SiGrafana, SiTerraform, SiHelm, SiArgo, SiGitlab, SiGithub, SiDocker, SiAmazonaws, SiPostgresql, SiMicrosoftazure, SiGooglecloud } from 'react-icons/si';
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { Feature } from '../Feature';
 import CTA from './CTA';
@@ -109,6 +109,7 @@ const Services = () => {
 
   const technologies = [
     { name: "Kubernetes", icon: <SiKubernetes className="w-8 h-8" /> },
+    { name: "PostgreSQL", icon: <SiPostgresql className="w-8 h-8" /> },
     { name: "Prometheus", icon: <SiPrometheus className="w-8 h-8" /> },
     { name: "Grafana", icon: <SiGrafana className="w-8 h-8" /> },
     { name: "Terraform", icon: <SiTerraform className="w-8 h-8" /> },
@@ -372,7 +373,7 @@ const Services = () => {
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 Technologies we
-                <span className="block text-blue-600">Love</span>
+                <span className="block text-blue-600 ml-2">Love</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 We work with the best open-source and cloud-native technologies to deliver robust, scalable solutions.
