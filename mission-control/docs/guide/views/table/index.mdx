@@ -1,10 +1,59 @@
 ---
 sidebar_position: 3
-title: Table
+title: Table Columns
 sidebar_custom_props:
   icon: view-details
 ---
 
+Tables define the structure and display of view data. Each column has a type that controls how values are rendered and filtered.
+
+## Column Definition
+
+Columns are defined in `spec.columns`:
+
+```yaml
+columns:
+  - name: pod_name        # Column identifier (used in mapping)
+    type: string          # Column type
+    primaryKey: true      # At least one column must be a primary key
+    description: "Pod name"
+```
+
+## Example
+
+This example demonstrates multiple column types including gauge, status, health, datetime, and card positioning:
+
+```yaml title="namespace.yaml" file=<rootDir>/modules/mission-control/fixtures/views/namespace.yaml {7-65}
+
+```
+
+## Common Properties
+
+All column types support these properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `name` | string | Column identifier (required) |
+| `type` | string | Column type (required) |
+| `primaryKey` | bool | Include in composite primary key |
+| `description` | string | Help text for the column |
+| `hidden` | bool | Hide from table display |
+| `filter` | object | Enable filtering (`type: multiselect`) |
+| `icon` | string | Icon for the column (supports CEL like `row.health`) |
+| `card` | object | Card layout position (`position`, `useForAccent`) |
+
+## Card Positioning
+
+Columns can be positioned in card layouts using `card.position`:
+
+- `title` - Card title area
+- `subtitle` - Subtitle area
+- `deck` - Header area after subtitle
+- `body` - Main content area
+- `footer` - Footer area
+- `headerRight` - Right side of header
+
+## Column Types
 
 import DocCardList from '@theme/DocCardList';
 
