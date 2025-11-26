@@ -2,9 +2,11 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Navigation from '@site/src/components/flanksource/Navigation';
 import Link from '@docusaurus/Link';
+import { K8S, Argo, Flux, Go, Prometheus, Grafana, Terraform, Aws, Azure, Gcp, Github, Jaeger, Clickhouse, Helm, Karpenter, Postgres, Crossplane, Vcluster, Powershell, Gitlab } from '@flanksource/icons/mi';
+import { FaHeart } from 'react-icons/fa';
 
 export default function SREJobPage() {
-  const [activeSection, setActiveSection] = React.useState('responsibilities');
+  const [activeSection, setActiveSection] = React.useState('tech-stack');
 
   return (
     <Layout
@@ -34,6 +36,7 @@ export default function SREJobPage() {
         }}>
           <nav style={{ borderLeft: '2px solid #e5e7eb' }}>
             {[
+              { id: 'tech-stack', label: 'Tech Stack' },
               { id: 'responsibilities', label: 'Responsibilities' },
               { id: 'requirements', label: 'Requirements' },
               { id: 'nice-to-haves', label: 'Nice-to-haves' },
@@ -80,12 +83,21 @@ export default function SREJobPage() {
           <h1 style={{
             fontSize: '36px',
             fontWeight: 700,
-            marginBottom: 0
+            marginBottom: '1rem'
           }}>
-            Site Reliability Engineer
+            Kubernetes  Site Reliability Engineer
           </h1>
 
-          <section id="responsibilities" style={{ marginBottom: '3rem' }}>
+
+          <p>
+            Are you an SRE who loves solving complex infrastructure problems but hates the repetitive toil? At Flanksource, we are redefining Managed Services. We are looking for a Kubernetes SRE to manage and optimize diverse Kubernetes environments for our clients—but you won’t be doing it the old way.
+          </p>
+          <p>You will leverage Mission Control, our internal platform, to gain a consolidated view of configuration, changes, and health across client clusters. Instead of manual firefighting, you will build GitOps-driven Playbooks and teach developers on how to use the Mission Control MCP server—feeding real-time data to AI agents—to troubleshoot and fix issues faster.
+          </p>
+
+
+
+          <section id="responsibilities" >
             <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '1rem' }}>Responsibilities</h2>
             <ul style={{ lineHeight: 1.8 }}>
               <li>Design and maintain Kubernetes clusters across multiple environments (development, staging, production)</li>
@@ -99,10 +111,11 @@ export default function SREJobPage() {
             </ul>
           </section>
 
-          <section id="requirements" style={{ marginBottom: '3rem' }}>
+          <section id="requirements" >
             <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '1rem' }}>Requirements</h2>
             <ul style={{ lineHeight: 1.8 }}>
               <li><strong>Deep Kubernetes expertise</strong> - CKA certification preferred</li>
+              <li><strong>Strong</strong> Experience with GitOps tools - (Flux, ArgoCD)</li>
               <li><strong>Infrastructure as Code</strong> - Experience with 2+ IaC tools (Terraform, Pulumi, etc.)</li>
               <li><strong>Monitoring & Observability</strong> - Proficiency with Prometheus, Grafana, and related tools</li>
               <li><strong>Cloud Platforms</strong> - Hands-on experience with AWS, Azure, or GCP</li>
@@ -114,10 +127,10 @@ export default function SREJobPage() {
             </ul>
           </section>
 
-          <section id="nice-to-haves" style={{ marginBottom: '3rem' }}>
+          <section id="nice-to-haves" >
             <h2 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '1rem' }}>Nice-to-haves</h2>
             <ul style={{ lineHeight: 1.8 }}>
-              <li>Experience with GitOps tools (Flux, ArgoCD)</li>
+
               <li>Go programming knowledge or willingness to learn</li>
               <li>Active open-source contributions</li>
               <li>Experience developing Kubernetes operators or controllers</li>
@@ -134,6 +147,49 @@ export default function SREJobPage() {
               <li>Opportunity to shape the future of Kubernetes tooling</li>
             </ul>
           </section>
+
+
+          <section id="tech-stack" className="mb-12">
+            <h2 className="text-2xl font-bold mb-6">Our Tech Stack</h2>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 mb-4">
+              {[
+                { Icon: K8S, name: 'Kubernetes' },
+                { Icon: Argo, name: 'ArgoCD' },
+                { Icon: Flux, name: 'Flux', favorite: true },
+                { Icon: Helm, name: 'Helm' },
+                { Icon: Crossplane, name: 'Crossplane' },
+                { Icon: Karpenter, name: 'Karpenter' },
+                { Icon: Vcluster, name: 'vCluster' },
+                { Icon: Go, name: 'Go' },
+                { Icon: Powershell, name: 'PowerShell' },
+                { Icon: Prometheus, name: 'Prometheus' },
+                { Icon: Grafana, name: 'Grafana' },
+                { Icon: Jaeger, name: 'Jaeger' },
+                { Icon: Terraform, name: 'Terraform' },
+                { Icon: Postgres, name: 'PostgreSQL' },
+                { Icon: Clickhouse, name: 'ClickHouse' },
+                { Icon: Aws, name: 'AWS' },
+                { Icon: Azure, name: 'Azure' },
+                { Icon: Gcp, name: 'GCP' },
+                { Icon: Github, name: 'GitHub' },
+                { Icon: Gitlab, name: 'GitLab' }
+              ].map(({ Icon, name, favorite }) => (
+                <div
+                  key={name}
+                  className="tech-card flex flex-col items-center gap-2 p-3 rounded-lg bg-gray-50 border border-gray-200 transition-all duration-200 relative"
+                >
+                  {favorite && (
+                    <FaHeart className="absolute top-1.5 right-1.5 w-3 h-3 text-red-500" />
+                  )}
+                  <Icon className="w-8 h-8" />
+                  <span className="text-xs font-medium text-gray-600 text-center">
+                    {name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+
 
           {/* Apply Button */}
           <div style={{ marginTop: '3rem' }}>
@@ -163,6 +219,12 @@ export default function SREJobPage() {
       <style>{`
         .apply-button:hover {
           background: #1d4ed8 !important;
+        }
+
+        .tech-card:hover {
+          background-color: #ffffff !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          transform: translateY(-2px);
         }
 
         @media (max-width: 968px) {

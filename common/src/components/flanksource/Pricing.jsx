@@ -21,7 +21,8 @@ import {
   FaQuestionCircle,
   FaInfoCircle
 } from 'react-icons/fa';
-import { SiKubernetes, SiPrometheus, SiAmazonaws, SiMicrosoftazure, SiGooglecloud } from 'react-icons/si';
+import { SiKubernetes, SiPrometheus, SiAmazonwebservices, SiGooglecloud } from 'react-icons/si';
+import { Azure } from '@flanksource/icons/mi';
 import Navigation from './Navigation';
 import { Hero } from './Hero';
 import CTA from './CTA';

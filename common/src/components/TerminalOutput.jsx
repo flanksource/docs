@@ -35,12 +35,28 @@ function ansi2HTML(str, command) {
 
 
 export default function Ansi({ command, children }) {
+  let copy = command
+
+  console.log("COMMAND:", typeof command)
+
+  if (Array.isArray(command)) {
+    copy = command.join("\n")
+    command = command.join("<br/>")
+  }
   let txt = ""
+  if (command) {
+    command = `${command}<br/>`
+  } else {
+    command = ""
+  }
   try {
 
 
     if (children?.props?.children) {
-      txt = `[92m❯[0m [37m${command}[0m<br/>` + children.props.children.replaceAll("\n", "<br/>")
+      copy = children.props.children;
+
+
+      txt = `[92m❯[0m [37m${command}[0m` + children.props.children.replaceAll("\n", "<br/>")
     } else {
       txt = `[92m❯[0m [37m${command}[0m`
     }
@@ -48,6 +64,8 @@ export default function Ansi({ command, children }) {
     console.error(e)
     txt = ""
   }
+
+
 
   let html = new Convert().toHtml(txt, command)
   return (
@@ -111,7 +129,7 @@ export default function Ansi({ command, children }) {
         </div>
 
         {/*FIXME: why does the button render outside?*/}
-        <div className='display-block mb-6 mr-[15px]'><CopyButton code={command} className="text-white/[0.5] hover:text-white" /></div>
+        <div className='display-block mb-6 mr-[15px]'><CopyButton code={copy} className="text-white/[0.5] hover:text-white" /></div>
 
       </div>
       <div

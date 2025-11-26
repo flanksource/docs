@@ -148,11 +148,12 @@ const About = () => {
                 To survive these engagements, we built internal tools to aggregate this chaos. Over time, these tools evolved into <strong>Mission Control</strong>. We realized we weren't just solving a client problem; we were solving a fundamental industry gap.
               </p>
             </div>
-            <div className="h-full min-h-[400px] bg-gradient-to-br from-blue-50 to-gray-100 rounded-lg flex items-center justify-center border-2 border-gray-200">
-              <div className="text-center px-8">
-                <div className="text-6xl mb-4">🔧 → 📊</div>
-                <p className="text-gray-600 font-medium">From Consulting Chaos<br/>to Product Clarity</p>
-              </div>
+            <div className="h-full min-h-[400px] rounded-lg overflow-hidden border-2 border-gray-200">
+              <img
+                src="/img/flanksource/generated_image_1763641910004_1.png"
+                alt="From Consulting Chaos to Product Clarity"
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>
@@ -221,9 +222,9 @@ const About = () => {
       </section>
 
       {/* Footer CTA Section */}
-      <section className="py-20 bg-gray-900 text-white">
+      <section className="py-20 bg-blue-50 border-t border-gray-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold mb-8">Ready to regain control?</h2>
+          <h2 className="text-4xl font-bold text-gray-900 mb-8">Ready to regain control?</h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/"
@@ -233,7 +234,7 @@ const About = () => {
             </Link>
             <Link
               to="/careers"
-              className="inline-block bg-gray-700 hover:bg-gray-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200"
+              className="inline-block bg-gray-800 hover:bg-gray-900 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200"
             >
               View Open Positions
             </Link>

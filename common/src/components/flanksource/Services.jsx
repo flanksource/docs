@@ -26,6 +26,7 @@ import {
 } from 'react-icons/fa';
 import { SiKubernetes, SiPrometheus, SiGrafana, SiTerraform, SiHelm, SiArgo, SiGitlab, SiGithub, SiDocker, SiAmazonaws, SiPostgresql, SiMicrosoftazure, SiGooglecloud } from 'react-icons/si';
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+import { Azure } from '@flanksource/icons/mi';
 import { Feature } from '../Feature';
 import CTA from './CTA';
 import Navigation from './Navigation';
@@ -118,8 +119,8 @@ const Services = () => {
     { name: "GitLab", icon: <SiGitlab className="w-8 h-8" /> },
     { name: "GitHub", icon: <SiGithub className="w-8 h-8" /> },
     { name: "Docker", icon: <SiDocker className="w-8 h-8" /> },
-    { name: "AWS", icon: <SiAmazonaws className="w-8 h-8" /> },
-    { name: "Azure", icon: <SiMicrosoftazure className="w-8 h-8" /> },
+    { name: "AWS", icon: <SiAmazonwebservices className="w-8 h-8" /> },
+    { name: "Azure", icon: <Azure className="w-8 h-8" /> },
     { name: "Google Cloud", icon: <SiGooglecloud className="w-8 h-8" /> }
   ];
 
