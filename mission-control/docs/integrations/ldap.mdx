@@ -1,0 +1,171 @@
+---
+title: LDAP
+sidebar_custom_props:
+  icon: ldap
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="healthcheck" />
+</CapabilityBadges>
+
+Mission Control integrates with LDAP directories to monitor authentication infrastructure. Use it to:
+
+- Verify LDAP/Active Directory connectivity and authentication
+- Validate bind credentials before they expire
+- Search for users and groups to confirm directory availability
+- Monitor directory replication by checking user existence across replicas
+- Alert when LDAP services become unavailable
+
+## Health Checks
+
+### Basic Connection Check
+
+Test LDAP connectivity, authentication, and user searches.
+
+```yaml title="ldap-connection-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: ldap-connectivity
+spec:
+  interval: 60
+  ldap:
+    - name: ldap-bind
+      url: ldaps://ldap.example.com:636
+      bindDN: cn=readonly,dc=example,dc=com
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: ldap-credentials
+            key: username
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: ldap-credentials
+            key: password
+```
+
+### User Search Validation
+
+```yaml title="ldap-search-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: ldap-user-search
+spec:
+  interval: 300
+  ldap:
+    - name: search-admin-users
+      url: ldaps://ldap.example.com:636
+      bindDN: cn=readonly,dc=example,dc=com
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: ldap-credentials
+            key: username
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: ldap-credentials
+            key: password
+      userSearch: "(&(objectClass=user)(memberOf=cn=admins,ou=groups,dc=example,dc=com))"
+```
+
+### Active Directory Check
+
+```yaml title="ldap-ad-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: active-directory
+spec:
+  interval: 60
+  ldap:
+    - name: ad-connectivity
+      url: ldaps://dc.corp.example.com:636
+      bindDN: CN=Service Account,OU=Service Accounts,DC=corp,DC=example,DC=com
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: ad-credentials
+            key: username
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: ad-credentials
+            key: password
+      userSearch: "(sAMAccountName=testuser)"
+```
+
+### Skip TLS Verification (Development Only)
+
+```yaml title="ldap-insecure-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: ldap-dev
+spec:
+  interval: 60
+  ldap:
+    - name: ldap-dev-check
+      url: ldaps://ldap-dev.example.com:636
+      bindDN: cn=admin,dc=dev,dc=example,dc=com
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: ldap-dev-credentials
+            key: username
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: ldap-dev-credentials
+            key: password
+      skipTLSVerify: true  # Only for development/testing
+```
+
+## Configuration Options
+
+| Field | Description | Default |
+|-------|-------------|---------|
+| `url` | LDAP server URL (`ldap://` or `ldaps://`) | Required |
+| `bindDN` | Distinguished name for binding | Required |
+| `username` | Bind username | Required |
+| `password` | Bind password | Required |
+| `userSearch` | LDAP filter to search for users | Optional |
+| `skipTLSVerify` | Skip TLS certificate verification | `false` |
+
+## Common LDAP Filters
+
+```
+# Find user by username
+(uid=johndoe)
+
+# Find user by email
+(mail=john@example.com)
+
+# Find all users in a group
+(&(objectClass=user)(memberOf=cn=developers,ou=groups,dc=example,dc=com))
+
+# Active Directory: Find by sAMAccountName
+(sAMAccountName=johndoe)
+
+# Find enabled AD users
+(&(objectClass=user)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))
+
+# Find users modified in last 24 hours
+(&(objectClass=user)(whenChanged>=20240101000000.0Z))
+```
+
+## Next Steps
+
+<Cards>
+  <Card title="Health Check Reference" href="/canary-checker/docs/reference/ldap">
+    LDAP health check configuration options
+  </Card>
+  <Card title="Azure AD Integration" href="/docs/integrations/azure-ad">
+    Monitor Azure Active Directory / Entra ID
+  </Card>
+</Cards>

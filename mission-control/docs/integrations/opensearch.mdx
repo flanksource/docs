@@ -1,0 +1,98 @@
+---
+title: Opensearch
+sidebar_custom_props:
+  icon: opensearch
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="healthcheck" />
+</CapabilityBadges>
+
+Mission Control integrates with Opensearch and Elasticsearch to monitor your search infrastructure. Use it to:
+
+- Execute search queries against Opensearch/Elasticsearch indices and validate results
+- Monitor cluster health and index availability
+- Alert when expected documents are missing or counts change unexpectedly
+- Validate log ingestion pipelines are working correctly
+- Check that critical indices contain recent data
+
+## Health Checks
+
+### Opensearch Example
+
+Run queries against Opensearch or Elasticsearch and validate the results.
+
+```yaml title="opensearch-health-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: opensearch-check
+spec:
+  interval: 60
+  opensearch:
+    - name: logs-index-check
+      url: https://opensearch:9200
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: opensearch-credentials
+            key: username
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: opensearch-credentials
+            key: password
+      index: application-logs
+      query: |
+        {
+          "query": {
+            "range": {
+              "@timestamp": {
+                "gte": "now-5m"
+              }
+            }
+          }
+        }
+      results: 1  # Expect at least 1 result
+```
+
+### Elasticsearch Example
+
+```yaml title="elasticsearch-health-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: elasticsearch-check
+spec:
+  interval: 60
+  elasticsearch:
+    - name: error-logs-check
+      url: https://elasticsearch:9200
+      index: error-logs-*
+      query: |
+        {
+          "query": {
+            "bool": {
+              "must": [
+                { "match": { "level": "ERROR" } },
+                { "range": { "@timestamp": { "gte": "now-1h" } } }
+              ]
+            }
+          }
+        }
+      results: 0  # Expect no errors in the last hour
+```
+
+## Next Steps
+
+<Cards>
+  <Card title="Health Check Reference" href="/canary-checker/docs/reference/opensearch">
+    Opensearch health check configuration options
+  </Card>
+  <Card title="Elasticsearch Reference" href="/canary-checker/docs/reference/elasticsearch">
+    Elasticsearch health check configuration options
+  </Card>
+</Cards>

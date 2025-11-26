@@ -1,44 +1,66 @@
 ---
-draft: true
-title: Argo
+title: ArgoCD
 sidebar_custom_props:
   icon: argo
 ---
 
-
-
+import { Card, Cards } from '@site/../common/src/components/Card'
+import Helm from '@site/../common/src/components/Helm.jsx'
 import Schema from '@site/modules/mission-control-registry/charts/argocd/values.schema.json'
+import Prereqs from '@site/docs/partials/_integration_prereqs.mdx'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
 
-# ArgoCD
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+  <CapabilityBadge type="playbook" />
+</CapabilityBadges>
 
-Mission Control integrates with ArgoCD to provide monitoring and relationship tracking of ArgoCD Applications and their associated resources.
+Mission Control integrates with ArgoCD to provide visibility into your GitOps deployments. Use it to:
 
-## Resource Scraping & Relationships
+- Discover Applications and ApplicationSets with their sync status and health state
+- Track the full resource hierarchy from Applications to Deployments, Services, and ConfigMaps
+- Correlate failed syncs with recent Git commits or cluster configuration changes
+- Monitor sync status changes over time with full history
+- Navigate relationships between Applications and the Kubernetes resources they deploy
 
-The integration automatically scrapes ArgoCD Applications (Custom Resources with apiVersion starting with `argoproj.io`) and establishes parent-child relationships between the Application and its deployed resources. This is done by:
+## Quick Start
 
-1. Examining the `status.resources` field of ArgoCD Applications
-2. Creating links between the Application and each resource referenced in the status
-3. Tracking resources across all supported Kubernetes types like Deployments, Services, ConfigMaps etc.
+<Prereqs />
 
-For example, if an ArgoCD Application deploys a Deployment and Service, Mission Control will automatically:
-- Detect the Application as the parent resource
-- Link it to the child Deployment and Service resources
-- Allow you to navigate and view the full resource hierarchy
+<Helm chart="mission-control-argocd" schema={Schema} />
+
+## Config Scrapers
+
+The ArgoCD integration automatically discovers and tracks config items in the unified catalog:
+
+- **Applications**: Track sync status, health state, and target revisions for each Application
+- **ApplicationSets**: Monitor template-generated applications and their parameters
+- **Deployed Resources**: Correlate Deployments, Services, ConfigMaps, and other resources with their parent Applications
+
+## Resource Relationships
+
+The integration examines the `status.resources` field of ArgoCD Applications and establishes parent-child relationships between the Application and its deployed resources:
+
+1. Detects the Application as the parent config item
+2. Links it to child Deployments, Services, and other resources referenced in the status
+3. Tracks resources across all supported Kubernetes types
+
+For example, if an ArgoCD Application deploys a Deployment and Service, Mission Control automatically links them in the catalog, allowing navigation through the full resource hierarchy.
 
 ## Health Status
 
-ArgoCD's built-in health checks are used to determine the overall health status of Applications and their resources. The status is gathered from ArgoCD's native health assessment and surfaced in Mission Control's UI.
+ArgoCD's built-in health checks determine the overall health status of Applications and their resources. The status is gathered from ArgoCD's native health assessment and displayed alongside other health indicators in the catalog.
 
+## Next Steps
 
-## Topology
-
-The Argo topology can be used to monitor and manage both an Argo instance and the Argo applications created
-
-1. Install the [mission-control-flux](https://artifacthub.io/packages/helm/flanksource/mission-control-argo) chart
-
-   <Helm chart="mission-control-argo"
-   schema={Schema}
-   createRepo={false}
-   creareNamespace={false}
-    />
+<Cards>
+  <Card title="Flux Integration" href="/docs/integrations/flux">
+    Compare with Flux GitOps integration
+  </Card>
+  <Card title="Kubernetes Integration" href="/docs/integrations/kubernetes">
+    Learn about Kubernetes resource tracking
+  </Card>
+  <Card title="Config DB Reference" href="/docs/guide/config-db">
+    Explore configuration scraping capabilities
+  </Card>
+</Cards>

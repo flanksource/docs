@@ -1,0 +1,179 @@
+---
+title: HTTP
+sidebar_custom_props:
+  icon: http
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="healthcheck" />
+  <CapabilityBadge type="playbook" />
+  <CapabilityBadge type="scraper" />
+</CapabilityBadges>
+
+Mission Control integrates with HTTP endpoints to monitor APIs and web services. Use it to:
+
+- Monitor API availability and response times
+- Validate JSON/XML response content against expected values
+- Check SSL certificate expiration before services fail
+- Authenticate with Basic Auth, OAuth2, or NTLM
+- Execute HTTP requests from playbooks for webhooks and API calls
+- Scrape configuration data from REST APIs
+
+## Health Checks
+
+### Basic Availability Check
+
+Monitor HTTP endpoints with comprehensive validation options.
+
+```yaml title="http-availability-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: api-health
+spec:
+  interval: 30
+  http:
+    - name: api-endpoint
+      url: https://api.example.com/health
+      responseCodes:
+        - 200
+```
+
+### JSON Response Validation
+
+```yaml title="http-json-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: api-status
+spec:
+  interval: 60
+  http:
+    - name: api-status
+      url: https://api.example.com/status
+      responseCodes:
+        - 200
+      responseContent:
+        jsonPath:
+          path: $.status
+          value: healthy
+```
+
+### SSL Certificate Check
+
+```yaml title="http-ssl-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: ssl-expiry
+spec:
+  interval: 3600
+  http:
+    - name: ssl-check
+      url: https://example.com
+      maxSSLExpiry: 720  # Alert if cert expires within 30 days (720 hours)
+```
+
+### Response Time Threshold
+
+```yaml title="http-latency-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: api-latency
+spec:
+  interval: 30
+  http:
+    - name: api-response-time
+      url: https://api.example.com/data
+      thresholdMillis: 500  # Alert if response takes > 500ms
+```
+
+### Authentication
+
+```yaml title="http-auth-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: authenticated-api
+spec:
+  interval: 60
+  http:
+    - name: secure-api
+      url: https://api.example.com/secure
+      authentication:
+        username:
+          valueFrom:
+            secretKeyRef:
+              name: api-credentials
+              key: username
+        password:
+          valueFrom:
+            secretKeyRef:
+              name: api-credentials
+              key: password
+```
+
+## Playbook Actions
+
+Make HTTP requests from playbooks to trigger webhooks or call APIs.
+
+```yaml title="http-playbook-action.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: notify-external
+spec:
+  on:
+    canary:
+      - name: critical-service
+        failed: true
+  actions:
+    - name: webhook-notification
+      http:
+        url: https://hooks.example.com/incident
+        method: POST
+        headers:
+          Content-Type: application/json
+        body: |
+          {
+            "service": "{{.check.name}}",
+            "status": "{{.check.status}}",
+            "message": "{{.check.message}}"
+          }
+```
+
+## Config Scrapers
+
+Scrape configuration data from REST APIs.
+
+```yaml title="http-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: api-config
+spec:
+  schedule: "@every 1h"
+  http:
+    - url: https://api.example.com/config
+      headers:
+        Authorization: Bearer ${API_TOKEN}
+      items:
+        - type: API::Config
+          id: .id
+          name: .name
+```
+
+## Next Steps
+
+<Cards>
+  <Card title="Health Check Reference" href="/canary-checker/docs/reference/http">
+    HTTP health check configuration options
+  </Card>
+  <Card title="HTTP Playbook Action" href="/docs/guide/playbooks/actions/http">
+    HTTP action reference for playbooks
+  </Card>
+</Cards>

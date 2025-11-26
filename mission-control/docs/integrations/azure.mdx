@@ -5,15 +5,19 @@ sidebar_custom_props:
 ---
 
 import Schema from '@site/modules/mission-control-registry/charts/azure/values.schema.json'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
 
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+</CapabilityBadges>
 
-Mission Control integrates with Azure to scrape and monitor your Azure cloud resources. The integration supports:
+Mission Control integrates with Azure to provide visibility into your cloud infrastructure. Use it to:
 
-- Azure subscription monitoring via subscription ID
-- Organization and tenant-based access
-- Configurable exclusions and transformations
-- Authentication via client ID and secret
-- Custom connection settings
+- Discover and catalog VMs, Azure SQL databases, App Services, and other Azure resources
+- Track configuration changes across subscriptions and resource groups
+- Monitor resource health and correlate with Kubernetes workloads
+- Support multi-tenant environments with organization-based access
+- Build a unified catalog of Azure resources alongside other cloud providers
 
 ## Getting Started
 

@@ -1,0 +1,26 @@
+---
+title: AWS
+sidebar_custom_props:
+  icon: aws
+---
+
+import DocCardList from '@theme/DocCardList';
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+  <CapabilityBadge type="healthcheck" />
+  <CapabilityBadge type="playbook" />
+  <CapabilityBadge type="notifications" />
+</CapabilityBadges>
+
+Mission Control integrates with AWS to provide visibility into your cloud infrastructure. Use it to:
+
+- Discover and catalog EC2 instances, RDS databases, Lambda functions, and other AWS resources
+- Monitor S3 bucket availability, CloudWatch metrics, and service health
+- Track configuration changes across accounts and regions
+- Correlate AWS resources with Kubernetes workloads and Terraform state
+- Trigger automated remediation playbooks when health checks fail
+- Send alerts to SNS topics or integrate with AWS incident workflows
+
+<DocCardList />

@@ -1,0 +1,26 @@
+---
+title: Flux
+hide_title: true
+sidebar_custom_props:
+  icon: flux
+---
+
+import DocCardList from '@theme/DocCardList';
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+## <Icon name="flux"/> Flux
+
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+  <CapabilityBadge type="playbook" />
+</CapabilityBadges>
+
+Mission Control integrates with Flux to provide visibility into your GitOps workflows. Use it to:
+
+- Discover GitRepositories, Kustomizations, and HelmReleases with their reconciliation status
+- Visualize the full dependency tree to identify which component is blocking reconciliation
+- Suspend and resume reconciliation directly from the UI
+- Trigger manual reconciliation or request temporary namespace access for debugging
+- Correlate reconciliation failures with source Git repository issues or cluster problems
+
+<DocCardList />

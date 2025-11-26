@@ -1,0 +1,117 @@
+---
+title: Trivy
+sidebar_custom_props:
+  icon: trivy
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+</CapabilityBadges>
+
+Mission Control integrates with Trivy to scan your Kubernetes clusters for security issues. Use it to:
+
+- Scan Kubernetes resources for known vulnerabilities (CVEs)
+- Detect misconfigurations in deployments, services, and other manifests
+- Identify exposed secrets and sensitive data in configurations
+- Track RBAC issues and excessive permissions
+- Monitor license compliance across container images
+
+## Config Scrapers
+
+Scan your Kubernetes cluster using Trivy and import the results into the catalog.
+
+### Basic Kubernetes Scan
+
+```yaml title="trivy-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: trivy-scan
+spec:
+  schedule: "@every 24h"
+  trivy:
+    - version: "0.50.0"
+      kubernetes: {}
+      timeout: "20m"
+```
+
+### Vulnerability Scanning with Severity Filter
+
+```yaml title="trivy-vuln-scan.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: trivy-vulnerabilities
+spec:
+  schedule: "@every 12h"
+  trivy:
+    - version: "0.50.0"
+      ignoreUnfixed: true
+      severity:
+        - critical
+        - high
+      scanners:
+        - vuln
+      kubernetes: {}
+      timeout: "30m"
+```
+
+### Comprehensive Security Scan
+
+```yaml title="trivy-full-scan.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: trivy-comprehensive
+spec:
+  schedule: "@every 6h"
+  trivy:
+    - version: "0.50.0"
+      severity:
+        - critical
+        - high
+        - medium
+      scanners:
+        - vuln      # Vulnerability scanning
+        - config    # Misconfiguration detection
+        - secret    # Secret detection
+        - rbac      # RBAC analysis
+        - license   # License compliance
+      kubernetes: {}
+      timeout: "45m"
+```
+
+## Configuration Options
+
+| Field | Description | Default |
+|-------|-------------|---------|
+| `version` | Trivy version to install and use | Required |
+| `ignoreUnfixed` | Skip vulnerabilities without available fixes | `false` |
+| `severity` | Filter by severity levels (`critical`, `high`, `medium`, `low`) | All |
+| `scanners` | Scanners to enable (`vuln`, `config`, `secret`, `rbac`, `license`) | All |
+| `kubernetes` | Enable Kubernetes cluster scanning | Required (empty object `{}`) |
+| `timeout` | Maximum scan duration | `5m` |
+
+## What Gets Scanned
+
+Trivy scans your Kubernetes cluster and reports:
+
+- **Vulnerabilities**: CVEs in container images with severity, fix versions, and affected packages
+- **Misconfigurations**: Security issues in Kubernetes manifests (privileged containers, missing resource limits, etc.)
+- **Secrets**: Exposed credentials, API keys, and sensitive data
+- **RBAC**: Overly permissive roles and service accounts
+- **Licenses**: Software license compliance issues
+
+## Next Steps
+
+<Cards>
+  <Card title="Scraper Reference" href="/docs/guide/config-db/scrapers/trivy">
+    Trivy scraper configuration options
+  </Card>
+  <Card title="Kubernetes Integration" href="/docs/integrations/kubernetes">
+    Learn about Kubernetes resource scraping
+  </Card>
+</Cards>

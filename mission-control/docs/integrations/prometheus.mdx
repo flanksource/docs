@@ -1,6 +1,71 @@
 ---
-draft: true
 title: Prometheus
 sidebar_custom_props:
   icon: prometheus
 ---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="healthcheck" />
+</CapabilityBadges>
+
+Mission Control integrates with Prometheus to monitor your metrics infrastructure. Use it to:
+
+- Execute PromQL queries against Prometheus endpoints and validate results
+- Alert when metric thresholds are breached or queries return unexpected values
+- Monitor Prometheus availability and query performance
+- Validate SLO/SLI metrics are within acceptable ranges
+- Detect anomalies by checking metric values against expected baselines
+
+## Health Checks
+
+### Example
+
+Run PromQL queries against Prometheus and validate the results match expected criteria.
+
+```yaml title="prometheus-health-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: prometheus-check
+spec:
+  interval: 60
+  prometheus:
+    - name: api-error-rate
+      url: http://prometheus:9090
+      query: |
+        sum(rate(http_requests_total{status=~"5.."}[5m]))
+        / sum(rate(http_requests_total[5m])) * 100
+      test:
+        expr: results[0] < 1  # Less than 1% error rate
+```
+
+### Query with Labels
+
+```yaml title="prometheus-labels-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: prometheus-labels
+spec:
+  interval: 30
+  prometheus:
+    - name: node-memory
+      url: http://prometheus:9090
+      query: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100
+      test:
+        expr: results[0] > 20  # At least 20% memory available
+```
+
+## Next Steps
+
+<Cards>
+  <Card title="Health Check Reference" href="/canary-checker/docs/reference/prometheus">
+    Prometheus health check configuration options
+  </Card>
+  <Card title="Grafana Integration" href="/docs/integrations/grafana">
+    Visualize Mission Control data in Grafana
+  </Card>
+</Cards>

@@ -4,9 +4,22 @@ title: Terraform
 sidebar_custom_props:
   icon: terraform
 ---
-# Terraform Integration
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
 
-The Terraform integration allows Mission Control to scrape and analyze your Terraform state files to build relationships between your infrastructure resources. The scraper examines Terraform state files to extract resource information and establish connections between different AWS resources.
+# Terraform
+
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+  <CapabilityBadge type="relationship" />
+</CapabilityBadges>
+
+Mission Control integrates with Terraform to provide visibility into your infrastructure-as-code. Use it to:
+
+- Discover resources managed by Terraform across your state files
+- Build relationships between Terraform modules and the AWS resources they create
+- Track state file changes and correlate with infrastructure drift
+- Map ARN-based connections between EC2, RDS, Lambda, S3, and other AWS services
+- Understand infrastructure dependencies by linking Terraform configurations to cloud resources
 
 ## How It Works
 
