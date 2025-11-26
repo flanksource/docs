@@ -1,0 +1,208 @@
+---
+title: Email / SMTP
+sidebar_custom_props:
+  icon: email
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="notifications" />
+</CapabilityBadges>
+
+Mission Control integrates with SMTP servers to send email notifications. Use it to:
+
+- Send email alerts when health checks fail or configs change
+- Notify teams of incidents and infrastructure changes
+- Route notifications to different recipients based on severity
+- Use HTML or plain text email formatting
+- Integrate with any SMTP provider (Gmail, SendGrid, AWS SES, etc.)
+
+## Notifications
+
+Send email notifications via SMTP.
+
+### Basic Email Notification
+
+```yaml title="email-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: email-alerts
+spec:
+  events:
+    - check.failed
+  to:
+    email:
+      host: smtp.example.com
+      port: 587
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: smtp-credentials
+            key: username
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: smtp-credentials
+            key: password
+      fromAddress: alerts@example.com
+      fromName: Mission Control
+      toAddresses:
+        - ops-team@example.com
+```
+
+### Using Connection Reference
+
+```yaml title="email-connection-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: email-via-connection
+spec:
+  events:
+    - incident.created
+    - incident.resolved
+  to:
+    connection: connection://smtp/corporate
+  title: "[{{.incident.severity}}] {{.incident.title}}"
+  body: |
+    Incident: {{.incident.title}}
+    Severity: {{.incident.severity}}
+    Status: {{.incident.status}}
+
+    {{.incident.description}}
+```
+
+### Routing by Severity
+
+```yaml title="email-routing-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: email-critical
+spec:
+  events:
+    - check.failed
+  filter: check.severity == "critical"
+  to:
+    email:
+      connection: connection://smtp/alerts
+      toAddresses:
+        - oncall@example.com
+        - management@example.com
+  title: "CRITICAL: {{.check.name}} Failed"
+---
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: email-warnings
+spec:
+  events:
+    - check.failed
+  filter: check.severity == "warning"
+  to:
+    email:
+      connection: connection://smtp/alerts
+      toAddresses:
+        - engineering@example.com
+```
+
+### Gmail SMTP
+
+```yaml title="email-gmail.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: gmail-alerts
+spec:
+  events:
+    - check.failed
+  to:
+    email:
+      host: smtp.gmail.com
+      port: 587
+      encryption: ExplicitTLS
+      auth: Plain
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: gmail-credentials
+            key: email
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: gmail-credentials
+            key: app-password  # Use App Password, not regular password
+      fromAddress: alerts@yourcompany.com
+      toAddresses:
+        - team@example.com
+```
+
+### AWS SES
+
+```yaml title="email-ses.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: ses-alerts
+spec:
+  events:
+    - check.failed
+  to:
+    email:
+      host: email-smtp.us-east-1.amazonaws.com
+      port: 587
+      encryption: ExplicitTLS
+      username:
+        valueFrom:
+          secretKeyRef:
+            name: ses-credentials
+            key: smtp-username
+      password:
+        valueFrom:
+          secretKeyRef:
+            name: ses-credentials
+            key: smtp-password
+      fromAddress: noreply@verified-domain.com
+      toAddresses:
+        - alerts@example.com
+```
+
+## Configuration Options
+
+| Field | Description | Default |
+|-------|-------------|---------|
+| `host` | SMTP server hostname | Required |
+| `port` | SMTP server port | `587` |
+| `username` | SMTP authentication username | Required |
+| `password` | SMTP authentication password | Required |
+| `fromAddress` | Sender email address | Required |
+| `fromName` | Sender display name | Optional |
+| `toAddresses` | List of recipient email addresses | Required |
+| `subject` | Email subject (supports templates) | Optional |
+| `encryption` | TLS mode: `None`, `ExplicitTLS`, `ImplicitTLS`, `Auto` | `Auto` |
+| `auth` | Auth method: `None`, `Plain`, `CRAMMD5`, `OAuth2` | `Plain` |
+| `insecureTLS` | Skip TLS certificate verification | `false` |
+| `headers` | Custom email headers | Optional |
+
+## Encryption Modes
+
+| Mode | Description | Common Port |
+|------|-------------|-------------|
+| `None` | No encryption (not recommended) | 25 |
+| `ExplicitTLS` | STARTTLS upgrade | 587 |
+| `ImplicitTLS` | TLS from connection start | 465 |
+| `Auto` | Auto-detect based on port | - |
+
+## Next Steps
+
+<Cards>
+  <Card title="Notification Reference" href="/docs/guide/notifications">
+    Notification configuration options
+  </Card>
+  <Card title="Slack Integration" href="/docs/integrations/slack">
+    Alternative: Send notifications to Slack
+  </Card>
+</Cards>

@@ -1,0 +1,80 @@
+---
+title: Azure AD / Entra ID
+sidebar_custom_props:
+  icon: entra-id
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+</CapabilityBadges>
+
+Mission Control integrates with Azure Active Directory (Entra ID) to provide visibility into your identity infrastructure. Use it to:
+
+- Discover users, groups, and their memberships across your tenant
+- Track app registrations and enterprise applications
+- Monitor service principal configurations and permissions
+- Audit app role assignments and authentication methods
+- Correlate identity resources with Azure subscriptions and Kubernetes RBAC
+
+## Config Scrapers
+
+Discover and track Azure AD resources in the catalog.
+
+### What You Can Scrape
+
+- **Users**: All user accounts with their profile information
+- **Groups**: Security and Microsoft 365 groups with membership
+- **App Registrations**: Applications registered in your tenant
+- **Enterprise Applications**: Service principals and their configurations
+- **App Role Assignments**: Who has access to which applications
+
+### Example
+
+```yaml title="azure-ad-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: azure-ad
+spec:
+  schedule: "@every 1h"
+  azure:
+    - tenantID: your-tenant-id
+      clientID:
+        valueFrom:
+          secretKeyRef:
+            name: azure-credentials
+            key: client-id
+      clientSecret:
+        valueFrom:
+          secretKeyRef:
+            name: azure-credentials
+            key: client-secret
+      activeDirectory:
+        users: true
+        groups: true
+        appRegistrations: true
+        enterpriseApplications: true
+```
+
+## Prerequisites
+
+To scrape Azure AD resources, your service principal needs the following Microsoft Graph API permissions:
+
+- `User.Read.All` - Read user profiles
+- `Group.Read.All` - Read groups and memberships
+- `Application.Read.All` - Read app registrations
+- `Directory.Read.All` - Read directory data
+
+## Next Steps
+
+<Cards>
+  <Card title="Azure Integration" href="/docs/integrations/azure">
+    Learn about Azure resource scraping
+  </Card>
+  <Card title="Config DB Reference" href="/docs/guide/config-db">
+    Explore configuration scraping capabilities
+  </Card>
+</Cards>

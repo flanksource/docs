@@ -1,0 +1,79 @@
+---
+title: Kustomize
+sidebar_custom_props:
+  icon: kustomize
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import Prereqs from '@site/docs/partials/_integration_prereqs.mdx'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="playbook" />
+</CapabilityBadges>
+
+Mission Control integrates with Kustomize to simplify configuration management. Use it to:
+
+- Create Deployments, HelmReleases, and Namespaces through guided playbooks
+- Modify existing resources via Kustomize patches without editing YAML manually
+- Scale replicas or update resource limits across environments
+- Commit changes back to Git repositories through Flux GitOps workflows
+- Generate pull requests for review before applying changes
+
+## Quick Start
+
+<Prereqs />
+
+Kustomize integration works with Flux GitOps. Ensure Flux is configured to manage your Kustomizations before using these playbooks.
+
+## Playbooks
+
+Automate Kustomize operations through GitOps-native playbooks that create pull requests for all changes:
+
+### Resource Creation
+
+Create new resources within Flux-managed Kustomizations:
+
+| Playbook | Description |
+|----------|-------------|
+| **Create Deployment** | Add a new Deployment with configurable image, CPU, and memory settings |
+| **Create HelmRelease** | Add a HelmRelease to a Kustomization for Helm chart management |
+| **Create Kustomization** | Create a new Flux Kustomization pointing to a path in your repository |
+| **Create Namespace** | Add a namespace managed by an existing Kustomization |
+
+### Resource Modification
+
+Modify existing resources through Kustomize patches:
+
+| Playbook | Description |
+|----------|-------------|
+| **Edit Kustomization** | Modify Kustomization settings like interval, path, or source reference |
+| **Scale Resources** | Adjust replica counts for Deployments via Kustomize patches |
+| **Update Resources** | Modify CPU and memory requests/limits |
+
+### Example: Create Deployment
+
+This playbook creates a Deployment manifest and updates the Kustomization to include it, then opens a pull request for review:
+
+```yaml file=<rootDir>/modules/generated/playbooks/kustomize-create-deployment.yaml title='kustomize-create-deployment.yaml'
+```
+
+The playbook:
+1. Accepts parameters for name, image, and resource limits
+2. Generates a Deployment manifest in the repository
+3. Patches the `kustomization.yaml` to include the new resource
+4. Creates a pull request with the changes
+
+## Next Steps
+
+<Cards>
+  <Card title="Flux Integration" href="/docs/integrations/flux">
+    Learn about Flux Kustomization management
+  </Card>
+  <Card title="Helm Integration" href="/docs/integrations/helm">
+    Deploy Helm charts alongside Kustomize resources
+  </Card>
+  <Card title="Playbook Actions" href="/docs/guide/playbooks/actions/gitops">
+    GitOps action reference for custom playbooks
+  </Card>
+</Cards>

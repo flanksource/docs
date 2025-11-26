@@ -1,0 +1,95 @@
+---
+title: MCP (Model Context Protocol)
+sidebar_custom_props:
+  icon: mcp
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="actions" />
+</CapabilityBadges>
+
+Mission Control provides an MCP (Model Context Protocol) server that enables AI assistants like Claude to interact with your infrastructure. Use it to:
+
+- Query the config catalog and explore infrastructure relationships
+- List and inspect health checks across your environment
+- Execute playbooks to remediate issues or perform operations
+- Manage connections, artifacts, and notifications
+- Enable AI-assisted troubleshooting and incident response
+
+## MCP Server
+
+Mission Control exposes an MCP server endpoint that AI assistants can connect to for infrastructure interactions.
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| **Catalog** | Query config items, search by type, and explore relationships |
+| **Health Checks** | List canary health checks, view status and history |
+| **Playbooks** | List available playbooks and trigger executions |
+| **Connections** | Browse configured connections to external systems |
+| **Artifacts** | List and retrieve artifacts from playbook runs |
+| **Notifications** | View notification configurations |
+| **Jobs** | Monitor scheduled jobs and their status |
+
+### Connecting Claude Desktop
+
+Add Mission Control to your Claude Desktop configuration:
+
+```json title="claude_desktop_config.json"
+{
+  "mcpServers": {
+    "mission-control": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://your-mission-control.example.com/mcp",
+        "--header",
+        "Authorization: Bearer ${MISSION_CONTROL_TOKEN}"
+      ]
+    }
+  }
+}
+```
+
+### Authentication
+
+The MCP server requires authentication with the `mcp:run` permission. Create an API token with appropriate RBAC permissions:
+
+```bash
+kubectl create token mission-control-mcp --duration=8760h
+```
+
+### Example Interactions
+
+Once connected, you can ask Claude questions like:
+
+- "What health checks are failing right now?"
+- "Show me all Kubernetes deployments in the production namespace"
+- "Run the restart-pod playbook for the api-server deployment"
+- "What config changes happened in the last hour?"
+
+## Architecture
+
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│  Claude/AI      │────▶│  MCP Server     │────▶│  Mission Control│
+│  Assistant      │◀────│  (SSE/HTTP)     │◀────│  API            │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+```
+
+The MCP server translates natural language requests from AI assistants into Mission Control API calls, enabling conversational infrastructure management.
+
+## Next Steps
+
+<Cards>
+  <Card title="Playbooks" href="/docs/guide/playbooks">
+    Learn about automating operations with playbooks
+  </Card>
+  <Card title="Config DB" href="/docs/guide/config-db">
+    Explore the configuration catalog
+  </Card>
+</Cards>

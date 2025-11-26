@@ -1,0 +1,195 @@
+---
+title: [Platform Name] Integration
+sidebar_custom_props:
+  icon: [icon-name]
+# draft: true  # Uncomment if page is not ready for production
+---
+
+import { Card, Cards } from '@site/src/components/Card';
+import Helm from '@site/src/components/Helm';
+
+# [Platform Name] Integration
+
+[Brief 2-3 sentence description of what Mission Control can do with this platform. Explain the value proposition and key capabilities.]
+
+## Quick Start
+
+:::info Prerequisites
+- Mission Control installed via Helm
+- [Platform-specific requirements, e.g., API keys, credentials, access rights]
+- [Any required CLI tools or SDKs]
+:::
+
+<Helm chart="mission-control" namespace="mission-control" />
+
+---
+
+## Health Checks
+
+Monitor [Platform] resources and services with Canary health checks.
+
+**What you can monitor:**
+- [Resource type 1]
+- [Resource type 2]
+- [Service/endpoint type]
+
+### Example
+
+```yaml title="[platform]-health-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: [platform]-check
+spec:
+  interval: 30
+  [platform]:
+    - name: sample-[platform]-check
+      # Add minimal working configuration here
+      # Include only essential fields for quick start
+```
+
+<Cards>
+  <Card
+    title="Health Check Reference"
+    link="/canary-checker/docs/reference/[platform-ref-link]"
+  />
+</Cards>
+
+---
+
+## Config Scrapers
+
+Discover and track [Platform] configuration changes in the Config DB.
+
+**What you can scrape:**
+- [Configuration type 1]
+- [Configuration type 2]
+- [Resource metadata]
+
+### Example
+
+```yaml title="[platform]-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: [platform]-scraper
+spec:
+  schedule: "@every 5m"
+  [platform]:
+    - # Add minimal working scraper configuration
+      # Include connection details and basic filters
+```
+
+<Cards>
+  <Card
+    title="Scraper Reference"
+    link="/docs/guide/config-db/scrapers/[platform-scraper-link]"
+  />
+</Cards>
+
+---
+
+## Notifications
+
+[If platform supports sending notifications, include this section]
+
+Send notifications and alerts via [Platform] notification services.
+
+**Supported channels:**
+- [Channel/service 1]
+- [Channel/service 2]
+
+### Example
+
+```yaml title="notification-config.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: [platform]-notification
+spec:
+  to:
+    [platform]: [connection-uri-or-config]
+  events:
+    - incident.created
+    - check.failed
+```
+
+<Cards>
+  <Card
+    title="Notification Channels"
+    link="/docs/guide/notifications/channels/[platform-notification-link]"
+  />
+</Cards>
+
+---
+
+## Playbooks
+
+[If platform supports playbooks, include this section]
+
+Automate remediation and operations for [Platform] resources.
+
+**Common playbook actions:**
+- [Action 1, e.g., restart service]
+- [Action 2, e.g., scale resources]
+- [Action 3, e.g., update configuration]
+
+### Example
+
+```yaml title="[platform]-playbook.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: [platform]-remediation
+spec:
+  on:
+    canary:
+      - name: [platform]-check
+        failed: true
+  actions:
+    - name: [remediation-action]
+      # Add playbook action configuration
+```
+
+<Cards>
+  <Card
+    title="Playbook Reference"
+    link="/docs/playbooks/[platform-playbook-link]"
+  />
+  <Card
+    title="Playbook Actions"
+    link="/docs/playbooks/actions"
+  />
+</Cards>
+
+---
+
+## Next Steps
+
+<Cards columns={3}>
+  <Card
+    title="[Platform] Examples"
+    link="/docs/examples/[platform]"
+    variant="secondary"
+  />
+  <Card
+    title="Best Practices"
+    link="/docs/integrations/[platform]/best-practices"
+    variant="secondary"
+  />
+  <Card
+    title="Troubleshooting"
+    link="/docs/integrations/[platform]/troubleshooting"
+    variant="secondary"
+  />
+</Cards>
+
+---
+
+## Additional Resources
+
+[Optional section for platform-specific documentation, community resources, etc.]
+
+- [Link to platform official docs]
+- [Link to Mission Control community examples]
+- [Link to related integrations]

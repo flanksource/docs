@@ -1,0 +1,159 @@
+---
+title: Loki
+sidebar_custom_props:
+  icon: loki
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="playbook" />
+</CapabilityBadges>
+
+Mission Control integrates with Grafana Loki to query and stream logs in playbooks. Use it to:
+
+- Query logs using LogQL for incident investigation
+- Stream real-time logs from pods and applications
+- Correlate log entries with health check failures
+- Include log context in playbook diagnostics
+- Search across multiple log sources and labels
+
+## Playbook Actions
+
+Query logs from Loki as part of automated diagnostics and troubleshooting.
+
+### Query Logs
+
+```yaml title="loki-query-playbook.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: investigate-errors
+spec:
+  on:
+    canary:
+      - name: api-health
+        failed: true
+  actions:
+    - name: fetch-error-logs
+      logs:
+        loki:
+          url: http://loki:3100
+          query: '{namespace="production", app="api"} |= "error"'
+          since: 15m
+          limit: 100
+```
+
+### Query with Authentication
+
+```yaml title="loki-auth-playbook.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: secure-log-query
+spec:
+  actions:
+    - name: fetch-logs
+      logs:
+        loki:
+          url: https://loki.example.com
+          username:
+            valueFrom:
+              secretKeyRef:
+                name: loki-credentials
+                key: username
+          password:
+            valueFrom:
+              secretKeyRef:
+                name: loki-credentials
+                key: password
+          query: '{job="kubernetes"}'
+          since: 1h
+```
+
+### Dynamic Query Based on Context
+
+```yaml title="loki-dynamic-playbook.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: pod-logs-investigation
+spec:
+  on:
+    config:
+      - types:
+          - Kubernetes::Pod
+        filter: config.status.phase == "Failed"
+  actions:
+    - name: get-pod-logs
+      logs:
+        loki:
+          url: http://loki:3100
+          query: '{namespace="{{.config.config.metadata.namespace}}", pod="{{.config.name}}"}'
+          since: 30m
+          limit: 500
+```
+
+### Stream Logs
+
+Stream logs in real-time for live debugging:
+
+```yaml title="loki-stream-playbook.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: stream-logs
+spec:
+  actions:
+    - name: tail-logs
+      logs:
+        loki:
+          url: http://loki:3100
+          query: '{app="my-service"} |= "error"'
+          stream: true
+          limit: 50
+```
+
+## Configuration Options
+
+| Field | Description | Default |
+|-------|-------------|---------|
+| `url` | Loki API endpoint URL | Required |
+| `username` | Basic auth username | Optional |
+| `password` | Basic auth password | Optional |
+| `query` | LogQL query string | Required |
+| `since` | Duration to look back (e.g., `15m`, `1h`, `24h`) | `1h` |
+| `limit` | Maximum number of log entries | `100` |
+| `stream` | Enable real-time streaming via WebSocket | `false` |
+| `direction` | Query direction (`forward` or `backward`) | `backward` |
+
+## LogQL Query Examples
+
+```
+# All logs from a namespace
+{namespace="production"}
+
+# Logs containing "error" (case-insensitive)
+{app="api"} |~ "(?i)error"
+
+# JSON logs with specific field
+{job="app"} | json | level="error"
+
+# Rate of errors per minute
+rate({app="api"} |= "error" [1m])
+
+# Logs from multiple apps
+{app=~"api|worker|scheduler"}
+```
+
+## Next Steps
+
+<Cards>
+  <Card title="Playbook Actions" href="/docs/guide/playbooks/actions">
+    All available playbook actions
+  </Card>
+  <Card title="Grafana Integration" href="/docs/integrations/grafana">
+    Monitor Grafana data sources
+  </Card>
+</Cards>

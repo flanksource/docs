@@ -1,0 +1,193 @@
+---
+title: Slack
+sidebar_custom_props:
+  icon: slack
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="notifications" />
+  <CapabilityBadge type="scraper" />
+</CapabilityBadges>
+
+Mission Control integrates with Slack to send notifications and scrape workspace data. Use it to:
+
+- Send alerts to Slack channels when health checks fail or configs change
+- Format notifications with Block Kit for rich, interactive messages
+- Route notifications to different channels based on severity or team
+- Scrape Slack workspace data for compliance and audit purposes
+- Track message delivery and notification history
+
+## Notifications
+
+Send notifications to Slack channels when events occur.
+
+### Basic Channel Notification
+
+```yaml title="slack-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: slack-alerts
+spec:
+  events:
+    - check.failed
+    - check.passed
+  to:
+    slack:
+      channel: alerts
+      token:
+        valueFrom:
+          secretKeyRef:
+            name: slack-credentials
+            key: bot-token
+```
+
+### Custom Message Template
+
+```yaml title="slack-custom-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: slack-incidents
+spec:
+  events:
+    - incident.created
+    - incident.resolved
+  to:
+    slack:
+      channel: incidents
+      token:
+        valueFrom:
+          secretKeyRef:
+            name: slack-credentials
+            key: bot-token
+  title: "{{if eq .event \"incident.created\"}}:rotating_light:{{else}}:white_check_mark:{{end}} {{.incident.title}}"
+  body: |
+    *Severity:* {{.incident.severity}}
+    *Status:* {{.incident.status}}
+    {{if .incident.description}}*Description:* {{.incident.description}}{{end}}
+```
+
+### Block Kit Formatting
+
+```yaml title="slack-blocks-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: slack-detailed
+spec:
+  events:
+    - check.failed
+  to:
+    slack:
+      channel: engineering
+      token:
+        valueFrom:
+          secretKeyRef:
+            name: slack-credentials
+            key: bot-token
+  blocks: |
+    [
+      {
+        "type": "header",
+        "text": {
+          "type": "plain_text",
+          "text": ":warning: Health Check Failed"
+        }
+      },
+      {
+        "type": "section",
+        "fields": [
+          {
+            "type": "mrkdwn",
+            "text": "*Check:*\n{{.check.name}}"
+          },
+          {
+            "type": "mrkdwn",
+            "text": "*Status:*\n{{.check.status}}"
+          }
+        ]
+      }
+    ]
+```
+
+### Routing by Severity
+
+```yaml title="slack-routing-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: slack-routed
+spec:
+  events:
+    - check.failed
+  filter: check.severity == "critical"
+  to:
+    slack:
+      channel: critical-alerts
+      token:
+        valueFrom:
+          secretKeyRef:
+            name: slack-credentials
+            key: bot-token
+---
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: slack-warnings
+spec:
+  events:
+    - check.failed
+  filter: check.severity == "warning"
+  to:
+    slack:
+      channel: warnings
+      token:
+        valueFrom:
+          secretKeyRef:
+            name: slack-credentials
+            key: bot-token
+```
+
+## Config Scrapers
+
+Scrape Slack workspace data for auditing and compliance.
+
+```yaml title="slack-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: slack-workspace
+spec:
+  schedule: "@every 24h"
+  slack:
+    - token:
+        valueFrom:
+          secretKeyRef:
+            name: slack-credentials
+            key: bot-token
+      channels: true
+      users: true
+```
+
+## Prerequisites
+
+Create a Slack App with the following bot token scopes:
+
+- `chat:write` - Send messages
+- `channels:read` - List public channels
+- `users:read` - List workspace members (for scraping)
+
+## Next Steps
+
+<Cards>
+  <Card title="Notification Reference" href="/docs/guide/notifications">
+    Notification configuration options
+  </Card>
+  <Card title="Notification Channels" href="/docs/guide/notifications/channels">
+    All supported notification channels
+  </Card>
+</Cards>

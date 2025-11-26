@@ -1,0 +1,27 @@
+---
+title: Kubernetes
+sidebar_custom_props:
+  icon: k8s
+---
+
+import DocCardList from '@theme/DocCardList';
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+  <CapabilityBadge type="healthcheck" />
+  <CapabilityBadge type="playbook" />
+  <CapabilityBadge type="notifications" />
+  <CapabilityBadge type="actions" />
+</CapabilityBadges>
+
+Mission Control provides deep integration with Kubernetes clusters. Use it to:
+
+- Discover and catalog Deployments, Services, ConfigMaps, and all Kubernetes resources
+- Monitor pod health, resource usage, and cluster events
+- Track configuration changes with full diff history
+- Correlate workloads with Helm releases, GitOps deployments, and cloud infrastructure
+- Run playbooks to restart pods, scale deployments, or execute kubectl commands
+- Send notifications to Slack, Teams, or PagerDuty when resources change state
+
+<DocCardList />

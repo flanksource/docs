@@ -20,7 +20,7 @@ Mission control enhances a [flux](https://fluxcd.io/flux) deployment with:
 
 The following playbooks work by calling the `flux` CLI directly
 
-| Playbook                                                               | <Icon name="kustomize"/> Kustomization                  | <Icon name="helm"/> HelmRelease                         |
+| Playbook                                                               | <Icon name="kustomize">Kustomization</Icon>             | <Icon name="helm">HelmRelease</Icon>                           |
 | ---------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------- |
 | <Icon name="flux">Suspend</Icon><Tooltip>Runs `flux suspend`</Tooltip> | <IoIosCheckmarkCircleOutline color='green' size={24} /> | <IoIosCheckmarkCircleOutline color='green' size={24} /> |
 | <Icon name="flux">Resume</Icon><Tooltip>Runs`flux resume`</Tooltip>    | <IoIosCheckmarkCircleOutline color='green' size={24} /> | <IoIosCheckmarkCircleOutline color='green' size={24} /> |

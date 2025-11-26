@@ -1,0 +1,179 @@
+---
+title: Azure DevOps
+sidebar_custom_props:
+  icon: azure-devops
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="healthcheck" />
+  <CapabilityBadge type="playbook" />
+  <CapabilityBadge type="scraper" />
+</CapabilityBadges>
+
+Mission Control integrates with Azure DevOps to monitor pipelines and trigger builds. Use it to:
+
+- Monitor pipeline run status and detect failures
+- Track build duration and identify slow pipelines
+- Trigger pipeline runs from playbooks for CI/CD automation
+- Scrape pipeline and project configurations into the catalog
+- Filter pipeline status by branch, variables, or naming patterns
+
+## Health Checks
+
+### Pipeline Status Check
+
+Monitor Azure DevOps pipeline runs and validate their status.
+
+```yaml title="ado-pipeline-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: ado-pipeline
+spec:
+  interval: 300
+  azureDevops:
+    - name: production-deploy
+      organization: your-org
+      project: your-project
+      personalAccessToken:
+        valueFrom:
+          secretKeyRef:
+            name: ado-credentials
+            key: token
+      pipeline: Production-Deploy
+      branch: main
+      result: succeeded
+```
+
+### Pipeline Duration Threshold
+
+```yaml title="ado-duration-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: ado-build-time
+spec:
+  interval: 600
+  azureDevops:
+    - name: build-duration
+      organization: your-org
+      project: your-project
+      personalAccessToken:
+        valueFrom:
+          secretKeyRef:
+            name: ado-credentials
+            key: token
+      pipeline: CI-Build
+      thresholdMillis: 600000  # Alert if build takes > 10 minutes
+```
+
+### Pattern Matching
+
+```yaml title="ado-pattern-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: ado-release-pipelines
+spec:
+  interval: 300
+  azureDevops:
+    - name: release-status
+      organization: your-org
+      project: your-project
+      personalAccessToken:
+        valueFrom:
+          secretKeyRef:
+            name: ado-credentials
+            key: token
+      pipelinePattern: "^Release-.*"  # Monitor all release pipelines
+      result: succeeded
+```
+
+## Playbook Actions
+
+Trigger Azure DevOps pipeline runs from playbooks.
+
+### Basic Pipeline Trigger
+
+```yaml title="ado-playbook-action.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: deploy-via-ado
+spec:
+  parameters:
+    - name: environment
+      label: Target Environment
+      type: list
+      properties:
+        options:
+          - dev
+          - staging
+          - production
+  actions:
+    - name: trigger-deploy
+      azureDevopsPipeline:
+        organization: your-org
+        project: your-project
+        personalAccessToken:
+          valueFrom:
+            secretKeyRef:
+              name: ado-credentials
+              key: token
+        pipeline: Deploy-Pipeline
+        parameters:
+          environment: "{{.params.environment}}"
+```
+
+### Pipeline with Version
+
+```yaml title="ado-versioned-pipeline.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: rollback-deployment
+spec:
+  actions:
+    - name: trigger-rollback
+      azureDevopsPipeline:
+        organization: your-org
+        project: your-project
+        pipeline: Rollback-Pipeline
+        version: "{{.config.config.metadata.labels.version}}"
+```
+
+## Config Scrapers
+
+Scrape Azure DevOps pipeline and project data into the catalog.
+
+```yaml title="ado-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: ado-pipelines
+spec:
+  schedule: "@every 1h"
+  azureDevops:
+    - organization: your-org
+      personalAccessToken:
+        valueFrom:
+          secretKeyRef:
+            name: ado-credentials
+            key: token
+      projects:
+        - your-project
+```
+
+## Next Steps
+
+<Cards>
+  <Card title="Health Check Reference" href="/canary-checker/docs/reference/azure-devops">
+    Azure DevOps health check configuration options
+  </Card>
+  <Card title="Azure DevOps Playbook Action" href="/docs/guide/playbooks/actions/azure-devops">
+    Pipeline trigger reference for playbooks
+  </Card>
+</Cards>

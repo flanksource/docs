@@ -4,46 +4,84 @@ sidebar_custom_props:
   icon: helm
 ---
 
+import { Card, Cards } from '@site/../common/src/components/Card'
+import Helm from '@site/../common/src/components/Helm.jsx'
 import Schema from '@site/modules/mission-control-registry/charts/helm/values.schema.json'
+import Prereqs from '@site/docs/partials/_integration_prereqs.mdx'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
 
-Install helm charts on the cluster and add them to the [Catalog](/docs/guide/config-db).
+<CapabilityBadges>
+  <CapabilityBadge type="healthcheck" />
+  <CapabilityBadge type="playbook" />
+    <CapabilityBadge type="relationship" />
+</CapabilityBadges>
 
-## Getting Started
+Mission Control integrates with Helm to manage chart deployments across clusters. Use it to:
 
-:::info Prerequisites
-To enable the Helm integration you need:
+- Discover Helm releases and track their versions, values, and upgrade availability
+- Monitor release health and correlate failures with recent value changes
+- Verify chart repository access and authentication before deployments fail
+- Deploy new charts or update existing releases through playbooks
+- Link Helm releases to the Kubernetes resources they create
 
-- Mission Control [installed](/docs/installation/)
-- [kubectl](/docs/installation/saas/kubectl) access to the Mission Control instance
-- FluxCD running in the cluster
-:::
+## Quick Start
 
+<Prereqs />
 
-1. Install the [mission-control-helm](https://artifacthub.io/packages/helm/flanksource/mission-control-helm) chart
+FluxCD must be running in the cluster for Helm release management.
 
-   <Helm chart="mission-control-helm"
-   createRepo={false}
-   schema={Schema}
-   createNamespace={false}
-   values={{
+Install the [mission-control-helm](https://artifacthub.io/packages/helm/flanksource/mission-control-helm) chart:
+
+<Helm chart="mission-control-helm"
+  createRepo={false}
+  schema={Schema}
+  createNamespace={false}
+  values={{
     "playbook": {
-        "enabled": true
+      "enabled": true
     },
     "scraper": {
-        "charts": [
-            "bitnami/kafka",
-            "bitnami/postgresql",
-            "bitnami/rabbitmq",
-            "prometheus-community/prometheus"
-        ]
+      "charts": [
+        "bitnami/kafka",
+        "bitnami/postgresql",
+        "bitnami/rabbitmq",
+        "prometheus-community/prometheus"
+      ]
     }
-   }}/>
+  }}/>
 
+## Health Checks
 
-## Installing charts with Playbook
+### Example
 
-The `Install Helm Chart` playbook can install the charts into any Kubernetes namespace with user-given values
+Verify Helm chart repository availability and authentication before deployments fail in production.
+
+```yaml file=<rootDir>/modules/canary-checker/fixtures/k8s/helm_check.yaml title='helm-health-check.yaml'
+```
+
+## Installing Charts with Playbook
+
+The `Install Helm Chart` playbook installs charts into any Kubernetes namespace with user-provided values:
 
 <Screenshot img="/img/helm-integration-playbook.png" />
 
-The [Kubernetes](/docs/integrations/kubernetes/playbooks) and [Flux](/docs/integrations/flux/playbooks) playbooks can further help with operations on these charts and resources created by them.
+Additional playbooks for Helm operations:
+
+- **Update Chart Version**: Upgrade to a newer chart version
+- **Update Values**: Modify Helm values for an existing release
+
+The [Kubernetes](/docs/integrations/kubernetes/playbooks) and [Flux](/docs/integrations/flux/playbooks) playbooks provide further operations on charts and the resources they create.
+
+## Next Steps
+
+<Cards>
+  <Card title="Flux Integration" href="/docs/integrations/flux">
+    Manage HelmReleases via Flux GitOps
+  </Card>
+  <Card title="Kustomize Integration" href="/docs/integrations/kustomize">
+    Create HelmReleases through Kustomize
+  </Card>
+  <Card title="Health Check Reference" href="/canary-checker/docs/reference/helm">
+    Helm health check configuration options
+  </Card>
+</Cards>

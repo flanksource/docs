@@ -1,18 +1,26 @@
 ---
-title: GCP
+title: Google Cloud
 sidebar_custom_props:
   icon: google-cloud
 ---
 
 import Schema from '@site/modules/mission-control-registry/charts/gcp/values.schema.json'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
 
-Mission Control integrates with Google Cloud Platform to scrape and monitor your GCP cloud resources. The integration supports:
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+  <CapabilityBadge type="healthcheck" />
+  <CapabilityBadge type="relationship" />
+</CapabilityBadges>
 
-- GCP project monitoring via project ID
-- Organization and folder-based access
-- Configurable exclusions and transformations
-- Authentication via service account keys or Workload Identity
-- Custom connection settings
+Mission Control integrates with Google Cloud Platform to provide visibility into your cloud infrastructure. Use it to:
+
+- Discover and catalog Compute Engine VMs, Cloud SQL instances, GKE clusters, and other GCP resources
+- Monitor Cloud Storage bucket availability and object health
+- Track configuration changes across projects and folders
+- Correlate GCP resources with GKE workloads and Terraform state
+- Build relationships between GCP services and their dependencies
+- Support organization-wide visibility with folder-based access
 
 ## Getting Started
 

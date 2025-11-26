@@ -1,6 +1,113 @@
 ---
-draft: true
-title: Postgres
+title: PostgreSQL
 sidebar_custom_props:
   icon: postgres
 ---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="healthcheck" />
+  <CapabilityBadge type="scraper" />
+</CapabilityBadges>
+
+Mission Control integrates with PostgreSQL to monitor your database infrastructure. Use it to:
+
+- Verify database connectivity and authentication
+- Execute SQL queries and validate results against expected values
+- Monitor replication lag, connection counts, and database health
+- Scrape database metadata and configurations into the catalog
+- Alert when queries return unexpected results or databases become unavailable
+
+## Health Checks
+
+### Connection Check
+
+Test database connectivity and run validation queries.
+
+```yaml title="postgres-connection-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: postgres-connection
+spec:
+  interval: 30
+  postgres:
+    - name: production-db
+      url: postgres://user:password@postgres:5432/mydb?sslmode=require
+      query: SELECT 1
+```
+
+### Query Validation
+
+```yaml title="postgres-query-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: postgres-replication
+spec:
+  interval: 60
+  postgres:
+    - name: replication-lag
+      connection: connection://postgres/production
+      query: |
+        SELECT EXTRACT(EPOCH FROM (now() - pg_last_xact_replay_timestamp()))::INT
+        AS replication_lag_seconds
+      test:
+        expr: results[0].replication_lag_seconds < 30
+```
+
+### Using Connection References
+
+```yaml title="postgres-connection-ref.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: postgres-check
+spec:
+  interval: 30
+  postgres:
+    - name: user-count
+      connection: connection://postgres/analytics
+      query: SELECT COUNT(*) as count FROM users WHERE active = true
+      test:
+        expr: results[0].count > 0
+```
+
+## Config Scrapers
+
+Scrape database configurations and metadata using SQL queries.
+
+```yaml title="postgres-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-config
+spec:
+  schedule: "@every 1h"
+  sql:
+    - connection: connection://postgres/production
+      driver: postgres
+      query: |
+        SELECT datname as name,
+               pg_database_size(datname) as size_bytes,
+               datconnlimit as connection_limit
+        FROM pg_database
+        WHERE datistemplate = false
+      items:
+        - type: Postgres::Database
+          id: .name
+          name: .name
+```
+
+## Next Steps
+
+<Cards>
+  <Card title="Health Check Reference" href="/canary-checker/docs/reference/postgres">
+    PostgreSQL health check configuration options
+  </Card>
+  <Card title="SQL Scraper Reference" href="/docs/guide/config-db/scrapers/sql">
+    SQL scraper configuration options
+  </Card>
+</Cards>

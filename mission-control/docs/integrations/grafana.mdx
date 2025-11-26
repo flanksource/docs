@@ -1,0 +1,95 @@
+---
+title: Grafana
+sidebar_custom_props:
+  icon: grafana
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="healthcheck" />
+</CapabilityBadges>
+
+Mission Control integrates with Grafana through its underlying data sources. Use it to:
+
+- Monitor Prometheus metrics that power your Grafana dashboards
+- Validate dashboard data sources are accessible and returning data
+- Alert when metrics used in critical dashboards breach thresholds
+- Check that Grafana's backend services (Prometheus, Elasticsearch, etc.) are healthy
+
+## Health Checks
+
+### Prometheus Data Source
+
+While Mission Control doesn't have a direct Grafana health check, you can monitor the data sources that power your Grafana dashboards.
+
+```yaml title="grafana-prometheus-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: grafana-data-source
+spec:
+  interval: 60
+  prometheus:
+    - name: grafana-prometheus
+      url: http://prometheus:9090  # Same Prometheus used by Grafana
+      query: up{job="grafana"}
+      test:
+        expr: results[0] == 1
+```
+
+### Elasticsearch Data Source
+
+```yaml title="grafana-elasticsearch-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: grafana-logs
+spec:
+  interval: 60
+  elasticsearch:
+    - name: grafana-elasticsearch
+      url: http://elasticsearch:9200
+      index: logs-*
+      query: |
+        {
+          "query": {
+            "range": {
+              "@timestamp": { "gte": "now-5m" }
+            }
+          }
+        }
+      results: 1
+```
+
+### Grafana HTTP Endpoint
+
+```yaml title="grafana-api-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: grafana-health
+spec:
+  interval: 30
+  http:
+    - name: grafana-api
+      url: http://grafana:3000/api/health
+      responseCodes:
+        - 200
+      responseContent:
+        jsonPath:
+          path: $.database
+          value: ok
+```
+
+## Next Steps
+
+<Cards>
+  <Card title="Prometheus Integration" href="/docs/integrations/prometheus">
+    Monitor Prometheus metrics directly
+  </Card>
+  <Card title="HTTP Health Checks" href="/docs/integrations/http">
+    Monitor HTTP endpoints and APIs
+  </Card>
+</Cards>

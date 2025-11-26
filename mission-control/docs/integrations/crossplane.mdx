@@ -5,9 +5,22 @@ sidebar_custom_props:
 title: Crossplane
 ---
 
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
 # Crossplane Integration
 
-Mission Control integrates deeply with Crossplane to provide visibility and relationships across your cloud infrastructure resources managed through Crossplane.
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+  <CapabilityBadge type="relationship" />
+</CapabilityBadges>
+
+Mission Control integrates with Crossplane to provide visibility into your infrastructure-as-code. Use it to:
+
+- Discover Crossplane managed resources and composite resources (XRs)
+- Build relationships between Providers and their managed resources
+- Link XRs to their composed resources and underlying cloud infrastructure
+- Track health and status changes of Crossplane resources
+- Correlate Crossplane configurations with AWS, Azure, or GCP resources via external IDs
 
 ## How It Works
 

@@ -1,0 +1,208 @@
+---
+title: GitLab
+sidebar_custom_props:
+  icon: gitlab
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="playbook" />
+</CapabilityBadges>
+
+Mission Control integrates with GitLab for GitOps workflows and repository operations. Use it to:
+
+- Clone repositories and push changes from playbooks
+- Create merge requests with reviewers and assignees
+- Commit configuration changes back to Git repositories
+- Integrate with GitLab CI/CD pipelines through GitOps
+- Support both GitLab.com and self-hosted GitLab instances
+
+## Playbook Actions
+
+Perform Git operations against GitLab repositories in playbooks.
+
+### Push Changes to Repository
+
+```yaml title="gitlab-push-playbook.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: update-config
+spec:
+  actions:
+    - name: push-config-change
+      gitops:
+        repo:
+          url: https://gitlab.com/org/config-repo.git
+          service: gitlab
+          accessToken:
+            valueFrom:
+              secretKeyRef:
+                name: gitlab-credentials
+                key: token
+          branch: main
+        commit:
+          author: Mission Control
+          email: automation@example.com
+          message: "Update configuration from playbook"
+        files:
+          - path: configs/app.yaml
+            content: |
+              replicas: {{.params.replicas}}
+              image: {{.params.image}}
+```
+
+### Create Merge Request
+
+```yaml title="gitlab-mr-playbook.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: create-merge-request
+spec:
+  parameters:
+    - name: change_description
+      label: Change Description
+      type: text
+  actions:
+    - name: create-mr
+      gitops:
+        repo:
+          url: https://gitlab.com/org/infrastructure.git
+          service: gitlab
+          accessToken:
+            valueFrom:
+              secretKeyRef:
+                name: gitlab-credentials
+                key: token
+          base: main
+          branch: "auto/{{.run.id}}"
+        commit:
+          author: Mission Control
+          email: automation@example.com
+          message: "{{.params.change_description}}"
+        pullRequest:
+          title: "Automated Change: {{.params.change_description}}"
+          body: |
+            This merge request was created automatically by Mission Control.
+
+            **Change:** {{.params.change_description}}
+            **Triggered by:** {{.user.name}}
+          reviewers:
+            - platform-team
+          assignees:
+            - infrastructure-lead
+```
+
+### Self-Hosted GitLab
+
+```yaml title="gitlab-selfhosted-playbook.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: self-hosted-gitlab
+spec:
+  actions:
+    - name: push-to-gitlab
+      gitops:
+        repo:
+          url: https://gitlab.internal.example.com/team/repo.git
+          service: gitlab
+          accessToken:
+            valueFrom:
+              secretKeyRef:
+                name: gitlab-internal-credentials
+                key: token
+          branch: main
+        commit:
+          author: Automation
+          email: automation@example.com
+          message: "Automated update"
+```
+
+### SSH Authentication
+
+```yaml title="gitlab-ssh-playbook.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: gitlab-ssh
+spec:
+  actions:
+    - name: push-via-ssh
+      gitops:
+        repo:
+          url: git@gitlab.com:org/repo.git
+          service: gitlab
+          sshPrivateKey:
+            valueFrom:
+              secretKeyRef:
+                name: gitlab-ssh
+                key: private-key
+          sshPrivateKeyPassword:
+            valueFrom:
+              secretKeyRef:
+                name: gitlab-ssh
+                key: passphrase
+          branch: main
+        commit:
+          author: Mission Control
+          email: automation@example.com
+          message: "Update via SSH"
+```
+
+## Configuration Options
+
+### Repository Configuration
+
+| Field | Description |
+|-------|-------------|
+| `url` | Repository URL (HTTPS or SSH) |
+| `service` | Git service type: `gitlab`, `github`, or `azure` |
+| `accessToken` | GitLab personal access token |
+| `sshPrivateKey` | SSH private key for authentication |
+| `sshPrivateKeyPassword` | Passphrase for encrypted SSH key |
+| `base` | Base branch for merge requests |
+| `branch` | Target branch for commits |
+
+### Commit Configuration
+
+| Field | Description |
+|-------|-------------|
+| `author` | Commit author name |
+| `email` | Commit author email |
+| `message` | Commit message |
+
+### Merge Request Configuration
+
+| Field | Description |
+|-------|-------------|
+| `title` | Merge request title |
+| `body` | Merge request description |
+| `reviewers` | List of reviewer usernames |
+| `assignees` | List of assignee usernames |
+| `tags` | Labels to apply |
+
+## GitLab Access Token Scopes
+
+Create a Personal Access Token or Project Access Token with these scopes:
+
+- `read_repository` - Clone repositories
+- `write_repository` - Push commits
+- `api` - Create merge requests (if using MR feature)
+
+## Next Steps
+
+<Cards>
+  <Card title="GitHub Integration" href="/docs/integrations/github">
+    Similar integration for GitHub repositories
+  </Card>
+  <Card title="GitOps Actions" href="/docs/guide/playbooks/actions/gitops">
+    GitOps action reference for playbooks
+  </Card>
+  <Card title="Flux Integration" href="/docs/integrations/flux">
+    GitOps with Flux CD
+  </Card>
+</Cards>

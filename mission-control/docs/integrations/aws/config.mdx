@@ -1,0 +1,138 @@
+---
+title: AWS Config
+sidebar_custom_props:
+  icon: aws-config
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+
+<CapabilityBadges>
+  <CapabilityBadge type="healthcheck" />
+</CapabilityBadges>
+
+Mission Control integrates with AWS Config to monitor your AWS resource configurations and compliance. Use it to:
+
+- Query AWS Config to discover and validate resource configurations
+- Monitor AWS Config Rules compliance status across accounts
+- Alert when resources become non-compliant with organizational policies
+- Track configuration changes and drift detection
+- Aggregate compliance data across multiple AWS accounts and regions
+
+## Health Checks
+
+### Query AWS Config Resources
+
+Query AWS Config to retrieve and validate resource configurations.
+
+```yaml title="aws-config-query.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: aws-config-query
+spec:
+  interval: 300
+  awsConfig:
+    - name: public-s3-buckets
+      query: |
+        SELECT resourceId, resourceType, configuration
+        WHERE resourceType = 'AWS::S3::Bucket'
+        AND configuration.publicAccessBlockConfiguration.blockPublicAcls = false
+      connection: connection://aws/production
+      test:
+        expr: len(results) == 0  # No public buckets allowed
+```
+
+### Query with Aggregator
+
+Use a Configuration Aggregator for multi-account queries:
+
+```yaml title="aws-config-aggregator.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: aws-config-aggregated
+spec:
+  interval: 600
+  awsConfig:
+    - name: unencrypted-volumes
+      aggregatorName: organization-aggregator
+      query: |
+        SELECT resourceId, accountId, awsRegion
+        WHERE resourceType = 'AWS::EC2::Volume'
+        AND configuration.encrypted = false
+      connection: connection://aws/management
+```
+
+### AWS Config Rules Compliance
+
+Monitor AWS Config Rules and alert on non-compliant resources:
+
+```yaml title="aws-config-rules.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: aws-compliance
+spec:
+  interval: 300
+  awsConfigRule:
+    - name: compliance-check
+      connection: connection://aws/production
+      complianceTypes:
+        - NON_COMPLIANT
+      rules:
+        - s3-bucket-ssl-requests-only
+        - ec2-imdsv2-check
+        - rds-storage-encrypted
+```
+
+### Ignore Specific Rules
+
+Exclude rules that are expected to fail or are not applicable:
+
+```yaml title="aws-config-rules-filtered.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: aws-compliance-filtered
+spec:
+  interval: 300
+  awsConfigRule:
+    - name: filtered-compliance
+      connection: connection://aws/production
+      complianceTypes:
+        - NON_COMPLIANT
+      ignoreRules:
+        - cloudwatch-alarm-action-check  # Known exception
+        - vpc-flow-logs-enabled          # Not required in dev
+```
+
+## Configuration Options
+
+### AWS Config Query
+
+| Field | Description |
+|-------|-------------|
+| `query` | SQL-like query for AWS Config resources |
+| `aggregatorName` | Configuration Aggregator name for multi-account queries |
+| `connection` | AWS connection reference |
+
+### AWS Config Rule
+
+| Field | Description |
+|-------|-------------|
+| `rules` | List of Config Rule names to check |
+| `ignoreRules` | List of Config Rule names to exclude |
+| `complianceTypes` | Filter by compliance status (`COMPLIANT`, `NON_COMPLIANT`, `NOT_APPLICABLE`, `INSUFFICIENT_DATA`) |
+| `connection` | AWS connection reference |
+
+## Next Steps
+
+<Cards>
+  <Card title="AWS Integration" href="/docs/integrations/aws">
+    Learn about AWS resource scraping
+  </Card>
+  <Card title="Health Check Reference" href="/canary-checker/docs/reference/aws-config">
+    AWS Config health check configuration options
+  </Card>
+</Cards>
