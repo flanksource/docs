@@ -343,14 +343,6 @@ spec:
       type: status
     - name: health
       type: health
-    - name: details_link
-      type: url
-      url:
-        view:
-          namespace: default
-          name: resource-details
-          filter:
-            resource_id: 'row.resource_id'
 
   queries:
     data:
@@ -365,7 +357,6 @@ spec:
     name: 'row.name'
     status: 'row.status'
     health: 'row.health'
-    details_link: 'row.name'
 ```
 
 ### Composite Metrics View
