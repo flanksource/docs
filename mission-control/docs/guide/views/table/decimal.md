@@ -8,10 +8,10 @@ The `decimal` column type displays precise floating-point numbers with configura
 
 ## Properties
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `precision` | integer | Number of decimal places |
-| `unit` | string | Display unit (e.g., "$", "%") |
+| Property    | Type    | Description                   |
+| ----------- | ------- | ----------------------------- |
+| `precision` | integer | Number of decimal places      |
+| `unit`      | string  | Display unit (e.g., "$", "%") |
 
 ## Example
 

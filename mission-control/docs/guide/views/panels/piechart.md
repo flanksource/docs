@@ -8,16 +8,16 @@ The `piechart` panel displays data distribution as a pie chart with customizable
 
 ## Properties
 
-| Property | Type | Description |
-|----------|------|-------------|
+| Property     | Type | Description                                   |
+| ------------ | ---- | --------------------------------------------- |
 | `showLabels` | bool | Whether to display value labels on pie slices |
-| `colors` | map | Custom color mapping by label name |
+| `colors`     | map  | Custom color mapping by label name            |
 
 ## Expected Columns
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `count` | number | Size of each slice (required) |
+| Column                   | Type   | Description                            |
+| ------------------------ | ------ | -------------------------------------- |
+| `count`                  | number | Size of each slice (required)          |
 | First non-`count` column | string | Slice label (e.g., `health`, `status`) |
 
 ## Colors

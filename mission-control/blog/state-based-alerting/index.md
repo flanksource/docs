@@ -1,22 +1,20 @@
 ---
 draft: true
 ---
-# State-Based Alerting: Understanding Why Kubernetes Deployments Fail
 
+# State-Based Alerting: Understanding Why Kubernetes Deployments Fail
 
 ## Application vs Infrastructure
 
-Application and infrastucture normally have very different failure scenarios, Application errors are normally due to bugs (that produce exceptions) or performance related problems. When there are problems it becomes immiedatly obvious - page fails to load or starts timing out.  Infrastructure health is more often related to configuration errors, drift, permissions and unhealthy dependencies problems can lay latent and be influenced by drift and dependences.
+Application and infrastucture normally have very different failure scenarios, Application errors are normally due to bugs (that produce exceptions) or performance related problems. When there are problems it becomes immiedatly obvious - page fails to load or starts timing out. Infrastructure health is more often related to configuration errors, drift, permissions and unhealthy dependencies problems can lay latent and be influenced by drift and dependences.
 
-Common application health methodologies include **USE** (**u**tilization, **s**aturation,**e**rrors) and **RED** (**r**quests, **e**rrors, **d**uration) that primarily use metrics (and log/trace derived metrics) that define thresholds for known health states. It is fairly straightforard to define healthy, unhealthy and warning states.  These methodoligies struggle with unknown states i.e. we are not receiving any traffic so we don't if there are any errors. Synthetic testing helps to surface problems by creating artificial transactions
+Common application health methodologies include **USE** (**u**tilization, **s**aturation,**e**rrors) and **RED** (**r**quests, **e**rrors, **d**uration) that primarily use metrics (and log/trace derived metrics) that define thresholds for known health states. It is fairly straightforard to define healthy, unhealthy and warning states. These methodoligies struggle with unknown states i.e. we are not receiving any traffic so we don't if there are any errors. Synthetic testing helps to surface problems by creating artificial transactions
 
 ## Metric (Thresholds and Anomalies)
-
 
 ## State Based
 
 ## Synthetic Testing
-
 
 Infrastructure errors tend be more state oreinted
 
@@ -24,14 +22,13 @@ Infrastructure errors tend be more state oreinted
 
 There are various types of alerting methods, and choosing the right one can be challenging.
 
-| Alerting Type | Example(s) | Use Cases |
-| :---- | :---- | :---- |
-| **Metrics (Threshold)** | \- CPU  \> 90% for 5 minutes. <br/> \- Available disk space \< 10GB.  | Best for USE (**u**tilization, **s**aturation,**e**rrors) and known errors. |
-| **Anomaly Detection** | \- Website traffic drops 50% compared to the same time last week. <br/>\- Login attempts spike far beyond the normal range. | Useful for detecting unusual patterns and behavior that deviate from historical norms. Suitable for security monitoring and business metrics. |
-| **Log-Based** | \- More than 10 "HTTP 500" errors in web server logs within 1 minute. <br/>\- Any log containing `OutOfMemoryError`. | Ideal for error detection, security events, and application-specific issues that are captured in logs. Good for detailed troubleshooting context. |
-| **State Based** | \- Kubernetes Node condition `Ready` \= False for 10 minutes. <br/>\- Pod status is `CrashLoopBackOff`. <br/>\- Deployment condition `Progressing = False` with reason: `ProgressDeadlineExceeded`. | Suitable for infrastructure and platform monitoring where resources have defined states. Good for Kubernetes and cloud resource health monitoring. |
-| **Synthetic** | \- Simulated user login journey fails from an external testing location. <br/>\- Critical API endpoint response time exceeds 2 seconds from an external check. <br/>\- Website homepage fails to load correctly from an external probe. | Best for end-to-end monitoring and user experience validation. Ideal for critical business flows and external service dependency checks. |
-
+| Alerting Type           | Example(s)                                                                                                                                                                                                                              | Use Cases                                                                                                                                          |
+| :---------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Metrics (Threshold)** | \- CPU \> 90% for 5 minutes. <br/> \- Available disk space \< 10GB.                                                                                                                                                                     | Best for USE (**u**tilization, **s**aturation,**e**rrors) and known errors.                                                                        |
+| **Anomaly Detection**   | \- Website traffic drops 50% compared to the same time last week. <br/>\- Login attempts spike far beyond the normal range.                                                                                                             | Useful for detecting unusual patterns and behavior that deviate from historical norms. Suitable for security monitoring and business metrics.      |
+| **Log-Based**           | \- More than 10 "HTTP 500" errors in web server logs within 1 minute. <br/>\- Any log containing `OutOfMemoryError`.                                                                                                                    | Ideal for error detection, security events, and application-specific issues that are captured in logs. Good for detailed troubleshooting context.  |
+| **State Based**         | \- Kubernetes Node condition `Ready` \= False for 10 minutes. <br/>\- Pod status is `CrashLoopBackOff`. <br/>\- Deployment condition `Progressing = False` with reason: `ProgressDeadlineExceeded`.                                     | Suitable for infrastructure and platform monitoring where resources have defined states. Good for Kubernetes and cloud resource health monitoring. |
+| **Synthetic**           | \- Simulated user login journey fails from an external testing location. <br/>\- Critical API endpoint response time exceeds 2 seconds from an external check. <br/>\- Website homepage fails to load correctly from an external probe. | Best for end-to-end monitoring and user experience validation. Ideal for critical business flows and external service dependency checks.           |
 
 This article compares Metric vs State Based alerts needed by platform teams managing infrastructure and deployments.
 
@@ -51,7 +48,7 @@ labels:
   severity: warning
 annotations:
   summary: Kubernetes pod crash looping (instance {{ $labels.instance }})
-  description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping"
+  description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping'
 ```
 
 And would produce an alert similar to this:
@@ -60,21 +57,18 @@ And would produce an alert similar to this:
 
 There are some drawbacks with this approach:
 
-* **Limited Details** - The alert tells you **_what_** happened, but not **_why_**.
-* **Limited Context** - You know the name of the pod and namespace, but not much else. If you want to restrict alerts to only pods labelled `env: production`, `kube-state-metrics` needs to be updated to whitelist the label.
-* **Cardinality Challenges** - Whitelisting is required, as without it, you risk a cardinality explosion. Ingesting large amounts of metrics can be expensive and inefficient.
-* **Configuration Overhead** - Each failure scenario requires configuration, first with the extraction of metrics and then by creating and fine-tuning alerts.
+- **Limited Details** - The alert tells you **_what_** happened, but not **_why_**.
+- **Limited Context** - You know the name of the pod and namespace, but not much else. If you want to restrict alerts to only pods labelled `env: production`, `kube-state-metrics` needs to be updated to whitelist the label.
+- **Cardinality Challenges** - Whitelisting is required, as without it, you risk a cardinality explosion. Ingesting large amounts of metrics can be expensive and inefficient.
+- **Configuration Overhead** - Each failure scenario requires configuration, first with the extraction of metrics and then by creating and fine-tuning alerts.
 
 These challenges are due to how TSDBs handle textual vs numerical data - the details and context you need is all in the text.
 
-
 ## State-Based Alerting
-
 
 The first step to "configuration-less" alerts is some standardization on what it means for something to be unhealthy. This is still an unsolved problem outside of Pod Probes. Kubernetes has taken some early steps with Conditions - which is an interface for reporting the state of a resource as either `unhealthy` or `healthy`.
 
 If you run the following command to get the YAML definition of a Pod:
-
 
 <TerminalOutput command="kubectl get po -o yaml">
 [36mapiVersion[0m:[32m v1[0m
@@ -198,8 +192,6 @@ If you run the following command to get the YAML definition of a Pod:
 [32m  [0m[36mstartTime[0m:[32m "2025-03-26T10:17:16Z"[0m
 </TerminalOutput>
 
-
-
 While standards exist for exposing metrics, there's no equivalent standard for exposing the thresholds or conditions that trigger alerts. This leads to fragmentation and complexity in monitoring setups.
 
 [is-healthy](https://github.com/flanksource/is-healthy) is a tool designed to assess and report the health status of Kubernetes and other cloud resources (such as AWS) without the limitations of metric-based approaches.
@@ -213,27 +205,26 @@ ready: false
 health: unhealthy
 status: ImagePullBackOff
 message: Back-off pulling image "nginx:invalid"
-lastUpdated: "2025-03-26T10:17:18Z"
+lastUpdated: '2025-03-26T10:17:18Z'
 ```
 
-
 This example output shows:
-* **ready**: Whether the resource is reconciling or provisioning. Note: `ready` indicates if the resource's desired state matches its actual state, which is different from its health. A pod in a failure state can be `ready` if its state is stable (not changing).
-* **health**: One of `healthy`, `unhealthy`, `warning`, `unknown`. This indicates the overall health assessment.
-* **status**: A text description of the state of the resource, for example, `Running` or `ImagePullBackOff`.
-* **message**: A reason providing more detail for the current status.
-* **lastUpdated**: The timestamp when the resource was lastUpdated or reconciled.
+
+- **ready**: Whether the resource is reconciling or provisioning. Note: `ready` indicates if the resource's desired state matches its actual state, which is different from its health. A pod in a failure state can be `ready` if its state is stable (not changing).
+- **health**: One of `healthy`, `unhealthy`, `warning`, `unknown`. This indicates the overall health assessment.
+- **status**: A text description of the state of the resource, for example, `Running` or `ImagePullBackOff`.
+- **message**: A reason providing more detail for the current status.
+- **lastUpdated**: The timestamp when the resource was lastUpdated or reconciled.
 
 This is example isn't really thay useful, as it needs to be run continously, [canary-checker](https://canarychecker.io/) is a kubernetes health-check platform with support for 30+ check types, The [`kubernetes`](https://canarychecker.io/reference/kubernetes) check uses the `is-healthy` library:
 
 ```yaml title=kubernetes.yaml file=./canary.yaml
+
 ```
 
 This can be run locally:
 
 <TerminalOutput command="canary-checker run -v kubernetes.yaml"/>
-
-
 
 ## Step-by-Step Guide to State-Based Alerting for Deployments
 
@@ -298,8 +289,6 @@ And then checking on the status:
 [95m[0m[36mupdatedReplicas[0m:[95m 1[0m
 </TerminalOutput>
 
-
-
 ### Setting Up State-Based Alerting with Mission Control
 
 Mission Control can monitor these states and alert when they indicate problems. Let's create a check to monitor deployment rollout status.
@@ -315,38 +304,40 @@ spec:
   interval: 30
   kubernetes:
     - name: check-deployment-rollout
-      description: "Monitor deployment rollout state"
+      description: 'Monitor deployment rollout state'
       resource:
         apiVersion: apps/v1
         kind: Deployment
         name: nginx-deployment
         namespace: default
       results:
-      - name: Available
-        selector: $.status.conditions[?(@.type=="Available")].status
-        condition: Equal
-        error: "False"
-      - name: Progressing
-        selector: $.status.conditions[?(@.type=="Progressing")].status
-        condition: Equal
-        error: "False"
-      - name: ProgressingReason
-        selector: $.status.conditions[?(@.type=="Progressing")].reason
-        condition: Equal
-        error: "ProgressDeadlineExceeded"
-      - name: ErrorMessage
-        selector: $.status.conditions[?(@.type=="Progressing")].message
-        display: true
+        - name: Available
+          selector: $.status.conditions[?(@.type=="Available")].status
+          condition: Equal
+          error: 'False'
+        - name: Progressing
+          selector: $.status.conditions[?(@.type=="Progressing")].status
+          condition: Equal
+          error: 'False'
+        - name: ProgressingReason
+          selector: $.status.conditions[?(@.type=="Progressing")].reason
+          condition: Equal
+          error: 'ProgressDeadlineExceeded'
+        - name: ErrorMessage
+          selector: $.status.conditions[?(@.type=="Progressing")].message
+          display: true
 ```
+
 This Canary check:
+
 1. Runs every 30 seconds (`interval: 30`).
 2. Targets the `Deployment` named `nginx-deployment` in the `default` namespace.
 3. Defines results based on JSONPath selectors applied to the Deployment's status:
-    - Checks if the `Available` condition status is `False`.
-    - Checks if the `Progressing` condition status is `False`.
-    - Checks if the `Progressing` condition reason is `ProgressDeadlineExceeded`.
-    - Captures the `Progressing` condition message for display (`display: true`).
-    An alert is triggered if any condition marked with `error:` is met.
+   - Checks if the `Available` condition status is `False`.
+   - Checks if the `Progressing` condition status is `False`.
+   - Checks if the `Progressing` condition reason is `ProgressDeadlineExceeded`.
+   - Captures the `Progressing` condition message for display (`display: true`).
+     An alert is triggered if any condition marked with `error:` is met.
 
 Use `kubectl` to apply the Canary resource definition to your cluster:
 
@@ -384,16 +375,17 @@ spec:
         app: failing-app
     spec:
       containers:
-      - name: container
-        image: nginx:latest
-        resources:
-          limits:
-            memory: "10Mi"  # Intentionally too small
-          requests:
-            memory: "10Mi"
-        ports:
-        - containerPort: 80
+        - name: container
+          image: nginx:latest
+          resources:
+            limits:
+              memory: '10Mi' # Intentionally too small
+            requests:
+              memory: '10Mi'
+          ports:
+            - containerPort: 80
 ```
+
 This Deployment requests 3 replicas but sets a very low memory limit (`10Mi`), which is likely to cause Pods to be terminated with Out Of Memory (OOM) errors.
 
 Use `kubectl` to apply the failing Deployment definition to your cluster:
@@ -413,18 +405,17 @@ Now, compare how different monitoring approaches handle this failure.
 With Prometheus, a common alert rule for deployment issues checks for generation mismatches:
 
 ```yaml title=KubernetesDeploymentGenerationMismatch
-  - alert: KubernetesDeploymentGenerationMismatch
-    expr: kube_deployment_status_observed_generation != kube_deployment_metadata_generation
-    for: 10m
-    labels:
-      severity: critical
-    annotations:
-      summary: Kubernetes Deployment generation mismatch (instance {{ $labels.instance }})
-      description: "Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has failed but has not been rolled back.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+- alert: KubernetesDeploymentGenerationMismatch
+  expr: kube_deployment_status_observed_generation != kube_deployment_metadata_generation
+  for: 10m
+  labels:
+    severity: critical
+  annotations:
+    summary: Kubernetes Deployment generation mismatch (instance {{ $labels.instance }})
+    description: "Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has failed but has not been rolled back.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 ```
 
-This alert fires when there is a mismatch between the observed and expected generation numbers of a Kubernetes Deployment. The generation number increments whenever the Deployment spec changes. A mismatch indicates that the latest configuration change has not been successfully rolled out by the controller. While useful, it doesn't explain *why* the rollout failed. See [KubernetesDeploymentGenerationMismatch](https://samber.github.io/awesome-prometheus-alerts/rules#rule-kubernetes-1-24) for more details on this type of alert.
-
+This alert fires when there is a mismatch between the observed and expected generation numbers of a Kubernetes Deployment. The generation number increments whenever the Deployment spec changes. A mismatch indicates that the latest configuration change has not been successfully rolled out by the controller. While useful, it doesn't explain _why_ the rollout failed. See [KubernetesDeploymentGenerationMismatch](https://samber.github.io/awesome-prometheus-alerts/rules#rule-kubernetes-1-24) for more details on this type of alert.
 
 #### Mission Control State-Based Alert
 
@@ -456,7 +447,9 @@ The output might resemble the following:
   }
 ]
 ```
+
 This output shows two conditions:
+
 1. `Available` is `False` because the deployment does not have the minimum required replicas ready (`MinimumReplicasUnavailable`).
 2. `Progressing` is `False` because the rollout timed out (`ProgressDeadlineExceeded`). The message provides specific details about the failure, potentially including reasons like OOM killing if the system surfaces that information here.
 
@@ -467,11 +460,13 @@ Mission Control captures this state and provides an alert with the error message
 ### When State-Based Alerting Works Best (and When It Doesn't)
 
 State-based alerting excels when:
+
 - Resources self-report meaningful status
 - Problems have descriptive error messages
 - You need context for troubleshooting
 
 It's less effective when:
+
 - Resources don't update status fields
 - You need to alert on trends over time
 - Complex conditions require correlation between multiple resources
@@ -487,6 +482,7 @@ State changes can trigger multiple alerts. To avoid this:
 ### Combining with Metric-Based Monitoring
 
 The best approach is often a combination:
+
 - Use state-based alerts for detailed diagnostics
 - Use metric-based alerts for performance issues and trends
 - Create correlation between the two for complete visibility
@@ -498,6 +494,8 @@ State-based alerting transforms monitoring from "something is wrong" to "this is
 The ability to extract human-readable error messages directly from Kubernetes resources provides context that metrics alone cannot. As systems become more complex, this context becomes critical for effective incident management.
 
 For Kubernetes operators, combining state-based alerting with traditional metrics creates a complete view of your system's health and gives you the power to resolve issues faster.
+
 ```
 
 - [KubernetesDeploymentGenerationMismatch](https://samber.github.io/awesome-prometheus-alerts/rules#rule-kubernetes-1-24)
+```

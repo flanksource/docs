@@ -53,31 +53,31 @@ You can see changes on the incoming relationships (and their parents) by choosin
 
 ## Relationship
 
-| Field    | Description                                            | Scheme                                                                                          | Required |
-| -------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | -------- |
+| Field    | Description                                            | Scheme                                                                                               | Required |
+| -------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | -------- |
 | `filter` | Which config items to form relationships with          | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](/docs/reference/config-db/scrape-result) | `true`   |
-| `id`     | The ID or Alias (External ID) of the config to link to | [Lookup](#lookup)                                                                               |          |
-| `name`   |                                                        | [Lookup](#lookup)                                                                               |          |
-| `type`   | Config Type                                            | [Lookup](#lookup)                                                                               |          |
+| `id`     | The ID or Alias (External ID) of the config to link to | [Lookup](#lookup)                                                                                    |          |
+| `name`   |                                                        | [Lookup](#lookup)                                                                                    |          |
+| `type`   | Config Type                                            | [Lookup](#lookup)                                                                                    |          |
 | `agent`  | agent of the config to link to                         | [Lookup](#lookup) that returns an [Agent](/docs/reference/types#agent)                               |          |
-| `labels` | Labels of the config to link to                        | `map[string]`[Lookup](#lookup)                                                                  |          |
+| `labels` | Labels of the config to link to                        | `map[string]`[Lookup](#lookup)                                                                       |          |
 
 ### Lookup
 
 RelationshipLookup offers different ways to specify a lookup value
 
-| Field   | Description                                   | Scheme                                                                                          | Variables                                            |
-| ------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| Field   | Description                                   | Scheme                                                                                               | Variables                                                 |
+| ------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | `expr`  | An expression that returns a value to be used | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](/docs/reference/config-db/scrape-result) | [`ScrapeResult`](/docs/reference/config-db/scrape-result) |
-| `value` | A static value to use in the lookup           | `string`                                                                                        |                                                      |
-| `label` | Get the value to use from an existing label   | `label name`                                                                                    |                                                      |
+| `value` | A static value to use in the lookup           | `string`                                                                                             |                                                           |
+| `label` | Get the value to use from an existing label   | `label name`                                                                                         |                                                           |
 
 ## Dynamic Linking
 
 Sometimes the logic for when to a form a relationship is complex, a CEL expression can be used to return a list of selectors dynamically.
 
-| Field  | Description                                                                            | Scheme                                | Variables                                            |
-| ------ | -------------------------------------------------------------------------------------- | ------------------------------------- | ---------------------------------------------------- |
+| Field  | Description                                                                                 | Scheme                                | Variables                                                 |
+| ------ | ------------------------------------------------------------------------------------------- | ------------------------------------- | --------------------------------------------------------- |
 | `expr` | An expression that returns a list of [ResourceSelectors](/docs/reference/resource-selector) | <CommonLink to="cel">CEL</CommonLink> | [`ScrapeResult`](/docs/reference/config-db/scrape-result) |
 
 ```yaml title=link-pvc-to-pod.yaml

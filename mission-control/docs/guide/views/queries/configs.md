@@ -8,16 +8,16 @@ Config queries fetch configuration items from the Flanksource catalog.
 
 ## Query Properties
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `types` | array | Config types to query (e.g., `["Kubernetes::Pod"]`) |
-| `search` | string | Free text search (supports `@order=` for sorting) |
-| `status` | string | Filter by status |
-| `health` | string | Filter by health status |
-| `tagSelector` | string | Filter by tags (e.g., `environment=prod,team=platform`) |
-| `labelSelector` | string | Filter by Kubernetes-style labels |
-| `agent` | string | Filter by agent ID (use `all` for all agents) |
-| `limit` | integer | Maximum results to return |
+| Property        | Type    | Description                                             |
+| --------------- | ------- | ------------------------------------------------------- |
+| `types`         | array   | Config types to query (e.g., `["Kubernetes::Pod"]`)     |
+| `search`        | string  | Free text search (supports `@order=` for sorting)       |
+| `status`        | string  | Filter by status                                        |
+| `health`        | string  | Filter by health status                                 |
+| `tagSelector`   | string  | Filter by tags (e.g., `environment=prod,team=platform`) |
+| `labelSelector` | string  | Filter by Kubernetes-style labels                       |
+| `agent`         | string  | Filter by agent ID (use `all` for all agents)           |
+| `limit`         | integer | Maximum results to return                               |
 
 ## Example
 

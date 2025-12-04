@@ -8,10 +8,10 @@ The `table` panel displays query results as a simple key-value list. It has no a
 
 ## Expected Columns
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `value` | string/number | Value displayed on the right (required) |
-| First non-`value` column | string | Label displayed on the left (required) |
+| Column                   | Type          | Description                             |
+| ------------------------ | ------------- | --------------------------------------- |
+| `value`                  | string/number | Value displayed on the right (required) |
+| First non-`value` column | string        | Label displayed on the left (required)  |
 
 ## Example
 

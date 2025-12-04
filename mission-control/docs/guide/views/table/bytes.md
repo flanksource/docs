@@ -9,10 +9,10 @@ The `bytes` column type displays byte sizes with automatic formatting (B, KB, MB
 ## Auto-Formatting
 
 | Input Value | Display |
-|------------|---------|
-| 512 | 512 B |
-| 1048576 | 1 MB |
-| 1073741824 | 1 GB |
+| ----------- | ------- |
+| 512         | 512 B   |
+| 1048576     | 1 MB    |
+| 1073741824  | 1 GB    |
 
 ## Example
 

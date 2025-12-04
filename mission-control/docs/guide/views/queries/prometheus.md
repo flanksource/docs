@@ -8,11 +8,11 @@ Prometheus queries fetch metrics directly from Prometheus using PromQL.
 
 ## Query Properties
 
-| Property | Type | Description |
-|----------|------|-------------|
+| Property     | Type   | Description                                                          |
+| ------------ | ------ | -------------------------------------------------------------------- |
 | `connection` | string | Prometheus connection reference (e.g., `connection://mc/prometheus`) |
-| `query` | string | PromQL query expression |
-| `columns` | object | Define column types for results (recommended) |
+| `query`      | string | PromQL query expression                                              |
+| `columns`    | object | Define column types for results (recommended)                        |
 
 ## Example
 

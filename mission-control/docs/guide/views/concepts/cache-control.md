@@ -41,6 +41,7 @@ spec:
 ## Cache Parameters
 
 ### maxAge
+
 The maximum age of cached data before it's considered stale and needs refresh.
 
 - **Default**: `15m`
@@ -50,12 +51,14 @@ The maximum age of cached data before it's considered stale and needs refresh.
   - Longer duration: Less frequent refreshes, potentially stale data, lower load
 
 **Example**:
+
 ```yaml
 cache:
-  maxAge: 5m  # Refresh at least every 5 minutes
+  maxAge: 5m # Refresh at least every 5 minutes
 ```
 
 ### minAge
+
 The minimum age cached data must reach before a user can request a manual refresh. This prevents over-refreshing from rapid user clicks.
 
 - **Default**: `10s`
@@ -65,12 +68,14 @@ The minimum age cached data must reach before a user can request a manual refres
   - Helps prevent accidental load spikes from aggressive clicking
 
 **Example**:
+
 ```yaml
 cache:
-  minAge: 30s  # Users can only refresh every 30 seconds
+  minAge: 30s # Users can only refresh every 30 seconds
 ```
 
 ### refreshTimeout
+
 How long to wait for a refresh operation to complete. If the refresh takes longer, stale data is returned instead of waiting.
 
 - **Default**: `5s`
@@ -80,9 +85,10 @@ How long to wait for a refresh operation to complete. If the refresh takes longe
   - Longer timeout: Fresher data, but slower responses if refresh is slow
 
 **Example**:
+
 ```yaml
 cache:
-  refreshTimeout: 2s  # Return stale data if refresh takes > 2 seconds
+  refreshTimeout: 2s # Return stale data if refresh takes > 2 seconds
 ```
 
 ## Per-Variable Caching
@@ -90,6 +96,7 @@ cache:
 Each unique combination of template variables creates a separate cache entry. This allows different filters to maintain independent cache lifespans.
 
 **Example**: A view with a "cluster" variable will maintain separate cached data for:
+
 - cluster=us-east-1
 - cluster=us-west-2
 - cluster=eu-central-1
@@ -99,6 +106,7 @@ Each cluster's data is cached independently, allowing users to switch between cl
 ## Cache Behavior Examples
 
 ### Example 1: Fresh Data Request
+
 ```
 User requests view
   ↓
@@ -110,6 +118,7 @@ Response time: ~10ms
 ```
 
 ### Example 2: Stale Data with Quick Refresh
+
 ```
 User requests view
   ↓
@@ -125,6 +134,7 @@ Response time: ~1.5s
 ```
 
 ### Example 3: Stale Data with Slow Refresh
+
 ```
 User requests view
   ↓
@@ -144,6 +154,7 @@ Refresh continues in background, updates cache
 ```
 
 ### Example 4: Manual Refresh Throttling
+
 ```
 User clicks refresh button
   ↓
@@ -157,6 +168,7 @@ User must wait 8 more seconds before refresh is allowed
 ## Recommended Settings
 
 ### High-Frequency Monitoring (Every Minute)
+
 Use shorter cache times for real-time dashboards:
 
 ```yaml
@@ -167,6 +179,7 @@ cache:
 ```
 
 ### Typical Dashboard (Every 5-15 Minutes)
+
 Standard balance of freshness and performance:
 
 ```yaml
@@ -177,6 +190,7 @@ cache:
 ```
 
 ### Low-Frequency Reference Data (Hourly)
+
 For relatively static data:
 
 ```yaml
@@ -187,6 +201,7 @@ cache:
 ```
 
 ### Real-Time Critical (Seconds)
+
 For mission-critical live data:
 
 ```yaml
@@ -200,14 +215,14 @@ cache:
 
 Cache settings directly affect system performance:
 
-| Setting | ↓ Latency | ↓ Load | ↓ Freshness |
-|---------|-----------|--------|------------|
-| Shorter maxAge | ✗ | ✗ | ✓ |
-| Longer maxAge | ✓ | ✓ | ✗ |
-| Shorter refreshTimeout | ✓ | ✗ | ✗ |
-| Longer refreshTimeout | ✗ | ✓ | ✓ |
-| Higher minAge | ✓ | ✓ | ✗ |
-| Lower minAge | ✗ | ✗ | ✓ |
+| Setting                | ↓ Latency | ↓ Load | ↓ Freshness |
+| ---------------------- | --------- | ------ | ----------- |
+| Shorter maxAge         | ✗         | ✗      | ✓           |
+| Longer maxAge          | ✓         | ✓      | ✗           |
+| Shorter refreshTimeout | ✓         | ✗      | ✗           |
+| Longer refreshTimeout  | ✗         | ✓      | ✓           |
+| Higher minAge          | ✓         | ✓      | ✗           |
+| Lower minAge           | ✗         | ✗      | ✓           |
 
 ## Default Configuration
 
@@ -215,8 +230,8 @@ If you don't specify cache settings, Mission Control uses these defaults:
 
 ```yaml
 cache:
-  maxAge: 15m        # Refresh at least every 15 minutes
-  minAge: 10s        # Throttle user refreshes to every 10 seconds
+  maxAge: 15m # Refresh at least every 15 minutes
+  minAge: 10s # Throttle user refreshes to every 10 seconds
   refreshTimeout: 5s # Return stale data if refresh takes > 5 seconds
 ```
 
@@ -234,11 +249,13 @@ Mission Control uses **singleflight deduplication** to prevent multiple concurre
 ## Cache Storage
 
 View cache data is stored in:
+
 - **Primary storage**: PostgreSQL database (persistent)
 - **Format**: `view_<namespace>_<name>` table per view
 - **Tracking**: Request fingerprint (SHA256 hash of variable map) identifies unique variable combinations
 
 This allows:
+
 - Data to survive service restarts
 - PostgREST API access to view data
 - Historical tracking of different variable combinations

@@ -8,14 +8,14 @@ Use `sql` to run queries against external databases (PostgreSQL, MySQL, or SQL S
 
 ## Configuration
 
-| Field         | Description                                                   |
-| ------------- | ------------------------------------------------------------- |
-| `connection`  | Name or URL of a stored SQL connection (recommended)          |
-| `type`        | Connection type when not using `connection` (`postgres`, `mysql`, `sqlserver`) |
-| `url`         | Database DSN/URL (supports env var references)                |
-| `username`    | Database username (supports env var references)               |
-| `password`    | Database password (supports env var references)               |
-| `query`       | SQL statement to execute                                      |
+| Field        | Description                                                                    |
+| ------------ | ------------------------------------------------------------------------------ |
+| `connection` | Name or URL of a stored SQL connection (recommended)                           |
+| `type`       | Connection type when not using `connection` (`postgres`, `mysql`, `sqlserver`) |
+| `url`        | Database DSN/URL (supports env var references)                                 |
+| `username`   | Database username (supports env var references)                                |
+| `password`   | Database password (supports env var references)                                |
+| `query`      | SQL statement to execute                                                       |
 
 Mission Control hydrates the connection details before executing the query, so secrets can stay in stored connections or environment variables.
 

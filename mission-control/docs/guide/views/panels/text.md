@@ -8,8 +8,8 @@ The `text` panel renders free-form text rows. Use it for short notes, callouts, 
 
 ## Expected Columns
 
-| Column | Type | Description |
-|--------|------|-------------|
+| Column  | Type   | Description                |
+| ------- | ------ | -------------------------- |
 | `value` | string | Text to display (required) |
 
 ## Example

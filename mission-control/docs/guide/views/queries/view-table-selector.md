@@ -15,11 +15,11 @@ View table selectors reuse cached data from other views instead of hitting the o
 
 ## Query Properties
 
-| Property        | Type   | Description                                                                 |
-| --------------- | ------ | --------------------------------------------------------------------------- |
-| `name`          | string | Name of the view to query                                                   |
-| `namespace`     | string | Namespace of the view (default: `default`)                                  |
-| `labelSelector` | string | Optional label selector to match multiple views (for composition by label)  |
+| Property        | Type   | Description                                                                |
+| --------------- | ------ | -------------------------------------------------------------------------- |
+| `name`          | string | Name of the view to query                                                  |
+| `namespace`     | string | Namespace of the view (default: `default`)                                 |
+| `labelSelector` | string | Optional label selector to match multiple views (for composition by label) |
 
 The selector returns **all rows** from the matched view tables. Shape or filter the data in your `merge` SQL or panel queries.
 

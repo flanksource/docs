@@ -8,9 +8,9 @@ The `duration` panel displays time duration values in a human-readable format (e
 
 ## Expected Columns
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `value` | number | Duration in **nanoseconds** (required) |
+| Column  | Type   | Description                                         |
+| ------- | ------ | --------------------------------------------------- |
+| `value` | number | Duration in **nanoseconds** (required)              |
 | `label` | string | Optional per-row label (defaults to the panel name) |
 
 ## Example
