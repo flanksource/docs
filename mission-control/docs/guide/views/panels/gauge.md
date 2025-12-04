@@ -20,7 +20,8 @@ The `gauge` panel displays a single numeric value as a visual gauge with configu
 
 | Column | Type | Description |
 |--------|------|-------------|
-| `value` | number | The numeric value to display on the gauge (required) |
+| `value` | number | Numeric value to display (required) |
+| `label` | string | Optional label; the panel title is used when omitted |
 
 ## Thresholds
 

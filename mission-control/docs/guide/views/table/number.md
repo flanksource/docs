@@ -15,6 +15,6 @@ The `number` column type displays numeric values (integers and decimals).
 
 ## Example
 
-```yaml title="namespace.yaml" file=<rootDir>/modules/mission-control/fixtures/views/namespace.yaml {115-119}
+```yaml title="namespace.yaml" file=<rootDir>/modules/mission-control/fixtures/views/notification-send-history.yaml {115-119}
 
 ```

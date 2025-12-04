@@ -1,5 +1,10 @@
 <Fields rows={[
   {
+    field: "description",
+    description: "Short explanation of what the view shows",
+    scheme: "string"
+  },
+  {
     field: "display.title",
     description: "Human-readable title displayed in the UI _(defaults to view name)_",
     scheme: "string"
@@ -18,6 +23,16 @@
     field: "display.ordinal",
     description: "Sort order for navigation, lower numbers appear first _(default: 0)_",
     scheme: "int"
+  },
+  {
+    field: "display.card",
+    description: "Default card layout for the view (body column count and whether cards are the default mode)",
+    scheme: "[DisplayCard](#view-card-layout)"
+  },
+  {
+    field: "display.plugins[]",
+    description: "Attach the view as a tab on matching config items with templated variables extracted from the config",
+    scheme: "[ViewConfigUIPlugin](#config-tabs)"
   },
   {
     field: "panels",
@@ -59,11 +74,21 @@
     field: "cache.refreshTimeout",
     description: "Duration to wait for a view to process before returning stale data _(default: 5s)_",
     scheme: "duration"
+  },
+  {
+    field: "templating",
+    description: "Variable definitions that can be substituted into queries and mappings",
+    scheme: "[[]ViewVariable](/mission-control/guide/views/concepts/templating)"
+  },
+  {
+    field: "sections",
+    description: "List of other views to render on the same page",
+    scheme: "[[]ViewSection](#sections)"
   }
 ]}/>
 
 :::note Validation Requirements
-- **At least one query**: Views must define at least one named query
+- **At least one query**: Views must define at least one named query (unless the view only renders `sections`)
 - **Output definition**: Views must have either `panels` or `columns` (or both)
 - **Merge requirement**: When using multiple queries with table output (columns only), you must provide a `merge` SQL query
 :::
@@ -84,9 +109,19 @@ Query definition for data sources.
     scheme: "[ResourceSelector](/docs/reference/resource-selector)"
   },
   {
+    field: "sql",
+    description: "Run a SQL query against a configured connection (PostgreSQL, MySQL, SQL Server)",
+    scheme: "[SQL query](/mission-control/guide/views/queries/sql)"
+  },
+  {
     field: "prometheus",
     description: "Query time-series data from Prometheus",
     scheme: "[Prometheus Query](#prometheus-query)"
+  },
+  {
+    field: "viewTableSelector",
+    description: "Read cached rows from another view table",
+    scheme: "[View Table Selector](#view-table-selector)"
   }
 ]}/>
 
@@ -143,7 +178,7 @@ Column definition for view tables with data types and visualization properties.
     field: "type",
     required: true,
     description: "Data type that determines formatting and visualization",
-    scheme: "`string`, `number`, `boolean`, `datetime`, `duration`, `health`, `status`, `gauge`, `bytes`, `decimal`, `millicore`, `url`"
+    scheme: "`string`, `number`, `boolean`, `datetime`, `duration`, `health`, `status`, `gauge`, `bytes`, `decimal`, `millicore`, `url`, `badge`, `config_item`, `labels`"
   },
   {
     field: "primaryKey",
@@ -161,6 +196,31 @@ Column definition for view tables with data types and visualization properties.
     scheme: "bool"
   },
   {
+    field: "filter",
+    description: "Enable column filtering in the UI. Options are populated from the cached table per request fingerprint _(type: multiselect; labels columns support key/value include-exclude filters)_",
+    scheme: "object"
+  },
+  {
+    field: "icon",
+    description: "CEL expression that selects an icon per row (for tables and cards)",
+    scheme: "string"
+  },
+  {
+    field: "url",
+    description: "Link to configs, other views, or custom URLs using CEL/Go templates",
+    scheme: "[ColumnURL](#column-urls)"
+  },
+  {
+    field: "unit",
+    description: "Unit string appended to values (e.g., %, bytes, millicore)",
+    scheme: "string"
+  },
+  {
+    field: "configItem",
+    description: "Options for `config_item` columns (choose which field to treat as the config ID)",
+    scheme: "ConfigItemColumnType"
+  },
+  {
     field: "for",
     description: "Reference to another column this column provides data for _(helper columns)_. Only applicable for type=url.",
     scheme: "string"
@@ -169,6 +229,11 @@ Column definition for view tables with data types and visualization properties.
     field: "gauge",
     description: "Configuration for gauge visualization _(required when type=gauge)_",
     scheme: "[GaugeConfig](#gauge-configuration)"
+  },
+  {
+    field: "card",
+    description: "Card layout configuration for this column (position and accent highlighting)",
+    scheme: "CardConfig"
   }
 ]}/>
 
@@ -196,7 +261,7 @@ Panel definition for interactive visualizations.
     field: "type",
     required: true,
     description: "Type of panel visualization",
-    scheme: "`piechart`, `table`, `number`, `gauge`"
+    scheme: "`piechart`, `table`, `text`, `number`, `duration`, `gauge`, `bargauge`, `timeseries`"
   },
   {
     field: "query",
@@ -218,6 +283,16 @@ Panel definition for interactive visualizations.
     field: "number",
     description: "Configuration for number panels",
     scheme: "[Panel Number Configuration](#panel-number-configuration)"
+  },
+  {
+    field: "bargauge",
+    description: "Configuration for bar gauge panels",
+    scheme: "[Bar Gauge Configuration](#bar-gauge-configuration)"
+  },
+  {
+    field: "timeseries",
+    description: "Configuration for timeseries panels",
+    scheme: "[Timeseries Configuration](#timeseries-configuration)"
   }
 ]}/>
 
@@ -245,19 +320,17 @@ Configuration for gauge visualizations with thresholds and color coding.
 <Fields rows={[
   {
     field: "min",
-    required: true,
-    description: "Minimum value for the gauge",
-    scheme: "int"
+    description: "Minimum value for the gauge (number or CEL expression)",
+    scheme: "string"
   },
   {
     field: "max",
-    required: true,
-    description: "Maximum value for the gauge",
-    scheme: "int"
+    description: "Maximum value for the gauge (number or CEL expression)",
+    scheme: "string"
   },
   {
     field: "thresholds[].value",
-    description: "Threshold value",
+    description: "Threshold value (deprecated; use percent)",
     scheme: "int"
   },
   {
@@ -284,4 +357,142 @@ Configuration for number panels.
   }
 ]}/>
 
+#### Bar Gauge Configuration
 
+Configuration for bar gauge panels.
+
+<Fields rows={[
+  {
+    field: "min",
+    description: "Minimum value (number or CEL expression)",
+    scheme: "string"
+  },
+  {
+    field: "max",
+    description: "Maximum value (number or CEL expression)",
+    scheme: "string"
+  },
+  {
+    field: "thresholds[].value",
+    description: "Threshold value (deprecated; use percent)",
+    scheme: "int"
+  },
+  {
+    field: "thresholds[].color",
+    description: "Color for this threshold",
+    scheme: "string"
+  },
+  {
+    field: "unit",
+    description: "Unit label appended to values",
+    scheme: "string"
+  },
+  {
+    field: "format",
+    description: "Display format (`percentage` or `multiplier`)",
+    scheme: "string"
+  },
+  {
+    field: "precision",
+    description: "Number of decimal places",
+    scheme: "int"
+  },
+  {
+    field: "group",
+    description: "Optional group name to merge multiple bar gauges",
+    scheme: "string"
+  }
+]}/>
+
+#### Timeseries Configuration
+
+Configuration for timeseries panels (API-level; UI rendering in progress).
+
+<Fields rows={[
+  {
+    field: "timeKey",
+    description: "Field name for the timestamp column _(default: `timestamp`)_",
+    scheme: "string"
+  },
+  {
+    field: "valueKey",
+    description: "Field name for the numeric value column _(default: `value`)_",
+    scheme: "string"
+  },
+  {
+    field: "style",
+    description: "Visualization style: `lines`, `area`, or `points`",
+    scheme: "string"
+  }
+]}/>
+
+### View Card Layout
+
+`display.card` controls the default card layout for tables with card positioning. Cards become the default view when `default: true` and at least one column defines `card.position` (or legacy `cardPosition`). Use `columns[].card.useForAccent` to color the card accent based on a column's value (status/health heuristics in the UI):
+
+<Fields rows={[
+  {
+    field: "columns",
+    required: true,
+    description: "Number of columns in the card body",
+    scheme: "int"
+  },
+  {
+    field: "default",
+    description: "Whether the Cards tab should be the default display mode",
+    scheme: "bool"
+  }
+]}/>
+
+### Config Tabs
+
+Use `display.plugins` to attach a view as a tab on config detail pages. The `configTab` selector chooses matching configs, and `variables` templating pulls values from the config into the view request.
+
+```yaml title="namespace.yaml" file=<rootDir>/modules/mission-control/fixtures/views/namespace.yaml {66-76}
+
+```
+
+### Column Filters
+
+Enable `columns[].filter.type: multiselect` to expose server-side filters without re-running the view. Mission Control gathers distinct values from the cached Postgres table (scoped to the current `request_fingerprint`), builds dropdown options, and applies PostgREST filters. Labels columns support include/exclude tokens so you can target specific keys.
+
+```yaml title="ingress.yaml" file=<rootDir>/modules/mission-control/fixtures/views/ingress.yaml {8-48}
+
+```
+
+### Column URLs
+
+`columns[].url` can link to Mission Control objects or external destinations:
+
+- `config`: CEL expression resolving to a config ID or search query (redirects to catalog page)
+- `view`: Link to another view with optional query params built from CEL expressions
+- `template`: Go template that renders a custom URL
+
+```yaml title="deployments.yaml" file=<rootDir>/modules/mission-control/fixtures/views/deployments.yaml {37-40,72-73}
+
+```
+
+### Row Attributes and Grants
+
+Mission Control appends hidden, reserved columns to every view table:
+
+- `__row__attributes` (`row_attributes` type) stores per-column metadata generated during mapping: evaluated icons, URLs, gauge min/max overrides, and config item details (`id`, `type`, `class`, `health`, `status`). The UI uses these attributes to render icons, clickable links, and card accents.
+- `__grants` (`grants` type) stores scope IDs computed for config queries so row-level security policies can filter PostgREST responses.
+
+You do not need to declare these columns, but they appear in the materialized Postgres table and PostgREST output.
+
+### View Table Selector
+
+Reference cached data from another view instead of re-querying sources. The selector matches views by `name`, `namespace`, or `labelSelector`, then treats their materialized tables as a query source.
+
+```yaml title="deployments-summary.yaml" file=<rootDir>/modules/mission-control/fixtures/views/deployments-summary.yaml {10-37}
+
+```
+
+### Sections
+
+Render multiple views on one page. Section-only views can omit panels and columns; each section points at another view and is rendered with shared variable controls.
+
+```yaml title="workload-overview.yaml" file=<rootDir>/modules/mission-control/fixtures/views/workload-overview.yaml {6-24}
+
+```

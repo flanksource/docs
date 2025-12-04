@@ -11,7 +11,7 @@ The `duration` panel displays time duration values in a human-readable format (e
 | Column | Type | Description |
 |--------|------|-------------|
 | `value` | number | Duration in **nanoseconds** (required) |
-| `label` | string | Label for the panel (optional, defaults to panel name) |
+| `label` | string | Optional per-row label (defaults to the panel name) |
 
 ## Example
 

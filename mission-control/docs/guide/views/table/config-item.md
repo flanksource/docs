@@ -4,7 +4,9 @@ sidebar_custom_props:
   icon: config
 ---
 
-The `config_item` column type displays clickable links to configuration item detail pages.
+The `config_item` column type displays clickable links to configuration item detail pages with a proper icon.
+
+This column requires an `id` field in row.
 
 ## Example
 

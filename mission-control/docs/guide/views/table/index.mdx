@@ -38,8 +38,11 @@ All column types support these properties:
 | `primaryKey` | bool | Include in composite primary key |
 | `description` | string | Help text for the column |
 | `hidden` | bool | Hide from table display |
-| `filter` | object | Enable filtering (`type: multiselect`) |
+| `filter` | object | Enable filtering (`type: multiselect`), labels columns support include/exclude per key |
 | `icon` | string | Icon for the column (supports CEL like `row.health`) |
+| `url` | object | Link to configs, views, or custom URLs (see URL column type) |
+| `unit` | string | Unit label for gauges, numbers, and durations |
+| `configItem` | object | Options for `config_item` columns (e.g., custom `idField`) |
 | `card` | object | Card layout position (`position`, `useForAccent`) |
 
 ## Card Positioning

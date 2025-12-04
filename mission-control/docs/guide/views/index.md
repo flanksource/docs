@@ -20,6 +20,7 @@ Views serve as a powerful data aggregation and visualization layer in Mission Co
 - **Support templating** with variables that users can adjust to dynamically filter and update the view
 - **Cache results** intelligently to balance data freshness with performance
 - **Transform data** using expressions to map raw query results to meaningful display columns
+- **Embed views** inside config item pages or assemble multiple views on one page with sections
 
 ## Key Features
 
@@ -30,6 +31,8 @@ Views can query data from multiple sources:
 - **Config Items**: Infrastructure components and configurations via the `configs` selector
 - **Changes**: Configuration change tracking and audit data via the `changes` selector
 - **Metrics**: Time-series data from Prometheus using PromQL queries
+- **SQL**: Direct SQL queries via stored connections (PostgreSQL, MySQL, SQL Server)
+- **Other Views**: Reuse cached tables from existing views with `viewTableSelector`
 
 ### Output Types
 
@@ -83,6 +86,22 @@ panels:
 ```
 
 This SQL-first approach gives you unlimited flexibility to slice, filter, and aggregate your data.
+
+### Compose Pages with Sections
+
+Use `spec.sections` to render multiple views together. Mission Control aggregates their variables and shows a single filter bar for all sections.
+
+```yaml title="workload-overview.yaml" file=<rootDir>/modules/mission-control/fixtures/views/workload-overview.yaml {6-24}
+
+```
+
+### Attach Views to Config Tabs
+
+`display.plugins` lets you place a view as a tab on matching config items. Variables can be templated from the config to scope the view automatically.
+
+```yaml title="namespace.yaml" file=<rootDir>/modules/mission-control/fixtures/views/namespace.yaml {66-76}
+
+```
 
 ## API Reference
 

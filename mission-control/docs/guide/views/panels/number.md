@@ -17,8 +17,8 @@ The `number` panel displays a single numeric value with optional unit formatting
 
 | Column | Type | Description |
 |--------|------|-------------|
-| `value` or `count` | number | The numeric value to display (required) |
-| `label` | string | Label for the panel (optional, defaults to panel name) |
+| `value` or `count` | number | Numeric value to display (required) |
+| `label` | string | Optional per-row label (defaults to the panel name) |
 
 ## Example
 

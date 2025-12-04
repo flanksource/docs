@@ -17,8 +17,8 @@ The `piechart` panel displays data distribution as a pie chart with customizable
 
 | Column | Type | Description |
 |--------|------|-------------|
-| `count` | number | The size of each pie slice (required) |
-| Any other column | string | Used as the label for each slice (e.g., `health`, `status`) |
+| `count` | number | Size of each slice (required) |
+| First non-`count` column | string | Slice label (e.g., `health`, `status`) |
 
 ## Colors
 
