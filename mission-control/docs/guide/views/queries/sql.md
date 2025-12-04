@@ -21,7 +21,7 @@ Mission Control hydrates the connection details before executing the query, so s
 
 ## Example
 
-```yaml title="sql-incidents.yaml" file=<rootDir>/modules/mission-control/fixtures/views/sql-incidents.yaml {7-28}
+```yaml title="failing-health-checks.yaml" file=<rootDir>/modules/mission-control/fixtures/views/failing-health-checks.yaml {33-59}
 
 ```
 

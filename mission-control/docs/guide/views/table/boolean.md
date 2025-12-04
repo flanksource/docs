@@ -8,7 +8,7 @@ The `boolean` column type renders `true`/`false` values as friendly yes/no text 
 
 ## Example
 
-```yaml title="boolean-example.yaml" file=<rootDir>/modules/mission-control/fixtures/views/boolean-example.yaml {7-27}
+```yaml title="boolean-example.yaml" file=<rootDir>/modules/mission-control/fixtures/views/boolean-example.yaml {24-26}
 
 ```
 

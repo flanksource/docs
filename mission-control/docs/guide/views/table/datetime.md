@@ -8,6 +8,6 @@ The `datetime` column type displays timestamps with human-readable formatting.
 
 ## Example
 
-```yaml title="cronjobs.yaml" file=<rootDir>/modules/mission-control/fixtures/views/cronjobs.yaml {30-31}
+```yaml title="cronjobs.yaml" file=<rootDir>/modules/mission-control/fixtures/views/cronjobs.yaml {32-33}
 
 ```

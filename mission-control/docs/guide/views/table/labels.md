@@ -8,7 +8,7 @@ The `labels` column type renders key/value labels and supports include/exclude f
 
 ## Example
 
-```yaml title="labels.yaml" file=<rootDir>/modules/mission-control/fixtures/views/labels.yaml {17-20}
+```yaml title="pods.yaml" file=<rootDir>/modules/mission-control/fixtures/views/pods.yaml {49-50}
 
 ```
 
