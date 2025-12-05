@@ -55,10 +55,10 @@ POST `/playbook/list?check_id={check_id}`
 
 ### Query Parameters
 
-| Parameter      | Description              | Type     |
-| -------------- | ------------------------ | -------- |
-| `config_id`    | ID of the config item    | `string` |
-| `check_id`     | ID of the Check          | `string` |
+| Parameter   | Description           | Type     |
+| ----------- | --------------------- | -------- |
+| `config_id` | ID of the config item | `string` |
+| `check_id`  | ID of the Check       | `string` |
 
 > Provide only 1 parameter
 
@@ -123,18 +123,18 @@ GET /playbook/run/{id}
 
 ### Response
 
-| Field          | Type                | Description                                           |
-| -------------- | ------------------- | ----------------------------------------------------- |
-| `id`           | `string`            | The ID of the run.                                    |
-| `playbook_id`  | `string`            | The ID of the playbook.                               |
-| `status`       | `string`            | The status of the run.                                |
-| `created_at`   | `string`            | The time the run is scheduled to start (_in RFC3339_) |
-| `start_time`   | `string`            | The time the run started (_in RFC3339_)               |
-| `end_time`     | `string`            | The time the run ended (_in RFC3339_)                 |
-| `created_by`   | `string`            | The ID of the user that created the run.              |
-| `config_id`    | `string`            | The ID of the config item that ran the playbook.      |
-| `parameters`   | `map[string]string` | The parameters to pass to the playbook.               |
-| `agent_id`     | `string`            | The ID of the agent that ran the playbook.            |
+| Field         | Type                | Description                                           |
+| ------------- | ------------------- | ----------------------------------------------------- |
+| `id`          | `string`            | The ID of the run.                                    |
+| `playbook_id` | `string`            | The ID of the playbook.                               |
+| `status`      | `string`            | The status of the run.                                |
+| `created_at`  | `string`            | The time the run is scheduled to start (_in RFC3339_) |
+| `start_time`  | `string`            | The time the run started (_in RFC3339_)               |
+| `end_time`    | `string`            | The time the run ended (_in RFC3339_)                 |
+| `created_by`  | `string`            | The ID of the user that created the run.              |
+| `config_id`   | `string`            | The ID of the config item that ran the playbook.      |
+| `parameters`  | `map[string]string` | The parameters to pass to the playbook.               |
+| `agent_id`    | `string`            | The ID of the agent that ran the playbook.            |
 
 ## Accessing Artifacts
 

@@ -8,20 +8,19 @@ sidebar_custom_props:
 
 import View from "@site/docs/reference/views/\_view.mdx"
 
-Views are a SQL-powered feature that allows you to create custom, dynamic dashboards from your Mission Control data. They collect data from multiple sources into an in-memory SQLite database, enabling you to run any SQL query for filtering, joining, and aggregating your observability data.
+Views are dynamic, data-driven dashboards in Mission Control that aggregate and visualize data from multiple sources.
+They collect data from multiple sources into an in-memory SQLite database, enabling you to run any SQL query for filtering, joining, and aggregating your observability data.
 
 <Screenshot img="/img/views.svg" className="h-auto" alt="Views Concept" shadow="false" size="800px"/>
 
-This view creates a dashboard showing Helm releases with their current status, health, and deployment information.
+Views serve as a powerful data aggregation and visualization layer in Mission Control. They:
 
-## Overview
-
-Views solve the challenge of creating custom dashboards and reports by providing:
-
-- **Dynamic Data Aggregation**: Combine data from multiple sources using SQL
-- **Rich Visualizations**: Display data with gauges, charts, status indicators, and more
-- **Structured Schema**: Define column types and constraints for consistent data presentation
-- **Cached Results**: Views work like materialized views, caching query results in dedicated database tables for fast retrieval
+- **Aggregate data** from multiple sources including configuration items, changes, and Prometheus metrics
+- **Display data** as interactive tables and visualization panels (gauges, pie charts, ...)
+- **Support templating** with variables that users can adjust to dynamically filter and update the view
+- **Cache results** intelligently to balance data freshness with performance
+- **Transform data** using expressions to map raw query results to meaningful display columns
+- **Embed views** inside config item pages or assemble multiple views on one page with sections
 
 ## Key Features
 
@@ -32,6 +31,8 @@ Views can query data from multiple sources:
 - **Config Items**: Infrastructure components and configurations via the `configs` selector
 - **Changes**: Configuration change tracking and audit data via the `changes` selector
 - **Metrics**: Time-series data from Prometheus using PromQL queries
+- **SQL**: Direct SQL queries via stored connections (PostgreSQL, MySQL, SQL Server)
+- **Other Views**: Reuse cached tables from existing views with `viewTableSelector`
 
 ### Output Types
 
@@ -85,6 +86,22 @@ panels:
 ```
 
 This SQL-first approach gives you unlimited flexibility to slice, filter, and aggregate your data.
+
+### Compose Pages with Sections
+
+Use `spec.sections` to render multiple views together. Mission Control aggregates their variables and shows a single filter bar for all sections.
+
+```yaml title="workload-overview.yaml" file=<rootDir>/modules/mission-control/fixtures/views/workload-overview.yaml {6-24}
+
+```
+
+### Attach Views to Config Tabs
+
+`display.plugins` lets you place a view as a tab on matching config items. Variables can be templated from the config to scope the view automatically.
+
+```yaml title="namespace.yaml" file=<rootDir>/modules/mission-control/fixtures/views/namespace.yaml {66-76}
+
+```
 
 ## API Reference
 

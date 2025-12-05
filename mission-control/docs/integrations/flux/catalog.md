@@ -29,7 +29,6 @@ Mission Control provides built-in support for relating Flux resources to each ot
 
   </Card>
 
-
     <Card size="sm" title="GitOps Playbooks" icon="playbook" link="./playbooks">
     Enable ClickOps workflows backed by git.
           <Tag label="playbooks"/>

@@ -1,0 +1,38 @@
+---
+sidebar_position: 4
+title: Panels
+sidebar_custom_props:
+  icon: mdi:chart-box
+---
+
+Panels display aggregated data visualizations above the main table. Each panel runs a SQL query against the view's query results and renders the data as a chart, gauge, or summary.
+
+## Panel Definition
+
+Panels are defined in `spec.panels`:
+
+```yaml
+panels:
+  - name: Pod Count          # Panel name
+    description: Total pods  # Optional description
+    type: gauge              # Panel type
+    query: SELECT COUNT(*) AS value FROM pods
+```
+
+## Common Properties
+
+All panel types support these properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `name` | string | Panel name (required) |
+| `description` | string | Optional description |
+| `type` | string | Panel type (required) |
+| `query` | string | SQL query against view data (required) |
+| `gauge`, `number`, `piechart`, `bargauge`, `timeseries` | object | Type-specific options |
+
+## Panel Types
+
+import DocCardList from '@theme/DocCardList';
+
+<DocCardList />

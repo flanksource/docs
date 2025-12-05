@@ -10,5 +10,3 @@ import ResourceSelector from '@site/docs/snippets/\_resource-selector.mdx';
 # Resource Selectors
 
 <ResourceSelector />
-
-

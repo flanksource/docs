@@ -8,11 +8,11 @@ Multiple playbooks could be listening to the same event and likewise a playbook 
 
 Filters can give you fine-grained control over the events that can trigger the playbook.
 
-| Field    | Description                                                                           | Scheme                          | Required |
-| -------- | ------------------------------------------------------------------------------------- | ------------------------------- | -------- |
-| `event`  | Event to listen for.                                                                  | `string`                        | `true`   |
+| Field    | Description                                                                           | Scheme                               | Required |
+| -------- | ------------------------------------------------------------------------------------- | ------------------------------------ | -------- |
+| `event`  | Event to listen for.                                                                  | `string`                             | `true`   |
 | `filter` | Filter events to trigger on                                                           | [CEL](/docs/reference/scripting/cel) | `true`   |
-| `labels` | Labels specifies the key-value pairs that the associated event's resource must match. | `map[string]string`             | `false`  |
+| `labels` | Labels specifies the key-value pairs that the associated event's resource must match. | `map[string]string`                  | `false`  |
 
 ## Canary
 
