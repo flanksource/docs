@@ -1,0 +1,471 @@
+---
+title: Clickhouse
+sidebar_custom_props:
+  icon: clickhouse
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+import Icon from '@site/../common/src/components/Icon'
+
+export const toc = [
+  { value: 'Catalog', id: 'catalog', level: 2 },
+];
+
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+</CapabilityBadges>
+
+Mission Control integrates with Clickhouse to scrape configuration data from databases and cloud storage.
+
+**Use cases:**
+
+- Import configuration items from Clickhouse tables and queries
+- Query data from AWS S3, Google Cloud Storage, and Azure Blob Storage
+- Process CSV, JSON, Parquet, and Iceberg file formats
+- Track changes in analytical data and business configurations
+- Monitor data pipeline outputs and transformation results
+
+## Data Sources
+
+Clickhouse's powerful SQL engine can query data from multiple sources using [table functions](https://clickhouse.com/docs/en/sql-reference/table-functions):
+
+| Source | Description | Use Cases |
+|--------|-------------|-----------|
+| <Icon name="clickhouse"/> **Clickhouse Database** | Direct connection to Clickhouse tables and materialized views | Application configs, CDC tables, analytics data |
+| <Icon name="aws-s3"/> **AWS S3** | Query objects from S3 buckets using the `s3()` function | Data lake exports, CloudTrail logs, cost reports |
+| <Icon name="google-cloud"/> **Google Cloud Storage** | Query objects from GCS buckets using the `gcs()` function | BigQuery exports, Dataflow outputs, backup configs |
+| <Icon name="azure"/> **Azure Blob Storage** | Query blobs from Azure containers using `azureBlobStorage()` | Data Factory exports, Azure logs, Power BI datasets |
+| <Icon name="http"/> **HTTP/HTTPS URLs** | Query files from any HTTP endpoint using the `url()` function | Public datasets, REST API exports, remote configs |
+| <Icon name="hdfs"/> **HDFS** | Query files from Hadoop clusters using the `hdfs()` function | Hadoop ecosystem data, Spark outputs |
+| <Icon name="mysql"/> **MySQL** | Query remote MySQL databases using the `mysql()` function | Legacy system configs, CRM data |
+| <Icon name="postgres"/> **PostgreSQL** | Query remote PostgreSQL databases using the `postgresql()` function | Application databases, metadata stores |
+
+<CapabilityHeading type="scraper" />
+
+### Direct Clickhouse Connection
+
+Query configuration data directly from Clickhouse tables.
+
+```yaml title="clickhouse-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: clickhouse-configs
+spec:
+  schedule: "@every 1h"
+  clickhouse:
+    - clickhouseURL: clickhouse://user:password@clickhouse:9000/configs
+      query: |
+        SELECT
+          id,
+          name,
+          config_data,
+          updated_at
+        FROM application_configs
+        WHERE active = true
+      items:
+        - type: Application::Config
+          id: .id
+          name: .name
+```
+
+<details summary="AWS S3 with Parquet Files">
+
+Query Parquet files stored in S3 using Clickhouse's S3 table function.
+
+```yaml title="clickhouse-s3-parquet.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: s3-parquet-configs
+spec:
+  schedule: "@every 6h"
+  clickhouse:
+    - awsS3:
+        bucket: config-exports
+        path: daily/
+        region: us-east-1
+        accessKey:
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: access-key
+        secretKey:
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: secret-key
+      query: |
+        SELECT *
+        FROM s3(
+          'https://config-exports.s3.amazonaws.com/daily/*.parquet',
+          'Parquet'
+        )
+      items:
+        - type: Export::Config
+          id: .record_id
+          name: .name
+```
+</details>
+
+<details summary="Google Cloud Storage with JSON">
+
+Query JSON files from Google Cloud Storage.
+
+```yaml title="clickhouse-gcs-json.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: gcs-json-configs
+spec:
+  schedule: "@every 4h"
+  clickhouse:
+    - query: |
+        SELECT *
+        FROM gcs(
+          'https://storage.googleapis.com/my-bucket/configs/*.json',
+          'JSONEachRow'
+        )
+      items:
+        - type: GCS::Config
+          id: .id
+          name: .name
+```
+</details>
+
+<details summary="Azure Blob Storage with CSV">
+
+Query CSV files from Azure Blob Storage using named collections.
+
+```yaml title="clickhouse-azure-csv.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: azure-csv-configs
+spec:
+  schedule: "@every 2h"
+  clickhouse:
+    - azureBlobStorage:
+        account: mystorageaccount
+        container: configs
+        path: exports/
+        collection: AzureConfigs
+      query: |
+        SELECT *
+        FROM azureBlobStorage(AzureConfigs, 'exports/*.csv', 'CSV')
+      items:
+        - type: Azure::Export
+          id: .config_id
+          name: .config_name
+```
+</details>
+
+<details summary="Iceberg Tables">
+
+Query Iceberg tables for versioned configuration data.
+
+```yaml title="clickhouse-iceberg.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: iceberg-configs
+spec:
+  schedule: "@every 12h"
+  clickhouse:
+    - awsS3:
+        bucket: data-lake
+        path: iceberg/configs/
+        region: us-west-2
+        connection: connection://aws/data-lake
+      query: |
+        SELECT *
+        FROM iceberg('s3://data-lake/iceberg/configs/')
+        WHERE snapshot_id = (
+          SELECT max(snapshot_id)
+          FROM iceberg_snapshots('s3://data-lake/iceberg/configs/')
+        )
+      items:
+        - type: DataLake::Config
+          id: .id
+          name: .name
+```
+</details>
+
+<details summary="Access Logs Analysis">
+
+Import access logs from cloud storage for compliance tracking.
+
+```yaml title="clickhouse-access-logs.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: access-logs
+spec:
+  schedule: "@every 1h"
+  clickhouse:
+    - awsS3:
+        bucket: access-logs
+        path: "{{.Date.Format \"2006/01/02\"}}/"
+        connection: connection://aws/logs
+      query: |
+        SELECT
+          request_id,
+          user_id,
+          action,
+          resource,
+          timestamp,
+          ip_address
+        FROM s3(
+          'https://access-logs.s3.amazonaws.com/{{.Date.Format "2006/01/02"}}/*.json.gz',
+          'JSONEachRow'
+        )
+        WHERE timestamp > now() - INTERVAL 1 HOUR
+      items:
+        - type: AccessLog::Entry
+          id: .request_id
+          name: "{{.action}} by {{.user_id}}"
+```
+</details>
+
+<details summary="Change Data Capture">
+
+Track configuration changes by querying CDC tables.
+
+```yaml title="clickhouse-cdc.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: config-changes
+spec:
+  schedule: "@every 15m"
+  full: true
+  clickhouse:
+    - clickhouseURL: clickhouse://user:password@clickhouse:9000/cdc
+      query: |
+        SELECT
+          id,
+          table_name,
+          operation,
+          before_data,
+          after_data,
+          changed_at
+        FROM config_changes
+        WHERE changed_at > now() - INTERVAL 15 MINUTE
+        ORDER BY changed_at DESC
+      items:
+        - type: CDC::Change
+          id: .id
+          name: "{{.table_name}}.{{.operation}}"
+```
+</details>
+
+<details summary="Remote MySQL Database">
+
+Query configuration data from a remote MySQL database using Clickhouse's MySQL table function.
+
+```yaml title="clickhouse-mysql.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: mysql-configs
+spec:
+  schedule: "@every 2h"
+  clickhouse:
+    - clickhouseURL: clickhouse://user:password@clickhouse:9000/default
+      query: |
+        SELECT
+          id,
+          name,
+          settings,
+          updated_at
+        FROM mysql(
+          'mysql-host:3306',
+          'app_database',
+          'configurations',
+          'readonly_user',
+          'password'
+        )
+        WHERE active = 1
+      items:
+        - type: MySQL::Config
+          id: .id
+          name: .name
+```
+</details>
+
+<details summary="Remote PostgreSQL Database">
+
+Query configuration data from a remote PostgreSQL database.
+
+```yaml title="clickhouse-postgresql.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-configs
+spec:
+  schedule: "@every 2h"
+  clickhouse:
+    - clickhouseURL: clickhouse://user:password@clickhouse:9000/default
+      query: |
+        SELECT
+          id,
+          name,
+          config_json,
+          modified_at
+        FROM postgresql(
+          'postgres-host:5432',
+          'app_db',
+          'feature_flags',
+          'readonly',
+          'password'
+        )
+      items:
+        - type: Postgres::FeatureFlag
+          id: .id
+          name: .name
+```
+</details>
+
+<details summary="HTTP/URL Data Source">
+
+Query JSON or CSV files from any HTTP endpoint.
+
+```yaml title="clickhouse-url.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: url-configs
+spec:
+  schedule: "@every 1h"
+  clickhouse:
+    - clickhouseURL: clickhouse://user:password@clickhouse:9000/default
+      query: |
+        SELECT *
+        FROM url(
+          'https://api.example.com/exports/configs.json',
+          'JSONEachRow'
+        )
+      items:
+        - type: API::Config
+          id: .id
+          name: .name
+```
+</details>
+
+<details summary="AWS Cost and Usage Reports">
+
+Import AWS Cost and Usage Reports from S3 for cost tracking.
+
+```yaml title="clickhouse-aws-cur.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-cost-reports
+spec:
+  schedule: "@daily"
+  clickhouse:
+    - awsS3:
+        bucket: aws-billing-reports
+        path: cur/
+        region: us-east-1
+        connection: connection://aws/billing
+      query: |
+        SELECT
+          line_item_resource_id as id,
+          line_item_product_code as service,
+          line_item_usage_type as usage_type,
+          sum(line_item_unblended_cost) as cost,
+          billing_period_start_date
+        FROM s3(
+          'https://aws-billing-reports.s3.amazonaws.com/cur/**/*.parquet',
+          'Parquet'
+        )
+        WHERE billing_period_start_date >= today() - 30
+        GROUP BY id, service, usage_type, billing_period_start_date
+      items:
+        - type: AWS::CostReport
+          id: .id
+          name: "{{.service}}/{{.usage_type}}"
+```
+</details>
+
+<details summary="CloudTrail Logs">
+
+Import CloudTrail logs for security and compliance auditing.
+
+```yaml title="clickhouse-cloudtrail.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: cloudtrail-events
+spec:
+  schedule: "@every 30m"
+  clickhouse:
+    - awsS3:
+        bucket: cloudtrail-logs
+        path: "AWSLogs/{{.AccountID}}/CloudTrail/"
+        region: us-east-1
+        connection: connection://aws/security
+      query: |
+        SELECT
+          eventID as id,
+          eventName,
+          eventSource,
+          userIdentity,
+          sourceIPAddress,
+          eventTime
+        FROM s3(
+          'https://cloudtrail-logs.s3.amazonaws.com/AWSLogs/*/CloudTrail/**/*.json.gz',
+          'JSONEachRow'
+        )
+        WHERE eventTime > now() - INTERVAL 1 HOUR
+      items:
+        - type: CloudTrail::Event
+          id: .id
+          name: "{{.eventSource}}/{{.eventName}}"
+```
+</details>
+
+## Supported File Formats
+
+| Format | Extension | Description | Best For |
+|--------|-----------|-------------|----------|
+| <Icon name="csv"/> **CSV** | `.csv`, `.tsv` | Comma/tab-separated values | Simple exports, spreadsheet data |
+| <Icon name="json"/> **JSON** | `.json`, `.ndjson` | JSON and newline-delimited JSON | API exports, nested structures |
+| <Icon name="parquet"/> **Parquet** | `.parquet` | Columnar storage format | Large datasets, analytics |
+| <Icon name="iceberg"/> **Iceberg** | - | Apache Iceberg table format | Versioned data lakes, time travel |
+| <Icon name="orc"/> **ORC** | `.orc` | Optimized Row Columnar format | Hive/Hadoop ecosystem |
+| <Icon name="avro"/> **Avro** | `.avro` | Apache Avro format | Schema evolution, Kafka data |
+| <Icon name="xml"/> **XML** | `.xml` | Extensible Markup Language | Legacy systems, SOAP exports |
+| <Icon name="protobuf"/> **Protobuf** | `.pb` | Protocol Buffers | gRPC services, compact binary |
+
+## Deployment
+
+Mission Control can deploy a Clickhouse instance for you:
+
+```yaml
+# values.yaml
+config-db:
+  clickhouse:
+    enabled: true
+```
+
+Or connect to an existing Clickhouse server using the `clickhouseURL` parameter.
+
+## Next Steps
+
+<Cards>
+  <Card icon="scraper" title="Clickhouse Scraper Reference" link="/docs/guide/config-db/scrapers/clickhouse">
+    Full configuration options for Clickhouse scrapers
+  </Card>
+  <Card icon="aws" title="AWS Integration" link="/docs/integrations/aws">
+    S3, CloudTrail, and other AWS data sources
+  </Card>
+  <Card icon="google-cloud" title="GCP Integration" link="/docs/integrations/gcp">
+    Google Cloud Storage and BigQuery exports
+  </Card>
+  <Card icon="azure" title="Azure Integration" link="/docs/integrations/azure">
+    Azure Blob Storage and data factory exports
+  </Card>
+</Cards>

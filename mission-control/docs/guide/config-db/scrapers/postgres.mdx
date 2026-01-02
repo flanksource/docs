@@ -1,0 +1,553 @@
+---
+title: PostgreSQL
+sidebar_position: 6.1
+sidebar_custom_props:
+  icon: postgres
+---
+
+import Custom from './_custom.mdx'
+
+# <Icon name="postgres"/> PostgreSQL
+
+The PostgreSQL scraper uses the SQL scraper to query PostgreSQL databases and create configuration items. This page provides PostgreSQL-specific examples and queries.
+
+See [SQL Scraper](./sql) for full documentation on transform scripts, relationships, changes, and access tracking.
+
+## Connection
+
+PostgreSQL connections use the `postgres` driver with a connection string or connection reference:
+
+```yaml
+# Direct connection string
+connection: postgresql://user:password@host:5432/database?sslmode=require
+
+# Connection reference
+connection: connection://postgres/production
+
+# Templated connection with auth
+connection: postgresql://$(username):$(password)@host:5432/database
+auth:
+  username:
+    valueFrom:
+      secretKeyRef:
+        name: pg-credentials
+        key: username
+  password:
+    valueFrom:
+      secretKeyRef:
+        name: pg-credentials
+        key: password
+```
+
+## Database Metadata
+
+Scrape PostgreSQL database configuration including version, settings, and encoding:
+
+```yaml title="postgres-database.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-databases
+spec:
+  sql:
+    - connection: connection://postgres/production
+      type: Postgres::Database
+      id: $.datname
+      name: $.datname
+      query: |
+        SELECT
+          d.datname,
+          d.datdba::regrole::text as owner,
+          pg_encoding_to_char(d.encoding) as encoding,
+          d.datcollate as collation,
+          d.datctype as ctype,
+          pg_database_size(d.datname) as size_bytes,
+          d.datconnlimit as connection_limit,
+          d.datallowconn as allow_connections,
+          d.datistemplate as is_template,
+          (
+            SELECT json_object_agg(name, setting)
+            FROM pg_settings
+            WHERE source != 'default'
+          ) as custom_settings
+        FROM pg_database d
+        WHERE d.datistemplate = false
+          AND d.datname NOT IN ('postgres')
+```
+
+## Users and Roles
+
+Scrape PostgreSQL users, roles, and their permissions:
+
+```yaml title="postgres-users-roles.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-iam
+spec:
+  full: true
+  sql:
+    - connection: connection://postgres/production
+      type: Postgres::Database
+      id: current_database
+      transform:
+        full: true
+        script:
+          javascript: |+
+            var data = config.data;
+            var result = {
+              id: data.database,
+              name: data.database,
+              config: {
+                version: data.version,
+                encoding: data.encoding
+              },
+              external_users: data.users.map(function(u) {
+                return {
+                  name: u.usename,
+                  account_id: u.usename,
+                  user_type: u.usesuper ? 'superuser' : 'user',
+                  aliases: [u.usesysid]
+                };
+              }),
+              external_roles: data.roles.map(function(r) {
+                return {
+                  name: r.rolname,
+                  account_id: r.rolname,
+                  role_type: r.rolcanlogin ? 'login_role' : 'group_role',
+                  description: [
+                    r.rolsuper ? 'SUPERUSER' : null,
+                    r.rolcreatedb ? 'CREATEDB' : null,
+                    r.rolcreaterole ? 'CREATEROLE' : null,
+                    r.rolreplication ? 'REPLICATION' : null
+                  ].filter(function(x) { return x; }).join(', '),
+                  aliases: [r.oid]
+                };
+              }),
+              external_user_groups: data.memberships.map(function(m) {
+                return {
+                  external_user_id: m.member,
+                  external_group_id: m.role
+                };
+              })
+            };
+            JSON.stringify([result])
+      query: |
+        SELECT json_build_object(
+          'database', current_database(),
+          'version', version(),
+          'encoding', pg_encoding_to_char(pg_database.encoding),
+          'users', (
+            SELECT json_agg(json_build_object(
+              'usename', usename,
+              'usesysid', usesysid::text,
+              'usesuper', usesuper,
+              'usecreatedb', usecreatedb
+            ))
+            FROM pg_user
+          ),
+          'roles', (
+            SELECT json_agg(json_build_object(
+              'rolname', rolname,
+              'oid', oid::text,
+              'rolsuper', rolsuper,
+              'rolcreatedb', rolcreatedb,
+              'rolcreaterole', rolcreaterole,
+              'rolcanlogin', rolcanlogin,
+              'rolreplication', rolreplication,
+              'rolconnlimit', rolconnlimit
+            ))
+            FROM pg_roles
+          ),
+          'memberships', (
+            SELECT json_agg(json_build_object(
+              'member', m.member::regrole::text,
+              'role', m.roleid::regrole::text
+            ))
+            FROM pg_auth_members m
+          )
+        ) as data
+        FROM pg_database
+        WHERE datname = current_database()
+```
+
+## Schema Inventory
+
+Scrape tables, views, and indexes with relationships:
+
+```yaml title="postgres-schema.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-schema
+spec:
+  sql:
+    - connection: connection://postgres/production
+      type: Postgres::Table
+      id: $.table_id
+      name: $.table_name
+      transform:
+        relationship:
+          # Link tables to their schema
+          - filter: config_type == 'Postgres::Table'
+            type:
+              value: Postgres::Schema
+            name:
+              expr: config.schema_name
+            parent: true
+          # Link tables to their database
+          - filter: config_type == 'Postgres::Table'
+            type:
+              value: Postgres::Database
+            name:
+              expr: config.database_name
+            parent: true
+      query: |
+        SELECT
+          c.oid::text as table_id,
+          c.relname as table_name,
+          n.nspname as schema_name,
+          current_database() as database_name,
+          CASE c.relkind
+            WHEN 'r' THEN 'table'
+            WHEN 'v' THEN 'view'
+            WHEN 'm' THEN 'materialized_view'
+            WHEN 'i' THEN 'index'
+            WHEN 'S' THEN 'sequence'
+            WHEN 'f' THEN 'foreign_table'
+            WHEN 'p' THEN 'partitioned_table'
+          END as type,
+          pg_get_userbyid(c.relowner) as owner,
+          c.reltuples::bigint as estimated_rows,
+          pg_total_relation_size(c.oid) as total_size_bytes,
+          pg_table_size(c.oid) as table_size_bytes,
+          pg_indexes_size(c.oid) as indexes_size_bytes,
+          obj_description(c.oid) as description,
+          (
+            SELECT json_agg(json_build_object(
+              'column_name', a.attname,
+              'data_type', pg_catalog.format_type(a.atttypid, a.atttypmod),
+              'is_nullable', NOT a.attnotnull,
+              'column_default', pg_get_expr(d.adbin, d.adrelid)
+            ) ORDER BY a.attnum)
+            FROM pg_attribute a
+            LEFT JOIN pg_attrdef d ON d.adrelid = a.attrelid AND d.adnum = a.attnum
+            WHERE a.attrelid = c.oid
+              AND a.attnum > 0
+              AND NOT a.attisdropped
+          ) as columns,
+          (
+            SELECT json_agg(json_build_object(
+              'index_name', i.relname,
+              'is_unique', ix.indisunique,
+              'is_primary', ix.indisprimary,
+              'columns', (
+                SELECT array_agg(a.attname ORDER BY array_position(ix.indkey, a.attnum))
+                FROM pg_attribute a
+                WHERE a.attrelid = c.oid AND a.attnum = ANY(ix.indkey)
+              )
+            ))
+            FROM pg_index ix
+            JOIN pg_class i ON i.oid = ix.indexrelid
+            WHERE ix.indrelid = c.oid
+          ) as indexes
+        FROM pg_class c
+        JOIN pg_namespace n ON n.oid = c.relnamespace
+        WHERE n.nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')
+          AND c.relkind IN ('r', 'v', 'm', 'p')
+        ORDER BY n.nspname, c.relname
+
+    # Also scrape schemas
+    - connection: connection://postgres/production
+      type: Postgres::Schema
+      id: $.schema_name
+      name: $.schema_name
+      query: |
+        SELECT
+          n.nspname as schema_name,
+          current_database() as database_name,
+          pg_get_userbyid(n.nspowner) as owner,
+          obj_description(n.oid) as description,
+          (SELECT count(*) FROM pg_class c WHERE c.relnamespace = n.oid AND c.relkind = 'r') as table_count,
+          (SELECT count(*) FROM pg_class c WHERE c.relnamespace = n.oid AND c.relkind = 'v') as view_count
+        FROM pg_namespace n
+        WHERE n.nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')
+          AND n.nspname NOT LIKE 'pg_%'
+```
+
+## Extensions
+
+Track installed PostgreSQL extensions:
+
+```yaml title="postgres-extensions.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-extensions
+spec:
+  sql:
+    - connection: connection://postgres/production
+      type: Postgres::Extension
+      id: $.extname
+      name: $.extname
+      query: |
+        SELECT
+          e.extname,
+          e.extversion as version,
+          n.nspname as schema,
+          e.extrelocatable as relocatable,
+          c.description
+        FROM pg_extension e
+        JOIN pg_namespace n ON n.oid = e.extnamespace
+        LEFT JOIN pg_description c ON c.objoid = e.oid AND c.classoid = 'pg_extension'::regclass
+```
+
+## Replication Status
+
+Monitor replication slots and subscribers:
+
+```yaml title="postgres-replication.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-replication
+spec:
+  sql:
+    - connection: connection://postgres/primary
+      type: Postgres::ReplicationSlot
+      id: $.slot_name
+      name: $.slot_name
+      status: $.active
+      health: |
+        {{- if .active }}healthy{{- else }}unhealthy{{- end }}
+      query: |
+        SELECT
+          slot_name,
+          plugin,
+          slot_type,
+          database,
+          temporary,
+          active,
+          active_pid,
+          xmin::text,
+          catalog_xmin::text,
+          restart_lsn::text,
+          confirmed_flush_lsn::text,
+          pg_wal_lsn_diff(pg_current_wal_lsn(), restart_lsn) as lag_bytes
+        FROM pg_replication_slots
+
+    - connection: connection://postgres/primary
+      type: Postgres::Subscription
+      id: $.subname
+      name: $.subname
+      query: |
+        SELECT
+          subname,
+          subconninfo,
+          subslotname,
+          subenabled,
+          subpublications
+        FROM pg_subscription
+```
+
+## Active Connections & Activity
+
+Monitor current database activity:
+
+```yaml title="postgres-activity.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-activity
+spec:
+  schedule: "*/5 * * * *"  # Every 5 minutes
+  sql:
+    - connection: connection://postgres/production
+      type: Postgres::ConnectionStats
+      id: connection_stats
+      name: "Connection Statistics"
+      query: |
+        SELECT json_build_object(
+          'timestamp', NOW(),
+          'max_connections', (SELECT setting::int FROM pg_settings WHERE name = 'max_connections'),
+          'current_connections', (SELECT count(*) FROM pg_stat_activity),
+          'active_connections', (SELECT count(*) FROM pg_stat_activity WHERE state = 'active'),
+          'idle_connections', (SELECT count(*) FROM pg_stat_activity WHERE state = 'idle'),
+          'idle_in_transaction', (SELECT count(*) FROM pg_stat_activity WHERE state = 'idle in transaction'),
+          'waiting_connections', (SELECT count(*) FROM pg_stat_activity WHERE wait_event IS NOT NULL),
+          'by_database', (
+            SELECT json_object_agg(datname, cnt)
+            FROM (
+              SELECT datname, count(*) as cnt
+              FROM pg_stat_activity
+              WHERE datname IS NOT NULL
+              GROUP BY datname
+            ) t
+          ),
+          'by_user', (
+            SELECT json_object_agg(usename, cnt)
+            FROM (
+              SELECT usename, count(*) as cnt
+              FROM pg_stat_activity
+              WHERE usename IS NOT NULL
+              GROUP BY usename
+            ) t
+          ),
+          'longest_running_query_seconds', (
+            SELECT EXTRACT(EPOCH FROM (NOW() - query_start))
+            FROM pg_stat_activity
+            WHERE state = 'active' AND query NOT LIKE '%pg_stat_activity%'
+            ORDER BY query_start
+            LIMIT 1
+          )
+        ) as stats
+```
+
+## Audit with pg_audit
+
+If you have pg_audit installed, scrape audit logs:
+
+```yaml title="postgres-audit.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-audit
+spec:
+  full: true
+  schedule: "*/15 * * * *"
+  sql:
+    - connection: connection://postgres/production
+      type: Postgres::Database
+      id: current_database
+      transform:
+        full: true
+        script:
+          javascript: |+
+            var logs = config.audit_logs || [];
+            var result = {
+              id: 'postgres_audit',
+              name: config.database,
+              config: { database: config.database },
+              access_logs: logs.map(function(log) {
+                return {
+                  external_user_id: log.user_name,
+                  created_at: log.log_time,
+                  properties: {
+                    command: log.command_tag,
+                    object_type: log.object_type,
+                    object_name: log.object_name,
+                    statement: log.statement,
+                    client_addr: log.client_addr
+                  }
+                };
+              })
+            };
+            JSON.stringify([result])
+      query: |
+        SELECT
+          current_database() as database,
+          (
+            SELECT json_agg(json_build_object(
+              'log_time', log_time,
+              'user_name', user_name,
+              'command_tag', command_tag,
+              'object_type', object_type,
+              'object_name', object_name,
+              'statement', statement,
+              'client_addr', client_addr
+            ) ORDER BY log_time DESC)
+            FROM pgaudit.audit_log
+            WHERE log_time > NOW() - INTERVAL '1 hour'
+            LIMIT 1000
+          ) as audit_logs
+```
+
+## Database Statistics
+
+Monitor database performance metrics:
+
+```yaml title="postgres-stats.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-stats
+spec:
+  sql:
+    - connection: connection://postgres/production
+      type: Postgres::DatabaseStats
+      id: $.datname
+      name: $.datname
+      query: |
+        SELECT
+          datname,
+          numbackends as active_connections,
+          xact_commit as transactions_committed,
+          xact_rollback as transactions_rolled_back,
+          blks_read as disk_blocks_read,
+          blks_hit as cache_hits,
+          CASE WHEN blks_read + blks_hit > 0
+            THEN round(100.0 * blks_hit / (blks_read + blks_hit), 2)
+            ELSE 0
+          END as cache_hit_ratio,
+          tup_returned as rows_returned,
+          tup_fetched as rows_fetched,
+          tup_inserted as rows_inserted,
+          tup_updated as rows_updated,
+          tup_deleted as rows_deleted,
+          conflicts,
+          temp_files,
+          temp_bytes,
+          deadlocks,
+          blk_read_time as disk_read_time_ms,
+          blk_write_time as disk_write_time_ms,
+          stats_reset as last_stats_reset
+        FROM pg_stat_database
+        WHERE datname NOT IN ('template0', 'template1')
+```
+
+## Vacuum and Maintenance Status
+
+Track table maintenance status:
+
+```yaml title="postgres-maintenance.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-maintenance
+spec:
+  sql:
+    - connection: connection://postgres/production
+      type: Postgres::TableMaintenance
+      id: $.table_id
+      name: $.table_name
+      health: |
+        {{- if gt .dead_tuple_ratio 20.0 }}unhealthy
+        {{- else if gt .dead_tuple_ratio 10.0 }}warning
+        {{- else }}healthy{{- end }}
+      query: |
+        SELECT
+          schemaname || '.' || relname as table_id,
+          relname as table_name,
+          schemaname as schema_name,
+          n_live_tup as live_tuples,
+          n_dead_tup as dead_tuples,
+          CASE WHEN n_live_tup > 0
+            THEN round(100.0 * n_dead_tup / n_live_tup, 2)
+            ELSE 0
+          END as dead_tuple_ratio,
+          last_vacuum,
+          last_autovacuum,
+          last_analyze,
+          last_autoanalyze,
+          vacuum_count,
+          autovacuum_count,
+          analyze_count,
+          autoanalyze_count
+        FROM pg_stat_user_tables
+        ORDER BY n_dead_tup DESC
+```
+
+## See Also
+
+- [SQL Scraper](./sql) - Full documentation on transforms, relationships, and access tracking
+- [PostgreSQL Connection](/docs/reference/connections/postgres) - Connection configuration

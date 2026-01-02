@@ -1,0 +1,657 @@
+---
+title: SQL Server
+sidebar_position: 6.2
+sidebar_custom_props:
+  icon: sqlserver
+---
+
+import Custom from './_custom.mdx'
+
+# <Icon name="sqlserver"/> SQL Server
+
+The SQL Server scraper uses the SQL scraper to query Microsoft SQL Server databases and create configuration items. This page provides SQL Server-specific examples and queries.
+
+See [SQL Scraper](./sql) for full documentation on transform scripts, relationships, changes, and access tracking.
+
+## Connection
+
+SQL Server connections use the `sqlserver` driver:
+
+```yaml
+# Direct connection string
+connection: sqlserver://user:password@host:1433?database=master
+
+# Connection reference
+connection: connection://sqlserver/production
+
+# With Windows Authentication (when running on Windows)
+connection: sqlserver://host:1433?database=master&trusted_connection=true
+
+# With authentication parameters
+connection: sqlserver://host:1433?database=master
+auth:
+  username:
+    valueFrom:
+      secretKeyRef:
+        name: mssql-credentials
+        key: username
+  password:
+    valueFrom:
+      secretKeyRef:
+        name: mssql-credentials
+        key: password
+```
+
+## Database Inventory
+
+Scrape SQL Server databases with their properties:
+
+```yaml title="mssql-databases.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: mssql-databases
+spec:
+  sql:
+    - connection: connection://sqlserver/production
+      type: MSSQL::Database
+      id: $.database_id
+      name: $.name
+      query: |
+        SELECT
+          database_id,
+          name,
+          state_desc as state,
+          recovery_model_desc as recovery_model,
+          compatibility_level,
+          collation_name,
+          user_access_desc as user_access,
+          is_read_only,
+          is_auto_close_on,
+          is_auto_shrink_on,
+          is_encrypted,
+          create_date,
+          (
+            SELECT
+              SUM(size * 8 / 1024) as size_mb
+            FROM sys.master_files mf
+            WHERE mf.database_id = d.database_id
+          ) as size_mb,
+          (
+            SELECT
+              SUM(CASE WHEN type = 0 THEN size * 8 / 1024 ELSE 0 END) as data_mb,
+              SUM(CASE WHEN type = 1 THEN size * 8 / 1024 ELSE 0 END) as log_mb
+            FROM sys.master_files mf
+            WHERE mf.database_id = d.database_id
+            FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+          ) as file_sizes
+        FROM sys.databases d
+        WHERE database_id > 4  -- Exclude system databases
+```
+
+## Logins and Users
+
+Scrape SQL Server logins, database users, and their role memberships:
+
+```yaml title="mssql-users-roles.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: mssql-iam
+spec:
+  full: true
+  sql:
+    - connection: connection://sqlserver/production
+      type: MSSQL::Instance
+      id: instance_iam
+      transform:
+        full: true
+        script:
+          javascript: |+
+            var data = JSON.parse(config.data);
+            var result = {
+              id: data.server_name,
+              name: data.server_name,
+              config: {
+                version: data.version,
+                edition: data.edition
+              },
+              external_users: data.logins.map(function(l) {
+                return {
+                  name: l.name,
+                  account_id: l.principal_id,
+                  user_type: l.type_desc.toLowerCase().replace(' ', '_'),
+                  aliases: [l.sid]
+                };
+              }),
+              external_roles: data.server_roles.map(function(r) {
+                return {
+                  name: r.name,
+                  account_id: r.principal_id,
+                  role_type: 'server_role',
+                  description: r.is_fixed_role ? 'Fixed server role' : 'User-defined server role'
+                };
+              }),
+              external_user_groups: data.role_members.map(function(m) {
+                return {
+                  external_user_id: m.member_principal_id,
+                  external_group_id: m.role_principal_id
+                };
+              })
+            };
+            JSON.stringify([result])
+      query: |
+        SELECT (
+          SELECT
+            @@SERVERNAME as server_name,
+            @@VERSION as version,
+            SERVERPROPERTY('Edition') as edition,
+            (
+              SELECT
+                principal_id,
+                name,
+                type_desc,
+                CONVERT(varchar(max), sid, 1) as sid,
+                is_disabled,
+                create_date,
+                modify_date,
+                default_database_name
+              FROM sys.server_principals
+              WHERE type IN ('S', 'U', 'G')  -- SQL Login, Windows Login, Windows Group
+              FOR JSON PATH
+            ) as logins,
+            (
+              SELECT
+                principal_id,
+                name,
+                is_fixed_role
+              FROM sys.server_principals
+              WHERE type = 'R'  -- Server Role
+              FOR JSON PATH
+            ) as server_roles,
+            (
+              SELECT
+                rm.role_principal_id,
+                rm.member_principal_id
+              FROM sys.server_role_members rm
+              FOR JSON PATH
+            ) as role_members
+          FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+        ) as data
+```
+
+## Database Users and Permissions
+
+Scrape users and permissions within a specific database:
+
+```yaml title="mssql-database-users.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: mssql-database-permissions
+spec:
+  sql:
+    - connection: connection://sqlserver/production
+      type: MSSQL::DatabaseUser
+      id: $.user_id
+      name: $.name
+      query: |
+        USE YourDatabase;
+        SELECT
+          dp.principal_id as user_id,
+          dp.name,
+          dp.type_desc as user_type,
+          dp.authentication_type_desc as auth_type,
+          dp.default_schema_name,
+          dp.create_date,
+          dp.modify_date,
+          (
+            SELECT
+              drm.role_principal_id,
+              r.name as role_name
+            FROM sys.database_role_members drm
+            JOIN sys.database_principals r ON r.principal_id = drm.role_principal_id
+            WHERE drm.member_principal_id = dp.principal_id
+            FOR JSON PATH
+          ) as role_memberships,
+          (
+            SELECT
+              class_desc,
+              permission_name,
+              state_desc as permission_state,
+              OBJECT_NAME(major_id) as object_name
+            FROM sys.database_permissions perm
+            WHERE perm.grantee_principal_id = dp.principal_id
+            FOR JSON PATH
+          ) as permissions
+        FROM sys.database_principals dp
+        WHERE dp.type IN ('S', 'U', 'G', 'E', 'X')  -- SQL user, Windows user, Windows group, External user, External group
+          AND dp.name NOT IN ('dbo', 'guest', 'INFORMATION_SCHEMA', 'sys')
+```
+
+## Database Roles to User Mapping
+
+Scrape the relationship between database roles and users across all databases:
+
+```yaml title="mssql-role-mapping.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: mssql-role-mapping
+spec:
+  sql:
+    - connection: connection://sqlserver/production
+      type: MSSQL::Database
+      id: $.name
+      transform:
+        full: true
+        script:
+          javascript: |+
+            var dbs = {}
+            for (var i = 0; i < config.rows.length; i++) {
+              var db = config.rows[i]
+              var name = db.DB
+              if (dbs[db.DB] == null) {
+                dbs[db.DB] = {
+                  id: name,
+                  name: name,
+                  config: {
+                    roles: {}
+                  }
+                }
+              }
+              if (!dbs[name].config.roles[db.role]) {
+                dbs[name].config.roles[db.role] = []
+              }
+              dbs[name].config.roles[db.role].push(db.user_name)
+            }
+            JSON.stringify(_.values(dbs))
+      query: |
+        DECLARE @results TABLE (
+          [DB] NVARCHAR(128),
+          [user_name] NVARCHAR(255),
+          [role] NVARCHAR(255)
+        )
+
+        DECLARE @sql NVARCHAR(MAX) = '
+          USE [?];
+          SELECT
+            DB_NAME() as DB,
+            dp.name AS [user_name],
+            ISNULL(r.name, ''No Role'') AS [role]
+          FROM sys.database_role_members AS drm
+          RIGHT JOIN sys.database_principals AS dp ON drm.role_principal_id = dp.principal_id
+          LEFT JOIN sys.database_principals AS r ON drm.member_principal_id = r.principal_id
+          WHERE dp.type = ''R'' AND r.name IS NOT NULL
+        '
+
+        INSERT INTO @results
+        EXEC sp_MSforeachdb @sql
+
+        SELECT * FROM @results
+```
+
+## Schema Objects
+
+Scrape tables, views, and stored procedures:
+
+```yaml title="mssql-schema.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: mssql-schema
+spec:
+  sql:
+    - connection: connection://sqlserver/production
+      type: MSSQL::Table
+      id: $.object_id
+      name: $.full_name
+      transform:
+        relationship:
+          - filter: config_type == 'MSSQL::Table'
+            type:
+              value: MSSQL::Schema
+            name:
+              expr: config.schema_name
+            parent: true
+          - filter: config_type == 'MSSQL::Table'
+            type:
+              value: MSSQL::Database
+            name:
+              expr: config.database_name
+            parent: true
+      query: |
+        USE YourDatabase;
+        SELECT
+          t.object_id,
+          SCHEMA_NAME(t.schema_id) + '.' + t.name as full_name,
+          t.name as table_name,
+          SCHEMA_NAME(t.schema_id) as schema_name,
+          DB_NAME() as database_name,
+          t.type_desc as object_type,
+          t.create_date,
+          t.modify_date,
+          p.rows as row_count,
+          (
+            SELECT
+              SUM(a.total_pages) * 8 / 1024
+            FROM sys.partitions p2
+            JOIN sys.allocation_units a ON p2.partition_id = a.container_id
+            WHERE p2.object_id = t.object_id
+          ) as size_mb,
+          (
+            SELECT
+              c.name as column_name,
+              TYPE_NAME(c.user_type_id) as data_type,
+              c.max_length,
+              c.precision,
+              c.scale,
+              c.is_nullable,
+              c.is_identity
+            FROM sys.columns c
+            WHERE c.object_id = t.object_id
+            ORDER BY c.column_id
+            FOR JSON PATH
+          ) as columns,
+          (
+            SELECT
+              i.name as index_name,
+              i.type_desc as index_type,
+              i.is_unique,
+              i.is_primary_key,
+              (
+                SELECT COL_NAME(ic.object_id, ic.column_id)
+                FROM sys.index_columns ic
+                WHERE ic.object_id = i.object_id AND ic.index_id = i.index_id
+                ORDER BY ic.key_ordinal
+                FOR JSON PATH
+              ) as columns
+            FROM sys.indexes i
+            WHERE i.object_id = t.object_id
+            FOR JSON PATH
+          ) as indexes
+        FROM sys.tables t
+        JOIN sys.partitions p ON t.object_id = p.object_id AND p.index_id IN (0, 1)
+        WHERE t.is_ms_shipped = 0
+```
+
+## SQL Server Agent Jobs
+
+Monitor SQL Server Agent jobs:
+
+```yaml title="mssql-agent-jobs.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: mssql-agent-jobs
+spec:
+  sql:
+    - connection: connection://sqlserver/production
+      type: MSSQL::AgentJob
+      id: $.job_id
+      name: $.name
+      status: $.last_run_status
+      health: |
+        {{- if eq .enabled 0 }}unknown
+        {{- else if eq .last_run_outcome 1 }}healthy
+        {{- else if eq .last_run_outcome 0 }}unhealthy
+        {{- else }}warning{{- end }}
+      query: |
+        SELECT
+          j.job_id,
+          j.name,
+          j.enabled,
+          j.description,
+          j.date_created,
+          j.date_modified,
+          SUSER_SNAME(j.owner_sid) as owner,
+          c.name as category,
+          (
+            SELECT TOP 1
+              run_status,
+              CASE run_status
+                WHEN 0 THEN 'Failed'
+                WHEN 1 THEN 'Succeeded'
+                WHEN 2 THEN 'Retry'
+                WHEN 3 THEN 'Canceled'
+                WHEN 4 THEN 'In Progress'
+              END as status_desc,
+              run_date,
+              run_time,
+              run_duration
+            FROM msdb.dbo.sysjobhistory h
+            WHERE h.job_id = j.job_id AND h.step_id = 0
+            ORDER BY h.instance_id DESC
+          ) as last_run_outcome,
+          CASE
+            WHEN ja.last_executed_step_id IS NOT NULL THEN 'Running'
+            ELSE 'Idle'
+          END as current_status,
+          (
+            SELECT
+              step_id,
+              step_name,
+              subsystem,
+              command,
+              database_name
+            FROM msdb.dbo.sysjobsteps s
+            WHERE s.job_id = j.job_id
+            ORDER BY s.step_id
+            FOR JSON PATH
+          ) as steps,
+          (
+            SELECT
+              schedule_id,
+              name as schedule_name,
+              enabled as schedule_enabled,
+              freq_type,
+              freq_interval
+            FROM msdb.dbo.sysjobschedules js
+            JOIN msdb.dbo.sysschedules s ON js.schedule_id = s.schedule_id
+            WHERE js.job_id = j.job_id
+            FOR JSON PATH
+          ) as schedules
+        FROM msdb.dbo.sysjobs j
+        LEFT JOIN msdb.dbo.syscategories c ON j.category_id = c.category_id
+        LEFT JOIN msdb.dbo.sysjobactivity ja ON j.job_id = ja.job_id
+          AND ja.session_id = (SELECT MAX(session_id) FROM msdb.dbo.sysjobactivity)
+          AND ja.start_execution_date IS NOT NULL
+          AND ja.stop_execution_date IS NULL
+```
+
+## SQL Server Audit Logs
+
+If SQL Server Audit is configured, scrape audit events:
+
+```yaml title="mssql-audit.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: mssql-audit
+spec:
+  full: true
+  schedule: "*/15 * * * *"
+  sql:
+    - connection: connection://sqlserver/production
+      type: MSSQL::Instance
+      id: audit_instance
+      transform:
+        full: true
+        script:
+          javascript: |+
+            var events = config.audit_events || [];
+            var result = {
+              id: 'mssql_audit',
+              name: config.server_name,
+              config: { server: config.server_name },
+              changes: events.filter(function(e) {
+                return ['SCHEMA_OBJECT_CHANGE_GROUP', 'DATABASE_OBJECT_CHANGE_GROUP'].indexOf(e.action_id) >= 0;
+              }).map(function(e) {
+                return {
+                  external_change_id: e.event_time + '_' + e.action_id,
+                  change_type: e.action_id,
+                  summary: e.statement,
+                  created_by: e.server_principal_name,
+                  created_at: e.event_time,
+                  details: {
+                    database: e.database_name,
+                    object: e.object_name,
+                    schema: e.schema_name
+                  }
+                };
+              }),
+              access_logs: events.filter(function(e) {
+                return ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'EXECUTE'].indexOf(e.action_id) >= 0;
+              }).map(function(e) {
+                return {
+                  external_user_id: e.server_principal_name,
+                  created_at: e.event_time,
+                  properties: {
+                    action: e.action_id,
+                    database: e.database_name,
+                    object: e.object_name,
+                    client_ip: e.client_ip,
+                    application: e.application_name
+                  }
+                };
+              })
+            };
+            JSON.stringify([result])
+      query: |
+        SELECT
+          @@SERVERNAME as server_name,
+          (
+            SELECT TOP 1000
+              event_time,
+              action_id,
+              succeeded,
+              server_principal_name,
+              database_name,
+              schema_name,
+              object_name,
+              statement,
+              client_ip,
+              application_name
+            FROM sys.fn_get_audit_file('C:\SQLAudit\*.sqlaudit', DEFAULT, DEFAULT)
+            WHERE event_time > DATEADD(HOUR, -1, GETUTCDATE())
+            ORDER BY event_time DESC
+            FOR JSON PATH
+          ) as audit_events
+```
+
+## Always On Availability Groups
+
+Monitor Availability Group status:
+
+```yaml title="mssql-availability-groups.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: mssql-availability-groups
+spec:
+  sql:
+    - connection: connection://sqlserver/production
+      type: MSSQL::AvailabilityGroup
+      id: $.group_id
+      name: $.name
+      status: $.synchronization_health_desc
+      health: |
+        {{- if eq .synchronization_health 2 }}healthy
+        {{- else if eq .synchronization_health 1 }}warning
+        {{- else }}unhealthy{{- end }}
+      query: |
+        SELECT
+          ag.group_id,
+          ag.name,
+          ag.automated_backup_preference_desc,
+          ag.failure_condition_level,
+          ag.health_check_timeout,
+          ags.synchronization_health,
+          ags.synchronization_health_desc,
+          (
+            SELECT
+              ar.replica_server_name,
+              ar.availability_mode_desc,
+              ar.failover_mode_desc,
+              ars.role_desc,
+              ars.operational_state_desc,
+              ars.connected_state_desc,
+              ars.synchronization_health_desc
+            FROM sys.availability_replicas ar
+            JOIN sys.dm_hadr_availability_replica_states ars ON ar.replica_id = ars.replica_id
+            WHERE ar.group_id = ag.group_id
+            FOR JSON PATH
+          ) as replicas,
+          (
+            SELECT
+              adc.database_name,
+              drs.synchronization_state_desc,
+              drs.synchronization_health_desc,
+              drs.log_send_queue_size,
+              drs.redo_queue_size
+            FROM sys.availability_databases_cluster adc
+            JOIN sys.dm_hadr_database_replica_states drs ON adc.group_database_id = drs.group_database_id
+            WHERE adc.group_id = ag.group_id
+            FOR JSON PATH
+          ) as databases
+        FROM sys.availability_groups ag
+        LEFT JOIN sys.dm_hadr_availability_group_states ags ON ag.group_id = ags.group_id
+```
+
+## Performance Metrics
+
+Monitor SQL Server performance:
+
+```yaml title="mssql-performance.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: mssql-performance
+spec:
+  sql:
+    - connection: connection://sqlserver/production
+      type: MSSQL::PerformanceCounters
+      id: performance_counters
+      name: "SQL Server Performance"
+      query: |
+        SELECT (
+          SELECT
+            object_name,
+            counter_name,
+            instance_name,
+            cntr_value
+          FROM sys.dm_os_performance_counters
+          WHERE object_name LIKE '%Buffer Manager%'
+            OR object_name LIKE '%Memory Manager%'
+            OR object_name LIKE '%SQL Statistics%'
+            OR object_name LIKE '%Databases%'
+          FOR JSON PATH
+        ) as counters
+
+    - connection: connection://sqlserver/production
+      type: MSSQL::WaitStats
+      id: wait_stats
+      name: "Wait Statistics"
+      query: |
+        SELECT (
+          SELECT TOP 20
+            wait_type,
+            waiting_tasks_count,
+            wait_time_ms,
+            max_wait_time_ms,
+            signal_wait_time_ms
+          FROM sys.dm_os_wait_stats
+          WHERE wait_type NOT LIKE '%SLEEP%'
+            AND wait_type NOT LIKE 'WAITFOR%'
+            AND wait_type NOT LIKE 'BROKER%'
+            AND wait_type NOT LIKE 'CLR%'
+            AND wait_type NOT LIKE 'XE%'
+          ORDER BY wait_time_ms DESC
+          FOR JSON PATH
+        ) as waits
+```
+
+## See Also
+
+- [SQL Scraper](./sql) - Full documentation on transforms, relationships, and access tracking
+- [SQL Server Connection](/docs/reference/connections) - Connection configuration
