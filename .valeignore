@@ -1,0 +1,11 @@
+prompts/
+**/apm-hub/**
+**/benchmark*
+**/development*
+**/node_modules/**
+modules/
+docs/incidents/
+docs-vale-package/
+docs/apm-hub/
+scripts/
+**/style-guide/

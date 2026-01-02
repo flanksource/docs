@@ -25,3 +25,6 @@ starlight/
 
 # Crush directory
 .crush
+.*cache
+branding/
+.playwright-mcp/

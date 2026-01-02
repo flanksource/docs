@@ -1,26 +1,33 @@
 ---
 title: SQL Server
 sidebar_custom_props:
-  icon: mssql
+  icon: sql-server
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+  { value: 'Catalog', id: 'catalog', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="healthcheck" />
   <CapabilityBadge type="scraper" />
 </CapabilityBadges>
 
-Mission Control integrates with Microsoft SQL Server to monitor your database infrastructure. Use it to:
+Mission Control integrates with Microsoft SQL Server to monitor your database infrastructure.
 
+---
+
+<CapabilityHeading type="healthcheck" />
+
+**Use cases:**
 - Verify database connectivity and authentication
 - Execute T-SQL queries and validate results against expected values
 - Monitor database health, blocking queries, and resource usage
-- Scrape database metadata and configurations into the catalog
 - Alert when queries return unexpected results or databases become unavailable
-
-## Health Checks
 
 ### Connection Check
 
@@ -39,7 +46,7 @@ spec:
       query: SELECT 1
 ```
 
-### Query Validation
+<details summary="Query Validation">
 
 ```yaml title="mssql-query-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -58,8 +65,9 @@ spec:
       test:
         expr: results[0].blocked_count == 0
 ```
+</details>
 
-### Database Size Monitoring
+<details summary="Database Size Monitoring">
 
 ```yaml title="mssql-size-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -79,10 +87,15 @@ spec:
       test:
         expr: results[0].used_mb / results[0].size_mb < 0.9  # Less than 90% full
 ```
+</details>
 
-## Config Scrapers
+---
 
-Scrape database configurations and metadata using SQL queries.
+<CapabilityHeading type="scraper" />
+
+**Use cases:**
+- Scrape database metadata and configurations into the catalog
+- Track database settings and schema changes
 
 ```yaml title="mssql-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -110,10 +123,10 @@ spec:
 ## Next Steps
 
 <Cards>
-  <Card title="Health Check Reference" href="/canary-checker/docs/reference/mssql">
-    SQL Server health check configuration options
-  </Card>
-  <Card title="SQL Scraper Reference" href="/docs/guide/config-db/scrapers/sql">
+  <Card icon="scraper" title="SQL Scraper Reference" href="/docs/guide/config-db/scrapers/sql">
     SQL scraper configuration options
+  </Card>
+  <Card icon="postgres" title="PostgreSQL Integration" href="/docs/integrations/postgres">
+    Monitor PostgreSQL databases
   </Card>
 </Cards>

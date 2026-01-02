@@ -5,22 +5,29 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+  { value: 'Catalog', id: 'catalog', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="healthcheck" />
   <CapabilityBadge type="scraper" />
 </CapabilityBadges>
 
-Mission Control integrates with PostgreSQL to monitor your database infrastructure. Use it to:
+Mission Control integrates with PostgreSQL to monitor your database infrastructure.
 
+---
+
+<CapabilityHeading type="healthcheck" />
+
+**Use cases:**
 - Verify database connectivity and authentication
 - Execute SQL queries and validate results against expected values
 - Monitor replication lag, connection counts, and database health
-- Scrape database metadata and configurations into the catalog
 - Alert when queries return unexpected results or databases become unavailable
-
-## Health Checks
 
 ### Connection Check
 
@@ -39,7 +46,7 @@ spec:
       query: SELECT 1
 ```
 
-### Query Validation
+<details summary="Query Validation">
 
 ```yaml title="postgres-query-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -57,8 +64,9 @@ spec:
       test:
         expr: results[0].replication_lag_seconds < 30
 ```
+</details>
 
-### Using Connection References
+<details summary="Using Connection References">
 
 ```yaml title="postgres-connection-ref.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -74,10 +82,16 @@ spec:
       test:
         expr: results[0].count > 0
 ```
+</details>
 
-## Config Scrapers
+---
 
-Scrape database configurations and metadata using SQL queries.
+<CapabilityHeading type="scraper" />
+
+**Use cases:**
+- Scrape database metadata and configurations into the catalog
+- Track database settings and schema changes
+- Monitor database users and permissions
 
 ```yaml title="postgres-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -104,10 +118,10 @@ spec:
 ## Next Steps
 
 <Cards>
-  <Card title="Health Check Reference" href="/canary-checker/docs/reference/postgres">
-    PostgreSQL health check configuration options
-  </Card>
-  <Card title="SQL Scraper Reference" href="/docs/guide/config-db/scrapers/sql">
+  <Card icon="scraper" title="SQL Scraper Reference" href="/docs/guide/config-db/scrapers/sql">
     SQL scraper configuration options
+  </Card>
+  <Card icon="mssql" title="SQL Server Integration" href="/docs/integrations/sql-server">
+    Monitor Microsoft SQL Server databases
   </Card>
 </Cards>

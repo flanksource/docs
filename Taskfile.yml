@@ -36,18 +36,33 @@ tasks:
     desc: Run vale on all documentation
     deps: [vale:sync]
     cmds:
-      - '{{.VALE}} canary-checker/docs --glob="!**/{README,CHANGELOG,readme,security,SECURITY,CONTRIBUTING,benchmark,development,LICENSE}.md"'
-      - '{{.VALE}} mission-control/docs --glob="!**/{README,CHANGELOG,readme,security,SECURITY,CONTRIBUTING,benchmark,development,LICENSE}.md"'
+      - |
+        files=$(rg --files --ignore-file=.valeignore -g "*.md" -g "*.mdx"  -g '![A-Z]*.md'  canary-checker/docs)
+        if [ -n "$files" ]; then
+          {{.VALE}} $files
+        fi
+      - |
+        files=$(rg --files --ignore-file=.valeignore -g "*.md" -g "*.mdx"  -g '![A-Z]*.md'  mission-control/docs)
+        if [ -n "$files" ]; then
+          {{.VALE}} $files
+        fi
 
   vale:changed:
     desc: Run vale on markdown files changed in current branch
     deps: [vale:sync]
     cmds:
       - |
-        files=$(git diff --name-only main...HEAD | grep -E '\.(md|mdx)$' || true)
+        changed_files=$(git diff --name-only main...HEAD | grep -E '\.(md|mdx)$' || true)
+        allowed_files=$(rg --files --ignore-file=.valeignore -g "*.md" -g "*.mdx" -g '![A-Z]*.md' || true)
+        files=""
+        for file in $changed_files; do
+          if [ -f "$file" ] && echo "$allowed_files" | grep -q "^$file$"; then
+            files="$files $file"
+          fi
+        done
         if [ -n "$files" ]; then
-          echo "Running vale on changed files: $files"
-          {{.VALE}} $files --glob='!**/{README,CHANGELOG,readme,security,AGENTS,Readme,SECURITY,CONTRIBUTING,benchmark,development,LICENSE}.md'
+          echo "Running vale on changed files:$files"
+          {{.VALE}} $files
         else
           echo "No markdown/mdx files changed"
         fi

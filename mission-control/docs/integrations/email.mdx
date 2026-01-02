@@ -5,21 +5,28 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Notifications', id: 'notifications', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="notifications" />
 </CapabilityBadges>
 
-Mission Control integrates with SMTP servers to send email notifications. Use it to:
+Mission Control integrates with SMTP servers to send email notifications.
 
+---
+
+<CapabilityHeading type="notifications" />
+
+**Use cases:**
 - Send email alerts when health checks fail or configs change
 - Notify teams of incidents and infrastructure changes
 - Route notifications to different recipients based on severity
 - Use HTML or plain text email formatting
 - Integrate with any SMTP provider (Gmail, SendGrid, AWS SES, etc.)
-
-## Notifications
 
 Send email notifications via SMTP.
 
@@ -53,7 +60,7 @@ spec:
         - ops-team@example.com
 ```
 
-### Using Connection Reference
+<details summary="Using Connection Reference">
 
 ```yaml title="email-connection-notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -74,8 +81,9 @@ spec:
 
     {{.incident.description}}
 ```
+</details>
 
-### Routing by Severity
+<details summary="Routing by Severity">
 
 ```yaml title="email-routing-notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -108,8 +116,9 @@ spec:
       toAddresses:
         - engineering@example.com
 ```
+</details>
 
-### Gmail SMTP
+<details summary="Gmail SMTP">
 
 ```yaml title="email-gmail.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -139,8 +148,9 @@ spec:
       toAddresses:
         - team@example.com
 ```
+</details>
 
-### AWS SES
+<details summary="AWS SES">
 
 ```yaml title="email-ses.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -169,6 +179,7 @@ spec:
       toAddresses:
         - alerts@example.com
 ```
+</details>
 
 ## Configuration Options
 
@@ -199,10 +210,10 @@ spec:
 ## Next Steps
 
 <Cards>
-  <Card title="Notification Reference" href="/docs/guide/notifications">
+  <Card icon="notifications" title="Notification Reference" href="/docs/guide/notifications">
     Notification configuration options
   </Card>
-  <Card title="Slack Integration" href="/docs/integrations/slack">
+  <Card icon="slack" title="Slack Integration" href="/docs/integrations/slack">
     Alternative: Send notifications to Slack
   </Card>
 </Cards>

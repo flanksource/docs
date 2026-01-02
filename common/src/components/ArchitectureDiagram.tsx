@@ -1,258 +1,224 @@
-import { Aws, Azure, CanaryCheckerWhite, ConfigDb, Flux, Gcp, Helm, K8S, Mcp, Playbook, Terraform, Prometheus, Datadog, Argo, ConfigDbWhite, GoogleCloud, AwsCloudwatch, Opensearch, Github, AzureDevops, Gitlab, Dynatrace, Kustomize, Postgres, SqlServer } from '@flanksource/icons/mi';
-import { PiBrain } from 'react-icons/pi';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
-import { ReactFlow, Node, Edge, NodeProps, Handle, Position } from 'reactflow';
-import 'reactflow/dist/style.css';
-import { Box, Arrow } from './Shapes';
+import Xarrow from 'react-xarrows';
+import {
+  Aws,
+  Azure,
+  K8S,
+  GoogleCloud,
+  Terraform,
+  Flux,
+  Argo,
+  Prometheus,
+  Datadog,
+  Github,
+  Postgres,
+  ConfigDbWhite,
+  CanaryCheckerWhite,
+  Playbook,
+  Mcp,
+  Helm,
+  Kustomize,
+  AwsCloudwatch,
+  Opensearch,
+  Dynatrace,
+  SqlServer,
+  AzureDevops,
+  Gitlab,
+} from '@flanksource/icons/mi';
+import { PiBrain } from 'react-icons/pi';
 
-// Helper Components
-function CacheComponent({ x, y, label }: { x: number; y: number; label: string }) {
-  return (
-    <g>
-      <rect x={x} y={y} width="160" height="25" rx="3" fill="#fbbf24" />
-      <text x={x + 80} y={y + 17} textAnchor="middle" fontSize="11" fill="#78350f">
-        {label}
-      </text>
-    </g>
-  );
+interface IconGridProps {
+  items: Array<{ Icon: React.ComponentType<{ className?: string }>; label?: string }>;
+  cols?: number;
+  iconSize?: string;
 }
 
-function MetricItem({ x, y, label, value }: { x: number; y: number; label: string; value: string }) {
+function IconGrid({ items, cols = 5, iconSize = 'w-6 h-6' }: IconGridProps) {
   return (
-    <g>
-      <text x={x} y={y} className="arch-small-label">
-        {label}
-      </text>
-      <text x={x + 130} y={y} className="arch-small-label" fill="#059669">
-        {value}
-      </text>
-    </g>
-  );
-}
-
-// Connector Component - Draws an arrow between two HTML elements
-interface ConnectorProps {
-  svgRef: React.RefObject<SVGSVGElement>;
-  fromRef: React.RefObject<HTMLElement>;
-  toRef: React.RefObject<HTMLElement>;
-  fromPosition?: 'top' | 'bottom' | 'center';
-  toPosition?: 'top' | 'bottom' | 'center';
-}
-
-function Connector({ svgRef, fromRef, toRef, fromPosition = 'bottom', toPosition = 'top' }: ConnectorProps) {
-  const [points, setPoints] = useState<{ from: { x: number; y: number }; to: { x: number; y: number } } | null>(null);
-
-  useEffect(() => {
-    console.log("laying out", svgRef.current, fromRef, toRef)
-    if (!svgRef.current || !fromRef.current || !toRef.current) return;
-
-    const svg = svgRef.current;
-
-    const toSvgPoint = (el: HTMLElement, position: 'top' | 'bottom' | 'center'): { x: number; y: number } => {
-      const rect = el.getBoundingClientRect();
-      const pt = svg.createSVGPoint();
-      pt.x = rect.left + rect.width / 2;
-
-      if (position === 'top') {
-        pt.y = rect.top;
-      } else if (position === 'bottom') {
-        pt.y = rect.bottom;
-      } else {
-        pt.y = rect.top + rect.height / 2;
-      }
-
-      const res = pt.matrixTransform(svg.getScreenCTM()!.inverse());
-      return { x: res.x, y: res.y };
-    };
-
-    setPoints({
-      from: toSvgPoint(fromRef.current, fromPosition),
-      to: toSvgPoint(toRef.current, toPosition),
-    });
-  }, [svgRef, fromRef, toRef]);
-
-  if (!points) {
-    console.log(fromRef, toRef)
-    return null;
-  }
-
-  return (
-    <Arrow
-      startX={points.from.x}
-      startY={points.from.y}
-      endX={points.to.x}
-      endY={points.to.y}
-    />
-  );
-}
-
-// Mission Control Node Component
-function MissionControlNode({ data }: NodeProps) {
-  return (
-    <div>
-
-      <Box
-        width={220}
-        variant="container"
-        flexWrap="wrap"
-        gap={20}
-        asSVG={true}
-        padding={20}
-      >
-        <Box width={180} height={40} label="Health Checks" icon={<CanaryCheckerWhite />} variant="primary" hoverable={true} />
-        <Box width={180} height={40} label="Unified Catalog" icon={<ConfigDbWhite />} variant="primary" hoverable={true} />
-        <Box width={180} height={40} label="Playbooks" icon={<Playbook />} variant="primary" hoverable={true} />
-        <Box width={180} height={40} label="Real-Time RAG" icon={<PiBrain />} variant="primary" hoverable={true} />
-      </Box>
-      <Handle type="source" position={Position.Bottom} id="mc-bottom" className='w-16 !bg-teal-500' isConnectable={false} isConnectableEnd={false} isConnectableStart={false} />
+    <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
+      {items.map(({ Icon, label }, idx) => (
+        <div key={label || idx} className="flex flex-col items-center">
+          <Icon className={iconSize} />
+          {label && <span className="text-[9px] text-gray-500 mt-0.5">{label}</span>}
+        </div>
+      ))}
     </div>
   );
 }
 
-// Integrations Node Component
-function IntegrationsNode({ data }: NodeProps) {
+interface BoxNodeProps {
+  id?: string;
+  title?: string | React.ReactNode;
+  className?: string;
+  bodyClassName?: string;
+  border?: 'solid' | 'dashed';
+  children?: React.ReactNode;
+}
+
+function BoxNode({ id, title, className = '', bodyClassName = '', border = 'solid', children }: BoxNodeProps) {
+  const bgMatch = className.match(/bg-(\w+)-(\d+)/);
+  const borderClass = bgMatch ? `border-${bgMatch[1]}-${bgMatch[2]}` : 'border-slate-300';
+  const borderStyle = `border-2 ${border === 'dashed' ? 'border-dashed' : 'border-solid'} ${borderClass}`;
+  const hasHeader = title !== undefined;
+
+  return (
+    <div id={id} className={`rounded-xl overflow-hidden shadow-lg min-w-[120px] ${borderStyle}`}>
+      {hasHeader && (
+        <div className={`px-3 py-2 text-center ${className}`}>
+          <span className="text-white text-xs font-bold">{title}</span>
+        </div>
+      )}
+      {children && (
+        <div className={`${bodyClassName} ${hasHeader ? 'p-3' : 'p-3'}`}>
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function K8SCRDsBox() {
+  return (
+    <div id="arch-k8s-crds" className="flex items-center gap-3 bg-blue-600 rounded-xl px-5 py-3 shadow-lg border-2 border-blue-400">
+      <K8S className="w-8 h-8 text-white" />
+      <span className="text-white font-bold text-sm">K8S CRDs</span>
+    </div>
+  );
+}
+
+function MissionControlBox() {
+  const features = [
+    { Icon: CanaryCheckerWhite, label: 'Health Checks' },
+    { Icon: ConfigDbWhite, label: 'Unified Catalog' },
+    { Icon: Playbook, label: 'Playbooks' },
+    { Icon: PiBrain, label: 'Real-Time RAG' },
+  ];
+
+  return (
+    <div id="arch-missionControl" className="rounded-2xl overflow-hidden bg-gradient-to-br from-slate-700 to-slate-900 border-2 border-blue-500 shadow-2xl">
+      <div className="px-6 py-3 text-center border-b border-blue-800/50">
+        <span className="text-white text-lg font-bold tracking-wide">MISSION CONTROL</span>
+      </div>
+      <div className="p-4 flex flex-col gap-3">
+        <div className="grid grid-cols-2 gap-3">
+          {features.map(({ Icon, label }) => (
+            <div
+              key={label}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 transition-colors rounded-lg px-3 py-2 cursor-default"
+            >
+              <Icon className="w-5 h-5 text-white" />
+              <span className="text-white text-xs font-medium">{label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center justify-center gap-2 bg-slate-600 rounded-lg px-3 py-2">
+          <Postgres className="w-5 h-5" />
+          <span className="text-white text-xs font-medium">Postgres</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MCPServerBox() {
+  return (
+    <div id="arch-mcp-server" className="flex items-center gap-3 bg-indigo-600 rounded-xl px-5 py-3 shadow-lg border-2 border-indigo-400">
+      <Mcp className="w-7 h-7 text-white fill-white" />
+      <span className="text-white font-bold text-sm">MCP Server</span>
+    </div>
+  );
+}
+
+function IntegrationsBox() {
   const integrations = [
-    <Aws key="aws" />,
-    <Azure key="azure" />,
-    <GoogleCloud key="gcloud" />,
-    <K8S key="k8s" />,
-    <Terraform key="terraform" />,
-    <Flux key="flux" />,
-    <Argo key="argo" />,
-    <Helm key="helm" />,
-    <Kustomize key="kustomize" />,
-    <AwsCloudwatch key="awscloudwatch" />,
-    <Opensearch key="opensearch" />,
-    <Prometheus key="prometheus" />,
-    <Datadog key="datadog" />,
-    <Dynatrace key="dynatrace" />,
-    <Postgres key="postgres" />,
-    <SqlServer key="sqlserver" />,
-    <ConfigDb key="configdb" />,
-    <Github key="github" />,
-    <AzureDevops key="azuredevops" />,
-    <Gitlab key="gitlab" />,
-    <Mcp key="mcp" />
+    { Icon: Aws },
+    { Icon: Azure },
+    { Icon: GoogleCloud },
+    { Icon: K8S },
+    { Icon: Terraform },
+    { Icon: Flux },
+    { Icon: Argo },
+    { Icon: Helm },
+    { Icon: Kustomize },
+    { Icon: Prometheus },
+    { Icon: Datadog },
+    { Icon: Dynatrace },
+    { Icon: AwsCloudwatch },
+    { Icon: Opensearch },
+    { Icon: Postgres },
+    { Icon: SqlServer },
+    { Icon: Github },
+    { Icon: AzureDevops },
+    { Icon: Gitlab },
+    { Icon: Mcp },
   ];
 
   return (
-    <div>
-      <Handle type="target" position={Position.Top} id="int-top" className='!bg-white' isConnectable={false} isConnectableStart={false} />
-      <Box
-        asSVG={true}
-        width={360}
-        variant="unstyled"
-        flexWrap="wrap"
-        gap={0}
-        padding={0}
+    <div id="arch-integrations">
+      <BoxNode
+        title="40+ Integrations"
+        className="bg-slate-500"
+        bodyClassName="bg-slate-50"
+        border="solid"
       >
-        {integrations.map((icon, index) => (
-          <Box
-            key={index}
-            width={35}
-            height={35}
-            icon={icon}
-            iconSize={25}
-            className="fill-white"
-            hoverable={true}
-          />
-        ))}
-      </Box>
+        <IconGrid items={integrations} cols={5} iconSize="w-7 h-7" />
+      </BoxNode>
     </div>
   );
 }
 
-// Custom node types
-const nodeTypes = {
-  missionControl: MissionControlNode,
-  integrations: IntegrationsNode,
-};
+interface ArchitectureDiagramProps {
+  className?: string;
+  variant?: string;
+}
 
-// Client-side component with ReactFlow
-function ArchitectureDiagramClient({ className, variant }: { className?: string, variant?: string }) {
-  // Define nodes
-  const nodes: Node[] = [
-    {
-      id: 'mission-control',
-      type: 'missionControl',
-      position: { x: 115, y: 0 },
-      data: {},
-    },
-    {
-      id: 'integrations',
-      type: 'integrations',
-      position: { x: 45, y: 350 },
-      data: {},
-    },
-  ];
-
-  // Define bidirectional edges
-  const edges: Edge[] = [
-    {
-      id: 'ingestion-flow',
-      source: 'mission-control',
-      sourceHandle: 'mc-bottom',
-      target: 'integrations',
-      targetHandle: 'int-top',
-
-      markerEnd: {
-        type: 'arrowclosed',
-        width: 24,
-        offset: 10,
-        height: 24,
-      },
-
-      animated: true,
-      style: { stroke: '#60A5FA', strokeWidth: 2 },
-      labelStyle: { fill: '#60A5FA', fontSize: 12 },
-    },
-  ];
-
+function ArchitectureDiagramInner({ className }: ArchitectureDiagramProps) {
   return (
-    <div className={className} style={{ width: '450px', height: '600px' }}>
-      <ReactFlow
-        nodes={nodes}
+    <div className={`${className || ''} relative flex flex-col items-center gap-10 py-8`}>
+      <K8SCRDsBox />
+      <MissionControlBox />
+      <MCPServerBox />
+      <IntegrationsBox />
 
-        edges={edges}
-        nodeTypes={nodeTypes}
-        fitView
-        nodesDraggable={false}
-        nodesConnectable={false}
-        elementsSelectable={false}
-        proOptions={{
-          hideAttribution: true,
-        }}
-        zoomOnScroll={false}
-        panOnScroll={false}
-        zoomOnDoubleClick={false}
-        preventScrolling={true}
-        attributionPosition={undefined}
+      <Xarrow
+        start="arch-k8s-crds"
+        end="arch-missionControl"
+        color="#3b82f6"
+        strokeWidth={3}
+        startAnchor="bottom"
+        endAnchor="top"
+        headSize={4}
+        dashness={{ strokeLen: 10, nonStrokeLen: 5, animation: 1 }}
+      />
+      <Xarrow
+        start="arch-missionControl"
+        end="arch-mcp-server"
+        color="#6366f1"
+        strokeWidth={3}
+        startAnchor="bottom"
+        endAnchor="top"
+        headSize={4}
+        dashness={{ strokeLen: 10, nonStrokeLen: 5, animation: 1 }}
+      />
+      <Xarrow
+        start="arch-mcp-server"
+        end="arch-integrations"
+        color="#6366f1"
+        strokeWidth={3}
+        startAnchor="bottom"
+        endAnchor="top"
+        headSize={4}
+        dashness={{ strokeLen: 10, nonStrokeLen: 5, animation: 1 }}
       />
     </div>
   );
 }
 
-// Wrapper component with BrowserOnly
-export default function ArchitectureDiagram({ className, variant }: { className?: string, variant?: string }) {
+export default function ArchitectureDiagram({ className, variant }: ArchitectureDiagramProps) {
   return (
-    <>
-      <style>{`
-        .hover-scale-group:hover {
-          transform: scale(1.1);
-        }
-        .hover-scale-group {
-          transition: transform 0.1s ease-in-out;
-        }
-
-        .hoverable-box:hover {
-          transform: !important scale(1.4);
-        }
-      `}</style>
-      <BrowserOnly fallback={<div className={className} style={{ width: '450px', height: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading architecture diagram...</div>}>
-        {() => <ArchitectureDiagramClient className={className} variant={variant} />}
-      </BrowserOnly>
-    </>
+    <BrowserOnly fallback={<div className="w-full h-96 flex items-center justify-center">Loading...</div>}>
+      {() => <ArchitectureDiagramInner className={className} variant={variant} />}
+    </BrowserOnly>
   );
 }
-

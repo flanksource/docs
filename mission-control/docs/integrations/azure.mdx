@@ -5,14 +5,25 @@ sidebar_custom_props:
 ---
 
 import Schema from '@site/modules/mission-control-registry/charts/azure/values.schema.json'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Catalog', id: 'catalog', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="scraper" />
 </CapabilityBadges>
 
-Mission Control integrates with Azure to provide visibility into your cloud infrastructure. Use it to:
+Mission Control integrates with Azure to provide visibility into your cloud infrastructure.
 
+---
+
+<CapabilityHeading type="scraper" />
+
+Discover and catalog Azure resources with full change history.
+
+**Use cases:**
 - Discover and catalog VMs, Azure SQL databases, App Services, and other Azure resources
 - Track configuration changes across subscriptions and resource groups
 - Monitor resource health and correlate with Kubernetes workloads
@@ -48,7 +59,10 @@ When you go to the catalog now, you can now see all the Azure Resources
 ## Next Steps
 
 <Cards>
-    <Card size="sm" title="ScrapeConfig" icon="k8s-customresourcedefinition" link="/docs/guide/config-db/scrapers/azure">
-      <Tag label="CRD"/>
+  <Card icon="scraper" title="Azure Scraper" link="/docs/guide/config-db/scrapers/azure">
+    Azure config scraper configuration options
+  </Card>
+  <Card icon="entra-id" title="Azure AD Integration" link="/docs/integrations/azure-ad">
+    Monitor Azure Active Directory / Entra ID
   </Card>
 </Cards>

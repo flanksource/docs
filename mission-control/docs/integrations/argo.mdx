@@ -8,20 +8,17 @@ import { Card, Cards } from '@site/../common/src/components/Card'
 import Helm from '@site/../common/src/components/Helm.jsx'
 import Schema from '@site/modules/mission-control-registry/charts/argocd/values.schema.json'
 import Prereqs from '@site/docs/partials/_integration_prereqs.mdx'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Catalog', id: 'catalog', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="scraper" />
-  <CapabilityBadge type="playbook" />
 </CapabilityBadges>
 
-Mission Control integrates with ArgoCD to provide visibility into your GitOps deployments. Use it to:
-
-- Discover Applications and ApplicationSets with their sync status and health state
-- Track the full resource hierarchy from Applications to Deployments, Services, and ConfigMaps
-- Correlate failed syncs with recent Git commits or cluster configuration changes
-- Monitor sync status changes over time with full history
-- Navigate relationships between Applications and the Kubernetes resources they deploy
+Mission Control integrates with ArgoCD to provide visibility into your GitOps deployments.
 
 ## Quick Start
 
@@ -29,7 +26,16 @@ Mission Control integrates with ArgoCD to provide visibility into your GitOps de
 
 <Helm chart="mission-control-argocd" schema={Schema} />
 
-## Config Scrapers
+---
+
+<CapabilityHeading type="scraper" />
+
+**Use cases:**
+- Discover Applications and ApplicationSets with their sync status and health state
+- Track the full resource hierarchy from Applications to Deployments, Services, and ConfigMaps
+- Correlate failed syncs with recent Git commits or cluster configuration changes
+- Monitor sync status changes over time with full history
+- Navigate relationships between Applications and the Kubernetes resources they deploy
 
 The ArgoCD integration automatically discovers and tracks config items in the unified catalog:
 
@@ -54,13 +60,13 @@ ArgoCD's built-in health checks determine the overall health status of Applicati
 ## Next Steps
 
 <Cards>
-  <Card title="Flux Integration" href="/docs/integrations/flux">
+  <Card icon="flux" title="Flux Integration" href="/docs/integrations/flux">
     Compare with Flux GitOps integration
   </Card>
-  <Card title="Kubernetes Integration" href="/docs/integrations/kubernetes">
+  <Card icon="k8s" title="Kubernetes Integration" href="/docs/integrations/kubernetes">
     Learn about Kubernetes resource tracking
   </Card>
-  <Card title="Config DB Reference" href="/docs/guide/config-db">
+  <Card icon="scraper" title="Config DB Reference" href="/docs/guide/config-db">
     Explore configuration scraping capabilities
   </Card>
 </Cards>

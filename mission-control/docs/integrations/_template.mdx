@@ -1,70 +1,47 @@
 ---
-title: [Platform Name] Integration
+title: [Platform Name]
 sidebar_custom_props:
   icon: [icon-name]
 # draft: true  # Uncomment if page is not ready for production
 ---
 
-import { Card, Cards } from '@site/src/components/Card';
-import Helm from '@site/src/components/Helm';
+import { Card, Cards } from '@site/../common/src/components/Card'
+import Helm from '@site/../common/src/components/Helm.jsx'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
 
-# [Platform Name] Integration
+export const toc = [
+  { value: 'Catalog', id: 'catalog', level: 2 },
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+  { value: 'Playbooks', id: 'playbooks', level: 2 },
+  { value: 'Notifications', id: 'notifications', level: 2 },
+];
 
-[Brief 2-3 sentence description of what Mission Control can do with this platform. Explain the value proposition and key capabilities.]
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+  <CapabilityBadge type="healthcheck" />
+  <CapabilityBadge type="playbook" />
+  <CapabilityBadge type="notifications" />
+</CapabilityBadges>
 
-## Quick Start
+[Brief 2-3 sentence description of what Mission Control can do with this platform.]
 
 :::info Prerequisites
 - Mission Control installed via Helm
 - [Platform-specific requirements, e.g., API keys, credentials, access rights]
-- [Any required CLI tools or SDKs]
 :::
 
 <Helm chart="mission-control" namespace="mission-control" />
 
 ---
 
-## Health Checks
+<CapabilityHeading type="scraper" />
 
-Monitor [Platform] resources and services with Canary health checks.
+Discover and track [Platform] configuration changes in the Catalog.
 
-**What you can monitor:**
-- [Resource type 1]
-- [Resource type 2]
-- [Service/endpoint type]
-
-### Example
-
-```yaml title="[platform]-health-check.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: [platform]-check
-spec:
-  interval: 30
-  [platform]:
-    - name: sample-[platform]-check
-      # Add minimal working configuration here
-      # Include only essential fields for quick start
-```
-
-<Cards>
-  <Card
-    title="Health Check Reference"
-    link="/canary-checker/docs/reference/[platform-ref-link]"
-  />
-</Cards>
-
----
-
-## Config Scrapers
-
-Discover and track [Platform] configuration changes in the Config DB.
-
-**What you can scrape:**
-- [Configuration type 1]
-- [Configuration type 2]
-- [Resource metadata]
+**Use cases:**
+- [Use case 1, e.g., Track EC2 instance configurations across regions]
+- [Use case 2, e.g., Monitor S3 bucket policies for compliance]
+- [Use case 3, e.g., Correlate resources with Terraform state]
 
 ### Example
 
@@ -77,62 +54,51 @@ spec:
   schedule: "@every 5m"
   [platform]:
     - # Add minimal working scraper configuration
-      # Include connection details and basic filters
 ```
 
 <Cards>
-  <Card
-    title="Scraper Reference"
-    link="/docs/guide/config-db/scrapers/[platform-scraper-link]"
-  />
+  <Card title="Scraper Reference" link="/docs/guide/config-db/scrapers/[platform]" />
 </Cards>
 
 ---
 
-## Notifications
+<CapabilityHeading type="healthcheck" />
 
-[If platform supports sending notifications, include this section]
+Monitor [Platform] resources and services with health checks.
 
-Send notifications and alerts via [Platform] notification services.
-
-**Supported channels:**
-- [Channel/service 1]
-- [Channel/service 2]
+**Use cases:**
+- [Use case 1, e.g., Verify API endpoint availability]
+- [Use case 2, e.g., Check database connectivity]
+- [Use case 3, e.g., Monitor queue depths and latency]
 
 ### Example
 
-```yaml title="notification-config.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Notification
+```yaml title="[platform]-health-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
 metadata:
-  name: [platform]-notification
+  name: [platform]-check
 spec:
-  to:
-    [platform]: [connection-uri-or-config]
-  events:
-    - incident.created
-    - check.failed
+  interval: 30
+  [platform]:
+    - name: sample-check
+      # Add minimal working configuration
 ```
 
 <Cards>
-  <Card
-    title="Notification Channels"
-    link="/docs/guide/notifications/channels/[platform-notification-link]"
-  />
+  <Card title="Health Check Reference" link="/docs/guide/canary-checker/reference/[platform]" />
 </Cards>
 
 ---
 
-## Playbooks
-
-[If platform supports playbooks, include this section]
+<CapabilityHeading type="playbook" />
 
 Automate remediation and operations for [Platform] resources.
 
-**Common playbook actions:**
-- [Action 1, e.g., restart service]
-- [Action 2, e.g., scale resources]
-- [Action 3, e.g., update configuration]
+**Use cases:**
+- [Use case 1, e.g., Auto-restart failed services]
+- [Use case 2, e.g., Scale resources based on metrics]
+- [Use case 3, e.g., Create PRs to update configurations]
 
 ### Example
 
@@ -147,49 +113,49 @@ spec:
       - name: [platform]-check
         failed: true
   actions:
-    - name: [remediation-action]
-      # Add playbook action configuration
+    - name: remediate
+      # Add playbook action
 ```
 
 <Cards>
-  <Card
-    title="Playbook Reference"
-    link="/docs/playbooks/[platform-playbook-link]"
-  />
-  <Card
-    title="Playbook Actions"
-    link="/docs/playbooks/actions"
-  />
+  <Card title="Playbook Actions" link="/docs/guide/playbooks/actions" />
+</Cards>
+
+---
+
+<CapabilityHeading type="notifications" />
+
+Send alerts and notifications via [Platform].
+
+**Use cases:**
+- [Use case 1, e.g., Alert on-call when health checks fail]
+- [Use case 2, e.g., Notify team channel of config changes]
+- [Use case 3, e.g., Create incidents for critical issues]
+
+### Example
+
+```yaml title="notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: [platform]-alerts
+spec:
+  to:
+    [platform]: [connection-uri]
+  events:
+    - incident.created
+    - check.failed
+```
+
+<Cards>
+  <Card title="Notification Channels" link="/docs/guide/notifications/channels/[platform]" />
 </Cards>
 
 ---
 
 ## Next Steps
 
-<Cards columns={3}>
-  <Card
-    title="[Platform] Examples"
-    link="/docs/examples/[platform]"
-    variant="secondary"
-  />
-  <Card
-    title="Best Practices"
-    link="/docs/integrations/[platform]/best-practices"
-    variant="secondary"
-  />
-  <Card
-    title="Troubleshooting"
-    link="/docs/integrations/[platform]/troubleshooting"
-    variant="secondary"
-  />
+<Cards>
+  <Card title="[Platform] Examples" link="/docs/integrations/[platform]/examples" />
+  <Card title="Connection Reference" link="/docs/reference/connections/[platform]" />
 </Cards>
-
----
-
-## Additional Resources
-
-[Optional section for platform-specific documentation, community resources, etc.]
-
-- [Link to platform official docs]
-- [Link to Mission Control community examples]
-- [Link to related integrations]

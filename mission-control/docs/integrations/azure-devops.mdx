@@ -5,7 +5,13 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+  { value: 'Playbooks', id: 'playbooks', level: 2 },
+  { value: 'Catalog', id: 'catalog', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="healthcheck" />
@@ -13,15 +19,16 @@ import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/component
   <CapabilityBadge type="scraper" />
 </CapabilityBadges>
 
-Mission Control integrates with Azure DevOps to monitor pipelines and trigger builds. Use it to:
+Mission Control integrates with Azure DevOps to monitor pipelines and trigger builds.
 
+---
+
+<CapabilityHeading type="healthcheck" />
+
+**Use cases:**
 - Monitor pipeline run status and detect failures
 - Track build duration and identify slow pipelines
-- Trigger pipeline runs from playbooks for CI/CD automation
-- Scrape pipeline and project configurations into the catalog
 - Filter pipeline status by branch, variables, or naming patterns
-
-## Health Checks
 
 ### Pipeline Status Check
 
@@ -48,7 +55,7 @@ spec:
       result: succeeded
 ```
 
-### Pipeline Duration Threshold
+<details summary="Pipeline Duration Threshold">
 
 ```yaml title="ado-duration-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -69,8 +76,9 @@ spec:
       pipeline: CI-Build
       thresholdMillis: 600000  # Alert if build takes > 10 minutes
 ```
+</details>
 
-### Pattern Matching
+<details summary="Pattern Matching">
 
 ```yaml title="ado-pattern-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -91,10 +99,17 @@ spec:
       pipelinePattern: "^Release-.*"  # Monitor all release pipelines
       result: succeeded
 ```
+</details>
 
-## Playbook Actions
 
-Trigger Azure DevOps pipeline runs from playbooks.
+
+---
+
+<CapabilityHeading type="playbook" />
+
+**Use cases:**
+- Trigger pipeline runs from playbooks for CI/CD automation
+- Automate deployments based on events
 
 ### Basic Pipeline Trigger
 
@@ -128,7 +143,7 @@ spec:
           environment: "{{.params.environment}}"
 ```
 
-### Pipeline with Version
+<details summary="Pipeline with Version">
 
 ```yaml title="ado-versioned-pipeline.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -144,10 +159,15 @@ spec:
         pipeline: Rollback-Pipeline
         version: "{{.config.config.metadata.labels.version}}"
 ```
+</details>
 
-## Config Scrapers
+---
 
-Scrape Azure DevOps pipeline and project data into the catalog.
+<CapabilityHeading type="scraper" />
+
+**Use cases:**
+- Scrape pipeline and project configurations into the catalog
+- Track pipeline configurations and changes
 
 ```yaml title="ado-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -170,10 +190,10 @@ spec:
 ## Next Steps
 
 <Cards>
-  <Card title="Health Check Reference" href="/canary-checker/docs/reference/azure-devops">
-    Azure DevOps health check configuration options
-  </Card>
-  <Card title="Azure DevOps Playbook Action" href="/docs/guide/playbooks/actions/azure-devops">
+  <Card icon="playbook" title="Azure DevOps Playbook Action" href="/docs/guide/playbooks/actions/azure_devops_pipeline">
     Pipeline trigger reference for playbooks
+  </Card>
+  <Card icon="scraper" title="Azure DevOps Scraper" href="/docs/guide/config-db/scrapers/azure-devops">
+    Scrape Azure DevOps pipelines and projects
   </Card>
 </Cards>

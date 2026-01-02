@@ -9,10 +9,12 @@ export const Card = ({
   size = "md",
   height = 'min-h-20 md:min-h-32',
   link,
+  href,
   variant = 'primary',
   sidebar,
   children
 }) => {
+  link = link || href;
   if (sidebar) {
     link = sidebar.href;
     if (sidebar.customProps?.icon) {

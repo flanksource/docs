@@ -5,22 +5,43 @@ sidebar_custom_props:
 ---
 
 import Schema from '@site/modules/mission-control-registry/charts/gcp/values.schema.json'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Catalog', id: 'catalog', level: 2 },
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="scraper" />
   <CapabilityBadge type="healthcheck" />
-  <CapabilityBadge type="relationship" />
 </CapabilityBadges>
 
-Mission Control integrates with Google Cloud Platform to provide visibility into your cloud infrastructure. Use it to:
+Mission Control integrates with Google Cloud Platform to provide visibility into your cloud infrastructure.
 
+---
+
+<CapabilityHeading type="scraper" />
+
+Discover and catalog GCP resources with full change history and relationships.
+
+**Use cases:**
 - Discover and catalog Compute Engine VMs, Cloud SQL instances, GKE clusters, and other GCP resources
-- Monitor Cloud Storage bucket availability and object health
 - Track configuration changes across projects and folders
 - Correlate GCP resources with GKE workloads and Terraform state
 - Build relationships between GCP services and their dependencies
 - Support organization-wide visibility with folder-based access
+
+---
+
+<CapabilityHeading type="healthcheck" />
+
+Monitor GCP services and endpoints with health checks.
+
+**Use cases:**
+- Monitor Cloud Storage bucket availability and object health
+- Check Cloud SQL database connectivity and status
+- Verify GKE cluster health and node status
 
 ## Getting Started
 
@@ -50,13 +71,10 @@ When you go to the catalog now, you can now see all the GCP Resources
 ## Next Steps
 
 <Cards>
-    <Card size="sm" title="ScrapeConfig" icon="k8s-customresourcedefinition" link="/docs/guide/config-db/scrapers/gcp">
-      <Tag label="CRD"/>
+  <Card icon="scraper" title="GCP Scraper" link="/docs/guide/config-db/scrapers/gcp">
+    GCP config scraper configuration options
   </Card>
-
-  <Card size="sm" title="GCP Cloud Storage" icon="google-cloud-storage" link="/docs/guide/canary-checker/reference/folder">
-    Check GCS buckets and objects
-    <Tag label="health-check"/>
+  <Card icon="aws" title="AWS Integration" link="/docs/integrations/aws">
+    Learn about AWS resource scraping
   </Card>
-
 </Cards>

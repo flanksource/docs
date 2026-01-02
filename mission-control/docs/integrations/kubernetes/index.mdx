@@ -5,23 +5,93 @@ sidebar_custom_props:
 ---
 
 import DocCardList from '@theme/DocCardList';
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Catalog', id: 'catalog', level: 2 },
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+  { value: 'Playbooks', id: 'playbooks', level: 2 },
+  { value: 'Notifications', id: 'notifications', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="scraper" />
   <CapabilityBadge type="healthcheck" />
   <CapabilityBadge type="playbook" />
   <CapabilityBadge type="notifications" />
-  <CapabilityBadge type="actions" />
 </CapabilityBadges>
 
-Mission Control provides deep integration with Kubernetes clusters. Use it to:
+Mission Control provides deep integration with Kubernetes clusters for complete visibility into your containerized infrastructure.
 
-- Discover and catalog Deployments, Services, ConfigMaps, and all Kubernetes resources
-- Monitor pod health, resource usage, and cluster events
+---
+
+<CapabilityHeading type="scraper" />
+
+Discover and catalog all Kubernetes resources with full change history and drift detection.
+
+**Use cases:**
+- Discover Deployments, Services, ConfigMaps, Secrets, and all Kubernetes resources
 - Track configuration changes with full diff history
 - Correlate workloads with Helm releases, GitOps deployments, and cloud infrastructure
-- Run playbooks to restart pods, scale deployments, or execute kubectl commands
-- Send notifications to Slack, Teams, or PagerDuty when resources change state
+- Monitor resource relationships and dependencies across namespaces
+
+<Cards>
+  <Card title="Kubernetes Scraper Reference" link="/docs/guide/config-db/scrapers/kubernetes" />
+</Cards>
+
+---
+
+<CapabilityHeading type="healthcheck" />
+
+Monitor pod health, resource usage, and cluster state with automated health checks.
+
+**Use cases:**
+- Verify pod readiness and liveness probe status
+- Monitor resource usage against requests and limits
+- Check cluster events for warnings and errors
+- Validate service endpoints and ingress configurations
+
+<Cards>
+  <Card title="Kubernetes Health Check" link="/docs/guide/canary-checker/reference/kubernetes" />
+  <Card title="Pod Check" link="/docs/guide/canary-checker/reference/pod" />
+</Cards>
+
+---
+
+<CapabilityHeading type="playbook" />
+
+Automate Kubernetes operations and incident remediation with playbooks.
+
+**Use cases:**
+- Restart pods or rollout deployments automatically
+- Scale deployments based on custom metrics or alerts
+- Execute kubectl commands for debugging and remediation
+- Delete stuck resources or force reconciliation
+
+<Cards>
+  <Card title="Kubernetes Action" link="/docs/guide/playbooks/actions/kubernetes" />
+  <Card title="Exec Action" link="/docs/guide/playbooks/actions/exec" />
+</Cards>
+
+---
+
+<CapabilityHeading type="notifications" />
+
+Send alerts when Kubernetes resources change state or encounter issues.
+
+**Use cases:**
+- Alert when pods enter CrashLoopBackOff or ImagePullBackOff
+- Notify on deployment rollout failures
+- Track configuration changes to sensitive resources
+- Integrate with Slack, Teams, or PagerDuty for on-call escalation
+
+<Cards>
+  <Card title="Notification Channels" link="/docs/guide/notifications/channels" />
+</Cards>
+
+---
+
+## Sub-pages
 
 <DocCardList />

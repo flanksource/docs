@@ -1,25 +1,32 @@
 ---
-title: Microsoft Teams
+title: Teams
 sidebar_custom_props:
-  icon: microsoft-teams
+  icons: teams
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Notifications', id: 'notifications', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="notifications" />
 </CapabilityBadges>
 
-Mission Control integrates with Microsoft Teams to send notifications to channels. Use it to:
+Mission Control integrates with Microsoft Teams to send notifications to channels.
 
+---
+
+<CapabilityHeading type="notifications" />
+
+**Use cases:**
 - Send alerts to Teams channels when health checks fail or configs change
 - Format notifications with rich MessageCard layouts
 - Route notifications to different channels based on severity or team
 - Customize message titles and theme colors
 - Keep teams informed of incidents and infrastructure changes
-
-## Notifications
 
 Send notifications to Microsoft Teams channels using incoming webhooks.
 
@@ -39,7 +46,7 @@ spec:
       webhook: https://outlook.office.com/webhook/...
 ```
 
-### Custom Title and Color
+<details summary="Custom Title and Color">
 
 ```yaml title="teams-custom-notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -56,8 +63,9 @@ spec:
       title: "Infrastructure Alert"
       color: "{{if eq .event \"incident.created\"}}FF0000{{else}}00FF00{{end}}"
 ```
+</details>
 
-### Using Connection Reference
+<details summary="Using Connection Reference">
 
 ```yaml title="teams-connection-notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -75,8 +83,9 @@ spec:
     **Type:** {{.config.type}}
     **Change:** {{.change.change_type}}
 ```
+</details>
 
-### Routing by Severity
+<details summary="Routing by Severity">
 
 ```yaml title="teams-routing-notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -112,6 +121,7 @@ spec:
             name: teams-webhooks
             key: warnings-channel
 ```
+</details>
 
 ## Setting Up a Webhook
 
@@ -133,10 +143,10 @@ spec:
 ## Next Steps
 
 <Cards>
-  <Card title="Notification Reference" href="/docs/guide/notifications">
+  <Card icon="notifications" title="Notification Reference" href="/docs/guide/notifications">
     Notification configuration options
   </Card>
-  <Card title="Slack Integration" href="/docs/integrations/slack">
+  <Card icon="slack" title="Slack Integration" href="/docs/integrations/slack">
     Alternative: Send notifications to Slack
   </Card>
 </Cards>

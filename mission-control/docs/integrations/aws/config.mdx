@@ -5,7 +5,7 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
 
 <CapabilityBadges>
   <CapabilityBadge type="healthcheck" />
@@ -19,7 +19,7 @@ Mission Control integrates with AWS Config to monitor your AWS resource configur
 - Track configuration changes and drift detection
 - Aggregate compliance data across multiple AWS accounts and regions
 
-## Health Checks
+<CapabilityHeading type="healthcheck" />
 
 ### Query AWS Config Resources
 
@@ -129,10 +129,10 @@ spec:
 ## Next Steps
 
 <Cards>
-  <Card title="AWS Integration" href="/docs/integrations/aws">
+  <Card icon="aws" title="AWS Integration" href="/docs/integrations/aws">
     Learn about AWS resource scraping
   </Card>
-  <Card title="Health Check Reference" href="/canary-checker/docs/reference/aws-config">
-    AWS Config health check configuration options
+  <Card icon="scraper" title="AWS Scraper" href="/docs/guide/config-db/scrapers/aws">
+    AWS config scraper configuration options
   </Card>
 </Cards>

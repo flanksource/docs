@@ -5,20 +5,28 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+  { value: 'Dashboards', id: 'dashboards', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="healthcheck" />
 </CapabilityBadges>
 
-Mission Control integrates with Grafana through its underlying data sources. Use it to:
+Mission Control integrates with Grafana through its underlying data sources.
 
+---
+
+<CapabilityHeading type="healthcheck" />
+
+**Use cases:**
 - Monitor Prometheus metrics that power your Grafana dashboards
 - Validate dashboard data sources are accessible and returning data
 - Alert when metrics used in critical dashboards breach thresholds
 - Check that Grafana's backend services (Prometheus, Elasticsearch, etc.) are healthy
-
-## Health Checks
 
 ### Prometheus Data Source
 
@@ -83,13 +91,37 @@ spec:
           value: ok
 ```
 
+## Dashboards
+
+Mission Control ships with pre-built Grafana dashboards for monitoring health checks and configuration scraping.
+
+### Available Dashboards
+
+| Dashboard | Description |
+|-----------|-------------|
+| **Canary Overview** | High-level view of all health checks with pass/fail rates and trends |
+| **Canary Details** | Detailed metrics for individual checks including latency histograms |
+| **Config-DB Scrape** | Scraper performance metrics, cache efficiency, and change rates |
+
+### Installation
+
+Enable dashboards during Helm installation:
+
+```bash
+helm install mission-control flanksource/mission-control \
+  --set grafanaDashboards=true \
+  --set serviceMonitor=true
+```
+
+This creates ConfigMaps that Grafana's sidecar can auto-discover. See [Prometheus Integration](/docs/integrations/prometheus#exposed-metrics) for the metrics these dashboards visualize.
+
 ## Next Steps
 
 <Cards>
-  <Card title="Prometheus Integration" href="/docs/integrations/prometheus">
-    Monitor Prometheus metrics directly
+  <Card icon="prometheus" title="Prometheus Integration" href="/docs/integrations/prometheus">
+    View exposed metrics and ServiceMonitor setup
   </Card>
-  <Card title="HTTP Health Checks" href="/docs/integrations/http">
+  <Card icon="http" title="HTTP Health Checks" href="/docs/integrations/http">
     Monitor HTTP endpoints and APIs
   </Card>
 </Cards>

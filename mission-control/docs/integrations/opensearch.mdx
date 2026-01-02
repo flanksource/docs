@@ -5,21 +5,28 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="healthcheck" />
 </CapabilityBadges>
 
-Mission Control integrates with Opensearch and Elasticsearch to monitor your search infrastructure. Use it to:
+Mission Control integrates with Opensearch and Elasticsearch to monitor your search infrastructure.
 
+---
+
+<CapabilityHeading type="healthcheck" />
+
+**Use cases:**
 - Execute search queries against Opensearch/Elasticsearch indices and validate results
 - Monitor cluster health and index availability
 - Alert when expected documents are missing or counts change unexpectedly
 - Validate log ingestion pipelines are working correctly
 - Check that critical indices contain recent data
-
-## Health Checks
 
 ### Opensearch Example
 
@@ -89,10 +96,10 @@ spec:
 ## Next Steps
 
 <Cards>
-  <Card title="Health Check Reference" href="/canary-checker/docs/reference/opensearch">
-    Opensearch health check configuration options
+  <Card icon="loki" title="Loki Integration" href="/docs/integrations/loki">
+    Query logs from Grafana Loki
   </Card>
-  <Card title="Elasticsearch Reference" href="/canary-checker/docs/reference/elasticsearch">
-    Elasticsearch health check configuration options
+  <Card icon="grafana" title="Grafana Integration" href="/docs/integrations/grafana">
+    Monitor Grafana data sources
   </Card>
 </Cards>
