@@ -109,6 +109,23 @@ export default async function createConfigAsync() {
                     exclude: /node_modules/,
                     type: 'asset/source',
                   },
+                  {
+                    test: /\.(ts|tsx)$/,
+                    include: [
+                      /node_modules\/@flanksource\/facet/,
+                      /\/facet\/src\//
+                    ],
+                    use: {
+                      loader: 'babel-loader',
+                      options: {
+                        presets: [
+                          '@babel/preset-env',
+                          ['@babel/preset-react', { runtime: 'automatic' }],
+                          '@babel/preset-typescript',
+                        ],
+                      },
+                    },
+                  },
                 ],
               },
               plugins: [
@@ -129,7 +146,7 @@ export default async function createConfigAsync() {
           configureWebpack(config, isServer, utils) {
             return {
               resolve: {
-                symlinks: false
+                symlinks: true
               }
             }
           }

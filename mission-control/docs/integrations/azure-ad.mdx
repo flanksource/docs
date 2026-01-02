@@ -1,25 +1,32 @@
 ---
 title: Azure AD / Entra ID
 sidebar_custom_props:
-  icon: entra-id
+  icon: entra
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Catalog', id: 'catalog', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="scraper" />
 </CapabilityBadges>
 
-Mission Control integrates with Azure Active Directory (Entra ID) to provide visibility into your identity infrastructure. Use it to:
+Mission Control integrates with Azure Active Directory (Entra ID) to provide visibility into your identity infrastructure.
 
+---
+
+<CapabilityHeading type="scraper" />
+
+**Use cases:**
 - Discover users, groups, and their memberships across your tenant
 - Track app registrations and enterprise applications
 - Monitor service principal configurations and permissions
 - Audit app role assignments and authentication methods
 - Correlate identity resources with Azure subscriptions and Kubernetes RBAC
-
-## Config Scrapers
 
 Discover and track Azure AD resources in the catalog.
 
@@ -71,10 +78,10 @@ To scrape Azure AD resources, your service principal needs the following Microso
 ## Next Steps
 
 <Cards>
-  <Card title="Azure Integration" href="/docs/integrations/azure">
+  <Card icon="azure" title="Azure Integration" href="/docs/integrations/azure">
     Learn about Azure resource scraping
   </Card>
-  <Card title="Config DB Reference" href="/docs/guide/config-db">
+  <Card icon="scraper" title="Config DB Reference" href="/docs/guide/config-db">
     Explore configuration scraping capabilities
   </Card>
 </Cards>

@@ -5,14 +5,19 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'MCP Server', id: 'mcp-server', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="actions" />
 </CapabilityBadges>
 
-Mission Control provides an MCP (Model Context Protocol) server that enables AI assistants like Claude to interact with your infrastructure. Use it to:
+Mission Control provides an MCP (Model Context Protocol) server that enables AI assistants like Claude to interact with your infrastructure.
 
+**Use cases:**
 - Query the config catalog and explore infrastructure relationships
 - List and inspect health checks across your environment
 - Execute playbooks to remediate issues or perform operations
@@ -86,10 +91,10 @@ The MCP server translates natural language requests from AI assistants into Miss
 ## Next Steps
 
 <Cards>
-  <Card title="Playbooks" href="/docs/guide/playbooks">
+  <Card icon="playbook" title="Playbooks" href="/docs/guide/playbooks">
     Learn about automating operations with playbooks
   </Card>
-  <Card title="Config DB" href="/docs/guide/config-db">
+  <Card icon="scraper" title="Config DB" href="/docs/guide/config-db">
     Explore the configuration catalog
   </Card>
 </Cards>

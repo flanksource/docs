@@ -5,21 +5,28 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Catalog', id: 'catalog', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="scraper" />
 </CapabilityBadges>
 
-Mission Control integrates with Trivy to scan your Kubernetes clusters for security issues. Use it to:
+Mission Control integrates with Trivy to scan your Kubernetes clusters for security issues.
 
+---
+
+<CapabilityHeading type="scraper" />
+
+**Use cases:**
 - Scan Kubernetes resources for known vulnerabilities (CVEs)
 - Detect misconfigurations in deployments, services, and other manifests
 - Identify exposed secrets and sensitive data in configurations
 - Track RBAC issues and excessive permissions
 - Monitor license compliance across container images
-
-## Config Scrapers
 
 Scan your Kubernetes cluster using Trivy and import the results into the catalog.
 
@@ -38,7 +45,7 @@ spec:
       timeout: "20m"
 ```
 
-### Vulnerability Scanning with Severity Filter
+<details summary="Vulnerability Scanning with Severity Filter">
 
 ```yaml title="trivy-vuln-scan.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -58,8 +65,9 @@ spec:
       kubernetes: {}
       timeout: "30m"
 ```
+</details>
 
-### Comprehensive Security Scan
+<details summary="Comprehensive Security Scan">
 
 ```yaml title="trivy-full-scan.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -83,6 +91,7 @@ spec:
       kubernetes: {}
       timeout: "45m"
 ```
+</details>
 
 ## Configuration Options
 
@@ -108,10 +117,10 @@ Trivy scans your Kubernetes cluster and reports:
 ## Next Steps
 
 <Cards>
-  <Card title="Scraper Reference" href="/docs/guide/config-db/scrapers/trivy">
+  <Card icon="scraper" title="Scraper Reference" href="/docs/guide/config-db/scrapers/trivy">
     Trivy scraper configuration options
   </Card>
-  <Card title="Kubernetes Integration" href="/docs/integrations/kubernetes">
+  <Card icon="k8s" title="Kubernetes Integration" href="/docs/integrations/kubernetes">
     Learn about Kubernetes resource scraping
   </Card>
 </Cards>

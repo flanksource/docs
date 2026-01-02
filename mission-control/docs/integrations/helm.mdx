@@ -8,21 +8,19 @@ import { Card, Cards } from '@site/../common/src/components/Card'
 import Helm from '@site/../common/src/components/Helm.jsx'
 import Schema from '@site/modules/mission-control-registry/charts/helm/values.schema.json'
 import Prereqs from '@site/docs/partials/_integration_prereqs.mdx'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+  { value: 'Playbooks', id: 'playbooks', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="healthcheck" />
   <CapabilityBadge type="playbook" />
-    <CapabilityBadge type="relationship" />
 </CapabilityBadges>
 
-Mission Control integrates with Helm to manage chart deployments across clusters. Use it to:
-
-- Discover Helm releases and track their versions, values, and upgrade availability
-- Monitor release health and correlate failures with recent value changes
-- Verify chart repository access and authentication before deployments fail
-- Deploy new charts or update existing releases through playbooks
-- Link Helm releases to the Kubernetes resources they create
+Mission Control integrates with Helm to manage chart deployments across clusters.
 
 ## Quick Start
 
@@ -50,7 +48,14 @@ Install the [mission-control-helm](https://artifacthub.io/packages/helm/flanksou
     }
   }}/>
 
-## Health Checks
+---
+
+<CapabilityHeading type="healthcheck" />
+
+**Use cases:**
+- Discover Helm releases and track their versions, values, and upgrade availability
+- Monitor release health and correlate failures with recent value changes
+- Verify chart repository access and authentication before deployments fail
 
 ### Example
 
@@ -58,6 +63,14 @@ Verify Helm chart repository availability and authentication before deployments 
 
 ```yaml file=<rootDir>/modules/canary-checker/fixtures/k8s/helm_check.yaml title='helm-health-check.yaml'
 ```
+
+---
+
+<CapabilityHeading type="playbook" />
+
+**Use cases:**
+- Deploy new charts or update existing releases through playbooks
+- Link Helm releases to the Kubernetes resources they create
 
 ## Installing Charts with Playbook
 
@@ -75,13 +88,13 @@ The [Kubernetes](/docs/integrations/kubernetes/playbooks) and [Flux](/docs/integ
 ## Next Steps
 
 <Cards>
-  <Card title="Flux Integration" href="/docs/integrations/flux">
+  <Card icon="flux" title="Flux Integration" href="/docs/integrations/flux">
     Manage HelmReleases via Flux GitOps
   </Card>
-  <Card title="Kustomize Integration" href="/docs/integrations/kustomize">
+  <Card icon="kustomize" title="Kustomize Integration" href="/docs/integrations/kustomize">
     Create HelmReleases through Kustomize
   </Card>
-  <Card title="Health Check Reference" href="/canary-checker/docs/reference/helm">
-    Helm health check configuration options
+  <Card icon="k8s" title="Kubernetes Integration" href="/docs/integrations/kubernetes">
+    Kubernetes resource monitoring
   </Card>
 </Cards>

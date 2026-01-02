@@ -73,3 +73,25 @@ export function CapabilityBadges({ children }) {
     </div>
   );
 }
+
+export function CapabilityHeading({ type }) {
+  const cap = capabilities[type];
+  if (!cap) return null;
+
+  const Icon = cap.icon;
+  return (
+    <h2 className="flex items-center gap-2 mt-8 mb-4 not-prose">
+      <span
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-base font-medium"
+        style={{
+          backgroundColor: cap.bg,
+          color: cap.color,
+          border: `1px solid ${cap.border}`
+        }}
+      >
+        <Icon className="w-5 h-5" />
+        {cap.label}
+      </span>
+    </h2>
+  );
+}

@@ -5,21 +5,28 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="healthcheck" />
 </CapabilityBadges>
 
-Mission Control integrates with LDAP directories to monitor authentication infrastructure. Use it to:
+Mission Control integrates with LDAP directories to monitor authentication infrastructure.
 
+---
+
+<CapabilityHeading type="healthcheck" />
+
+**Use cases:**
 - Verify LDAP/Active Directory connectivity and authentication
 - Validate bind credentials before they expire
 - Search for users and groups to confirm directory availability
 - Monitor directory replication by checking user existence across replicas
 - Alert when LDAP services become unavailable
-
-## Health Checks
 
 ### Basic Connection Check
 
@@ -48,7 +55,7 @@ spec:
             key: password
 ```
 
-### User Search Validation
+<details summary="User Search Validation">
 
 ```yaml title="ldap-search-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -73,8 +80,9 @@ spec:
             key: password
       userSearch: "(&(objectClass=user)(memberOf=cn=admins,ou=groups,dc=example,dc=com))"
 ```
+</details>
 
-### Active Directory Check
+<details summary="Active Directory Check">
 
 ```yaml title="ldap-ad-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -99,8 +107,9 @@ spec:
             key: password
       userSearch: "(sAMAccountName=testuser)"
 ```
+</details>
 
-### Skip TLS Verification (Development Only)
+<details summary="Skip TLS Verification (Development Only)">
 
 ```yaml title="ldap-insecure-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -125,6 +134,7 @@ spec:
             key: password
       skipTLSVerify: true  # Only for development/testing
 ```
+</details>
 
 ## Configuration Options
 
@@ -162,10 +172,10 @@ spec:
 ## Next Steps
 
 <Cards>
-  <Card title="Health Check Reference" href="/canary-checker/docs/reference/ldap">
-    LDAP health check configuration options
-  </Card>
-  <Card title="Azure AD Integration" href="/docs/integrations/azure-ad">
+  <Card icon="entra-id" title="Azure AD Integration" href="/docs/integrations/azure-ad">
     Monitor Azure Active Directory / Entra ID
+  </Card>
+  <Card icon="k8s" title="Kubernetes Integration" href="/docs/integrations/kubernetes">
+    Kubernetes resource monitoring
   </Card>
 </Cards>

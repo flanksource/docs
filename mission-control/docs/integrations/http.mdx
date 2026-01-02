@@ -5,7 +5,13 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+  { value: 'Playbooks', id: 'playbooks', level: 2 },
+  { value: 'Catalog', id: 'catalog', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="healthcheck" />
@@ -13,16 +19,17 @@ import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/component
   <CapabilityBadge type="scraper" />
 </CapabilityBadges>
 
-Mission Control integrates with HTTP endpoints to monitor APIs and web services. Use it to:
+Mission Control integrates with HTTP endpoints to monitor APIs and web services.
 
+---
+
+<CapabilityHeading type="healthcheck" />
+
+**Use cases:**
 - Monitor API availability and response times
 - Validate JSON/XML response content against expected values
 - Check SSL certificate expiration before services fail
 - Authenticate with Basic Auth, OAuth2, or NTLM
-- Execute HTTP requests from playbooks for webhooks and API calls
-- Scrape configuration data from REST APIs
-
-## Health Checks
 
 ### Basic Availability Check
 
@@ -42,7 +49,7 @@ spec:
         - 200
 ```
 
-### JSON Response Validation
+<details summary="JSON Response Validation">
 
 ```yaml title="http-json-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -61,8 +68,9 @@ spec:
           path: $.status
           value: healthy
 ```
+</details>
 
-### SSL Certificate Check
+<details summary="SSL Certificate Check">
 
 ```yaml title="http-ssl-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -76,8 +84,9 @@ spec:
       url: https://example.com
       maxSSLExpiry: 720  # Alert if cert expires within 30 days (720 hours)
 ```
+</details>
 
-### Response Time Threshold
+<details summary="Response Time Threshold">
 
 ```yaml title="http-latency-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -91,8 +100,9 @@ spec:
       url: https://api.example.com/data
       thresholdMillis: 500  # Alert if response takes > 500ms
 ```
+</details>
 
-### Authentication
+<details summary="Authentication">
 
 ```yaml title="http-auth-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -116,10 +126,15 @@ spec:
               name: api-credentials
               key: password
 ```
+</details>
 
-## Playbook Actions
+---
 
-Make HTTP requests from playbooks to trigger webhooks or call APIs.
+<CapabilityHeading type="playbook" />
+
+**Use cases:**
+- Execute HTTP requests from playbooks for webhooks and API calls
+- Trigger external systems in response to events
 
 ```yaml title="http-playbook-action.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -146,9 +161,13 @@ spec:
           }
 ```
 
-## Config Scrapers
+---
 
-Scrape configuration data from REST APIs.
+<CapabilityHeading type="scraper" />
+
+**Use cases:**
+- Scrape configuration data from REST APIs
+- Import data from external systems into the catalog
 
 ```yaml title="http-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -170,10 +189,10 @@ spec:
 ## Next Steps
 
 <Cards>
-  <Card title="Health Check Reference" href="/canary-checker/docs/reference/http">
-    HTTP health check configuration options
-  </Card>
-  <Card title="HTTP Playbook Action" href="/docs/guide/playbooks/actions/http">
+  <Card icon="playbook" title="HTTP Playbook Action" href="/docs/guide/playbooks/actions/http">
     HTTP action reference for playbooks
+  </Card>
+  <Card icon="scraper" title="HTTP Scraper" href="/docs/guide/config-db/scrapers/http">
+    Scrape configuration from HTTP endpoints
   </Card>
 </Cards>

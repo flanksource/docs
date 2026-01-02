@@ -4,16 +4,42 @@ sidebar_position: 1
 slug: /integrations
 ---
 
-import {Card, Cards} from '@site/src/components/Card'
+import Icon from '@site/../common/src/components/Icon'
 
-  <Cards>
+Mission Control integrates with a wide range of platforms and services. Each integration supports different capabilities:
 
+- **Health** - Monitor service availability and performance
+- **Scraper** - Import configuration data into the catalog
+- **Notifications** - Send alerts to messaging platforms
+- **Playbook** - Execute automated actions and workflows
 
-    <Card link="/docs/integrations/aws/" title="AWS" icon="aws"/>
-    <Card link="/docs/integrations/azure/" title="Azure" icon="azure"/>
-    <Card link="/docs/integrations/flux/" title="Flux" icon="flux"/>
-    <Card link="/docs/integrations/helm" title="Helm" icon="helm"/>
-    <Card link="/docs/integrations/kubernetes/" title="Kubernetes" icon="k8s"/>
-
-  </Cards>
-
+| Integration | Health | Scraper | Notifications | Playbook |
+|-------------|:------:|:-------:|:-------------:|:--------:|
+| <Icon name="argo"/> [ArgoCD](/docs/integrations/argo) | | ✓ | | ✓ |
+| <Icon name="aws"/> [AWS](/docs/integrations/aws/) | ✓ | ✓ | ✓ | ✓ |
+| <Icon name="azure"/> [Azure](/docs/integrations/azure) | | ✓ | | |
+| <Icon name="entra-id"/> [Azure AD / Entra ID](/docs/integrations/azure-ad) | | ✓ | | |
+| <Icon name="azure-devops"/> [Azure DevOps](/docs/integrations/azure-devops) | ✓ | ✓ | | ✓ |
+| <Icon name="clickhouse"/> [Clickhouse](/docs/integrations/clickhouse) | | ✓ | | |
+| <Icon name="crossplane"/> [Crossplane](/docs/integrations/crossplane) | | ✓ | | |
+| <Icon name="email"/> [Email / SMTP](/docs/integrations/email) | | | ✓ | |
+| <Icon name="flux"/> [Flux](/docs/integrations/flux/) | | ✓ | | ✓ |
+| <Icon name="github"/> [GitHub](/docs/integrations/github) | ✓ | ✓ | | ✓ |
+| <Icon name="gitlab"/> [GitLab](/docs/integrations/gitlab) | | | | ✓ |
+| <Icon name="google-cloud"/> [Google Cloud](/docs/integrations/gcp) | ✓ | ✓ | | |
+| <Icon name="grafana"/> [Grafana](/docs/integrations/grafana) | ✓ | | | |
+| <Icon name="helm"/> [Helm](/docs/integrations/helm) | ✓ | | | ✓ |
+| <Icon name="http"/> [HTTP](/docs/integrations/http) | ✓ | ✓ | | ✓ |
+| <Icon name="k8s"/> [Kubernetes](/docs/integrations/kubernetes/) | ✓ | ✓ | ✓ | ✓ |
+| <Icon name="kustomize"/> [Kustomize](/docs/integrations/kustomize/) | | | | ✓ |
+| <Icon name="ldap"/> [LDAP](/docs/integrations/ldap) | ✓ | | | |
+| <Icon name="loki"/> [Loki](/docs/integrations/loki) | | | | ✓ |
+| <Icon name="mcp"/> [MCP](/docs/integrations/mcp) | | | | ✓ |
+| <Icon name="microsoft-teams"/> [Microsoft Teams](/docs/integrations/teams) | | | ✓ | |
+| <Icon name="opensearch"/> [Opensearch](/docs/integrations/opensearch) | ✓ | | | |
+| <Icon name="postgres"/> [PostgreSQL](/docs/integrations/postgres) | ✓ | ✓ | | |
+| <Icon name="prometheus"/> [Prometheus](/docs/integrations/prometheus) | ✓ | | | |
+| <Icon name="slack"/> [Slack](/docs/integrations/slack) | | ✓ | ✓ | |
+| <Icon name="mssql"/> [SQL Server](/docs/integrations/sql-server) | ✓ | ✓ | | |
+| <Icon name="terraform"/> [Terraform](/docs/integrations/terraform) | | ✓ | | |
+| <Icon name="trivy"/> [Trivy](/docs/integrations/trivy) | | ✓ | | |

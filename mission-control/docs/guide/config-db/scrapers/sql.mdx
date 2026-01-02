@@ -1,107 +1,799 @@
 ---
 title: SQL
+sidebar_position: 6
 sidebar_custom_props:
   icon: database
 ---
 
 import Custom from './_custom.mdx'
 
+# <Icon name="database"/> SQL
+
 <!-- Source: modules/config-db/api/v1/sql.go:3#SQL -->
 
-The SQL configuration scraper will execute a SQL query and then create a configuration item for each returned row.
+The SQL scraper executes queries against relational databases and creates configuration items from each row. It supports PostgreSQL, MySQL, and SQL Server, enabling you to:
 
-The example below creates a new `MSSQL::Database` configuration for each database on the sql server, and then creates a roles object container the SQL Server login to database role mapping. With change detection this will highlight when new users are added / modified / removed on an individual databases.
+- Scrape application configurations stored in databases
+- Track database schema, users, roles, and permissions
+- Ingest audit logs and change history
+- Create relationships between database entities
+- Monitor access patterns and compliance
 
-```yaml title='sql-scraper.yaml'
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: sql-scraper
-spec:
-  sql:
-    - connection: 'sqlserver://localhost:1433?database=master'
-      auth:
-        username:
-          value: sa
-        password:
-          value: password
-      type: MSSQL::Database
-      id: $.name
+## Use Cases
 
-      transform:
-        full: true # transform the entire configuration item, and not just the configuration data (row)
-        script:
-          javascript: |+
-            var dbs = {}
-            for (var i = 0; i < config.rows.length; i++) {
-              var db = config.rows[i]
-              var name = db.DB
-              if (dbs[db.DB] == null) {
-                {
-                  config:               dbs[db.DB] = {
-                    name: name,
-                    roles: {}
-                  },
-                  changes: {
+- **Application Config Management**: Track application settings stored in database tables
+- **Database Inventory**: Catalog databases, schemas, tables, and views
+- **IAM/RBAC Tracking**: Monitor database users, roles, and permission assignments
+- **Audit & Compliance**: Ingest change logs and access history for compliance reporting
+- **Multi-tenant Monitoring**: Track tenant configurations across shared databases
 
-                  },
-                  analysis: {
+## Database-Specific Pages
 
-                  }
+<Cards>
+  <Card icon="postgres" title="PostgreSQL" href="./postgres">
+    PostgreSQL-specific queries and examples
+  </Card>
+  <Card icon="sqlserver" title="SQL Server" href="./mssql">
+    SQL Server-specific queries and examples
+  </Card>
+  <Card icon="clickhouse-icon" title="ClickHouse" href="./clickhouse">
+    ClickHouse and cloud storage integration
+  </Card>
+</Cards>
 
-                }
-              }
-              dbs[name].roles[db.role] = db.name
-            }
-            JSON.stringify(_.values(dbs))
+## Configuration
 
-      query: |
-        declare  @mytable table (
-          [DB] [nvarchar](128) NULL,
-          [name]  [nvarchar](255)  NOT NULL,
-          [role]  [nvarchar](255)  NOT NULL
-          )
-
-
-        DECLARE @command varchar(1000)
-        SELECT @command =
-        'USE ?; SELECT DB_NAME() as DB, DP1.name AS [user],
-          isnull (DP2.name, ''No members'') AS [role]
-        FROM sys.database_role_members AS DRM
-        RIGHT OUTER JOIN sys.database_principals AS DP1
-          ON DRM.role_principal_id = DP1.principal_id
-        LEFT OUTER JOIN sys.database_principals AS DP2
-          ON DRM.member_principal_id = DP2.principal_id
-        WHERE DP1.type = ''R'' and DP2.name is not null'
-
-        insert into @mytable  EXEC sp_MSforeachdb @command
-
-        select * from @mytable
-```
-
-## Scraper
-
-| Field       | Description                                                                        | Scheme                                       | Required |
-| ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
-| `logLevel`  | Specify the level of logging.                                                      | `string`                                     |          |
-| `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
-| `full`      | Set to `true` to extract changes & access logs from scraped configurations. Defaults to `false`. | `bool`                                       |          |
+| Field       | Description                                                                        | Scheme                                             | Required |
+| ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
+| `logLevel`  | Specify the level of logging                                                       | `string`                                           |          |
+| `schedule`  | Scrape interval in cron format. Defaults to every 60 minutes                       | [Cron](/docs/reference/types#cron)                 |          |
+| `full`      | Extract changes, access logs, users, groups from scraped configurations            | `bool`                                             |          |
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
-| `sql`       | Specifies the list of SQL configurations to scrape.                                | [`[]SQL`](#sql)                            |          |
+| `sql`       | List of SQL configurations to scrape                                               | [`[]SQL`](#sql-1)                                  |          |
 
 ### SQL
 
 <CustomScraper connection="sql" rows={[
-
+  {
+    "field": "driver",
+    "description": "Database driver: `postgres`, `mysql`, or `sqlserver`",
+    "scheme": "string",
+  },
   {
     "field": "query",
-    "description": "SQL query to execute",
-    "scheme": "SQL",
+    "description": "SQL query to execute. Each row becomes a config item",
+    "scheme": "string",
     "required": true,
   },
-
-
 ]}/>
 
 <Custom/>
 
+## Transform
+
+The `transform` section allows you to enrich scraped configurations with relationships, locations, aliases, and to extract changes and access data.
+
+### Transform Scripts
+
+Transform scripts modify the scraped data before creating config items. Available script types:
+
+| Type | Description |
+|------|-------------|
+| `javascript` | JavaScript with lodash (`_`) available |
+| `expr` | CEL expressions |
+| `jsonpath` | JSONPath expressions |
+| `gotemplate` | Go template syntax |
+
+When `full: true` is set, scripts receive the entire config structure and can return multiple config items with changes, relationships, and access data.
+
+```yaml title="transform-example.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: app-configs
+spec:
+  sql:
+    - connection: connection://postgres/production
+      type: Application
+      id: $.app_id
+      name: $.app_name
+      transform:
+        full: true
+        script:
+          javascript: |+
+            // Transform each row into a full config item
+            var results = [];
+            for (var i = 0; i < config.rows.length; i++) {
+              var row = config.rows[i];
+              results.push({
+                id: row.app_id,
+                name: row.app_name,
+                config: {
+                  version: row.version,
+                  environment: row.environment,
+                  settings: JSON.parse(row.settings_json)
+                },
+                changes: row.changes || [],
+                aliases: [row.app_code, row.legacy_id]
+              });
+            }
+            JSON.stringify(results)
+      query: |
+        SELECT
+          app_id,
+          app_name,
+          app_code,
+          legacy_id,
+          version,
+          environment,
+          settings_json,
+          (
+            SELECT json_agg(json_build_object(
+              'change_type', change_type,
+              'summary', description,
+              'created_at', changed_at,
+              'created_by', changed_by
+            ))
+            FROM app_changes
+            WHERE app_changes.app_id = apps.app_id
+            AND changed_at > NOW() - INTERVAL '24 hours'
+          ) as changes
+        FROM apps
+```
+
+## Changes
+
+To scrape change history from your database, use `full: true` and include a `changes` array in your transformed output.
+
+### Change Fields
+
+| Field | Description | Type |
+|-------|-------------|------|
+| `external_change_id` | Unique identifier for the change | `string` |
+| `action` | Action type: `create`, `update`, `delete` | `string` |
+| `change_type` | Category of change (e.g., `ConfigUpdate`, `SchemaChange`) | `string` |
+| `summary` | Human-readable description | `string` |
+| `severity` | Severity level: `info`, `low`, `medium`, `high`, `critical` | `string` |
+| `source` | Origin of the change | `string` |
+| `created_by` | User or system that made the change | `string` |
+| `created_at` | Timestamp of the change | `time` |
+| `details` | Additional structured data | `map[string]any` |
+| `diff` | Diff content showing what changed | `string` |
+
+### Change Mapping & Exclusion
+
+Use `transform.changes` to map or exclude changes based on their properties:
+
+```yaml title="change-mapping.yaml"
+transform:
+  changes:
+    # Map certain change types to specific severities
+    mapping:
+      - filter: change_type == 'SECURITY_UPDATE'
+        severity: high
+        type: SecurityChange
+      - filter: change_type == 'CONFIG_UPDATE' && details.auto_generated == true
+        severity: info
+        action: ignore  # Ignore auto-generated changes
+      - filter: change_type == 'DELETE'
+        action: delete  # Mark config as deleted
+        summary: "Config deleted: {{.summary}}"
+
+    # Exclude noisy changes
+    exclude:
+      - change_type == 'HEARTBEAT'
+      - source == 'monitoring-system'
+```
+
+## Relationships
+
+Create relationships between config items using `transform.relationship`. Relationships can link configs within the same scraper or across different scrapers.
+
+### Relationship Configuration
+
+| Field | Description |
+|-------|-------------|
+| `id` | Match by config ID (static or CEL expression) |
+| `external_id` | Match by external ID (static or CEL expression) |
+| `name` | Match by name (static or CEL expression) |
+| `type` | Match by config type (static or CEL expression) |
+| `filter` | CEL expression to select which configs this relationship applies to |
+| `parent` | If `true`, matched configs become parents of the filtered configs |
+| `expr` | CEL expression returning a list of relationship selectors |
+
+### Relationship Example
+
+```yaml title="relationships.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: database-with-relationships
+spec:
+  sql:
+    - connection: connection://postgres/production
+      type: Database::Table
+      id: $.table_id
+      name: $.table_name
+      transform:
+        relationship:
+          # Link tables to their parent schema
+          - filter: config_type == 'Database::Table'
+            type:
+              expr: "'Database::Schema'"
+            name:
+              expr: config.schema_name
+            parent: true
+
+          # Link tables to the database they belong to
+          - filter: config_type == 'Database::Table'
+            type:
+              expr: "'Database'"
+            external_id:
+              expr: config.database_id
+            parent: true
+
+          # Dynamic relationships via CEL expression
+          - filter: config_type == 'Database::Table' && has(config.foreign_keys)
+            expr: |
+              config.foreign_keys.map(fk, {
+                "type": "Database::Table",
+                "external_id": fk.referenced_table_id
+              })
+      query: |
+        SELECT
+          t.table_id,
+          t.table_name,
+          t.schema_name,
+          t.database_id,
+          (
+            SELECT json_agg(json_build_object(
+              'referenced_table_id', fk.referenced_table_id,
+              'column', fk.column_name
+            ))
+            FROM foreign_keys fk
+            WHERE fk.table_id = t.table_id
+          ) as foreign_keys
+        FROM tables t
+```
+
+## Locations & Aliases
+
+Assign geographic or organizational locations and alternative names to config items.
+
+### LocationOrAlias Configuration
+
+| Field | Description |
+|-------|-------------|
+| `type` | Match expression for config types (e.g., `Database::*`, `Application`) |
+| `filter` | CEL expression to further filter which configs this applies to |
+| `values` | List of location/alias values (supports Go templates) |
+| `withParent` | Inherit location/alias from parent config |
+
+```yaml title="locations-aliases.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: geo-aware-configs
+spec:
+  sql:
+    - connection: connection://postgres/production
+      type: Application
+      id: $.app_id
+      name: $.app_name
+      transform:
+        locations:
+          - type: Application
+            filter: config.region != ''
+            values:
+              - "{{.config.region}}"
+              - "{{.config.datacenter}}"
+
+          - type: Database::*
+            filter: config.availability_zone != ''
+            values:
+              - "{{.config.availability_zone}}"
+
+        aliases:
+          - type: Application
+            values:
+              - "{{.config.app_code}}"
+              - "{{.config.legacy_id}}"
+              - "app-{{.config.tenant_id}}-{{.config.app_id}}"
+      query: |
+        SELECT
+          app_id,
+          app_name,
+          app_code,
+          legacy_id,
+          tenant_id,
+          region,
+          datacenter,
+          availability_zone
+        FROM applications
+```
+
+## External Users, Groups & Roles
+
+Scrape IAM/RBAC data to track who has access to your configurations. This enables access reviews, compliance reporting, and security monitoring.
+
+### Data Structures
+
+**ExternalUser**
+| Field | Description |
+|-------|-------------|
+| `name` | Display name of the user |
+| `account_id` | Unique account identifier |
+| `user_type` | Type of user (e.g., `human`, `service`, `system`) |
+| `email` | Email address |
+| `aliases` | Alternative identifiers |
+
+**ExternalGroup**
+| Field | Description |
+|-------|-------------|
+| `name` | Group name |
+| `account_id` | Unique group identifier |
+| `group_type` | Type of group (e.g., `role`, `team`, `department`) |
+| `aliases` | Alternative identifiers |
+
+**ExternalRole**
+| Field | Description |
+|-------|-------------|
+| `name` | Role name |
+| `account_id` | Unique role identifier |
+| `role_type` | Type of role (e.g., `database`, `application`, `admin`) |
+| `description` | Role description |
+| `aliases` | Alternative identifiers |
+
+### Scraping Users and Roles
+
+```yaml title="users-roles.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: database-iam
+spec:
+  full: true
+  sql:
+    - connection: connection://postgres/production
+      type: Postgres::Database
+      id: $.database_name
+      transform:
+        full: true
+        script:
+          javascript: |+
+            var db = config.database;
+            var result = {
+              id: db.name,
+              name: db.name,
+              config: {
+                version: db.version,
+                encoding: db.encoding
+              },
+              // External users from database roles
+              external_users: db.users.map(function(u) {
+                return {
+                  name: u.username,
+                  account_id: u.username,
+                  user_type: u.is_service ? 'service' : 'human',
+                  email: u.email,
+                  aliases: [u.oid]
+                };
+              }),
+              // External groups (role groups)
+              external_groups: db.role_groups.map(function(g) {
+                return {
+                  name: g.group_name,
+                  account_id: g.group_name,
+                  group_type: 'role_group',
+                  aliases: [g.oid]
+                };
+              }),
+              // External roles
+              external_roles: db.roles.map(function(r) {
+                return {
+                  name: r.role_name,
+                  account_id: r.role_name,
+                  role_type: 'database_role',
+                  description: r.description,
+                  aliases: [r.oid]
+                };
+              }),
+              // User-group memberships
+              external_user_groups: db.memberships.map(function(m) {
+                return {
+                  external_user_id: m.user_id,
+                  external_group_id: m.group_id
+                };
+              })
+            };
+            JSON.stringify([result])
+      query: |
+        SELECT json_build_object(
+          'name', current_database(),
+          'version', version(),
+          'encoding', pg_encoding_to_char(encoding),
+          'users', (
+            SELECT json_agg(json_build_object(
+              'username', usename,
+              'oid', usesysid::text,
+              'is_service', usename LIKE 'svc_%',
+              'email', NULL
+            ))
+            FROM pg_user
+          ),
+          'role_groups', (
+            SELECT json_agg(json_build_object(
+              'group_name', rolname,
+              'oid', oid::text
+            ))
+            FROM pg_roles
+            WHERE rolcanlogin = false
+          ),
+          'roles', (
+            SELECT json_agg(json_build_object(
+              'role_name', rolname,
+              'oid', oid::text,
+              'description', pg_catalog.shobj_description(oid, 'pg_authid')
+            ))
+            FROM pg_roles
+          ),
+          'memberships', (
+            SELECT json_agg(json_build_object(
+              'user_id', m.member::regrole::text,
+              'group_id', m.roleid::regrole::text
+            ))
+            FROM pg_auth_members m
+          )
+        ) as database
+```
+
+## Config Access & Access Logs
+
+Track which users/groups have access to which configurations and monitor access patterns.
+
+### ConfigAccess
+
+Links users, groups, or roles to specific config items:
+
+| Field | Description |
+|-------|-------------|
+| `config_id` | ID of the config item |
+| `external_user_id` | User who has access |
+| `external_group_id` | Group that has access |
+| `external_role_id` | Role that grants access |
+
+### ConfigAccessLog
+
+Records access events for compliance and auditing:
+
+| Field | Description |
+|-------|-------------|
+| `config_id` | ID of the accessed config |
+| `external_user_id` | User who accessed the config |
+| `created_at` | Timestamp of access |
+| `mfa` | Whether MFA was used |
+| `properties` | Additional access metadata |
+
+```yaml title="access-tracking.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: access-audit
+spec:
+  full: true
+  sql:
+    - connection: connection://postgres/production
+      type: Application
+      id: $.app_id
+      transform:
+        full: true
+        script:
+          javascript: |+
+            var results = [];
+            for (var i = 0; i < config.rows.length; i++) {
+              var row = config.rows[i];
+              results.push({
+                id: row.app_id,
+                name: row.app_name,
+                config: row.settings,
+                // Config access permissions
+                config_access: row.permissions.map(function(p) {
+                  return {
+                    external_user_id: p.user_id,
+                    external_role_id: p.role_id
+                  };
+                }),
+                // Access logs from audit table
+                access_logs: row.access_logs.map(function(log) {
+                  return {
+                    external_user_id: log.user_id,
+                    created_at: log.accessed_at,
+                    mfa: log.mfa_used,
+                    properties: {
+                      ip_address: log.ip_address,
+                      action: log.action,
+                      user_agent: log.user_agent
+                    }
+                  };
+                })
+              });
+            }
+            JSON.stringify(results)
+      query: |
+        SELECT
+          a.app_id,
+          a.app_name,
+          a.settings,
+          (
+            SELECT json_agg(json_build_object(
+              'user_id', p.user_id,
+              'role_id', p.role_id
+            ))
+            FROM app_permissions p
+            WHERE p.app_id = a.app_id
+          ) as permissions,
+          (
+            SELECT json_agg(json_build_object(
+              'user_id', l.user_id,
+              'accessed_at', l.accessed_at,
+              'mfa_used', l.mfa_used,
+              'ip_address', l.ip_address,
+              'action', l.action,
+              'user_agent', l.user_agent
+            ))
+            FROM access_audit_log l
+            WHERE l.resource_id = a.app_id
+            AND l.accessed_at > NOW() - INTERVAL '7 days'
+          ) as access_logs
+        FROM applications a
+```
+
+## Comprehensive Example
+
+This example demonstrates all features working together: scraping application configs with users, roles, relationships, locations, changes, and access tracking.
+
+```yaml title="comprehensive-sql-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: comprehensive-app-scraper
+spec:
+  schedule: "*/30 * * * *"  # Every 30 minutes
+  full: true
+  retention:
+    changes:
+      count: 100
+    staleItemAge: 7d
+  sql:
+    - connection: connection://postgres/production
+      type: Application
+      id: $.app_id
+      name: $.app_name
+      labels:
+        environment: production
+        managed-by: config-db
+      tags:
+        - name: team
+          jsonpath: $.team_name
+        - name: criticality
+          jsonpath: $.criticality
+      transform:
+        full: true
+
+        # Assign locations based on region
+        locations:
+          - type: Application
+            filter: config.region != ''
+            values:
+              - "{{.config.region}}"
+              - "{{.config.datacenter}}"
+
+        # Create aliases for lookups
+        aliases:
+          - type: Application
+            values:
+              - "{{.config.app_code}}"
+              - "{{.config.legacy_id}}"
+
+        # Define relationships
+        relationship:
+          # Link to parent organization
+          - filter: config_type == 'Application'
+            type:
+              value: Organization
+            name:
+              expr: config.org_name
+            parent: true
+
+          # Link to dependent services
+          - filter: config_type == 'Application' && has(config.dependencies)
+            expr: |
+              config.dependencies.map(dep, {
+                "type": "Application",
+                "external_id": dep.app_id
+              })
+
+        # Map and filter changes
+        changes:
+          mapping:
+            - filter: change_type == 'SECURITY'
+              severity: high
+            - filter: change_type == 'DEPLOYMENT'
+              type: Deployment
+          exclude:
+            - change_type == 'HEALTHCHECK'
+
+        script:
+          javascript: |+
+            var results = [];
+            for (var i = 0; i < config.rows.length; i++) {
+              var row = config.rows[i];
+              results.push({
+                id: row.app_id,
+                name: row.app_name,
+                config: {
+                  version: row.version,
+                  environment: row.environment,
+                  settings: JSON.parse(row.settings_json || '{}'),
+                  region: row.region,
+                  datacenter: row.datacenter,
+                  app_code: row.app_code,
+                  legacy_id: row.legacy_id,
+                  org_name: row.org_name,
+                  dependencies: row.dependencies,
+                  team_name: row.team_name,
+                  criticality: row.criticality
+                },
+                // Changes from audit log
+                changes: (row.changes || []).map(function(c) {
+                  return {
+                    external_change_id: c.change_id,
+                    change_type: c.change_type,
+                    summary: c.description,
+                    severity: c.severity || 'info',
+                    created_by: c.changed_by,
+                    created_at: c.changed_at,
+                    details: c.details
+                  };
+                }),
+                // Users with access
+                external_users: (row.users || []).map(function(u) {
+                  return {
+                    name: u.display_name,
+                    account_id: u.user_id,
+                    user_type: u.user_type,
+                    email: u.email
+                  };
+                }),
+                // Roles
+                external_roles: (row.roles || []).map(function(r) {
+                  return {
+                    name: r.role_name,
+                    account_id: r.role_id,
+                    role_type: 'application',
+                    description: r.description
+                  };
+                }),
+                // Access permissions
+                config_access: (row.permissions || []).map(function(p) {
+                  return {
+                    external_user_id: p.user_id,
+                    external_role_id: p.role_id
+                  };
+                }),
+                // Recent access logs
+                access_logs: (row.access_logs || []).map(function(l) {
+                  return {
+                    external_user_id: l.user_id,
+                    created_at: l.accessed_at,
+                    mfa: l.mfa_used,
+                    properties: {
+                      ip: l.ip_address,
+                      action: l.action
+                    }
+                  };
+                })
+              });
+            }
+            JSON.stringify(results)
+
+      query: |
+        SELECT
+          a.app_id,
+          a.app_name,
+          a.app_code,
+          a.legacy_id,
+          a.version,
+          a.environment,
+          a.settings_json,
+          a.region,
+          a.datacenter,
+          o.org_name,
+          t.team_name,
+          a.criticality,
+
+          -- Dependencies
+          (
+            SELECT json_agg(json_build_object('app_id', d.dependency_app_id))
+            FROM app_dependencies d
+            WHERE d.app_id = a.app_id
+          ) as dependencies,
+
+          -- Recent changes
+          (
+            SELECT json_agg(json_build_object(
+              'change_id', c.change_id,
+              'change_type', c.change_type,
+              'description', c.description,
+              'severity', c.severity,
+              'changed_by', c.changed_by,
+              'changed_at', c.changed_at,
+              'details', c.details
+            ) ORDER BY c.changed_at DESC)
+            FROM app_changes c
+            WHERE c.app_id = a.app_id
+            AND c.changed_at > NOW() - INTERVAL '24 hours'
+          ) as changes,
+
+          -- Users with access
+          (
+            SELECT json_agg(DISTINCT json_build_object(
+              'user_id', u.user_id,
+              'display_name', u.display_name,
+              'user_type', u.user_type,
+              'email', u.email
+            ))
+            FROM users u
+            JOIN app_permissions p ON p.user_id = u.user_id
+            WHERE p.app_id = a.app_id
+          ) as users,
+
+          -- Available roles
+          (
+            SELECT json_agg(json_build_object(
+              'role_id', r.role_id,
+              'role_name', r.role_name,
+              'description', r.description
+            ))
+            FROM app_roles r
+            WHERE r.app_id = a.app_id
+          ) as roles,
+
+          -- Permission assignments
+          (
+            SELECT json_agg(json_build_object(
+              'user_id', p.user_id,
+              'role_id', p.role_id
+            ))
+            FROM app_permissions p
+            WHERE p.app_id = a.app_id
+          ) as permissions,
+
+          -- Access audit logs
+          (
+            SELECT json_agg(json_build_object(
+              'user_id', l.user_id,
+              'accessed_at', l.accessed_at,
+              'mfa_used', l.mfa_used,
+              'ip_address', l.ip_address,
+              'action', l.action
+            ) ORDER BY l.accessed_at DESC)
+            FROM access_logs l
+            WHERE l.resource_id = a.app_id
+            AND l.accessed_at > NOW() - INTERVAL '7 days'
+            LIMIT 100
+          ) as access_logs
+
+        FROM applications a
+        LEFT JOIN organizations o ON o.org_id = a.org_id
+        LEFT JOIN teams t ON t.team_id = a.team_id
+        WHERE a.is_active = true
+```
+
+## See Also
+
+- [PostgreSQL Scraper](./postgres) - PostgreSQL-specific examples
+- [SQL Server Scraper](./mssql) - SQL Server-specific examples
+- [ClickHouse Scraper](./clickhouse) - ClickHouse and cloud storage
+- [Retention](/docs/guide/config-db/concepts/retention) - Configure data retention
+- [Connections](/docs/reference/connections) - Database connection setup

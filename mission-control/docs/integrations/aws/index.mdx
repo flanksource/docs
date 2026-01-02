@@ -5,7 +5,15 @@ sidebar_custom_props:
 ---
 
 import DocCardList from '@theme/DocCardList';
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+import { Card, Cards } from '@site/../common/src/components/Card'
+
+export const toc = [
+  { value: 'Catalog', id: 'catalog', level: 2 },
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+  { value: 'Playbooks', id: 'playbooks', level: 2 },
+  { value: 'Notifications', id: 'notifications', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="scraper" />
@@ -14,13 +22,76 @@ import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/component
   <CapabilityBadge type="notifications" />
 </CapabilityBadges>
 
-Mission Control integrates with AWS to provide visibility into your cloud infrastructure. Use it to:
+Mission Control integrates with AWS to provide visibility into your cloud infrastructure, monitor resource health, and automate remediation workflows.
 
-- Discover and catalog EC2 instances, RDS databases, Lambda functions, and other AWS resources
-- Monitor S3 bucket availability, CloudWatch metrics, and service health
-- Track configuration changes across accounts and regions
+---
+
+<CapabilityHeading type="scraper" />
+
+Discover and catalog AWS resources with full change history and drift detection.
+
+**Use cases:**
+- Track EC2 instances, RDS databases, and Lambda functions across accounts and regions
+- Monitor S3 bucket policies and IAM configurations for compliance
 - Correlate AWS resources with Kubernetes workloads and Terraform state
-- Trigger automated remediation playbooks when health checks fail
-- Send alerts to SNS topics or integrate with AWS incident workflows
+- Detect configuration drift and unauthorized changes
+
+<Cards>
+  <Card title="AWS Scraper Reference" link="/docs/guide/config-db/scrapers/aws" />
+</Cards>
+
+---
+
+<CapabilityHeading type="healthcheck" />
+
+Monitor AWS services and endpoints with automated health checks.
+
+**Use cases:**
+- Verify S3 bucket availability and object integrity
+- Check CloudWatch metrics and alarms status
+- Monitor SQS queue depths and message latency
+- Test Lambda function invocations and response times
+
+<Cards>
+  <Card title="S3 Health Check" link="/docs/guide/canary-checker/reference/s3-bucket" />
+  <Card title="CloudWatch Check" link="/docs/guide/canary-checker/reference/cloudwatch" />
+</Cards>
+
+---
+
+<CapabilityHeading type="playbook" />
+
+Automate AWS operations and incident remediation with playbooks.
+
+**Use cases:**
+- Auto-restart failed EC2 instances or ECS tasks
+- Scale Auto Scaling Groups based on custom metrics
+- Rotate secrets and update SSM parameters
+- Trigger AWS Lambda functions for custom remediation
+
+<Cards>
+  <Card title="AWS CLI Action" link="/docs/guide/playbooks/actions/aws" />
+  <Card title="Exec Action" link="/docs/guide/playbooks/actions/exec" />
+</Cards>
+
+---
+
+<CapabilityHeading type="notifications" />
+
+Send alerts to AWS notification services.
+
+**Use cases:**
+- Publish health check failures to SNS topics
+- Create CloudWatch Events for config changes
+- Integrate with AWS Incident Manager workflows
+- Trigger Step Functions for complex alerting pipelines
+
+<Cards>
+  <Card title="SNS Notifications" link="/docs/guide/notifications/channels/sns" />
+</Cards>
+
+---
+
+## Sub-pages
 
 <DocCardList />

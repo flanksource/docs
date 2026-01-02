@@ -460,8 +460,9 @@ ol > li > :first-child:where(h1, h2, h3, h4, h5, h6) {
   --lh: calc(1em * var(--sl-line-height-headings));
 }
 
-div.inline-block {
-  @apply flex flex-row;
+
+.inline-block {
+  display: inline-block !important;
 }
 
 details table thead {

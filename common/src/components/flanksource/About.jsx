@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  FaEye,
-  FaBolt,
-  FaBrain,
-  FaLinkedin
-} from 'react-icons/fa';
+import { FaLinkedin } from 'react-icons/fa';
 import Link from '@docusaurus/Link';
 import Navigation from './Navigation';
 const About = () => {
@@ -60,27 +55,76 @@ const About = () => {
 
   const philosophy = [
     {
-      icon: <FaEye className="w-12 h-12 text-blue-600" />,
-      title: "Unified Context",
-      description: "You cannot fix what you cannot see. We believe every incident requires a consolidated view of Health, Configuration, and Changes."
+      icon: (
+        <svg className="w-16 h-16 text-zinc-500" viewBox="0 0 24 24" fill="none">
+          <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1">
+            <path d="M6 3v12" />
+            <circle cx="18" cy="6" r="3" />
+            <circle cx="6" cy="18" r="3" />
+            <path d="M18 9a9 9 0 0 1-9 9" />
+          </g>
+        </svg>
+      ),
+      title: "Trunk-Based, GitOps-First",
+      description: "One branch, one truth. We commit to main, gate merges with E2E tests, and deploy declaratively. No long-lived branches, no merge conflicts, no surprises."
     },
     {
-      icon: <FaBolt className="w-12 h-12 text-blue-600" />,
-      title: "Action, Not Just Observation",
-      description: (
-        <>
-          Data without action is noise. We build <span className="font-mono">Playbooks</span> that integrate into <span className="font-mono">GitOps</span> workflows, allowing teams to fix issues as fast as they find them.
-        </>
-      )
+      icon: (
+        <svg className="w-16 h-16 text-zinc-500" viewBox="0 0 24 24" fill="none">
+          <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="m12 14l4-4M3.34 19a10 10 0 1 1 17.32 0" />
+        </svg>
+      ),
+      title: "Fast Feedback, Clear Ownership",
+      description: "Minutes from commit to production. Every service has an owner, every alert has context, and every deploy is traceable. We optimize for iteration speed."
     },
     {
-      icon: <FaBrain className="w-12 h-12 text-blue-600" />,
-      title: "AI-Native Architecture",
-      description: (
-        <>
-          We build for the future. Our <span className="font-mono">MCP</span> (Model Context Protocol) server feeds real-time, summarized data to AI agents, making troubleshooting automated and conversational.
-        </>
-      )
+      icon: (
+        <svg className="w-16 h-16 text-zinc-500" viewBox="0 0 24 24" fill="none">
+          <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1">
+            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+            <path d="m9 12l2 2l4-4" />
+          </g>
+        </svg>
+      ),
+      title: "Simple and Operable",
+      description: "Complexity is debt. We choose boring technology, write code that's easy to debug at 3am, and build systems that explain themselves. If it's hard to operate, it's wrong."
+    }
+  ];
+
+  const culture = [
+    {
+      icon: (
+        <svg className="w-12 h-12 text-zinc-500" viewBox="0 0 24 24" fill="none">
+          <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20M2 12h20" />
+          </g>
+        </svg>
+      ),
+      title: "Remote-First, Not Remote-Friendly",
+      description: "Our team spans Tel Aviv, South Africa, India, and Nepal. We default to async communication, document decisions in writing, and trust each other to manage time across timezones."
+    },
+    {
+      icon: (
+        <svg className="w-12 h-12 text-zinc-500" viewBox="0 0 24 24" fill="none">
+          <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="6" />
+            <circle cx="12" cy="12" r="2" />
+          </g>
+        </svg>
+      ),
+      title: "Own the Problem, Not Just the Task",
+      description: "We hire engineers who can take a problem from discovery to production. No ticket queues, no handoffs—you debug it, you ship it, you own it."
+    },
+    {
+      icon: (
+        <svg className="w-12 h-12 text-zinc-500" viewBox="0 0 24 24" fill="none">
+          <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="m18 16l4-4l-4-4M6 8l-4 4l4 4m8.5-12l-5 16" />
+        </svg>
+      ),
+      title: "Build in Public",
+      description: "Canary Checker, Karina, and our core libraries are open source. We believe transparency isn't just a value—it's how great software gets built."
     }
   ];
 
@@ -95,8 +139,11 @@ const About = () => {
           />
         )}
       </div>
-      <p className="text-xl font-semibold text-gray-900 mb-2 text-center">{person.name}</p>
-      <p className="text-blue-600 font-medium mb-3 text-center">{person.role}</p>
+      <p className="text-xl font-semibold text-gray-900 mb-2 text-center justify-center">{person.name}</p>
+      <p className="text-blue-600 font-medium mb-1 text-center">{person.role}</p>
+      {person.location && (
+        <p className="text-gray-500 text-sm italic mb-3 text-center">{person.location}</p>
+      )}
       {person.linkedin && person.linkedin !== '#' && (
         <div className="flex justify-center">
           <a
@@ -150,8 +197,8 @@ const About = () => {
             </div>
             <div className="h-full min-h-[400px] rounded-lg overflow-hidden border-2 border-gray-200">
               <img
-                src="/img/flanksource/generated_image_1763641910004_1.png"
-                alt="From Consulting Chaos to Product Clarity"
+                src="/img/born-in-terminal.png"
+                alt="Born in the Terminal - Developer working late with terminal code"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -164,7 +211,7 @@ const About = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-bold text-gray-900 mb-4 text-center">How We Build</h2>
           <p className="text-xl text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-            We believe the true cost of software isn't writing it—it's running it.
+            Engineering principles that let us ship fast without breaking things.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
             {philosophy.map((item, index) => (
@@ -172,8 +219,8 @@ const About = () => {
                 <div className="flex justify-center mb-6">
                   {item.icon}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">{item.title}</h3>
-                <p className="text-gray-600 leading-relaxed text-center">{item.description}</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-4 flex justify-center">{item.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
@@ -183,23 +230,20 @@ const About = () => {
       {/* Culture Section */}
       <section className="py-20 bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Engineered for Autonomy</h2>
+          <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Built for Builders</h2>
           <p className="text-lg text-gray-700 mb-8 text-center max-w-4xl mx-auto leading-relaxed">
-            We operate with the precision of a distributed system. We are a <strong>Remote-First</strong> company with a culture built on intellectual honesty and "Source-Open" values.
+            We operate like a well-architected distributed system—autonomous nodes, clear interfaces, shared state.
           </p>
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Asynchronous by Design</h3>
-              <p className="text-gray-600">We document everything. We value deep work over endless meetings.</p>
-            </div>
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Open Source First</h3>
-              <p className="text-gray-600">We contribute back. Tools like <em>Canary Checker</em> and <em>Karina</em> are our gift to the community.</p>
-            </div>
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Output Over Hours</h3>
-              <p className="text-gray-600">We don't care when you work; we care about the quality of the code you ship and the problems you solve.</p>
-            </div>
+            {culture.map((item, index) => (
+              <div key={index} className="bg-white rounded-lg p-6 shadow-md">
+                <div className="flex justify-center mb-4">
+                  {item.icon}
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3 flex justify-center">{item.title}</h3>
+                <p className="text-gray-600 ">{item.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

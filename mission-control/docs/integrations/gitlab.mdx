@@ -5,21 +5,28 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Playbooks', id: 'playbooks', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="playbook" />
 </CapabilityBadges>
 
-Mission Control integrates with GitLab for GitOps workflows and repository operations. Use it to:
+Mission Control integrates with GitLab for GitOps workflows and repository operations.
 
+---
+
+<CapabilityHeading type="playbook" />
+
+**Use cases:**
 - Clone repositories and push changes from playbooks
 - Create merge requests with reviewers and assignees
 - Commit configuration changes back to Git repositories
 - Integrate with GitLab CI/CD pipelines through GitOps
 - Support both GitLab.com and self-hosted GitLab instances
-
-## Playbook Actions
 
 Perform Git operations against GitLab repositories in playbooks.
 
@@ -54,7 +61,7 @@ spec:
               image: {{.params.image}}
 ```
 
-### Create Merge Request
+<details summary="Create Merge Request">
 
 ```yaml title="gitlab-mr-playbook.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -95,8 +102,9 @@ spec:
           assignees:
             - infrastructure-lead
 ```
+</details>
 
-### Self-Hosted GitLab
+<details summary="Self-Hosted GitLab">
 
 ```yaml title="gitlab-selfhosted-playbook.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -121,8 +129,9 @@ spec:
           email: automation@example.com
           message: "Automated update"
 ```
+</details>
 
-### SSH Authentication
+<details summary="SSH Authentication">
 
 ```yaml title="gitlab-ssh-playbook.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -152,6 +161,7 @@ spec:
           email: automation@example.com
           message: "Update via SSH"
 ```
+</details>
 
 ## Configuration Options
 
@@ -196,13 +206,13 @@ Create a Personal Access Token or Project Access Token with these scopes:
 ## Next Steps
 
 <Cards>
-  <Card title="GitHub Integration" href="/docs/integrations/github">
+  <Card icon="github" title="GitHub Integration" href="/docs/integrations/github">
     Similar integration for GitHub repositories
   </Card>
-  <Card title="GitOps Actions" href="/docs/guide/playbooks/actions/gitops">
+  <Card icon="playbook" title="GitOps Actions" href="/docs/guide/playbooks/actions/gitops">
     GitOps action reference for playbooks
   </Card>
-  <Card title="Flux Integration" href="/docs/integrations/flux">
+  <Card icon="flux" title="Flux Integration" href="/docs/integrations/flux">
     GitOps with Flux CD
   </Card>
 </Cards>

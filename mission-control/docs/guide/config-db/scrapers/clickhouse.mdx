@@ -228,3 +228,380 @@ spec:
       type: LogEntry
       id: $.timestamp
 ```
+
+## Users and Roles
+
+Scrape ClickHouse users, roles, and their permissions from system tables:
+
+```yaml title="clickhouse-iam.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: clickhouse-iam
+spec:
+  full: true
+  clickhouse:
+    - clickhouseURL: "clickhouse://admin:password@localhost:9000/system"
+      type: Clickhouse::Instance
+      id: clickhouse_iam
+      transform:
+        full: true
+        script:
+          javascript: |+
+            var data = config;
+            var result = {
+              id: 'clickhouse_iam',
+              name: 'ClickHouse IAM',
+              config: {
+                version: data.version
+              },
+              external_users: (data.users || []).map(function(u) {
+                return {
+                  name: u.name,
+                  account_id: u.id,
+                  user_type: u.storage === 'local_directory' ? 'local' : 'ldap',
+                  aliases: [u.id]
+                };
+              }),
+              external_roles: (data.roles || []).map(function(r) {
+                return {
+                  name: r.name,
+                  account_id: r.id,
+                  role_type: 'clickhouse_role',
+                  aliases: [r.id]
+                };
+              }),
+              external_user_groups: (data.role_grants || []).map(function(g) {
+                return {
+                  external_user_id: g.user_name || g.role_name,
+                  external_group_id: g.granted_role_name
+                };
+              })
+            };
+            JSON.stringify([result])
+      query: |
+        SELECT
+          version() as version,
+          (
+            SELECT groupArray(tuple(id, name, storage))
+            FROM system.users
+          ) as users,
+          (
+            SELECT groupArray(tuple(id, name, storage))
+            FROM system.roles
+          ) as roles,
+          (
+            SELECT groupArray(tuple(user_name, role_name, granted_role_name))
+            FROM system.role_grants
+          ) as role_grants
+        FORMAT JSONEachRow
+```
+
+## Query Log for Access Tracking
+
+Use the system.query_log table to track who accessed what data:
+
+```yaml title="clickhouse-access-logs.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: clickhouse-access-audit
+spec:
+  full: true
+  schedule: "*/15 * * * *"
+  clickhouse:
+    - clickhouseURL: "clickhouse://admin:password@localhost:9000/system"
+      type: Clickhouse::Database
+      id: $.database
+      transform:
+        full: true
+        script:
+          javascript: |+
+            var databases = {};
+            var rows = config.rows || [];
+            rows.forEach(function(row) {
+              var db = row.database || 'default';
+              if (!databases[db]) {
+                databases[db] = {
+                  id: db,
+                  name: db,
+                  config: { database: db },
+                  access_logs: []
+                };
+              }
+              databases[db].access_logs.push({
+                external_user_id: row.user,
+                created_at: row.event_time,
+                properties: {
+                  query_type: row.type,
+                  tables: row.tables,
+                  read_rows: row.read_rows,
+                  read_bytes: row.read_bytes,
+                  client_hostname: row.client_hostname,
+                  client_name: row.client_name,
+                  query_duration_ms: row.query_duration_ms
+                }
+              });
+            });
+            JSON.stringify(Object.values(databases))
+      query: |
+        SELECT
+          event_time,
+          user,
+          type,
+          query_duration_ms,
+          read_rows,
+          read_bytes,
+          databases as database,
+          tables,
+          client_hostname,
+          client_name
+        FROM system.query_log
+        WHERE event_time > now() - INTERVAL 1 HOUR
+          AND type IN ('QueryFinish', 'QueryStart')
+          AND user != 'default'
+        ORDER BY event_time DESC
+        LIMIT 1000
+        FORMAT JSONEachRow
+```
+
+## Change Tracking from MergeTree Tables
+
+Track changes in MergeTree tables using the `_version` column or custom audit columns:
+
+```yaml title="clickhouse-changes.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: clickhouse-config-changes
+spec:
+  full: true
+  clickhouse:
+    - clickhouseURL: "clickhouse://user:password@localhost:9000/config_db"
+      type: Configuration
+      id: $.config_id
+      transform:
+        full: true
+        script:
+          javascript: |+
+            var results = [];
+            var rows = config.rows || [];
+            rows.forEach(function(row) {
+              results.push({
+                id: row.config_id,
+                name: row.config_name,
+                config: {
+                  value: row.config_value,
+                  environment: row.environment
+                },
+                changes: (row.history || []).map(function(h) {
+                  return {
+                    external_change_id: row.config_id + '_' + h.version,
+                    change_type: h.change_type,
+                    summary: h.description,
+                    created_by: h.changed_by,
+                    created_at: h.changed_at,
+                    details: {
+                      old_value: h.old_value,
+                      new_value: h.new_value
+                    }
+                  };
+                })
+              });
+            });
+            JSON.stringify(results)
+      query: |
+        SELECT
+          config_id,
+          config_name,
+          config_value,
+          environment,
+          (
+            SELECT groupArray(tuple(
+              version,
+              change_type,
+              description,
+              changed_by,
+              changed_at,
+              old_value,
+              new_value
+            ))
+            FROM config_history ch
+            WHERE ch.config_id = c.config_id
+              AND ch.changed_at > now() - INTERVAL 24 HOUR
+            ORDER BY changed_at DESC
+          ) as history
+        FROM configurations c
+        WHERE is_active = 1
+        FORMAT JSONEachRow
+```
+
+## Database and Table Inventory
+
+Scrape ClickHouse database structure and table metadata:
+
+```yaml title="clickhouse-inventory.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: clickhouse-inventory
+spec:
+  clickhouse:
+    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+      type: Clickhouse::Database
+      id: $.name
+      name: $.name
+      query: |
+        SELECT
+          name,
+          engine,
+          data_path,
+          metadata_path,
+          uuid
+        FROM system.databases
+        WHERE name NOT IN ('system', 'INFORMATION_SCHEMA', 'information_schema')
+
+    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+      type: Clickhouse::Table
+      id: $.table_id
+      name: $.name
+      transform:
+        relationship:
+          - filter: config_type == 'Clickhouse::Table'
+            type:
+              value: Clickhouse::Database
+            name:
+              expr: config.database
+            parent: true
+      query: |
+        SELECT
+          concat(database, '.', name) as table_id,
+          database,
+          name,
+          engine,
+          total_rows,
+          total_bytes,
+          lifetime_rows,
+          lifetime_bytes,
+          metadata_modification_time,
+          create_table_query,
+          partition_key,
+          sorting_key,
+          primary_key
+        FROM system.tables
+        WHERE database NOT IN ('system', 'INFORMATION_SCHEMA', 'information_schema')
+```
+
+## Cluster Status
+
+Monitor ClickHouse cluster health and replication:
+
+```yaml title="clickhouse-cluster.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: clickhouse-cluster
+spec:
+  clickhouse:
+    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+      type: Clickhouse::Cluster
+      id: $.cluster
+      name: $.cluster
+      health: |
+        {{- if eq .total_replicas .active_replicas }}healthy
+        {{- else }}warning{{- end }}
+      query: |
+        SELECT
+          cluster,
+          count() as total_replicas,
+          countIf(is_local = 1) as local_replicas,
+          countIf(is_local = 0) as remote_replicas,
+          sum(errors_count) as total_errors,
+          groupArray(host_name) as hosts
+        FROM system.clusters
+        GROUP BY cluster
+
+    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+      type: Clickhouse::ReplicatedTable
+      id: $.table_id
+      name: $.table
+      status: $.is_leader
+      health: |
+        {{- if and (eq .is_readonly 0) (lt .absolute_delay 300) }}healthy
+        {{- else if lt .absolute_delay 3600 }}warning
+        {{- else }}unhealthy{{- end }}
+      query: |
+        SELECT
+          concat(database, '.', table) as table_id,
+          database,
+          table,
+          engine,
+          is_leader,
+          is_readonly,
+          is_session_expired,
+          future_parts,
+          parts_to_check,
+          zookeeper_path,
+          replica_name,
+          replica_path,
+          columns_version,
+          queue_size,
+          inserts_in_queue,
+          merges_in_queue,
+          log_pointer,
+          last_queue_update,
+          absolute_delay,
+          total_replicas,
+          active_replicas
+        FROM system.replicas
+```
+
+## Performance Metrics
+
+Track ClickHouse performance and resource usage:
+
+```yaml title="clickhouse-metrics.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: clickhouse-metrics
+spec:
+  clickhouse:
+    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+      type: Clickhouse::Metrics
+      id: clickhouse_metrics
+      name: "ClickHouse Performance Metrics"
+      query: |
+        SELECT
+          (SELECT value FROM system.metrics WHERE metric = 'Query') as active_queries,
+          (SELECT value FROM system.metrics WHERE metric = 'Merge') as active_merges,
+          (SELECT value FROM system.metrics WHERE metric = 'ReplicatedFetch') as replicated_fetches,
+          (SELECT value FROM system.metrics WHERE metric = 'ReplicatedSend') as replicated_sends,
+          (SELECT value FROM system.metrics WHERE metric = 'TCPConnection') as tcp_connections,
+          (SELECT value FROM system.metrics WHERE metric = 'HTTPConnection') as http_connections,
+          (SELECT value FROM system.metrics WHERE metric = 'MemoryTracking') as memory_usage_bytes,
+          (SELECT sum(value) FROM system.asynchronous_metrics WHERE metric LIKE '%CacheUsed%') as cache_used_bytes
+
+    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+      type: Clickhouse::DiskUsage
+      id: $.name
+      name: $.name
+      health: |
+        {{- $pct := (mulf (divf .free_space .total_space) 100) }}
+        {{- if gt $pct 20.0 }}healthy
+        {{- else if gt $pct 10.0 }}warning
+        {{- else }}unhealthy{{- end }}
+      query: |
+        SELECT
+          name,
+          path,
+          free_space,
+          total_space,
+          keep_free_space
+        FROM system.disks
+```
+
+## See Also
+
+- [SQL Scraper](./sql) - Full documentation on transforms, relationships, and access tracking
+- [ClickHouse Documentation](https://clickhouse.com/docs) - Official ClickHouse docs

@@ -5,21 +5,29 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+  { value: 'Exposed Metrics', id: 'exposed-metrics', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="healthcheck" />
 </CapabilityBadges>
 
-Mission Control integrates with Prometheus to monitor your metrics infrastructure. Use it to:
+Mission Control integrates with Prometheus to monitor your metrics infrastructure.
 
+---
+
+<CapabilityHeading type="healthcheck" />
+
+**Use cases:**
 - Execute PromQL queries against Prometheus endpoints and validate results
 - Alert when metric thresholds are breached or queries return unexpected values
 - Monitor Prometheus availability and query performance
 - Validate SLO/SLI metrics are within acceptable ranges
 - Detect anomalies by checking metric values against expected baselines
-
-## Health Checks
 
 ### Example
 
@@ -42,7 +50,7 @@ spec:
         expr: results[0] < 1  # Less than 1% error rate
 ```
 
-### Query with Labels
+<details summary="Query with Labels">
 
 ```yaml title="prometheus-labels-check.yaml"
 apiVersion: canaries.flanksource.com/v1
@@ -58,14 +66,65 @@ spec:
       test:
         expr: results[0] > 20  # At least 20% memory available
 ```
+</details>
+
+## Exposed Metrics
+
+Mission Control exposes Prometheus metrics for monitoring health checks, notifications, and configuration scraping.
+
+### ServiceMonitor Setup
+
+Enable Prometheus scraping via ServiceMonitor:
+
+```bash
+helm install mission-control flanksource/mission-control \
+  --set serviceMonitor=true
+```
+
+### Health Check Metrics
+
+| Metric | Type | Description |
+|--------|------|-------------|
+| `canary_check` | Gauge | Pass (1) or fail (0) for each check |
+| `canary_check_success_count` | Counter | Total successful check executions |
+| `canary_check_failed_count` | Counter | Total failed check executions |
+| `canary_check_info` | Gauge | Check metadata (name, namespace, type) |
+| `canary_check_duration` | Histogram | Check execution duration in seconds |
+
+Labels: `canary_name`, `key`, `name`, `namespace`, `owner`, `severity`, `type`
+
+### Notification Metrics
+
+| Metric | Type | Description |
+|--------|------|-------------|
+| `notification_sent_total` | Counter | Notifications sent by recipient |
+| `notification_send_error_total` | Counter | Failed notification attempts |
+| `notification_send_duration_seconds` | Histogram | Notification delivery latency |
+
+### Scraper Metrics
+
+| Metric | Type | Description |
+|--------|------|-------------|
+| `scraper_added` | Counter | Config items added per scrape |
+| `scraper_updated` | Counter | Config items updated per scrape |
+| `scraper_deleted` | Counter | Config items deleted per scrape |
+| `config_changes` | Counter | Changes detected by type |
+| `temp_cache_hit` | Counter | Cache lookups found |
+| `temp_cache_miss` | Counter | Cache lookups requiring DB query |
+| `kubernetes_informer_events` | Counter | Kubernetes watch events received |
+| `incremental_scrape_event` | Histogram | Incremental scrape duration |
+
+Labels: `scraper_id`, `kind`, `config_type`
+
+For the complete metrics reference, see the [Canary Checker metrics documentation](/canary-checker/concepts/metrics).
 
 ## Next Steps
 
 <Cards>
-  <Card title="Health Check Reference" href="/canary-checker/docs/reference/prometheus">
-    Prometheus health check configuration options
+  <Card icon="grafana" title="Grafana Dashboards" href="/docs/integrations/grafana#dashboards">
+    Pre-built dashboards for visualizing these metrics
   </Card>
-  <Card title="Grafana Integration" href="/docs/integrations/grafana">
-    Visualize Mission Control data in Grafana
+  <Card icon="http" title="HTTP Health Checks" href="/docs/integrations/http">
+    Monitor HTTP endpoints and APIs
   </Card>
 </Cards>

@@ -5,21 +5,28 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Playbooks', id: 'playbooks', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="playbook" />
 </CapabilityBadges>
 
-Mission Control integrates with Grafana Loki to query and stream logs in playbooks. Use it to:
+Mission Control integrates with Grafana Loki to query and stream logs in playbooks.
 
+---
+
+<CapabilityHeading type="playbook" />
+
+**Use cases:**
 - Query logs using LogQL for incident investigation
 - Stream real-time logs from pods and applications
 - Correlate log entries with health check failures
 - Include log context in playbook diagnostics
 - Search across multiple log sources and labels
-
-## Playbook Actions
 
 Query logs from Loki as part of automated diagnostics and troubleshooting.
 
@@ -45,7 +52,7 @@ spec:
           limit: 100
 ```
 
-### Query with Authentication
+<details summary="Query with Authentication">
 
 ```yaml title="loki-auth-playbook.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -71,8 +78,9 @@ spec:
           query: '{job="kubernetes"}'
           since: 1h
 ```
+</details>
 
-### Dynamic Query Based on Context
+<details summary="Dynamic Query Based on Context">
 
 ```yaml title="loki-dynamic-playbook.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -94,8 +102,9 @@ spec:
           since: 30m
           limit: 500
 ```
+</details>
 
-### Stream Logs
+<details summary="Stream Logs">
 
 Stream logs in real-time for live debugging:
 
@@ -114,6 +123,7 @@ spec:
           stream: true
           limit: 50
 ```
+</details>
 
 ## Configuration Options
 
@@ -150,10 +160,10 @@ rate({app="api"} |= "error" [1m])
 ## Next Steps
 
 <Cards>
-  <Card title="Playbook Actions" href="/docs/guide/playbooks/actions">
+  <Card icon="playbook" title="Playbook Actions" href="/docs/guide/playbooks">
     All available playbook actions
   </Card>
-  <Card title="Grafana Integration" href="/docs/integrations/grafana">
+  <Card icon="grafana" title="Grafana Integration" href="/docs/integrations/grafana">
     Monitor Grafana data sources
   </Card>
 </Cards>

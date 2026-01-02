@@ -6,6 +6,7 @@ import HowItWorksDiagram from '@site/src/components/HowItWorksDiagram';
 import Helm from '@site/src/components/Helm';
 import { FaQuestionCircle } from 'react-icons/fa';
 import TerminalOutput from '@site/src/components/TerminalOutput';
+import QueryResponseChat from '@flanksource/facet/QueryResponseChat';
 import { Hero } from './Hero';
 import CTA from './CTA';
 import { Feature } from '../Feature';
@@ -16,6 +17,11 @@ import {
   FaRocket,
   FaBolt
 } from 'react-icons/fa';
+import {
+  IoServerOutline,
+  IoCodeSlashOutline,
+  IoShieldCheckmarkOutline
+} from 'react-icons/io5';
 import {
   FiLayers,
   FiClock,
@@ -492,21 +498,22 @@ const MissionControlPage = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-lg p-8 border border-gray-700 shadow-2xl">
-            <div className="font-mono text-sm">
-              <div className="mb-6">
-                <div className="text-gray-400 mb-2"># AI Agent Query</div>
-                <div className="text-blue-400">&gt; "Why is the payments-service failing?"</div>
-              </div>
-
-              <div>
-                <div className="text-gray-400 mb-2"># Mission Control Response (via MCP)</div>
-                <div className="text-green-400">&gt; "payments-service is degraded.</div>
-                <div className="text-green-400 ml-2">&gt; Cause: Config change detected 10m ago (commit a1b2c3).</div>
-                <div className="text-green-400 ml-2">&gt; Error: 'Connection refused' on DB port 5432."</div>
-              </div>
-            </div>
-          </div>
+          <QueryResponseChat
+            userQuery="Why is the payments-service failing3?"
+            mcpTools={[
+              {
+                tool: 'search_catalog',
+                description: 'type=Kubernetes::Pod name=payment* health=unhealthy',
+                result: 'Found 3 replicas, 2 in CrashLoopBackOff',
+              },
+              {
+                tool: 'get_config',
+                description: 'config_id=payment-service',
+                result: 'Config change detected 10m ago (commit a1b2c3)',
+              },
+            ]}
+            aiResponse="payments-service is degraded. Cause: Config change detected 10m ago (commit a1b2c3). "
+          />
         </div>
       </section>
 
@@ -526,45 +533,45 @@ const MissionControlPage = () => {
             <HowItWorksDiagram />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-            <div className="text-center p-5 bg-blue-50 rounded-xl border-2 border-blue-200">
-              <div className="flex justify-center mb-3">
-                <div className="w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  1
-                </div>
+          <div className="flex flex-col gap-4 mt-8 max-w-2xl mx-auto">
+            <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl border-2 border-blue-200">
+              <div className="w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                1
               </div>
-              <h3 className="font-bold text-base text-gray-900 mb-1">Discover</h3>
-              <p className="text-gray-600 text-xs">Continuously scrape and discover resources from AWS, Kubernetes, Git, and monitoring systems</p>
+              <div>
+                <h3 className="font-bold text-base text-gray-900">Discover</h3>
+                <p className="text-gray-600 text-xs">Continuously scrape and discover resources from AWS, Kubernetes, Git, and monitoring systems</p>
+              </div>
             </div>
 
-            <div className="text-center p-5 bg-amber-50 rounded-xl border-2 border-amber-200">
-              <div className="flex justify-center mb-3">
-                <div className="w-9 h-9 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  2
-                </div>
+            <div className="flex items-center gap-4 p-4 bg-amber-50 rounded-xl border-2 border-amber-200">
+              <div className="w-9 h-9 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                2
               </div>
-              <h3 className="font-bold text-base text-gray-900 mb-1">Analyze</h3>
-              <p className="text-gray-600 text-xs">Correlate changes, health status, diffs, and alerts to understand the full context</p>
+              <div>
+                <h3 className="font-bold text-base text-gray-900">Analyze</h3>
+                <p className="text-gray-600 text-xs">Correlate changes, health status, diffs, and alerts to understand the full context</p>
+              </div>
             </div>
 
-            <div className="text-center p-5 bg-purple-50 rounded-xl border-2 border-purple-200">
-              <div className="flex justify-center mb-3">
-                <div className="w-9 h-9 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  3
-                </div>
+            <div className="flex items-center gap-4 p-4 bg-purple-50 rounded-xl border-2 border-purple-200">
+              <div className="w-9 h-9 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                3
               </div>
-              <h3 className="font-bold text-base text-gray-900 mb-1">Playbooks</h3>
-              <p className="text-gray-600 text-xs">Automate responses with AI-assisted playbooks via MCP Server with built-in guardrails</p>
+              <div>
+                <h3 className="font-bold text-base text-gray-900">Playbooks</h3>
+                <p className="text-gray-600 text-xs">Automate responses with AI-assisted playbooks via MCP Server with built-in guardrails</p>
+              </div>
             </div>
 
-            <div className="text-center p-5 bg-green-50 rounded-xl border-2 border-green-200">
-              <div className="flex justify-center mb-3">
-                <div className="w-9 h-9 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  4
-                </div>
+            <div className="flex items-center gap-4 p-4 bg-green-50 rounded-xl border-2 border-green-200">
+              <div className="w-9 h-9 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                4
               </div>
-              <h3 className="font-bold text-base text-gray-900 mb-1">GitOps</h3>
-              <p className="text-gray-600 text-xs">Deploy changes via Git commits and Kubernetes apply, completing the feedback loop</p>
+              <div>
+                <h3 className="font-bold text-base text-gray-900">GitOps</h3>
+                <p className="text-gray-600 text-xs">Deploy changes via Git commits and Kubernetes apply, completing the feedback loop</p>
+              </div>
             </div>
           </div>
         </div>
@@ -599,30 +606,73 @@ const MissionControlPage = () => {
       </section>
 
       {/* Common Questions */}
-      <section className="bg-gray-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+      <section className="bg-gradient-to-b from-gray-50 to-white py-20 overflow-hidden">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">
               Quickly answer questions like:
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex flex-wrap justify-center gap-3 relative">
             {[
-              "Did anything break that would prevent us from deploying new workloads?",
-              "What changed recently at either the infra, app, code or configuration level?",
-              "What is the compliance level of my application against organisational policies?",
-              "Where can I find all the configuration and log files for an app?",
-              "What is the health of my application?",
-              "Did any applications break after we upgraded the platform?"
-            ].map((question, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-                <div className="flex items-start">
-                  <FaQuestionCircle className="text-blue-600 text-xl mr-3 mt-1 flex-shrink-0" />
-                  <p className="text-gray-700">{question}</p>
+              { q: "Did anything break?", persona: "DevOps", size: "lg", rotate: "-2" },
+              { q: "What changed recently?", persona: "Developer", size: "md", rotate: "1" },
+              { q: "Is my app compliant?", persona: "Security", size: "sm", rotate: "-1" },
+              { q: "Where are the logs?", persona: "Developer", size: "md", rotate: "2" },
+              { q: "What's the health status?", persona: "DevOps", size: "lg", rotate: "-1" },
+              { q: "Who approved this change?", persona: "Security", size: "sm", rotate: "1" },
+              { q: "Why is prod down?", persona: "DevOps", size: "xl", rotate: "-2" },
+              { q: "What secrets are exposed?", persona: "Security", size: "md", rotate: "2" },
+              { q: "Can I deploy safely?", persona: "Developer", size: "lg", rotate: "-1" },
+              { q: "What broke after the upgrade?", persona: "DevOps", size: "md", rotate: "1" },
+              { q: "Which pods are failing?", persona: "Developer", size: "sm", rotate: "-2" },
+              { q: "Are we SOC2 compliant?", persona: "Security", size: "lg", rotate: "1" },
+              { q: "What's using all the CPU?", persona: "DevOps", size: "md", rotate: "-1" },
+              { q: "Who has access?", persona: "Security", size: "sm", rotate: "2" },
+              { q: "What config changed?", persona: "Developer", size: "md", rotate: "-2" }
+            ].map((item, index) => {
+              const personaStyles = {
+                DevOps: "bg-blue-100 text-blue-700 border-blue-200",
+                Developer: "bg-purple-100 text-purple-700 border-purple-200",
+                Security: "bg-amber-100 text-amber-700 border-amber-200"
+              };
+              const sizeStyles = {
+                sm: "text-sm px-3 py-2",
+                md: "text-base px-4 py-2",
+                lg: "text-lg px-5 py-3 font-medium",
+                xl: "text-xl px-6 py-3 font-semibold"
+              };
+              const rotations = {
+                "-2": "-rotate-2",
+                "-1": "-rotate-1",
+                "1": "rotate-1",
+                "2": "rotate-2"
+              };
+              return (
+                <div
+                  key={index}
+                  className={`${personaStyles[item.persona]} ${sizeStyles[item.size]} ${rotations[item.rotate]} rounded-full border hover:scale-105 transition-transform cursor-default whitespace-nowrap`}
+                >
+                  {item.q}
                 </div>
-              </div>
-            ))}
+              );
+            })}
+          </div>
+
+          <div className="flex justify-center gap-8 mt-10 text-sm">
+            <div className="flex items-center gap-2">
+              <IoServerOutline className="text-blue-500 text-lg" />
+              <span className="text-gray-600">DevOps</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <IoCodeSlashOutline className="text-purple-500 text-lg" />
+              <span className="text-gray-600">Developer</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <IoShieldCheckmarkOutline className="text-amber-500 text-lg" />
+              <span className="text-gray-600">Security</span>
+            </div>
           </div>
         </div>
       </section>

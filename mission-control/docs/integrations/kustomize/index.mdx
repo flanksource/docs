@@ -6,19 +6,17 @@ sidebar_custom_props:
 
 import { Card, Cards } from '@site/../common/src/components/Card'
 import Prereqs from '@site/docs/partials/_integration_prereqs.mdx'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Playbooks', id: 'playbooks', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="playbook" />
 </CapabilityBadges>
 
-Mission Control integrates with Kustomize to simplify configuration management. Use it to:
-
-- Create Deployments, HelmReleases, and Namespaces through guided playbooks
-- Modify existing resources via Kustomize patches without editing YAML manually
-- Scale replicas or update resource limits across environments
-- Commit changes back to Git repositories through Flux GitOps workflows
-- Generate pull requests for review before applying changes
+Mission Control integrates with Kustomize to simplify configuration management through GitOps-native playbooks.
 
 ## Quick Start
 
@@ -26,7 +24,16 @@ Mission Control integrates with Kustomize to simplify configuration management. 
 
 Kustomize integration works with Flux GitOps. Ensure Flux is configured to manage your Kustomizations before using these playbooks.
 
-## Playbooks
+---
+
+<CapabilityHeading type="playbook" />
+
+**Use cases:**
+- Create Deployments, HelmReleases, and Namespaces through guided playbooks
+- Modify existing resources via Kustomize patches without editing YAML manually
+- Scale replicas or update resource limits across environments
+- Commit changes back to Git repositories through Flux GitOps workflows
+- Generate pull requests for review before applying changes
 
 Automate Kustomize operations through GitOps-native playbooks that create pull requests for all changes:
 
@@ -67,13 +74,13 @@ The playbook:
 ## Next Steps
 
 <Cards>
-  <Card title="Flux Integration" href="/docs/integrations/flux">
+  <Card icon="flux" title="Flux Integration" href="/docs/integrations/flux">
     Learn about Flux Kustomization management
   </Card>
-  <Card title="Helm Integration" href="/docs/integrations/helm">
+  <Card icon="helm" title="Helm Integration" href="/docs/integrations/helm">
     Deploy Helm charts alongside Kustomize resources
   </Card>
-  <Card title="Playbook Actions" href="/docs/guide/playbooks/actions/gitops">
+  <Card icon="playbook" title="Playbook Actions" href="/docs/guide/playbooks/actions/gitops">
     GitOps action reference for custom playbooks
   </Card>
 </Cards>

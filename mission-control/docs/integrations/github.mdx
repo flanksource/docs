@@ -5,7 +5,13 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Health Checks', id: 'health-checks', level: 2 },
+  { value: 'Playbooks', id: 'playbooks', level: 2 },
+  { value: 'Catalog', id: 'catalog', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="healthcheck" />
@@ -13,15 +19,16 @@ import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/component
   <CapabilityBadge type="scraper" />
 </CapabilityBadges>
 
-Mission Control integrates with GitHub to monitor repositories and trigger workflows. Use it to:
+Mission Control integrates with GitHub to monitor repositories and trigger workflows.
 
+---
+
+<CapabilityHeading type="healthcheck" />
+
+**Use cases:**
 - Query repository data including commits, pull requests, and issues
-- Monitor GitHub Actions workflow status and trigger new runs
-- Scrape repository configurations and metadata into the catalog
-- Dispatch workflows from playbooks for CI/CD automation
+- Monitor GitHub Actions workflow status
 - Track repository health and security status
-
-## Health Checks
 
 ### Repository Query
 
@@ -49,9 +56,14 @@ spec:
         expr: results[0].pr_count < 50  # Alert if too many open PRs
 ```
 
-## Playbook Actions
+---
 
-Trigger GitHub Actions workflows from playbooks.
+<CapabilityHeading type="playbook" />
+
+**Use cases:**
+- Dispatch workflows from playbooks for CI/CD automation
+- Trigger new GitHub Actions runs based on events
+- Automate deployment pipelines
 
 ### Dispatch Workflow
 
@@ -84,7 +96,7 @@ spec:
           environment: "{{.params.environment}}"
 ```
 
-### Workflow with Parameters
+<details summary="Workflow with Parameters">
 
 ```yaml title="github-workflow-params.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -108,10 +120,16 @@ spec:
           namespace: "{{.config.config.metadata.namespace}}"
           deployment: "{{.config.name}}"
 ```
+</details>
 
-## Config Scrapers
+---
 
-Scrape GitHub repository data into the catalog.
+<CapabilityHeading type="scraper" />
+
+**Use cases:**
+- Scrape repository configurations and metadata into the catalog
+- Track repository settings and branch protection rules
+- Monitor organization membership and access
 
 ```yaml title="github-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -134,10 +152,10 @@ spec:
 ## Next Steps
 
 <Cards>
-  <Card title="Health Check Reference" href="/canary-checker/docs/reference/github">
-    GitHub health check configuration options
-  </Card>
-  <Card title="GitHub Playbook Action" href="/docs/guide/playbooks/actions/github">
+  <Card icon="playbook" title="GitHub Playbook Action" href="/docs/guide/playbooks/actions/github">
     GitHub Actions workflow dispatch reference
+  </Card>
+  <Card icon="gitlab" title="GitLab Integration" href="/docs/integrations/gitlab">
+    Similar integration for GitLab repositories
   </Card>
 </Cards>

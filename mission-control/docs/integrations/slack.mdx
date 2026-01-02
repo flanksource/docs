@@ -5,22 +5,29 @@ sidebar_custom_props:
 ---
 
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge } from '@site/../common/src/components/CapabilityBadges'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+
+export const toc = [
+  { value: 'Notifications', id: 'notifications', level: 2 },
+  { value: 'Catalog', id: 'catalog', level: 2 },
+];
 
 <CapabilityBadges>
   <CapabilityBadge type="notifications" />
   <CapabilityBadge type="scraper" />
 </CapabilityBadges>
 
-Mission Control integrates with Slack to send notifications and scrape workspace data. Use it to:
+Mission Control integrates with Slack to send notifications and scrape workspace data.
 
+---
+
+<CapabilityHeading type="notifications" />
+
+**Use cases:**
 - Send alerts to Slack channels when health checks fail or configs change
 - Format notifications with Block Kit for rich, interactive messages
 - Route notifications to different channels based on severity or team
-- Scrape Slack workspace data for compliance and audit purposes
 - Track message delivery and notification history
-
-## Notifications
 
 Send notifications to Slack channels when events occur.
 
@@ -45,7 +52,7 @@ spec:
             key: bot-token
 ```
 
-### Custom Message Template
+<details summary="Custom Message Template">
 
 ```yaml title="slack-custom-notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -70,8 +77,9 @@ spec:
     *Status:* {{.incident.status}}
     {{if .incident.description}}*Description:* {{.incident.description}}{{end}}
 ```
+</details>
 
-### Block Kit Formatting
+<details summary="Block Kit Formatting">
 
 ```yaml title="slack-blocks-notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -113,8 +121,9 @@ spec:
       }
     ]
 ```
+</details>
 
-### Routing by Severity
+<details summary="Routing by Severity">
 
 ```yaml title="slack-routing-notification.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -151,10 +160,16 @@ spec:
             name: slack-credentials
             key: bot-token
 ```
+</details>
 
-## Config Scrapers
+---
 
-Scrape Slack workspace data for auditing and compliance.
+<CapabilityHeading type="scraper" />
+
+**Use cases:**
+- Scrape Slack workspace data for compliance and audit purposes
+- Track channel membership and user activity
+- Monitor workspace configuration changes
 
 ```yaml title="slack-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -184,10 +199,10 @@ Create a Slack App with the following bot token scopes:
 ## Next Steps
 
 <Cards>
-  <Card title="Notification Reference" href="/docs/guide/notifications">
+  <Card icon="notifications" title="Notification Reference" href="/docs/guide/notifications">
     Notification configuration options
   </Card>
-  <Card title="Notification Channels" href="/docs/guide/notifications/channels">
-    All supported notification channels
+  <Card icon="slack" title="Slack Channel Reference" href="/docs/guide/notifications/channels/slack">
+    Slack notification channel configuration
   </Card>
 </Cards>
