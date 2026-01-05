@@ -146,7 +146,7 @@ export default async function createConfigAsync() {
           configureWebpack(config, isServer, utils) {
             return {
               resolve: {
-                symlinks: true
+                symlinks: false
               }
             }
           }

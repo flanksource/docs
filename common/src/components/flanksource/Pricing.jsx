@@ -1,13 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   FaCheck,
   FaTimes,
-  FaUsers,
-  FaCloud,
-  FaShieldAlt,
-  FaEnvelope,
-  FaSlack,
-  FaPhoneAlt,
   FaChevronDown,
   FaChevronUp,
   FaArrowRight,
@@ -16,13 +10,10 @@ import {
   FaBell,
   FaServer,
   FaLock,
-  FaLifeRing,
   FaRocket,
   FaQuestionCircle,
   FaInfoCircle
 } from 'react-icons/fa';
-import { SiKubernetes, SiPrometheus, SiAmazonwebservices, SiGooglecloud } from 'react-icons/si';
-import { Azure } from '@flanksource/icons/mi';
 import Navigation from './Navigation';
 import { Hero } from './Hero';
 import CTA from './CTA';
