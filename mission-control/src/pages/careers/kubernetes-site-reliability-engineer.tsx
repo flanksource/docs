@@ -153,7 +153,7 @@ export default function SREJobPage() {
             <h2 className="text-2xl font-bold mb-6">Our Tech Stack</h2>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-4 mb-4">
               {[
-                { Icon: K8S, name: 'Kubernetes' },
+                { Icon: K8S, name: 'Kubernetes', favorite: true },
                 { Icon: Argo, name: 'ArgoCD' },
                 { Icon: Flux, name: 'Flux', favorite: true },
                 { Icon: Helm, name: 'Helm' },
@@ -166,7 +166,7 @@ export default function SREJobPage() {
                 { Icon: Grafana, name: 'Grafana' },
                 { Icon: Jaeger, name: 'Jaeger' },
                 { Icon: Terraform, name: 'Terraform' },
-                { Icon: Postgres, name: 'PostgreSQL' },
+                { Icon: Postgres, name: 'PostgreSQL', favorite: true },
                 { Icon: Clickhouse, name: 'ClickHouse' },
                 { Icon: Aws, name: 'AWS' },
                 { Icon: Azure, name: 'Azure' },

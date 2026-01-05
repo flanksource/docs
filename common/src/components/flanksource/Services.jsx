@@ -24,9 +24,9 @@ import {
   FaClock,
   FaHeadset
 } from 'react-icons/fa';
-import { SiKubernetes, SiPrometheus, SiGrafana, SiTerraform, SiHelm, SiArgo, SiGitlab, SiGithub, SiDocker, SiAmazonaws, SiPostgresql, SiMicrosoftazure, SiGooglecloud } from 'react-icons/si';
+import { SiKubernetes, SiPrometheus, SiGrafana, SiTerraform, SiHelm, SiArgo, SiGitlab, SiGithub, SiDocker, x, SiPostgresql, SiMicrosoftazure, SiGooglecloud } from 'react-icons/si';
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-import { Azure } from '@flanksource/icons/mi';
+import { Azure, Aws, K8S, Postgres, Prometheus, Grafana, Terraform, Helm, Argo, Gitlab, Github, GoogleCloud } from '@flanksource/icons/mi';
 import { Feature } from '../Feature';
 import CTA from './CTA';
 import Navigation from './Navigation';
@@ -109,19 +109,18 @@ const Services = () => {
   ];
 
   const technologies = [
-    { name: "Kubernetes", icon: <SiKubernetes className="w-8 h-8" /> },
-    { name: "PostgreSQL", icon: <SiPostgresql className="w-8 h-8" /> },
-    { name: "Prometheus", icon: <SiPrometheus className="w-8 h-8" /> },
-    { name: "Grafana", icon: <SiGrafana className="w-8 h-8" /> },
-    { name: "Terraform", icon: <SiTerraform className="w-8 h-8" /> },
-    { name: "Helm", icon: <SiHelm className="w-8 h-8" /> },
-    { name: "ArgoCD", icon: <SiArgo className="w-8 h-8" /> },
-    { name: "GitLab", icon: <SiGitlab className="w-8 h-8" /> },
-    { name: "GitHub", icon: <SiGithub className="w-8 h-8" /> },
-    { name: "Docker", icon: <SiDocker className="w-8 h-8" /> },
-    { name: "AWS", icon: <SiAmazonwebservices className="w-8 h-8" /> },
+    { name: "Kubernetes", icon: <K8S className="w-8 h-8" /> },
+    { name: "PostgreSQL", icon: <Postgres className="w-8 h-8" /> },
+    { name: "Prometheus", icon: <Prometheus className="w-8 h-8" /> },
+    { name: "Grafana", icon: <Grafana className="w-8 h-8" /> },
+    { name: "Terraform", icon: <Terraform className="w-8 h-8" /> },
+    { name: "Helm", icon: <Helm className="w-8 h-8" /> },
+    { name: "ArgoCD", icon: <Argo className="w-8 h-8" /> },
+    { name: "GitLab", icon: <Gitlab className="w-8 h-8" /> },
+    { name: "GitHub", icon: <Github className="w-8 h-8" /> },
+    { name: "AWS", icon: <Aws className="w-8 h-8" /> },
     { name: "Azure", icon: <Azure className="w-8 h-8" /> },
-    { name: "Google Cloud", icon: <SiGooglecloud className="w-8 h-8" /> }
+    { name: "Google Cloud", icon: <GoogleCloud className="w-8 h-8" /> }
   ];
 
   const benefits = [
