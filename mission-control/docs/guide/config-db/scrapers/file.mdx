@@ -1,5 +1,6 @@
 ---
 title: File
+sidebar_position: 7
 sidebar_custom_props:
   icon: pepicons-pencil:file-loop
 
@@ -34,7 +35,7 @@ spec:
 | Field       | Description                                                                        | Scheme                                       | Required |
 | ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
 | `schedule`  | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | `string`                                     |          |
-| `full`      | Set to `true` to extract changes & access logs from scraped configurations. Defaults to `false`. | `bool`                                       |          |
+| `full`      | Set to `true` to extract [changes](/docs/guide/config-db/concepts/changes#extracting-changes) and [access logs](/docs/guide/config-db/concepts/access-logs) from scraped configurations. Defaults to `false`. | `bool`                                       |          |
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
 | `file`      | Specifies the list of File configurations to scrape.                               | [`[]File`](#file)                          |          |
 | `logLevel`  | Specify the level of logging.                                                      | `string`                                     |          |

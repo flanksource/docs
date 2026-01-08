@@ -1,0 +1,90 @@
+---
+title: Request Chaining
+sidebar_position: 5
+---
+
+Request chaining allows you to create dependencies between checks within the same Canary, enabling complex multi-step verification workflows. A check can depend on other checks and access their output data through templating.
+
+## Use Cases
+
+- **Authentication flows**: Login first, then use the token for subsequent API calls
+- **Multi-step API workflows**: Create a resource, then verify its state
+- **Data-dependent checks**: Fetch configuration from one endpoint, use it in another
+
+## How It Works
+
+1. Define checks with unique names
+2. Use `dependsOn` to specify which checks must complete first
+3. Access previous check outputs via `outputs.<checkName>.<field>`
+
+Checks are executed in topological order based on their dependencies, ensuring dependent checks only run after their prerequisites complete successfully.
+
+## Example
+
+```yaml title="http-depends-on.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_depends_on_pass.yaml
+
+```
+
+## Fields
+
+<Fields rows={[
+  {
+    field: 'dependsOn',
+    description: 'List of check names that must complete before this check runs',
+    scheme: '[]string'
+  }
+]}/>
+
+## Accessing Outputs
+
+When a check has dependencies, it can access the outputs from those checks using the `outputs` object:
+
+| Expression | Description |
+|------------|-------------|
+| `outputs.<checkName>.json` | Parsed JSON response body |
+| `outputs.<checkName>.code` | HTTP response code |
+| `outputs.<checkName>.headers` | Response headers |
+| `outputs.<checkName>.body` | Raw response body |
+
+### Example: Using Previous Check Output
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: auth-flow
+spec:
+  schedule: "@every 5m"
+  http:
+    - name: login
+      url: https://api.example.com/auth/login
+      method: POST
+      body: '{"username": "user", "password": "pass"}'
+      test:
+        expr: "code == 200 && json.token != ''"
+
+    - name: get-profile
+      url: https://api.example.com/profile
+      dependsOn:
+        - login
+      headers:
+        - name: Authorization
+          # Use the token from the login check
+          value: "Bearer $(.outputs.login.json.token)"
+      test:
+        expr: "code == 200"
+```
+
+## Execution Order
+
+Checks are automatically sorted using topological ordering based on their dependencies. If check B depends on check A, then:
+
+1. Check A executes first
+2. If Check A succeeds, Check B executes with access to A's outputs
+3. If Check A fails, Check B is skipped
+
+## Limitations
+
+- Circular dependencies are not allowed
+- `dependsOn` only works within the same Canary resource
+- All referenced check names must exist in the same Canary

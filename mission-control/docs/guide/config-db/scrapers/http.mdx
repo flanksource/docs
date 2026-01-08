@@ -1,6 +1,6 @@
 ---
 title: HTTP
-sidebar_position: 4
+sidebar_position: 10
 sidebar_custom_props:
   icon: http
 ---
@@ -22,7 +22,7 @@ The HTTP scraper allows you to collect data from HTTP endpoints and APIs. It sup
 | `retention` | Settings for retaining changes, analysis and scraped items                   | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
 | `http`      | Specifies the list of HTTP configurations to scrape.                         | [`[]HTTP`](#http-configuration)                    |          |
 | `logLevel`  | Specify the level of logging.                                                      | `string`                                     |          |
-| `full`      | Set to `true` to extract changes & access logs from scraped configurations. Defaults to `false`. | `bool`                                       |          |
+| `full`      | Set to `true` to extract [changes](/docs/guide/config-db/concepts/changes#extracting-changes) and [access logs](/docs/guide/config-db/concepts/access-logs) from scraped configurations. Defaults to `false`. | `bool`                                       |          |
 
 ## HTTP Configuration
 

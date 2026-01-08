@@ -5,6 +5,7 @@ const capabilities = {
   scraper: {
     icon: ConfigDb,
     label: 'Scraper',
+    anchor: 'catalog',
     color: '#2563eb',
     bg: '#dbeafe',
     border: '#93c5fd'
@@ -12,6 +13,7 @@ const capabilities = {
   healthcheck: {
     icon: Health,
     label: 'Health Check',
+    anchor: 'health-checks',
     color: '#d97706',
     bg: '#fef3c7',
     border: '#fcd34d'
@@ -19,6 +21,7 @@ const capabilities = {
   playbook: {
     icon: Playbook,
     label: 'Playbook',
+    anchor: 'playbooks',
     color: '#7c3aed',
     bg: '#ede9fe',
     border: '#c4b5fd'
@@ -26,6 +29,7 @@ const capabilities = {
   notifications: {
     icon: Bell,
     label: 'Notifications',
+    anchor: 'notifications',
     color: '#16a34a',
     bg: '#dcfce7',
     border: '#86efac'
@@ -33,6 +37,7 @@ const capabilities = {
   actions: {
     icon: Webhook,
     label: 'Actions',
+    anchor: 'actions',
     color: '#4f46e5',
     bg: '#e0e7ff',
     border: '#a5b4fc'
@@ -40,6 +45,7 @@ const capabilities = {
   'relationship': {
     icon: ConfigDb,
     label: 'Relationship',
+    anchor: 'relationship',
     color: '#d97706',
     bg: '#fef3c7',
     border: '#fcd34d'
@@ -80,7 +86,7 @@ export function CapabilityHeading({ type }) {
 
   const Icon = cap.icon;
   return (
-    <h2 className="flex items-center gap-2 mt-8 mb-4 not-prose">
+    <h2 id={cap.anchor} className="flex items-center gap-2 mt-8 mb-4 not-prose">
       <span
         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-base font-medium"
         style={{

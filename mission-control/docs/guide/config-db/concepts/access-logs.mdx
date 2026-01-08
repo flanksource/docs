@@ -1,0 +1,130 @@
+---
+title: Access Logs
+sidebar_position: 6
+sidebar_custom_props:
+  icon: mdi:account-clock
+---
+
+Access logs track who accessed configuration items and when. This enables compliance auditing, security monitoring, and access reviews for your infrastructure.
+
+## Overview
+
+When scraping configurations from external systems, you can also capture access logs that record:
+
+- **Who** accessed a resource (external user)
+- **What** was accessed (config item)
+- **When** the access occurred
+- **How** they authenticated (MFA status, properties)
+
+Access logs are stored separately from configuration data and can be queried independently for audit purposes.
+
+## Enabling Access Log Scraping
+
+To scrape access logs, set `full: true` on your scraper configuration:
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: database-config
+spec:
+  # highlight-next-line
+  full: true
+  # ... scraper configuration
+```
+
+When `full` mode is enabled, the scraper expects each configuration item to potentially include an `access_logs` field containing access records.
+
+## Access Log Schema
+
+Each access log entry should include:
+
+<Fields rows={[
+  {
+    field: 'config_id',
+    description: 'ID of the config item that was accessed',
+    scheme: 'uuid',
+    required: true
+  },
+  {
+    field: 'external_user_id',
+    description: 'ID of the external user who accessed the resource',
+    scheme: 'uuid',
+    required: true
+  },
+  {
+    field: 'created_at',
+    description: 'Timestamp when the access occurred',
+    scheme: 'timestamp'
+  },
+  {
+    field: 'mfa',
+    description: 'Whether multi-factor authentication was used',
+    scheme: 'bool'
+  },
+  {
+    field: 'properties',
+    description: 'Additional access metadata (IP address, session info, etc.)',
+    scheme: 'map[string]string'
+  }
+]}/>
+
+## Example: Custom Scraper with Access Logs
+
+```json title="config-with-access-logs.json"
+{
+  "id": "db-prod-001",
+  "config": {
+    "name": "production-database",
+    "engine": "postgres",
+    "version": "15.2"
+  },
+  "access_logs": [
+    {
+      "config_id": "db-prod-001",
+      "external_user_id": "user-123",
+      "created_at": "2025-01-08T10:30:00Z",
+      "mfa": true,
+      "properties": {
+        "ip_address": "192.168.1.100",
+        "client": "psql"
+      }
+    },
+    {
+      "config_id": "db-prod-001",
+      "external_user_id": "user-456",
+      "created_at": "2025-01-08T11:45:00Z",
+      "mfa": false
+    }
+  ]
+}
+```
+
+## Scrapers with Access Log Support
+
+The following scrapers support access log extraction when `full: true` is enabled:
+
+| Scraper | Use Case |
+|---------|----------|
+| [SQL](/docs/guide/config-db/scrapers/sql) | Database access logs from audit tables |
+| [PostgreSQL](/docs/guide/config-db/scrapers/postgres) | PostgreSQL connection and query logs |
+| [SQL Server](/docs/guide/config-db/scrapers/mssql) | SQL Server audit events |
+| [Clickhouse](/docs/guide/config-db/scrapers/clickhouse) | Clickhouse query logs and S3 access |
+| [HTTP](/docs/guide/config-db/scrapers/http) | API access logs from external systems |
+| [File](/docs/guide/config-db/scrapers/file) | Access logs from log files |
+| [Exec](/docs/guide/config-db/scrapers/exec) | Custom scripts that output access data |
+
+## External Users and Groups
+
+Access logs reference external users and groups that are also scraped from your systems. These entities enable:
+
+- **User identification**: Track individual user access across configs
+- **Group membership**: Understand access patterns by team or role
+- **Access reviews**: Audit who has access to what resources
+
+See the [SQL scraper](/docs/guide/config-db/scrapers/sql) for examples of scraping users, groups, and roles alongside access logs.
+
+## Related
+
+- [Config Access Reference](/docs/reference/config_access) - Access log schema details
+- [Retention](/docs/guide/config-db/concepts/retention) - Configure access log retention policies

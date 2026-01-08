@@ -20,7 +20,7 @@ If you need to pass a template through a Helm Chart and prevent Helm from templa
 {{`{{ .secret }}`}}
 ```
 
-Alternatively [change the templating delimiters](#delimiters)
+Alternatively change the templating delimiters (see below)
 
 </Details>
 

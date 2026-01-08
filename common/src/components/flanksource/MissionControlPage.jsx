@@ -147,7 +147,7 @@ const MissionControlPage = () => {
 
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Link
-                  to="/docs/mission-control"
+                  to="/docs"
                   className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 text-center"
                 >
                   Get Started
@@ -375,7 +375,7 @@ const MissionControlPage = () => {
         image="flanksource/self-hosted.svg"
         title="Self-Hosted First"
         subtitle="SECURITY & CONTROL"
-        url="/docs/mission-control/installation"
+        url="/docs/installation"
         left={false}
       >
         Mission Control is self-hosted first, and easy to install using a Helm Chart. Self-Hosted, SaaS or Hybrid Deployment Models with no network or proxy access required and no secrets stored in the SaaS.
@@ -385,7 +385,7 @@ const MissionControlPage = () => {
         image="flanksource/playbooks.svg"
         title="Playbooks & Automation"
         subtitle="DEVELOPER ENABLEMENT"
-        url="/docs/mission-control/playbooks"
+        url="/docs/guide/playbooks"
         left={true}
       >
         Empower developers to be more self-sufficient without the need to become experts in the Cloud and Kubernetes. Run playbooks automatically on failing health checks/alerts, implement security best practices of least privilege and just in time (JIT) access, and use the built-in library of actions.
@@ -395,7 +395,7 @@ const MissionControlPage = () => {
         image="flanksource/status_pages.png"
         title="Deep Health Monitoring"
         subtitle="PROACTIVE OPERATIONS"
-        url="/docs/mission-control/canary-checker"
+        url="/docs/guide/canary-checker"
         left={false}
       >
         Understand the health of complex services at a glance with red, amber, green statuses which leverage active/passive health checks and consolidated alerts from Prometheus, AWS, Dynatrace, and more.
@@ -706,7 +706,7 @@ const MissionControlPage = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/docs/mission-control"
+              to="/docs"
               className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200"
             >
               Read the Docs

@@ -31,7 +31,8 @@ Exec action allows you to executes a command or a script file on the target host
   {field: 'env', scheme: '[[]EnvVar](/docs/reference/env-var)', description: 'Environment variables to set during execution'},
   {field: 'checkout', scheme: '[Checkout](#git-checkout)', description: 'Checkout a git repository before running the script'},
   {field: 'artifacts', scheme: '[Artifacts](#artifacts)', description: 'Artifacts produced by the action'},
-  {field: 'connections', scheme: '[Connections](#connections)', description: 'Connections used by the action'}
+  {field: 'connections', scheme: '[Connections](#connections)', description: 'Connections used by the action'},
+  {field: 'setup', scheme: '[Setup](#setup)', description: 'Install runtime dependencies (Bun, Python) before execution'}
 ]}/>
 
 ## Output
@@ -126,9 +127,39 @@ will be setup on the host running the script.
 ```
 
 <Fields connection="git" rows={[
-  {field: "destination", description: "Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL will be used as the dir name", type: "string"},
+  {field: "destination", description: "Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL will be used as the dir name", scheme: "string"},
+  {field: "depth", description: "Git clone depth for shallow clones", scheme: "int"},
 ]}/>
 
+
+### Setup
+
+The `setup` field allows you to automatically install runtime environments before executing your script. This is useful when your script requires specific versions of Bun or Python that may not be available in the base image.
+
+#### Bun
+
+```yaml title="exec-deps-pkgs-bun.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/exec-deps-pkgs-bun.yaml
+
+```
+
+#### Python
+
+For Python scripts, you can declare dependencies inline using [PEP 723 inline script metadata](https://packaging.python.org/en/latest/specifications/inline-script-metadata/). The `uv` package manager is used to manage Python environments.
+
+```yaml title="exec-deps-pkgs-python.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/exec-deps-pkgs-python.yaml
+
+```
+
+<Fields rows={[
+  {field: 'bun', scheme: '[RuntimeSetup](#runtimesetup)', description: 'Install Bun runtime'},
+  {field: 'python', scheme: '[RuntimeSetup](#runtimesetup)', description: 'Install Python runtime via uv'},
+]}/>
+
+#### RuntimeSetup
+
+<Fields rows={[
+  {field: 'version', scheme: 'string', description: 'Version to install (e.g., "1.3.5" for Bun, "3.10.19" for Python)'},
+]}/>
 
 ### Action Result
 

@@ -1,104 +1,114 @@
 import Link from '@docusaurus/Link';
 
-Resource Selectors are used in multiple places including:
+Resource Selectors are used throughout Mission Control for:
 
 - Creating relationships between configs and configs/components
-- Finding resources to run health checks or playbooks on
+- Filtering resources in playbook triggers and actions
+- Selecting targets for health checks
+- Building dynamic views and dashboards
 
-| Field           | Description                                                                                                                                                | Scheme                                                                                              | Required |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------- |
-| `id`            | ID of the component                                                                                                                                        | `string`                                                                                            | No       |
-| `name`          | Name of the component/config                                                                                                                               | `string`                                                                                            | No       |
-| `namespace`     | Select resources in this namespace only, if empty find resources in all namespaces                                                                         | `string`                                                                                            | No       |
-| `types`         | Match any of the types specified                                                                                                                           | `[]string`                                                                                          | No       |
-| `statuses`      | Match any of the statuses specified                                                                                                                        | `[]string`                                                                                          | No       |
-| `labelSelector` | Kubernetes Style Label Selector                                                                                                                            | [LabelSelector](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)          | No       |
-| `fieldSelector` | Kubernetes Style Field Selector Property fields of the component in kubernetes format (or database columns: owner, topology_id, parent_id)                 | [FieldSelector](https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/) | No       |
-| `agent`         | Select resources created on this agent, Defaults to `local`                                                                                                | `uuid`, `{name}`, `local` or `all`                                                                  | No       |
-| `cache`         | Cache settings to use for the results, expensive selectors or selectors that are used often should be cached for longer periods. Defaults to `max-age=10m` | `no-cache`, `no-store` or `max-age={duration}`                                                      | No       |
-| `search`        | Search for resources via key value pairs using parsing expression grammar                                                                                  | [Search](#search)                                                                                   | No       |
+| Field           | Description                                                                                                                                                                                                                | Scheme                                                                                              | Required |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------- |
+| `id`            | Select resource by ID. Supports comma-separated values and wildcards (`id=abc*,def*`)                                                                                                                                      | `string`                                                                                            |          |
+| `name`          | Select resource by name. Supports comma-separated values and wildcards (`name=*-prod,*-staging`)                                                                                                                           | `string`                                                                                            |          |
+| `namespace`     | Select resources in this namespace only. If empty, selects from all namespaces                                                                                                                                             | `string`                                                                                            |          |
+| `types`         | Select resources matching any of the specified types (e.g., `Kubernetes::Pod`, `AWS::EC2::Instance`)                                                                                                                       | `[]string`                                                                                          |          |
+| `statuses`      | Select resources matching any of the specified statuses                                                                                                                                                                    | `[]string`                                                                                          |          |
+| `health`        | Select resources matching the specified health status. Supports multiple values separated by comma (`healthy,warning`) and negation (`!unhealthy`)                                                                         | `string`                                                                                            |          |
+| `scope`         | Limit selection to resources belonging to a specific parent. For configs this is the scraper id, for checks it's the canary, and for components it's the topology. Can be a UUID or `namespace/name`                      | `string`                                                                                            |          |
+| `labelSelector` | Kubernetes-style label selector. Supports `=`, `==`, `!=` operators and set-based selectors (`key in (v1,v2)`, `key notin (v1,v2)`, `key`, `!key`)                                                                         | [LabelSelector](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)          |          |
+| `fieldSelector` | Select resources by property fields using Kubernetes field selector syntax. Supports fields like `owner`, `topology_id`, `parent_id` for components                                                                        | [FieldSelector](https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/) |          |
+| `tagSelector`   | Select resources by tags using the same syntax as `labelSelector`. Tags are key-value pairs assigned during scraping                                                                                                       | `string`                                                                                            |          |
+| `agent`         | Select resources created on a specific agent. Accepts agent UUID, agent name, or special values: `local` (resources without an agent), `self` (alias for local), `all` (resources from any agent). Defaults to `local`    | `string`                                                                                            |          |
+| `cache`         | Cache settings for selector results. Useful for expensive or frequently-used selectors. Values: `no-cache` (bypass but allow caching), `no-store` (bypass and don't cache), `max-age=<duration>` (cache for duration)     | `string`                                                                                            |          |
+| `limit`         | Maximum number of resources to return                                                                                                                                                                                      | `int`                                                                                               |          |
+| `includeDeleted`| Include soft-deleted resources in results. Defaults to `false`                                                                                                                                                             | `bool`                                                                                              |          |
+| `search`        | Full-text search across resource name, tags, and labels using parsing expression grammar. See [Search](#search)                                                                                                            | `string`                                                                                            |          |
 
-### Search
+## Wildcards and Negation
 
-The query syntax is `field1=value1 field2>value2 field3=value3* field4=*value4`. `*` is for prefix and suffix matching.
+The `name`, `id`, `types`, `statuses`, and `health` fields support:
 
-Supported operators:
+- **Prefix matching**: `name=prod-*` matches names starting with `prod-`
+- **Suffix matching**: `name=*-backend` matches names ending with `-backend`
+- **Negation**: `health=!unhealthy` excludes unhealthy resources
+- **Multiple values**: `types=Kubernetes::Pod,Kubernetes::Deployment` matches either type
 
-| Operator | Syntax                           | Types                 |
-| -------- | -------------------------------- | --------------------- |
-| `=`      | `field=value`                    | `string` `int` `json` |
-| `!=`     | `field!=value`                   | `string` `int` `json` |
-| `*`      | `field=*value` or `field=value*` | `string` `int`        |
-| `>` `<`  | `field>value` or `field<value`   | `datetime` `int`      |
+## Search
 
-#### Date Queries
-- **Absolute dates**: `2025-01-15`
+The `search` field provides a powerful query language for filtering resources.
+
+### Syntax
+
+```
+field1=value1 field2>value2 field3=value3* field4=*value4
+```
+
+Multiple conditions are combined with AND logic.
+
+### Operators
+
+| Operator | Example                          | Description                                    | Types                 |
+| -------- | -------------------------------- | ---------------------------------------------- | --------------------- |
+| `=`      | `status=healthy`                 | Equals (exact match or wildcard)               | `string` `int` `json` |
+| `!=`     | `health!=unhealthy`              | Not equals                                     | `string` `int` `json` |
+| `=*`     | `name=*-prod` or `name=api-*`    | Prefix or suffix match                         | `string` `int`        |
+| `>`      | `created_at>now-24h`             | Greater than                                   | `datetime` `int`      |
+| `<`      | `updated_at<2025-01-01`          | Less than                                      | `datetime` `int`      |
+
+### Date Queries
+
+- **Absolute dates**: `2025-01-15`, `2025-01-15T10:30:00Z`
 - **Relative dates**: `now-24h`, `now-7d`, `now+1w`
-- **Supported units**: s (seconds), m (minutes), h (hours), d (days), w (weeks), y (years)
+- **Supported units**: `s` (seconds), `m` (minutes), `h` (hours), `d` (days), `w` (weeks), `y` (years)
 
+### JSON Field Access
 
-Supported fields for:
-
-- [Catalog/Config](/docs/reference/config-db/config):
-
-| Field        | Type       |
-| ------------ | ---------- |
-| `name`       | `string`   |
-| `source`     | `string`   |
-| `namespace`  | `string`   |
-| `type`       | `string`   |
-| `status`     | `string`   |
-| `labels`     | `json`     |
-| `tags`       | `json`     |
-| `config`     | `json`     |
-| `health`     | `string`   |
-| `agent`      | `string`   |
-| `created_at` | `datetime` |
-| `updated_at` | `datetime` |
-| `deleted_at` | `datetime` |
-
-
-- [Catalog/Config Changes](/docs/reference/config-db/changes):
-
-| Field           | Type       |
-| --------------- | ---------- |
-| `id`            | `string`   |
-| `config_id`     | `string`   |
-| `name`          | `string`   |
-| `type`          | `string`   |
-| `created_at`    | `datetime` |
-| `severity`      | `string`   |
-| `change_type`   | `string`   |
-| `summary`       | `string`   |
-| `count`         | `int`      |
-| `first_observed`| `datetime` |
-| `agent_id`      | `string`   |
-| `tags`          | `json`     |
-| `details`       | `json`     |
-
-
-### Example Queries
+Access nested fields in labels, tags, and config using dot notation:
 
 ```
-# Find all Kubernetes namespaces starting with "kube"
-type=Kubernetes::Namespace name=kube*
-
-# Find unhealthy AWS EC2 instances
-type=AWS::EC2::Instance health=unhealthy
-
-# Find critical severity changes for AWS resources
-type=AWS::* severity=critical
-
-# Find configs created in the last 24 hours
-created_at>now-24h
-
-# Find nginx pods with prod cluster tag
-type=Kubernetes::Pod label.app=nginx tags.cluster=prod
-
-# Complex query with date range
-updated_at>2025-01-01 updated_at<2025-01-31 type=Kubernetes::Deployment
+labels.app=nginx
+tags.env=production
+config.spec.replicas>3
 ```
 
+### Searchable Fields
+
+#### Catalog Items (Configs)
+
+| Field        | Type       | Description                           |
+| ------------ | ---------- | ------------------------------------- |
+| `name`       | `string`   | Resource name                         |
+| `namespace`  | `string`   | Kubernetes namespace or equivalent    |
+| `type`       | `string`   | Resource type (e.g., `Kubernetes::Pod`)|
+| `status`     | `string`   | Current status                        |
+| `health`     | `string`   | Health status                         |
+| `source`     | `string`   | Source identifier                     |
+| `agent`      | `string`   | Agent that scraped this resource      |
+| `labels`     | `json`     | Kubernetes-style labels               |
+| `tags`       | `json`     | Scraper-assigned tags                 |
+| `config`     | `json`     | Full configuration data               |
+| `created_at` | `datetime` | Creation timestamp                    |
+| `updated_at` | `datetime` | Last update timestamp                 |
+| `deleted_at` | `datetime` | Soft deletion timestamp               |
+
+#### Config Changes
+
+| Field            | Type       | Description                           |
+| ---------------- | ---------- | ------------------------------------- |
+| `id`             | `string`   | Change ID                             |
+| `config_id`      | `string`   | Parent config ID                      |
+| `name`           | `string`   | Change name                           |
+| `type`           | `string`   | Config type                           |
+| `change_type`    | `string`   | Type of change (e.g., `diff`, `event`)|
+| `severity`       | `string`   | Change severity                       |
+| `summary`        | `string`   | Change summary                        |
+| `count`          | `int`      | Occurrence count                      |
+| `agent_id`       | `string`   | Agent ID                              |
+| `tags`           | `json`     | Change tags                           |
+| `details`        | `json`     | Additional details                    |
+| `created_at`     | `datetime` | Change timestamp                      |
+| `first_observed` | `datetime` | First observation time                |
 
 {!props.hideCheck && (
 <CommonLink to="/docs/reference/canary-checker/check">Health Checks</CommonLink>
@@ -106,17 +116,119 @@ updated_at>2025-01-01 updated_at<2025-01-31 type=Kubernetes::Deployment
 
 {!props.hideCheck && (
 <Fields rows={[
-  {field: "name", scheme: "string"},
-  {field: "canary_id", scheme: "string"},
-  {field: "namespace", scheme: "string"},
-  {field: "type", scheme: "string"},
-  {field: "status", scheme: "string"},
-  {field: "health", scheme: "string"},
-  {field: "labels", scheme: "json"},
-  {field: "agent", scheme: "string"},
-  {field: "created_at", scheme: "datetime"},
-  {field: "updated_at", scheme: "datetime"},
-  {field: "deleted_at", scheme: "datetime"},
+  {field: "name", scheme: "string", description: "Check name"},
+  {field: "canary_id", scheme: "string", description: "Parent canary ID"},
+  {field: "namespace", scheme: "string", description: "Check namespace"},
+  {field: "type", scheme: "string", description: "Check type (e.g., `http`, `tcp`)"},
+  {field: "status", scheme: "string", description: "Current status"},
+  {field: "health", scheme: "string", description: "Health status"},
+  {field: "labels", scheme: "json", description: "Check labels"},
+  {field: "agent", scheme: "string", description: "Agent ID"},
+  {field: "created_at", scheme: "datetime", description: "Creation timestamp"},
+  {field: "updated_at", scheme: "datetime", description: "Last update timestamp"},
+  {field: "deleted_at", scheme: "datetime", description: "Deletion timestamp"},
 ]}/>
 
 )}
+
+## Examples
+
+### Basic Selection
+
+```yaml
+# Select by exact name
+name: my-deployment
+
+# Select by ID
+id: 3b1a2c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+
+# Select all pods in a namespace
+types:
+  - Kubernetes::Pod
+namespace: production
+```
+
+### Using Wildcards
+
+```yaml
+# Select all resources with names starting with "prod-"
+name: prod-*
+
+# Select all AWS resources
+types:
+  - AWS::*
+
+# Select resources ending with "-backend"
+name: "*-backend"
+```
+
+### Label and Tag Selectors
+
+```yaml
+# Select by labels (Kubernetes-style)
+labelSelector: app=nginx,env in (prod,staging)
+
+# Select by tags
+tagSelector: team=platform,cost-center!=shared
+
+# Combine both
+labelSelector: app=api
+tagSelector: environment=production
+```
+
+### Health and Status Filtering
+
+```yaml
+# Select only healthy resources
+health: healthy
+
+# Exclude unhealthy resources
+health: "!unhealthy"
+
+# Select resources with specific statuses
+statuses:
+  - Running
+  - Pending
+```
+
+### Search Queries
+
+```yaml
+# Find all Kubernetes namespaces starting with "kube"
+search: type=Kubernetes::Namespace name=kube*
+
+# Find unhealthy AWS EC2 instances
+search: type=AWS::EC2::Instance health=unhealthy
+
+# Find configs created in the last 24 hours
+search: created_at>now-24h
+
+# Find nginx pods with specific tags
+search: type=Kubernetes::Pod labels.app=nginx tags.cluster=prod
+
+# Complex query with date range
+search: updated_at>2025-01-01 updated_at<2025-01-31 type=Kubernetes::Deployment
+```
+
+### Multi-Agent Selection
+
+```yaml
+# Select from a specific agent
+agent: production-cluster
+
+# Select from all agents
+agent: all
+
+# Select only local (agentless) resources
+agent: local
+```
+
+### Scoped Selection
+
+```yaml
+# Select configs from a specific scraper
+scope: namespace/my-scraper
+
+# Select checks from a specific canary
+scope: canary-uuid-here
+```
