@@ -1,7 +1,7 @@
 ---
 title: Github
 show_title: false
-sidebar_position: 4
+sidebar_position: 9
 sidebar_custom_props:
   icon: github
 ---

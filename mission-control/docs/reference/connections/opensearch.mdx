@@ -1,0 +1,57 @@
+---
+title: OpenSearch
+sidebar_custom_props:
+  icon: opensearch
+---
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: opensearch-logs
+  namespace: default
+spec:
+  opensearch:
+    urls:
+      - https://opensearch-node1.example.com:9200
+      - https://opensearch-node2.example.com:9200
+    index: logs-*
+    username:
+      valueFrom:
+        secretKeyRef:
+          name: opensearch-credentials
+          key: OPENSEARCH_USER
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: opensearch-credentials
+          key: OPENSEARCH_PASSWORD
+    insecureSkipVerify: false
+```
+
+<Fields rows={[
+  {
+    field: 'urls',
+    description: 'List of OpenSearch node URLs',
+    scheme: '[]string',
+    required: true
+  },
+  {
+    field: 'index',
+    description: 'Default index pattern to query',
+    scheme: 'string',
+  },
+  {
+    field: 'username',
+    scheme: 'envvar',
+  },
+  {
+    field: 'password',
+    scheme: 'envvar',
+  },
+  {
+    field: 'insecureSkipVerify',
+    description: 'Skip TLS certificate verification',
+    scheme: 'bool',
+  },
+]}/>

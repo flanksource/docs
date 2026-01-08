@@ -1,14 +1,14 @@
 ---
 title: Clickhouse
-sidebar_position: 7
+sidebar_position: 5
 show_title: false
 sidebar_custom_props:
-  icon: clickhouse-icon
+  icon: simple-icons:clickhouse
 ---
 
 import Custom from './_custom.mdx'
 
-# <Icon name="clickhouse-icon"/> Clickhouse
+# <Icon name="simple-icons:clickhouse"/> Clickhouse
 
 <!-- Source: modules/config-db/api/v1/clickhouse.go:9#Clickhouse -->
 
@@ -299,7 +299,7 @@ spec:
 
 ## Query Log for Access Tracking
 
-Use the system.query_log table to track who accessed what data:
+Use the system.query_log table to track who accessed what data. See [Access Logs](/docs/guide/config-db/concepts/access-logs) for more details on the access log schema.
 
 ```yaml title="clickhouse-access-logs.yaml"
 apiVersion: configs.flanksource.com/v1

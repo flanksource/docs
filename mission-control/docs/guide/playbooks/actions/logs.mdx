@@ -10,7 +10,32 @@ import Templating from "@site/docs/reference/playbooks/context.mdx"
 
 # <Icon name="logs"/> Logs Action
 
-Logs action allows you to fetch and query logs from various backends including Loki, CloudWatch, OpenSearch, and Kubernetes.
+The Logs action fetches and queries logs from various backends. Use it to retrieve logs for debugging, analysis, or to pass to downstream actions like AI analysis.
+
+```yaml title="fetch-pod-logs.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: analyze-pod-errors
+spec:
+  on:
+    config:
+      - types:
+          - Kubernetes::Pod
+  actions:
+    - name: fetch-logs
+      logs:
+        kubernetes:
+          namespace: '{{.config.tags.namespace}}'
+          pod: '{{.config.name}}'
+          since: 1h
+          tailLines: 500
+    - name: analyze
+      ai:
+        prompt: |
+          Analyze these logs and identify any errors or issues:
+          {{.actions.fetch-logs.result.logs | toJSON}}
+```
 
 <Action rows={[
     {field: "logs", description: "Logs Action", scheme: "[Logs](#logs)"},
@@ -19,102 +44,270 @@ Logs action allows you to fetch and query logs from various backends including L
 ## Logs
 
 <Fields oneOf={["loki", "cloudwatch", "opensearch", "kubernetes"]} rows={[
-  {field: "loki", description: "Loki backend configuration", scheme: "[Loki](#loki)"},
-  {field: "cloudwatch", description: "CloudWatch logs backend configuration", scheme: "[CloudWatch](#cloudwatch)"},
-  {field: "opensearch", description: "OpenSearch logs backend configuration", scheme: "[OpenSearch](#opensearch)"},
-  {field: "kubernetes", description: "Kubernetes logs backend configuration", scheme: "[Kubernetes](#kubernetes)"}
-]}/>
-
-### Loki
-
-<Fields rows={[
-  {field: "connection", description: "Loki connection details", scheme: "Connection"},
-  {field: "url", description: "Loki URL", scheme: "string"},
-  {field: "username", description: "Basic auth username", scheme: "EnvVar"},
-  {field: "password", description: "Basic auth password", scheme: "EnvVar"},
-  {field: "query", description: "LogQL query", scheme: "string", required: true, templatable: true},
-  {field: "start", description: "Start time for query", scheme: "string", templatable: true},
-  {field: "end", description: "End time for query", scheme: "string", templatable: true},
-  {field: "limit", description: "Maximum number of entries to return", scheme: "int"},
-  {field: "direction", description: "Query direction", scheme: "`forward` | `backward`"},
-  {field: "dedupe", description: "Log deduplication settings", scheme: "[Dedupe](#dedupe)"},
-  {field: "match", description: "CEL expressions to filter logs", scheme: "[]MatchExpression"},
-  {field: "mapping", description: "Field mapping configuration", scheme: "FieldMappingConfig"}
+  {field: "dedupe.window", description: "Time window for deduplication (e.g., `5m`, `1h`). Logs with identical dedupe fields within this window are merged", scheme: "duration"},
+  {field: "dedupe.fields", description: "Fields to use for identifying duplicate log entries (e.g., `['message', 'level']`)", scheme: "[]string"},
+  {field: "match", description: "CEL expressions to filter logs after retrieval. Only logs matching all expressions are returned", scheme: "[]string"},
+  {field: "mapping.timestamp", description: "Source field names for timestamp (tries each until non-empty)", scheme: "[]string"},
+  {field: "mapping.severity", description: "Source field names for log level/severity", scheme: "[]string"},
+  {field: "mapping.message", description: "Source field names for log message content", scheme: "[]string"},
+  {field: "mapping.id", description: "Source field names for unique log identifier", scheme: "[]string"},
+  {field: "cloudwatch", description: "Query logs from AWS CloudWatch Logs", scheme: "[CloudWatch](#cloudwatch)"},
+  {field: "kubernetes", description: "Fetch logs directly from Kubernetes pods", scheme: "[Kubernetes](#kubernetes)"},
+  {field: "loki", description: "Query logs from Grafana Loki", scheme: "[Loki](#loki)"},
+  {field: "opensearch", description: "Query logs from OpenSearch/Elasticsearch", scheme: "[OpenSearch](#opensearch)"}
 ]}/>
 
 ### CloudWatch
 
-<Fields rows={[
-  {field: "connection", description: "AWS connection details", scheme: "AWSConnection"},
-  {field: "accessKey", description: "AWS access key", scheme: "EnvVar"},
-  {field: "secretKey", description: "AWS secret key", scheme: "EnvVar"},
-  {field: "region", description: "AWS region", scheme: "string"},
-  {field: "logGroup", description: "CloudWatch log group name", scheme: "string", required: true, templatable: true},
-  {field: "logStream", description: "CloudWatch log stream name", scheme: "string", templatable: true},
-  {field: "filterPattern", description: "CloudWatch filter pattern", scheme: "string", templatable: true},
-  {field: "startTime", description: "Start time for query", scheme: "string", templatable: true},
-  {field: "endTime", description: "End time for query", scheme: "string", templatable: true},
-  {field: "limit", description: "Maximum number of events to return", scheme: "int"},
-  {field: "dedupe", description: "Log deduplication settings", scheme: "[Dedupe](#dedupe)"},
-  {field: "match", description: "CEL expressions to filter logs", scheme: "[]MatchExpression"},
-  {field: "mapping", description: "Field mapping configuration", scheme: "FieldMappingConfig"}
-]}/>
-
-### OpenSearch
+Query logs from [AWS CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/).
 
 <Fields rows={[
-  {field: "connection", description: "OpenSearch connection details", scheme: "Connection"},
-  {field: "url", description: "OpenSearch URL", scheme: "string"},
-  {field: "username", description: "Basic auth username", scheme: "EnvVar"},
-  {field: "password", description: "Basic auth password", scheme: "EnvVar"},
-  {field: "index", description: "OpenSearch index pattern", scheme: "string", required: true, templatable: true},
-  {field: "query", description: "OpenSearch query", scheme: "string", templatable: true},
-  {field: "timeField", description: "Time field name", scheme: "string"},
-  {field: "from", description: "Start time for query", scheme: "string", templatable: true},
-  {field: "to", description: "End time for query", scheme: "string", templatable: true},
-  {field: "size", description: "Maximum number of hits to return", scheme: "int"},
-  {field: "sort", description: "Sort configuration", scheme: "[]map[string]any"},
-  {field: "dedupe", description: "Log deduplication settings", scheme: "[Dedupe](#dedupe)"},
-  {field: "match", description: "CEL expressions to filter logs", scheme: "[]MatchExpression"},
-  {field: "mapping", description: "Field mapping configuration", scheme: "FieldMappingConfig"}
+  {field: "connection", description: "AWS connection for credentials", scheme: "[AWSConnection](/docs/reference/connections/aws)"},
+  {field: "accessKey", description: "AWS access key ID", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "secretKey", description: "AWS secret access key", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "region", description: "AWS region (e.g., `us-east-1`)", scheme: "string"},
+  {field: "logGroup", description: "CloudWatch log group name", scheme: "string", required: true, templateable: true},
+  {field: "logStream", description: "Specific log stream name. If omitted, searches all streams", scheme: "string", templateable: true},
+  {field: "filterPattern", description: "CloudWatch filter pattern (e.g., `ERROR` or `{ $.level = \"error\" }`)", scheme: "string", templateable: true},
+  {field: "startTime", description: "Start time - relative (e.g., `1h`) or Unix timestamp in ms", scheme: "string", templateable: true},
+  {field: "endTime", description: "End time - relative or Unix timestamp. Defaults to now", scheme: "string", templateable: true},
+  {field: "limit", description: "Maximum number of events to return", scheme: "int"}
 ]}/>
+
+<details summary="Example">
+
+```yaml title="cloudwatch-lambda-logs.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: fetch-lambda-errors
+spec:
+  parameters:
+    - name: function_name
+      label: Lambda Function
+  actions:
+    - name: get-logs
+      logs:
+        cloudwatch:
+          connection: connection://aws/production
+          region: us-east-1
+          logGroup: '/aws/lambda/{{.params.function_name}}'
+          filterPattern: 'ERROR'
+          startTime: 6h
+          limit: 200
+```
+
+</details>
 
 ### Kubernetes
 
-<Fields rows={[
-  {field: "connection", description: "Kubernetes connection details", scheme: "KubernetesConnection"},
-  {field: "kubeconfig", description: "Kubeconfig source", scheme: "EnvVar"},
-  {field: "namespace", description: "Kubernetes namespace", scheme: "string", templatable: true},
-  {field: "pod", description: "Pod name", scheme: "string", templatable: true},
-  {field: "container", description: "Container name", scheme: "string", templatable: true},
-  {field: "labelSelector", description: "Label selector for pods", scheme: "string", templatable: true},
-  {field: "fieldSelector", description: "Field selector for pods", scheme: "string", templatable: true},
-  {field: "since", description: "Only return logs newer than a relative duration", scheme: "string", templatable: true},
-  {field: "sinceTime", description: "Only return logs after a specific date", scheme: "string", templatable: true},
-  {field: "tailLines", description: "Number of lines from the end of the logs", scheme: "int"},
-  {field: "follow", description: "Follow log output", scheme: "bool"},
-  {field: "previous", description: "Return previous terminated container logs", scheme: "bool"},
-  {field: "timestamps", description: "Include timestamps in log output", scheme: "bool"},
-  {field: "dedupe", description: "Log deduplication settings", scheme: "[Dedupe](#dedupe)"},
-  {field: "match", description: "CEL expressions to filter logs", scheme: "[]MatchExpression"},
-  {field: "mapping", description: "Field mapping configuration", scheme: "FieldMappingConfig"}
-]}/>
-
-### Dedupe
-
-Log deduplication removes duplicate log entries based on specified fields.
+Fetch logs directly from Kubernetes pods using the Kubernetes API.
 
 <Fields rows={[
-  {field: "window", description: "Time window for deduplication", scheme: "duration"},
-  {field: "fields", description: "Fields to use for deduplication", scheme: "[]string", required: true}
+  {field: "connection", description: "Kubernetes connection for cluster access", scheme: "[KubernetesConnection](/docs/reference/connections/kubernetes)"},
+  {field: "kubeconfig", description: "Kubeconfig content or path", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "namespace", description: "Kubernetes namespace", scheme: "string", templateable: true},
+  {field: "pod", description: "Pod name (exact match)", scheme: "string", templateable: true},
+  {field: "container", description: "Container name. Required if pod has multiple containers", scheme: "string", templateable: true},
+  {field: "labelSelector", description: "Select pods by labels (e.g., `app=myservice,env=prod`)", scheme: "string", templateable: true},
+  {field: "fieldSelector", description: "Select pods by fields (e.g., `status.phase=Running`)", scheme: "string", templateable: true},
+  {field: "since", description: "Relative duration (e.g., `1h`, `30m`). Logs newer than this", scheme: "string", templateable: true},
+  {field: "sinceTime", description: "Absolute time (RFC3339). Logs after this timestamp", scheme: "string", templateable: true},
+  {field: "tailLines", description: "Number of lines from the end of logs to retrieve", scheme: "int"},
+  {field: "follow", description: "Stream logs in real-time (for long-running playbooks)", scheme: "bool"},
+  {field: "previous", description: "Fetch logs from previous (crashed) container instance", scheme: "bool"},
+  {field: "timestamps", description: "Prepend RFC3339 timestamp to each log line", scheme: "bool"}
 ]}/>
+
+<details summary="Example: Fetch logs for a specific pod">
+
+```yaml title="k8s-pod-logs.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: get-pod-logs
+spec:
+  on:
+    config:
+      - types:
+          - Kubernetes::Pod
+  actions:
+    - name: fetch-logs
+      logs:
+        kubernetes:
+          namespace: '{{.config.tags.namespace}}'
+          pod: '{{.config.name}}'
+          since: 1h
+          tailLines: 1000
+          timestamps: true
+```
+
+</details>
+
+<details summary="Example: Fetch logs from crashed container">
+
+```yaml title="k8s-crashloop-logs.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: debug-crashloop
+spec:
+  on:
+    config:
+      - types:
+          - Kubernetes::Pod
+        filter: config.status == "CrashLoopBackOff"
+  actions:
+    - name: current-logs
+      logs:
+        kubernetes:
+          namespace: '{{.config.tags.namespace}}'
+          pod: '{{.config.name}}'
+          tailLines: 200
+    - name: previous-logs
+      logs:
+        kubernetes:
+          namespace: '{{.config.tags.namespace}}'
+          pod: '{{.config.name}}'
+          previous: true
+          tailLines: 200
+```
+
+</details>
+
+<details summary="Example: Fetch logs by label selector">
+
+```yaml title="k8s-label-selector-logs.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: service-logs
+spec:
+  parameters:
+    - name: service
+      label: Service Name
+  actions:
+    - name: fetch-all-pods
+      logs:
+        kubernetes:
+          namespace: production
+          labelSelector: 'app={{.params.service}}'
+          since: 30m
+          tailLines: 100
+```
+
+</details>
+
+### Loki
+
+Query logs from [Grafana Loki](https://grafana.com/oss/loki/) using LogQL.
+
+<Fields rows={[
+  {field: "connection", description: "Connection name for Loki credentials", scheme: "[Connection](/docs/reference/connections/http)"},
+  {field: "url", description: "Loki server URL (e.g., `http://loki:3100`)", scheme: "string"},
+  {field: "username", description: "Basic auth username", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "password", description: "Basic auth password", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "query", description: "LogQL query (e.g., `{app=\"myservice\"} |= \"error\"`)", scheme: "string", required: true, templateable: true},
+  {field: "start", description: "Start time - relative (e.g., `1h`, `24h`) or absolute (RFC3339)", scheme: "string", templateable: true},
+  {field: "end", description: "End time - relative or absolute. Defaults to now", scheme: "string", templateable: true},
+  {field: "limit", description: "Maximum number of log entries to return", scheme: "int"},
+  {field: "direction", description: "Query direction: `forward` (oldest first) or `backward` (newest first)", scheme: "`forward` | `backward`"}
+]}/>
+
+<details summary="Example">
+
+```yaml title="loki-error-logs.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: fetch-loki-errors
+spec:
+  actions:
+    - name: get-errors
+      logs:
+        loki:
+          url: http://loki.monitoring:3100
+          query: '{namespace="production"} |= "error" | json'
+          start: 1h
+          limit: 100
+          direction: backward
+        match:
+          - 'severity in ["error", "fatal"]'
+```
+
+</details>
+
+### OpenSearch
+
+Query logs from [OpenSearch](https://opensearch.org/) or Elasticsearch clusters.
+
+<Fields rows={[
+  {field: "connection", description: "Connection name for OpenSearch credentials", scheme: "[Connection](/docs/reference/connections/opensearch)"},
+  {field: "url", description: "OpenSearch cluster URL", scheme: "string"},
+  {field: "username", description: "Basic auth username", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "password", description: "Basic auth password", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "index", description: "Index name or pattern (e.g., `logs-*`, `app-logs-2024.01.*`)", scheme: "string", required: true, templateable: true},
+  {field: "query", description: "OpenSearch query DSL or Lucene query string", scheme: "string", templateable: true},
+  {field: "timeField", description: "Field containing timestamp. Defaults to `@timestamp`", scheme: "string"},
+  {field: "from", description: "Start time for query range", scheme: "string", templateable: true},
+  {field: "to", description: "End time for query range. Defaults to now", scheme: "string", templateable: true},
+  {field: "size", description: "Maximum number of documents to return", scheme: "int"},
+  {field: "sort", description: "Sort configuration (e.g., `[{\"@timestamp\": \"desc\"}]`)", scheme: "[]map[string]any"}
+]}/>
+
+<details summary="Example">
+
+```yaml title="opensearch-app-logs.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: search-opensearch
+spec:
+  actions:
+    - name: search-errors
+      logs:
+        opensearch:
+          connection: connection://opensearch/logs
+          index: 'app-logs-*'
+          query: 'level:error AND service:{{.config.name}}'
+          from: 24h
+          size: 500
+          sort:
+            - '@timestamp': desc
+        mapping:
+          timestamp: ['@timestamp']
+          message: ['message', 'msg']
+          severity: ['level', 'log_level']
+```
+
+</details>
 
 ## Output
 
+The action returns a structured result containing the retrieved logs.
+
 <Fields rows={[
-  {field: "logs", description: "Retrieved log entries", scheme: "[]LogEntry"},
-  {field: "count", description: "Number of log entries returned", scheme: "int"}
+  {field: "logs", description: "Array of log entries with normalized fields (timestamp, message, severity, etc.)", scheme: "[]LogEntry"},
+  {field: "count", description: "Total number of log entries returned", scheme: "int"}
 ]}/>
+
+### Using Results in Subsequent Actions
+
+```yaml
+actions:
+  - name: fetch-logs
+    logs:
+      kubernetes:
+        namespace: production
+        labelSelector: app=api
+        since: 1h
+  - name: analyze
+    if: actions.fetch-logs.result.count > 0
+    ai:
+      prompt: |
+        Analyze these {{.actions.fetch-logs.result.count}} log entries:
+        {{.actions.fetch-logs.result.logs | toJSON}}
+```
 
 ## Templating
 

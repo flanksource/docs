@@ -37,8 +37,12 @@ For example, if you want to exclude all events with severity="info", a scrape pl
       field: 'changes.mapping',
       description: 'Categorize changes',
       scheme: '[Mapping](#mapping)'
+    },
+    {
+      field: 'retention',
+      description: 'Global retention settings for config items and changes',
+      scheme: '[Retention](./retention)'
     }
-
   ]}
 />
 
@@ -74,3 +78,27 @@ For example, the change 'status.images' might not be self-explanatory. To clarif
     }
   ]}
 />
+
+### Retention
+
+Scrape plugins can define global retention policies that are merged with individual scraper retention settings. This is useful for enforcing organization-wide retention policies.
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapePlugin
+metadata:
+  name: global-retention
+spec:
+  retention:
+    changes:
+      - name: PullSucceeded
+        age: 7d
+      - name: diff
+        age: 30d
+    types:
+      - name: Kubernetes::Pod
+        deletedAge: 7d
+    staleItemAge: 24h
+```
+
+When a scraper runs, retention settings from all applicable plugins are merged with the scraper's own retention configuration. See [Retention](./retention) for the full schema.

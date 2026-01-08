@@ -122,6 +122,18 @@ spec:
 ```
 </details>
 
+<details summary="Request Chaining">
+
+Chain multiple HTTP requests together using `dependsOn`. This is useful for authentication flows where you need to login first and use the token in subsequent requests.
+
+```yaml title="http-depends-on.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_depends_on_pass.yaml
+
+```
+
+See [Request Chaining](/docs/guide/canary-checker/concepts/request-chaining) for more details.
+
+</details>
+
 ---
 
 <CapabilityHeading type="playbook" />

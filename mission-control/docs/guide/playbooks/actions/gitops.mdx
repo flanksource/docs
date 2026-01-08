@@ -92,11 +92,12 @@ Common use cases:
 
 Patches modify existing files on the git repo. You can either use `yq` to modify yaml files or `jq` to modify json files.
 
-| Field  | Description   | Scheme   | Required | Templatable |
-| ------ | ------------- | -------- | -------- | ----------- |
-| `path` | Path to patch | `string` | `true`   | `true`      |
-| `yq`   | yq query      | `string` | `false`  | `true`      |
-| `jq`   | jq query      | `string` | `false`  | `true`      |
+| Field  | Description                                              | Scheme   | Required | Templatable |
+| ------ | -------------------------------------------------------- | -------- | -------- | ----------- |
+| `path` | Path to patch                                            | `string` | `true`   | `true`      |
+| `yq`   | yq query                                                 | `string` | `false`  | `true`      |
+| `jq`   | jq query                                                 | `string` | `false`  | `true`      |
+| `if`   | CEL expression to conditionally apply the patch          | `string` | `false`  |             |
 
 ### File
 

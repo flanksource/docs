@@ -1,6 +1,6 @@
 ---
 title: SQL
-sidebar_position: 6
+sidebar_position: 18
 sidebar_custom_props:
   icon: database
 ---
@@ -47,7 +47,7 @@ The SQL scraper executes queries against relational databases and creates config
 | ----------- | ---------------------------------------------------------------------------------- | -------------------------------------------------- | -------- |
 | `logLevel`  | Specify the level of logging                                                       | `string`                                           |          |
 | `schedule`  | Scrape interval in cron format. Defaults to every 60 minutes                       | [Cron](/docs/reference/types#cron)                 |          |
-| `full`      | Extract changes, access logs, users, groups from scraped configurations            | `bool`                                             |          |
+| `full`      | Extract [changes](/docs/guide/config-db/concepts/changes#extracting-changes), [access logs](/docs/guide/config-db/concepts/access-logs), users, groups from scraped configurations | `bool`                                             |          |
 | `retention` | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/docs/guide/config-db/concepts/retention) |          |
 | `sql`       | List of SQL configurations to scrape                                               | [`[]SQL`](#sql)                                    |          |
 

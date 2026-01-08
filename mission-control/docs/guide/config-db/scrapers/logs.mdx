@@ -1,11 +1,9 @@
 ---
 title: Logs
-sidebar_position: 8
+sidebar_position: 13
 sidebar_custom_props:
   icon: logs
 ---
-
-import Custom from './_custom.mdx'
 
 # <Icon name="logs"/> Logs
 
@@ -32,165 +30,113 @@ The Logs scraper queries log aggregation systems to extract configuration change
 
 ### Logs
 
-<Custom rows={[
+<Fields rows={[
   {
-    field: "loki",
-    description: "Loki configuration for log scraping",
-    scheme: "[LokiConfig](#lokiconfig)",
-    required: false
+    field: "fieldMapping.timestamp",
+    description: "Source field names containing timestamp data. The scraper tries each field in order until it finds a non-empty value. Common values: `@timestamp`, `timestamp`, `time`, `date`",
+    scheme: "[]string"
   },
   {
-    field: "gcpCloudLogging",
-    description: "GCP Cloud Logging configuration",
-    scheme: "[GCPCloudLoggingConfig](#gcpcloudloggingconfig)",
-    required: false
+    field: "fieldMapping.severity",
+    description: "Source field names containing log level/severity. Used to categorize log entries. Common values: `level`, `severity`, `log_level`, `priority`",
+    scheme: "[]string"
   },
   {
-    field: "openSearch",
-    description: "OpenSearch configuration for log scraping",
-    scheme: "[OpenSearchConfig](#opensearchconfig)",
-    required: false
+    field: "fieldMapping.message",
+    description: "Source field names containing the main log message content. Common values: `message`, `msg`, `log`, `text`, `body`",
+    scheme: "[]string"
+  },
+  {
+    field: "fieldMapping.id",
+    description: "Source field names containing unique identifiers for deduplication. Common values: `id`, `event_id`, `trace_id`, `request_id`",
+    scheme: "[]string"
   },
   {
     field: "bigQuery",
     description: "BigQuery configuration for log scraping",
-    scheme: "[BigQueryConfig](#bigqueryconfig)",
-    required: false
+    scheme: "[BigQueryConfig](#bigqueryconfig)"
   },
   {
-    field: "fieldMapping",
-    description: "Defines how source log fields map to canonical LogLine fields",
-    scheme: "[FieldMappingConfig](#fieldmappingconfig)",
-    required: false
+    field: "gcpCloudLogging",
+    description: "GCP Cloud Logging configuration",
+    scheme: "[GCPCloudLoggingConfig](#gcpcloudloggingconfig)"
+  },
+  {
+    field: "loki",
+    description: "Loki configuration for log scraping",
+    scheme: "[LokiConfig](#lokiconfig)"
+  },
+  {
+    field: "openSearch",
+    description: "OpenSearch configuration for log scraping",
+    scheme: "[OpenSearchConfig](#opensearchconfig)"
   }
 ]} />
 
-### LokiConfig
+## Field Mapping
 
-<Custom rows={[
-  {
-    field: "url",
-    description: "Loki server URL",
-    scheme: "string",
-    required: true
-  },
-  {
-    field: "query",
-    description: "LogQL query to execute",
-    scheme: "string",
-    required: true
-  },
-  {
-    field: "start",
-    description: "Start time for the query (e.g., '24h', '7d')",
-    scheme: "string",
-    required: false
-  },
-  {
-    field: "end",
-    description: "End time for the query",
-    scheme: "string",
-    required: false
-  },
-  {
-    field: "limit",
-    description: "Maximum number of log entries to return",
-    scheme: "string",
-    required: false
-  },
-  {
-    field: "username",
-    description: "Basic auth username",
-    scheme: "[EnvVar](/docs/reference/types#envvar)",
-    required: false
-  },
-  {
-    field: "password",
-    description: "Basic auth password",
-    scheme: "[EnvVar](/docs/reference/types#envvar)",
-    required: false
-  }
-]} />
+Different log systems use different field names for the same data. For example:
+- **Timestamp**: Elasticsearch uses `@timestamp`, Loki uses `ts`, CloudWatch uses `timestamp`
+- **Message**: Some systems use `message`, others use `msg`, `log`, or `text`
+- **Severity**: Could be `level`, `severity`, `log_level`, or `priority`
 
-### GCPCloudLoggingConfig
+Field mapping normalizes these differences so your transform expressions work consistently regardless of the log source.
 
-<Custom rows={[
-  {
-    field: "project",
-    description: "GCP project ID",
-    scheme: "string",
-    required: true
-  },
-  {
-    field: "filter",
-    description: "Cloud Logging filter query",
-    scheme: "string",
-    required: false
-  },
-  {
-    field: "orderBy",
-    description: "Field to order results by",
-    scheme: "string",
-    required: false
-  },
-  {
-    field: "pageSize",
-    description: "Number of entries per page",
-    scheme: "int",
-    required: false
-  },
-  {
-    field: "credentials",
-    description: "GCP service account credentials",
-    scheme: "[EnvVar](/docs/reference/types#envvar)",
-    required: false
-  }
-]} />
+### How It Works
 
-### OpenSearchConfig
+When you specify multiple field names, the scraper tries each one in order and uses the first non-empty value:
 
-<Custom rows={[
-  {
-    field: "url",
-    description: "OpenSearch cluster URL",
-    scheme: "string",
-    required: true
-  },
-  {
-    field: "index",
-    description: "Index name or pattern",
-    scheme: "string",
-    required: true
-  },
-  {
-    field: "query",
-    description: "OpenSearch query DSL",
-    scheme: "string",
-    required: false
-  },
-  {
-    field: "size",
-    description: "Number of results to return",
-    scheme: "int",
-    required: false
-  },
-  {
-    field: "username",
-    description: "Basic auth username",
-    scheme: "[EnvVar](/docs/reference/types#envvar)",
-    required: false
-  },
-  {
-    field: "password",
-    description: "Basic auth password",
-    scheme: "[EnvVar](/docs/reference/types#envvar)",
-    required: false
-  }
-]} />
+```yaml
+fieldMapping:
+  timestamp: ['@timestamp', 'timestamp', 'time']  # Try @timestamp first, then timestamp, then time
+  message: ['message', 'msg', 'log']
+  severity: ['level', 'severity']
+  id: ['trace_id', 'request_id', 'event_id']
+```
+
+### When to Use Field Mapping
+
+Use field mapping when:
+- Your logs come from multiple sources with different schemas
+- You're migrating between log systems and field names changed
+- Third-party applications use non-standard field names
+- You want transforms to be portable across different backends
+
+<details summary="Example: Normalizing ELK and Loki logs">
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: unified-app-logs
+spec:
+  logs:
+    # OpenSearch/Elasticsearch logs use @timestamp and message
+    - openSearch:
+        url: https://elasticsearch:9200
+        index: app-logs-*
+      fieldMapping:
+        timestamp: ['@timestamp']
+        message: ['message']
+        severity: ['level', 'log.level']
+        id: ['trace.id', 'request_id']
+
+    # Loki logs use different field names
+    - loki:
+        url: http://loki:3100
+        query: '{app="myservice"}'
+      fieldMapping:
+        timestamp: ['ts', 'timestamp']
+        message: ['line', 'msg']
+        severity: ['level', 'detected_level']
+        id: ['traceID']
+```
+
+</details>
 
 ### BigQueryConfig
 
-<Custom rows={[
+<Fields rows={[
   {
     field: "project",
     description: "GCP project ID containing the BigQuery dataset",
@@ -206,55 +152,49 @@ The Logs scraper queries log aggregation systems to extract configuration change
   {
     field: "credentials",
     description: "GCP service account credentials",
-    scheme: "[EnvVar](/docs/reference/types#envvar)",
-    required: false
+    scheme: "[EnvVar](/docs/reference/env-var)"
   }
 ]} />
 
-### FieldMappingConfig
-
-<Custom rows={[
-  {
-    field: "timestamp",
-    description: "Field names that contain timestamp information",
-    scheme: "[]string",
-    required: false
-  },
-  {
-    field: "severity",
-    description: "Field names that contain severity/level information",
-    scheme: "[]string",
-    required: false
-  },
-  {
-    field: "message",
-    description: "Field names that contain the main log message",
-    scheme: "[]string",
-    required: false
-  },
-  {
-    field: "id",
-    description: "Field names that contain unique identifiers",
-    scheme: "[]string",
-    required: false
-  }
-]} />
-
-
-
-## Configuration Examples
-
-### Loki Integration
-
-```yaml title="loki-config-changes.yaml" file=<rootDir>/modules/config-db/fixtures/logs-app-config-changes.yaml
-```
-
-### BigQuery Log Analysis
+<details summary="Example">
 
 ```yaml title="bigquery-github-commits.yaml" file=<rootDir>/modules/config-db/fixtures/bigquery-logs.yaml
 ```
 
-### GCP Cloud Logging
+</details>
+
+### GCPCloudLoggingConfig
+
+<Fields rows={[
+  {
+    field: "project",
+    description: "GCP project ID",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "filter",
+    description: "Cloud Logging filter query",
+    scheme: "string"
+  },
+  {
+    field: "orderBy",
+    description: "Field to order results by",
+    scheme: "string"
+  },
+  {
+    field: "pageSize",
+    description: "Number of entries per page",
+    scheme: "int"
+  },
+  {
+    field: "credentials",
+    description: "GCP service account credentials",
+    scheme: "[EnvVar](/docs/reference/env-var)"
+  }
+]} />
+
+<details summary="Example">
 
 ```yaml
 apiVersion: configs.flanksource.com/v1
@@ -283,7 +223,95 @@ spec:
           }).toJSON()
 ```
 
-### OpenSearch Log Mining
+</details>
+
+### LokiConfig
+
+<Fields rows={[
+  {
+    field: "url",
+    description: "Loki server URL",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "query",
+    description: "LogQL query to execute",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "start",
+    description: "Start time for the query (e.g., '24h', '7d')",
+    scheme: "string"
+  },
+  {
+    field: "end",
+    description: "End time for the query",
+    scheme: "string"
+  },
+  {
+    field: "limit",
+    description: "Maximum number of log entries to return",
+    scheme: "string"
+  },
+  {
+    field: "username",
+    description: "Basic auth username",
+    scheme: "[EnvVar](/docs/reference/env-var)"
+  },
+  {
+    field: "password",
+    description: "Basic auth password",
+    scheme: "[EnvVar](/docs/reference/env-var)"
+  }
+]} />
+
+<details summary="Example">
+
+```yaml title="loki-config-changes.yaml" file=<rootDir>/modules/config-db/fixtures/logs-app-config-changes.yaml
+```
+
+</details>
+
+### OpenSearchConfig
+
+<Fields rows={[
+  {
+    field: "url",
+    description: "OpenSearch cluster URL",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "index",
+    description: "Index name or pattern",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "query",
+    description: "OpenSearch query DSL",
+    scheme: "string"
+  },
+  {
+    field: "size",
+    description: "Number of results to return",
+    scheme: "int"
+  },
+  {
+    field: "username",
+    description: "Basic auth username",
+    scheme: "[EnvVar](/docs/reference/env-var)"
+  },
+  {
+    field: "password",
+    description: "Basic auth password",
+    scheme: "[EnvVar](/docs/reference/env-var)"
+  }
+]} />
+
+<details summary="Example">
 
 ```yaml
 apiVersion: configs.flanksource.com/v1
@@ -324,4 +352,4 @@ spec:
         id: ['event_id', 'transaction_id']
 ```
 
-The Logs scraper provides powerful integration with various log aggregation systems, enabling you to transform log data into actionable configuration insights and change tracking.
+</details>
