@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-slug: /installation/self-hosted/getting-started
+slug: /installation/self-hosted
 show_title: true
 sidebar_custom_props:
   icon: getting-started
@@ -54,12 +54,12 @@ To install and run Mission Control you need the following:
 1. Choose a routable `DOMAIN` for Mission Control
     <p/>
     > See [Ingress](/docs/reference/helm/mission-control#ingress) for more options on configuring the ingress including generating certs with cert-manager
-    > <p>See [Local Testing](../local-testing) for testing using a kind or minikube without a routable domain</p>
+    > <p>See [Local Testing](/docs/installation/local-testing) for testing using a kind or minikube without a routable domain</p>
 
 1. Install Mission Control
     <p/>
     :::tip
-    If you are installing on EKS and plan to scrape AWS resources use the method described in [EKS](./eks) instead
+    If you are installing on EKS and plan to scrape AWS resources use the method described in [EKS](/docs/installation/self-hosted/eks) instead
     :::
 
     <Helm values={{
@@ -75,10 +75,10 @@ To install and run Mission Control you need the following:
 <Cards className="border border-t border-solid border-gray-200">
 
 
-  <Card size="sm" title="Use an External Database" icon="postgres" link="./database"/>
+  <Card size="sm" title="Use an External Database" icon="postgres" link="/docs/installation/self-hosted/database"/>
 
-  <Card size="sm" title="Configure Single Sign-On" icon="jwt" link="./sso"/>
-  <Card size="sm" title="Configure SMTP/Email" icon="email" link="./smtp"/>
+  <Card size="sm" title="Configure Single Sign-On" icon="jwt" link="/docs/installation/self-hosted/sso"/>
+  <Card size="sm" title="Configure SMTP/Email" icon="email" link="/docs/installation/self-hosted/smtp"/>
 
 
 </Cards>
