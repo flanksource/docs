@@ -36,3 +36,8 @@ sync:
 
 update-submodules:
 	git submodule update --remote --merge && git submodule sync
+
+.PHONY: llms.txt
+llms.txt:
+	claude --model  claude-haiku-4-5 \
+		'go through all the cel functions in mission-control/docs/reference/scripting/cel.mdx and document each and every one those functions in @canary-checker/docs/scripting/llms.txt with function signature. Example: - base64.decode(string)'

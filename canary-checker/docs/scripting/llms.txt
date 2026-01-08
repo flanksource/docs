@@ -1,0 +1,247 @@
+# CEL Function Reference
+
+## Type Conversion
+- bool(value)
+- bytes(value)
+- double(value)
+- duration(string)
+- int(value)
+- string(value)
+- timestamp(string)
+- uint(value)
+- type(value)
+- dyn(value)
+
+## AWS Functions
+- aws.arnToMap(arn)
+- aws.fromAWSMap(list)
+
+## Base64
+- base64.encode(bytes)
+- base64.decode(string)
+
+## Collections
+- <map>.keys()
+- <map>.merge(map)
+- <map>.omit(list)
+- <list>.sort()
+- <list>.distinct()
+- <list>.flatten()
+- <list>.reverse()
+- range(n)
+- range(start, end)
+- range(start, end, step)
+- <list>.uniq()
+- <map>.values()
+- keyValToMap(string)
+- <map>.mapToKeyVal()
+- <list>.all(x, predicate)
+- <list>.exists(x, predicate)
+- <list>.exists_one(x, predicate)
+- <list>.filter(x, predicate)
+- <list>.fold(e, acc, binary_function)
+- <map>.fold(k, v, acc, binary_function)
+- has(field)
+- <list>.map(x, transform)
+- <list>.map(x, predicate, transform)
+- <optional>.or(optional)
+- <optional>.orValue(value)
+- size(collection)
+- <list>.slice(start, end)
+
+## Sets
+- sets.contains(list, list)
+- sets.equivalent(list, list)
+- sets.intersects(list, list)
+
+## CSV
+- CSV(array)
+
+## Crypto
+- crypto.SHA1(string)
+- crypto.SHA256(string)
+- crypto.SHA384(string)
+- crypto.SHA512(string)
+
+## Dates & Time
+- timestamp(string)
+- <timestamp>.getDate()
+- <timestamp>.getDayOfMonth()
+- <timestamp>.getDayOfWeek()
+- <timestamp>.getDayOfYear()
+- <timestamp>.getFullYear()
+- <timestamp>.getHours()
+- <timestamp>.getMilliseconds()
+- <timestamp>.getMinutes()
+- <timestamp>.getMonth()
+- <timestamp>.getSeconds()
+- duration(string)
+- time.Unix(epoch)
+- time.Nanosecond
+- time.Microsecond
+- time.Millisecond
+- time.Second
+- time.Minute
+- time.Hour
+- time.ZoneName()
+- time.ZoneOffset()
+- time.Parse(layout, value)
+- time.ParseLocal(layout, value)
+- time.ParseInLocation(layout, location, value)
+- time.Now()
+- time.ParseDuration(string)
+- time.Since(timestamp)
+- time.Until(timestamp)
+
+## Encoding
+- urlencode(string)
+- urldecode(string)
+
+## Filepath
+- filepath.Base(path)
+- filepath.Clean(path)
+- filepath.Dir(path)
+- filepath.Ext(path)
+- filepath.IsAbs(path)
+- filepath.Join(paths)
+- filepath.Match(pattern, name)
+- filepath.Rel(basepath, targpath)
+- filepath.Split(path)
+
+## JSON
+- <string>.JSON()
+- <string>.JSONArray()
+- <value>.toJSON()
+- <value>.toJSONPretty(indent)
+- jmespath(expression, object)
+- jsonpath(expression, object)
+- jq(expression, object)
+
+## Kubernetes
+- k8s.cpuAsMillicores(string)
+- k8s.getHealth(resource)
+- k8s.getStatus(resource)
+- k8s.getResourcesLimit(pod, resource)
+- k8s.getResourcesRequests(pod, resource)
+- k8s.isHealthy(resource)
+- k8s.labels(object)
+- k8s.memoryAsBytes(string)
+- k8s.nodeProperties(node)
+- k8s.podProperties(pod)
+
+## Math
+- math.Add(list)
+- math.Sub(x, y)
+- math.Mul(list)
+- math.Div(x, y)
+- math.Rem(x, y)
+- math.Pow(x, y)
+- math.Seq(list)
+- math.Abs(x)
+- math.greatest(list)
+- math.least(list)
+- math.Ceil(x)
+- math.Floor(x)
+- math.Round(x)
+- math.Trunc(x)
+- math.Sign(x)
+- math.Sqrt(x)
+- math.IsNaN(x)
+- math.IsInf(x)
+- math.IsFinite(x)
+- math.bitOr(x, y)
+- math.bitAnd(x, y)
+- math.bitXor(x, y)
+- math.bitNot(x)
+- math.bitShiftLeft(x, n)
+- math.bitShiftRight(x, n)
+
+## Query Functions
+- matchQuery(resource, query)
+- matchLabel(labels, key, patterns)
+
+## Random
+- random.ASCII(length)
+- random.Alpha(length)
+- random.AlphaNum(length)
+- random.String(length)
+- random.String(length, charset)
+- random.Item(list)
+- random.Number(min, max)
+- random.Float(min, max)
+
+## Regular Expressions
+- regexp.Find(pattern, input)
+- regexp.FindAll(pattern, count, input)
+- regexp.Match(pattern, input)
+- regexp.QuoteMeta(string)
+- regexp.Replace(pattern, replacement, input)
+- regexp.ReplaceLiteral(pattern, replacement, input)
+- regexp.Split(pattern, count, input)
+
+## Strings
+- <string>.abbrev(offset, maxWidth)
+- <string>.abbrev(maxWidth)
+- <string>.camelCase()
+- <string>.charAt(index)
+- <string>.contains(substring)
+- <string>.endsWith(suffix)
+- <string>.format(args)
+- <string>.indent(width, prefix)
+- <string>.indexOf(substring)
+- <string>.indexOf(substring, start)
+- <list>.join()
+- <list>.join(separator)
+- <string>.kebabCase()
+- <string>.lastIndexOf(substring)
+- <string>.lastIndexOf(substring, end)
+- <string>.lowerAscii()
+- <string>.matches(pattern)
+- <string>.quote()
+- <string>.repeat(count)
+- <string>.replace(search, replacement)
+- <string>.replace(search, replacement, limit)
+- <string>.replaceAll(search, replacement)
+- <string>.reverse()
+- <string>.runeCount()
+- <string>.shellQuote()
+- <string>.size()
+- <string>.slug()
+- <string>.snakeCase()
+- <string>.sort()
+- <string>.split(separator)
+- <string>.split(separator, limit)
+- <string>.squote()
+- <string>.startsWith(prefix)
+- <string>.substring(start)
+- <string>.substring(start, end)
+- <string>.title()
+- <string>.trim()
+- <string>.trimPrefix(prefix)
+- <string>.trimSuffix(suffix)
+- <string>.upperAscii()
+- <string>.wordWrap(maxWidth)
+- <string>.wordWrap(maxWidth, lineBreakSequence)
+- HumanDuration(seconds)
+- HumanSize(bytes)
+- Semver(version)
+- SemverCompare(version1, version2)
+
+## YAML
+- YAML(string)
+- <value>.toYAML()
+- YAMLArray(string)
+
+## TOML
+- TOML(string)
+- <value>.toTOML()
+
+## GCP
+- gcp.ParseIncidentTime(string)
+
+## UUID
+- uuid.Nil()
+- uuid.V1()
+- uuid.V4()
+- uuid.IsValid(string)
+- uuid.Parse(string)

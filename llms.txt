@@ -1,0 +1,5 @@
+# Flanksource Docs LLM Index
+This repository contains documentation for Flanksource projects built with Docusaurus.
+
+References:
+- canary-checker/docs/scripting/llms.txt: CEL function reference (complete list)
