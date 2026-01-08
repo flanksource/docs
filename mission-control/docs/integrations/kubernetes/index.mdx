@@ -8,13 +8,6 @@ import DocCardList from '@theme/DocCardList';
 import { Card, Cards } from '@site/../common/src/components/Card'
 import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
 
-export const toc = [
-  { value: 'Catalog', id: 'catalog', level: 2 },
-  { value: 'Health Checks', id: 'health-checks', level: 2 },
-  { value: 'Playbooks', id: 'playbooks', level: 2 },
-  { value: 'Notifications', id: 'notifications', level: 2 },
-];
-
 <CapabilityBadges>
   <CapabilityBadge type="scraper" />
   <CapabilityBadge type="healthcheck" />
@@ -70,7 +63,6 @@ Automate Kubernetes operations and incident remediation with playbooks.
 - Delete stuck resources or force reconciliation
 
 <Cards>
-  <Card title="Kubernetes Action" link="/docs/guide/playbooks/actions/kubernetes" />
   <Card title="Exec Action" link="/docs/guide/playbooks/actions/exec" />
 </Cards>
 

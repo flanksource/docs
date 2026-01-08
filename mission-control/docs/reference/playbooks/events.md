@@ -18,6 +18,16 @@ Filters can give you fine-grained control over the events that can trigger the p
 
 Canary events relate to activities on health checks.
 
+## Component
+
+Component events relate to changes in component health status.
+
+| Event       | Description                              |
+| ----------- | ---------------------------------------- |
+| `healthy`   | When a component becomes healthy         |
+| `unhealthy` | When a component becomes unhealthy       |
+| `warning`   | When a component enters a warning state  |
+
 | Event    | Description                           |
 | -------- | ------------------------------------- |
 | `passed` | When a previously failed check passes |
