@@ -1,0 +1,49 @@
+---
+title: Discord
+description: Connect to Discord for sending notifications and alerts via webhooks
+sidebar_custom_props:
+  icon: discord
+---
+
+Discord connections enable sending notifications and alerts to Discord channels via webhooks.
+
+## Used By
+
+- [Notifications](/docs/guide/notifications) - Send alerts to Discord channels
+- [Notification Action](/docs/guide/playbooks/actions/notification) - Send messages from playbooks
+
+<Fields rows={[
+  {
+    field: 'webhookID',
+    scheme: 'string',
+    description: 'Discord webhook ID',
+    required: true
+  },
+  {
+    field: 'token',
+    scheme: 'string',
+    description: 'Discord webhook token',
+    required: true
+  },
+]}/>
+
+## Example
+
+```yaml title="discord-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: discord-alerts
+spec:
+  discord:
+    webhookID: "1234567890123456789"
+    token:
+      valueFrom:
+        secretKeyRef:
+          name: discord-credentials
+          key: WEBHOOK_TOKEN
+```
+
+## Next Steps
+
+- [Discord Channel Guide](/docs/guide/notifications/channels/discord) - Configure Discord notifications

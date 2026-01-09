@@ -51,10 +51,10 @@ spec:
   {field: "mapping.severity", description: "Source field names for log level/severity", scheme: "[]string"},
   {field: "mapping.message", description: "Source field names for log message content", scheme: "[]string"},
   {field: "mapping.id", description: "Source field names for unique log identifier", scheme: "[]string"},
-  {field: "cloudwatch", description: "Query logs from AWS CloudWatch Logs", scheme: "[CloudWatch](#cloudwatch)"},
-  {field: "kubernetes", description: "Fetch logs directly from Kubernetes pods", scheme: "[Kubernetes](#kubernetes)"},
-  {field: "loki", description: "Query logs from Grafana Loki", scheme: "[Loki](#loki)"},
-  {field: "opensearch", description: "Query logs from OpenSearch/Elasticsearch", scheme: "[OpenSearch](#opensearch)"}
+  {field: "cloudwatch", priority: 1, description: "Query logs from AWS CloudWatch Logs", scheme: "[CloudWatch](#cloudwatch)"},
+  {field: "kubernetes", priority: 1, description: "Fetch logs directly from Kubernetes pods", scheme: "[Kubernetes](#kubernetes)"},
+  {field: "loki", priority: 1, description: "Query logs from Grafana Loki", scheme: "[Loki](#loki)"},
+  {field: "opensearch", priority: 1, description: "Query logs from OpenSearch/Elasticsearch", scheme: "[OpenSearch](#opensearch)"}
 ]}/>
 
 ### CloudWatch

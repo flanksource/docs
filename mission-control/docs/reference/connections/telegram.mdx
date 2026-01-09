@@ -1,0 +1,52 @@
+---
+title: Telegram
+description: Connect to Telegram for sending notifications and alerts via bot
+sidebar_custom_props:
+  icon: telegram
+---
+
+Telegram connections enable sending notifications and alerts to Telegram chats via a bot.
+
+## Used By
+
+- [Notifications](/docs/guide/notifications) - Send alerts to Telegram chats
+- [Notification Action](/docs/guide/playbooks/actions/notification) - Send messages from playbooks
+
+<Fields rows={[
+  {
+    field: 'token',
+    required: true,
+    scheme: 'EnvVar',
+    description: 'Telegram bot token from @BotFather'
+  },
+  {
+    field: 'chats',
+    required: true,
+    scheme: 'EnvVar',
+    description: 'Chat ID(s) to send messages to'
+  },
+]}/>
+
+## Example
+
+```yaml title="telegram-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: telegram-alerts
+spec:
+  telegram:
+    token:
+      valueFrom:
+        secretKeyRef:
+          name: telegram-credentials
+          key: BOT_TOKEN
+    chats:
+      value: "-1001234567890"
+```
+
+Note: Group chat IDs start with `-100` prefix.
+
+## Next Steps
+
+- [Telegram Channel Guide](/docs/guide/notifications/channels/telegram) - Configure Telegram notifications

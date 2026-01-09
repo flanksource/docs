@@ -79,7 +79,7 @@ li::marker {
 }
 
 li {
-  font: var(--ifm-font-sans) !important;
+  font-family: var(--ifm-font-sans) !important;
 }
 
 li > svg {
@@ -573,7 +573,7 @@ pre {
 
 .navbar__link--active {
   color: var(--ifm-color-primary-light);
-  font: bold;
+  font-weight: bold;
 }
 
 a {

@@ -23,7 +23,6 @@ When creating a notification you can either specify a connection or a custom URL
 | [Mattermost](./mattermost)   | _mattermost://[__`username`__@]**`mattermost-host`**/**`token`**[/__`channel`__]_                                               |
 | [Matrix](./matrix)           | _matrix://**`username`**:**`password`**@**`host`**:**`port`**/[?rooms=**`!roomID1`**[,__`roomAlias2`__]]_                       |
 | [Ntfy](./ntfy)               | _ntfy://**`username`**:**`password`**@ntfy.sh/**`topic`**_                                                                      |
-| [OpsGenie](./opsgenie)       | _opsgenie://**`host`**/token?responders=**`responder1`**[,__`responder2`__]_                                                    |
 | [Pushbullet](./pushbullet)   | _pushbullet://**`api-token`**[/__`device`__/#__`channel`__/__`email`__]_                                                        |
 | [Pushover](./pushover)       | _pushover://shoutrrr:**`apiToken`**@**`userKey`**/?devices=**`device1`**[,__`device2`__, ...]_                                  |
 | [Rocketchat](./rocketchat)   | _rocketchat://[__`username`__@]**`rocketchat-host`**/**`token`**[/__`channel`&#124;`@recipient`__]_                             |

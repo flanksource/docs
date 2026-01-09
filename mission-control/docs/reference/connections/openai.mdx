@@ -1,19 +1,28 @@
 ---
 title: OpenAI
+description: Connect to OpenAI API for AI-powered playbook actions and analysis
 sidebar_custom_props:
   icon: openai
 ---
 
+OpenAI connections enable integration with OpenAI's API for AI-powered playbook actions, automated analysis, and intelligent response generation.
+
+## Used By
+
+- [AI Action](/docs/guide/playbooks/actions/ai) - Use AI for log analysis, incident summarization, and automated troubleshooting
+
 <Fields connection="openai"/>
 
-## Example
+## Examples
 
-```yaml
+<details summary="OpenAI API">
+<div>
+
+```yaml title="openai-connection.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
   name: openai-gpt4
-  namespace: default
 spec:
   openai:
     model:
@@ -21,6 +30,33 @@ spec:
     apiKey:
       valueFrom:
         secretKeyRef:
-          name: openai
+          name: openai-credentials
           key: API_KEY
 ```
+
+</div>
+</details>
+
+<details summary="Azure OpenAI Service">
+<div>
+
+```yaml title="azure-openai.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: azure-openai
+spec:
+  openai:
+    model:
+      value: gpt-4
+    apiKey:
+      valueFrom:
+        secretKeyRef:
+          name: azure-openai-credentials
+          key: API_KEY
+    baseURL:
+      value: https://my-resource.openai.azure.com/openai/deployments/gpt-4
+```
+
+</div>
+</details>

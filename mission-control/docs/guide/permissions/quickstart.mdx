@@ -1,0 +1,234 @@
+---
+title: Quickstart
+sidebar_position: 1
+sidebar_custom_props:
+  icon: rocket
+---
+
+This guide helps you get started with Mission Control permissions, including understanding default permissions and how to customize them.
+
+## Default Behavior
+
+By default, Mission Control operates in a permissive mode where:
+
+- **Editors** can run any playbook and read any connection
+- **Notifications** can run any playbook and read configs/components
+- **System services** (canaries, scrapers, playbooks, topologies, notifications) can read all connections, configs, and components
+
+This default behavior is suitable for small teams or development environments where fine-grained access control isn't required.
+
+## Enabling Strict Permissions
+
+For production environments or multi-tenant setups, you should enable strict permission mode via Helm values:
+
+```yaml title="values.yaml"
+permissions:
+  # Require explicit permissions to run playbooks
+  playbooks: true
+  # Require explicit permissions to read connections
+  connections: true
+  # Require explicit permissions for system services to read configs
+  configs: true
+  # Require explicit permissions for system services to read components
+  components: true
+```
+
+When these are set to `true`, the default permissive rules are disabled and you must explicitly grant permissions.
+
+## Helm Values Reference
+
+| Value | Default | Description |
+|-------|---------|-------------|
+| `permissions.playbooks` | `false` | When `true`, users need explicit permission to run playbooks |
+| `permissions.connections` | `false` | When `true`, users need explicit permission to read connections |
+| `permissions.configs` | `false` | When `true`, system services need explicit permission to read configs |
+| `permissions.components` | `false` | When `true`, system services need explicit permission to read components |
+
+## Default Permission Groups
+
+Mission Control creates a `system` permission group that includes all system services:
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: PermissionGroup
+metadata:
+  name: system
+spec:
+  canaries:
+    - name: "*"
+  scrapers:
+    - name: "*"
+  playbooks:
+    - name: "*"
+  topologies:
+    - name: "*"
+  notifications:
+    - name: "*"
+```
+
+This group is used to grant system-wide permissions to Mission Control's internal services.
+
+## Quick Setup Examples
+
+### Allow a Team to Run Playbooks
+
+```yaml title="team-playbook-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: sre-team-playbooks
+spec:
+  description: Allow SRE team to run all playbooks
+  subject:
+    team: sre-team
+  actions:
+    - playbook:run
+  object:
+    playbooks:
+      - name: "*"
+```
+
+### Allow a Notification to Use a Connection
+
+When strict permissions are enabled, notifications need explicit access to connections:
+
+```yaml title="notification-connection-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: alert-notification-slack
+spec:
+  description: Allow alert notification to use Slack connection
+  subject:
+    notification: monitoring/critical-alerts
+  actions:
+    - read
+  object:
+    connections:
+      - name: slack-alerts
+```
+
+### Allow a Playbook to Access AWS Connection
+
+```yaml title="playbook-aws-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: cleanup-playbook-aws
+spec:
+  description: Allow cleanup playbook to use AWS connection
+  subject:
+    playbook: automation/cleanup-resources
+  actions:
+    - read
+  object:
+    connections:
+      - name: aws-production
+```
+
+### Restrict Access by Namespace
+
+```yaml title="namespace-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: dev-team-dev-namespace
+spec:
+  description: Allow dev team to run playbooks only in dev namespace
+  subject:
+    team: developers
+  actions:
+    - playbook:run
+  object:
+    playbooks:
+      - namespace: development
+    configs:
+      - namespace: development
+```
+
+## Migration from Permissive to Strict Mode
+
+When transitioning to strict permissions:
+
+1. **Audit current usage** - Review which users, teams, and services are running playbooks and accessing connections
+
+2. **Create permissions incrementally** - Start by creating permissions for the most critical workflows:
+   ```yaml
+   # First, ensure system services still work
+   apiVersion: mission-control.flanksource.com/v1
+   kind: Permission
+   metadata:
+     name: system-connections
+   spec:
+     subject:
+       group: system
+     actions:
+       - read
+     object:
+       connections:
+         - name: "*"
+   ```
+
+3. **Enable strict mode one feature at a time**:
+   ```yaml title="values.yaml"
+   permissions:
+     playbooks: true    # Enable first
+     connections: false  # Enable after playbook permissions are tested
+     configs: false
+     components: false
+   ```
+
+4. **Test thoroughly** - Verify that notifications, playbooks, and scrapers continue to function
+
+5. **Monitor for permission errors** - Check logs for access denied errors and create missing permissions
+
+## Common Issues
+
+### Notification Fails to Send
+
+If notifications fail after enabling strict permissions, ensure the notification has read access to any connections it uses:
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: notification-connection-access
+spec:
+  subject:
+    notification: <namespace>/<notification-name>
+  actions:
+    - read
+  object:
+    connections:
+      - name: <connection-name>
+```
+
+### Playbook Cannot Access Resources
+
+If a playbook fails with permission errors, grant it access to required connections and configs:
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: playbook-resource-access
+spec:
+  subject:
+    playbook: <namespace>/<playbook-name>
+  actions:
+    - read
+  object:
+    connections:
+      - name: <connection-name>
+    configs:
+      - name: "*"
+```
+
+## Next Steps
+
+- [Roles](./roles) - Understand built-in roles
+- [Subjects](./subjects) - Learn about different subject types
+- [Actions](./actions) - Understand available permission actions
+- [Permission Groups](./groups) - Group subjects for easier management
+- [Multi-Tenancy](./multi-tenancy) - Set up agent and tag-based permissions for SaaS environments
+- [ABAC](./multi-tenancy) - Attribute-based access control for fine-grained permissions

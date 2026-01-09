@@ -1,83 +1,116 @@
 ---
 title: GCP
+description: Connect to Google Cloud Platform for health checks, config scraping, and playbook actions
 sidebar_custom_props:
   icon: google-cloud
 ---
 
-<!-- Source: modules/duty/connection/gcp.go:19#GCPConnection -->
+GCP connections enable integration with Google Cloud Platform for health checks, configuration scraping, and playbook automation.
+
+## Used By
+
+- [GCP Config Scraper](/docs/guide/config-db/scrapers/gcp) - Scrape GCP resource configurations
+- [GCS Folder Check](/docs/reference/canary-checker) - Check Cloud Storage buckets
+- [Playbook Actions](/docs/guide/playbooks/actions) - Execute GCP-related automation
 
 <Fields connection="gcp"/>
 
+## Authentication Methods
 
+<Step step={1} name="GKE Workload Identity" style="list">
 
+Use GKE [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity). This is the default when no `connection` or `credentials` is specified and the recommended approach for workloads running on GKE.
 
-There are 3 options when connecting to GCP:
-
-<Step step={1} name="GKE Workload Identity"  style="list">
-
-GKE [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) (the default if no `connection` or `credentials` is specified)
 </Step>
 
-## Example
+<Step step={2} name="Connection Reference" style="list">
 
-This example demonstrates how to configure a GCP connection using a YAML file.
+Reference a shared connection:
 
-```yaml title="gcp-connection-example.yaml"
+```yaml title="using-connection.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
-  name: example-gcp-connection
+  name: gcs-check
 spec:
   interval: 60
   folder:
-    - name: gcs auth test
-      path: gcs://example-bucket
+    - name: GCS Backup Check
+      path: gcs://my-bucket
       gcpConnection:
-        connection: connection://gcp/example
-```
-
-This example:
-1. Configures a GCP connection to a bucket named `example-bucket`.
-2. Uses the `connection://gcp/example` connection string.
-3. Sets the interval to 60 seconds.
-
-<Step step={2} name="Connection" style="list">
-
-```yaml title="gcs-connection.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: /docs/guide/canary-checker/reference/database-backup-check
-spec:
-  interval: 60
-  folder:
-    - name: gcs auth test
-      path: gcs://somegcsbucket
-      gcpConnection:
-        connection: connection://gcp/internal
+        connection: connection://gcp/production
 ```
 
 </Step>
 
-<Step step={3} name="Inline"  style="list">
+<Step step={3} name="Inline Credentials" style="list">
 
-```yaml title="gcp-inline.yaml"
+Specify service account credentials directly:
+
+```yaml title="inline-credentials.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
-  name: /docs/guide/canary-checker/reference/database-backup-check
+  name: gcs-check
 spec:
   interval: 60
   folder:
-    - name: gcs auth test
-      path: gcs://somegcsbucket
+    - name: GCS Backup Check
+      path: gcs://my-bucket
       gcpConnection:
         credentials:
           valueFrom:
             secretKeyRef:
               name: gcp-credentials
-              key: AUTH_ACCESS_TOKEN
+              key: service-account.json
 ```
+
 </Step>
 
+## Examples
 
+<details summary="Service Account Connection">
+<div>
+
+Create a GCP connection with service account:
+
+```yaml title="gcp-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: gcp-production
+  namespace: default
+spec:
+  gcp:
+    credentials:
+      valueFrom:
+        secretKeyRef:
+          name: gcp-credentials
+          key: service-account.json
+```
+
+</div>
+</details>
+
+<details summary="With Project ID">
+<div>
+
+Include project for resource access:
+
+```yaml title="gcp-with-project.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: gcp-project
+spec:
+  gcp:
+    project: my-gcp-project
+    credentials:
+      valueFrom:
+        secretKeyRef:
+          name: gcp-credentials
+          key: service-account.json
+```
+
+</div>
+</details>

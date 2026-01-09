@@ -1,9 +1,62 @@
 ---
-title: Github
+title: GitHub
+description: Connect to GitHub for repository access, issue management, and workflow automation
 sidebar_custom_props:
   icon: github
 ---
 
-import Github from '@site/docs/partials/_github.mdx'
+GitHub connections enable integration with GitHub repositories and APIs for GitOps workflows, issue management, and pull request automation.
 
-<Github/>
+## Used By
+
+- [GitHub Config Scraper](/docs/guide/config-db/scrapers/github) - Scrape GitHub resource configurations
+- [GitHub Action](/docs/guide/playbooks/actions/github) - Create issues and pull requests
+- [GitOps Action](/docs/guide/playbooks/actions/gitops) - Commit changes to repositories
+
+<Fields rows={[
+  {field: "url", description: "GitHub API URL (defaults to https://api.github.com)", scheme: "string"},
+  {field: "personalAccessToken", description: "GitHub personal access token for authentication", scheme: "EnvVar", required: true}
+]} />
+
+## Examples
+
+<details summary="GitHub.com Connection">
+<div>
+
+```yaml title="github-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: github
+spec:
+  github:
+    personalAccessToken:
+      valueFrom:
+        secretKeyRef:
+          name: github-credentials
+          key: token
+```
+
+</div>
+</details>
+
+<details summary="GitHub Enterprise">
+<div>
+
+```yaml title="github-enterprise.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: github-enterprise
+spec:
+  github:
+    url: https://github.mycompany.com/api/v3
+    personalAccessToken:
+      valueFrom:
+        secretKeyRef:
+          name: github-enterprise-credentials
+          key: token
+```
+
+</div>
+</details>

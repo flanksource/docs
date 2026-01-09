@@ -1,0 +1,100 @@
+---
+title: SMTP
+description: Connect to SMTP servers for sending email notifications
+sidebar_custom_props:
+  icon: email
+---
+
+SMTP connections enable sending email notifications via SMTP servers.
+
+## Used By
+
+- [Notifications](/docs/guide/notifications) - Send email alerts
+- [Notification Action](/docs/guide/playbooks/actions/notification) - Send emails from playbooks
+
+<Fields rows={[
+  {
+    field: 'host',
+    scheme: 'string',
+    description: 'SMTP server hostname',
+    required: true
+  },
+  {
+    field: 'port',
+    scheme: 'int',
+    description: 'SMTP server port (default: 587)'
+  },
+  {
+    field: 'username',
+    scheme: 'EnvVar',
+    description: 'Username for SMTP authentication'
+  },
+  {
+    field: 'password',
+    scheme: 'EnvVar',
+    description: 'Password for SMTP authentication'
+  },
+  {
+    field: 'fromAddress',
+    scheme: 'string',
+    description: 'Email address to send from',
+    required: true
+  },
+  {
+    field: 'toAddresses',
+    scheme: 'string[]',
+    description: 'Default recipient email addresses'
+  },
+  {
+    field: 'subject',
+    scheme: 'string',
+    description: 'Default email subject'
+  },
+  {
+    field: 'encryption',
+    scheme: 'string',
+    anyOf: ["None", "ExplicitTLS", "ImplicitTLS", "Auto"],
+    description: 'Encryption method (default: Auto)'
+  },
+  {
+    field: 'auth',
+    scheme: 'string',
+    description: 'Authentication method',
+    anyOf: ["None", "Plain", "CRAMMD5", "OAuth2"]
+  },
+  {
+    field: 'insecureTLS',
+    scheme: 'bool',
+    description: 'Skip TLS certificate verification'
+  },
+]}/>
+
+## Example
+
+```yaml title="smtp-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: email-alerts
+spec:
+  smtp:
+    host: smtp.example.com
+    port: 587
+    username:
+      valueFrom:
+        secretKeyRef:
+          name: smtp-credentials
+          key: username
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: smtp-credentials
+          key: password
+    fromAddress: alerts@example.com
+    encryption: Auto
+    auth: Plain
+```
+
+## Next Steps
+
+- [Email Channel Guide](/docs/guide/notifications/channels/email) - Configure email notifications

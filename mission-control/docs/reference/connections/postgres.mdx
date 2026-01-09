@@ -1,10 +1,58 @@
 ---
 title: Postgres
+description: Connect to PostgreSQL databases for health checks, queries, and playbook actions
 sidebar_custom_props:
   icon: postgres
 ---
 
-```yaml
+PostgreSQL connections enable integration with PostgreSQL databases for health checks, SQL queries in playbooks, and database monitoring.
+
+## Used By
+
+- [Postgres Health Check](/docs/reference/canary-checker) - Verify database connectivity and run health queries
+- [SQL Action](/docs/guide/playbooks/actions/sql) - Execute SQL queries in playbooks
+- [Postgres Scraper](/docs/guide/config-db/scrapers/postgres) - Scrape database configurations
+
+<Fields rows={[
+  {
+    field: 'host',
+    description: 'Database server hostname or IP address',
+    scheme: 'EnvVar',
+    required: true
+  },
+  {
+    field: 'database',
+    description: 'Database name to connect to',
+    scheme: 'EnvVar',
+    required: true
+  },
+  {
+    field: 'username',
+    description: 'Database user for authentication',
+    scheme: 'EnvVar',
+    required: true
+  },
+  {
+    field: 'password',
+    description: 'Database password for authentication',
+    scheme: 'EnvVar',
+    required: true
+  },
+  {
+    field: 'port',
+    description: 'Database server port (default: 5432)',
+    scheme: 'int'
+  },
+  {
+    field: 'insecureTLS',
+    description: 'Skip TLS certificate verification',
+    scheme: 'bool'
+  }
+]}/>
+
+## Example
+
+```yaml title="postgres-connection.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
@@ -12,43 +60,20 @@ metadata:
   namespace: default
 spec:
   postgres:
+    host:
+      value: postgres.example.com
+    port: 5432
     database:
       value: payments
-    host:
-      value: postgres.host.com
-    insecureTLS: true
     username:
       valueFrom:
         secretKeyRef:
-          name: payments-database-credentials
+          name: postgres-credentials
           key: POSTGRES_USER
     password:
       valueFrom:
         secretKeyRef:
-          name: payments-database-credentials
+          name: postgres-credentials
           key: POSTGRES_PASSWORD
+    insecureTLS: false
 ```
-
-<Fields rows={[
-  {
-    field: 'database',
-    scheme: 'envvar',
-  },
-    {
-    field: 'host',
-    scheme: 'envvar',
-  },
-  {
-    field: 'username',
-    scheme: 'envvar',
-  },
-  {
-    field: 'password',
-    scheme: 'envvar',
-  },
-  {
-    field: 'insecureTLS',
-    scheme: 'bool',
-  },
-
-]}/>

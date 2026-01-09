@@ -1,12 +1,17 @@
 ---
 title: Git
+description: Connect to Git repositories for GitOps workflows, configuration management, and playbook actions
 sidebar_custom_props:
   icon: git
 ---
 
-<!-- Source: modules/duty/connection/git.go:166#GitConnection -->
+Git connections enable integration with Git repositories for GitOps workflows, configuration management, and playbook automation.
 
-Git connections enable integration with Git repositories across various platforms including GitHub, GitLab, Azure DevOps, and generic Git servers.
+## Used By
+
+- [File Scraper](/docs/guide/config-db/scrapers/file) - Scrape configuration files from repositories
+- [GitOps Action](/docs/guide/playbooks/actions/gitops) - Create commits and pull requests
+- [Playbook Actions](/docs/guide/playbooks/actions) - Execute Git-related automation
 
 <Fields oneOf={["connection", "url"]} rows={[
   {field: "connection", description: "Connection name to use for credentials", scheme: "string"},
@@ -19,117 +24,51 @@ Git connections enable integration with Git repositories across various platform
   {field: "destination", description: "Local directory path for cloning (auto-generated if empty)", scheme: "string"}
 ]} />
 
-## Example
+## Authentication Methods
 
 ### HTTPS with Personal Access Token
 
-```yaml title="git-https-connection.yaml"
-apiVersion: v1
+```yaml title="https-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
   name: github-repo
-  namespace: default
 spec:
-  type: git
-  url: https://github.com/organization/repository.git
-  username: github-user
-  password:
-    valueFrom:
-      secretKeyRef:
-        name: git-credentials
-        key: token
-  branch: main
+  git:
+    url: https://github.com/organization/repository.git
+    username: github-user
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: git-credentials
+          key: token
+    branch: main
 ```
 
 ### SSH with Private Key
 
-```yaml title="git-ssh-connection.yaml"
-apiVersion: v1
+```yaml title="ssh-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
   name: gitlab-repo
-  namespace: default
 spec:
-  type: git
-  url: git@gitlab.com:organization/repository.git
-  certificate:
-    valueFrom:
-      secretKeyRef:
-        name: git-ssh-key
-        key: private-key
-  branch: develop
-```
-
-## Authentication Methods
-
-### 1. HTTPS with Username/Password
-For HTTPS repositories using username and password or personal access tokens:
-
-```yaml
-username: your-username
-password:
-  valueFrom:
-    secretKeyRef:
-      name: git-credentials
-      key: password-or-token
-```
-
-### 2. SSH with Private Key
-For SSH repositories using private key authentication:
-
-```yaml
-certificate:
-  valueFrom:
-    secretKeyRef:
-      name: ssh-key
-      key: private-key
-```
-
-### 3. Connection Reference
-Reference an existing connection for credentials:
-
-```yaml
-connection: connection://git/my-git-connection
+  git:
+    url: git@gitlab.com:organization/repository.git
+    certificate:
+      valueFrom:
+        secretKeyRef:
+          name: git-ssh-key
+          key: private-key
+    branch: main
 ```
 
 ## Supported Git Services
 
-### GitHub
-```yaml
-type: github
-url: https://github.com/owner/repo.git
-```
-
-### GitLab
-```yaml
-type: gitlab
-url: https://gitlab.com/owner/repo.git
-```
-
-### Azure DevOps
-```yaml
-type: azure_devops
-url: https://dev.azure.com/organization/project/_git/repository
-```
-
-### Generic Git
-```yaml
-type: git
-url: https://git.example.com/repo.git
-```
-
-## Use Cases
-
-- **Source Code Access**: Clone repositories for configuration management
-- **GitOps Workflows**: Sync configurations from Git repositories
-- **CI/CD Integration**: Access repositories for build and deployment processes
-- **Configuration Storage**: Store and retrieve configuration files from Git
-- **Documentation**: Access documentation stored in Git repositories
-
-## Best Practices
-
-- **Access Tokens**: Use personal access tokens instead of passwords for better security
-- **SSH Keys**: Prefer SSH keys for automated systems
-- **Branch Strategy**: Specify explicit branches for predictable behavior
-- **Credential Management**: Store credentials in Kubernetes secrets
-- **Repository URLs**: Use consistent URL formats for your Git service
+| Service | Type | URL Format |
+|---------|------|------------|
+| GitHub | `github` | `https://github.com/owner/repo.git` |
+| GitLab | `gitlab` | `https://gitlab.com/owner/repo.git` |
+| Azure DevOps | `azure_devops` | `https://dev.azure.com/org/project/_git/repo` |
+| Bitbucket | `git` | `https://bitbucket.org/owner/repo.git` |
+| Generic Git | `git` | `https://git.example.com/repo.git` |

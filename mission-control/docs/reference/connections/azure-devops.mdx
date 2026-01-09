@@ -1,9 +1,63 @@
 ---
-title: Azure Devops
+title: Azure DevOps
+description: Connect to Azure DevOps for repository access, pipeline automation, and work item management
 sidebar_custom_props:
   icon: azure-devops
 ---
 
-import AzureDevops from '@site/docs/partials/_azureDevops.mdx'
+Azure DevOps connections enable integration with Azure DevOps Services and Server for Git repository access, pipeline automation, and work item management.
 
-<AzureDevops/>
+## Used By
+
+- [Azure DevOps Config Scraper](/docs/guide/config-db/scrapers/azure-devops) - Scrape Azure DevOps configurations
+- [Azure DevOps Pipeline Action](/docs/guide/playbooks/actions/azure_devops_pipeline) - Trigger pipelines
+- [GitOps Action](/docs/guide/playbooks/actions/gitops) - Commit changes to repositories
+
+<Fields rows={[
+  {field: "url", description: "Azure DevOps organization URL", scheme: "string", required: true},
+  {field: "personalAccessToken", description: "Azure DevOps personal access token", scheme: "EnvVar", required: true}
+]} />
+
+## Examples
+
+<details summary="Azure DevOps Services">
+<div>
+
+```yaml title="azure-devops-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: azure-devops
+spec:
+  azureDevops:
+    url: https://dev.azure.com/my-organization
+    personalAccessToken:
+      valueFrom:
+        secretKeyRef:
+          name: azure-devops-credentials
+          key: token
+```
+
+</div>
+</details>
+
+<details summary="Azure DevOps Server (On-Premises)">
+<div>
+
+```yaml title="azure-devops-server.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: azure-devops-server
+spec:
+  azureDevops:
+    url: https://tfs.mycompany.com/tfs/DefaultCollection
+    personalAccessToken:
+      valueFrom:
+        secretKeyRef:
+          name: tfs-credentials
+          key: token
+```
+
+</div>
+</details>

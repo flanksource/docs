@@ -1,0 +1,144 @@
+---
+title: Actions
+sidebar_position: 4
+sidebar_custom_props:
+  icon: cog
+---
+
+Actions define what operations a subject can perform on the target objects. The `actions` field is required and accepts a list of action strings.
+
+## Available Actions
+
+| Action | Description |
+|--------|-------------|
+| `read` | Allows reading/viewing resources |
+| `write` | Allows creating or modifying resources |
+| `delete` | Allows deleting resources |
+| `playbook:run` | Allows running playbooks |
+| `playbook:approve` | Allows approving playbook runs that require approval |
+| `playbook:cancel` | Allows canceling playbook runs |
+
+## Wildcards
+
+You can use wildcards to grant multiple permissions at once:
+
+| Wildcard | Description |
+|----------|-------------|
+| `playbook:*` | Grants all playbook-related permissions (run, approve, cancel) |
+| `*` | Grants all permissions (use with caution) |
+
+## Examples
+
+<details summary="Read-Only Access">
+<div>
+
+```yaml title="read-only-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: viewer-access
+spec:
+  description: Read-only access to configs
+  subject:
+    team: viewers
+  actions:
+    - read
+  object:
+    configs:
+      - name: "*"
+```
+
+</div>
+</details>
+
+<details summary="Full Playbook Access">
+<div>
+
+```yaml title="playbook-full-access.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: playbook-admin
+spec:
+  description: Full playbook management access
+  subject:
+    team: platform-team
+  actions:
+    - playbook:*
+  object:
+    playbooks:
+      - name: "*"
+```
+
+</div>
+</details>
+
+<details summary="Multiple Actions">
+<div>
+
+```yaml title="multiple-actions.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: editor-access
+spec:
+  description: Read and write access to configs
+  subject:
+    person: editor@example.com
+  actions:
+    - read
+    - write
+  object:
+    configs:
+      - namespace: production
+```
+
+</div>
+</details>
+
+<details summary="Playbook Run and Approve">
+<div>
+
+```yaml title="run-approve-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: playbook-operator
+spec:
+  description: Allow running and approving playbooks
+  subject:
+    team: operators
+  actions:
+    - playbook:run
+    - playbook:approve
+  object:
+    playbooks:
+      - labels:
+          category: maintenance
+```
+
+</div>
+</details>
+
+<details summary="Admin Access (All Permissions)">
+<div>
+
+```yaml title="admin-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: admin-all-access
+spec:
+  description: Full admin access (use sparingly)
+  subject:
+    team: admins
+  actions:
+    - "*"
+```
+
+:::warning
+Using `*` (all permissions) should be limited to administrative roles. Always prefer granting the minimum necessary permissions.
+:::
+
+</div>
+</details>

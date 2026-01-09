@@ -1,67 +1,137 @@
 ---
 title: Kubernetes
+description: Connect to Kubernetes clusters for health checks, config scraping, and playbook actions
 sidebar_custom_props:
   icon: k8s
 ---
 
-<!-- Source: modules/duty/connection/kubernetes.go:49#KubernetesConnection -->
+Kubernetes connections enable integration with Kubernetes clusters for health checks, configuration scraping, and playbook automation.
 
-Kubernetes connections enable integration with Kubernetes clusters across different cloud providers and environments. 
-You can configure connections to AWS EKS clusters, Google Cloud GKE instances, and Config Connector (CNRM) implementations.
+## Used By
+
+- [Kubernetes Config Scraper](/docs/guide/config-db/scrapers/kubernetes) - Scrape Kubernetes resource configurations
+- [Pod Exec Action](/docs/guide/playbooks/actions/exec) - Execute commands in pods
+- [Playbook Actions](/docs/guide/playbooks/actions) - Execute Kubernetes automation
 
 <Fields connection="kubernetes" />
 
 :::note
-One of the four sources of connection details must be provided.
+One of the connection types must be provided: kubeconfig, EKS, GKE, or CNRM.
 :::
 
+## Connection Types
+
+### Kubeconfig
+
+Connect using a kubeconfig file:
+
+```yaml title="kubeconfig-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: remote-cluster
+spec:
+  kubernetes:
+    kubeconfig:
+      valueFrom:
+        secretKeyRef:
+          name: cluster-credentials
+          key: kubeconfig
+```
+
 ### EKS Connection
+
+Connect to Amazon EKS clusters:
 
 <Fields connection="aws" rows={[
   {
     field: "cluster",
-    description: "Name of the cluster",
+    description: "Name of the EKS cluster",
     scheme: "string",
     required: true,
   }
 ]}
 />
 
+```yaml title="eks-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: eks-production
+spec:
+  kubernetes:
+    eks:
+      cluster: my-eks-cluster
+      region: us-east-1
+      accessKey:
+        valueFrom:
+          secretKeyRef:
+            name: aws-credentials
+            key: AWS_ACCESS_KEY_ID
+      secretKey:
+        valueFrom:
+          secretKeyRef:
+            name: aws-credentials
+            key: AWS_SECRET_ACCESS_KEY
+```
+
 ### GKE Connection
+
+Connect to Google Kubernetes Engine clusters:
 
 <Fields connection="gcp" rows={[
   {
     field: "project",
-    description: "Name of the project",
+    description: "GCP project ID",
     scheme: "string",
     required: true,
   },
   {
     field: "zone",
-    description: "Name of the zone",
+    description: "GCP zone where the cluster is located",
     scheme: "string",
     required: true,
   },
   {
     field: "cluster",
-    description: "Name of the cluster",
+    description: "Name of the GKE cluster",
     scheme: "string",
     required: true,
   }
 ]}
 />
 
+```yaml title="gke-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: gke-production
+spec:
+  kubernetes:
+    gke:
+      project: my-gcp-project
+      zone: us-central1-a
+      cluster: my-gke-cluster
+      credentials:
+        valueFrom:
+          secretKeyRef:
+            name: gcp-credentials
+            key: service-account.json
+```
+
 ### CNRM Connection
+
+Connect via Config Connector for GCP-managed clusters:
 
 <Fields connection="cnrm" rows={[
   {
     field: "gke",
-    description: "GKE connection",
+    description: "GKE connection details",
     scheme: "[GKE](#gke-connection)",
   },
   {
     field: "clusterResource",
-    description: "Name of the cluster resource",
+    description: "Name of the cluster resource in Config Connector",
     scheme: "string",
   },
   {

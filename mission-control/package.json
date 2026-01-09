@@ -5,14 +5,14 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "tailwindcss -i ./src/css/custom.css -o ./src/css/out.css && docusaurus start -p 3005",
-    "build": "tailwindcss -i ./src/css/custom.css -o ./src/css/out.css && docusaurus build",
+    "build": "tailwindcss -i ./src/css/custom.css -o ./src/css/out.css && docusaurus build && node scripts/move-llms.js",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "render-for-context7": "INIT_CWD=$(pwd) ../scripts/goja-mdx-renderer/run.sh"
+    "move-llms": "node scripts/move-llms.js"
   },
   "dependencies": {
     "@docusaurus/core": "3.7.0",
@@ -48,6 +48,7 @@
     "util": "^0.12.5"
   },
   "devDependencies": {
+    "docusaurus-plugin-llms": "^0.2.2",
     "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-react": "^7.28.5",

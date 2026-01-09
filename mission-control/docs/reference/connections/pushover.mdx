@@ -1,0 +1,68 @@
+---
+title: Pushover
+description: Connect to Pushover for push notifications to mobile devices
+sidebar_custom_props:
+  icon: pushover
+---
+
+Pushover connections enable sending push notifications to iOS and Android devices via the Pushover service.
+
+## Used By
+
+- [Notifications](/docs/guide/notifications) - Send push notifications
+- [Notification Action](/docs/guide/playbooks/actions/notification) - Send notifications from playbooks
+
+<Fields rows={[
+  {
+    field: "token",
+    description: "API Token/Key",
+    scheme: "EnvVar",
+    required: true
+  },
+  {
+    field: "user",
+    description: "User Key",
+    scheme: "EnvVar",
+    required: true
+  },
+  {
+    field: "devices",
+    description: "Target devices",
+    scheme: "string"
+  },
+  {
+    field: "priority",
+    description: "Message priority (default: 0)",
+    scheme: "int between -1 and 1"
+  },
+  {
+    field: "title",
+    description: "Message title",
+    scheme: "string"
+  }
+]}/>
+
+## Example
+
+```yaml title="pushover-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: pushover-alerts
+spec:
+  pushover:
+    token:
+      valueFrom:
+        secretKeyRef:
+          name: pushover-credentials
+          key: API_TOKEN
+    user:
+      valueFrom:
+        secretKeyRef:
+          name: pushover-credentials
+          key: USER_KEY
+```
+
+## Next Steps
+
+- [Pushover Channel Guide](/docs/guide/notifications/channels/pushover) - Configure Pushover notifications
