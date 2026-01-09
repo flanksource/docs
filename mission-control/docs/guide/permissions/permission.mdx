@@ -1,0 +1,322 @@
+---
+title: Permission
+sidebar_position: 2
+sidebar_custom_props:
+  icon: shield
+---
+
+A Permission defines access control rules that grant or deny specific actions to subjects on target objects.
+
+## Overview
+
+A Permission has 4 parts:
+
+- **[Subject](./subjects)**: The user or service requesting access
+- **[Object](#objects)**: The resources this permission affects (playbooks, connections, or configs)
+- **Effect**: Whether to allow or deny access (Default: allow)
+- **[Actions](./actions)**: The list of allowed actions
+
+:::info
+Deny rules always override Allow rules.
+:::
+
+## Example
+
+```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/deny-person-playbook.yaml
+```
+
+## Schema
+
+<Fields
+  rows={[
+    {
+      field: 'description',
+      description: 'Description of the permission',
+      scheme: 'string',
+    },
+    {
+      field: 'actions',
+      required: true,
+      description: 'List of [allowed actions](./actions)',
+      scheme: '`[]string`',
+    },
+    {
+      field: 'subject.person',
+      description: 'Email or ID of the person',
+      scheme: 'string',
+    },
+    {
+      field: 'subject.team',
+      description: 'Name or ID of the team',
+      scheme: 'string',
+    },
+    {
+      field: 'subject.group',
+      description: 'Name of a [permission group](./groups)',
+      scheme: 'string',
+    },
+    {
+      field: 'subject.notification',
+      description: '`<namespace>/<name>` of the notification',
+      scheme: 'string',
+    },
+    {
+      field: 'subject.playbook',
+      description: '`<namespace>/<name>` of the playbook',
+      scheme: 'string',
+    },
+    {
+      field: 'object.playbooks',
+      description: 'List of playbook resource selectors',
+      scheme: '[ResourceSelector](/docs/reference/resource-selector)',
+    },
+    {
+      field: 'object.configs',
+      description: 'List of config resource selectors',
+      scheme: '[ResourceSelector](/docs/reference/resource-selector)',
+    },
+    {
+      field: 'object.connections',
+      description: 'List of connection resource selectors',
+      scheme: '[ResourceSelector](/docs/reference/resource-selector)',
+    },
+    {
+      field: 'object.components',
+      description: 'List of component resource selectors',
+      scheme: '[ResourceSelector](/docs/reference/resource-selector)',
+    },
+    {
+      field: 'deny',
+      description: 'Specifies if this is a deny rule. _(Default: false)_',
+      scheme: 'bool',
+    },
+  ]}
+/>
+
+### Multi-Tenancy Fields
+
+For [agent and tag-based permissions](./multi-tenancy), you can also use these fields:
+
+<Fields
+  rows={[
+    {
+      field: 'agents',
+      description: 'List of agent names to restrict this permission to',
+      scheme: '`[]string`',
+    },
+    {
+      field: 'tags',
+      description: 'Key-value pairs of tags to restrict this permission to',
+      scheme: '`map[string]string`',
+    },
+  ]}
+/>
+
+## Objects
+
+Objects define the resources the permission targets. You can define Objects using [Resource Selectors](/docs/reference/resource-selector).
+
+| Object Type | Description |
+|-------------|-------------|
+| `playbooks` | Automation playbooks in the system |
+| `configs` | Configuration items in the catalog |
+| `connections` | Connection configurations for external systems |
+| `components` | Topology components |
+
+A permission can target multiple object types. If you define multiple objects, Mission Control grants the permission only if the request matches **all** defined objects (AND condition).
+
+### Object Examples
+
+<details summary="Target All Playbooks">
+<div>
+
+```yaml
+object:
+  playbooks:
+    - name: "*"
+```
+
+</div>
+</details>
+
+<details summary="Target Playbooks in a Namespace">
+<div>
+
+```yaml
+object:
+  playbooks:
+    - namespace: production
+```
+
+</div>
+</details>
+
+<details summary="Target Configs with Labels">
+<div>
+
+```yaml
+object:
+  configs:
+    - labels:
+        environment: production
+```
+
+</div>
+</details>
+
+<details summary="Target Specific Connection">
+<div>
+
+```yaml
+object:
+  connections:
+    - name: aws-production
+```
+
+</div>
+</details>
+
+<details summary="Multiple Object Types (AND condition)">
+<div>
+
+This permission allows running playbooks **only on configs in the specified namespace**:
+
+```yaml file=<rootDir>/modules/mission-control/fixtures/permissions/notification-playbook-permission.yaml {14-22}
+```
+
+</div>
+</details>
+
+## Examples
+
+<details summary="Allow Team to Run All Playbooks">
+<div>
+
+```yaml title="team-playbook-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: sre-run-playbooks
+spec:
+  description: Allow SRE team to run any playbook
+  subject:
+    team: sre-team
+  actions:
+    - playbook:run
+  object:
+    playbooks:
+      - name: "*"
+```
+
+</div>
+</details>
+
+<details summary="Deny User from Deleting Configs">
+<div>
+
+```yaml title="deny-delete-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: deny-john-delete
+spec:
+  description: Deny John from deleting any configs
+  deny: true
+  subject:
+    person: john@example.com
+  actions:
+    - delete
+  object:
+    configs:
+      - name: "*"
+```
+
+</div>
+</details>
+
+<details summary="Allow Notification to Use Connection">
+<div>
+
+```yaml title="notification-connection-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: alerts-slack-access
+spec:
+  description: Allow alerts notification to use Slack connection
+  subject:
+    notification: monitoring/critical-alerts
+  actions:
+    - read
+  object:
+    connections:
+      - name: slack-alerts
+```
+
+</div>
+</details>
+
+<details summary="Allow Playbook to Access AWS">
+<div>
+
+```yaml title="playbook-aws-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: cleanup-aws-access
+spec:
+  description: Allow cleanup playbook to use AWS connection
+  subject:
+    playbook: automation/cleanup-resources
+  actions:
+    - read
+  object:
+    connections:
+      - name: aws-production
+```
+
+</div>
+</details>
+
+<details summary="Restrict by Agent (Multi-Tenancy)">
+<div>
+
+```yaml title="agent-restricted-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: dev-team-dev-agent
+spec:
+  description: Allow dev team to access only dev agent resources
+  subject:
+    team: developers
+  actions:
+    - read
+    - playbook:run
+  agents:
+    - dev-cluster-agent
+```
+
+</div>
+</details>
+
+<details summary="Restrict by Tags (Multi-Tenancy)">
+<div>
+
+```yaml title="tag-restricted-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: prod-readonly
+spec:
+  description: Read-only access to production resources
+  subject:
+    team: viewers
+  actions:
+    - read
+  tags:
+    environment: production
+```
+
+</div>
+</details>

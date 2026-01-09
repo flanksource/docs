@@ -1,26 +1,41 @@
 ---
 title: SMB / CIFS
+description: Connect to Windows file shares for file operations and backup monitoring
 sidebar_custom_props:
   icon: microsoft
 ---
 
-<!-- Source: modules/duty/connection/smb.go:12#SMBConnection -->
+SMB (Server Message Block) / CIFS (Common Internet File System) connections enable integration with Windows file shares and network-attached storage for file operations and backup monitoring.
 
-```yaml
-apiVersion: v1
-kind: Connection
-metadata:
-  name: example-smb-connection
-spec:
-  smb:
-    server: "smb.example.com"
-    username: "exampleUser"
-    password: "examplePassword"
-    port: 445
-    share: "exampleShare"
-```
+## Used By
 
+- [Folder Health Check](/docs/reference/canary-checker) - Check file existence and age on Windows shares
+- [File Scraper](/docs/guide/config-db/scrapers/file) - Scrape configuration files from SMB shares
 
 <Fields connection="smb"/>
 
+## Example
 
+```yaml title="smb-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: windows-share
+spec:
+  smb:
+    server: fileserver.example.com
+    share: backups
+    port: 445
+    username:
+      valueFrom:
+        secretKeyRef:
+          name: smb-credentials
+          key: username
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: smb-credentials
+          key: password
+```
+
+For domain authentication, use the format `DOMAIN\\username` for the username field.

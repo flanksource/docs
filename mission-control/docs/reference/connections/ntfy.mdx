@@ -1,0 +1,88 @@
+---
+title: ntfy
+description: Connect to ntfy for push notifications to mobile and desktop devices
+sidebar_custom_props:
+  icon: ntfy
+---
+
+ntfy connections enable sending push notifications via the ntfy pub/sub notification service.
+
+## Used By
+
+- [Notifications](/docs/guide/notifications) - Send push notifications
+- [Notification Action](/docs/guide/playbooks/actions/notification) - Send notifications from playbooks
+
+<Fields rows={[
+  {
+    field: 'host',
+    required: true,
+    scheme: 'string',
+    description: 'ntfy server URL (e.g., https://ntfy.sh or self-hosted)'
+  },
+  {
+    field: 'topic',
+    required: true,
+    scheme: 'string',
+    description: 'Topic to publish messages to'
+  },
+  {
+    field: 'username',
+    scheme: 'EnvVar',
+    description: 'Username for authentication (if required)'
+  },
+  {
+    field: 'password',
+    scheme: 'EnvVar',
+    description: 'Password for authentication (if required)'
+  },
+]}/>
+
+## Examples
+
+<details summary="Public ntfy.sh">
+<div>
+
+```yaml title="ntfy-public.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: ntfy-alerts
+spec:
+  ntfy:
+    host: https://ntfy.sh
+    topic: my-alerts-topic
+```
+
+</div>
+</details>
+
+<details summary="Self-Hosted with Authentication">
+<div>
+
+```yaml title="ntfy-self-hosted.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: ntfy-private
+spec:
+  ntfy:
+    host: https://ntfy.internal.example.com
+    topic: infrastructure-alerts
+    username:
+      valueFrom:
+        secretKeyRef:
+          name: ntfy-credentials
+          key: username
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: ntfy-credentials
+          key: password
+```
+
+</div>
+</details>
+
+## Next Steps
+
+- [ntfy Channel Guide](/docs/guide/notifications/channels/ntfy) - Configure ntfy notifications

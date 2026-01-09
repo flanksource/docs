@@ -1,8 +1,15 @@
 ---
 title: Ollama
+description: Connect to local Ollama instances for self-hosted AI-powered playbook actions
 sidebar_custom_props:
   icon: ollama
 ---
+
+Ollama connections enable integration with locally hosted Ollama instances for AI-powered playbook actions without external API dependencies.
+
+## Used By
+
+- [AI Action](/docs/guide/playbooks/actions/ai) - Use self-hosted AI for log analysis and automation
 
 <Fields connection="ollama"/>
 
@@ -12,10 +19,10 @@ sidebar_custom_props:
 apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
-  name: ollama
+  name: ollama-local
 spec:
   ollama:
     model: llama3.1:8b
     url:
-      value: http://localhost:11434
+      value: http://ollama.ollama-system.svc:11434
 ```

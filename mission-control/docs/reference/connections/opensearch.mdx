@@ -1,10 +1,49 @@
 ---
 title: OpenSearch
+description: Connect to OpenSearch clusters for log queries, search operations, and monitoring
 sidebar_custom_props:
   icon: opensearch
 ---
 
-```yaml
+OpenSearch connections enable integration with OpenSearch and Elasticsearch clusters for log queries, search operations, and monitoring.
+
+## Used By
+
+- [Log Scraper](/docs/guide/config-db/scrapers/logs) - Scrape logs from OpenSearch
+- [Logs Action](/docs/guide/playbooks/actions/logs) - Query logs in playbooks
+
+<Fields rows={[
+  {
+    field: 'urls',
+    description: 'List of OpenSearch/Elasticsearch node URLs',
+    scheme: '[]string',
+    required: true
+  },
+  {
+    field: 'index',
+    description: 'Default index pattern to query',
+    scheme: 'string'
+  },
+  {
+    field: 'username',
+    description: 'Username for authentication',
+    scheme: 'EnvVar'
+  },
+  {
+    field: 'password',
+    description: 'Password for authentication',
+    scheme: 'EnvVar'
+  },
+  {
+    field: 'insecureSkipVerify',
+    description: 'Skip TLS certificate verification',
+    scheme: 'bool'
+  }
+]}/>
+
+## Example
+
+```yaml title="opensearch-connection.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
@@ -28,30 +67,3 @@ spec:
           key: OPENSEARCH_PASSWORD
     insecureSkipVerify: false
 ```
-
-<Fields rows={[
-  {
-    field: 'urls',
-    description: 'List of OpenSearch node URLs',
-    scheme: '[]string',
-    required: true
-  },
-  {
-    field: 'index',
-    description: 'Default index pattern to query',
-    scheme: 'string',
-  },
-  {
-    field: 'username',
-    scheme: 'envvar',
-  },
-  {
-    field: 'password',
-    scheme: 'envvar',
-  },
-  {
-    field: 'insecureSkipVerify',
-    description: 'Skip TLS certificate verification',
-    scheme: 'bool',
-  },
-]}/>

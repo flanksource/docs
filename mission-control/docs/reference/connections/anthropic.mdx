@@ -1,8 +1,15 @@
 ---
 title: Anthropic
+description: Connect to Anthropic's Claude API for AI-powered playbook actions and analysis
 sidebar_custom_props:
- icon: anthropic
+  icon: anthropic
 ---
+
+Anthropic connections enable integration with Anthropic's Claude API for AI-powered playbook actions, automated analysis, and intelligent response generation.
+
+## Used By
+
+- [AI Action](/docs/guide/playbooks/actions/ai) - Use AI for complex reasoning, code analysis, and technical explanations
 
 <Fields connection="anthropic"/>
 
@@ -13,13 +20,12 @@ apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
   name: anthropic-claude
-  namespace: default
 spec:
   anthropic:
-    model: llama3.1:8b
-  apikey:
-    valueFrom:
-      secretKeyRef:
-        name: anthropic
-        key: api
-  ```
+    model: claude-3-5-sonnet-20241022
+    apiKey:
+      valueFrom:
+        secretKeyRef:
+          name: anthropic-credentials
+          key: API_KEY
+```

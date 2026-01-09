@@ -52,24 +52,31 @@ The Logs scraper queries log aggregation systems to extract configuration change
     scheme: "[]string"
   },
   {
+    priority: 1,
     field: "bigQuery",
     description: "BigQuery configuration for log scraping",
-    scheme: "[BigQueryConfig](#bigqueryconfig)"
+    scheme: "[BigQuery](#bigquery)"
   },
   {
+        priority: 1,
+
     field: "gcpCloudLogging",
     description: "GCP Cloud Logging configuration",
-    scheme: "[GCPCloudLoggingConfig](#gcpcloudloggingconfig)"
+    scheme: "[GCPCloudLogging](#gcpcloudlogging)"
   },
   {
+        priority: 1,
+
     field: "loki",
     description: "Loki configuration for log scraping",
-    scheme: "[LokiConfig](#lokiconfig)"
+    scheme: "[Loki](#loki)"
   },
   {
+        priority: 1,
+
     field: "openSearch",
     description: "OpenSearch configuration for log scraping",
-    scheme: "[OpenSearchConfig](#opensearchconfig)"
+    scheme: "[OpenSearch](#opensearch)"
   }
 ]} />
 
@@ -134,7 +141,7 @@ spec:
 
 </details>
 
-### BigQueryConfig
+### BigQuery
 
 <Fields rows={[
   {
@@ -163,7 +170,7 @@ spec:
 
 </details>
 
-### GCPCloudLoggingConfig
+### GCPCloudLogging
 
 <Fields rows={[
   {
@@ -225,7 +232,7 @@ spec:
 
 </details>
 
-### LokiConfig
+### Loki
 
 <Fields rows={[
   {
@@ -274,7 +281,7 @@ spec:
 
 </details>
 
-### OpenSearchConfig
+### OpenSearch
 
 <Fields rows={[
   {

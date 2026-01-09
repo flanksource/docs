@@ -1,67 +1,140 @@
 ---
 title: HTTP
+description: Connect to HTTP/HTTPS endpoints for API integrations, webhooks, and health checks
 sidebar_custom_props:
   icon: http
 ---
 
-<!-- Source: modules/duty/connection/http.go:38#HTTPConnection -->
+HTTP connections enable integration with any HTTP/HTTPS endpoint for API access, webhook integrations, and health checks.
 
-HTTP Connections are used to query data via any http/https compatible resource
+## Used By
+
+- [HTTP Health Check](/docs/reference/canary-checker) - Monitor HTTP endpoints
+- [HTTP Scraper](/docs/guide/config-db/scrapers/http) - Scrape configuration from APIs
+- [HTTP Action](/docs/guide/playbooks/actions/http) - Make HTTP requests in playbooks
+- [Notifications](/docs/guide/notifications) - Send webhook notifications
 
 ## Schema
 
-| Field        | Description     | Scheme                                         | Required |
-|--------------|-----------------|------------------------------------------------|----------|
-| `url`        | URL             | string                                         | `true`   |
-| `username`   | Username        | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
-| `password`   | Password        | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
-| `oauth`      | OAuth           | [OAuth](#oauth)                                |          |
-| `bearer`     | Bearer          | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
-| `tls`        | TLS Config      | [TLS](#tls)                                    |          |
-| `connection` | Connection Name | string                                         |          |
-
-:::info
-If connection is already created `connection` (Connection Name) can be used as a reference instead of redefining all fields. Read more on [connection referencing](/docs/reference/connections/#referencing-connections)
-:::
+| Field        | Description                                            | Scheme                                         | Required |
+|--------------|--------------------------------------------------------|------------------------------------------------|----------|
+| `url`        | Base URL for the HTTP endpoint                         | string                                         | `true`   |
+| `username`   | Username for basic authentication                       | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
+| `password`   | Password for basic authentication                       | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
+| `oauth`      | OAuth 2.0 client credentials configuration              | [OAuth](#oauth)                                |          |
+| `bearer`     | Bearer token for authentication                         | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
+| `tls`        | TLS/SSL configuration for client certificates           | [TLS](#tls)                                    |          |
+| `connection` | Reference to an existing connection                     | string                                         |          |
 
 ### OAuth
 
-| Field          | Description   | Scheme                                         | Required |
-|----------------|---------------|------------------------------------------------|----------|
-| `tokenURL`     | Token URL     | string                                         | `true`   |
-| `clientID`     | Client ID     | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
-| `clientSecret` | Client Secret | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
-| `scopes`       | Scopes        | []string                                       |          |
-| `params`       | Params        | map[string]string                              |          |
+| Field          | Description                          | Scheme                                         | Required |
+|----------------|--------------------------------------|------------------------------------------------|----------|
+| `tokenURL`     | OAuth token endpoint URL              | string                                         | `true`   |
+| `clientID`     | OAuth client ID                       | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
+| `clientSecret` | OAuth client secret                   | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
+| `scopes`       | OAuth scopes to request               | []string                                       |          |
+| `params`       | Additional parameters for token request| map[string]string                              |          |
 
 ### TLS
 
-| Field                | Description                                                                     | Scheme                                         | Required |
-|----------------------|---------------------------------------------------------------------------------|------------------------------------------------|----------|
-| `key`                | PEM encoded client private key                                                  | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
-| `ca`                 | PEM encoded certificate of the CA to verify the server certificate              | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
-| `cert`               | PEM encoded client certificate                                                  | <CommonLink to="secrets">_EnvVar_</CommonLink> | `true`   |
-| `insecureSkipVerify` | controls whether a client verifies the server's certificate chain and host name | bool                                           |          |
-| `handshakeTimeout`   | Handshake timeout (Default: 10 seconds)                                         | time.Duration                                  |          |
+| Field                | Description                                                                     | Scheme                                         |
+|----------------------|---------------------------------------------------------------------------------|------------------------------------------------|
+| `key`                | PEM encoded client private key                                                  | <CommonLink to="secrets">_EnvVar_</CommonLink> |
+| `ca`                 | PEM encoded certificate of the CA to verify the server certificate              | <CommonLink to="secrets">_EnvVar_</CommonLink> |
+| `cert`               | PEM encoded client certificate                                                  | <CommonLink to="secrets">_EnvVar_</CommonLink> |
+| `insecureSkipVerify` | Skip TLS certificate verification (not recommended for production)              | bool                                           |
+| `handshakeTimeout`   | TLS handshake timeout (default: 10 seconds)                                     | time.Duration                                  |
 
+## Authentication Methods
 
-## Example
+### Basic Authentication
 
-This example demonstrates how to configure an HTTP connection in Mission Control:
-
-```yaml title="http-connection.yaml"
-apiVersion: v1
+```yaml title="basic-auth.yaml"
+apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
-  name: http-connection
+  name: api-basic
 spec:
   http:
-    url: https://example.com
+    url: https://api.example.com
     username:
-      value: user
+      value: api-user
     password:
       valueFrom:
         secretKeyRef:
-          name: credentials
+          name: api-credentials
           key: password
+```
+
+### Bearer Token
+
+```yaml title="bearer-token.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: api-bearer
+spec:
+  http:
+    url: https://api.example.com
+    bearer:
+      valueFrom:
+        secretKeyRef:
+          name: api-credentials
+          key: token
+```
+
+### OAuth 2.0 Client Credentials
+
+```yaml title="oauth.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: api-oauth
+spec:
+  http:
+    url: https://api.example.com
+    oauth:
+      tokenURL: https://auth.example.com/oauth/token
+      clientID:
+        valueFrom:
+          secretKeyRef:
+            name: oauth-credentials
+            key: client-id
+      clientSecret:
+        valueFrom:
+          secretKeyRef:
+            name: oauth-credentials
+            key: client-secret
+      scopes:
+        - read
+        - write
+```
+
+### Mutual TLS (mTLS)
+
+```yaml title="mtls.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: api-mtls
+spec:
+  http:
+    url: https://secure-api.example.com
+    tls:
+      cert:
+        valueFrom:
+          secretKeyRef:
+            name: mtls-certs
+            key: client.crt
+      key:
+        valueFrom:
+          secretKeyRef:
+            name: mtls-certs
+            key: client.key
+      ca:
+        valueFrom:
+          secretKeyRef:
+            name: mtls-certs
+            key: ca.crt
 ```

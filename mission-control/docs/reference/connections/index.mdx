@@ -1,18 +1,40 @@
 ---
 title: Connections
+description: Secure credential management for integrating with external systems and services
 sidebar_position: 2
-
 sidebar_custom_props:
   icon: fluent:vault-24-filled
 ---
 
-Connections are an easy way to authenticate against sources. It can be created via a CRD or by adding it in the settings page
+Connections provide a secure, reusable way to authenticate against external systems and services. Instead of embedding credentials directly in your health checks, scrapers, and playbooks, you define connections once and reference them throughout your configuration.
 
+## Benefits
 
+- **Security**: Credentials are stored securely in Kubernetes secrets, not in plain text
+- **Reusability**: Define once, use across multiple resources
+- **Maintainability**: Update credentials in one place when they change
+- **Auditability**: Track which resources use which connections
 
-A sample connection CRD looks like:
+## Connection Types
 
-```yaml
+| Category | Connections |
+|----------|-------------|
+| **Cloud Providers** | [AWS](./aws), [Azure](./azure), [GCP](./gcp) |
+| **Kubernetes** | [Kubernetes](./kubernetes) |
+| **Source Control** | [Git](./git), [GitHub](./github), [GitLab](./gitlab), [Azure DevOps](./azure-devops) |
+| **Databases** | [Postgres](./postgres), [OpenSearch](./opensearch) |
+| **File Storage** | [SFTP](./sftp), [SMB](./smb) |
+| **AI Providers** | [OpenAI](./openai), [Anthropic](./anthropic), [Ollama](./ollama) |
+| **Notifications** | [Slack](./slack), [Discord](./discord), [Telegram](./telegram), [SMTP](./smtp), [ntfy](./ntfy), [Pushbullet](./pushbullet), [Pushover](./pushover) |
+| **Generic** | [HTTP](./http) |
+
+## Creating Connections
+
+Connections can be created via Kubernetes CRD or through the Mission Control UI.
+
+### Kubernetes CRD
+
+```yaml title="connection-example.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
@@ -20,53 +42,125 @@ metadata:
   namespace: default
 spec:
   postgres:
+    host:
+      value: postgres.example.com
     database:
       value: payments
-    host:
-      value: postgres.host.com
-    insecureTLS: true
     username:
       valueFrom:
         secretKeyRef:
-          name: payments-database-credentials
+          name: postgres-credentials
           key: POSTGRES_USER
     password:
       valueFrom:
         secretKeyRef:
-          name: payments-database-credentials
+          name: postgres-credentials
           key: POSTGRES_PASSWORD
 ```
 
+### UI Configuration
+
+Connections can also be created through the Settings page in the Mission Control UI. This is useful for quick setup and for users who prefer a visual interface.
+
 ## Referencing Connections
 
-A connection string can be represented in the form of `namespace/connection_name`
+Once created, connections can be referenced using the `connection://` URL scheme:
 
-It can then be used in Health Checks, Playbooks, Notifications etc via the  `connection` field.
+```
+connection://[namespace]/[connection-name]
+```
 
-```yaml
+### Example Usage
+
+```yaml title="canary-with-connection.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
   name: postgres-check
 spec:
   postgres:
-    - name: postgres schemas check
+    - name: Database Health Check
       connection: connection://default/payments-database
-      query: SELECT COUNT(*) FROM payments where state = 'pending'
+      query: SELECT 1
 ```
 
-This allows us a safe and reusable way to handle authentication
-
 :::tip
-The connection string can also be found in the `status.ref` field of the connection kubernetes object.
+The connection string can be found in the `status.ref` field of the Connection Kubernetes object.
 :::
 
-:::tip
-If the entire URL is in the secrets and cannot be constructed like `scheme://$(username):$(password)@<host>:<port>` you can fetch that directly like
+## Credential Sources
+
+Connection fields support multiple ways to specify values:
+
+### Direct Value
+
 ```yaml
+host:
+  value: postgres.example.com
+```
+
+### From Kubernetes Secret
+
+```yaml
+password:
+  valueFrom:
+    secretKeyRef:
+      name: my-secret
+      key: password
+```
+
+### From ConfigMap
+
+```yaml
+host:
+  valueFrom:
+    configMapKeyRef:
+      name: my-config
+      key: database-host
+```
+
+### From Helm Values
+
+```yaml
+password:
+  valueFrom:
+    helmRef:
+      name: my-release
+      key: database.password
+```
+
+## URL Template Pattern
+
+For connections where all credentials are embedded in a URL, you can use variable substitution:
+
+```yaml title="connection-url-template.yaml"
+apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
   name: opensearch-global
+spec:
+  type: opensearch
+  url:
+    value: "https://$(username):$(password)@opensearch.example.com:9200"
+  username:
+    valueFrom:
+      secretKeyRef:
+        name: opensearch-credentials
+        key: OPENSEARCH_USER
+  password:
+    valueFrom:
+      secretKeyRef:
+        name: opensearch-credentials
+        key: OPENSEARCH_PASSWORD
+```
+
+:::tip
+If the entire URL is stored in a secret, you can fetch it directly:
+
+```yaml
+kind: Connection
+metadata:
+  name: opensearch-from-url
 spec:
   type: opensearch
   url:
@@ -77,24 +171,24 @@ spec:
         name: opensearch-credentials
         key: OPENSEARCH_URL
 ```
-
 :::
 
 ## Schema
 
-| **Field**    | **Description**                                       | **Scheme**                                     | **Required** |
-|--------------|-------------------------------------------------------|------------------------------------------------|--------------|
-| url          | URL in templatable form                               | <CommonLink to="secrets">*EnvVar*</CommonLink> | yes          |
-| port         | Port number                                           | <CommonLink to="secrets">*EnvVar*</CommonLink> |              |
-| type         | Type of datasource (postgres,mysql,elasticsearch ...) | string                                         |              |
-| username     | Username                                              | <CommonLink to="secrets">*EnvVar*</CommonLink> |              |
-| password     | Password                                              | <CommonLink to="secrets">*EnvVar*</CommonLink> |              |
-| certificate  | Certificate for verification                          | <CommonLink to="secrets">*EnvVar*</CommonLink> |              |
-| properties   | Property fields                                       | map[string]string                              |              |
-| insecure_tls | Allow insecure tls                                    | bool                                           |              |
+| Field          | Description                                       | Scheme                                     | Required |
+|----------------|---------------------------------------------------|-------------------------------------------|----------|
+| `url`          | URL in templatable form                           | <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
+| `port`         | Port number                                       | <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
+| `type`         | Type of datasource (postgres, mysql, etc.)        | string                                     |          |
+| `username`     | Username for authentication                       | <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
+| `password`     | Password for authentication                       | <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
+| `certificate`  | Certificate for verification                      | <CommonLink to="secrets">*EnvVar*</CommonLink> |          |
+| `properties`   | Additional property fields                        | map[string]string                          |          |
+| `insecure_tls` | Skip TLS certificate verification                 | bool                                       |          |
 
-## Permission
+## Permissions
 
-To use a connection, a principal needs to have the `read` permission on the connection.
+To use a connection, a principal needs the `read` permission on the connection resource.
 
 ```yaml title="connection-permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/playbook-connection-read.yaml
+```

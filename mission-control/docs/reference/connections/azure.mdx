@@ -1,29 +1,81 @@
 ---
 title: Azure
+description: Connect to Microsoft Azure for health checks, config scraping, and playbook actions
 sidebar_custom_props:
   icon: azure
 ---
 
-<!-- Source: modules/duty/connection/azure.go:11#AzureConnection -->
+Azure connections enable integration with Microsoft Azure for health checks, configuration scraping, and playbook automation.
+
+## Used By
+
+- [Azure Config Scraper](/docs/guide/config-db/scrapers/azure) - Scrape Azure resource configurations
+- [Azure Blob Health Check](/docs/reference/canary-checker) - Check Azure Blob Storage
+- [Azure DevOps Pipeline](/docs/guide/playbooks/actions/azure_devops_pipeline) - Trigger pipelines
+- [Playbook Actions](/docs/guide/playbooks/actions) - Execute Azure-related automation
 
 <Fields connection="azure"/>
 
-## Example
+## Authentication
 
-This example demonstrates how to configure an Azure connection in Mission Control:
+Azure connections use service principal credentials (client ID and client secret) for authentication.
+
+## Examples
+
+<details summary="Service Principal Authentication">
+<div>
+
+Create an Azure connection with service principal:
 
 ```yaml title="azure-connection.yaml"
-apiVersion: v1
+apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
-  name: azure-connection
+  name: azure-production
+  namespace: default
 spec:
   azure:
     clientID:
-      value: your-client-id
+      valueFrom:
+        secretKeyRef:
+          name: azure-credentials
+          key: AZURE_CLIENT_ID
     clientSecret:
-      value: your-client-secret
+      valueFrom:
+        secretKeyRef:
+          name: azure-credentials
+          key: AZURE_CLIENT_SECRET
     tenantID: your-tenant-id
-    subscriptionId: subscription-id
 ```
 
+</div>
+</details>
+
+<details summary="With Subscription ID">
+<div>
+
+Include subscription for resource access:
+
+```yaml title="azure-with-subscription.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: azure-subscription
+spec:
+  azure:
+    clientID:
+      valueFrom:
+        secretKeyRef:
+          name: azure-credentials
+          key: AZURE_CLIENT_ID
+    clientSecret:
+      valueFrom:
+        secretKeyRef:
+          name: azure-credentials
+          key: AZURE_CLIENT_SECRET
+    tenantID: your-tenant-id
+    subscriptionID: your-subscription-id
+```
+
+</div>
+</details>

@@ -3,262 +3,76 @@ slug: /guide/permission
 title: Permissions
 sidebar_position: 6
 hide_title: true
-# hide_table_of_contents: true
 pagination_prev: guide/mcp/index
 sidebar_custom_props:
   icon: shield-user
 ---
 
-## Permission
+## Permissions
 
-In Mission Control, Permission provides a flexible and strong security model that combines two powerful methods:
+Mission Control provides a flexible and strong security model that combines two powerful methods:
 Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC).
+
 This combined permission system helps you set up detailed access rules.
 For instance, while RBAC can control if a user can run any playbooks in the system,
 detailed ABAC rules let you define exactly which playbooks specific users or teams can access.
 
-You can manage Permissions through the UI and using CRDs.
+## Key Concepts
 
-```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/deny-person-playbook.yaml
+| Concept | Description |
+|---------|-------------|
+| [Permission](./permissions/permission) | A rule that grants or denies specific actions to a subject on target objects |
+| [Subject](./permissions/subjects) | WHO or WHAT gets the permission (person, team, group, or system service) |
+| [Actions](./permissions/actions) | WHAT operations are allowed (read, write, delete, playbook:run, etc.) |
+| [Groups](./permissions/groups) | Groups of subjects for easier permission management |
+
+## Access Control Models
+
+| Model | Description |
+|-------|-------------|
+| [Roles](./permissions/roles) | Role-Based Access Control using built-in roles (admin, editor, viewer, guest) |
+| [ABAC](./permissions/multi-tenancy) | Attribute-Based Access Control based on resource attributes (tags, namespace, name) |
+| [Multi-Tenancy](./permissions/multi-tenancy) | Agent and tag-based permissions for SaaS environments |
+
+## Quick Example
+
+```yaml title="permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: sre-playbook-access
+spec:
+  description: Allow SRE team to run playbooks on production configs
+  subject:
+    team: sre-team
+  actions:
+    - playbook:run
+  object:
+    playbooks:
+      - name: "*"
+    configs:
+      - labels:
+          environment: production
 ```
-
-A Permission has 4 parts:
-
-- **Subject**: The user or service requesting access.
-- **Object**: The resources this permission affects (playbooks, connections or configs).
-- **Effect**: Whether to allow or deny access (Default: allow).
-- **Actions**: The [list of allowed actions](/docs/reference/permissions/actions).
 
 :::info
 Deny rules always override Allow rules.
 :::
 
-## CRD
+## Getting Started
 
-<Fields
-  rows={[
-    {
-      field: 'description',
-      description: 'Description of the permission',
-      scheme: 'string',
-    },
-    {
-      field: 'actions',
-      required: true,
-      description: 'List of [allowed actions](/docs/reference/permissions/actions)',
-      scheme: '`[]string`',
-    },
-    {
-      field: 'subject.person',
-      description: 'Email or ID of the person',
-      scheme: 'string',
-    },
-    {
-      field: 'subject.team',
-      description: 'Name or ID of the team',
-      scheme: 'string',
-    },
-    {
-      field: 'subject.group',
-      description: 'Name of a permission group',
-      scheme: 'string',
-    },
-    {
-      field: 'subject.notification',
-      description: '`<namespace>/<name>` of the notification',
-      scheme: 'string',
-    },
-    {
-      field: 'subject.playbook',
-      description: '`<namespace>/<name>` of the playbook',
-      scheme: 'string',
-    },
-    {
-      field: 'object.playbooks',
-      description: 'List of playbook resource selectors',
-      scheme: 'resourceselectors',
-    },
-    {
-      field: 'object.configs',
-      description: 'List of config resource selectors',
-      scheme: 'resourceselectors',
-    },
+1. **[Quickstart](./permissions/quickstart)** - Learn about default permissions and how to enable strict mode
+2. **[Permission](./permissions/permission)** - Understand the Permission CRD schema
+3. **[Subjects](./permissions/subjects)** - Learn about different subject types
+4. **[Actions](./permissions/actions)** - Understand available permission actions
 
-    {
-      field: 'object.connections',
-      description: 'List of connection resource selectors',
-      scheme: 'resourceselectors',
-    },
-    {
-      field: 'deny',
-      description: 'Specifies if this is a deny rule. _(Default: False)_',
-      scheme: 'bool',
-    },
-  ]}
-/>
+## See Also
 
-Additionally, for [tag-agent based ABAC](./concepts/multi-tenancy.md), you can also use these fields.
-
-<Fields
-  rows={[
-    {
-      field: 'agents',
-      description: 'List of agents',
-      scheme: '`[]string`',
-    },
-    {
-      field: 'tags',
-      description: 'Key-value pairs of tags',
-      scheme: '`map[string]string`',
-    },
-  ]}
-/>
-
-## Subjects
-
-Subjects define WHO or WHAT gets the permission. The `subject` field can contain **only one** of the following:
-
-### Individual User
-
-Specify a human user by their email address or name (if the name is unique) to grant permission.
-
-```yaml
-subject:
-  person: jane.doe@example.com
-```
-
-OR
-
-```yaml
-subject:
-  person: "Jane Doe"
-```
-
-### Team
-
-Specify a team by its name to grant permission to all its members.
-
-```yaml
-subject:
-  team: sre-team
-```
-
-### Group
-
-Specify a defined `PermissionGroup` to grant permission. Groups bundle different items (like specific playbooks, notifications) or lists of users/teams.
-
-```yaml
-subject:
-  group: system-administrators
-```
-
-### System Services
-
-Sometimes, a specific system service needs permission to act *for* a particular resource instance. Mission Control often uses this for automation or to allow one part of Mission Control to interact with another. The service gains permission only when it acts for the specified resource, identified by its `<namespace>/<name>`.
-
-- **Notification Service**:
-
-  Specify a notification to grant permission to the notification service when it processes that notification.
-  Example: A notification might need access to read a connection or trigger a playbook run.
-
-  ```yaml
-  subject:
-    notification: monitoring/critical-alerts
-  ```
-
-- **Playbook Service**:
-
-  Specify a playbook to grant permission to the playbook runner service when it runs that playbook.
-  Example: A playbook needs access to a specific resource it acts on.
-
-  ```yaml
-  subject:
-    playbook: automation/cleanup-pods
-  ```
-
-## Objects
-
-Objects define the resources the permission targets. You can define Objects using [Resource Selectors](/docs/reference/resource-selector).
-There are 4 types of objects:
-
-- **Playbooks** - Automation playbooks in the system
-- **Configs** - Configuration items in the catalog
-- **Connections** - Connection configurations for external systems
-
-A permission can target multiple objects, while a subject can only target one.
-If you define multiple objects, Mission Control grants the permission only if the request matches all defined objects.
-In other words, Mission Control applies an AND condition to the objects.
-
-```yaml
-
-```
-
-This permission object allows running all playbooks but **only on configs in the "mission-control" namespace**.
-
-```yaml file=<rootDir>/modules/mission-control/fixtures/permissions/notification-playbook-permission.yaml {14-22}
-```
-
-This permission, on the other hand, allows running the "echo-config" playbook on all configs & components.
-
-## Permission Actions
-
-The following actions can be used in the `actions` field of a Permission:
-
-- **`read`** - Allows reading resources
-- **`write`** - Allows creating or modifying resources
-- **`delete`** - Allows deleting resources
-- **`playbook:run`** - Allows running playbooks
-- **`playbook:approve`** - Allows approving playbook runs that require approval
-- **`playbook:cancel`** - Allows canceling playbook runs
-
-You can also use wildcards to grant multiple permissions at once:
-
-- **`playbook:*`** - Grants all playbook-related permissions
-- **`*`** - Grants all permissions (use with caution)
-
-## Permission Groups
-
-Permission Groups let you group subjects (people, teams, or system services) under one name for simpler permission setup.
-The subjects included in the group then inherit the permissions applied to it.
-
-Permission Groups are particularly useful when:
-- You need to manage permissions for many users with similar roles
-- You want to grant the same permissions to multiple system services
-- You need to update permissions for a set of users all at once
-### CRD
-
-```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/config-notification-group-playbook-permission.yaml
-```
-
-<Fields
-  rows={[
-    {
-      field: 'name',
-      description: 'Set a unique name for the permission group',
-      required: true,
-      scheme: 'string',
-    },
-    {
-      field: 'people',
-      description: 'List of people identifiers (email or id) to associate with the group',
-      scheme: '`[]string`',
-    },
-    {
-      field: 'teams',
-      description: 'List of team names to associate with the group',
-      scheme: '`[]string`',
-    },
-    {
-      field: 'notifications',
-      description: 'List of notification `<namespace>/<name>`',
-      scheme: '`[]string`',
-    },
-    {
-      field: 'playbooks',
-      description: 'List of playbook `<namespace>/<name>`',
-      scheme: '`[]string`',
-    },
-  ]}
-/>
-
-
+- [Quickstart](./permissions/quickstart) - Get started with permissions, including Helm configuration
+- [Permission](./permissions/permission) - Permission CRD schema and examples
+- [Subjects](./permissions/subjects) - Define who gets the permission
+- [Actions](./permissions/actions) - Define what operations are allowed
+- [Permission Groups](./permissions/groups) - Group subjects for simpler permission management
+- [Roles](./permissions/roles) - Role-Based Access Control
+- [ABAC](./permissions/multi-tenancy) - Attribute-Based Access Control
+- [Multi-Tenancy](./permissions/multi-tenancy) - Agent and tag-based permissions for SaaS environments

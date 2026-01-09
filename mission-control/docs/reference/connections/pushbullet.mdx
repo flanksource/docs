@@ -1,0 +1,50 @@
+---
+title: Pushbullet
+description: Connect to Pushbullet for push notifications across devices
+sidebar_custom_props:
+  icon: pushbullet
+---
+
+Pushbullet connections enable sending push notifications to phones, tablets, and browsers via the Pushbullet service.
+
+## Used By
+
+- [Notifications](/docs/guide/notifications) - Send push notifications
+- [Notification Action](/docs/guide/playbooks/actions/notification) - Send notifications from playbooks
+
+<Fields rows={[
+  {
+    field: 'token',
+    scheme: 'EnvVar',
+    description: 'Pushbullet Access Token',
+    required: true
+  },
+  {
+    field: 'targets',
+    scheme: 'string[]',
+    description: 'Device identifiers or channel tags to send to',
+    required: true
+  },
+]}/>
+
+## Example
+
+```yaml title="pushbullet-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: pushbullet-alerts
+spec:
+  pushbullet:
+    token:
+      valueFrom:
+        secretKeyRef:
+          name: pushbullet-credentials
+          key: ACCESS_TOKEN
+    targets:
+      - ""  # Empty string sends to all devices
+```
+
+## Next Steps
+
+- [Pushbullet Channel Guide](/docs/guide/notifications/channels/pushbullet) - Configure Pushbullet notifications

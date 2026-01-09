@@ -1,9 +1,11 @@
 ---
-title: RBAC
-sidebar_position: 1
+title: Roles
+sidebar_position: 6
+sidebar_custom_props:
+  icon: lock
 ---
 
-Role-Based Access Control (RBAC) is a security model that manages access to Mission Control resources based on the roles assigned to users.
+Mission Control uses Role-Based Access Control (RBAC) to manage access to resources based on the roles assigned to users.
 Mission Control provides a collection of built-in roles to accommodate common organizational needs and security requirements.
 Users receive a role when joining the system, which sets their base access level.
 
@@ -20,4 +22,4 @@ This system enables precise control over who views, modifies, and manages resour
 
 ## Custom Roles
 
-If you require more specialized access configurations, [PermissionGroups](../index.mdx#permission-groups) offer functionality similar to custom roles.
+If you require more specialized access configurations, [Permission Groups](./groups) offer functionality similar to custom roles.

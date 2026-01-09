@@ -1,8 +1,61 @@
 ---
-title: Gitlab
+title: GitLab
+description: Connect to GitLab for repository access, issue management, and pipeline automation
 sidebar_custom_props:
   icon: gitlab
 ---
-import Gitlab from '@site/docs/partials/_gitlab.mdx'
 
-<Gitlab/>
+GitLab connections enable integration with GitLab repositories and APIs for GitOps workflows, issue management, and merge request automation.
+
+## Used By
+
+- [GitOps Action](/docs/guide/playbooks/actions/gitops) - Create commits and merge requests
+- [Playbook Actions](/docs/guide/playbooks/actions) - Execute GitLab-related automation
+
+<Fields rows={[
+  {field: "url", description: "GitLab API URL (defaults to https://gitlab.com)", scheme: "string"},
+  {field: "personalAccessToken", description: "GitLab personal access token for authentication", scheme: "EnvVar", required: true}
+]} />
+
+## Examples
+
+<details summary="GitLab.com Connection">
+<div>
+
+```yaml title="gitlab-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: gitlab
+spec:
+  gitlab:
+    personalAccessToken:
+      valueFrom:
+        secretKeyRef:
+          name: gitlab-credentials
+          key: token
+```
+
+</div>
+</details>
+
+<details summary="Self-Hosted GitLab">
+<div>
+
+```yaml title="gitlab-self-hosted.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: gitlab-self-hosted
+spec:
+  gitlab:
+    url: https://gitlab.mycompany.com
+    personalAccessToken:
+      valueFrom:
+        secretKeyRef:
+          name: gitlab-credentials
+          key: token
+```
+
+</div>
+</details>

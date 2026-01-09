@@ -1,0 +1,63 @@
+---
+title: Groups
+sidebar_position: 5
+sidebar_custom_props:
+  icon: group
+---
+
+Permission Groups let you group subjects (people, teams, or system services) under one name for simpler permission setup.
+The subjects included in the group then inherit the permissions applied to it.
+
+Permission Groups are particularly useful when:
+- You need to manage permissions for many users with similar roles
+- You want to grant the same permissions to multiple system services
+- You need to update permissions for a set of users all at once
+
+## Example
+
+```yaml title="permission-group.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/config-notification-group-playbook-permission.yaml
+```
+
+## Schema
+
+<Fields
+  rows={[
+    {
+      field: 'name',
+      description: 'Set a unique name for the permission group',
+      required: true,
+      scheme: 'string',
+    },
+    {
+      field: 'people',
+      description: 'List of people identifiers (email or id) to associate with the group',
+      scheme: '`[]string`',
+    },
+    {
+      field: 'teams',
+      description: 'List of team names to associate with the group',
+      scheme: '`[]string`',
+    },
+    {
+      field: 'notifications',
+      description: 'List of notification `<namespace>/<name>`',
+      scheme: '`[]string`',
+    },
+    {
+      field: 'playbooks',
+      description: 'List of playbook `<namespace>/<name>`',
+      scheme: '`[]string`',
+    },
+  ]}
+/>
+
+## Using Permission Groups
+
+Once a Permission Group is created, you can reference it in the `subject` field of a Permission:
+
+```yaml
+subject:
+  group: system-administrators
+```
+
+All members of the group will inherit the permissions defined in the Permission resource.

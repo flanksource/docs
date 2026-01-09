@@ -1,0 +1,166 @@
+---
+title: Subjects
+sidebar_position: 3
+sidebar_custom_props:
+  icon: user
+---
+
+Subjects define WHO or WHAT gets the permission. The `subject` field can contain **only one** of the following:
+
+## Individual User
+
+Specify a human user by their email address or name (if the name is unique) to grant permission.
+
+```yaml
+subject:
+  person: jane.doe@example.com
+```
+
+OR
+
+```yaml
+subject:
+  person: "Jane Doe"
+```
+
+## Team
+
+Specify a team by its name to grant permission to all its members.
+
+```yaml
+subject:
+  team: sre-team
+```
+
+## Group
+
+Specify a defined [Permission Group](./groups) to grant permission. Groups bundle different items (like specific playbooks, notifications) or lists of users/teams.
+
+```yaml
+subject:
+  group: system-administrators
+```
+
+## System Services
+
+Sometimes, a specific system service needs permission to act *for* a particular resource instance. Mission Control often uses this for automation or to allow one part of Mission Control to interact with another. The service gains permission only when it acts for the specified resource, identified by its `<namespace>/<name>`.
+
+### Notification Service
+
+Specify a notification to grant permission to the notification service when it processes that notification.
+Example: A notification might need access to read a connection or trigger a playbook run.
+
+```yaml
+subject:
+  notification: monitoring/critical-alerts
+```
+
+### Playbook Service
+
+Specify a playbook to grant permission to the playbook runner service when it runs that playbook.
+Example: A playbook needs access to a specific resource it acts on.
+
+```yaml
+subject:
+  playbook: automation/cleanup-pods
+```
+
+## Schema
+
+<Fields
+  rows={[
+    {
+      field: 'person',
+      description: 'Email or ID of the person',
+      scheme: 'string',
+    },
+    {
+      field: 'team',
+      description: 'Name or ID of the team',
+      scheme: 'string',
+    },
+    {
+      field: 'group',
+      description: 'Name of a permission group',
+      scheme: 'string',
+    },
+    {
+      field: 'notification',
+      description: '`<namespace>/<name>` of the notification',
+      scheme: 'string',
+    },
+    {
+      field: 'playbook',
+      description: '`<namespace>/<name>` of the playbook',
+      scheme: 'string',
+    },
+  ]}
+/>
+
+## Examples
+
+<details summary="Grant User Access to Run Playbooks">
+<div>
+
+```yaml title="user-playbook-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: jane-playbook-access
+spec:
+  description: Allow Jane to run playbooks
+  subject:
+    person: jane.doe@example.com
+  actions:
+    - playbook:run
+  object:
+    playbooks:
+      - name: "*"
+```
+
+</div>
+</details>
+
+<details summary="Grant Team Read Access">
+<div>
+
+```yaml title="team-read-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: sre-read-access
+spec:
+  description: Allow SRE team to read all configs
+  subject:
+    team: sre-team
+  actions:
+    - read
+  object:
+    configs:
+      - name: "*"
+```
+
+</div>
+</details>
+
+<details summary="Grant Playbook Access to Connection">
+<div>
+
+```yaml title="playbook-connection-permission.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Permission
+metadata:
+  name: cleanup-playbook-aws-access
+spec:
+  description: Allow cleanup playbook to use AWS connection
+  subject:
+    playbook: automation/cleanup-pods
+  actions:
+    - read
+  object:
+    connections:
+      - name: aws-production
+```
+
+</div>
+</details>

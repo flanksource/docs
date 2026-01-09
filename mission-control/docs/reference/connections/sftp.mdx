@@ -1,52 +1,64 @@
 ---
 title: SFTP
+description: Connect to SFTP servers for file transfers and backup monitoring
 sidebar_custom_props:
   icon: sftp
 ---
 
-<!-- Source: modules/duty/connection/sftp.go:12#SFTPConnection -->
+SFTP connections enable secure file transfer protocol integration for file operations, backup monitoring, and file-based health checks.
+
+## Used By
+
+- [Folder Health Check](/docs/reference/canary-checker) - Check file existence and age on SFTP servers
+- [File Scraper](/docs/guide/config-db/scrapers/file) - Scrape configuration files from SFTP
 
 <Fields connection="sftp"/>
 
-## Example
+## Authentication Methods
 
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: sftp-connection
-type: Opaque
-data:
-  host: c3RlcC5leGFtcGxlLmNvbQ== # base64 encoded value of "step.example.com"
-  username: dXNlcm5hbWU= # base64 encoded value of "username"
-  password: cGFzc3dvcmQ= # base64 encoded value of "password"
----
-apiVersion: mission-control/v1
+### Password Authentication
+
+```yaml title="sftp-password.yaml"
+apiVersion: mission-control.flanksource.com/v1
 kind: Connection
 metadata:
-  name: example-sftp
+  name: sftp-backups
 spec:
   sftp:
     host:
-      valueFrom:
-        secretKeyRef:
-          name: sftp-connection
-          key: host
+      value: sftp.example.com
+    port: 22
     username:
       valueFrom:
         secretKeyRef:
-          name: sftp-connection
+          name: sftp-credentials
           key: username
     password:
       valueFrom:
         secretKeyRef:
-          name: sftp-connection
+          name: sftp-credentials
           key: password
-    port: 22
-    path: /upload
+    path: /backups
 ```
 
-This example:
-1. Creates a Kubernetes Secret to store the SFTP connection details.
-2. Defines a Connection resource that references the secret for the SFTP connection.
-3. Specifies the SFTP server's host, username, password, port, and path.
+### SSH Key Authentication
+
+```yaml title="sftp-ssh-key.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: sftp-ssh
+spec:
+  sftp:
+    host:
+      value: sftp.example.com
+    port: 22
+    username:
+      value: backup-user
+    certificate:
+      valueFrom:
+        secretKeyRef:
+          name: sftp-ssh-key
+          key: private-key
+    path: /data
+```

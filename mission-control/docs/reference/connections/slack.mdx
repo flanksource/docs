@@ -1,0 +1,75 @@
+---
+title: Slack
+description: Connect to Slack for sending notifications and alerts
+sidebar_custom_props:
+  icon: slack
+---
+
+Slack connections enable sending notifications, alerts, and messages to Slack channels.
+
+## Used By
+
+- [Notifications](/docs/guide/notifications) - Send alerts to Slack channels
+- [Notification Action](/docs/guide/playbooks/actions/notification) - Send messages from playbooks
+
+<Fields rows={[
+  {
+    field: 'token',
+    scheme: 'EnvVar',
+    description: "Slack app's API bot token (starts with xoxb-)",
+    required: true,
+  },
+  {
+    field: 'channel',
+    scheme: 'string',
+    description: "The channel to send messages to, in `Cxxxxxxxxxx` format",
+    required: true
+  },
+  {
+    field: "botName",
+    description: "Bot name displayed in messages",
+    aliases: ["username"],
+  },
+  {
+    field: "color",
+    description: "Message left-hand border color",
+    anyOf: ["good", "warning", "danger", "hex color code"],
+  },
+  {
+    field: "icon",
+    scheme: "emoji or URL",
+    description: "Bot icon as emoji or image URL",
+    aliases: ["icon_emoji", "icon_url"],
+  },
+  {
+    field: "threadTS",
+    description: "Parent message timestamp to send as thread reply",
+  },
+  {
+    field: "title",
+    description: "Prepended text above the message",
+  },
+]}/>
+
+## Example
+
+```yaml title="slack-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: slack-alerts
+spec:
+  slack:
+    token:
+      valueFrom:
+        secretKeyRef:
+          name: slack-credentials
+          key: BOT_TOKEN
+    channel: C0123456789
+    botName: Mission Control
+    icon: ":robot_face:"
+```
+
+## Next Steps
+
+- [Slack Channel Guide](/docs/guide/notifications/channels/slack) - Configure Slack notifications

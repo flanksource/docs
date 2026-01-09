@@ -1,25 +1,34 @@
 ---
 title: AWS
-
+description: Connect to Amazon Web Services for health checks, config scraping, and playbook actions
 sidebar_custom_props:
   icon: aws
 ---
 
-<!-- Source: modules/duty/connection/aws.go:20#AWSConnection -->
+AWS connections enable integration with Amazon Web Services for health checks, configuration scraping, and playbook automation.
+
+## Used By
+
+- [AWS Config Scraper](/docs/guide/config-db/scrapers/aws) - Scrape AWS resource configurations
+- [CloudWatch Health Check](/docs/reference/canary-checker) - Monitor CloudWatch metrics
+- [S3 Folder Check](/docs/reference/canary-checker) - Check S3 bucket contents
+- [Playbook Actions](/docs/guide/playbooks/actions) - Execute AWS-related automation
 
 <Fields connection="aws"/>
 
-
-There are 3 options when connecting to AWS:
+## Authentication Methods
 
 <Step step={1} name="AWS Instance or Pod Identity" style="list">
 
-By using the AWS [Instance Profile](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html) or [Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-configuration.html) (the default if no `connection` or `accessKey` is specified)
-</Step>
-<Step step={2} name="Connection" style="list">
+Use the AWS [Instance Profile](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html) or [Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-configuration.html). This is the default when no `connection` or `accessKey` is specified and the recommended approach for workloads running on AWS infrastructure.
 
-Using a shared <CommonLink to="connection">Connection</CommonLink>
-```yaml title="aws-connection.yaml"
+</Step>
+
+<Step step={2} name="Connection Reference" style="list">
+
+Reference a shared <CommonLink to="connection">Connection</CommonLink> for reusable credentials:
+
+```yaml title="using-connection-reference.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
@@ -27,13 +36,17 @@ metadata:
 spec:
   interval: 30
   cloudwatch:
-    - connection: connection://aws/internal
-      region: us-east-1 # optional if specified in the connection
+    - connection: connection://aws/production
+      region: us-east-1
 ```
-</Step>
-<Step step={3} name="Inline" style="list">
 
-```yaml title="inline.yaml"
+</Step>
+
+<Step step={3} name="Inline Credentials" style="list">
+
+Specify credentials directly using Kubernetes secrets:
+
+```yaml title="inline-credentials.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
@@ -53,7 +66,65 @@ spec:
             key: AWS_SECRET_ACCESS_KEY
       region: us-east-1
 ```
+
 </Step>
 
+## Examples
 
+<details summary="Connection Resource">
+<div>
 
+Create a reusable AWS connection:
+
+```yaml title="aws-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: aws-production
+  namespace: default
+spec:
+  aws:
+    region: us-east-1
+    accessKey:
+      valueFrom:
+        secretKeyRef:
+          name: aws-credentials
+          key: AWS_ACCESS_KEY_ID
+    secretKey:
+      valueFrom:
+        secretKeyRef:
+          name: aws-credentials
+          key: AWS_SECRET_ACCESS_KEY
+```
+
+</div>
+</details>
+
+<details summary="Cross-Account Access with AssumeRole">
+<div>
+
+Access resources in another AWS account:
+
+```yaml title="aws-assume-role.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: aws-cross-account
+spec:
+  aws:
+    region: us-east-1
+    accessKey:
+      valueFrom:
+        secretKeyRef:
+          name: aws-credentials
+          key: AWS_ACCESS_KEY_ID
+    secretKey:
+      valueFrom:
+        secretKeyRef:
+          name: aws-credentials
+          key: AWS_SECRET_ACCESS_KEY
+    assumeRole: arn:aws:iam::123456789012:role/CrossAccountAccess
+```
+
+</div>
+</details>
