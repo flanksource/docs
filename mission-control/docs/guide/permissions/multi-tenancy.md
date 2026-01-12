@@ -142,7 +142,7 @@ spec:
     - playbook:run
   object:
     playbooks:
-      - name: "*"
+      - name: '*'
     configs:
       - tagSelector: cluster=demo
       - tagSelector: cluster=staging
