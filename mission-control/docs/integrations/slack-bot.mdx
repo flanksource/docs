@@ -1,0 +1,252 @@
+---
+title: Slack Bot
+sidebar_custom_props:
+  icon: slack
+---
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
+Mission Control Assistant is a Slack bot that responds to direct messages and @mentions. The bot uses Slack Socket Mode, which opens a WebSocket connection so you do not expose a public webhook endpoint.
+
+## Slack app creation and installation
+
+### Before you start
+
+- A Slack workspace where you can create apps
+- An Anthropic, OpenAI, or Google Generative AI API key for the LLM provider
+
+
+### Create the Slack app
+
+1. Go to [api.slack.com/apps](https://api.slack.com/apps) and select **Create New App**.
+2. Choose **From scratch**, name the app, and select the workspace.
+3. Select **Create App**.
+
+![](./api.slack.com_apps.png)
+
+### Enable Socket Mode
+
+Open **Settings** → **Socket Mode** and turn on **Enable Socket Mode**. 
+
+You'll be prompted to generate an app-level token with access to the `connections:write` scope.
+
+![](./app-level-token.png)
+
+Store the token value as `SLACK_APP_TOKEN` env var.
+
+### Enable App Home messages
+
+Open **Features** → **App Home** and enable these settings:
+
+- **Messages Tab**
+- **Allow users to send Slash commands and messages from the messages tab**
+
+These settings let users send direct messages to the bot from the App Home Messages tab. Without them, Slack disables messages to the app.
+
+### Add bot token scopes
+
+Open **Features** → **OAuth & Permissions** and add these bot token scopes:
+
+| Scope | Description |
+| --- | --- |
+| `app_mentions:read` | View messages that directly mention @Mission Control AI Assistant in conversations that the app is in. |
+| `chat:write` | Send messages as @Mission Control AI Assistant. |
+| `groups:history` | View messages and other content in private channels that Mission Control AI Assistant has been added to. |
+| `im:history` | View messages and other content in direct messages that Mission Control AI Assistant has been added to. |
+| `im:read` | View basic information about direct messages that Mission Control AI Assistant has been added to. |
+| `im:write` | Start direct messages with people. |
+
+### Add bot events
+
+Open **Features** → **Event Subscriptions**, enable events, and subscribe the bot to these events:
+
+| Event name | Description | Required scope |
+| --- | --- | --- |
+| `app_mention` | Subscribe to only the message events that mention your app or bot. | `app_mentions:read` |
+| `message.im` | A message was posted in a direct message channel. | `im:history` |
+
+### Install the app
+
+Finally, you can go back to **Features** → **OAuth & Permissions** and select **Install to Workspace**. 
+
+After installation, you'll see the Bot User OAuth Token (starts with `xoxb-`) on that same page.
+Store the token value as `SLACK_BOT_TOKEN` env var.
+
+## Mission Control MCP URL and token
+
+You need the MCP URL and bearer token to connect the bot to Mission Control tools.
+
+### Get the MCP URL and token
+
+Use the Setup MCP flow to get both values.
+
+1. In Mission Control, open the user menu and select **Setup MCP**.
+2. Select **Create new token**.
+3. In the token details dialog, select **Slack Bot** and copy `MCP_URL` and `MCP_BEARER_TOKEN`.
+
+![](./token-mcp-slack.png)
+
+## Deployment
+
+#### Create the Kubernetes Secrets (Helm and Flux)
+
+Create three Secrets for Slack, LLM, and MCP credentials before you deploy with Helm or Flux.
+
+```yaml title="slack-secret.yaml"
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mission-control-slack-bot-slack
+type: Opaque
+stringData:
+  SLACK_BOT_TOKEN: xoxb-your-bot-token
+  SLACK_APP_TOKEN: xapp-your-app-token
+```
+
+```yaml title="llm-secret.yaml"
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mission-control-slack-bot-llm
+type: Opaque
+stringData:
+  ANTHROPIC_API_KEY: sk-ant-your-api-key
+```
+
+```yaml title="mcp-secret.yaml"
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mission-control-slack-bot-mcp
+type: Opaque
+stringData:
+  MCP_URL: https://mission-control.example.com/mcp
+  MCP_BEARER_TOKEN: your-mcp-token
+```
+
+
+
+<Tabs>
+<TabItem label="kubectl Helm release" value="helm" default>
+
+### Create Secrets
+
+
+```bash title="Apply the Slack bot secrets"
+kubectl apply -f slack-secret.yaml 
+kubectl apply  -f llm-secret.yaml 
+kubectl apply -f mcp-secret.yaml
+```
+
+#### Create the values file
+
+Create a Helm values file to set the secret name and LLM settings for the chart. Update the provider, model, and log level to match your environment.
+
+```yaml title="slack-bot-values.yaml"
+slack:
+  secretName: mission-control-slack-bot-slack
+llm:
+  provider: anthropic
+  secretName: mission-control-slack-bot-llm
+  secretKey: ANTHROPIC_API_KEY
+  model: claude-haiku-4-5
+mcp:
+  secretName: mission-control-slack-bot-mcp
+```
+
+#### Add the Helm repository
+
+Add the Flanksource Helm repository so Helm can find the Slack bot chart.
+
+```bash title="Add the Flanksource Helm repository"
+helm repo add flanksource https://flanksource.github.io/charts
+```
+
+#### Update the Helm repository
+
+Update the Helm repository index so Helm can install the latest chart version.
+
+```bash title="Update the Helm repository index"
+helm repo update flanksource
+```
+
+This command refreshes the `flanksource` repository metadata on your workstation.
+
+#### Install the chart
+
+Install the chart from the Flanksource Helm repository so Kubernetes runs the deployment with your values.
+
+```bash title="Install the Slack bot chart"
+helm upgrade --install mission-control-slack-bot flanksource/mission-control-ai-assistant -f slack-bot-values.yaml -n mission-control --create-namespace
+```
+
+The `flanksource/mission-control-ai-assistant` chart name targets the Slack bot chart, `-f` loads your values file, and `--create-namespace` creates the namespace when it does not exist.
+
+</TabItem>
+<TabItem label="Flux Helm release" value="flux">
+
+#### Create the HelmRepository
+
+Define the Flanksource Helm repository so Flux can fetch the chart.
+
+```yaml title="slack-bot-helm-repository.yaml"
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: flanksource
+  namespace: mission-control
+spec:
+  interval: 10m
+  url: https://flanksource.github.io/charts
+```
+
+#### Create the HelmRelease
+
+Create a HelmRelease that points to the Slack bot chart and sets the values for your Slack and LLM credentials.
+
+```yaml title="slack-bot-helm-release.yaml"
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mission-control-slack-bot
+  namespace: mission-control
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: mission-control-ai-assistant
+      sourceRef:
+        kind: HelmRepository
+        name: flanksource
+        namespace: mission-control
+      interval: 10m
+  values:
+    slack:
+      secretName: mission-control-slack-bot-slack
+    llm:
+      provider: anthropic
+      secretName: mission-control-slack-bot-llm
+      secretKey: ANTHROPIC_API_KEY
+      model: claude-haiku-4-5
+    mcp:
+      secretName: mission-control-slack-bot-mcp
+```
+
+#### Add a flux Kustomization
+
+Use a Kustomization to apply the HelmRelease and Secrets together.
+
+```yaml title="kustomization.yaml"
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - slack-secret.yaml
+  - llm-secret.yaml
+  - mcp-secret.yaml
+  - slack-bot-helm-repository.yaml
+  - slack-bot-helm-release.yaml
+```
+
+</TabItem>
+</Tabs>
