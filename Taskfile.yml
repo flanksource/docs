@@ -78,12 +78,12 @@ tasks:
   fmt:
     desc: Format all markdown files with prettier
     cmds:
-      - npx prettier --write "**/*.md"
+      - npx prettier --write "**/*.md" --ignore-path .prettierignore
 
   fmt:check:
     desc: Check markdown formatting without making changes
     cmds:
-      - npx prettier --check --log-level=debug "**/*.md"
+      - npx prettier --check --log-level=debug "**/*.md" --ignore-path .prettierignore
 
   # File reference validation
   check:files:
