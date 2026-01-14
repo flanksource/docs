@@ -89,43 +89,23 @@ Use the Setup MCP flow to get both values.
 
 ## Deployment
 
-#### Create the Kubernetes Secrets (Helm and Flux)
+#### Create the Kubernetes Secret (Helm and Flux)
 
-Create three Secrets for Slack, LLM, and MCP credentials before you deploy with Helm or Flux.
+Create one Secret for Slack, LLM, and MCP credentials before you deploy with Helm or Flux.
 
-```yaml title="slack-secret.yaml"
+```yaml title="slack-bot-secret.yaml"
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mission-control-slack-bot-slack
+  name: slack-bot
 type: Opaque
 stringData:
   SLACK_BOT_TOKEN: xoxb-your-bot-token
   SLACK_APP_TOKEN: xapp-your-app-token
-```
-
-```yaml title="llm-secret.yaml"
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mission-control-slack-bot-llm
-type: Opaque
-stringData:
   ANTHROPIC_API_KEY: sk-ant-your-api-key
-```
-
-```yaml title="mcp-secret.yaml"
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mission-control-slack-bot-mcp
-type: Opaque
-stringData:
   MCP_URL: https://mission-control.example.com/mcp
   MCP_BEARER_TOKEN: your-mcp-token
 ```
-
-
 
 <Tabs>
 <TabItem label="kubectl Helm release" value="helm" default>
@@ -134,9 +114,7 @@ stringData:
 
 
 ```bash title="Apply the Slack bot secrets"
-kubectl apply -f slack-secret.yaml 
-kubectl apply  -f llm-secret.yaml 
-kubectl apply -f mcp-secret.yaml
+kubectl apply -f slack-bot-secret.yaml
 ```
 
 #### Create the values file
@@ -145,14 +123,14 @@ Create a Helm values file to set the secret name and LLM settings for the chart.
 
 ```yaml title="slack-bot-values.yaml"
 slack:
-  secretName: mission-control-slack-bot-slack
+  secretName: slack-bot
 llm:
   provider: anthropic
-  secretName: mission-control-slack-bot-llm
+  secretName: slack-bot
   secretKey: ANTHROPIC_API_KEY
   model: claude-haiku-4-5
 mcp:
-  secretName: mission-control-slack-bot-mcp
+  secretName: slack-bot
 ```
 
 #### Add the Helm repository
@@ -223,14 +201,14 @@ spec:
       interval: 10m
   values:
     slack:
-      secretName: mission-control-slack-bot-slack
+      secretName: slack-bot
     llm:
       provider: anthropic
-      secretName: mission-control-slack-bot-llm
+      secretName: slack-bot
       secretKey: ANTHROPIC_API_KEY
       model: claude-haiku-4-5
     mcp:
-      secretName: mission-control-slack-bot-mcp
+      secretName: slack-bot
 ```
 
 #### Add a flux Kustomization
@@ -241,9 +219,7 @@ Use a Kustomization to apply the HelmRelease and Secrets together.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - slack-secret.yaml
-  - llm-secret.yaml
-  - mcp-secret.yaml
+  - slack-bot-secret.yaml
   - slack-bot-helm-repository.yaml
   - slack-bot-helm-release.yaml
 ```
