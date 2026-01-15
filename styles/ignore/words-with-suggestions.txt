@@ -118,6 +118,9 @@ config_id
 configmap
 configmaps
 Configmaps
+Flux
+HelmRelease
+HelmRepository
 configs
 consumesApis
 containerd
@@ -475,3 +478,11 @@ YAMLArray
 Youtube
 yq
 Zulip
+Anthropic
+Docker
+Helm
+LLM
+MCP
+OpenAI
+Slack
+WebSocket
