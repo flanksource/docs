@@ -7,7 +7,7 @@ sidebar_custom_props:
 
 # <Icon name="http"/> HTTP
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:116#HTTPCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#HTTPCheck -->
 
 This check performs queries on HTTP to monitor their activity.
 
@@ -30,7 +30,7 @@ This check performs queries on HTTP to monitor their activity.
   {field: "responseJSONContent", description: "Deprecated: Use expr and jsonpath function", scheme: "JSONCheck", deprecated: true},
   {field: "thresholdMillis", description: "Maximum duration in milliseconds for the HTTP request. It will fail the check if it takes longer", default: 5000, scheme: "int"},
   {field: "maxSSLExpiry", description: <>Maximum number of days until the SSL Certificate expires<br/>Equivalent to <code>test.expr: sslAge &lt; Age("7d")</code></>, scheme: "int"},
-  {field: "envVars", description: "Setup environment variables that are accessible while templating", scheme: "[]EnvVar"},
+  {field: "env", description: "Environment variables that are accessible while templating", scheme: "[]EnvVar"},
   {field: "ntlm", description: "When set to true will authenticate using NTLM v1 protocol", scheme: "bool"},
   {field: "ntlmv2", description: "When set to true will authenticate using NTLM v2 protocol", scheme: "bool"},
   {field: "crawl", description: "Crawl configuration for following links", scheme: "[Crawl](#crawl-configuration)"},
@@ -43,7 +43,7 @@ This check performs queries on HTTP to monitor their activity.
   {field: "ca", description: "PEM encoded certificate of the CA to verify the server certificate", scheme: "EnvVar"},
   {field: "cert", description: "PEM encoded client certificate", scheme: "EnvVar"},
   {field: "key", description: "PEM encoded client private key", scheme: "EnvVar"},
-  {field: "handshakeTimeout", description: "Timeout for SSL handshake (defaults to 10 seconds)", scheme: "int"},
+  {field: "handshakeTimeout", description: "Timeout for SSL handshake (defaults to 10 seconds)", scheme: "Duration"},
   {field: "insecureSkipVerify", description: "Controls whether a client verifies the server's certificate chain and host name", scheme: "bool"}
 ]}/>
 

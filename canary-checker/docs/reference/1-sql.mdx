@@ -8,7 +8,7 @@ import { AzureSqlServer } from "@flanksource/icons/mi"
 
 # <AzureSqlServer/> SQL
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:425#PostgresCheck, 441#MssqlCheck, 469#MysqlCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#PostgresCheck, #MssqlCheck, #MysqlCheck -->
 
 This check connects to a specified Postgres database, run a query against it and verify the results.
 
@@ -17,8 +17,8 @@ This check connects to a specified Postgres database, run a query against it and
 
 <HealthCheck name="postgres"  connection="url" rows={[
   {field: "query", description: "Query to execute against the Postgres database", scheme: 'SQL', required: true},
-  {field: "results", description: "Number of expected rows in results", scheme: 'int'}
-
+  {field: "results", description: "Number of expected rows in results", scheme: 'int'},
+  {field: "timeout", description: "Timeout in seconds for query execution (default: 60)", scheme: 'int'}
 ]}/>
 
 ## Result Variables

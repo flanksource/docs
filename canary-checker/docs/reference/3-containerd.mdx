@@ -7,7 +7,7 @@ sidebar_custom_props:
 
 # <Icon name="containerd" /> ContainerD / Docker
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:339#ContainerdPullCheck, 356#ContainerdPushCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#ContainerdPullCheck, #ContainerdPushCheck -->
 
 This check pulls a Docker image from specified registry using containerd and then verify its checksum and size.
 
@@ -22,7 +22,7 @@ The containerd and docker health checks require access to a working socket that 
 
 <HealthCheck name="containerd"  rows={[
   {
-    field: "image" ,
+    field: "image",
     description: "Full path to image, including registry",
     scheme: 'string',
     required: true
@@ -37,16 +37,10 @@ The containerd and docker health checks require access to a working socket that 
     description: "Expected size of the pulled image",
     scheme: 'int64',
   },
-
-    {
-    field: "username",
-    description: "Registry username for authentication",
-    scheme: 'string',
-  },
-      {
-    field: "password",
-    description: "Registry password for authentication",
-    scheme: 'string',
+  {
+    field: "auth",
+    description: "Registry authentication credentials",
+    scheme: '[Authentication](#authentication)',
   },
 ]}/>
 

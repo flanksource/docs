@@ -6,7 +6,7 @@ sidebar_custom_props:
 
 # <Icon name="smb" /> Folder
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:1118#FolderCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#FolderCheck -->
 
 Checks the contents of a folder for size, age, and count. Folder based checks are useful in a number of scenarios:
 
@@ -25,6 +25,11 @@ Checks the contents of a folder for size, age, and count. Folder based checks ar
     field: 'path',
     description: "A local folder path or a remote folder `smb://`, `sftp://`, `s3://` or `gcs://`",
     required: true
+  },
+  {
+    field: 'recursive',
+    description: "When set to true, recursively scans the folder to list all files (symlinks are listed but not traversed)",
+    scheme: "bool"
   },
   {    field: 'sftpConnection',description: "Connection details", scheme: "[SFTP](#sftp)"  },
   { field: "gcpConnection", description: "Connection details for GCP", scheme: "[GCP](#gcp)" },
@@ -55,14 +60,19 @@ Checks the contents of a folder for size, age, and count. Folder based checks ar
     description: "Filter files based on regular expression",
     scheme: "regex"
   },
-
+  {
+    field: "filter.since",
+    description: "Filter files created since this time",
+    scheme: "string"
+  },
   {field: "minCount", description: "The minimum number of files inside the `path`", scheme: "int"},
   {field: "maxCount", description: "The maximum number of files inside the `path`, can be used in conjunction with `filter.regex` to detect error files", scheme: "int"},
   {field: "minAge", description: "The youngest age a file can be", scheme: "Duration"},
   {field: "maxAge", description: "The oldest age a file can be, often used to check for unprocessed files or files that have not been cleaned up", scheme: "Duration"},
   {field: "minSize", description: "The minimum file size, can be used to detect backups that did not upload successfully", scheme: "Size"},
-  {field: "maxSize", description: "The maximum file size", scheme: "Size"}
-
+  {field: "maxSize", description: "The maximum file size", scheme: "Size"},
+  {field: "availableSize", description: "Minimum available size on the filesystem", scheme: "Size"},
+  {field: "totalSize", description: "Minimum total size of the filesystem", scheme: "Size"}
 ]}/>
 
 

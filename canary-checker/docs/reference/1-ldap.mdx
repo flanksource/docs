@@ -6,7 +6,7 @@ sidebar_custom_props:
 
 # <Icon name="ldap" /> LDAP
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:626#LDAPCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#LDAPCheck -->
 
 The LDAP check:
 
@@ -18,7 +18,7 @@ The LDAP check:
 ```
 <HealthCheck name="ldap" connection="ldap" rows={[
   {field: "bindDN", description: "BindDN to use in query", scheme: 'string', required: true},
-  {field: "userSearch", description: "UserSearch to use in query", scheme: 'string', required: true},
-
+  {field: "userSearch", description: "UserSearch to use in query", scheme: 'string'},
+  {field: "skipTLSVerify", description: "Skip TLS certificate verification", scheme: 'bool'},
 ]}/>
 

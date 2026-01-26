@@ -6,7 +6,7 @@ sidebar_custom_props:
 
 # <Icon name="console" /> Exec
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:1176#ExecCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#ExecCheck -->
 
 Executes a bash (Linux) or powershell (Windows) script. The check is considered passing if the script exits with `0`
 
@@ -33,7 +33,7 @@ See <CommonLink to="image-variants">Image Variants</CommonLink> for a list of in
 {
   field: "checkout",
   description: "Specify git repository to mount to the exec process",
-  scheme: "[`[]GitCheckout`](#git-checkout)",
+  scheme: "[`GitConnection`](#git-checkout)",
 },
 {
   field: "env",

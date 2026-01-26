@@ -8,12 +8,20 @@ import TransformFields from '../concepts/expressions/_transform_fields.mdx'
 
 # <Icon name="webhook" /> Webhook
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:1543#WebhookCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#WebhookCheck -->
 
 Webhooks allow you to create and update checks by sending HTTP POST requests to an endpoint.
 
 ```yaml title="github-webhook.yaml" file=<rootDir>/modules/canary-checker/fixtures/external/github-webhook.yaml
 ```
+
+<HealthCheck name="webhook" rows={[
+  {
+    field: "token",
+    description: "Optional authorization token to run this check",
+    scheme: "EnvVar"
+  }
+]}/>
 
 This example:
 1. Defines a webhook named `Github` accessible via `http://<host>/webhook/Github`

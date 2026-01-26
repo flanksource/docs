@@ -7,7 +7,7 @@ sidebar_custom_props:
 
 # <Icon name="restic" /> Restic
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:251#ResticCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#ResticCheck -->
 
     <FullImage />
 
@@ -20,14 +20,16 @@ The Restic check:
 
 ```yaml title="restic.yaml"  file=<rootDir>/modules/canary-checker/fixtures/restic/restic_without_integrity_pass.yaml
 ```
-<HealthCheck name="redis" connection="url" rows={[
-  {field: "repository", description: "The restic repository path e.g., `rest: https://user:pass@host:8000/` or rest: `https://host:8000/` or `s3:s3.amazonaws.com/bucket_name`", required: true},
-  {field: "maxAge", description: "Max age for backup freshness check", required: true, scheme: "Duration"},
-  {field: "checkIntegrity", description: "When enabled it checks the Integrity and consistency of the restic repository", scheme: "boolean"},
-  {field: "caCert", description: "Path to CA certificate for self-signed certificates", scheme: "string"},
-  {field: "password", description: "Password for encrypted repositories", scheme: "EnvVar"},
-  {field: "awsConnectionName", description: "AWS connection name for S3 repositories", scheme: "aws"}
-
+<HealthCheck name="restic" rows={[
+  {field: "repository", description: "The restic repository path e.g., `rest:https://user:pass@host:8000/` or `rest:https://host:8000/` or `s3:s3.amazonaws.com/bucket_name`", required: true, scheme: "string"},
+  {field: "password", description: "Password for the restic repository", required: true, scheme: "EnvVar"},
+  {field: "maxAge", description: "Max age for backup freshness", required: true, scheme: "Duration"},
+  {field: "checkIntegrity", description: "When enabled, checks the integrity and consistency of the restic repository", scheme: "bool"},
+  {field: "caCert", description: "Path to the root cert for self-signed certificates", scheme: "string"},
+  {field: "connection", description: "Connection name used to derive restic password", scheme: "string"},
+  {field: "awsConnectionName", description: "AWS connection name used to derive the access key and secret key", scheme: "string"},
+  {field: "accessKey", description: "Access key ID for connection with AWS S3, MinIO, Wasabi, Alibaba OSS", scheme: "EnvVar"},
+  {field: "secretKey", description: "Secret access key for connection with AWS S3, MinIO, Wasabi, Alibaba OSS", scheme: "EnvVar"}
 ]}/>
 
 

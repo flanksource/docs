@@ -9,7 +9,7 @@ tags:
 
 # <Icon name="k8s-pod" /> Pod
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:591#PodCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#PodCheck -->
 
 The Pod check creates a new pod and verifies that it can be reached via an Ingress
 
@@ -31,8 +31,10 @@ The Pod check creates a new pod and verifies that it can be reached via an Ingre
 {field: "deadline", description: "Overall deadline for pod check", scheme: 'Duration'},
 {field: "httpRetryInterval", description: "Interval between HTTP retries", scheme: 'Duration'},
 {field:"ingressName", description: "Name to use for the ingress object that exposes the created pod", scheme: 'string'},
-{field: "ingressHost", description: " URL used by the ingress to expose the created pod ", scheme: 'string'},
-{field: "priorityClass", description: " Priority class to assign to the created pod", scheme: 'string'}
+{field: "ingressHost", description: "URL used by the ingress to expose the created pod", scheme: 'string'},
+{field: "ingressClass", description: "Ingress class to use for the ingress object", scheme: 'string'},
+{field: "priorityClass", description: "Priority class to assign to the created pod", scheme: 'string'},
+{field: "roundRobinNodes", description: "When true, creates pods on different nodes in a round-robin fashion", scheme: 'bool'}
 
 
 ]}/>
