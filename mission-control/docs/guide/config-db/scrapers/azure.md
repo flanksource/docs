@@ -52,13 +52,13 @@ Either the `connection` name or the credentials (`clientID`, `clientSecret` & `t
 
 #### Entra
 
-| Field                | Description                                          | Scheme               | Required |
-| -------------------- | ---------------------------------------------------- | -------------------- | -------- |
-| `users`              | Selectors for scraping Entra ID users                | `[]ResourceSelector` |          |
-| `groups`             | Selectors for scraping Entra ID groups               | `[]ResourceSelector` |          |
-| `appRegistrations`   | Selectors for scraping app registrations             | `[]ResourceSelector` |          |
-| `enterpriseApps`     | Selectors for scraping enterprise applications       | `[]ResourceSelector` |          |
-| `appRoleAssignments` | Selectors for scraping app role assignments          | `[]ResourceSelector` |          |
+| Field                | Description                                    | Scheme               | Required |
+| -------------------- | ---------------------------------------------- | -------------------- | -------- |
+| `users`              | Selectors for scraping Entra ID users          | `[]ResourceSelector` |          |
+| `groups`             | Selectors for scraping Entra ID groups         | `[]ResourceSelector` |          |
+| `appRegistrations`   | Selectors for scraping app registrations       | `[]ResourceSelector` |          |
+| `enterpriseApps`     | Selectors for scraping enterprise applications | `[]ResourceSelector` |          |
+| `appRoleAssignments` | Selectors for scraping app role assignments    | `[]ResourceSelector` |          |
 
 ## Resource Types
 
