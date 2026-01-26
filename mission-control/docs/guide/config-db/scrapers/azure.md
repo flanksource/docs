@@ -30,11 +30,12 @@ The Azure scrapers scrapes your azure account to fetch all the resources & save 
 | ---------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------- | -------- |
 | `connection`     | Specify the connection that provides the clientID, clientSecret & tenantID | `string`                                                   |          |
 | `subscriptionID` | Azure subscription ID                                                      | `string`                                                   |          |
-| `organisation`   | Azure organisation ID                                                      | `string`                                                   |          |
 | `tenantID`       | Azure tenant ID                                                            | `string`                                                   |          |
 | `clientID`       | Microsoft Entra ID app client id                                           | <CommonLink to="secrets">_EnvVar_</CommonLink>             |          |
 | `clientSecret`   | Microsoft Entra ID app client secret                                       | <CommonLink to="secrets">_EnvVar_</CommonLink>             |          |
-| `exclusions`     | Specifies the Azure projects to scrape                                     | [`Exclusion`](#exclusion)                                  |          |
+| `include`        | Azure resources to include for scraping                                    | `[]string`                                                 |          |
+| `exclusions`     | Specifies the Azure resources to exclude                                   | [`Exclusion`](#exclusion)                                  |          |
+| `entra`          | Microsoft Entra ID (Azure AD) scraping configuration                       | [`Entra`](#entra)                                          |          |
 | `properties`     | Custom templatable properties for the scraped config items.                | [`[]ConfigProperty`](/docs/reference/config-db/properties) |          |
 | `transform`      | Field to transform result                                                  | [`Transform`](/docs/guide/config-db/concepts/transform)    |          |
 | `tags`           | Set custom tags on the scraped config items                                | `map[string]string`                                        |          |
@@ -48,6 +49,16 @@ Either the `connection` name or the credentials (`clientID`, `clientSecret` & `t
 | Field          | Description                                        | Scheme     | Required |
 | -------------- | -------------------------------------------------- | ---------- | -------- |
 | `activityLogs` | A list of operations to exclude from activity logs | `[]string` |          |
+
+#### Entra
+
+| Field                | Description                                          | Scheme               | Required |
+| -------------------- | ---------------------------------------------------- | -------------------- | -------- |
+| `users`              | Selectors for scraping Entra ID users                | `[]ResourceSelector` |          |
+| `groups`             | Selectors for scraping Entra ID groups               | `[]ResourceSelector` |          |
+| `appRegistrations`   | Selectors for scraping app registrations             | `[]ResourceSelector` |          |
+| `enterpriseApps`     | Selectors for scraping enterprise applications       | `[]ResourceSelector` |          |
+| `appRoleAssignments` | Selectors for scraping app role assignments          | `[]ResourceSelector` |          |
 
 ## Resource Types
 
