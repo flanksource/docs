@@ -8,7 +8,7 @@ sidebar_custom_props:
 
 # <Icon name="github"/> Github
 
-<!-- Source: modules/config-db/api/v1/github.go:7#GitHubActions -->
+<!-- Source: modules/config-db/api/v1/github.go#GitHubActions -->
 
 The file config type is set to scrape configurations or configurations in common with the related elements that can be specified in the fields; `type`, and `id`. The paths to the configuration(s) to be scraped is set with the field `path` as a list.
 
