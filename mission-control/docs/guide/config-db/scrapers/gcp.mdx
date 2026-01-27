@@ -7,7 +7,7 @@ sidebar_custom_props:
 
 # <Icon name="google-cloud"/> GCP
 
-<!-- Source: modules/config-db/api/v1/gcp.go:47#GCP -->
+<!-- Source: modules/config-db/api/v1/gcp.go#GCP -->
 
 The GCP scrapers scrapes your GCP account to fetch all the resources & save them as configs.
 
@@ -46,5 +46,22 @@ Either the `connection` name or the `credentials` are required (if Workload Iden
     description: 'GCP resources to exclude from scraping',
     scheme: '[]string'
   },
+  {
+    field: 'auditLogs',
+    description: 'Query BigQuery dataset for audit logs',
+    scheme: '[`AuditLogs`](#audit-logs)'
+  },
 ]}
 />
+
+### Audit Logs
+
+| Field             | Description                                                              | Scheme              |
+| ----------------- | ------------------------------------------------------------------------ | ------------------- |
+| `dataset`         | BigQuery dataset to query audit logs from (e.g., "default._AllLogs")     | `string`            |
+| `since`           | Time range to query audit logs (e.g., "24h", "7d", "30d")                | `string`            |
+| `userAgents`      | Filter user agents matching these patterns                               | `MatchExpressions`  |
+| `principalEmails` | Filter principal emails matching these patterns                          | `MatchExpressions`  |
+| `permissions`     | Filter permissions matching these patterns                               | `MatchExpressions`  |
+| `serviceNames`    | Filter service names matching these patterns                             | `MatchExpressions`  |
+| `methods`         | Filter methods matching these patterns                                   | `MatchExpressions`  |

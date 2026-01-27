@@ -6,7 +6,7 @@ sidebar_custom_props:
 
 # <Icon name="azure-devops" /> Azure Devops
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:1511#AzureDevopsCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#AzureDevopsCheck -->
 
 Azure Devops checks for healthy pipeline runs.
 
@@ -15,6 +15,11 @@ Azure Devops checks for healthy pipeline runs.
 ```
 
 <HealthCheck name="azureDevops" edition="standard" rows={[
+  {
+    field: "connection",
+    description: "Connection name for Azure DevOps credentials",
+    scheme: "string"
+  },
   {
     field: "organization",
     description: "Name of the Azure Organization",

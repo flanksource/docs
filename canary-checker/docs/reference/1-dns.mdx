@@ -6,7 +6,7 @@ sidebar_custom_props:
 
 # <Icon name="dns" /> DNS
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:674#DNSCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#DNSCheck -->
 
 Performs queries to a DNS server, typical use cases include:
 
@@ -28,7 +28,8 @@ Performs queries to a DNS server, typical use cases include:
   {
     field: "port",
     description: "Port to query DNS server on",
-    default: "53"
+    default: "53",
+    scheme: "int"
   },
   {
     field: "query",

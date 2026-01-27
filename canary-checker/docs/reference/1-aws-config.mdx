@@ -6,7 +6,7 @@ sidebar_custom_props:
 
 # <Icon name="aws-config" /> AWS Config
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:1207#AwsConfigCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#AwsConfigCheck -->
 
 AWS Config checks
 
@@ -16,7 +16,7 @@ AWS Config checks
 
 
 
-<HealthCheck name="awsConfigRule" connection="aws" rows={[
+<HealthCheck name="awsConfig" connection="aws" rows={[
   {
     field: "query",
     required: true,

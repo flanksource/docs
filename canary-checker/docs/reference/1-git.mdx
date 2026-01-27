@@ -7,7 +7,7 @@ sidebar_custom_props:
 
 # <Icon name="git" /> Git
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:829#GitProtocolCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#GitHubCheck -->
 
 <Standard />
 
@@ -17,6 +17,7 @@ Execute as SQL style query against a github repo using [mergestat-lite](https://
 ```
 
 <HealthCheck name="github" rows={[
-  {field: "githubToken", description: "Github Personal Access Token", scheme: 'EnvVar', required: true},
+  {field: "connection", description: "Connection name for GitHub credentials", scheme: 'string'},
+  {field: "githubToken", description: "Github Personal Access Token", scheme: 'EnvVar'},
   {field: "query", description: "Query to be executed. See [mergestat-lite](https://github.com/mergestat/mergestat-lite) for syntax", scheme: 'string', required: true},
 ]}/>

@@ -9,7 +9,7 @@ sidebar_custom_props:
 
 import Custom from './_custom.mdx'
 
-<!-- Source: modules/config-db/api/v1/file.go:10#File -->
+<!-- Source: modules/config-db/api/v1/file.go#File -->
 
 The `file` scraper is used to create config items from files in a local folder (or git). This can be used to track changes in files like `/etc/hosts` or `/etc/passwd`, or for service metadata stored in git.
 
@@ -55,6 +55,26 @@ spec:
     "description": "Specify paths to configuration(s) for scraping",
     "scheme": "[]glob",
     "required": "true"
+  },
+  {
+    "field": "ignore",
+    "description": "Patterns to ignore when scraping files",
+    "scheme": "[]string"
+  },
+  {
+    "field": "format",
+    "description": "File format (e.g., json, yaml)",
+    "scheme": "string"
+  },
+  {
+    "field": "icon",
+    "description": "Icon for the scraped config items",
+    "scheme": "string"
+  },
+  {
+    "field": "connection",
+    "description": "Connection name to use for URL credentials",
+    "scheme": "string"
   },
 
 ]}/>

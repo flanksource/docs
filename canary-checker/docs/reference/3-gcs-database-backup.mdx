@@ -7,7 +7,7 @@ sidebar_custom_props:
 
 # <Icon name="google-cloud" /> Google Cloud SQL Backups
 
-<!-- Source: modules/canary-checker/api/v1/checks.go:1245#DatabaseBackupCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#DatabaseBackupCheck -->
 
 Checks if a Google Cloud SQL instance has been successfully backed up recently.
 
@@ -15,11 +15,10 @@ Checks if a Google Cloud SQL instance has been successfully backed up recently.
 ```
 
 <HealthCheck name="databaseBackup" edition="standard" rows={[
-
-{name: "maxAge", description: "Max age for backup allowed", scheme: "Duration", required:true },
-  {name: "gcp.database", description: "GCP project name", required: true},
-  {name: "gcp.instance", description: "Google CloudSQL instance name",  required: true},
-  {name: "gcp.gcpConnection.credentials",  scheme: "env-var", required: true}
+  {field: "maxAge", description: "Max age for backup allowed", scheme: "Duration", required: true},
+  {field: "gcp.project", description: "GCP project ID", required: true, scheme: "string"},
+  {field: "gcp.instance", description: "Cloud SQL instance ID", required: true, scheme: "string"},
+  {field: "gcp.gcpConnection", description: "GCP connection credentials", scheme: "GCPConnection"}
 ]}/>
 
 
