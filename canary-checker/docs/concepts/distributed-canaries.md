@@ -22,13 +22,13 @@ A background job syncs agent selector canaries every 5 minutes. When agents are 
 
 The `agentSelector` field accepts a list of patterns to match agent names:
 
-| Pattern | Description |
-|---------|-------------|
-| `agent-1` | Exact match |
-| `eu-west-*` | Prefix match (glob) |
-| `*-prod` | Suffix match (glob) |
-| `!staging` | Exclude agents matching this pattern |
-| `team-*`, `!team-b` | Match all `team-*` except `team-b` |
+| Pattern             | Description                          |
+| ------------------- | ------------------------------------ |
+| `agent-1`           | Exact match                          |
+| `eu-west-*`         | Prefix match (glob)                  |
+| `*-prod`            | Suffix match (glob)                  |
+| `!staging`          | Exclude agents matching this pattern |
+| `team-*`, `!team-b` | Match all `team-*` except `team-b`   |
 
 ## Example: HTTP Check on All Agents
 
@@ -41,7 +41,7 @@ metadata:
   name: api-health
   namespace: monitoring
 spec:
-  schedule: "@every 1m"
+  schedule: '@every 1m'
   http:
     - name: api-endpoint
       url: http://api-service.default.svc.cluster.local:8080/health
@@ -49,7 +49,7 @@ spec:
       test:
         expr: json.status == 'healthy'
   agentSelector:
-    - "*" # Run on all agents
+    - '*' # Run on all agents
 ```
 
 When this canary is created:
@@ -69,17 +69,17 @@ kind: Canary
 metadata:
   name: external-api-latency
 spec:
-  schedule: "@every 5m"
+  schedule: '@every 5m'
   http:
     - name: payment-gateway
       url: https://api.payment-provider.com/health
       responseCodes: [200]
       maxResponseTime: 500
   agentSelector:
-    - "eu-*"      # All EU agents
-    - "us-*"      # All US agents
-    - "!us-test"  # Exclude test agent
-    - "local"     # Run on local instance as well
+    - 'eu-*' # All EU agents
+    - 'us-*' # All US agents
+    - '!us-test' # Exclude test agent
+    - 'local' # Run on local instance as well
 ```
 
 ## Example: Exclude Specific Agents
@@ -92,11 +92,11 @@ kind: Canary
 metadata:
   name: production-checks
 spec:
-  schedule: "@every 2m"
+  schedule: '@every 2m'
   http:
     - name: internal-service
       url: http://internal.example.com/status
   agentSelector:
-    - "!*-dev"      # Exclude all dev agents
-    - "!*-staging"  # Exclude all staging agents
+    - '!*-dev' # Exclude all dev agents
+    - '!*-staging' # Exclude all staging agents
 ```
