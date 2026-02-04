@@ -8,36 +8,8 @@ The `http` query allows you to fetch data from external APIs and use it within y
 
 ## Example
 
-```yaml
-apiVersion: mission-control.flanksource.com/v1
-kind: View
-metadata:
-  name: github-stars
-spec:
-  queries:
-    repos:
-      http:
-        url: https://api.github.com/users/flanksource/repos
-        headers:
-          - name: User-Agent
-            value: Mission-Control
-      columns:
-        name: string
-        stargazers_count: number
-        html_url: url
+```yaml title="recipes-http.yaml" file=<rootDir>/modules/mission-control/fixtures/views/recipes-http.yaml
 
-  columns:
-    - name: name
-      type: string
-    - name: stars
-      type: number
-    - name: link
-      type: url
-
-  mapping:
-    name: row.name
-    stars: row.stargazers_count
-    link: row.html_url
 ```
 
 ## Configuration
@@ -96,3 +68,79 @@ http:
   url: https://api.example.com/data
   connection: connection://my-api-creds
 ```
+
+## Connection Field
+
+The `connection` field references a stored [Connection](/mission-control/guide/configurations/connections) resource. When specified, Mission Control hydrates the connection by:
+
+1. Looking up the connection by name in the view's namespace
+2. Extracting authentication details (username, password, bearer token, OAuth credentials)
+3. Applying TLS configuration (CA, cert, key, insecure skip verify)
+4. Merging custom headers defined in the connection
+5. Resolving any environment variable references in connection properties
+
+Connection properties that can be inherited:
+- `url` - Base URL for the API
+- `username` / `password` - HTTP Basic Authentication
+- `bearer` - Bearer token for token-based auth
+- `oauth` - OAuth2 credentials (clientID, clientSecret, tokenURL, scopes, params)
+- `tls` - TLS configuration (ca, cert, key, insecureSkipVerify)
+- `headers` - Additional HTTP headers
+
+**Example with connection:**
+
+```yaml title="http-connection.yaml" file=<rootDir>/modules/mission-control/fixtures/views/http-connection.yaml
+
+```
+
+## Templating Support
+
+The `body` field supports Go templating, allowing dynamic request payloads:
+
+```yaml title="http-post-body.yaml" file=<rootDir>/modules/mission-control/fixtures/views/http-post-body.yaml
+
+```
+
+Template variables available in the body:
+- `$(var.<name>)` - View template variables
+- Environment variables via `$(ENV_VAR_NAME)`
+
+## Response Size Limits
+
+By default, HTTP responses are limited to **25 MB** to prevent memory issues with large payloads. You can configure this limit using the `view.http.body.max_size_bytes` property.
+
+### Configuring the Limit
+
+Set the property via environment variable or configuration:
+
+```yaml
+# Increase limit to 50 MB
+properties:
+  view.http.body.max_size_bytes: "52428800"
+```
+
+### Size Limit Error Handling
+
+When a response exceeds the configured limit, the view returns an error with details:
+
+```
+http response body size (32 MB) exceeds maximum allowed (25 MB); increase limit via property "view.http.body.max_size_bytes"
+```
+
+To resolve:
+1. Increase the limit via the property (if you have sufficient memory)
+2. Use pagination in the API request to fetch smaller chunks
+3. Apply filters in the API request to reduce response size
+4. Use `jsonpath` to extract only the needed subset of data
+
+**Example with pagination:**
+
+```yaml
+queries:
+  paged-data:
+    http:
+      url: https://api.example.com/items?page=1&per_page=100
+      connection: connection://my-api
+```
+
+
