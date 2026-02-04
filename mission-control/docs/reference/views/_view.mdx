@@ -247,7 +247,7 @@ Column definition for view tables with data types and visualization properties.
     field: "type",
     required: true,
     description: "Data type that determines formatting and visualization",
-    scheme: "`string`, `number`, `boolean`, `datetime`, `duration`, `health`, `status`, `gauge`, `bytes`, `decimal`, `millicore`, `url`, `badge`, `config_item`, `labels`"
+    scheme: "`string`, `number`, `boolean`, `datetime`, `duration`, `health`, `status`, `gauge`, `bytes`, `decimal`, `millicore`, `config_item`, `labels`"
   },
   {
     field: "primaryKey",
@@ -278,6 +278,11 @@ Column definition for view tables with data types and visualization properties.
     field: "url",
     description: "Link to configs, other views, or custom URLs using CEL/Go templates",
     scheme: "[ColumnURL](#column-urls)"
+  },
+  {
+    field: "badge",
+    description: "Badge configuration for the column",
+    scheme: "BadgeConfig"
   },
   {
     field: "unit",
@@ -519,7 +524,7 @@ Configuration for timeseries panels (API-level; UI rendering in progress).
 
 ### View Card Layout
 
-`display.card` controls the default card layout for tables with card positioning. Cards become the default view when `default: true` and at least one column defines `card.position` (or legacy `cardPosition`). Use `columns[].card.useForAccent` to color the card accent based on a column's value (status/health heuristics in the UI):
+`display.card` controls the default card layout for the view (when `default: true`, cards are shown instead of the table).
 
 <Fields rows={[
   {
@@ -583,6 +588,100 @@ Reference cached data from another view instead of re-querying sources. The sele
 ### Sections
 
 Render multiple views on one page. Section-only views can omit panels and columns; each section points at another view and is rendered with shared variable controls.
+
+<Fields rows={[
+  {
+    field: "title",
+    required: true,
+    description: "Title of the section",
+    scheme: "string"
+  },
+  {
+    field: "icon",
+    description: "Icon for the section",
+    scheme: "string"
+  },
+  {
+    field: "viewRef.name",
+    description: "Name of the view to include",
+    scheme: "string"
+  },
+  {
+    field: "viewRef.namespace",
+    description: "Namespace of the view to include",
+    scheme: "string"
+  },
+  {
+    field: "uiRef.changes",
+    description: "Embed the native Changes UI component",
+    scheme: "[ChangesUIFilters](#changes-ui-filters)"
+  },
+  {
+    field: "uiRef.configs",
+    description: "Embed the native Configs UI component",
+    scheme: "[ConfigsUIFilters](#configs-ui-filters)"
+  }
+]}/>
+
+#### Changes UI Filters
+
+<Fields rows={[
+  {
+    field: "configTypes",
+    description: "Filter by config types (comma-separated)",
+    scheme: "string"
+  },
+  {
+    field: "changeType",
+    description: "Filter by change type",
+    scheme: "string"
+  },
+  {
+    field: "severity",
+    description: "Filter by severity",
+    scheme: "string"
+  },
+  {
+    field: "from",
+    description: "Start time (duration string, e.g. 24h)",
+    scheme: "string"
+  },
+  {
+    field: "tags",
+    description: "Filter by tags (Kubernetes style selector)",
+    scheme: "string"
+  }
+]}/>
+
+#### Configs UI Filters
+
+<Fields rows={[
+  {
+    field: "search",
+    description: "Free text search",
+    scheme: "string"
+  },
+  {
+    field: "configType",
+    description: "Filter by config type",
+    scheme: "string"
+  },
+  {
+    field: "labels",
+    description: "Filter by labels (Kubernetes style selector)",
+    scheme: "string"
+  },
+  {
+    field: "status",
+    description: "Filter by status",
+    scheme: "string"
+  },
+  {
+    field: "health",
+    description: "Filter by health",
+    scheme: "string"
+  }
+]}/>
 
 ```yaml title="workload-overview.yaml" file=<rootDir>/modules/mission-control/fixtures/views/workload-overview.yaml {6-24}
 
