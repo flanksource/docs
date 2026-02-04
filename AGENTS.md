@@ -18,3 +18,14 @@ This repository contains documentation for multiple Flanksource projects built w
 - Docs for "canary-checker", "mission-control" and shared components under `common`.
 - Style enforced by Vale, markdownlint, and Prettier via Makefile targets.
 - Documentation follows Google style, second person, active voice, and present tense.
+
+## Guidelines
+
+- Never write yaml examples directly. The examples/fixtures should come from the submodules mission-control | duty | config-db | canary-checker.
+  use code blocks with file=directive to import the fixtures. Example:
+
+  ```yaml title="canary.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_simple.yaml
+
+  ```
+
+  If the required fixtures aren't present then stop and notify the user.
