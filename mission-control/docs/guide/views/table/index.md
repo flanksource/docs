@@ -38,6 +38,17 @@ Use `merge` to combine configs with Prometheus metrics into one table:
 
 ```
 
+## Default Sort and Page Size
+
+Use `display.table` to control the initial sort order and page size:
+
+```yaml
+display:
+  table:
+    sort: -cpu_usage # Sort by cpu_usage descending
+    size: 50         # Show 50 rows per page
+```
+
 ## Best Practices
 
 - Always set `primaryKey` on at least one column (composite keys allowed).

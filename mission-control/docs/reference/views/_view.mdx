@@ -96,6 +96,7 @@
 - **At least one query**: Views must define at least one named query (unless the view only renders `sections`)
 - **Output definition**: Views must have either `panels` or `columns` (or both)
 - **Merge requirement**: When using multiple queries with table output (columns only), you must provide a `merge` SQL query
+- **Column definition**: When using Prometheus or HTTP queries, `columns` map must be defined to generate the table schema
 :::
 
 ### Query
