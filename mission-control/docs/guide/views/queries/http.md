@@ -42,17 +42,17 @@ spec:
 
 ## Configuration
 
-| Field | Type | Description |
-|Str|Str|Str|
-| `url` | string | The URL to send the request to. |
-| `method` | string | HTTP method (GET, POST, PUT, DELETE, PATCH). Default: `GET`. |
-| `body` | string | Request body for POST/PUT/PATCH requests. Supports templating. |
-| `jsonpath` | string | JSONPath expression to extract specific data from the response. |
-| `headers` | list | List of headers to include in the request. |
-| `connection` | string | Reference to a connection for authentication. |
-| `username` | [EnvVar](/docs/reference/env-var) | Basic auth username. |
-| `password` | [EnvVar](/docs/reference/env-var) | Basic auth password. |
-| `bearer` | [EnvVar](/docs/reference/env-var) | Bearer token. |
+| Field        | Type                              | Description                                                     |
+| ------------ | --------------------------------- | --------------------------------------------------------------- |
+| `url`        | string                            | The URL to send the request to.                                 |
+| `method`     | string                            | HTTP method (GET, POST, PUT, DELETE, PATCH). Default: `GET`.    |
+| `body`       | string                            | Request body for POST/PUT/PATCH requests. Supports templating.  |
+| `jsonpath`   | string                            | JSONPath expression to extract specific data from the response. |
+| `headers`    | list                              | List of headers to include in the request.                      |
+| `connection` | string                            | Reference to a connection for authentication.                   |
+| `username`   | [EnvVar](/docs/reference/env-var) | Basic auth username.                                            |
+| `password`   | [EnvVar](/docs/reference/env-var) | Basic auth password.                                            |
+| `bearer`     | [EnvVar](/docs/reference/env-var) | Bearer token.                                                   |
 
 ### JSONPath Extraction
 
@@ -65,8 +65,8 @@ For example, if the API returns:
   "status": "success",
   "data": {
     "items": [
-      {"id": 1, "name": "A"},
-      {"id": 2, "name": "B"}
+      { "id": 1, "name": "A" },
+      { "id": 2, "name": "B" }
     ]
   }
 }
@@ -79,6 +79,7 @@ Use `jsonpath: "$.data.items"` to extract the array.
 You can provide authentication details inline or reference a stored connection.
 
 **Inline Basic Auth:**
+
 ```yaml
 http:
   url: https://api.example.com/data
@@ -89,6 +90,7 @@ http:
 ```
 
 **Using a Connection:**
+
 ```yaml
 http:
   url: https://api.example.com/data
