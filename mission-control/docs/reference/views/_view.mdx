@@ -30,6 +30,11 @@
     scheme: "[DisplayCard](#view-card-layout)"
   },
   {
+    field: "display.table",
+    description: "Default table layout for the view (sort order and page size)",
+    scheme: "[DisplayTable](#view-table-layout)"
+  },
+  {
     field: "display.plugins[]",
     description: "Attach the view as a tab on matching config items with templated variables extracted from the config",
     scheme: "[ViewConfigUIPlugin](#config-tabs)"
@@ -324,7 +329,7 @@ Panel definition for interactive visualizations.
     field: "type",
     required: true,
     description: "Type of panel visualization",
-    scheme: "`piechart`, `table`, `text`, `number`, `duration`, `gauge`, `bargauge`, `timeseries`"
+    scheme: "`piechart`, `table`, `text`, `number`, `duration`, `gauge`, `bargauge`, `timeseries`, `properties`"
   },
   {
     field: "query",
@@ -356,6 +361,11 @@ Panel definition for interactive visualizations.
     field: "timeseries",
     description: "Configuration for timeseries panels",
     scheme: "[Timeseries Configuration](#timeseries-configuration)"
+  },
+  {
+    field: "properties",
+    description: "Properties panel renders query results as key-value pairs (no specific configuration)",
+    scheme: "object"
   }
 ]}/>
 
@@ -486,6 +496,23 @@ Configuration for timeseries panels (API-level; UI rendering in progress).
     field: "style",
     description: "Visualization style: `lines`, `area`, or `points`",
     scheme: "string"
+  }
+]}/>
+
+### View Table Layout
+
+`display.table` controls the default table layout for the view.
+
+<Fields rows={[
+  {
+    field: "sort",
+    description: "Default sort column name. Prefix with `-` for descending order.",
+    scheme: "string"
+  },
+  {
+    field: "size",
+    description: "Default page size for the table.",
+    scheme: "int"
   }
 ]}/>
 
