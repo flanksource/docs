@@ -114,6 +114,11 @@ Query definition for data sources.
     scheme: "[SQL query](/mission-control/guide/views/queries/sql)"
   },
   {
+    field: "http",
+    description: "Query external APIs via HTTP",
+    scheme: "[HTTP Query](#http-query)"
+  },
+  {
     field: "prometheus",
     description: "Query time-series data from Prometheus",
     scheme: "[Prometheus Query](#prometheus-query)"
@@ -122,6 +127,64 @@ Query definition for data sources.
     field: "viewTableSelector",
     description: "Read cached rows from another view table",
     scheme: "[View Table Selector](#view-table-selector)"
+  },
+  {
+    field: "columns",
+    description: "Define column types for the query results (useful for HTTP/Prometheus)",
+    scheme: "map[string]ColumnType"
+  }
+]}/>
+
+#### HTTP Query
+
+Query configuration for HTTP requests.
+
+<Fields rows={[
+  {
+    field: "url",
+    required: true,
+    description: "Target URL",
+    scheme: "string"
+  },
+  {
+    field: "method",
+    description: "HTTP method _(default: GET)_",
+    scheme: "string"
+  },
+  {
+    field: "body",
+    description: "Request body for POST/PUT/PATCH",
+    scheme: "string"
+  },
+  {
+    field: "jsonpath",
+    description: "JSONPath expression to extract rows from response",
+    scheme: "string"
+  },
+  {
+    field: "headers",
+    description: "Custom request headers",
+    scheme: "[[]EnvVar](/docs/reference/env-var)"
+  },
+  {
+    field: "connection",
+    description: "Reference to a connection",
+    scheme: "string"
+  },
+  {
+    field: "username",
+    description: "Basic auth username",
+    scheme: "EnvVar"
+  },
+  {
+    field: "password",
+    description: "Basic auth password",
+    scheme: "EnvVar"
+  },
+  {
+    field: "bearer",
+    description: "Bearer token",
+    scheme: "EnvVar"
   }
 ]}/>
 
