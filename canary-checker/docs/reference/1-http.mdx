@@ -106,15 +106,21 @@ The above canary (`http-check.yaml`) is functionally equivalent to `http-check-e
 
 ## Template Body Variables
 
-| Name                          | Scheme              |
-| ----------------------------- | ------------------- |
-| `metadata.name`               | string              |
-| `metadata.namespace` | _string_            |
-| `metadata.labels`             | _map[string]string_ |
-| `{fields from []envVars}`         | any                 |
+| Name                  | Description                    | Scheme              |
+| --------------------- | ------------------------------ | ------------------- |
+| `canary.name`         | Canary name                    | `string`            |
+| `canary.namespace`    | Canary namespace               | `string`            |
+| `canary.labels`       | Canary labels                  | `map[string]string` |
+| `canary.id`           | Persisted Canary ID            | `string`            |
+| `check.name`          | Check name                     | `string`            |
+| `check.id`            | Check ID                       | `string`            |
+| `check.description`   | Check description              | `string`            |
+| `check.labels`        | Check labels                   | `map[string]string` |
+| `check.endpoint`      | Check endpoint/URL             | `string`            |
+| `{envVar.name}`       | Environment variables defined in `env` | `any`        |
 
-Variables defined in `envVars` are available to template with the name that's configured on the spec.
-Eg: In the following spec, the vars `my_secret_path` and `my_secret_var`, defined in `envVars`, are available during templating.
+Variables defined in `env` are available to template with the name that's configured on the spec.
+Eg: In the following spec, the var `db`, defined in `env`, is available as `{{.db}}` during templating.
 
 <details summary="Templating request body from env variables">
 
