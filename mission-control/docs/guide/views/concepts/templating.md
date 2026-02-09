@@ -92,12 +92,12 @@ templating:
 
 ### Required Properties
 
-| Property | Type   | Description                                                       |
-| -------- | ------ | ----------------------------------------------------------------- |
-| `key`    | string | Unique identifier for the variable (used in template expressions) |
-| `label`  | string | Display name shown to users                                       |
-| `values` | array  | Static list of options for the dropdown                           |
-| `valueFrom` | object | Dynamic options from config items (alternative to `values`)      |
+| Property    | Type   | Description                                                       |
+| ----------- | ------ | ----------------------------------------------------------------- |
+| `key`       | string | Unique identifier for the variable (used in template expressions) |
+| `label`     | string | Display name shown to users                                       |
+| `values`    | array  | Static list of options for the dropdown                           |
+| `valueFrom` | object | Dynamic options from config items (alternative to `values`)       |
 
 :::note One of values or valueFrom is required
 Every variable must have exactly one of `values` (static list) or `valueFrom` (dynamic from configs) to populate the dropdown options. These fields are mutually exclusive.
@@ -105,24 +105,24 @@ Every variable must have exactly one of `values` (static list) or `valueFrom` (d
 
 ### Optional Properties
 
-| Property    | Type   | Description                                                          |
-| ----------- | ------ | -------------------------------------------------------------------- |
-| `default`   | string | Default value when view loads                                        |
-| `dependsOn` | array  | List of variable keys this depends on                                |
+| Property    | Type   | Description                           |
+| ----------- | ------ | ------------------------------------- |
+| `default`   | string | Default value when view loads         |
+| `dependsOn` | array  | List of variable keys this depends on |
 
 ## valueFrom Structure
 
 When using dynamic values from config items, `valueFrom` has the following structure:
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `config` | object | Config selector to find matching config items |
-| `config.types` | array | List of config types to match (e.g., `['Kubernetes::Cluster']`) |
-| `config.tagSelector` | string | Tag selector for filtering configs (optional) |
-| `config.search` | string | Free text search for configs (optional) |
-| `config.limit` | int | Maximum number of configs to return (optional, default: no limit) |
-| `label` | string | CEL expression for dropdown display labels (optional, defaults to config name) |
-| `value` | string | CEL expression for dropdown values (optional, defaults to config name) |
+| Property             | Type   | Description                                                                    |
+| -------------------- | ------ | ------------------------------------------------------------------------------ |
+| `config`             | object | Config selector to find matching config items                                  |
+| `config.types`       | array  | List of config types to match (e.g., `['Kubernetes::Cluster']`)                |
+| `config.tagSelector` | string | Tag selector for filtering configs (optional)                                  |
+| `config.search`      | string | Free text search for configs (optional)                                        |
+| `config.limit`       | int    | Maximum number of configs to return (optional, default: no limit)              |
+| `label`              | string | CEL expression for dropdown display labels (optional, defaults to config name) |
+| `value`              | string | CEL expression for dropdown values (optional, defaults to config name)         |
 
 **Example:**
 
@@ -132,8 +132,8 @@ valueFrom:
     types: ['Kubernetes::Pod']
     tagSelector: 'cluster=production'
     limit: 50
-  label: 'row.name + " (" + row.tags.namespace + ")"'  # Display: "nginx (default)"
-  value: 'row.name'  # Value used in queries: "nginx"
+  label: 'row.name + " (" + row.tags.namespace + ")"' # Display: "nginx (default)"
+  value: 'row.name' # Value used in queries: "nginx"
 ```
 
 ## Variable Types
@@ -468,6 +468,7 @@ spec:
    ```
 
 5. **Limit dynamic variable options** - Add reasonable limits to prevent huge lists
+
    ```yaml
    valueFrom:
      config:
