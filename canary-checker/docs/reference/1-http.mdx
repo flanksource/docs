@@ -122,6 +122,24 @@ The above canary (`http-check.yaml`) is functionally equivalent to `http-check-e
 Variables defined in `env` are available to template with the name that's configured on the spec.
 Eg: In the following spec, the var `db`, defined in `env`, is available as `{{.db}}` during templating.
 
+### Dependency Output Variables
+
+When an HTTP check has [`dependsOn`](../concepts/request-chaining) configured, the `outputs` variable is available for templating. It contains the results from all dependency checks that have completed successfully.
+
+| Name | Description | Scheme |
+|------|-------------|--------|
+| `outputs.<checkName>.pass` | Whether the dependency check passed | `bool` |
+| `outputs.<checkName>.message` | Result message from the dependency check | `string` |
+| `outputs.<checkName>.duration` | Duration of the dependency check in milliseconds | `int64` |
+| `outputs.<checkName>.code` | HTTP response code from the dependency check | `int` |
+| `outputs.<checkName>.headers` | Response headers from the dependency check | `map[string]string` |
+| `outputs.<checkName>.content` | Raw response body from the dependency check | `string` |
+| `outputs.<checkName>.json` | Parsed JSON response from the dependency check (if `Content-Type=application/json`) | `JSON` |
+| `outputs.<checkName>.elapsed` | HTTP request duration from the dependency check | `time.Duration` |
+| `outputs.<checkName>.sslAge` | Time until SSL certificate expires from the dependency check | `time.Duration` |
+
+See [Request Chaining](../concepts/request-chaining) for examples.
+
 <details summary="Templating request body from env variables">
 
 <div>
@@ -139,6 +157,7 @@ Eg: In the following spec, the var `db`, defined in `env`, is available as `{{.d
 </details>
 
 See <CommonLink to="gotemplate" anchor="escaping">Escaping variables</CommonLink>
+
 
 ## Metrics
 
