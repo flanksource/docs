@@ -138,6 +138,27 @@ Eg: In the following spec, the var `db`, defined in `env`, is available as `{{.d
 </div>
 </details>
 
+### Referencing Outputs from Dependent Checks
+
+When using `dependsOn` to create dependencies between checks, you can access outputs from other checks by name. This enables <CommonLink to="request-chaining">request chaining</CommonLink> for multi-step workflows.
+
+| Variable | Description | Scheme |
+| -------- | ----------- | ------ |
+| `outputs.<checkName>.json` | Parsed JSON response body from the named check | `map[string]any` |
+| `outputs.<checkName>.code` | HTTP response status code from the named check | `int` |
+| `outputs.<checkName>.headers` | Response headers from the named check | `map[string][]string` |
+| `outputs.<checkName>.body` | Raw response body from the named check | `string` |
+
+<details summary="Example: Using outputs from dependent checks">
+
+<div>
+```yaml title="http-depends-on.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_depends_on_pass.yaml
+```
+
+In this example, the `get-profile` check depends on the `login` check and uses the token from the login response via `$(.outputs.login.json.token)`.
+</div>
+</details>
+
 See <CommonLink to="gotemplate" anchor="escaping">Escaping variables</CommonLink>
 
 ## Metrics
