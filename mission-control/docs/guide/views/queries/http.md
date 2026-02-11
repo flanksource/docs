@@ -80,6 +80,7 @@ The `connection` field references a stored [Connection](/mission-control/guide/c
 5. Resolving any environment variable references in connection properties
 
 Connection properties that can be inherited:
+
 - `url` - Base URL for the API
 - `username` / `password` - HTTP Basic Authentication
 - `bearer` - Bearer token for token-based auth
@@ -102,6 +103,7 @@ The `body` field supports Go templating, allowing dynamic request payloads:
 ```
 
 Template variables available in the body:
+
 - `$(var.<name>)` - View template variables
 - Environment variables via `$(ENV_VAR_NAME)`
 
@@ -116,7 +118,7 @@ Set the property via environment variable or configuration:
 ```yaml
 # Increase limit to 50 MB
 properties:
-  view.http.body.max_size_bytes: "52428800"
+  view.http.body.max_size_bytes: '52428800'
 ```
 
 ### Size Limit Error Handling
@@ -128,6 +130,7 @@ http response body size (32 MB) exceeds maximum allowed (25 MB); increase limit 
 ```
 
 To resolve:
+
 1. Increase the limit via the property (if you have sufficient memory)
 2. Use pagination in the API request to fetch smaller chunks
 3. Apply filters in the API request to reduce response size
@@ -142,5 +145,3 @@ queries:
       url: https://api.example.com/items?page=1&per_page=100
       connection: connection://my-api
 ```
-
-

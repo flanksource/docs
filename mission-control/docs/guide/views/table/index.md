@@ -46,7 +46,7 @@ Use `display.table` to control the initial sort order and page size:
 display:
   table:
     sort: -cpu_usage # Sort by cpu_usage descending
-    size: 50         # Show 50 rows per page
+    size: 50 # Show 50 rows per page
 ```
 
 ## Best Practices
