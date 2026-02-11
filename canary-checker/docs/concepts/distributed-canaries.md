@@ -8,7 +8,11 @@ sidebar_position: 6
 Distributed canaries allow you to define a check once and have it automatically run on multiple agents. This is useful for monitoring services from different locations, clusters, or network segments.
 
 :::info
-This feature is only available in [Mission Control](https://flanksource.com/docs) since Canary Checker does not support agents 
+This feature is only available in [Mission Control](https://flanksource.com/docs) since Canary Checker does not support agents
+:::
+
+:::tip
+For a step-by-step tutorial and real-world examples, see the [Distributed Canaries blog post](/blog/distributed-canaries-tutorial).
 :::
 
 ## How It Works
