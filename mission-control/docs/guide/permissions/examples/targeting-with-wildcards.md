@@ -11,7 +11,7 @@ This example demonstrates using the wildcard `*` to match all resources of a spe
 Using `name: "*"` matches all components (topology items) in the system without any filtering.
 
 :::info Wildcard Limitations
-The `name` field only supports the special wildcard directive `*` which matches **any** resource. Prefix and suffix wildcards (e.g., `nginx-*` or `*-prod`) are **NOT** supported.
+The `name` field only supports the special wildcard directive `*` which matches **any** resource. Mission Control does **NOT** support prefix and suffix wildcards (e.g., `nginx-*` or `*-prod`).
 :::
 
 **Use Cases:**

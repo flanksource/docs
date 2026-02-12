@@ -2,7 +2,7 @@
 title: Targeting by Tags
 ---
 
-This example shows how to use tag selectors to dynamically scope resources based on their labels. Tag-based scoping is the most flexible approach as it allows resources to be added or removed from the scope by simply updating their tags.
+This example shows how to use tag selectors to dynamically scope resources based on their labels. Tag-based scoping is the most flexible approach because you can add or remove resources from the scope by simply updating their tags.
 
 ```yaml title="homelab-all-resources.yaml" file=<rootDir>/modules/mission-control/fixtures/scopes/homelab-all-resources.yaml
 

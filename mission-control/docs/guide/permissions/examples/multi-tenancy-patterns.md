@@ -65,7 +65,7 @@ spec:
         tagSelector: 'customer=acme'
 ```
 
-Each customer's resources are tagged appropriately, and Scopes ensure customer data isolation.
+You tag each customer's resources appropriately, and Scopes ensure customer data isolation.
 
 ## Multi-Dimensional Isolation
 

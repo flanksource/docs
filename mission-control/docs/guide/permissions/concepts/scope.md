@@ -11,7 +11,7 @@ Scopes work as building blocks for [ABAC](abac.md) permission policies and enabl
 
 ### Scope Structure
 
-A Scope consists of one or more **targets**, where each target defines a collection of resources. Multiple targets within a Scope are combined with **OR logic**, meaning a resource matches the Scope if it matches any of the targets.
+A Scope consists of one or more **targets**, where each target defines a collection of resources. When a Scope contains multiple targets, the system combines them with **OR logic**, meaning a resource matches the Scope if it matches any of the targets.
 
 :::info
 Each target must specify exactly **one** resource type. You cannot mix different resource types within a single target.
@@ -45,7 +45,7 @@ Scopes can target six different resource types:
 
 ## Integration with ABAC
 
-Scopes are designed to work seamlessly with [Attribute-Based Access Control (ABAC)](abac.md). When using ABAC, you reference Scopes in your permission policies to define the resource boundaries for access control.
+Scopes work seamlessly with [Attribute-Based Access Control (ABAC)](abac.md). When using ABAC, you reference Scopes in your permission policies to define the resource boundaries for access control.
 
 ```yaml
 apiVersion: mission-control.flanksource.com/v1
@@ -70,7 +70,7 @@ This permission grants the `dev-team` group read and update access to all resour
 When a user attempts to access a resource:
 
 1. The system evaluates all Scopes referenced in the user's permissions
-2. If the resource matches any target in any of the user's Scopes, access is granted (subject to action restrictions)
+2. If the resource matches any target in any of the user's Scopes, the system grants access (subject to action restrictions)
 3. Multiple Scopes are combined with OR logic
 
 ## Integration with Multi-Tenancy
