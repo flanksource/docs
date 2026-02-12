@@ -18,11 +18,11 @@ spec:
   description: All production resources
   targets:
     - config:
-        tagSelector: "env=production"
+        tagSelector: 'env=production'
     - component:
-        tagSelector: "env=production"
+        tagSelector: 'env=production'
     - playbook:
-        tagSelector: "env=production"
+        tagSelector: 'env=production'
 ```
 
 Grant developers read-only access to production resources and full access to development resources.
@@ -62,7 +62,7 @@ spec:
   description: All resources for ACME Corp
   targets:
     - config:
-        tagSelector: "customer=acme"
+        tagSelector: 'customer=acme'
 ```
 
 Each customer's resources are tagged appropriately, and Scopes ensure customer data isolation.
@@ -82,12 +82,13 @@ spec:
   targets:
     - config:
         namespace: team-a
-        tagSelector: "env=production,region=west"
+        tagSelector: 'env=production,region=west'
 ```
 
 This provides granular control for complex organizational structures.
 
 **Key Principles:**
+
 - Use consistent tagging strategies across all resources
 - Document your tenant isolation model
 - Start with broader Scopes and refine as needed

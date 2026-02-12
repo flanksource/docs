@@ -22,12 +22,14 @@ This Scope matches configs, components, playbooks, canaries, and views in the `r
 ## When to Use Global Selectors
 
 **Use global selectors when:**
+
 - Applying namespace-based isolation across all resource types
 - Creating agent-wide restrictions
 - Implementing broad organizational boundaries
 - Simplifying Scope definitions for common patterns
 
 **Avoid global selectors when:**
+
 - You need fine-grained control per resource type
 - Different resource types have different access requirements
 - You want to apply different tag filters to different resource types
@@ -37,6 +39,7 @@ This Scope matches configs, components, playbooks, canaries, and views in the `r
 These two Scopes are functionally equivalent:
 
 **Using global:**
+
 ```yaml
 targets:
   - global:
@@ -44,6 +47,7 @@ targets:
 ```
 
 **Using individual targets:**
+
 ```yaml
 targets:
   - config:

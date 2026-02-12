@@ -11,12 +11,14 @@ This example shows how to use tag selectors to dynamically scope resources based
 The `tagSelector` uses label selector syntax to match configs with `cluster=homelab` AND `namespace=monitoring` tags. All specified tags must match (AND logic within a single selector).
 
 **Advantages of Tag-Based Scoping:**
+
 - **Dynamic**: Resources automatically join/leave the scope when tags change
 - **Flexible**: No need to update Scope definitions when adding new resources
 - **Expressive**: Combine multiple tags to create precise filters
 - **Maintainable**: Centralize resource categorization through tagging strategy
 
 **Use Cases:**
+
 - Environment-based access (dev, staging, prod)
 - Application-based grouping
 - Compliance and regulatory boundaries

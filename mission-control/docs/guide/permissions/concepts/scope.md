@@ -21,12 +21,12 @@ Each target must specify exactly **one** resource type. You cannot mix different
 
 Each target uses a `ScopeResourceSelector` to filter resources. The selector supports four fields:
 
-| Field | Description | Example |
-|-------|-------------|---------|
-| `agent` | Filter by agent ID or name | `agent-prod-1` |
-| `namespace` | Filter by Kubernetes namespace | `production` |
-| `name` | Filter by resource name. Supports wildcard `*` to match any resource | `nginx-*` is **NOT** supported, but `*` matches all |
-| `tagSelector` | Filter by tags using label selector syntax | `env=prod,region=us-west` |
+| Field         | Description                                                          | Example                                             |
+| ------------- | -------------------------------------------------------------------- | --------------------------------------------------- |
+| `agent`       | Filter by agent ID or name                                           | `agent-prod-1`                                      |
+| `namespace`   | Filter by Kubernetes namespace                                       | `production`                                        |
+| `name`        | Filter by resource name. Supports wildcard `*` to match any resource | `nginx-*` is **NOT** supported, but `*` matches all |
+| `tagSelector` | Filter by tags using label selector syntax                           | `env=prod,region=us-west`                           |
 
 :::info Wildcard Limitations
 The `name` field supports only the special wildcard directive `*` which matches **any** resource. Prefix and suffix wildcards (e.g., `nginx-*` or `*-prod`) are **NOT** supported.
@@ -57,7 +57,7 @@ spec:
     - kind: Group
       name: dev-team
   scopes:
-    - prod-agent-configs  # Reference to Scope
+    - prod-agent-configs # Reference to Scope
   actions:
     - read
     - update
@@ -78,6 +78,7 @@ When a user attempts to access a resource:
 Scopes are fundamental to implementing [multi-tenancy](multi-tenancy.md) in Mission Control. They allow you to partition resources across different tenants, teams, or organizational units.
 
 Common multi-tenancy patterns include:
+
 - **Environment Isolation** - Separate Scopes for dev, staging, and production environments
 - **Team-Based Isolation** - Partition resources by team using namespaces or agents
 - **Customer Isolation** - For SaaS scenarios, isolate customer resources by tags or agents

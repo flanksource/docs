@@ -16,10 +16,11 @@ spec:
     - config:
         agent: agent-west-1
         namespace: production
-        tagSelector: "region=us-west"
+        tagSelector: 'region=us-west'
 ```
 
 This target matches configs that:
+
 - Come from `agent-west-1` **AND**
 - Are in the `production` namespace **AND**
 - Have the tag `region=us-west`
@@ -27,12 +28,14 @@ This target matches configs that:
 All three conditions must be satisfied for a config to match this target.
 
 **Use Cases:**
+
 - Highly specific resource filtering
 - Regional + environment isolation
 - Agent-specific namespaced resources
 - Complex compliance requirements
 
 **Selector Logic Summary:**
+
 - Fields within a single selector: **AND** logic (all must match)
 - Multiple targets in a Scope: **OR** logic (any target can match)
 - Multiple tags in `tagSelector`: **AND** logic (all tags must match)

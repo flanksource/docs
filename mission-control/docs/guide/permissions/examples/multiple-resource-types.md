@@ -14,16 +14,17 @@ spec:
   description: Complete monitoring stack resources
   targets:
     - config:
-        tagSelector: "app=prometheus"
+        tagSelector: 'app=prometheus'
     - component:
-        tagSelector: "app=prometheus"
+        tagSelector: 'app=prometheus'
     - canary:
-        tagSelector: "app=prometheus"
+        tagSelector: 'app=prometheus'
 ```
 
 This Scope includes configs, components, and canaries that all have the tag `app=prometheus`. A resource matches the Scope if it matches **any** of the three targets.
 
 **Use Cases:**
+
 - Application stack ownership (all resources for an app)
 - Feature-based access (configs + playbooks for a feature)
 - Platform team permissions (infrastructure + monitoring)

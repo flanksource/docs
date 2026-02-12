@@ -15,6 +15,7 @@ The `name` field only supports the special wildcard directive `*` which matches 
 :::
 
 **Use Cases:**
+
 - Creating broad access policies for all resources of a type
 - Testing and development environments
 - Admin-level permissions
