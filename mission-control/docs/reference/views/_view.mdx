@@ -30,6 +30,11 @@
     scheme: "[DisplayCard](#view-card-layout)"
   },
   {
+    field: "display.table",
+    description: "Default table layout for the view (sort order and page size)",
+    scheme: "[DisplayTable](#view-table-layout)"
+  },
+  {
     field: "display.plugins[]",
     description: "Attach the view as a tab on matching config items with templated variables extracted from the config",
     scheme: "[ViewConfigUIPlugin](#config-tabs)"
@@ -91,6 +96,7 @@
 - **At least one query**: Views must define at least one named query (unless the view only renders `sections`)
 - **Output definition**: Views must have either `panels` or `columns` (or both)
 - **Merge requirement**: When using multiple queries with table output (columns only), you must provide a `merge` SQL query
+- **Column definition**: When using Prometheus or HTTP queries, `columns` map must be defined to generate the table schema
 :::
 
 ### Query
@@ -114,6 +120,11 @@ Query definition for data sources.
     scheme: "[SQL query](/mission-control/guide/views/queries/sql)"
   },
   {
+    field: "http",
+    description: "Query external APIs via HTTP",
+    scheme: "[HTTP Query](#http-query)"
+  },
+  {
     field: "prometheus",
     description: "Query time-series data from Prometheus",
     scheme: "[Prometheus Query](#prometheus-query)"
@@ -122,6 +133,64 @@ Query definition for data sources.
     field: "viewTableSelector",
     description: "Read cached rows from another view table",
     scheme: "[View Table Selector](#view-table-selector)"
+  },
+  {
+    field: "columns",
+    description: "Define column types for the query results (useful for HTTP/Prometheus)",
+    scheme: "map[string]ColumnType"
+  }
+]}/>
+
+#### HTTP Query
+
+Query configuration for HTTP requests.
+
+<Fields rows={[
+  {
+    field: "url",
+    required: true,
+    description: "Target URL",
+    scheme: "string"
+  },
+  {
+    field: "method",
+    description: "HTTP method _(default: GET)_",
+    scheme: "string"
+  },
+  {
+    field: "body",
+    description: "Request body for POST/PUT/PATCH",
+    scheme: "string"
+  },
+  {
+    field: "jsonpath",
+    description: "JSONPath expression to extract rows from response",
+    scheme: "string"
+  },
+  {
+    field: "headers",
+    description: "Custom request headers",
+    scheme: "[[]EnvVar](/docs/reference/env-var)"
+  },
+  {
+    field: "connection",
+    description: "Reference to a connection",
+    scheme: "string"
+  },
+  {
+    field: "username",
+    description: "Basic auth username",
+    scheme: "EnvVar"
+  },
+  {
+    field: "password",
+    description: "Basic auth password",
+    scheme: "EnvVar"
+  },
+  {
+    field: "bearer",
+    description: "Bearer token",
+    scheme: "EnvVar"
   }
 ]}/>
 
@@ -178,7 +247,7 @@ Column definition for view tables with data types and visualization properties.
     field: "type",
     required: true,
     description: "Data type that determines formatting and visualization",
-    scheme: "`string`, `number`, `boolean`, `datetime`, `duration`, `health`, `status`, `gauge`, `bytes`, `decimal`, `millicore`, `url`, `badge`, `config_item`, `labels`"
+    scheme: "`string`, `number`, `boolean`, `datetime`, `duration`, `health`, `status`, `gauge`, `bytes`, `decimal`, `millicore`, `config_item`, `labels`"
   },
   {
     field: "primaryKey",
@@ -209,6 +278,11 @@ Column definition for view tables with data types and visualization properties.
     field: "url",
     description: "Link to configs, other views, or custom URLs using CEL/Go templates",
     scheme: "[ColumnURL](#column-urls)"
+  },
+  {
+    field: "badge",
+    description: "Badge configuration for the column",
+    scheme: "BadgeConfig"
   },
   {
     field: "unit",
@@ -261,7 +335,7 @@ Panel definition for interactive visualizations.
     field: "type",
     required: true,
     description: "Type of panel visualization",
-    scheme: "`piechart`, `table`, `text`, `number`, `duration`, `gauge`, `bargauge`, `timeseries`"
+    scheme: "`piechart`, `table`, `text`, `number`, `duration`, `gauge`, `bargauge`, `timeseries`, `properties`"
   },
   {
     field: "query",
@@ -293,6 +367,11 @@ Panel definition for interactive visualizations.
     field: "timeseries",
     description: "Configuration for timeseries panels",
     scheme: "[Timeseries Configuration](#timeseries-configuration)"
+  },
+  {
+    field: "properties",
+    description: "Properties panel renders query results as key-value pairs (no specific configuration)",
+    scheme: "object"
   }
 ]}/>
 
@@ -426,9 +505,26 @@ Configuration for timeseries panels (API-level; UI rendering in progress).
   }
 ]}/>
 
+### View Table Layout
+
+`display.table` controls the default table layout for the view.
+
+<Fields rows={[
+  {
+    field: "sort",
+    description: "Default sort column name. Prefix with `-` for descending order.",
+    scheme: "string"
+  },
+  {
+    field: "size",
+    description: "Default page size for the table.",
+    scheme: "int"
+  }
+]}/>
+
 ### View Card Layout
 
-`display.card` controls the default card layout for tables with card positioning. Cards become the default view when `default: true` and at least one column defines `card.position` (or legacy `cardPosition`). Use `columns[].card.useForAccent` to color the card accent based on a column's value (status/health heuristics in the UI):
+`display.card` controls the default card layout for the view (when `default: true`, cards are shown instead of the table).
 
 <Fields rows={[
   {
@@ -492,6 +588,100 @@ Reference cached data from another view instead of re-querying sources. The sele
 ### Sections
 
 Render multiple views on one page. Section-only views can omit panels and columns; each section points at another view and is rendered with shared variable controls.
+
+<Fields rows={[
+  {
+    field: "title",
+    required: true,
+    description: "Title of the section",
+    scheme: "string"
+  },
+  {
+    field: "icon",
+    description: "Icon for the section",
+    scheme: "string"
+  },
+  {
+    field: "viewRef.name",
+    description: "Name of the view to include",
+    scheme: "string"
+  },
+  {
+    field: "viewRef.namespace",
+    description: "Namespace of the view to include",
+    scheme: "string"
+  },
+  {
+    field: "uiRef.changes",
+    description: "Embed the native Changes UI component",
+    scheme: "[ChangesUIFilters](#changes-ui-filters)"
+  },
+  {
+    field: "uiRef.configs",
+    description: "Embed the native Configs UI component",
+    scheme: "[ConfigsUIFilters](#configs-ui-filters)"
+  }
+]}/>
+
+#### Changes UI Filters
+
+<Fields rows={[
+  {
+    field: "configTypes",
+    description: "Filter by config types (comma-separated)",
+    scheme: "string"
+  },
+  {
+    field: "changeType",
+    description: "Filter by change type",
+    scheme: "string"
+  },
+  {
+    field: "severity",
+    description: "Filter by severity",
+    scheme: "string"
+  },
+  {
+    field: "from",
+    description: "Start time (duration string, e.g. 24h)",
+    scheme: "string"
+  },
+  {
+    field: "tags",
+    description: "Filter by tags (Kubernetes style selector)",
+    scheme: "string"
+  }
+]}/>
+
+#### Configs UI Filters
+
+<Fields rows={[
+  {
+    field: "search",
+    description: "Free text search",
+    scheme: "string"
+  },
+  {
+    field: "configType",
+    description: "Filter by config type",
+    scheme: "string"
+  },
+  {
+    field: "labels",
+    description: "Filter by labels (Kubernetes style selector)",
+    scheme: "string"
+  },
+  {
+    field: "status",
+    description: "Filter by status",
+    scheme: "string"
+  },
+  {
+    field: "health",
+    description: "Filter by health",
+    scheme: "string"
+  }
+]}/>
 
 ```yaml title="workload-overview.yaml" file=<rootDir>/modules/mission-control/fixtures/views/workload-overview.yaml {6-24}
 
