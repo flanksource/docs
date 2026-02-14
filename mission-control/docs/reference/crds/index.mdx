@@ -1,0 +1,36 @@
+---
+title: Custom Resource Definitions (CRDs)
+---
+
+# Custom Resource Definitions
+
+Mission Control uses several Custom Resource Definitions (CRDs) to provide extended functionality in Kubernetes. These CRDs allow you to define various resources that Mission Control can manage, monitor, and interact with.
+
+## Available CRDs
+
+| CRD | Kind | Description |
+|-----|------|-------------|
+| [Canary](./canary.mdx) | Canary | Define health checks to monitor the availability of services |
+| [Component](./component.mdx) | Component | Define components for organizing and visualizing your infrastructure |
+| [Topology](./topology.mdx) | Topology | Define relationships and hierarchies between components |
+| [Connection](./connection.mdx) | Connection | Define connections to external systems and services |
+| [IncidentRule](./incident-rule.mdx) | IncidentRule | Define rules for incident detection and management |
+| [Notification](./notification.mdx) | Notification | Define notification channels and rules |
+| [NotificationSilence](./notification-silence.mdx) | NotificationSilence | Define periods when notifications should be silenced |
+| [PermissionGroup](./permission-group.mdx) | PermissionGroup | Define groups of permissions for RBAC |
+| [Permission](./permission.mdx) | Permission | Define individual permissions for RBAC |
+| [Playbook](./playbook.mdx) | Playbook | Define automated workflows for operations |
+| [ScrapeConfig](./scrape-config.mdx) | ScrapeConfig | Define configurations for scraping metrics |
+| [ScrapePlugin](./scrape-plugin.mdx) | ScrapePlugin | Define plugins for scraping custom data sources |
+
+## Installation
+
+These CRDs are automatically installed when you deploy Mission Control using the Helm chart. If you need to install them manually, you can use:
+
+```bash
+kubectl apply -f https://github.com/flanksource/mission-control-chart/tree/main/crd-chart/templates
+```
+
+## Validation
+
+Mission Control uses OpenAPI validation schemas to ensure that the resources you create are valid. You can find the full schemas in the [duty repository](https://github.com/flanksource/duty/tree/main/schema/openapi).
