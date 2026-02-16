@@ -1,0 +1,366 @@
+---
+title: "Monitoring From Every Angle: A Guide to Distributed Canaries"
+description: Learn how to run the same health check across multiple clusters and regions with a single canary definition
+slug: distributed-canaries-tutorial
+authors: [yash]
+tags: [canary-checker, distributed, multi-cluster, agents]
+hide_table_of_contents: false
+---
+
+# Monitoring From Every Angle: A Guide to Distributed Canaries
+
+If you've ever managed services across multiple Kubernetes clusters, you know the pain. You write the same health check for cluster A, copy-paste it for cluster B, tweak it for cluster C, and before you know it, you're maintaining a dozen nearly-identical YAML files. When something changes, you're updating them all. It's tedious, error-prone, and frankly, a waste of time.
+
+What if you could define a check once and have it automatically run everywhere you need it?
+
+That's exactly what distributed canaries do.
+
+<!--truncate -->
+
+## The Problem With Multi-Cluster Monitoring
+
+Let's say you're running an API service that's deployed across three clusters: one in `eu-west`, one in `us-east`, and one in `ap-south`. You want to monitor the `/health` endpoint from each cluster to ensure the service is responding correctly in all regions.
+
+The naive approach looks something like this:
+
+```yaml title="eu-west-cluster/api-health.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: api-health
+spec:
+  schedule: "@every 5m"
+  http:
+    - name: api-endpoint
+      url: http://api-service.default.svc:8080/health
+      responseCodes: [200]
+```
+
+Now multiply that by three clusters. And then by every service you want to monitor. You see where this is going.
+
+There are two ways to solve this, and each fits different situations.
+
+## Two Approaches
+
+### 1. Bundle Canaries With Your Deployment (Push)
+
+If you're already deploying your application to multiple clusters using Helm, ArgoCD, Flux, or any other deployment tool, you can include the Canary resource right alongside your application. The canary deploys wherever your app deploys — one canary per cluster, automatically.
+
+### 2. Agent Selector (Pull)
+
+If you want to define checks centrally and have them distributed to agents, you use `agentSelector`. You write the canary once on the Mission Control server, and it gets replicated to every matched agent.
+
+Both approaches get you the same result — a health check running in every cluster. The difference is in how they get there. Let's look at each one.
+
+## Approach 1: Bundle With Your Deployment
+
+This is the simplest approach if you already have a deployment pipeline that targets multiple clusters. You add the Canary resource to your Helm chart (or Kustomize overlay, or whatever you use), and it rides along with your application.
+
+Say you have a Helm chart for your `payment-service`. You'd add a canary template:
+
+```yaml title="charts/payment-service/templates/canary.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: {{ .Release.Name }}-health
+  namespace: {{ .Release.Namespace }}
+spec:
+  schedule: "@every 1m"
+  http:
+    - name: payment-api
+      url: http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc:8080/health
+      responseCodes: [200]
+      test:
+        expr: json.status == 'healthy'
+```
+
+Now when you deploy your service to three clusters:
+
+```bash
+# EU West
+helm install payment-service ./charts/payment-service \
+  --kube-context eu-west-prod
+
+# US East
+helm install payment-service ./charts/payment-service \
+  --kube-context us-east-prod
+
+# AP South
+helm install payment-service ./charts/payment-service \
+  --kube-context ap-south-prod
+```
+
+Each cluster gets its own canary, running against the local service endpoint. The canary lives and dies with the deployment — if you uninstall the chart, the canary goes with it.
+
+The nice thing about this approach is that each canary can be customized per environment using Helm values:
+
+```yaml title="values-eu-west.yaml"
+canary:
+  schedule: "@every 30s"
+  maxResponseTime: 200  # Stricter for EU
+```
+
+```yaml title="values-ap-south.yaml"
+canary:
+  schedule: "@every 2m"
+  maxResponseTime: 800  # More lenient for AP
+```
+
+This gives you per-cluster tuning that's version-controlled right alongside your deployment config.
+
+## Approach 2: Agent Selector
+
+Agent selector takes the opposite approach. Instead of deploying canaries alongside your application, you define them centrally on Mission Control and specify which agents should run them.
+
+Here's the same health check, but managed centrally:
+
+```yaml title="api-health.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: api-health
+spec:
+  schedule: "@every 5m"
+  http:
+    - name: api-endpoint
+      url: http://api-service.default.svc:8080/health
+      responseCodes: [200]
+  agentSelector:
+    - "*"  # Run on all agents
+```
+
+That's it. One file, all clusters.
+
+### How Agent Selector Works
+
+When you create a canary with an `agentSelector`, the canary doesn't run on the central server at all. Instead, the system:
+
+1. Looks at all registered agents
+2. Matches agent names against your selector patterns
+3. Creates a copy of the canary for each matched agent
+4. Each agent runs the check independently and reports results back
+
+The copies are kept in sync automatically. If you update the parent canary, all the derived canaries update too. If you add a new agent that matches the pattern, it gets the canary within a few minutes. If you remove an agent, its canary is cleaned up.
+
+### Setting It Up
+
+You'll need:
+- A central Mission Control instance
+- At least two Kubernetes clusters with agents installed
+
+**Register your agents** with meaningful names. When you [install the agent helm chart](/docs/installation/saas/agent), you specify the agent name:
+
+```bash
+helm install mission-control-agent flanksource/mission-control-agent \
+ --set clusterName=<Unique name for this agent> \
+ --set upstream.agent=YOUR_LOCAL_NAME \
+ --set upstream.username=token \
+ --set upstream.password= \
+ --set upstream.host= \
+ -n mission-control --create-namespace \
+ --wait
+```
+
+Do this for each cluster with descriptive names like `eu-west-prod`, `us-east-prod`, `ap-south-prod`.
+
+**Create your distributed canary** targeting all production agents:
+
+```yaml title="distributed-service-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: payment-service-health
+  namespace: monitoring
+spec:
+  schedule: "@every 30s"
+  http:
+    - name: payment-api
+      url: http://payment-service.payments.svc.cluster.local:8080/health
+      responseCodes: [200]
+      maxResponseTime: 500
+      test:
+        expr: json.status == 'healthy' && json.database == 'connected'
+  agentSelector:
+    - "*-prod"  # All agents ending with -prod
+```
+
+Apply this to your central Mission Control instance:
+
+```bash
+kubectl apply -f distributed-service-check.yaml
+```
+
+Within a few minutes, you should see derived canaries created for each agent. You can verify this in the Mission Control UI, or by checking the canaries list:
+
+```bash
+kubectl get canaries -A
+```
+
+You'll see the original canary plus one derived canary per matched agent.
+
+## When to Use Which
+
+| | Bundled with Deployment | Agent Selector |
+|---|---|---|
+| **Model** | Push — canary deploys with your app | Pull — canary is distributed from a central server |
+| **Best for** | Application-specific checks that should live with the app | Infrastructure-wide checks or cross-cutting concerns |
+| **Per-cluster customization** | Full control via Helm values or overlays | Same check everywhere (that's the point) |
+| **Lifecycle** | Tied to the deployment — created and deleted with it | Managed centrally — independent of app deployments |
+| **Requires Mission Control** | No — works with standalone canary-checker | Yes — agents report back to Mission Control |
+| **Who owns it** | The team deploying the service | The platform or SRE team |
+
+In practice, you'll likely use both. Application teams bundle canaries in their Helm charts for service-specific checks (with per-environment tuning). The platform team uses agent selector for cross-cutting concerns like external API reachability, DNS resolution, or certificate expiry — checks that don't belong to any single application but need to run everywhere.
+
+## Pattern Matching Deep Dive
+
+The `agentSelector` field is quite flexible. Here are some patterns you'll find useful:
+
+### Select All Agents
+
+```yaml
+agentSelector:
+  - "*"
+```
+
+### Select by Prefix (Regional)
+
+```yaml
+agentSelector:
+  - "eu-*"      # All European agents
+  - "us-*"      # All US agents
+```
+
+### Select by Suffix (Environment)
+
+```yaml
+agentSelector:
+  - "*-prod"    # All production agents
+  - "*-staging" # All staging agents
+```
+
+### Exclude Specific Agents
+
+```yaml
+agentSelector:
+  - "*-prod"       # All production agents
+  - "!us-east-prod" # Except US East (maybe it's being decommissioned)
+```
+
+### Exclusion-Only Patterns
+
+You can also just exclude, which means "all agents except these":
+
+```yaml
+agentSelector:
+  - "!*-dev"      # All agents except dev
+  - "!*-test"     # And except test
+```
+
+## Real-World Use Cases
+
+### Geographic Latency Monitoring
+
+Monitor an external API from all your regions to compare latency:
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: stripe-api-latency
+spec:
+  schedule: "@every 5m"
+  http:
+    - name: stripe-health
+      url: https://api.stripe.com/v1/health
+      responseCodes: [200]
+      maxResponseTime: 1000
+  agentSelector:
+    - "*"
+```
+
+Now you can see if Stripe is slower from one region than another.
+
+### Internal Service Mesh Validation
+
+Verify that internal services are reachable from all clusters:
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: mesh-connectivity
+spec:
+  schedule: "@every 1m"
+  http:
+    - name: auth-service
+      url: http://auth.internal.example.com/health
+    - name: user-service
+      url: http://users.internal.example.com/health
+    - name: orders-service
+      url: http://orders.internal.example.com/health
+  agentSelector:
+    - "*-prod"
+```
+
+### Gradual Rollout Monitoring
+
+When rolling out a new service version, monitor it from a subset of clusters first:
+
+```yaml
+agentSelector:
+  - "us-east-prod"  # Canary region first
+```
+
+Then expand:
+
+```yaml
+agentSelector:
+  - "us-*-prod"  # All US production
+```
+
+And finally:
+
+```yaml
+agentSelector:
+  - "*-prod"  # All production
+```
+
+## What Happens Under the Hood
+
+The system runs a background sync job every 5 minutes that:
+
+1. Finds all canaries with `agentSelector` set
+2. For each canary, matches agent names against the patterns
+3. Creates or updates derived canaries for matched agents
+4. Deletes derived canaries for agents that no longer match
+
+There's also an hourly cleanup job that removes orphaned derived canaries (when the parent canary is deleted).
+
+This means:
+- Changes propagate within 5 minutes
+- You don't need to restart anything when adding agents
+- The system is self-healing
+
+## Tips and Gotchas
+
+**Agent names matter.** Pick a naming convention early and stick to it. Something like `{region}-{environment}` works well.
+
+**The parent canary doesn't run locally.** If you have an `agentSelector`, the canary only runs on the matched agents, not on the server where you applied it unless `local` is specified.
+
+**Results are aggregated.** In the UI, you'll see results from all agents. This gives you a single view of service health across all locations.
+
+**Start specific, then broaden.** When testing a new canary, start with a specific agent name, verify it works, then expand to patterns.
+
+## Conclusion
+
+Distributed canaries turn a maintenance headache into something manageable. Whether you bundle canaries in your Helm charts or manage them centrally with agent selector, you get health checks running everywhere your services live — without the copy-paste.
+
+Bundle with your deployment when the check is specific to the application and the team owning the service should own the canary too. Use agent selector when you need the same check running across all clusters from a single source of truth.
+
+Most teams end up using both. And that's probably the right call.
+
+## References
+
+- [Distributed Canaries Concept](/docs/guide/canary-checker/concepts/distributed-canaries)
+- [Canary Spec Reference](/docs/guide/canary-checker/reference/canary-spec)
+- [Agent Installation Guide](/docs/docs/installation/saas/agent)
