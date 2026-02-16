@@ -9,7 +9,7 @@ import Silence from "@site/docs/reference/notifications/_silence.mdx"
 A silence is a way to temporarily suppress notifications. Each silence has:
 
 - A description - explaining why the silence was created
-- A duration - specified by `from` and `until` timestamps in RFC3339 format
+- A duration - specified by `from` and `until` timestamps in RFC3339 format, datetime or datemath expressions (e.g., `now`, `now+2d`)
 - A scope - defined through selectors and filters to target specific resources
 - A recursive flag - to apply silence to child resources
 
@@ -38,10 +38,15 @@ Silences can be created in multiple ways:
 
 ### Resource Selection
 
-Silences can target resources in two ways:
+Silences can target resources using selectors, filters, or a specific resource. At least one targeting method must be specified.
 
-1. **Selectors**: Direct resource matching using kind and name
+1. **Selectors**: Direct resource matching using types, names, namespaces, labels, and tags
 2. **Filters**: Complex matching using CEL expressions
+3. **Specific Resource**: Selecting a specific config, check, canary, or component (via UI)
+
+:::info
+When both `filter` and `selectors` are specified, the filter is evaluated first. If the filter matches, the silence is applied. Selectors are only evaluated if the filter does not match.
+:::
 
 #### Selectors
 
@@ -65,7 +70,6 @@ A filter is a CEL expression that evaluates to a boolean value. The notification
 Filters can reference these variables:
 - [CheckEvents](/docs/reference/notifications/template_vars/checks)
 - [ConfigEvents](/docs/reference/notifications/template_vars/config)
-- [ComponentEvents](/docs/reference/notifications/template_vars/components)
 
 ### Recursive Mode
 
