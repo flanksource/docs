@@ -31,22 +31,7 @@
   },
   {
     field: "selectors",
-    description: "List of resource selectors to target specific resources by their kind and name",
-    scheme: "[[]ResourceSelector](#resource-selector)"
-  }
-]}/>
-
-### Resource Selector
-
-<Fields rows={[
-  {
-    field: "kind",
-    description: "The kind of resource to select (e.g., 'Kubernetes::StatefulSet', 'Kubernetes::Pod')",
-    scheme: "string"
-  },
-  {
-    field: "name",
-    description: "The name of the resource to select",
-    scheme: "string"
+    description: "List of resource selectors to target specific resources",
+    scheme: "[[]ResourceSelector](/docs/reference/resource-selector)"
   }
 ]}/>
