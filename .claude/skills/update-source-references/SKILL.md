@@ -16,7 +16,7 @@ For all mdx/md files in @docs/canary-checker/ and @docs/mission-control/ that ha
    - Document ALL fields from that struct, not just the ones currently in docs
    - Follow type references across packages to get complete field lists
 
-4. For _canary-spec.mdx, ensure all check types from CanarySpec are listed with correct field names matching the json tags
+4. For \_canary-spec.mdx, ensure all check types from CanarySpec are listed with correct field names matching the json tags
 
 Pay attention to:
 
