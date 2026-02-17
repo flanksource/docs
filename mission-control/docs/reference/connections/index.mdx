@@ -11,22 +11,23 @@ Connections provide a secure, reusable way to authenticate against external syst
 ## Benefits
 
 - **Security**: Credentials are stored securely in Kubernetes secrets, not in plain text
-- **Reusability**: Define once, use across multiple resources
+- **Reuse**: Define once, use across multiple resources
 - **Maintainability**: Update credentials in one place when they change
 - **Auditability**: Track which resources use which connections
 
 ## Connection Types
 
-| Category | Connections |
-|----------|-------------|
-| **Cloud Providers** | [AWS](./aws), [Azure](./azure), [GCP](./gcp) |
-| **Kubernetes** | [Kubernetes](./kubernetes) |
-| **Source Control** | [Git](./git), [GitHub](./github), [GitLab](./gitlab), [Azure DevOps](./azure-devops) |
-| **Databases** | [Postgres](./postgres), [OpenSearch](./opensearch) |
-| **File Storage** | [SFTP](./sftp), [SMB](./smb) |
-| **AI Providers** | [OpenAI](./openai), [Anthropic](./anthropic), [Ollama](./ollama) |
-| **Notifications** | [Slack](./slack), [Discord](./discord), [Telegram](./telegram), [SMTP](./smtp), [ntfy](./ntfy), [Pushbullet](./pushbullet), [Pushover](./pushover) |
-| **Generic** | [HTTP](./http) |
+| Category              | Connections                                                                                                                                    |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Cloud Providers**   | [AWS](./aws), [Azure](./azure), [GCP](./gcp)                                                                                                  |
+| **Key Management**    | [KMS](./KMS), [AWS KMS](./KMS/aws-kms), [Azure Key Vault](./KMS/azure-key-vault), [GCP KMS](./KMS/gcp-kms)                                 |
+| **Kubernetes**        | [Kubernetes](./kubernetes)                                                                                                                     |
+| **Source Control**    | [Git](./git), [GitHub](./github), [GitLab](./gitlab), [Azure DevOps](./azure-devops)                                                        |
+| **Databases**         | [Postgres](./postgres), [OpenSearch](./opensearch)                                                                                            |
+| **File Storage**      | [SFTP](./sftp), [SMB](./smb)                                                                                                                   |
+| **AI Providers**      | [OpenAI](./openai), [Anthropic](./anthropic), [Ollama](./ollama)                                                                              |
+| **Notifications**     | [Slack](./slack), [Discord](./discord), [Telegram](./telegram), [SMTP](./smtp), [Ntfy](./ntfy), [Pushbullet](./pushbullet), [Pushover](./pushover) |
+| **Generic**           | [HTTP](./http)                                                                                                                                 |
 
 ## Creating Connections
 

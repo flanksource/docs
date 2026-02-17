@@ -289,7 +289,7 @@ You can also create a new policy with only the permissions required by Mission C
 
 </TabItem>
 
-<TabItem label="Cloudformation" value="cloudformation">
+<TabItem label="CloudFormation" value="cloudformation">
 
 1. Setup variables
 	```bash
@@ -300,7 +300,7 @@ You can also create a new policy with only the permissions required by Mission C
 	```
 	<p/>
 
-1. Create a cloudformation template
+1. Create a CloudFormation template
 
    ```yaml title="mission-control-iam-cloudformation.yaml"  file=<rootDir>/docs/partials/_pod_identity.yaml
    ```
@@ -463,52 +463,15 @@ After creating the key and policy, make sure to include the KMS policy ARN in yo
 
 ### Create a Mission Control Connection
 
-```yaml title="aws-kms-connection.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Connection
-metadata:
-  name: aws-kms
-  namespace: mission-control
-spec:
-  aws:
-    region: us-west-2
-    # Use the same authentication method as your main AWS connection
-  awsKms:
-    keyID: alias/mission-control-secrets
+```yaml title="awskms.yaml" file=<rootDir>/modules/mission-control/fixtures/connections/awskms.yaml
+
 ```
 
-### Update Mission Control Helm Chart
+### Update Mission Control Helm Values
 
-<Tabs>
-  <TabItem label="Helm" value="Helm">
-    ```bash
-    helm upgrade mission-control flanksource/mission-control \
-        --set kmsConnection='connection://mission-control/aws-kms' \
-        -n mission-control \
-        --wait 
-    ```
-  </TabItem>
+Set `kmsConnection` to the KMS connection reference used by your installation:
 
-  <TabItem label="Flux" value="Flux">
-    ```yaml
-    ---
-    apiVersion: helm.toolkit.fluxcd.io/v2
-    kind: HelmRelease
-    metadata:
-      name: mission-control
-      namespace: mission-control
-    spec:
-      chart:
-        spec:
-          chart: mission-control
-          sourceRef:
-            kind: HelmRepository
-            name: flanksource
-            namespace: mission-control
-      interval: 5m
-      values:
-        kmsConnection: 'connection://mission-control/aws-kms'
-    ```
-  </TabItem>
-</Tabs>
+<Helm chart={props.chart} values={props.values} valueFile={`
+kmsConnection: "connection://<namespace>/<kms-connection-name>"
+`}/>
 

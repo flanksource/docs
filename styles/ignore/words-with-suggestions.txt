@@ -390,6 +390,7 @@ searchPath
 securityContext
 Semver
 serviceMonitor
+serviceAccount
 SFTPConnection
 shoutrrr
 Shoutrrr
@@ -485,5 +486,6 @@ Helm
 LLM
 MCP
 OpenAI
+Ollama
 Slack
 WebSocket
