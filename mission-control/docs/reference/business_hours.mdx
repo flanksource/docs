@@ -1,0 +1,77 @@
+---
+title: Business Hours
+description: Configure and evaluate business hours in CEL expressions and Go templates.
+sidebar_custom_props:
+  icon: tabler:clock-hour-9
+---
+
+Business hours let you define the time windows, in Mission Control, that count as working hours.
+Cel expression and go templates are provided with custom function to check if a timestamp falls within the business hours or not.
+
+:::info
+Default business hours
+
+- Monday through Friday
+- 09:00 to 17:00
+  :::
+
+## Configure business hours
+
+Set `time_interval.business_hours` in your properties file as a JSON array.
+
+Mission Control uses the same object shape as Prometheus `time_interval_spec` entries.
+
+```properties title="app.properties"
+time_interval.business_hours=[{"weekdays":["monday:friday"],"times":[{"start_time":"09:00","end_time":"17:00"}],"location":"UTC"}]
+```
+
+## How interval matching works
+
+- Each field is a list, and any item in that field can match.
+- If you omit a field, Mission Control does not restrict matching on that field. For example, if you do not specify `weekdays`, it matches all days.
+- Do not set an empty list for a field. An empty list, such as `weekdays: []`, does not match any timestamp.
+- A timestamp must match all specified fields.
+- If `location` is omitted, Mission Control evaluates the interval in UTC.
+
+## Interval fields
+
+For full semantics, see [Prometheus `time_interval`](https://prometheus.io/docs/alerting/latest/configuration/#time_interval).
+
+| Field           | Description                                                                                                                                                    | Example                                       |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `times`         | 24-hour time ranges. `start_time` is inclusive and `end_time` is exclusive.                                                                                    | `[{"start_time":"09:00","end_time":"17:00"}]` |
+| `weekdays`      | Day names (case-insensitive) or inclusive ranges, for example `monday:friday`. The week starts on Sunday.                                                      | `["monday:friday"]`                           |
+| `days_of_month` | 1-based day numbers. Negative values count from the end of the month (`-1` is the last day). Ranges are inclusive, and values are clamped to the month length. | `["1:5", "-3:-1"]`                            |
+| `months`        | Month names or month numbers (`1` is January). Ranges are inclusive.                                                                                           | `["1:3", "may:august", "december"]`           |
+| `years`         | Year values or inclusive year ranges.                                                                                                                          | `["2025:2026"]`                               |
+| `location`      | IANA timezone used for evaluation. You can also use `UTC` or `Local`.                                                                                          | `"Asia/Kathmandu"`                            |
+
+## Use in CEL expressions
+
+`in_business_hours(<timestamp>)` returns `true` when the timestamp is inside business hours, and `false` otherwise.
+
+```javascript title="CEL examples"
+in_business_hours('2024-01-02T10:00:00Z') // true
+in_business_hours('2024-01-02T20:00:00Z') // false
+in_business_hours('2024-01-02 10:00:00') // true
+```
+
+## Use in Go templates
+
+Use the same function in Go templates.
+
+```go title="Go template examples"
+{{ in_business_hours "2024-01-02T10:00:00Z" }} // true
+{{ in_business_hours "2024-01-02T20:00:00Z" }} // false
+```
+
+## Timestamp formats
+
+`in_business_hours` accepts these common formats:
+
+- RFC3339, for example `2024-01-02T10:00:00Z`
+- RFC3339Nano
+- `YYYY-MM-DD HH:MM:SS`
+- `YYYY-MM-DD`
+
+If parsing fails, the expression returns an error.
