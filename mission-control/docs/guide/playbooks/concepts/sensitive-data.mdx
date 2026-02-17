@@ -10,19 +10,14 @@ Sensitive data includes passwords, API keys, tokens, and other confidential info
 
 Use `secret` type parameters to handle sensitive data in playbooks:
 
-```yaml
-parameters:
-  - name: database_password
-    type: secret
-    label: "Database Password"
-    description: "Password for database connection"
-    required: true
+```yaml title="http-secret-parameter.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/http-secret-parameter.yaml
+
 ```
 
 ## KMS Connection
 
 :::info
-Your Mission Control instance **must** have a KMS connection configured to use secret parameters. 
+Your Mission Control instance **must** have a KMS connection configured to use secret parameters.
 :::
 
 Configure this using the `--secret-keeper-connection` flag:
@@ -31,13 +26,12 @@ Configure this using the `--secret-keeper-connection` flag:
 mission-control serve --secret-keeper-connection "connection://default/my-kms-key"
 ```
 
-or in the helm chart:
-
-```yaml
-kmsConnection: "connection://default/my-kms-key"
-```
+Or set `kmsConnection` in your Helm values file.
 
 Supported connection types:
+
 - AWS KMS
-- Azure Key Vault  
+- Azure Key Vault
 - GCP KMS
+
+For field-level schema details, see [KMS connection reference](/docs/reference/connections/KMS/).

@@ -10,24 +10,6 @@ sidebar_custom_props:
 
 ## Example
 
-```yaml title="azure-key-vault-connection.yaml"
-apiVersion: v1
-kind: Connection
-metadata:
-  name: azure-key-vault-connection
-spec:
-  type: azure_key_vault
-  clientID:
-    valueFrom:
-      secretKeyRef:
-        name: azure-credentials
-        key: AZURE_CLIENT_ID
-  clientSecret:
-    valueFrom:
-      secretKeyRef:
-        name: azure-credentials
-        key: AZURE_CLIENT_SECRET
-  tenantID: your-tenant-id
-  properties:
-    keyID: https://your-vault.vault.azure.net/keys/mission-control-key
+```yaml title="azurekeyvault.yaml" file=<rootDir>/modules/mission-control/fixtures/connections/azurekeyvault.yaml
+
 ```
