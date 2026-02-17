@@ -54,15 +54,13 @@ This resource allows you to access detailed information about a specific connect
   "type": "slack",
   "created_at": "2025-01-12T10:15:00Z",
   "updated_at": "2025-01-18T16:45:00Z",
-  "url": "slack://$(password)@$(username)",
-  "username": "notification-bot",
-  "password": "secret://slack/token"
   "properties": {
+    "token": "secret://slack-credentials/BOT_TOKEN",
     "channel": "C1234567890",
     "botName": "Mission Control",
     "color": "#36a64f",
     "icon": ":robot_face:"
-  },
+  }
 }
 ```
 

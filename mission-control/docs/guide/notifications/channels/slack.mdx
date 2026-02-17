@@ -39,17 +39,6 @@ The Slack notification service uses either [Slack Webhooks](https://api.slack.co
 
 
 
-## Examples
-
-```uri title="Bot API"
-slack://xoxb:123456789012-1234567890123-4mt0t4l1YL3g1T5L4cK70k3N@C001CH4NN3L?color=good&title=Great+News&icon=man-scientist&botname=Shoutrrrbot
-```
-
-```uri title="Hook with color"
-slack://hook:WNA3PBYV6-F20DUQND3RQ-Webc4MAvoacrpPakR8phF0zi@webhook?color=%2300FF00&title=Great+News&icon=man-scientist&botname=Shoutrrrbot
-```
-
-
 ## Create a Slack bot
 
 1. Create a new app
@@ -86,15 +75,15 @@ slack://hook:WNA3PBYV6-F20DUQND3RQ-Webc4MAvoacrpPakR8phF0zi@webhook?color=%2300F
     apiVersion: v1
     kind: Secret
     metadata:
-      name: slack
+      name: slack-credentials
       namespace: default
     stringData:
-      token: xoxb-910094966996-6596865117477-n7iujSYWmHtnTLMmITdm8z06
+      BOT_TOKEN: xoxb-910094966996-6596865117477-n7iujSYWmHtnTLMmITdm8z06
     ```
      <p/>
 5. Create Connection
 
-    Create a new slack connection using that kubernetes secret. The channel that should receive the notification should go into `spec.username` field.
+    Create a new Slack connection using that kubernetes secret.
 
     ```yaml title="slack-connection.yaml"
     apiVersion: mission-control.flanksource.com/v1
@@ -103,16 +92,15 @@ slack://hook:WNA3PBYV6-F20DUQND3RQ-Webc4MAvoacrpPakR8phF0zi@webhook?color=%2300F
       name: slack
       namespace: default
     spec:
-      type: slack
-      url:
-        value: slack://$(password)@$(username)
-      username:
-        value: mission-control-notifications # <-- slack channel name
-      password:
-        valueFrom:
-          secretKeyRef:
-            name: slack
-            key: token
+      slack:
+        token:
+          valueFrom:
+            secretKeyRef:
+              name: slack-credentials
+              key: BOT_TOKEN
+        channel: C0123456789
+        botName: Mission Control
+        icon: ":robot_face:"
     ```
     <p/>
 6. Create the notification CRD
