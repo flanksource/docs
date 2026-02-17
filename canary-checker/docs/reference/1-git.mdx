@@ -7,17 +7,18 @@ sidebar_custom_props:
 
 # <Icon name="git" /> Git
 
-<!-- Source: modules/canary-checker/api/v1/checks.go#GitHubCheck -->
+<!-- Source: modules/canary-checker/api/v1/checks.go#GitProtocolCheck -->
 
 <Standard />
 
-Execute as SQL style query against a github repo using [mergestat-lite](https://github.com/mergestat/mergestat-lite).
+Use a `gitProtocol` check to verify repository access with Git credentials.
 
-```yaml file=<rootDir>/modules/canary-checker/fixtures/git/git_check_pass.yaml title='github-check.yaml'
+```yaml file=<rootDir>/modules/canary-checker/fixtures/git/git_pull_push_pass.yaml title='git-protocol-check.yaml'
 ```
 
-<HealthCheck name="github" rows={[
-  {field: "connection", description: "Connection name for GitHub credentials", scheme: 'string'},
-  {field: "githubToken", description: "Github Personal Access Token", scheme: 'EnvVar'},
-  {field: "query", description: "Query to be executed. See [mergestat-lite](https://github.com/mergestat/mergestat-lite) for syntax", scheme: 'string', required: true},
+<HealthCheck name="gitProtocol" rows={[
+  {field: "repository", description: "Git repository URL", scheme: 'string', required: true},
+  {field: "username", description: "Username for repository authentication", scheme: 'EnvVar', required: true},
+  {field: "password", description: "Password or token for repository authentication", scheme: 'EnvVar', required: true},
+  {field: "filename", description: "Optional file name used by the check", scheme: 'string'},
 ]}/>
