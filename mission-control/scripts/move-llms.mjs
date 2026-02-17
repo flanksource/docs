@@ -52,6 +52,12 @@ const SPECIAL_SECTIONS = [
     name: 'Go Template Reference',
     description: 'Go template reference'
   },
+  {
+    urlPath: '/docs/reference/business_hours',
+    srcFile: path.join(DOCS_DIR, 'reference', 'business_hours.mdx'),
+    name: 'Business Hours Reference',
+    description: 'Business hours configuration and usage in expressions and templates'
+  },
 ];
 
 const EXCLUDE_PATTERNS = [
