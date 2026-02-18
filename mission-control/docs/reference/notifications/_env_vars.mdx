@@ -19,12 +19,27 @@ export function CheckHealthEnv() {
       {
         "field": "permalink",
         "scheme": "string",
-        "description": "Link to the Catalog in mission control"
+        "description": "A link to the resource in Mission Control"
+      },
+      {
+        "field": "silenceURL",
+        "scheme": "string",
+        "description": "A link to silence this notification"
       },
       {
         "field": "agent",
         "scheme": "[`Agent`](#agent)",
-        "description": "Details of the agent that created the config."
+        "description": "Details of the agent"
+      },
+      {
+        "field": "channel",
+        "scheme": "string",
+        "description": "The notification channel, e.g. `slack`, `email`"
+      },
+      {
+        "field": "groupedResources",
+        "scheme": "`[]string`",
+        "description": "A list of grouped resource names. Only available when notifications are grouped using `waitFor`."
       }
     ]}
   />
@@ -35,23 +50,43 @@ export function ConfigEventsTemplateVars() {
     rows={[
       {
         "field": "config",
-        "scheme": "[`Config`](#config)",
+        "scheme": "[`Config`](#config-item)",
         "description": "Corresponding config item."
       },
       {
         "field": "new_state",
-        "scheme": "`created`, `updated`, `deleted`",
-        "description": "The db state change that caused this event.\n\n*Only available on state events.*"
+        "scheme": "`created` | `updated` | `deleted`",
+        "description": "The state change that triggered this event.\n\n*Only available on config state events (e.g. `config.created`, `config.updated`, `config.deleted`).*"
       },
       {
         "field": "permalink",
         "scheme": "string",
-        "description": "Link to the Catalog in mission control"
+        "description": "A link to the resource in Mission Control"
+      },
+      {
+        "field": "silenceURL",
+        "scheme": "string",
+        "description": "A link to silence this notification"
       },
       {
         "field": "agent",
         "scheme": "[`Agent`](#agent)",
-        "description": "Details of the agent that created the config."
+        "description": "Details of the agent"
+      },
+      {
+        "field": "recent_events",
+        "scheme": "`[]string`",
+        "description": "Recent config changes from the last hour"
+      },
+      {
+        "field": "channel",
+        "scheme": "string",
+        "description": "The notification channel, e.g. `slack`, `email`"
+      },
+      {
+        "field": "groupedResources",
+        "scheme": "`[]string`",
+        "description": "A list of grouped resource names. Only available when notifications are grouped using `waitFor`."
       }
     ]}
   />

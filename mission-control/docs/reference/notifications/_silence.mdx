@@ -1,0 +1,40 @@
+<Fields withTemplates="true" rows={[
+  {
+    field: "description",
+    description: "A description explaining the purpose of the silence",
+    scheme: "string"
+  },
+  {
+    field: "from",
+    description: "Start time of the silence period in RFC3339 format, datetime or datemath expression (e.g., \"now\", \"now+2h\", \"2025-01-01\")",
+    scheme: "string"
+  },
+  {
+    field: "until",
+    description: "End time of the silence period in RFC3339 format, datetime or datemath expression (e.g., \"now\", \"now+2d\", \"2025-02-01\")",
+    scheme: "string"
+  },
+  {
+    field: "recursive",
+    description: "When true, the silence applies to all child resources of the matched resources. For example, silencing a namespace would silence all deployments, statefulsets, pods, etc. within it.",
+    scheme: "boolean"
+  },
+  {
+    field: "filter",
+    description: "A CEL expression that determines whether to apply the silence. The silence is only applied if the filter evaluates to true.",
+    scheme: "CEL",
+    templateEnv: [
+      {"name": "CheckEvents", "url": "/docs/reference/notifications/template_vars/checks"},
+      {"name": "ConfigEvents", "url": "/docs/reference/notifications/template_vars/config"},
+    ],
+  },
+  {
+    field: "selectors",
+    description: "List of resource selectors to target specific resources",
+    scheme: "[[]ResourceSelector](/docs/reference/resource-selector)"
+  }
+]}/>
+
+:::info
+At least one of `filter` or `selectors` must be specified to target resources for the silence. When both are specified, `filter` takes precedence.
+:::
