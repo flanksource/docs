@@ -15,7 +15,7 @@ Mission Control has a micro-service architecture with a shared data source with 
 Communication between services happens in 3 ways:
 
 1. **Database** - A shared database with interface library enables services to query data that other services own by directly hitting the database using an interface that a shared library provides.
-2. **Messaging** - A postgres based message bus is used; database triggers insert events into queues which are then consumed by various services.
+2. **Messaging** - Mission Control uses a Postgres-based message bus; database triggers insert events into queues that various services consume.
 3. **HTTP/REST** - Services use this model when they need to interact with systems outside the DB (e.g., the APM hub connects to log stores to retrieve logs).
 
 **Postgres**

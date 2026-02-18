@@ -1,6 +1,6 @@
 import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 import type * as Preset from '@docusaurus/preset-classic';
 
@@ -146,11 +146,11 @@ export default async function createConfigAsync() {
           name: 'llms-compatibility-plugin',
           async postBuild({ outDir }) {
             const source = join(outDir, 'llms.txt');
+            const target = join(outDir, 'docs', 'llms.txt');
 
             for (let attempt = 0; attempt < 20; attempt++) {
               if (existsSync(source)) {
                 const docsDir = join(outDir, 'docs');
-                const target = join(docsDir, 'llms.txt');
 
                 mkdirSync(docsDir, { recursive: true });
                 copyFileSync(source, target);
@@ -159,6 +159,8 @@ export default async function createConfigAsync() {
 
               await new Promise((resolve) => setTimeout(resolve, 250));
             }
+
+            console.warn(`[llms-compatibility-plugin] Failed to copy llms.txt from ${source} to ${target}; source was not found after 20 attempts.`);
           },
         };
       },
@@ -267,6 +269,7 @@ export default async function createConfigAsync() {
               "**/*.canary.md",
               "**/_*.mdx",
               "**/modules/**",
+              "**/llms-intro.md",
               "**/_*.md"
             ],
             sidebarPath: './sidebars.js',
