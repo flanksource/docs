@@ -1,4 +1,5 @@
-import { dirname } from 'path';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import type * as Preset from '@docusaurus/preset-classic';
@@ -12,6 +13,7 @@ import PrismDark from './src/prismDark.ts';
 export default async function createConfigAsync() {
 
   const codeImport = await import('remark-code-import');
+  const llmsRootContent = readFileSync(join(__dirname, 'docs', 'llms-intro.md'), 'utf-8').trim();
 
   return {
     title: 'Mission Control',
@@ -115,12 +117,9 @@ export default async function createConfigAsync() {
         generateLLMsFullTxt: false,
         generateMarkdownFiles: true,
         llmsTxtFilename: 'docs/llms.txt',
+        rootContent: llmsRootContent,
         ignoreFiles: [
-          '**/*.canary.mdx',
-          '**/*.canary.md',
-          '**/_*.mdx',
-          '**/modules/**',
-          '**/_*.md',
+          '**/modules/**'
         ],
         excludeImports: true,
       }],
