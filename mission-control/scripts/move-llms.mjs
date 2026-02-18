@@ -18,7 +18,6 @@ const BUILD_DIR = path.join(__dirname, '..', 'build');
 const DOCS_DIR = path.join(__dirname, '..', 'docs');
 const ROOT_DIR = path.join(__dirname, '..', '..');
 const CANARY_CHECKER_SCRIPTING = path.join(__dirname, '..', '..', 'canary-checker', 'docs', 'scripting');
-const BASE_URL = 'https://flanksource.com';
 
 const SECTIONS = [
   { urlPath: '/docs', srcDir: 'docs', name: 'Documentation', description: 'Mission Control documentation' },
@@ -298,91 +297,103 @@ function parseSitemap() {
 
 function generateRootLlmsTxt() {
   const urls = parseSitemap();
-  const docsUrls = urls.filter(u => u.includes('/docs/'));
 
-  const sections = {};
-  for (const url of docsUrls) {
-    const urlPath = url.replace(BASE_URL, '').replace(/\/$/, '');
-    const parts = urlPath.split('/').filter(Boolean);
+  const toTitle = (segment) => {
+    const specialCases = {
+      api: 'API',
+      cel: 'CEL',
+      db: 'DB',
+      rbac: 'RBAC',
+      ui: 'UI',
+      kubernetes: 'Kubernetes',
+      prometheus: 'Prometheus',
+    };
 
-    if (parts.length >= 2 && parts[0] === 'docs') {
-      const section = parts.length > 2 ? parts.slice(0, 3).join('/') : parts.slice(0, 2).join('/');
-      if (!sections[section]) {
-        sections[section] = [];
+    return decodeURIComponent(segment)
+      .split(/[-_]/g)
+      .map(part => specialCases[part.toLowerCase()] || (part.charAt(0).toUpperCase() + part.slice(1)))
+      .join(' ');
+  };
+
+  const canonicalDocsUrls = new Map();
+  for (const rawUrl of urls) {
+    try {
+      const parsed = new URL(rawUrl.trim());
+      const pathname = parsed.pathname.replace(/\/$/, '') || '/';
+
+      if (pathname === '/docs' || pathname.startsWith('/docs/')) {
+        canonicalDocsUrls.set(`${parsed.origin}${pathname}`, true);
       }
-      sections[section].push(urlPath);
+    } catch {
+      // Ignore malformed URLs from sitemap
+    }
+  }
+
+  const docsUrls = [...canonicalDocsUrls.keys()].sort((a, b) => {
+    const aPath = new URL(a).pathname;
+    const bPath = new URL(b).pathname;
+    return aPath.localeCompare(bPath);
+  });
+
+  const root = { segment: '', url: null, children: new Map() };
+  for (const url of docsUrls) {
+    const parsed = new URL(url);
+    const segments = parsed.pathname.split('/').filter(Boolean);
+
+    let node = root;
+    for (let i = 0; i < segments.length; i++) {
+      const segment = segments[i];
+      if (!node.children.has(segment)) {
+        node.children.set(segment, { segment, url: null, children: new Map() });
+      }
+      node = node.children.get(segment);
+
+      if (i === segments.length - 1) {
+        node.url = `${parsed.origin}${parsed.pathname.replace(/\/$/, '') || '/'}`;
+      }
     }
   }
 
   const lines = [
     '# Flanksource Mission Control',
     '',
-    '> Internal Developer Platform for Kubernetes',
-    '',
-    'Mission Control is an internal developer platform that helps teams manage, monitor, and automate their Kubernetes infrastructure.',
+    'Mission Control is an internal developer platform for Kubernetes that helps you monitor systems, automate operations, and investigate incidents across your infrastructure.',
     '',
     '## Documentation Sections',
-    '',
+    ''
   ];
 
-  const allSections = [...SECTIONS, ...SPECIAL_SECTIONS];
-  for (const section of allSections) {
-    const llmsPath = `${section.urlPath}/llms.txt`;
-    const buildLlmsPath = path.join(BUILD_DIR, llmsPath.substring(1));
+  const renderNode = (node, depth = 0) => {
+    const label = toTitle(node.segment);
+    const indent = '  '.repeat(depth);
 
-    if (fs.existsSync(buildLlmsPath)) {
-      lines.push(`- [${section.name}](${BASE_URL}${llmsPath}): ${section.description}`);
+    if (node.url) {
+      lines.push(`${indent}- [${label}](${node.url})`);
     } else {
-      lines.push(`- [${section.name}](${BASE_URL}${section.urlPath}): ${section.description}`);
+      lines.push(`${indent}- ${label}`);
     }
-  }
 
-  lines.push('');
-  lines.push('## All Documentation Pages');
-  lines.push('');
-
-  const topLevelSections = {};
-  for (const sectionPath of Object.keys(sections)) {
-    const parts = sectionPath.split('/').filter(Boolean);
-    const topLevel = parts.length > 1 ? parts[1] : parts[0];
-    if (!topLevelSections[topLevel]) {
-      topLevelSections[topLevel] = {};
+    const children = [...node.children.values()].sort((a, b) => a.segment.localeCompare(b.segment));
+    for (const child of children) {
+      renderNode(child, depth + 1);
     }
-    topLevelSections[topLevel][sectionPath] = sections[sectionPath];
-  }
+  };
 
-  const sortedTopLevel = Object.keys(topLevelSections).sort();
-  for (const topLevel of sortedTopLevel) {
-    const topLevelName = topLevel.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-    const subSections = topLevelSections[topLevel];
-    const subSectionKeys = Object.keys(subSections).sort();
-
-    const allUrls = [];
-    for (const key of subSectionKeys) {
-      allUrls.push(...subSections[key]);
+  const docsNode = root.children.get('docs');
+  if (docsNode) {
+    if (docsNode.url) {
+      lines.push(`- [Overview](${docsNode.url})`);
     }
-    const uniqueUrls = [...new Set(allUrls)].sort();
 
-    if (uniqueUrls.length === 1) {
-      const urlPath = uniqueUrls[0];
-      const pageName = urlPath.split('/').pop()
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, c => c.toUpperCase()) || topLevelName;
-      lines.push(`- [${pageName}](${BASE_URL}${urlPath})`);
-    } else {
-      lines.push(`- ${topLevelName}`);
-      for (const urlPath of uniqueUrls) {
-        const pageName = urlPath.split('/').slice(2).join(' / ')
-          .replace(/-/g, ' ')
-          .replace(/\b\w/g, c => c.toUpperCase()) || 'Overview';
-        lines.push(`  - [${pageName}](${BASE_URL}${urlPath})`);
-      }
+    const docsChildren = [...docsNode.children.values()].sort((a, b) => a.segment.localeCompare(b.segment));
+    for (const child of docsChildren) {
+      renderNode(child, 0);
     }
   }
 
   const llmsTxtPath = path.join(BUILD_DIR, 'llms.txt');
-  fs.writeFileSync(llmsTxtPath, lines.join('\n'));
-  console.log(`Generated root llms.txt with ${docsUrls.length} documentation pages`);
+  fs.writeFileSync(llmsTxtPath, `${lines.join('\n')}\n`);
+  console.log(`Generated root llms.txt docs sitemap with ${docsUrls.length} URLs`);
 }
 
 async function main() {
