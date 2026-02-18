@@ -108,6 +108,23 @@ export default async function createConfigAsync() {
 
         }],
 
+      ['docusaurus-plugin-llms', {
+        docsDir: 'docs',
+        includeBlog: false,
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: false,
+        generateMarkdownFiles: true,
+        llmsTxtFilename: 'docs/llms.txt',
+        ignoreFiles: [
+          '**/*.canary.mdx',
+          '**/*.canary.md',
+          '**/_*.mdx',
+          '**/modules/**',
+          '**/_*.md',
+        ],
+        excludeImports: true,
+      }],
+
       // async function myPlugin(context, options) {
       //   return {
       //     name: "docusaurus-tailwindcss",
