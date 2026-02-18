@@ -20,7 +20,7 @@ Communication between services happen in 3 ways:
 
 ## Postgres
 
-Postgres is the only data store used by Mission Control and relies heavily on JSON and queuing support in Postgres. 
+Postgres is the only data store used by Mission Control and relies heavily on JSON and queuing support in Postgres.
 This limits the dependencies and complexity especially when self-hosting.
 
 All services use a shared database and model via the [duty](https://github.com/flanksource/duty) project, this provides the following benefits:
