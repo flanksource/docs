@@ -187,6 +187,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     {
       field: "tenantId",
       description: "The Azure Active Directory tenant ID",
+      scheme: "EnvVar",
       required: true
     },
     {
