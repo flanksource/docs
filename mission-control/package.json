@@ -57,7 +57,7 @@
     "@iconify/tailwind": "^1.1.3",
     "@tailwindcss/typography": "^0.5.15",
     "babel-loader": "^10.0.0",
-    "docusaurus-plugin-llms": "^0.3.0",
+    "docusaurus-plugin-llms": "~0.3.0",
     "glob": "^10.0.0",
     "gray-matter": "^4.0.3",
     "remark-code-import": "^1.2.0",

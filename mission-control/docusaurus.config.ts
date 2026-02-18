@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { dirname, join } from 'path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'url';
 
 import type * as Preset from '@docusaurus/preset-classic';
