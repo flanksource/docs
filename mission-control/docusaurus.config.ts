@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'url';
 
@@ -13,7 +13,7 @@ import PrismDark from './src/prismDark.ts';
 export default async function createConfigAsync() {
 
   const codeImport = await import('remark-code-import');
-  const llmsRootContent = readFileSync(join(__dirname, 'docs', 'llms-intro.md'), 'utf-8').trim();
+  const llmsIntroContent = readFileSync(join(__dirname, 'docs', 'llms-intro.md'), 'utf-8').trim();
 
   return {
     title: 'Mission Control',
@@ -110,19 +110,58 @@ export default async function createConfigAsync() {
 
         }],
 
-      ['docusaurus-plugin-llms', {
-        docsDir: 'docs',
-        includeBlog: false,
-        generateLLMsTxt: true,
-        generateLLMsFullTxt: false,
-        generateMarkdownFiles: true,
-        llmsTxtFilename: 'docs/llms.txt',
-        rootContent: llmsRootContent,
-        ignoreFiles: [
-          '**/modules/**'
-        ],
-        excludeImports: true,
+      ['@signalwire/docusaurus-plugin-llms-txt', {
+        siteTitle: 'Mission Control',
+        siteDescription: llmsIntroContent,
+        onRouteError: 'warn',
+        content: {
+          enableMarkdownFiles: true,
+          enableLlmsFullTxt: false,
+          includeDocs: true,
+          includeBlog: false,
+          includePages: false,
+          includeVersionedDocs: false,
+          excludeRoutes: [
+            '/search',
+            '/404.html',
+            '/tags',
+            '/tags/**',
+            '/docs/tags',
+            '/docs/tags/**',
+            '/blog/tags',
+            '/blog/tags/**',
+            '/blog/archive',
+            '/blog/authors',
+            '/blog/authors/**',
+            '/docs/**/modules/**',
+            '/docs/modules/**',
+            '/modules/**',
+          ],
+        },
       }],
+
+      // Maintain backwards compatibility for existing consumers expecting /docs/llms.txt
+      async function llmsCompatibilityPlugin() {
+        return {
+          name: 'llms-compatibility-plugin',
+          async postBuild({ outDir }) {
+            const source = join(outDir, 'llms.txt');
+
+            for (let attempt = 0; attempt < 20; attempt++) {
+              if (existsSync(source)) {
+                const docsDir = join(outDir, 'docs');
+                const target = join(docsDir, 'llms.txt');
+
+                mkdirSync(docsDir, { recursive: true });
+                copyFileSync(source, target);
+                return;
+              }
+
+              await new Promise((resolve) => setTimeout(resolve, 250));
+            }
+          },
+        };
+      },
 
       // async function myPlugin(context, options) {
       //   return {
