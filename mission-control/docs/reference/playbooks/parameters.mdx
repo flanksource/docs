@@ -87,6 +87,7 @@ When running the playbook on a `Deployment` named `mysql` the following is pre-p
 | `text`       | Text input                         | Text Input   | `string`  | [`Text`](#text)           |
 | `millicores` | CPU resource                       | Number       | `string`  | -                         |
 | `bytes`      | Memory resource                    | Number       | `string`  | -                         |
+| `secret`     | Encrypted sensitive data           | Password     | `string`  | -                         |
 
 ```yaml title='params-sink.yaml' file=<rootDir>/modules/mission-control/fixtures/playbooks/params.yaml {20,24,27,32,39,46,51,56,61,72} showLineNumbers
 
@@ -128,3 +129,24 @@ When running the playbook on a `Deployment` named `mysql` the following is pre-p
 | ----------------- | -------------------------------- | -------- |
 | `options[].label` | Specify label of the list option | `string` |
 | `options[].value` | Specify value of the list option | `string` |
+
+### secret
+
+Secret parameters handle sensitive data like passwords, API keys, and tokens. Values are encrypted at rest using the configured KMS connection and are automatically redacted in logs, UI displays, and database queries.
+
+:::info Requirements
+Your Mission Control instance must have a [KMS connection configured](/docs/reference/connections/KMS/) to use secret parameters.
+:::
+
+Secret parameters are rendered as password input fields in the UI and their values are:
+
+- **Encrypted** using the configured KMS (AWS KMS, Azure Key Vault, or GCP KMS)
+- **Redacted** in all logs and audit trails
+- **Hidden** in the UI after initial input
+- **Protected** in database storage
+
+Use the following fixture as a reference implementation:
+
+```yaml title="http-secret-parameter.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/http-secret-parameter.yaml
+
+```

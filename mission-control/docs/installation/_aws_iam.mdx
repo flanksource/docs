@@ -8,6 +8,7 @@ Depending on how you want to use Mission Control you need to create an IAM role 
 | -------------------------------------------- | ----------------------------------------- |
 | Read Only Scraping                           | `arn:aws:iam::aws:policy/ReadOnlyAccess`  |
 | Playbooks to create and update AWS Resources | `arn:aws:iam::aws:policy/PowerUserAccess` |
+| Secret Management (optional)                 | Custom KMS policy (see below)            |
 
 <details summary="Create new IAM Policy (Alternative)">
 <div>
@@ -107,6 +108,9 @@ You can also create a new policy with only the permissions required by Mission C
                 roleName: MissionControlRole
                 roleOnly: true
                 attachPolicyARNs:
+                # Add additional policies as needed:
+                # - "arn:aws:iam::aws:policy/PowerUserAccess"
+                # - Custom KMS policy ARN for secret management
                 - "arn:aws:iam::aws:policy/ReadOnlyAccess"
             - metadata:
                     name: canary-checker-sa
@@ -114,6 +118,9 @@ You can also create a new policy with only the permissions required by Mission C
                 roleName: CanaryCheckerRole
                 roleOnly: true
                 attachPolicyARNs:
+                # Add additional policies as needed:
+                # - "arn:aws:iam::aws:policy/PowerUserAccess"
+                # - Custom KMS policy ARN for secret management
                 - "arn:aws:iam::aws:policy/ReadOnlyAccess"
             - metadata:
                     name: config-db-sa
@@ -121,6 +128,9 @@ You can also create a new policy with only the permissions required by Mission C
                 roleName: ConfigDBRole
                 roleOnly: true
                 attachPolicyARNs:
+                # Add additional policies as needed:
+                # - "arn:aws:iam::aws:policy/PowerUserAccess"
+                # - Custom KMS policy ARN for secret management
                 - "arn:aws:iam::aws:policy/ReadOnlyAccess"
 
            ```
@@ -168,15 +178,27 @@ You can also create a new policy with only the permissions required by Mission C
    podIdentityAssociations:
    	- namespace: mission-control
    		serviceAccountName:  mission-control-sa
-   		permissionPolicyARNs: arn:aws:iam::aws:policy/ReadOnlyAccess
+   		permissionPolicyARNs: 
+			# Add additional policies as needed:
+			# - arn:aws:iam::aws:policy/PowerUserAccess
+			# - Custom KMS policy ARN for secret management
+			- arn:aws:iam::aws:policy/ReadOnlyAccess
 
    	- namespace: mission-control
    		serviceAccountName:  config-db-sa
-   		permissionPolicyARNs: arn:aws:iam::aws:policy/ReadOnlyAccess
+   		permissionPolicyARNs: 
+			# Add additional policies as needed:
+			# - arn:aws:iam::aws:policy/PowerUserAccess
+			# - Custom KMS policy ARN for secret management
+			- arn:aws:iam::aws:policy/ReadOnlyAccess
 
    	- namespace: mission-control
    		serviceAccountName:  canary-checker-sa
-   		permissionPolicyARNs: arn:aws:iam::aws:policy/ReadOnlyAccess
+   		permissionPolicyARNs: 
+			# Add additional policies as needed:
+			# - arn:aws:iam::aws:policy/PowerUserAccess
+			# - Custom KMS policy ARN for secret management
+			- arn:aws:iam::aws:policy/ReadOnlyAccess
    iam:
    	# note withOIDC is not required for Pod Identity
    	serviceAccounts:
@@ -185,18 +207,27 @@ You can also create a new policy with only the permissions required by Mission C
    			name: mission-control-sa
    			namespace: mission-control
    		attachPolicyARNs:
+		# Add additional policies as needed:
+		# - "arn:aws:iam::aws:policy/PowerUserAccess"
+		# - Custom KMS policy ARN for secret management
    		- "arn:aws:iam::aws:policy/ReadOnlyAccess"
    # used for cloudwatch, S3 and other AWS health checks
    	- metadata:
    			name: canary-checker-sa
    			namespace: mission-control
    		attachPolicyARNs:
+		# Add additional policies as needed:
+		# - "arn:aws:iam::aws:policy/PowerUserAccess"
+		# - Custom KMS policy ARN for secret management
    		- "arn:aws:iam::aws:policy/ReadOnlyAccess"
    # used to scrape resources, AWS CloudTrail and AWS Cost & Usage Reports
    	- metadata:
    			name: config-db-sa
    			namespace: mission-control
    		attachPolicyARNs:
+		# Add additional policies as needed:
+		# - "arn:aws:iam::aws:policy/PowerUserAccess"
+		# - Custom KMS policy ARN for secret management
    		- "arn:aws:iam::aws:policy/ReadOnlyAccess"
 	```
 	<p />
@@ -258,7 +289,7 @@ You can also create a new policy with only the permissions required by Mission C
 
 </TabItem>
 
-<TabItem label="Cloudformation" value="cloudformation">
+<TabItem label="CloudFormation" value="cloudformation">
 
 1. Setup variables
 	```bash
@@ -269,7 +300,7 @@ You can also create a new policy with only the permissions required by Mission C
 	```
 	<p/>
 
-1. Create a cloudformation template
+1. Create a CloudFormation template
 
    ```yaml title="mission-control-iam-cloudformation.yaml"  file=<rootDir>/docs/partials/_pod_identity.yaml
    ```
@@ -312,9 +343,20 @@ First we create a secret called `aws` containing the access key and secret.
    USER_NAME="mission-control-sa"
 
    aws iam create-user --user-name $USER_NAME
+   
+   # Add policies based on your use case (see table above)
    aws iam attach-user-policy \
 	 	--user-name $USER_NAME \
 		--policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess
+		
+   # Add additional policies as needed:
+   # aws iam attach-user-policy \
+   #	 	--user-name $USER_NAME \
+   #	--policy-arn arn:aws:iam::aws:policy/PowerUserAccess
+   # aws iam attach-user-policy \
+   #	 	--user-name $USER_NAME \
+   #	--policy-arn arn:aws:iam::<ACCOUNT>:policy/MissionControlKMSPolicy
+   
    key=$(aws iam create-access-key --user-name $USER_NAME)
    ```
 	 <p/>
@@ -355,4 +397,81 @@ First we create a secret called `aws` containing the access key and secret.
 
 </TabItem>
 </Tabs>
+
+## Optional: KMS Setup for Secret Management
+
+If you plan to use secret parameters in playbooks, create a KMS key and IAM policy to encrypt and manage sensitive data:
+
+### Create a KMS Key
+
+```bash
+# Set your AWS region and account ID
+export AWS_REGION=us-west-2
+export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+
+# Create a KMS key for Mission Control
+aws kms create-key \
+    --description "Mission Control Secret Management Key" \
+    --region $AWS_REGION \
+    --query 'KeyMetadata.KeyId' \
+    --output text > mission-control-key-id.txt
+
+export KEY_ID=$(cat mission-control-key-id.txt)
+
+# Create an alias for easier reference
+aws kms create-alias \
+    --alias-name alias/mission-control-secrets \
+    --target-key-id $KEY_ID \
+    --region $AWS_REGION
+```
+
+### Create KMS IAM Policy
+
+```bash
+# Create a custom KMS policy
+cat > mission-control-kms-policy.json << EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "MissionControlKMSAccess",
+            "Effect": "Allow",
+            "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:DescribeKey"
+            ],
+            "Resource": "arn:aws:kms:${AWS_REGION}:${ACCOUNT_ID}:key/${KEY_ID}"
+        }
+    ]
+}
+EOF
+
+# Create the IAM policy
+aws iam create-policy \
+    --policy-name MissionControlKMSPolicy \
+    --policy-document file://mission-control-kms-policy.json \
+    --query 'Policy.Arn' \
+    --output text > mission-control-kms-policy-arn.txt
+
+export KMS_POLICY_ARN=$(cat mission-control-kms-policy-arn.txt)
+```
+
+After creating the key and policy, make sure to include the KMS policy ARN in your service account configurations above.
+
+### Create a Mission Control Connection
+
+```yaml title="awskms.yaml" file=<rootDir>/modules/mission-control/fixtures/connections/awskms.yaml
+
+```
+
+### Update Mission Control Helm Values
+
+Set `kmsConnection` to the KMS connection reference used by your installation:
+
+<Helm chart={props.chart} values={props.values} valueFile={`
+kmsConnection: "connection://<namespace>/<kms-connection-name>"
+`}/>
 

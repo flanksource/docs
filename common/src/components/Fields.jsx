@@ -118,6 +118,90 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     return a.field.localeCompare(b.field)
   }
 
+  // Common AWS connection fields
+  const awsFields = [
+    {
+      field: oss ? null : "connection",
+      description: "The connection url to use, mutually exclusive with `accessKey` and `secretKey`",
+      scheme: "Connection",
+    },
+    {
+      field: "accessKey",
+      description: "Access Key ID",
+      scheme: "EnvVar"
+    },
+    {
+      field: "secretKey",
+      description: "Secret Access Key",
+      scheme: "EnvVar"
+    },
+    {
+      field: "region",
+      description: "The AWS region",
+      scheme: "string"
+    },
+    {
+      field: "endpoint",
+      scheme: "string",
+      description: "Custom AWS Endpoint to use",
+    },
+    {
+      field: "skipTLSVerify",
+      description: "Skip TLS verify when connecting to AWS",
+      scheme: 'bool'
+    }
+  ]
+
+  // Common GCP connection fields
+  const gcpFields = [
+    {
+      field: oss ? null : 'connection',
+      description:
+        'The connection url to use, mutually exclusive with `credentials`',
+      scheme: 'Connection'
+    },
+    {
+      field: 'credentials',
+      description: 'The credentials to use for authentication',
+      scheme: 'EnvVar'
+    },
+    {
+      field: 'endpoint',
+      description: 'Custom GCP Endpoint to use',
+      scheme: 'string'
+    },
+    {
+      field: 'skipTLSVerify',
+      description: 'Skip TLS verification when connecting to GCP',
+      scheme: 'bool'
+    }
+  ]
+
+  // Common Azure connection fields
+  const azureFields = [
+    {
+      field: oss ? null : "connection",
+      description: "The connection url to use, mutually exclusive with `tenantId`, `clientId`, and `clientSecret`",
+      scheme: "Connection",
+    },
+    {
+      field: "tenantId",
+      description: "The Azure Active Directory tenant ID",
+      scheme: "EnvVar",
+      required: true
+    },
+    {
+      field: "clientId",
+      description: "The Azure client/application ID",
+      scheme: "EnvVar"
+    },
+    {
+      field: "clientSecret",
+      description: "The Azure client/application secret",
+      scheme: "EnvVar"
+    }
+  ]
+
   if (connection == "url") {
     rows = rows.concat([
       {
@@ -200,62 +284,9 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       }
     ])
   } else if (connection == "aws") {
-    rows = rows.concat([
-      {
-        field: oss ? null : "connection",
-        description: "The connection url to use, mutually exclusive with `accessKey` and `secretKey`",
-        scheme: "Connection",
-      },
-      {
-        field: "accessKey",
-        description: "Access Key ID",
-        scheme: "EnvVar"
-      },
-      {
-        field: "secretKey",
-        description: "Secret Access Key",
-        scheme: "EnvVar"
-      },
-      {
-        field: "region",
-        description: "The AWS region",
-        scheme: "string"
-      },
-      {
-        field: "endpoint",
-        scheme: "string",
-        description: "Custom AWS Endpoint to use",
-      },
-      {
-        field: "skipTLSVerify",
-        description: "Skip TLS verify when connecting to AWS",
-        scheme: 'bool'
-      }
-    ])
+    rows = rows.concat(awsFields)
   } else if (connection == "gcp") {
-    rows = rows.concat([
-      {
-        field: oss ? null : 'connection',
-        description:
-          'The connection url to use, mutually exclusive with `credentials`',
-        scheme: 'Connection'
-      },
-      {
-        field: 'credentials',
-        description: 'The credentials to use for authentication',
-        scheme: 'EnvVar'
-      },
-      {
-        field: 'endpoint',
-        description: 'Custom GCP Endpoint to use',
-        scheme: 'string'
-      },
-      {
-        field: 'skipTLSVerify',
-        description: 'Skip TLS verification when connecting to GCP',
-        scheme: 'bool'
-      }
-    ])
+    rows = rows.concat(gcpFields)
   } else if (connection == "sftp") {
     rows = rows.concat([
       {
@@ -347,34 +378,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
         scheme: "[CNRM](/docs/reference/connections/kubernetes/#cnrm-connection)",
       }])
   } else if (connection == "azure") {
-    rows = rows.concat([
-      {
-        field: oss ? null : "connection",
-        description: "The connection url to use, mutually exclusive with `tenantId`, `subscriptionId`, `clientId`, and `clientSecret`",
-        scheme: "Connection",
-      },
-      {
-        field: "tenantId",
-        description: "The Azure Active Directory tenant ID",
-        required: true
-      },
-      {
-        field: "subscriptionId",
-        description: "The Azure subscription ID",
-        required: true,
-        scheme: "EnvVar"
-      },
-      {
-        field: "clientId",
-        description: "The Azure client/application ID",
-        scheme: "EnvVar"
-      },
-      {
-        field: "clientSecret",
-        description: "The Azure client/application secret",
-        scheme: "EnvVar"
-      }
-    ])
+    rows = rows.concat(azureFields)
   } else if (connection == "openai") {
     rows = rows.concat([
       {
@@ -618,6 +622,33 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
   } else if (connection == "prometheus") {
     // Prometheus extends HTTP connection, so HTTP fields will be included
     rows = rows.concat([])
+  } else if (connection == "aws_kms") {
+    rows = rows.concat(awsFields.concat([
+      {
+        field: "keyID",
+        description: "KMS key ID, alias, or ARN. Can include region specification for aliases (e.g., alias/ExampleAlias?region=us-east-1)",
+        scheme: "string",
+        required: true
+      }
+    ]))
+  } else if (connection == "gcp_kms") {
+    rows = rows.concat(gcpFields.concat([
+      {
+        field: "keyID",
+        description: "KMS key resource path in the format: projects/PROJECT/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY",
+        scheme: "string",
+        required: true
+      }
+    ]))
+  } else if (connection == "azure_key_vault") {
+    rows = rows.concat(azureFields.concat([
+      {
+        field: "keyID",
+        description: "Key Vault key URL in the format: https://vault-name.vault.azure.net/keys/key-name",
+        scheme: "string",
+        required: true
+      }
+    ]))
   }
 
   rows = rows.concat(common.filter(row => row.required)).filter(i => i.field != null)
