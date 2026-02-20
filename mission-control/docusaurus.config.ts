@@ -329,23 +329,20 @@ export default async function createConfigAsync() {
           },
           items: [
             {
-              to: '/docs',
+              type: 'docSidebar',
               sidebarId: 'overview',
-              activeBasePath: '/docs',
               position: 'left',
               label: 'Overview'
             },
             {
-              to: '/docs/integrations',
-              activeBasePath: '/docs/integrations',
-              // sidebarId: 'integrationsSidebar',
+              type: 'docSidebar',
+              sidebarId: 'integrations',
               position: 'left',
               label: 'Integrations'
             },
             {
-              to: '/docs/guide',
-              activeBasePath: '/docs/guide',
-              // activeBasePath: '/config-db',
+              type: 'docSidebar',
+              sidebarId: 'guide',
               label: 'User Guide',
               position: 'left'
             },
