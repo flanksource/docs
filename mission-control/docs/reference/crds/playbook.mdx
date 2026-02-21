@@ -1,0 +1,325 @@
+---
+title: Playbook CRD
+---
+
+# Playbook
+
+The `Playbook` CRD allows you to define automated workflows and runbooks for handling operational tasks, incidents, and maintenance activities.
+
+## Definition
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: example-playbook
+spec:
+  # Human-readable name of the playbook
+  name: Database Failover
+
+  # Description of the playbook
+  description: Automated process for database failover
+
+  # Playbook execution steps
+  steps:
+    - name: Check Database Status
+      check:
+        type: sql
+        connection: primary-db
+        query: SELECT pg_is_in_recovery();
+
+    - name: Trigger Failover
+      if: $.steps[0].output == false
+      exec:
+        connection: primary-db
+        command: pg_ctl promote
+```
+
+## Schema
+
+The `Playbook` resource supports the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.name` | Human-readable name of the playbook |
+| `spec.description` | Description of the playbook's purpose |
+| `spec.icon` | Icon to represent the playbook |
+| `spec.labels` | Labels to categorize the playbook |
+| `spec.type` | Type classification of the playbook |
+| `spec.schedule` | Schedule for automatic execution (cron format) |
+| `spec.timeout` | Maximum execution time for the playbook |
+| `spec.parameters` | Input parameters for the playbook |
+| `spec.steps` | Execution steps of the playbook |
+| `spec.steps[].name` | Name of the step |
+| `spec.steps[].description` | Description of the step |
+| `spec.steps[].if` | Conditional expression for step execution |
+| `spec.steps[].exec` | Command execution action |
+| `spec.steps[].http` | HTTP request action |
+| `spec.steps[].approval` | Human approval action |
+| `spec.steps[].kubernetes` | Kubernetes resource action |
+| `spec.steps[].check` | Health check action |
+| `spec.steps[].alert` | Alert creation/update action |
+| `spec.steps[].script` | Script execution action |
+| `spec.steps[].playbook` | Nested playbook execution |
+| `spec.steps[].template` | Template rendering action |
+| `spec.steps[].inputs` | User input collection |
+| `spec.steps[].log` | Logging action |
+| `spec.steps[].wait` | Wait for a condition |
+| `spec.steps[].timeout` | Step-specific timeout |
+| `spec.steps[].retries` | Retry configuration |
+| `spec.onSuccess` | Actions to execute on successful completion |
+| `spec.onFailure` | Actions to execute on failure |
+
+## Examples
+
+### Incident Response Playbook
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: api-incident-response
+spec:
+  name: API Service Incident Response
+  description: Automated steps for diagnosing and recovering API service
+  icon: medkit
+  type: incident
+  steps:
+    - name: Check API Status
+      check:
+        type: http
+        url: https://api.example.com/health
+        timeout: 5s
+        
+    - name: Restart API Service
+      if: $.steps[0].status == "failed"
+      kubernetes:
+        action: restart
+        resource: deployment
+        name: api-service
+        namespace: production
+        
+    - name: Verify Recovery
+      wait: 30s
+      check:
+        type: http
+        url: https://api.example.com/health
+        timeout: 5s
+        
+    - name: Escalate to On-Call
+      if: $.steps[2].status == "failed"
+      alert:
+        severity: critical
+        title: "API Service Failed to Recover"
+        description: "Automatic recovery of the API service failed after restart"
+        assignee: "oncall@example.com"
+```
+
+### Database Maintenance Playbook
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: db-maintenance
+spec:
+  name: Database Maintenance
+  description: Scheduled database maintenance tasks
+  type: maintenance
+  schedule: "0 1 * * 0"  # Every Sunday at 1 AM
+  parameters:
+    - name: backup
+      type: boolean
+      default: true
+      description: Whether to perform a backup before maintenance
+  steps:
+    - name: Pre-maintenance Backup
+      if: $.parameters.backup == true
+      exec:
+        connection: database-server
+        command: pg_dump -Fc -f /backups/pre_maintenance_$(date +%Y%m%d).dump mydatabase
+        
+    - name: Notify Maintenance Start
+      notification:
+        channels:
+          - slack-ops
+        message: "Database maintenance starting"
+        
+    - name: Set Read-Only Mode
+      exec:
+        connection: database-server
+        command: psql -c "ALTER SYSTEM SET default_transaction_read_only = on;"
+        
+    - name: Run VACUUM ANALYZE
+      exec:
+        connection: database-server
+        command: psql -c "VACUUM ANALYZE;"
+        
+    - name: Run Index Maintenance
+      exec:
+        connection: database-server
+        command: psql -f /scripts/reindex.sql
+        
+    - name: Restore Read-Write Mode
+      exec:
+        connection: database-server
+        command: psql -c "ALTER SYSTEM SET default_transaction_read_only = off;"
+        
+    - name: Reload Configuration
+      exec:
+        connection: database-server
+        command: psql -c "SELECT pg_reload_conf();"
+        
+    - name: Verify Database Health
+      check:
+        type: sql
+        connection: database
+        query: "SELECT 1;"
+  onSuccess:
+    notification:
+      channels:
+        - slack-ops
+      message: "Database maintenance completed successfully"
+  onFailure:
+    notification:
+      channels:
+        - slack-ops
+        - pagerduty-dba
+      message: "Database maintenance failed: {{.error}}"
+```
+
+### Interactive Approval Workflow
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: production-deployment
+spec:
+  name: Production Deployment
+  description: Workflow for deploying to production with approvals
+  type: deployment
+  parameters:
+    - name: version
+      type: string
+      required: true
+      description: Version to deploy
+  steps:
+    - name: Deploy to Staging
+      kubernetes:
+        action: apply
+        manifest: |
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: app-staging
+            namespace: staging
+          spec:
+            template:
+              spec:
+                containers:
+                - name: app
+                  image: myapp:{{$.parameters.version}}
+    
+    - name: Run Integration Tests
+      exec:
+        connection: ci-server
+        command: run-tests --env staging
+        
+    - name: Request Production Approval
+      approval:
+        title: "Approve Production Deployment"
+        description: "Version {{$.parameters.version}} is ready for production. Tests passed in staging."
+        approvers:
+          - team-leads
+          - operations
+        requiredApprovals: 2
+        timeout: 24h
+        
+    - name: Deploy to Production
+      if: $.steps[2].approved == true
+      kubernetes:
+        action: apply
+        manifest: |
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: app
+            namespace: production
+          spec:
+            template:
+              spec:
+                containers:
+                - name: app
+                  image: myapp:{{$.parameters.version}}
+                  
+    - name: Verify Production
+      wait: 2m
+      check:
+        type: http
+        url: https://app.example.com/health
+        timeout: 10s
+```
+
+### Complex Conditional Workflow
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: scaling-workflow
+spec:
+  name: Auto-scaling Workflow
+  description: Dynamic scaling based on system metrics
+  type: operations
+  steps:
+    - name: Check CPU Usage
+      check:
+        type: prometheus
+        connection: monitoring
+        query: avg(container_cpu_usage_seconds_total{namespace="production"})
+        
+    - name: Check Memory Usage
+      check:
+        type: prometheus
+        connection: monitoring
+        query: avg(container_memory_usage_bytes{namespace="production"})
+        
+    - name: Scale Up Workers
+      if: >
+        $.steps[0].output > 0.8 || 
+        $.steps[1].output > 0.85
+      kubernetes:
+        action: scale
+        resource: deployment
+        name: workers
+        namespace: production
+        replicas: 10
+        
+    - name: Scale Down Workers
+      if: >
+        $.steps[0].output < 0.3 && 
+        $.steps[1].output < 0.4
+      kubernetes:
+        action: scale
+        resource: deployment
+        name: workers
+        namespace: production
+        replicas: 3
+        
+    - name: Notify Operations
+      if: $.steps[2].status == "success" || $.steps[3].status == "success"
+      notification:
+        channels:
+          - slack-ops
+        message: >
+          Automatic scaling applied: 
+          {{if eq $.steps[2].status "success"}}Scaled UP to 10 replicas{{end}}
+          {{if eq $.steps[3].status "success"}}Scaled DOWN to 3 replicas{{end}}
+```
+
+## See Also
+
+- [Playbook Documentation](../playbooks/index.mdx)
+- [Scripting](../scripting/index.mdx)
+- [Incident Management](../../incidents/index.mdx)

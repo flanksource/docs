@@ -1,0 +1,183 @@
+---
+title: IncidentRule CRD
+---
+
+# IncidentRule
+
+The `IncidentRule` CRD allows you to define rules for automatically creating, updating, and managing incidents based on events and conditions in your infrastructure.
+
+## Definition
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: IncidentRule
+metadata:
+  name: example-incident-rule
+spec:
+  # Source of events to process
+  source:
+    type: canary
+    selector:
+      matchLabels:
+        app: frontend
+        
+  # Conditions that trigger the rule
+  condition:
+    status: unhealthy
+    duration: 10m
+    
+  # Incident creation settings
+  incident:
+    title: "Frontend Availability Issue"
+    severity: high
+    owner: platform-team
+    labels:
+      service: frontend
+      type: availability
+```
+
+## Schema
+
+The `IncidentRule` resource supports the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.source` | Source configuration for events |
+| `spec.source.type` | Type of event source (canary, component, alert, etc.) |
+| `spec.source.selector` | Kubernetes label selector for matching sources |
+| `spec.condition` | Conditions that trigger the rule |
+| `spec.condition.status` | Required status of the source (e.g., unhealthy) |
+| `spec.condition.duration` | Time duration condition must be true before triggering |
+| `spec.condition.count` | Number of occurrences required to trigger |
+| `spec.condition.message` | Message pattern to match |
+| `spec.condition.labels` | Labels that must be present on the source |
+| `spec.condition.expression` | CEL expression for complex conditions |
+| `spec.incident` | Incident configuration |
+| `spec.incident.title` | Title template for the incident |
+| `spec.incident.description` | Description template for the incident |
+| `spec.incident.severity` | Severity level (critical, high, medium, low) |
+| `spec.incident.type` | Type classification for the incident |
+| `spec.incident.owner` | Default owner for the incident |
+| `spec.incident.labels` | Labels to apply to the incident |
+| `spec.incident.components` | Components to associate with the incident |
+| `spec.incident.playbooks` | Playbooks to trigger when incident is created |
+| `spec.incident.responders` | Initial responders to assign |
+| `spec.jira` | JIRA integration settings |
+| `spec.pagerduty` | PagerDuty integration settings |
+| `spec.teams` | Microsoft Teams integration settings |
+| `spec.slack` | Slack integration settings |
+
+## Examples
+
+### Basic Canary Failure Rule
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: IncidentRule
+metadata:
+  name: api-availability
+spec:
+  source:
+    type: canary
+    selector:
+      matchLabels:
+        check: api-health
+  condition:
+    status: unhealthy
+    duration: 5m
+  incident:
+    title: "API Availability Issue"
+    severity: high
+    owner: api-team
+    labels:
+      service: api
+      type: availability
+```
+
+### Component Health Rule
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: IncidentRule
+metadata:
+  name: database-health
+spec:
+  source:
+    type: component
+    selector:
+      matchLabels:
+        type: database
+        tier: production
+  condition:
+    status: unhealthy
+    duration: 2m
+  incident:
+    title: "Database Health Issue - {{.component.name}}"
+    description: "The database component {{.component.name}} is reporting unhealthy status.\n\nLast error: {{.component.status.message}}"
+    severity: critical
+    components:
+      - "{{.component.id}}"
+    playbooks:
+      - database-recovery
+```
+
+### Alert Manager Integration
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: IncidentRule
+metadata:
+  name: prometheus-alerts
+spec:
+  source:
+    type: alertmanager
+    selector:
+      matchLabels:
+        severity: critical
+  condition:
+    status: firing
+    duration: 1m
+  incident:
+    title: "{{.alert.labels.alertname}}"
+    description: "{{.alert.annotations.description}}"
+    severity: "{{.alert.labels.severity}}"
+    labels:
+      source: prometheus
+  pagerduty:
+    integration: primary-pd-service
+    severity: critical
+  slack:
+    channel: "#incidents"
+    message: "Critical alert triggered: {{.alert.labels.alertname}}"
+```
+
+### Complex Condition with Expression
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: IncidentRule
+metadata:
+  name: advanced-rule
+spec:
+  source:
+    type: component
+  condition:
+    expression: |
+      source.status == "unhealthy" && 
+      (source.labels.tier == "production" || source.labels.criticality == "high") &&
+      duration("10m")
+  incident:
+    title: "Service Disruption - {{.component.name}}"
+    severity: high
+    type: availability
+    components:
+      - "{{.component.id}}"
+      - "{{range .component.dependencies}}{{.id}}{{end}}"
+```
+
+## See Also
+
+- [Incident Management](../../incidents/index.mdx)
+- [Canary CRD](./canary.mdx)
+- [Component CRD](./component.mdx)
+- [Playbook CRD](./playbook.mdx)
