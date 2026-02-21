@@ -7,6 +7,18 @@ sidebar_custom_props:
 
 After scraping we can choose to retain results on the basis of name, age, count and more.
 
+## Default Retention Periods
+
+When retention rules are not explicitly configured, config-db applies the following default retention periods:
+
+| Type            | Default Period | Description                                         |
+| --------------- | -------------- | --------------------------------------------------- |
+| Config Items    | 7 days         | Configuration items are retained for 7 days         |
+| Changes         | 60 days        | Change records are retained for 60 days             |
+| Config Analysis | 60 days        | Configuration analysis data is retained for 60 days |
+
+These defaults ensure that your database doesn't grow unbounded while maintaining a reasonable history of configuration changes and analysis.
+
 The retention rules are applied for each unique catalog item. If `changes` is specified with type `X` and count `20`, last 20 changes of `X` type would be kept for each catalog item
 
 | Field          | Description                                                        | Scheme                                     |
@@ -53,7 +65,7 @@ metadata:
   name: kubernetes-scraper
 spec:
   retention:
-  	//highlight-next-line
+    //highlight-next-line
     staleItemAge: 30m
   kubernetes:
     clusterName: local
