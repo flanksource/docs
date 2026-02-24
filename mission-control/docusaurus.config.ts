@@ -301,11 +301,9 @@ export default async function createConfigAsync() {
                 });
               },
             },
-
           },
 
           theme: {
-
             customCss: ['./src/css/out.css', './src/css/mission-control.css']
           }
         } satisfies Preset.Options

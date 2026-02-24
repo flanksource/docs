@@ -4,6 +4,7 @@ slug: canary-checker-v1.1.0
 authors: [moshe]
 tags: [release, canary-checker]
 hide_table_of_contents: false
+date: 2024-12-15
 ---
 
 <!--truncate-->
