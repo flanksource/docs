@@ -8,7 +8,7 @@ export default function BlogPostItems({
   component: BlogPostItemComponent = BlogPostItem,
 }) {
   return (
-    <div className='pt-10 container'>
+    <div className='pt-10 container text--center'>
       <h1>Flanksource Blog</h1>
       <Cards>
         {items.map(({ content: BlogPostContent }) => (
