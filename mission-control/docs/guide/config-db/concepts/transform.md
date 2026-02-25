@@ -11,20 +11,15 @@ Transformations allow you to modify scraped config items before they are saved, 
 - Masking sensitive data
 - Excluding duplicate changes or changes with a high rate
 
-| Field                       | Description                                                                | Scheme                                                                        |
-| --------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `transform.exclude`         | Remove fields from a scraped `config`                                      | [[]Exclude](#field-exclusions)                                                |
-| `transform.mask`            | Replace sensitive fields with a hash to enable change detection on secrets | [[]Mask](#masking)                                                            |
-| `transform.changes.exclude` | Ignore changes                                                             | [[]CEL](#exclusions) with [Change Context](/docs/reference/config-db/changes) |
-| `transform.changes.mapping` | Categorize changes                                                         | [Mapping](#mapping)                                                           |
-| `transform.expr`            |                                                                            | [CEL](/docs/reference/scripting/cel)                                          |
-| `transform.relationship`    | Create relationships between items                                         | [Relationships](./relationships)                                              |
+For full schema reference, see [Transformation Reference](/docs/reference/config-db/transformation).
 
 ## Config Items
 
 ### Field Exclusions
 
 Exclusions allow you to remove fields from the `config` of an item. This is useful when you want to remove sensitive or overly verbose from being recorded.
+
+See [Field Exclusions Schema](/docs/reference/config-db/transformation#field-exclusions) for the full schema.
 
 ```yaml title="kubernetes-exclude-superfluous-fields.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -43,14 +38,11 @@ spec:
        //highlight-end
 ```
 
-| Field      | Description                                                            | Scheme                                            | Required |
-| ---------- | ---------------------------------------------------------------------- | ------------------------------------------------- | -------- |
-| `jsonpath` | All matching elements will be removed from the `config`                | <CommonLink to="jsonpath">`jsonpath`</CommonLink> | `true`   |
-| `types`    | Only run exclusion rules for these config types, if empty apply to all | `[]string`                                        |          |
-
 ### Masking
 
 Masking replaces sensitive fields with a hash or static string. A hash can be used to determine if a field changed without revealing original values.
+
+See [Masking Schema](/docs/reference/config-db/transformation#masking) for the full schema.
 
 ```yaml title="file-mask-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -75,12 +67,6 @@ spec:
       paths:
         - fixtures/data/single-config.json
 ```
-
-| Field      | Description                                 | Scheme                                                                                                       |
-| ---------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `selector` | Filter which config items to apply masks on | <CommonLink to="cel">`CEL`</CommonLink> with [ScrapeResult](/docs/reference/config-db/scrape-result) context |
-| `jsonpath` | Values to mask                              | <CommonLink to="jsonpath">`JSONPath`</CommonLink>                                                            |
-| `value`    | The replacement value of matched elements   | `md5` or any static string e.g. `***`                                                                        |
 
 :::info
 Masks are applied in the order they are specified in the configuration file.
@@ -114,6 +100,8 @@ spec:
 
 When you encounter a diff change, unlike an event-based change, it can sometimes appear unclear. The summary of the change may not immediately indicate its purpose. For example, the change 'status.images' might not be self-explanatory. To clarify this, you can assign types to these diff changes using mapping.
 
+See [Change Mapping Schema](/docs/reference/config-db/transformation#change-mapping) for the full schema.
+
 ```yaml title="kubernetes-scraper.yaml"
 apiVersion: configs.flanksource.com/v1
 kind: ScrapeConfig
@@ -138,20 +126,11 @@ spec:
               //highlight-end
 ```
 
-| Field     | Description                                                                                            | Scheme                                                                                                        |
-| --------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| `filter`  | Selects changes to apply the mapping                                                                   | <CommonLink to="cel">CEL</CommonLink> with [Change Context](/docs/reference/config-db/changes)                |
-| `action`  | What action to take on the change, if `delete` then the corresponding config item is marked as deleted | `delete` or `ignore`                                                                                          |
-| `type`    | New change type                                                                                        | `string`                                                                                                      |
-| `summary` | New summary of the change                                                                              | <CommonLink to="gotemplate">Go Template</CommonLink> with [Change Context](/docs/reference/config-db/changes) |
-
 ## Scripting
 
 Scripting modifies the scraped configuration using CEL before saving it to the database. This process is beneficial for data normalization, default value population, and sensitive field masking.
 
-| Field  | Description             | Scheme                                                                                                       | Context                                                                               |
-| ------ | ----------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| `expr` | Transform a config item | <CommonLink to="cel">CEL</CommonLink> that returns [[]ScrapeResult](/docs/reference/config-db/scrape-result) | `config` `JSON`<br/>`result` [Scrape Result](/docs/reference/config-db/scrape-result) |
+See [Script Context](/docs/reference/config-db/transformation#script-context) for available variables and the [Transform Schema](/docs/reference/config-db/transformation#transform) for scripting options (`expr`, `gotemplate`, `jsonpath`, `javascript`).
 
 ```yaml title="file-scraper.yaml"
 apiVersion: configs.flanksource.com/v1

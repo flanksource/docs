@@ -5,7 +5,7 @@ sidebar_custom_props:
   icon: hugeicons:chart-relationship
 ---
 
-:::tip Integarations
+:::tip Integrations
 
 The integration [charts](/docs/integrations) include many common relationships for Argo, Flux, etc out of the box.
 
@@ -13,9 +13,11 @@ The integration [charts](/docs/integrations) include many common relationships f
 
 Relationships associate two different configs. They help in visualizing the connection of a config above and below in a hierarchy. Example: A kubernetes pod is linked to a Deployment and ReplicaSet and also to the persistent volumes.
 
+For full schema reference, see [Relationships Reference](/docs/reference/config-db/transformation#relationships).
+
 Relationships come in 2 types:
 
-**Hard Links** represent a physical relationship, e.g. A pod is always a child of namespace, hard links are created automatically by the relevant scraper or can be created by specifying `Parent Type` and `ID` in custom scrapers.
+**Hard Links** represent a physical relationship, e.g. A pod is always a child of namespace, hard links are created automatically by the relevant scraper or can be created by specifying `Parent Type` and `ID` in custom scrapers. Use the `parent` field to control whether matched configs become parents or children.
 
 **Soft Links** represent logical relationships and can have directionality. e.g. Node is related to a pod that runs on it, and a pod is related to an Persistent Volume that is attached the pod. Soft Links are created automatically by some scrapers e.g. Using `ownerRef` in kubernetes and `subnet-id` in AWS. Custom soft links can be created using a `relationship` transform:
 
@@ -51,34 +53,11 @@ You can see changes on the incoming relationships (and their parents) by choosin
 
 :::
 
-## Relationship
-
-| Field    | Description                                            | Scheme                                                                                               | Required |
-| -------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | -------- |
-| `filter` | Which config items to form relationships with          | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](/docs/reference/config-db/scrape-result) | `true`   |
-| `id`     | The ID or Alias (External ID) of the config to link to | [Lookup](#lookup)                                                                                    |          |
-| `name`   |                                                        | [Lookup](#lookup)                                                                                    |          |
-| `type`   | Config Type                                            | [Lookup](#lookup)                                                                                    |          |
-| `agent`  | agent of the config to link to                         | [Lookup](#lookup) that returns an [Agent](/docs/reference/types#agent)                               |          |
-| `labels` | Labels of the config to link to                        | `map[string]`[Lookup](#lookup)                                                                       |          |
-
-### Lookup
-
-RelationshipLookup offers different ways to specify a lookup value
-
-| Field   | Description                                   | Scheme                                                                                               | Variables                                                 |
-| ------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| `expr`  | An expression that returns a value to be used | <CommonLink to="cel">CEL</CommonLink> with [`ScrapeResult`](/docs/reference/config-db/scrape-result) | [`ScrapeResult`](/docs/reference/config-db/scrape-result) |
-| `value` | A static value to use in the lookup           | `string`                                                                                             |                                                           |
-| `label` | Get the value to use from an existing label   | `label name`                                                                                         |                                                           |
-
 ## Dynamic Linking
 
-Sometimes the logic for when to a form a relationship is complex, a CEL expression can be used to return a list of selectors dynamically.
+Sometimes the logic for when to form a relationship is complex. A CEL expression can be used to return a list of [ResourceSelectors](/docs/reference/resource-selector) dynamically.
 
-| Field  | Description                                                                                 | Scheme                                | Variables                                                 |
-| ------ | ------------------------------------------------------------------------------------------- | ------------------------------------- | --------------------------------------------------------- |
-| `expr` | An expression that returns a list of [ResourceSelectors](/docs/reference/resource-selector) | <CommonLink to="cel">CEL</CommonLink> | [`ScrapeResult`](/docs/reference/config-db/scrape-result) |
+See [Dynamic Relationships](/docs/reference/config-db/transformation#dynamic-relationships) for the schema.
 
 ```yaml title=link-pvc-to-pod.yaml
 apiVersion: configs.flanksource.com/v1
