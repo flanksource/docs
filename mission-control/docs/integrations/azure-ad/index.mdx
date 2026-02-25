@@ -51,6 +51,43 @@ Users and groups are stored as **external users** and **external groups**, not a
 - **Groups -> Users**: Group membership is tracked through external user-group mappings.
 - **Enterprise Application -> Users/Groups**: App role assignments link users and groups to enterprise applications via config access records.
 
+### Data Flow
+
+```
+┌─────────────────┐
+│    Entra ID      │
+│  (MS Graph API)  │
+└────────┬─────────┘
+         │ Scraper
+         ▼
+┌──────────────────────────────────────────┐
+│          Mission Control Catalog          │
+│                                           │
+│  External Users ◄──── Group Memberships   │
+│  External Groups      (who belongs where) │
+│         │                                  │
+│         ▼                                  │
+│  Config Access ◄──── App Role Assignments  │
+│  (who can access      (from enterprise     │
+│   what app)            applications)       │
+│         │                                  │
+│         ▼                                  │
+│  Config Items: App Registrations,          │
+│  Enterprise Apps, Secrets, Certificates,   │
+│  Auth Method Policies                      │
+└────────────────────┬──────────────────────┘
+                     │ Application CRD
+                     ▼
+┌──────────────────────────────────────────┐
+│           Audit Report                    │
+│                                           │
+│  • Access Control: users + roles per app  │
+│  • Sign-in Logs: who accessed, when, how  │
+│  • Auth Methods: MFA/FIDO2 policies       │
+│  • Findings: expired secrets, compliance  │
+└───────────────────────────────────────────┘
+```
+
 ### App Role Assignments and Config Access
 
 When `appRoleAssignments` is configured, the scraper creates **config access records** linking users and groups to enterprise applications:
@@ -72,6 +109,10 @@ When `appRoleAssignments` is configured, the scraper creates **config access rec
 | `Policy.Read.All` | Authentication method policies (MFA, FIDO2, etc.) |
 
 See [Getting Started](./getting-started) for the full permissions table and setup walkthrough.
+
+:::tip
+After deploying, follow the [verification steps](./getting-started#verification) to confirm resources are being scraped correctly. For large tenants (10K+ users), see [Performance & Scheduling](./getting-started#performance--scheduling) for schedule recommendations and rate limit guidance.
+:::
 
 ---
 
