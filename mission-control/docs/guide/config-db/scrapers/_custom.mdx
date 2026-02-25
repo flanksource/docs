@@ -93,6 +93,220 @@ You can still access non-JSON content in scripts using `config.content`.
 
 The UI formats and renders XML appropriately.
 
+## Full Scraper Output Schema
+
+When you enable `full: true`, custom scrapers can return complex objects containing config data, changes, access logs, and external entities. This enables IAM scraping and compliance auditing.
+
+For transforming scraped configs before they are saved (field exclusions, masking, relationships, etc.), see the [Transformation Reference](/docs/reference/config-db/transformation).
+
+### Top-Level Fields
+
+With `full: true`, the scraper expects each item to have these top-level fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique identifier for the config item |
+| `config` | object | The actual configuration data to store |
+| `changes` | array | Change events (see [Changes](/docs/guide/config-db/concepts/changes#extracting-changes)) |
+| `access_logs` | array | Access log entries (see [Access Logs](/docs/guide/config-db/concepts/access-logs)) |
+| `config_access` | array | Access permissions linking users/groups/roles to configs |
+| `external_users` | array | User definitions from external identity systems |
+| `external_groups` | array | Group definitions from external systems |
+| `external_roles` | array | Role definitions from external systems |
+| `external_user_groups` | array | User-to-group membership mappings |
+
+### External User Schema
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Display name of the user",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Account identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "user_type",
+    description: "Type of user: `human`, `service`, or `system`",
+    scheme: "string"
+  },
+  {
+    field: "email",
+    description: "User's email address",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers used for alias resolution in `config_access`",
+    scheme: "[]string"
+  }
+]}/>
+
+### External Group Schema
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Group name",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Group identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "group_type",
+    description: "Type of group: `team`, `role`, `department`, or `security`",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers used for alias resolution in `config_access`",
+    scheme: "[]string"
+  }
+]}/>
+
+### External Role Schema
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Role name",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Role identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "role_type",
+    description: "Type of role: `builtin`, `custom`, `database`, or `application`",
+    scheme: "string"
+  },
+  {
+    field: "description",
+    description: "Human-readable description of the role's purpose",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers used for alias resolution in `config_access`",
+    scheme: "[]string"
+  }
+]}/>
+
+### Config Access Schema
+
+The `config_access` array links users, groups, and roles to specific config items using alias resolution.
+
+<Fields rows={[
+  {
+    field: "id",
+    description: "Unique identifier for this access record",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "external_config_id",
+    description: "Reference to the config item (contains `config_type` and `external_id`)",
+    scheme: "ExternalID",
+    required: true
+  },
+  {
+    field: "external_user_aliases",
+    description: "User aliases to resolve against `external_users[].aliases`",
+    scheme: "[]string"
+  },
+  {
+    field: "external_group_aliases",
+    description: "Group aliases to resolve against `external_groups[].aliases`",
+    scheme: "[]string"
+  },
+  {
+    field: "external_role_aliases",
+    description: "Role aliases to resolve against `external_roles[].aliases`",
+    scheme: "[]string"
+  }
+]}/>
+
+### Alias Resolution
+
+When processing `config_access` entries, the scraper resolves aliases to actual entity IDs:
+
+1. `external_user_aliases` are matched against the `aliases` field of each `external_users` entry
+2. `external_group_aliases` are matched against the `aliases` field of each `external_groups` entry
+3. `external_role_aliases` are matched against the `aliases` field of each `external_roles` entry
+
+This allows you to reference entities by any of their known identifiers (email, username, account ID, etc.) rather than requiring exact ID matches.
+
+### Complete Example
+
+```json title="config-with-access.json"
+{
+  "id": "test-org-role-access",
+  "config": {
+    "name": "Test Organization",
+    "type": "organization"
+  },
+  "external_users": [
+    {
+      "name": "Charlie Brown",
+      "account_id": "org-789",
+      "user_type": "human",
+      "email": "charlie@example.com",
+      "aliases": ["charlie-brown", "charlie@example.com"]
+    }
+  ],
+  "external_roles": [
+    {
+      "name": "Editor",
+      "account_id": "org-789",
+      "role_type": "custom",
+      "description": "Edit access",
+      "aliases": ["editor-role", "edit-access"]
+    }
+  ],
+  "external_groups": [
+    {
+      "name": "Editors Group",
+      "account_id": "org-789",
+      "group_type": "team",
+      "aliases": ["editors-group", "edit-team"]
+    }
+  ],
+  "config_access": [
+    {
+      "id": "role-access-001",
+      "external_config_id": {
+        "config_type": "Organization",
+        "external_id": "test-org-role-access"
+      },
+      "external_user_aliases": ["charlie-brown"],
+      "external_role_aliases": ["editor-role"],
+      "external_group_aliases": ["editors-group"]
+    }
+  ],
+  "changes": [
+    {
+      "change_type": "permission_grant",
+      "summary": "Charlie granted editor access",
+      "created_at": "2025-01-08T10:00:00Z"
+    }
+  ]
+}
+```
+
 ## Extracting Changes & Access Logs
 
 When you enable `full: true`, custom scrapers can ingest [changes](/docs/guide/config-db/concepts/changes#extracting-changes) and [access logs](/docs/guide/config-db/concepts/access-logs) from external systems by separating the config data from change events in your source.

@@ -1,0 +1,804 @@
+---
+title: Audit & Compliance Reporting
+sidebar_position: 6
+sidebar_custom_props:
+  icon: mdi:shield-check
+---
+
+Mission Control provides the building blocks for audit-ready infrastructure reporting: catalog scrapers track who has access to what, health checks verify backups are running, change tracking records every modification, and views pull it all together into dashboards.
+
+This guide walks through setting up each audit area end-to-end.
+
+## Application & Config Access
+
+Track who has access to which resources, their roles, group memberships, and access history.
+
+### AWS IAM
+
+Scrape IAM users, roles, and policies to maintain a complete picture of AWS access:
+
+```yaml title="aws-iam-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-iam-audit
+spec:
+  schedule: "@every 6h"
+  full: true
+  aws:
+    - connection: connection://aws/prod
+      compliance: true
+      include:
+        - IAMUser
+        - IAMRole
+        - IAMPolicy
+        - IAMGroup
+```
+
+With `compliance: true`, the scraper also pulls AWS compliance metadata from Trusted Advisor and Security Hub.
+
+### Kubernetes RBAC
+
+Scrape cluster roles, role bindings, and service accounts to audit Kubernetes access:
+
+```yaml title="k8s-rbac-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: k8s-rbac-audit
+spec:
+  schedule: "@every 1h"
+  kubernetes:
+    - clusterName: production
+      watch:
+        - apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRole
+        - apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRoleBinding
+        - apiVersion: rbac.authorization.k8s.io/v1
+          kind: Role
+        - apiVersion: rbac.authorization.k8s.io/v1
+          kind: RoleBinding
+        - apiVersion: v1
+          kind: ServiceAccount
+```
+
+### Database Users & Roles
+
+Scrape PostgreSQL roles, privileges, and connection logs using a SQL scraper:
+
+```yaml title="postgres-access-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-access-audit
+spec:
+  schedule: "@every 6h"
+  full: true
+  sql:
+    - connection: connection://postgres/prod
+      type: Postgres::Role
+      id: $.rolname
+      name: $.rolname
+      items: |
+        SELECT
+          rolname,
+          rolsuper,
+          rolinherit,
+          rolcreaterole,
+          rolcreatedb,
+          rolcanlogin,
+          rolreplication,
+          rolvaliduntil,
+          rolconnlimit
+        FROM pg_roles
+        ORDER BY rolname
+```
+
+### Access Log Scraping
+
+When using [custom scrapers](/docs/guide/config-db/scrapers/_custom) with `full: true`, you can capture access logs alongside config data. Each config item can include an `access_logs` field:
+
+```json title="example-access-data.json"
+{
+  "id": "app-prod-001",
+  "config": {
+    "name": "production-api",
+    "type": "application"
+  },
+  "external_users": [
+    {
+      "name": "Jane Smith",
+      "account_id": "org-123",
+      "user_type": "human",
+      "email": "jane@example.com"
+    }
+  ],
+  "config_access": [
+    {
+      "id": "access-001",
+      "external_config_id": {
+        "config_type": "Application",
+        "external_id": "app-prod-001"
+      },
+      "external_user_aliases": ["jane@example.com"],
+      "external_role_aliases": ["admin"]
+    }
+  ],
+  "access_logs": [
+    {
+      "external_user_id": "jane@example.com",
+      "created_at": "2025-01-15T10:30:00Z",
+      "mfa": true,
+      "properties": {
+        "ip_address": "10.0.1.50",
+        "client": "browser"
+      }
+    }
+  ]
+}
+```
+
+See [Access Logs](/docs/guide/config-db/concepts/access-logs) for schema details and [Config Access Reference](/docs/reference/config-db/config_access) for the full field reference.
+
+### Access Summary View
+
+Create a dashboard showing access across your infrastructure:
+
+```yaml title="access-audit-view.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: View
+metadata:
+  name: access-audit
+spec:
+  display:
+    title: Access Audit
+    icon: mdi:account-lock
+    sidebar: true
+  columns:
+    - name: id
+      type: string
+      primaryKey: true
+      hidden: true
+    - name: name
+      type: config_item
+      description: The config item name
+    - name: user_count
+      type: string
+      description: Number of human users with access
+    - name: service_account_count
+      type: string
+      description: Number of service accounts with access
+    - name: last_reviewed
+      type: datetime
+      description: When access was last reviewed
+  queries:
+    access_summary:
+      columns:
+        id: string
+        name: string
+        user_count: string
+        service_account_count: string
+        last_reviewed: datetime
+      sql:
+        connection: connection://mc/mission-control
+        query: |
+          SELECT
+            ci.id,
+            ci.name,
+            COUNT(DISTINCT CASE WHEN eu.user_type = 'human' THEN eu.id END)::text as user_count,
+            COUNT(DISTINCT CASE WHEN eu.user_type = 'service' THEN eu.id END)::text as service_account_count,
+            MAX(ca.last_reviewed_at) as last_reviewed
+          FROM config_items ci
+          LEFT JOIN config_access ca ON ca.config_id = ci.id
+          LEFT JOIN external_users eu ON eu.id = ca.external_user_id
+          WHERE ci.deleted_at IS NULL
+          GROUP BY ci.id, ci.name
+          HAVING COUNT(ca.id) > 0
+          ORDER BY COUNT(DISTINCT CASE WHEN eu.user_type = 'human' THEN eu.id END) DESC
+```
+
+---
+
+## Backup Monitoring
+
+Monitor backup health, track where backups are stored, and verify restore capability.
+
+### Backup Health Checks
+
+Create canary checks that verify backups are completing on schedule:
+
+```yaml title="backup-health-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: rds-backup-check
+spec:
+  schedule: "@every 1h"
+  awsConfigRule:
+    - name: rds-backup-verification
+      connection: connection://aws/prod
+      rules:
+        - "RDS_BACKUP_PLAN_ENABLED"
+      complianceTypes:
+        - NON_COMPLIANT
+```
+
+For custom backup systems, use a SQL check to verify the last backup timestamp:
+
+```yaml title="custom-backup-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: database-backup-check
+spec:
+  schedule: "@every 1h"
+  postgres:
+    - name: postgres-backup-freshness
+      connection: connection://postgres/prod
+      query: |
+        SELECT
+          EXTRACT(EPOCH FROM (NOW() - MAX(last_archived_time))) as age_seconds
+        FROM pg_stat_archiver
+      results: 1
+      test:
+        expr: results[0].age_seconds < 86400
+      display:
+        expr: |
+          results[0].age_seconds < 86400
+            ? "Last backup " + duration(int(results[0].age_seconds) * 1000000000) + " ago"
+            : "STALE: Last backup " + duration(int(results[0].age_seconds) * 1000000000) + " ago"
+```
+
+### Backup Location & Region Tracking
+
+Scrape backup configurations to track where backups are stored:
+
+```yaml title="backup-location-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-backup-locations
+spec:
+  schedule: "@every 6h"
+  aws:
+    - connection: connection://aws/prod
+      include:
+        - RDSInstance
+        - S3Bucket
+      transform:
+        expr: |
+          config.has("DBInstanceIdentifier") ?
+          config + {
+            'backup_location': config.get("BackupTarget", ""),
+            'backup_region': config.get("AvailabilityZone", "").split("").slice(0, -1).join(""),
+            'backup_retention_days': config.get("BackupRetentionPeriod", 0),
+            'multi_az': config.get("MultiAZ", false)
+          } : config
+```
+
+### Backup Events from Changes
+
+Track backup-related events by mapping change types in your scraper:
+
+```yaml title="backup-change-tracking.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-with-backup-events
+spec:
+  schedule: "@every 1h"
+  aws:
+    - connection: connection://aws/prod
+      cloudtrail:
+        exclude:
+          - DescribeInstances
+          - GetObject
+      include:
+        - RDSInstance
+        - S3Bucket
+      transform:
+        changes:
+          mapping:
+            - filter: >
+                change.change_type == 'CloudTrail' &&
+                change.summary.contains("CreateDBSnapshot")
+              type: BackupCreated
+            - filter: >
+                change.change_type == 'CloudTrail' &&
+                change.summary.contains("DeleteDBSnapshot")
+              type: BackupDeleted
+            - filter: >
+                change.change_type == 'CloudTrail' &&
+                change.summary.contains("RestoreDBInstanceFromDBSnapshot")
+              type: BackupRestored
+```
+
+### Backup Restore Testing
+
+Use a playbook to periodically test that backups can be restored:
+
+```yaml title="backup-restore-test-playbook.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: test-backup-restore
+spec:
+  title: Test Backup Restore
+  icon: mdi:backup-restore
+  description: Verify that the latest backup can be restored successfully
+  on:
+    schedule: "@every 24h"
+  actions:
+    - name: Restore snapshot to test instance
+      exec:
+        script: |
+          LATEST_SNAPSHOT=$(aws rds describe-db-snapshots \
+            --db-instance-identifier production-db \
+            --query 'sort_by(DBSnapshots, &SnapshotCreateTime)[-1].DBSnapshotIdentifier' \
+            --output text)
+
+          aws rds restore-db-instance-from-db-snapshot \
+            --db-instance-identifier backup-test-restore \
+            --db-snapshot-identifier "$LATEST_SNAPSHOT" \
+            --db-instance-class db.t3.micro \
+            --no-multi-az
+
+          aws rds wait db-instance-available \
+            --db-instance-identifier backup-test-restore
+
+          echo "Restore successful: $LATEST_SNAPSHOT"
+      timeout: 30m
+    - name: Verify restored data
+      exec:
+        script: |
+          ENDPOINT=$(aws rds describe-db-instances \
+            --db-instance-identifier backup-test-restore \
+            --query 'DBInstances[0].Endpoint.Address' \
+            --output text)
+
+          psql "host=$ENDPOINT dbname=production user=readonly" \
+            -c "SELECT COUNT(*) FROM information_schema.tables"
+      timeout: 5m
+    - name: Cleanup test instance
+      exec:
+        script: |
+          aws rds delete-db-instance \
+            --db-instance-identifier backup-test-restore \
+            --skip-final-snapshot
+      timeout: 10m
+```
+
+### Backup Status View
+
+```yaml title="backup-status-view.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: View
+metadata:
+  name: backup-status
+spec:
+  display:
+    title: Backup Status
+    icon: mdi:backup-restore
+    sidebar: true
+  columns:
+    - name: id
+      type: string
+      primaryKey: true
+      hidden: true
+    - name: name
+      type: config_item
+      description: The resource name
+    - name: health
+      type: health
+      description: Backup health status
+    - name: backup_region
+      type: string
+      description: Region where backups are stored
+    - name: backup_retention_days
+      type: string
+      description: Backup retention in days
+    - name: last_backup
+      type: datetime
+      description: Most recent backup timestamp
+  queries:
+    backup_summary:
+      columns:
+        id: string
+        name: string
+        health: string
+        backup_region: string
+        backup_retention_days: string
+        last_backup: datetime
+      sql:
+        connection: connection://mc/mission-control
+        query: |
+          SELECT
+            ci.id,
+            ci.name,
+            ci.health,
+            ci.config->>'backup_region' as backup_region,
+            ci.config->>'backup_retention_days' as backup_retention_days,
+            (
+              SELECT MAX(cc.created_at)
+              FROM config_changes cc
+              WHERE cc.config_id = ci.id
+              AND cc.change_type IN ('BackupCreated', 'CreateDBSnapshot')
+            ) as last_backup
+          FROM config_items ci
+          WHERE ci.type IN ('AWS::RDS::DBInstance', 'AWS::S3::Bucket')
+          AND ci.deleted_at IS NULL
+          ORDER BY last_backup ASC NULLS FIRST
+```
+
+---
+
+## Change Tracking & Drift
+
+Mission Control automatically tracks changes to every scraped config item. Use this for audit trails and drift detection.
+
+### How Changes Are Captured
+
+Changes are recorded in two ways:
+
+- **Diff changes**: Mission Control compares each scrape result with the previous version and records the diff automatically.
+- **Event-based changes**: External events (CloudTrail, Kubernetes events) are ingested as named change types.
+
+See [Changes](/docs/guide/config-db/concepts/changes) for details.
+
+### AWS CloudTrail Integration
+
+Track AWS API calls as config changes:
+
+```yaml title="aws-cloudtrail-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-audit-trail
+spec:
+  schedule: "@every 30m"
+  aws:
+    - connection: connection://aws/prod
+      cloudtrail:
+        maxAge: 7d
+        exclude:
+          - DescribeInstances
+          - DescribeVolumes
+          - GetObject
+          - ListBuckets
+      include:
+        - EC2Instance
+        - RDSInstance
+        - IAMUser
+        - IAMRole
+        - SecurityGroup
+```
+
+### Kubernetes Event Tracking
+
+Kubernetes events are captured automatically by the Kubernetes scraper. Ensure `event` handling is enabled:
+
+```yaml title="k8s-change-tracking.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: k8s-change-audit
+spec:
+  schedule: "@every 15m"
+  kubernetes:
+    - clusterName: production
+      event:
+        exclusions:
+          reasons:
+            - SuccessfulCreate
+            - Pulling
+            - Pulled
+            - Started
+            - Created
+        severityKeywords:
+          error:
+            - failed
+            - error
+          warn:
+            - backoff
+            - unhealthy
+            - oom
+```
+
+### Change Audit View
+
+```yaml title="change-audit-view.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: View
+metadata:
+  name: change-audit
+spec:
+  display:
+    title: Change Audit Trail
+    icon: octicon:diff-16
+    sidebar: true
+  columns:
+    - name: id
+      type: string
+      primaryKey: true
+      hidden: true
+    - name: name
+      type: config_item
+      description: The resource that changed
+    - name: change_type
+      type: string
+      description: Type of change
+    - name: summary
+      type: string
+      description: Change summary
+    - name: created_by
+      type: string
+      description: Who made the change
+    - name: created_at
+      type: datetime
+      description: When the change occurred
+  queries:
+    recent_changes:
+      columns:
+        id: string
+        name: string
+        change_type: string
+        summary: string
+        created_by: string
+        created_at: datetime
+      sql:
+        connection: connection://mc/mission-control
+        query: |
+          SELECT
+            cc.id::text,
+            ci.name,
+            cc.change_type,
+            cc.summary,
+            cc.created_by,
+            cc.created_at
+          FROM config_changes cc
+          JOIN config_items ci ON ci.id = cc.config_id
+          WHERE ci.deleted_at IS NULL
+          AND cc.created_at > NOW() - INTERVAL '30 days'
+          ORDER BY cc.created_at DESC
+          LIMIT 500
+```
+
+---
+
+## Infrastructure Inventory
+
+Maintain a complete catalog of all infrastructure resources for audit purposes.
+
+### AWS Infrastructure
+
+```yaml title="aws-inventory-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-inventory
+spec:
+  schedule: "@every 1h"
+  aws:
+    - connection: connection://aws/prod
+      compliance: true
+      cloudtrail:
+        maxAge: 7d
+      include:
+        - EC2Instance
+        - RDSInstance
+        - S3Bucket
+        - SecurityGroup
+        - Subnet
+        - VPC
+        - EBSVolume
+        - ELB
+        - IAMUser
+        - IAMRole
+        - IAMPolicy
+        - Lambda
+```
+
+### Kubernetes Inventory
+
+```yaml title="k8s-inventory-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: k8s-inventory
+spec:
+  schedule: "@every 15m"
+  kubernetes:
+    - clusterName: production
+      watch:
+        - apiVersion: apps/v1
+          kind: Deployment
+        - apiVersion: apps/v1
+          kind: StatefulSet
+        - apiVersion: apps/v1
+          kind: DaemonSet
+        - apiVersion: v1
+          kind: Service
+        - apiVersion: v1
+          kind: ConfigMap
+        - apiVersion: v1
+          kind: Secret
+        - apiVersion: networking.k8s.io/v1
+          kind: Ingress
+        - apiVersion: networking.k8s.io/v1
+          kind: NetworkPolicy
+        - apiVersion: v1
+          kind: PersistentVolumeClaim
+```
+
+### Database Inventory
+
+```yaml title="postgres-inventory-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-inventory
+spec:
+  schedule: "@every 6h"
+  sql:
+    - connection: connection://postgres/prod
+      type: Postgres::Database
+      id: $.datname
+      name: $.datname
+      items: |
+        SELECT
+          datname,
+          pg_database_size(datname) as size_bytes,
+          datcollate as collation,
+          datconnlimit as connection_limit,
+          has_database_privilege(datname, 'CONNECT') as connectable
+        FROM pg_database
+        WHERE datistemplate = false
+        ORDER BY datname
+```
+
+### Infrastructure Inventory View
+
+```yaml title="inventory-view.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: View
+metadata:
+  name: infrastructure-inventory
+spec:
+  display:
+    title: Infrastructure Inventory
+    icon: mdi:server
+    sidebar: true
+  columns:
+    - name: id
+      type: string
+      primaryKey: true
+      hidden: true
+    - name: name
+      type: config_item
+      description: The resource name
+    - name: type
+      type: string
+      description: Resource type
+      filter:
+        type: multiselect
+    - name: health
+      type: health
+      description: Current health status
+      filter:
+        type: multiselect
+    - name: status
+      type: status
+      description: Current status
+    - name: updated_at
+      type: datetime
+      description: Last change timestamp
+    - name: created_at
+      type: datetime
+      description: When the resource was first seen
+  queries:
+    all_resources:
+      configs:
+        types:
+          - AWS::*
+          - Kubernetes::*
+          - Postgres::*
+```
+
+---
+
+## Audit Notifications
+
+Configure alerts for audit-relevant events so issues are caught immediately.
+
+### Failed Backup Alert
+
+```yaml title="backup-failure-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: backup-failure-alert
+spec:
+  events:
+    - config.unhealthy
+  filter: config.type == 'AWS::RDS::DBInstance'
+  to:
+    connection: connection://slack/ops
+  title: |
+    Backup failure: {{.config.name}}
+  template: |
+    Backup check failed for **{{.config.name}}** ({{.config.type}}).
+
+    Status: {{.config.status}}
+
+    [View Resource]({{.permalink}})
+```
+
+### Critical Config Change Alert
+
+```yaml title="critical-change-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: critical-config-change
+spec:
+  events:
+    - config.changed
+  filter: >
+    config.type in [
+      'AWS::IAM::Role',
+      'AWS::IAM::Policy',
+      'AWS::EC2::SecurityGroup',
+      'Kubernetes::ClusterRole',
+      'Kubernetes::ClusterRoleBinding'
+    ]
+  to:
+    connection: connection://slack/security
+  title: |
+    Security-sensitive change: {{.config.name}}
+  template: |
+    A security-sensitive configuration was modified:
+
+    **Resource**: {{.config.name}} ({{.config.type}})
+    **State**: {{.new_state}}
+
+    [View Resource]({{.permalink}})
+```
+
+### Access Without MFA Alert
+
+```yaml title="mfa-alert-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: access-without-mfa
+spec:
+  events:
+    - config.changed
+  filter: config.type.contains('production')
+  to:
+    connection: connection://slack/security
+  title: |
+    Config change on production: {{.config.name}}
+  template: |
+    A production resource was modified:
+
+    **Resource**: {{.config.name}} ({{.config.type}})
+
+    Review access logs for this resource to verify MFA compliance.
+
+    [View Resource]({{.permalink}})
+```
+
+---
+
+## Related
+
+- [Access Logs](/docs/guide/config-db/concepts/access-logs) - Access log scraping details
+- [Config Access Reference](/docs/reference/config-db/config_access) - Full access schema reference
+- [Changes](/docs/guide/config-db/concepts/changes) - How config changes are tracked
+- [AWS Scraper](/docs/guide/config-db/scrapers/aws) - AWS scraper configuration
+- [Kubernetes Scraper](/docs/guide/config-db/scrapers/kubernetes) - Kubernetes scraper configuration
+- [Views](/docs/guide/views/) - Building dashboards and views
+- [Notifications](/docs/guide/notifications/) - Notification configuration
+- [Playbooks](/docs/guide/playbooks/) - Automation and runbooks

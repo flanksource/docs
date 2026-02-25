@@ -122,9 +122,176 @@ Access logs reference external users and groups that are also scraped from your 
 - **Group membership**: Understand access patterns by team or role
 - **Access reviews**: Audit who has access to what resources
 
-See the [SQL scraper](/docs/guide/config-db/scrapers/sql) for examples of scraping users, groups, and roles alongside access logs.
+### External User Schema
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Display name of the user",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Account identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "user_type",
+    description: "Type of user: `human`, `service`, or `system`",
+    scheme: "string"
+  },
+  {
+    field: "email",
+    description: "User's email address",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers for alias resolution",
+    scheme: "[]string"
+  }
+]}/>
+
+### External Group Schema
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Group name",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Group identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "group_type",
+    description: "Type of group: `team`, `role`, `department`, or `security`",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers for alias resolution",
+    scheme: "[]string"
+  }
+]}/>
+
+### External Role Schema
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Role name",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Role identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "role_type",
+    description: "Type of role: `builtin`, `custom`, `database`, or `application`",
+    scheme: "string"
+  },
+  {
+    field: "description",
+    description: "Human-readable description of the role's purpose",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers for alias resolution",
+    scheme: "[]string"
+  }
+]}/>
+
+## Use Cases
+
+### Compliance Auditing
+
+Access logs provide the audit trail required for compliance frameworks:
+
+- **SOC 2**: Demonstrate access controls and monitoring
+- **HIPAA**: Track access to systems containing PHI
+- **PCI-DSS**: Monitor access to cardholder data environments
+- **ISO 27001**: Evidence for access management controls
+
+### Security Monitoring
+
+Detect suspicious access patterns:
+
+- Access from unusual IP addresses or locations
+- Access outside normal business hours
+- Multiple failed authentication attempts
+- Access to sensitive resources without MFA
+
+### Access Reviews
+
+Periodic permission audits become straightforward:
+
+- List all users with access to specific resources
+- Identify inactive accounts with active permissions
+- Verify group memberships align with job responsibilities
+- Track when access was last reviewed
+
+### IAM Scraping Example
+
+Scrape IAM configurations with full access tracking:
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: iam-scraper
+spec:
+  full: true
+  http:
+    - name: organization-access
+      url: https://api.example.com/organizations
+      transform:
+        expr: |
+          results.map(org, {
+            'id': org.id,
+            'config': {
+              'name': org.name,
+              'plan': org.plan
+            },
+            'external_users': org.members.map(m, {
+              'name': m.display_name,
+              'account_id': org.id,
+              'user_type': m.is_bot ? 'service' : 'human',
+              'email': m.email,
+              'aliases': [m.username, m.email]
+            }),
+            'external_roles': org.roles.map(r, {
+              'name': r.name,
+              'account_id': org.id,
+              'role_type': r.custom ? 'custom' : 'builtin',
+              'description': r.description,
+              'aliases': [r.id, r.slug]
+            }),
+            'config_access': org.permissions.map(p, {
+              'id': p.id,
+              'external_config_id': {
+                'config_type': 'Organization',
+                'external_id': org.id
+              },
+              'external_user_aliases': [p.user_email],
+              'external_role_aliases': [p.role_id]
+            })
+          })
+```
 
 ## Related
 
-- [Config Access Reference](/docs/reference/config-db/config_access) - Access log schema details
+- [Config Access Reference](/docs/reference/config-db/config_access) - Full schema details
+- [Custom Scraper Transformations](/docs/guide/config-db/scrapers/file#full-transformation-schema) - Complete transformation schema
 - [Retention](/docs/guide/config-db/concepts/retention) - Configure access log retention policies

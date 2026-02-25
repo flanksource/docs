@@ -1,54 +1,208 @@
 ---
 title: Config Access
 sidebar_custom_props:
-  icon: lock # TODO
+  icon: lock
 sidebar_position: 2
 ---
 
-### Access Log
+Config Access tracks who has access to configuration items and their access history. This enables compliance auditing, security monitoring, and periodic access reviews.
+
+## External User
+
+External users represent individuals or service accounts from your identity providers or external systems.
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Display name of the user",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Account identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "user_type",
+    description: "Type of user: `human`, `service`, or `system`",
+    scheme: "string"
+  },
+  {
+    field: "email",
+    description: "User's email address",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers for alias resolution",
+    scheme: "[]string"
+  }
+]}/>
+
+## External Group
+
+External groups represent teams, departments, or security groups from your identity systems.
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Group name",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Group identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "group_type",
+    description: "Type of group: `team`, `role`, `department`, or `security`",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers for alias resolution",
+    scheme: "[]string"
+  }
+]}/>
+
+## External Role
+
+External roles define permission sets that can be assigned to users or groups.
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Role name",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Role identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "role_type",
+    description: "Type of role: `builtin`, `custom`, `database`, or `application`",
+    scheme: "string"
+  },
+  {
+    field: "description",
+    description: "Human-readable description of the role's purpose",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers for alias resolution",
+    scheme: "[]string"
+  }
+]}/>
+
+## External User Group
+
+Links external users to their group memberships.
+
+<Fields rows={[
+  {
+    field: "external_user_id",
+    description: "ID of the external user",
+    scheme: "uuid",
+    required: true
+  },
+  {
+    field: "external_group_id",
+    description: "ID of the external group the user belongs to",
+    scheme: "uuid",
+    required: true
+  }
+]}/>
+
+## Config Access
+
+Records which users, groups, and roles have access to specific configuration items.
+
+<Fields rows={[
+  {
+    field: "id",
+    description: "Unique identifier for this access record",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "config_id",
+    description: "ID of the config item being accessed",
+    scheme: "uuid",
+    required: true
+  },
+  {
+    field: "external_user_id",
+    description: "ID of the external user with access",
+    scheme: "uuid"
+  },
+  {
+    field: "external_group_id",
+    description: "ID of the external group with access",
+    scheme: "uuid"
+  },
+  {
+    field: "external_role_id",
+    description: "ID of the external role granting access",
+    scheme: "uuid"
+  },
+  {
+    field: "last_reviewed_at",
+    description: "Timestamp of the last access review",
+    scheme: "timestamp"
+  },
+  {
+    field: "last_reviewed_by",
+    description: "User who performed the last access review",
+    scheme: "uuid"
+  }
+]}/>
+
+## Config Access Log
+
+Records individual access events for audit purposes.
 
 <Fields rows={[
   {
     field: "config_id",
-    description: "The time the check or event logically started (e.g if coming from an external source)",
+    description: "ID of the config item that was accessed",
     scheme: "uuid",
-     priority: 1,
     required: true
   },
-	{
+  {
     field: "external_user_id",
-    description: "The time the check or event logically started (e.g if coming from an external source)",
+    description: "ID of the external user who accessed the resource",
     scheme: "uuid",
-     priority: 1,
     required: true
   },
-	{
+  {
     field: "scraper_id",
-    description: "The time the check or event logically started (e.g if coming from an external source)",
+    description: "ID of the scraper that captured this access log",
     scheme: "uuid",
-     priority: 1,
-    required: false
+    required: true
   },
-	{
+  {
     field: "created_at",
-    description: "The time the check or event logically started (e.g if coming from an external source)",
-    scheme: "time.Time",
-     priority: 1,
-    required: false
+    description: "Timestamp when the access occurred",
+    scheme: "timestamp"
   },
-	{
+  {
     field: "mfa",
-    description: "The time the check or event logically started (e.g if coming from an external source)",
-    scheme: "bool",
-     priority: 1,
-    required: false
+    description: "Whether multi-factor authentication was used",
+    scheme: "bool"
   },
-	{
+  {
     field: "properties",
-    description: "The time the check or event logically started (e.g if coming from an external source)",
-    scheme: "map[string]string",
-     priority: 1,
-    required: false
+    description: "Additional access metadata (IP address, session info, client, etc.)",
+    scheme: "map[string]string"
   }
 ]}/>
-	
