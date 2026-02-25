@@ -1,0 +1,158 @@
+---
+title: Access Control
+sidebar_position: 1
+sidebar_custom_props:
+  icon: mdi:account-lock
+---
+
+Mission Control consolidates identity data from disparate sources into a unified catalog, allowing you to track who has access to what across your entire infrastructure. By mapping access to specific applications via the [Application CRD](/docs/guide/audit/applications), you gain a clear, auditable view of your organization's security posture. This unified perspective is critical for identifying unauthorized access, enforcing least-privilege principles, and meeting regulatory requirements like SOC 2, HIPAA, and ISO 27001.
+
+## Azure AD / Entra ID
+
+Mission Control integrates directly with Entra ID to scrape users, groups, enterprise applications, and app role assignments. This provides a centralized record of identity provider access, essential for auditing cloud resource permissions and user authentication.
+
+See the [Entra ID integration guide](/docs/integrations/azure-ad) for full setup instructions including Azure Portal steps, permissions, and troubleshooting. To scrape sign-in and directory audit logs, see [Audit Logs](/docs/integrations/azure-ad/audit-logs).
+
+```yaml title="azure-entra-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: azure-entra
+spec:
+  schedule: "@every 1h"
+  azure:
+    - connection: connection://mc/entra
+      include:
+        - entra
+        - appRoles
+        - authMethods
+      entra:
+        users:
+          - {}
+        groups:
+          - {}
+        appRegistrations:
+          - {}
+        enterpriseApps:
+          - {}
+        appRoleAssignments:
+          - {}
+```
+
+Users and groups are stored as **external users** and **external groups** (not config items) and appear in access control views when linked through an [Application](/docs/guide/audit/applications). App registrations and enterprise applications appear as config items in the catalog.
+
+:::tip
+After deploying the scraper, follow the [verification steps](/docs/integrations/azure-ad/getting-started#verification) to confirm users, groups, and apps are being scraped correctly.
+:::
+
+Use an Application to map Entra resources to a specific app - the `mapping.logins` field selects the enterprise application, and `mapping.roles` maps Entra groups to named roles:
+
+```yaml title="payments-application.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Application
+metadata:
+  name: payments-api
+  namespace: mc
+spec:
+  type: Application
+  description: Payment processing service
+  mapping:
+    logins:
+      - search: type=Azure::EnterpriseApplication name="Payments API"
+    roles:
+      - search: type=Azure::Group name=payments-users
+        role: User
+      - search: type=Azure::Group name=payments-admins
+        role: Admin
+```
+
+## AWS IAM
+
+Mission Control pulls AWS IAM users, roles, policies, and their attachments into its unified catalog. This provides a clear audit trail of permissions granted within your AWS environments, helping to enforce least privilege and identify over-provisioning.
+
+Scrape IAM resources using the [AWS scraper](/docs/guide/config-db/scrapers/aws) with `compliance: true` to also pull compliance metadata from Trusted Advisor and Security Hub:
+
+```yaml title="aws-iam-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-iam-audit
+spec:
+  schedule: "@every 6h"
+  full: true
+  aws:
+    - connection: connection://aws/prod
+      compliance: true
+      include:
+        - IAMUser
+        - IAMRole
+        - IAMPolicy
+        - IAMGroup
+```
+
+## Kubernetes RBAC
+
+Mission Control scrapes Kubernetes RBAC configurations including Roles, ClusterRoles, and their bindings. This gives auditors a precise view of who can perform what actions within your clusters.
+
+Use the [Kubernetes scraper](/docs/guide/config-db/scrapers/kubernetes) to watch RBAC resources:
+
+```yaml title="k8s-rbac-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: k8s-rbac-audit
+spec:
+  schedule: "@every 1h"
+  kubernetes:
+    - clusterName: production
+      watch:
+        - apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRole
+        - apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRoleBinding
+        - apiVersion: rbac.authorization.k8s.io/v1
+          kind: Role
+        - apiVersion: rbac.authorization.k8s.io/v1
+          kind: RoleBinding
+        - apiVersion: v1
+          kind: ServiceAccount
+```
+
+## Database Users & Roles
+
+Mission Control collects database users, roles, and their assigned privileges using [SQL scrapers](/docs/guide/config-db/scrapers/sql). This ensures you can audit and verify access to sensitive data stores.
+
+```yaml title="postgres-access-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-access-audit
+spec:
+  schedule: "@every 6h"
+  full: true
+  sql:
+    - connection: connection://postgres/prod
+      type: Postgres::Role
+      id: $.rolname
+      name: $.rolname
+      items: |
+        SELECT rolname, rolsuper, rolinherit, rolcreaterole,
+               rolcreatedb, rolcanlogin, rolreplication, rolvaliduntil
+        FROM pg_roles ORDER BY rolname
+```
+
+## Access Log Scraping
+
+Beyond static configuration, Mission Control can ingest access logs that record who accessed what, when, and how they authenticated. This complements configuration-based audits by capturing real-world usage patterns - enabling detection of access from unusual locations, access without MFA, and inactive accounts with active permissions.
+
+When using custom scrapers with `full: true`, each config item can include `access_logs`, `external_users`, and `config_access` fields. See [Access Logs](/docs/guide/config-db/concepts/access-logs) for the schema and [Config Access Reference](/docs/reference/config-db/config_access) for the full field reference.
+
+## Related
+
+- [Azure AD / Entra ID](/docs/integrations/azure-ad) - Entra ID integration setup and configuration
+- [Microsoft Graph API](/docs/guide/audit/ms-graph) - HTTP scraper with MS Graph for custom identity scraping
+- [Applications](/docs/guide/audit/applications) - Mapping access control to applications for audit
+- [Access Logs](/docs/guide/config-db/concepts/access-logs) - Access log scraping schema
+- [Config Access Reference](/docs/reference/config-db/config_access) - Full access schema reference
+- [AWS Scraper](/docs/guide/config-db/scrapers/aws) - AWS scraper configuration
+- [Kubernetes Scraper](/docs/guide/config-db/scrapers/kubernetes) - Kubernetes scraper configuration
