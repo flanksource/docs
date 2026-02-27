@@ -576,6 +576,12 @@ pre {
   font-weight: bold;
 }
 
+/* Fix external link icons appearing on separate line in navbar */
+.navbar__link[target="_blank"] {
+  display: inline-flex;
+  align-items: center;
+}
+
 a {
   font-color: var(--ifm-color-primary);
 }
