@@ -126,6 +126,39 @@ spec:
               //highlight-end
 ```
 
+### Change Traversal
+
+Changes can be redirected to other config items using `move-up`, `copy-up`, `move`, and `copy` actions.
+
+- **`move-up`** redirects a change to an ancestor config (walks the parent chain). Use `ancestor_type` to target a specific type; omit it for the immediate parent.
+- **`copy-up`** is the same as `move-up` but keeps the original change as well.
+- **`move`** redirects a change to config items matched by `target`.
+- **`copy`** duplicates the change to all matched targets.
+
+```yaml title="change-traversal.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: kubernetes-scraper
+spec:
+  kubernetes:
+    - clusterName: local-kind-cluster
+      transform:
+        changes:
+          mapping:
+            //highlight-start
+            # Move pod crash events to the parent Namespace
+            - filter: change.change_type == "PodCrashLooping"
+              action: move-up
+            # Copy node-level changes up to the Cluster
+            - filter: >
+                config.config_type == "Kubernetes::Node" &&
+                change.change_type == "diff"
+              action: copy-up
+              ancestor_type: Kubernetes::Cluster
+            //highlight-end
+```
+
 ## Scripting
 
 Scripting modifies the scraped configuration using CEL before saving it to the database. This process is beneficial for data normalization, default value population, and sensitive field masking.
