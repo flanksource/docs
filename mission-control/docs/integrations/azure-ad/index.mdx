@@ -13,7 +13,7 @@ import EntraDataFlowDiagram from '@site/src/components/EntraDataFlowDiagram'
   <CapabilityBadge type="scraper" />
 </CapabilityBadges>
 
-Mission Control integrates with Azure Active Directory (Entra ID) to provide visibility into your identity infrastructure - users, groups, app registrations, enterprise applications, and access assignments.
+Mission Control scrapes identity data from Entra ID and stores it in a unified catalog alongside your infrastructure (AWS, Azure, Kubernetes, SQL Server, Azure DevOps) and custom applications. The [Application CRD](/docs/guide/audit/applications) maps this catalog data into access and audit reports — giving you a single view of who has access to what, when they last used it, and whether it's been reviewed.
 
 <EntraDataFlowDiagram className="mx-auto" />
 
@@ -24,10 +24,9 @@ Mission Control integrates with Azure Active Directory (Entra ID) to provide vis
 **Use cases:**
 - Discover users, groups, and their memberships across your tenant
 - Track app registrations, client secrets, and certificate expiry
-- Monitor enterprise applications and service principal configurations
-- Audit app role assignments - who has access to which applications
-- Correlate identity resources with Azure subscriptions and Kubernetes RBAC
-- Map Entra groups to application roles using the [Application CRD](/docs/guide/audit/applications)
+- Audit app role assignments — who has access to which applications and when
+- Correlate identity data with AWS IAM, Kubernetes RBAC, Azure DevOps, and SQL Server access
+- Build access and audit reports for both infrastructure and custom applications using the [Application CRD](/docs/guide/audit/applications)
 
 ## What Gets Scraped
 
