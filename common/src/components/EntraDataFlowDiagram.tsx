@@ -56,6 +56,42 @@ function NodeSection({ title, items, id }: { title: string; items: string[]; id?
   );
 }
 
+const auditRows = [
+  { name: 'J. Smith', role: 'Global Admin', lastAccess: '2h ago', reviewed: '30d ago' },
+  { name: 'A. Chen', role: 'App Owner', lastAccess: '1d ago', reviewed: '7d ago' },
+  { name: 'svc-deploy', role: 'Contributor', lastAccess: '5m ago', reviewed: 'Never' },
+];
+
+function AuditTable() {
+  const cellStyle: React.CSSProperties = {
+    color: COLORS.muted, fontSize: '9px', padding: '2px 6px', whiteSpace: 'nowrap',
+  };
+  const headerStyle: React.CSSProperties = {
+    ...cellStyle, fontWeight: 700, borderBottom: `1px solid ${COLORS.outputBorder}`,
+  };
+  return (
+    <table className="w-full" style={{ borderCollapse: 'collapse' }}>
+      <thead>
+        <tr>
+          {['User', 'Role', 'Last Access', 'Reviewed'].map((h) => (
+            <th key={h} style={headerStyle}>{h}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {auditRows.map((r) => (
+          <tr key={r.name}>
+            <td style={cellStyle}>{r.name}</td>
+            <td style={cellStyle}>{r.role}</td>
+            <td style={cellStyle}>{r.lastAccess}</td>
+            <td style={cellStyle}>{r.reviewed}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
 interface EntraDataFlowDiagramProps {
   className?: string;
 }
@@ -135,20 +171,14 @@ function EntraDataFlowDiagramInner({ className }: EntraDataFlowDiagramProps) {
         </div>
         <div id={id('views')}>
           <BoxNode
-            title="Audit Views"
+            title="Audit Report"
             headerColor={COLORS.outputBorder}
             bodyColor={COLORS.background}
             borderColor={COLORS.outputBorder}
             compact
+            minWidth="220px"
           >
-            <div className="flex flex-col gap-1">
-              {['Who Accessed, When', 'Inventory', 'Change Trail'].map((item) => (
-                <div key={item} className="text-[10px] rounded px-2 py-0.5 text-center"
-                  style={{ color: COLORS.muted, backgroundColor: COLORS.background, border: `1px solid ${COLORS.outputBorder}` }}>
-                  {item}
-                </div>
-              ))}
-            </div>
+            <AuditTable />
           </BoxNode>
         </div>
       </div>
@@ -157,7 +187,6 @@ function EntraDataFlowDiagramInner({ className }: EntraDataFlowDiagramProps) {
       <Xarrow start={id('entra')} end={id('ingestion')}
         {...primaryArrowProps}
         startAnchor="right" endAnchor="left"
-        labels={{ middle: <ArrowLabel text="Scrapers" /> }}
       />
 
       {/* Ingestion → Catalog (internal MC flow) */}
@@ -172,20 +201,11 @@ function EntraDataFlowDiagramInner({ className }: EntraDataFlowDiagramProps) {
         startAnchor="right" endAnchor="left"
       />
 
-      {/* MC → Audit Views */}
+      {/* MC → Audit Report */}
       <Xarrow start={id('mc')} end={id('views')}
         {...primaryArrowProps}
         startAnchor="right" endAnchor="left"
       />
-    </div>
-  );
-}
-
-function ArrowLabel({ text }: { text: string }) {
-  return (
-    <div className="rounded px-1.5 py-0.5 text-[9px] font-semibold mt-1"
-      style={{ backgroundColor: COLORS.background, color: COLORS.accent, border: `1px solid ${COLORS.primary}` }}>
-      {text}
     </div>
   );
 }
