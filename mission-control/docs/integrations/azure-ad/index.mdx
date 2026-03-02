@@ -7,12 +7,15 @@ sidebar_custom_props:
 import DocCardList from '@theme/DocCardList';
 import { Card, Cards } from '@site/../common/src/components/Card'
 import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+import EntraDataFlowDiagram from '@site/src/components/EntraDataFlowDiagram'
 
 <CapabilityBadges>
   <CapabilityBadge type="scraper" />
 </CapabilityBadges>
 
 Mission Control integrates with Azure Active Directory (Entra ID) to provide visibility into your identity infrastructure - users, groups, app registrations, enterprise applications, and access assignments.
+
+<EntraDataFlowDiagram className="mx-auto" />
 
 ---
 
@@ -50,43 +53,6 @@ Users and groups are stored as **external users** and **external groups**, not a
 - **Enterprise Application -> App Registration**: Linked via `AppServicePrincipal` relationship. Each enterprise app is the service principal for an app registration.
 - **Groups -> Users**: Group membership is tracked through external user-group mappings.
 - **Enterprise Application -> Users/Groups**: App role assignments link users and groups to enterprise applications via config access records.
-
-### Data Flow
-
-```
-┌─────────────────┐
-│    Entra ID      │
-│  (MS Graph API)  │
-└────────┬─────────┘
-         │ Scraper
-         ▼
-┌──────────────────────────────────────────┐
-│          Mission Control Catalog          │
-│                                           │
-│  External Users ◄──── Group Memberships   │
-│  External Groups      (who belongs where) │
-│         │                                  │
-│         ▼                                  │
-│  Config Access ◄──── App Role Assignments  │
-│  (who can access      (from enterprise     │
-│   what app)            applications)       │
-│         │                                  │
-│         ▼                                  │
-│  Config Items: App Registrations,          │
-│  Enterprise Apps, Secrets, Certificates,   │
-│  Auth Method Policies                      │
-└────────────────────┬──────────────────────┘
-                     │ Application CRD
-                     ▼
-┌──────────────────────────────────────────┐
-│           Audit Report                    │
-│                                           │
-│  • Access Control: users + roles per app  │
-│  • Sign-in Logs: who accessed, when, how  │
-│  • Auth Methods: MFA/FIDO2 policies       │
-│  • Findings: expired secrets, compliance  │
-└───────────────────────────────────────────┘
-```
 
 ### App Role Assignments and Config Access
 

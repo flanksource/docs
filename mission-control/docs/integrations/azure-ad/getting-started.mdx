@@ -12,6 +12,13 @@ This guide walks you through setting up the Entra ID scraper — from Azure Port
 ## Prerequisites
 
 :::info Prerequisites
+- Azure AD tenant with Global Administrator or Application Administrator access
+- Mission Control installed via Helm
+:::
+
+<details>
+<summary>Create a new Azure App Registration</summary>
+
 1. In the Azure Portal, go to **Microsoft Entra ID > App registrations > New registration**
 2. Set the **Name** (e.g. `mission-control-scraper`)
    - Set **Supported account types** to "Accounts in this organizational directory only"
@@ -24,7 +31,8 @@ This guide walks you through setting up the Entra ID scraper — from Azure Port
    - Add the permissions from the [table below](#permissions)
 6. Click **Grant admin consent for \{tenant\}** (requires Global Administrator or Privileged Role Administrator)
 7. Create a [Connection](#connection)
-:::
+
+</details>
 
 ### Permissions
 

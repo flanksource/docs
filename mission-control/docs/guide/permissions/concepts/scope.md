@@ -5,7 +5,7 @@ sidebar_position: 4
 
 Scopes define collections of resources that can be used for fine-grained access control in Mission Control. A Scope allows you to group resources by various criteria (agent, namespace, name, tags) and use these groups in permission rules to control who can access what resources.
 
-Scopes work as building blocks for [ABAC](abac.md) permission policies and enable [multi-tenancy](multi-tenancy.md) by allowing you to partition resources across different teams, environments, or organizational boundaries.
+Scopes work as building blocks for [ABAC](/docs/guide/permissions/multi-tenancy) permission policies and enable [multi-tenancy](/docs/guide/permissions/multi-tenancy) by allowing you to partition resources across different teams, environments, or organizational boundaries.
 
 ## Core Concepts
 
@@ -45,7 +45,7 @@ Scopes can target six different resource types:
 
 ## Integration with ABAC
 
-Scopes work seamlessly with [Attribute-Based Access Control (ABAC)](abac.md). When using ABAC, you reference Scopes in your permission policies to define the resource boundaries for access control.
+Scopes work seamlessly with [Attribute-Based Access Control (ABAC)](/docs/guide/permissions/multi-tenancy). When using ABAC, you reference Scopes in your permission policies to define the resource boundaries for access control.
 
 ```yaml
 apiVersion: mission-control.flanksource.com/v1
@@ -75,7 +75,7 @@ When a user attempts to access a resource:
 
 ## Integration with Multi-Tenancy
 
-Scopes are fundamental to implementing [multi-tenancy](multi-tenancy.md) in Mission Control. They allow you to partition resources across different tenants, teams, or organizational units.
+Scopes are fundamental to implementing [multi-tenancy](/docs/guide/permissions/multi-tenancy) in Mission Control. They allow you to partition resources across different tenants, teams, or organizational units.
 
 Common multi-tenancy patterns include:
 
@@ -88,6 +88,6 @@ See the [multi-tenancy patterns examples](../examples/multi-tenancy-patterns.md)
 ## See Also
 
 - [Scope Examples](../examples) - Practical examples of Scope configurations
-- [Attribute-Based Access Control (ABAC)](abac.md) - Using Scopes in permission policies
-- [Multi-Tenancy](multi-tenancy.md) - Implementing tenant isolation with Scopes
-- [Permission Actions](/reference/permissions/actions) - Available actions for Scope-based permissions
+- [Attribute-Based Access Control (ABAC)](/docs/guide/permissions/multi-tenancy) - Using Scopes in permission policies
+- [Multi-Tenancy](/docs/guide/permissions/multi-tenancy) - Implementing tenant isolation with Scopes
+- [Permission Actions](/docs/reference/permissions/actions) - Available actions for Scope-based permissions

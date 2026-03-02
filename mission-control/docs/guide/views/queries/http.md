@@ -71,7 +71,7 @@ http:
 
 ## Connection Field
 
-The `connection` field references a stored [Connection](/mission-control/guide/configurations/connections) resource. When specified, Mission Control hydrates the connection by:
+The `connection` field references a stored [Connection](/docs/reference/connections) resource. When specified, Mission Control hydrates the connection by:
 
 1. Looking up the connection by name in the view's namespace
 2. Extracting authentication details (username, password, bearer token, OAuth credentials)

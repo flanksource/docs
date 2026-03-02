@@ -1,0 +1,74 @@
+---
+title: Audit Logs
+sidebar_position: 1
+sidebar_custom_props:
+  icon: entra
+---
+
+import DocCardList from '@theme/DocCardList';
+import { Card, Cards } from '@site/../common/src/components/Card'
+
+Entra ID generates sign-in logs and directory audit logs that can be scraped into Mission Control as [access logs](/docs/guide/config-db/concepts/access-logs). There are three approaches depending on your infrastructure and latency requirements.
+
+:::warning Required Permissions
+All approaches require:
+- **`AuditLog.Read.All`** — Application permission, admin-consented. Without this permission, all `/auditLogs/*` Graph API calls return `403 Forbidden`.
+- **Entra ID P1 or P2 license** — Hard requirement from Microsoft. Free-tier tenants do not generate sign-in logs at all.
+
+These are in addition to the base permissions (`User.Read.All`, `Group.Read.All`, etc.) needed by the [Entra ID scraper](../getting-started#permissions).
+:::
+
+## Approach Comparison
+
+| | [HTTP + MS Graph](./http-scraper) | [Logs Scraper](./logs-scraper) | [Event Hub](./event-hub) |
+|---|---|---|---|
+| **Latency** | Minutes (polling) | Minutes | Seconds |
+| **Setup** | Low | Medium | High |
+| **Permissions** | `AuditLog.Read.All` | Azure Diagnostic Settings | Azure Diagnostic Settings + Event Hub |
+| **Best For** | Direct API access, simplest setup | Logs already forwarded to a backend | Real-time, high volume |
+| **Pagination** | Manual (`$top`, `$filter`) | Handled by backend | N/A (streaming) |
+| **Infrastructure** | None extra | Log backend (OpenSearch, Loki, etc.) | Event Hub + bridge consumer |
+
+## Latency and Retention
+
+### Log Availability Delay
+
+Entra ID logs are not available immediately after the event occurs:
+
+| Log Category | Typical Delay |
+|---|---|
+| Interactive sign-ins | 5 – 15 minutes |
+| Non-interactive sign-ins | 15 – 30 minutes |
+| Directory audit logs | 5 – 15 minutes |
+
+Set your scraper schedule to at least `@every 15m` to avoid missing events due to delay.
+
+### Retention by License
+
+| License Tier | Retention Period |
+|---|---|
+| Free / Office 365 | 7 days |
+| Entra ID P1 / P2 | 30 days |
+
+For longer retention, export logs via Azure Monitor Diagnostic Settings to a log backend and use the [Logs scraper](./logs-scraper) approach.
+
+## Approaches
+
+<DocCardList />
+
+## Related
+
+<Cards>
+  <Card icon="entra" title="Microsoft Graph API" href="/docs/guide/audit/ms-graph">
+    Custom HTTP scraper with MS Graph for advanced queries
+  </Card>
+  <Card icon="entra" title="Entra ID Getting Started" href="/docs/integrations/azure-ad/getting-started">
+    Full setup walkthrough and scraper configuration
+  </Card>
+  <Card icon="scraper" title="Access Logs" href="/docs/guide/config-db/concepts/access-logs">
+    Access log schema and examples
+  </Card>
+  <Card icon="lock" title="Config Access Reference" href="/docs/reference/config-db/config_access">
+    Full config_access field reference
+  </Card>
+</Cards>

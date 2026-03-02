@@ -5,6 +5,8 @@ sidebar_custom_props:
   icon: mdi:account-lock
 ---
 
+import {Card, Cards} from '@site/../common/src/components/Card'
+
 Mission Control consolidates identity data from disparate sources into a unified catalog, allowing you to track who has access to what across your entire infrastructure. By mapping access to specific applications via the [Application CRD](/docs/guide/audit/applications), you gain a clear, auditable view of your organization's security posture. This unified perspective is critical for identifying unauthorized access, enforcing least-privilege principles, and meeting regulatory requirements like SOC 2, HIPAA, and ISO 27001.
 
 ## Azure AD / Entra ID
@@ -149,10 +151,12 @@ When using custom scrapers with `full: true`, each config item can include `acce
 
 ## Related
 
-- [Azure AD / Entra ID](/docs/integrations/azure-ad) - Entra ID integration setup and configuration
-- [Microsoft Graph API](/docs/guide/audit/ms-graph) - HTTP scraper with MS Graph for custom identity scraping
-- [Applications](/docs/guide/audit/applications) - Mapping access control to applications for audit
-- [Access Logs](/docs/guide/config-db/concepts/access-logs) - Access log scraping schema
-- [Config Access Reference](/docs/reference/config-db/config_access) - Full access schema reference
-- [AWS Scraper](/docs/guide/config-db/scrapers/aws) - AWS scraper configuration
-- [Kubernetes Scraper](/docs/guide/config-db/scrapers/kubernetes) - Kubernetes scraper configuration
+<Cards>
+  <Card title="Azure AD / Entra ID" link="/docs/integrations/azure-ad" icon="entra" />
+  <Card title="Microsoft Graph API" link="/docs/guide/audit/ms-graph" icon="http" />
+  <Card title="Applications" link="/docs/guide/audit/applications" icon="lucide:package" />
+  <Card title="Access Logs" link="/docs/guide/config-db/concepts/access-logs" />
+  <Card title="Config Access Reference" link="/docs/reference/config-db/config_access" />
+  <Card title="AWS Scraper" link="/docs/guide/config-db/scrapers/aws" icon="aws" />
+  <Card title="Kubernetes Scraper" link="/docs/guide/config-db/scrapers/kubernetes" icon="k8s" />
+</Cards>

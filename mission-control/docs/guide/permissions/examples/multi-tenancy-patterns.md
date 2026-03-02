@@ -92,4 +92,4 @@ This provides granular control for complex organizational structures.
 - Use consistent tagging strategies across all resources
 - Document your tenant isolation model
 - Start with broader Scopes and refine as needed
-- Combine Scopes with [ABAC](../concepts/abac.md) policies for complete access control
+- Combine Scopes with [ABAC](/docs/guide/permissions/multi-tenancy) policies for complete access control

@@ -1,0 +1,130 @@
+---
+title: Infrastructure Inventory
+sidebar_position: 4
+sidebar_custom_props:
+  icon: mdi:server
+---
+
+import {Card, Cards} from '@site/../common/src/components/Card'
+
+Mission Control maintains a complete and up-to-date inventory of all your infrastructure assets, providing a foundational layer for audit and compliance. This catalog details what resources you have, where they are located, and their current health status. A comprehensive inventory is essential for asset management, vulnerability scanning, and demonstrating control over your operational environment to auditors.
+
+Each resource is tracked as a config item in the catalog with full change history, health status, and relationships to other resources. Scrapers run on a schedule to keep the inventory current.
+
+## AWS
+
+Use the [AWS scraper](/docs/guide/config-db/scrapers/aws) to catalog EC2 instances, RDS databases, S3 buckets, networking resources, and IAM entities:
+
+```yaml title="aws-inventory-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-inventory
+spec:
+  schedule: "@every 1h"
+  aws:
+    - connection: connection://aws/prod
+      compliance: true
+      cloudtrail:
+        maxAge: 7d
+      include:
+        - EC2Instance
+        - RDSInstance
+        - S3Bucket
+        - SecurityGroup
+        - Subnet
+        - VPC
+        - EBSVolume
+        - ELB
+        - IAMUser
+        - IAMRole
+        - Lambda
+```
+
+See the [AWS scraper reference](/docs/guide/config-db/scrapers/aws) for the full list of supported resource types.
+
+## Kubernetes
+
+Use the [Kubernetes scraper](/docs/guide/config-db/scrapers/kubernetes) to catalog workloads, services, networking policies, and storage:
+
+```yaml title="k8s-inventory-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: k8s-inventory
+spec:
+  schedule: "@every 15m"
+  kubernetes:
+    - clusterName: production
+      watch:
+        - apiVersion: apps/v1
+          kind: Deployment
+        - apiVersion: apps/v1
+          kind: StatefulSet
+        - apiVersion: v1
+          kind: Service
+        - apiVersion: networking.k8s.io/v1
+          kind: Ingress
+        - apiVersion: networking.k8s.io/v1
+          kind: NetworkPolicy
+        - apiVersion: v1
+          kind: PersistentVolumeClaim
+```
+
+See the [Kubernetes scraper reference](/docs/guide/config-db/scrapers/kubernetes) for watch configuration and event tracking.
+
+## Azure
+
+Use the [Azure scraper](/docs/guide/config-db/scrapers/azure) to catalog VMs, SQL databases, App Services, and networking resources. For Entra ID identity resources (users, groups, app registrations), see the [Entra ID integration](/docs/integrations/azure-ad).
+
+## Databases
+
+Use [SQL scrapers](/docs/guide/config-db/scrapers/sql) to catalog database-specific resources like schemas, roles, and configurations:
+
+```yaml title="postgres-inventory-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-inventory
+spec:
+  schedule: "@every 6h"
+  sql:
+    - connection: connection://postgres/prod
+      type: Postgres::Database
+      id: $.datname
+      name: $.datname
+      items: |
+        SELECT datname, pg_database_size(datname) as size_bytes,
+               datcollate as collation, datconnlimit as connection_limit
+        FROM pg_database WHERE datistemplate = false ORDER BY datname
+```
+
+## Tying It Together with an Application
+
+Use the [Application CRD](/docs/guide/audit/applications) to map inventory items to specific applications. The `mapping.environments` field groups resources by environment (production, DR, staging) with a declared purpose:
+
+```yaml title="application-environments.yaml"
+mapping:
+  environments:
+    "Prod":
+      - search: type=AWS::*
+        tagSelector: env=prod,app=payments
+        purpose: primary
+    "DR":
+      - search: type=AWS::*
+        tagSelector: env=dr,app=payments
+        purpose: backup
+```
+
+See [Applications](/docs/guide/audit/applications) for the full spec.
+
+## Related
+
+<Cards>
+  <Card title="Applications" link="/docs/guide/audit/applications" icon="lucide:package" />
+  <Card title="AWS Scraper" link="/docs/guide/config-db/scrapers/aws" icon="aws" />
+  <Card title="Azure Scraper" link="/docs/guide/config-db/scrapers/azure" icon="azure" />
+  <Card title="Kubernetes Scraper" link="/docs/guide/config-db/scrapers/kubernetes" icon="k8s" />
+  <Card title="SQL Scraper" link="/docs/guide/config-db/scrapers/sql" icon="postgres" />
+  <Card title="Views" link="/docs/guide/views/" />
+</Cards>
