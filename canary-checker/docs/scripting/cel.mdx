@@ -666,6 +666,39 @@ Returns a new sub-list using the indices provided.
 [(1, 2, 3, 4)].slice(2, 4) // return [3 ,4]
 ```
 
+### coalesce
+
+`coalesce` returns the first argument that is not nil or empty. Empty means empty string, empty slice, or empty map. Zero values (`0`, `false`) are considered valid.
+
+```javascript
+coalesce("", "b") // "b"
+coalesce(nil, "x") // "x"
+coalesce(nil, 0) // 0
+coalesce(nil, false) // false
+coalesce([], "fallback") // "fallback"
+coalesce({}, "fallback") // "fallback"
+```
+
+### first
+
+`first` returns the first element of a list, the first character of a string, or the value at the lexicographically smallest key of a map.
+
+```javascript
+first([1, 2, 3]) // 1
+first("hello") // "h"
+first({"b": 2, "a": 1}) // 1
+```
+
+### last
+
+`last` returns the last element of a list, the last character of a string, or the value at the lexicographically largest key of a map.
+
+```javascript
+last([1, 2, 3]) // 3
+last("hello") // "o"
+last({"b": 2, "a": 1}) // 2
+```
+
 ---
 
 ## sets
@@ -1612,6 +1645,32 @@ math.IsFinite(1.0 / 0.0) // false
 | `math.bitNot(x)` | Bitwise NOT | `math.bitNot(5)` → `-6` |
 | `math.bitShiftLeft(x, n)` | Left shift | `math.bitShiftLeft(5, 1)` → `10` |
 | `math.bitShiftRight(x, n)` | Right shift | `math.bitShiftRight(10, 1)` → `5` |
+
+---
+
+## net
+
+### net.ContainsCIDR
+
+`net.ContainsCIDR` returns `true` if the IP address is within the given CIDR block. Returns `false` on invalid input.
+
+```javascript
+net.ContainsCIDR("10.0.0.0/8", "10.1.2.3") // true
+net.ContainsCIDR("10.0.0.0/8", "192.168.1.1") // false
+net.ContainsCIDR("192.168.0.0/24", "192.168.0.50") // true
+net.ContainsCIDR("2001:db8::/32", "2001:db8::1") // true (IPv6)
+```
+
+### net.IsValidIP
+
+`net.IsValidIP` returns `true` if the string is a valid IPv4 or IPv6 address.
+
+```javascript
+net.IsValidIP("10.0.0.1") // true
+net.IsValidIP("::1") // true (IPv6 loopback)
+net.IsValidIP("not-an-ip") // false
+net.IsValidIP("256.0.0.1") // false
+```
 
 ---
 
@@ -2732,4 +2791,13 @@ uuid.IsValid("2a42e576-c308-4db9-8525-0513af307586")
 
 ```javascript
 uuid.Parse("2a42e576-c308-4db9-8525-0513af307586")
+```
+
+### uuid.HashUUID
+
+`uuid.HashUUID` returns a deterministic UUID (v5) from the SHA256 hash of the input arguments. Same inputs always produce the same UUID.
+
+```javascript
+uuid.HashUUID("cluster-1", "node-abc") // always returns the same UUID for these inputs
+uuid.HashUUID("test") != uuid.HashUUID("other") // different inputs produce different UUIDs
 ```
