@@ -43,7 +43,7 @@ This guide walks you through setting up the Entra ID scraper — from Azure Port
 | `GroupMember.Read.All` | Application | Read group memberships | Map users to groups; required for role-based access audit |
 | `Application.Read.All` | Application | Read app registrations and enterprise apps | Catalog app registrations, client secrets/certificates, enterprise applications |
 | `Directory.Read.All` | Application | Broad directory read access | Service principal metadata, directory roles, additional attributes |
-| `AuditLog.Read.All` | Application | Sign-in and audit logs | Scrape sign-in events and directory changes (requires P1/P2 license) |
+| `AuditLog.Read.All` | Application | Sign-in and audit logs | Only needed for [HTTP scraper](./audit-logs/http-scraper) sign-in log ingestion (requires P1/P2 license) |
 | `Policy.Read.All` | Application | Authentication method policies | Scrape tenant-level MFA, FIDO2, passwordless, and other auth method configs |
 
 :::info Note
