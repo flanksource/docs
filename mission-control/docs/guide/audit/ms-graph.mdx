@@ -5,11 +5,14 @@ sidebar_custom_props:
   icon: entra
 ---
 
+import {Card, Cards} from '@site/../common/src/components/Card'
+
 When the built-in [Entra ID scraper](/docs/integrations/azure-ad) doesn't cover your needs — custom `$filter` queries, specific user attributes, or endpoints not yet supported — you can use the [HTTP scraper](/docs/guide/config-db/scrapers/http) with [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/overview) directly.
 
 ## Prerequisites
 
-Register an App in Azure Portal with these **Application** permissions (admin-consented):
+- [Connection](/docs/integrations/azure-ad/getting-started#connection) to Entra ID with OAuth2 client credentials
+- **Application** permissions below, admin-consented
 
 | Permission | Purpose |
 |---|---|
@@ -19,7 +22,12 @@ Register an App in Azure Portal with these **Application** permissions (admin-co
 | `Directory.Read.All` | Broad directory read access |
 | `Application.Read.All` | Read app registrations and enterprise apps |
 
+<details>
+<summary>Create a new Azure App Registration</summary>
+
 See the [Entra ID integration guide](/docs/integrations/azure-ad/getting-started#prerequisites) for step-by-step Azure Portal instructions.
+
+</details>
 
 ## ScrapeConfig
 
@@ -92,9 +100,11 @@ If you need all users or groups regardless of count, use the [built-in Entra ID 
 
 ## Next Steps
 
-- [HTTP Scraper](/docs/guide/config-db/scrapers/http) — Full HTTP scraper reference
-- [Azure AD / Entra ID](/docs/integrations/azure-ad) — Built-in Entra scraper
-- [Access Control](/docs/guide/audit/access-control) — Multi-provider access auditing
-- [Applications](/docs/guide/audit/applications) — Map scraped data to auditable applications
-- [Access Logs](/docs/guide/config-db/concepts/access-logs) — Access log schema and examples
-- [Config Access Reference](/docs/reference/config-db/config_access) — Full `config_access` field reference
+<Cards>
+  <Card title="HTTP Scraper" link="/docs/guide/config-db/scrapers/http" icon="http" />
+  <Card title="Azure AD / Entra ID" link="/docs/integrations/azure-ad" icon="entra" />
+  <Card title="Access Control" link="/docs/guide/audit/access-control" icon="mdi:account-lock" />
+  <Card title="Applications" link="/docs/guide/audit/applications" icon="lucide:package" />
+  <Card title="Access Logs" link="/docs/guide/config-db/concepts/access-logs" />
+  <Card title="Config Access Reference" link="/docs/reference/config-db/config_access" />
+</Cards>

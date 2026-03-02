@@ -1,0 +1,59 @@
+---
+title: Event Hub Streaming
+sidebar_position: 2
+sidebar_custom_props:
+  icon: azure
+---
+
+import { EventHubDiagram } from '@site/src/components/AuditLogDiagrams'
+import ComparisonBox from '@site/../common/src/components/ComparisonBox'
+import {Card, Cards} from '@site/../common/src/components/Card'
+
+For real-time, high-volume ingestion, stream Entra logs via Azure Event Hub. This provides the lowest latency but requires the most infrastructure setup.
+
+<EventHubDiagram className="mx-auto" />
+
+<ComparisonBox>
+  <ComparisonBox.Pros>
+    <li>You need sub-minute latency on sign-in events</li>
+    <li>High volume — Event Hub partitions scale natively</li>
+    <li>Decouples Entra from Mission Control (Event Hub buffers events)</li>
+  </ComparisonBox.Pros>
+  <ComparisonBox.Cons>
+    <li>Minute-level latency is acceptable — use <a href="./http-scraper">HTTP Scraper</a> or <a href="./logs-scraper">Logs Scraper</a></li>
+    <li>You want to avoid managing Event Hub + bridge consumer infrastructure</li>
+    <li>Additional Azure costs for throughput units are not justified</li>
+  </ComparisonBox.Cons>
+</ComparisonBox>
+
+## Prerequisites
+
+- **Azure Monitor Diagnostic Settings** configured to export **SignInLogs** and **AuditLogs** to an Event Hub
+- **Azure Event Hub namespace** with a dedicated hub for Entra logs
+- **Bridge consumer** that reads from Event Hub and publishes to a Mission Control-supported backend
+- **Entra ID P1 or P2 license** — Microsoft does not generate these log categories without it
+
+## Architecture
+
+The [PubSub scraper](/docs/guide/config-db/scrapers/pubsub) natively supports GCP Pub/Sub. For Azure Event Hub, you need a bridge:
+
+1. **Azure Event Hub** receives logs from Entra ID Diagnostic Settings (same Diagnostic Settings setup as the [Logs Scraper](./logs-scraper#azure-setup) approach)
+2. **Bridge consumer** reads from Event Hub and publishes to a supported backend:
+   - Write to GCP Pub/Sub, then use the PubSub scraper
+   - Write to a log backend (OpenSearch, Loki), then use the [Logs scraper](./logs-scraper)
+   - Write to a webhook endpoint, then use the HTTP scraper in push mode
+
+:::tip
+If sub-minute latency is not required, the [HTTP scraper](./http-scraper) or [Logs scraper](./logs-scraper) approaches are simpler and require less infrastructure.
+:::
+
+See the [PubSub scraper reference](/docs/guide/config-db/scrapers/pubsub) for the GCP Pub/Sub configuration pattern.
+
+## Related
+
+<Cards>
+  <Card title="HTTP Scraper" link="/docs/integrations/azure-ad/audit-logs/http-scraper" icon="http" />
+  <Card title="Logs Scraper" link="/docs/integrations/azure-ad/audit-logs/logs-scraper" icon="opensearch" />
+  <Card title="PubSub Scraper Reference" link="/docs/guide/config-db/scrapers/pubsub" />
+  <Card title="Access Control" link="/docs/guide/audit/access-control" icon="mdi:account-lock" />
+</Cards>
