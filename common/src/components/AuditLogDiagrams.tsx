@@ -8,13 +8,20 @@ import {
   Http,
   AzureServiceBus,
 } from '@flanksource/icons/mi';
-import { HiShieldCheck, HiUserGroup } from 'react-icons/hi2';
+import { HiShieldCheck } from 'react-icons/hi2';
+import BoxNode from './diagrams/BoxNode';
 
 const COLORS = {
   primary: '#2d7de4',
   background: '#f7fbfe',
   accent: '#1069dc',
   muted: '#62758a',
+};
+
+const pillStyle: React.CSSProperties = {
+  color: COLORS.muted,
+  backgroundColor: COLORS.background,
+  border: `1px solid ${COLORS.primary}`,
 };
 
 const primaryArrowProps = {
@@ -30,6 +37,14 @@ const secondaryArrowProps = {
   headSize: 3,
   dashness: { strokeLen: 6, nonStrokeLen: 4, animation: 1 },
 } as const;
+
+function NodePill({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="text-[10px] rounded px-2 py-1 text-center" style={pillStyle}>
+      {children}
+    </div>
+  );
+}
 
 function DiagramNode({ id, icon: Icon, label }: { id: string; icon: React.ComponentType<{className?: string; style?: React.CSSProperties}>; label: string }) {
   return (
@@ -51,15 +66,35 @@ function MissionControlPill({ id }: { id: string }) {
   );
 }
 
-function SourceColumn({ idEntra, idLogins }: { idEntra: string; idLogins: string }) {
+function EntraSourceBox({ id }: { id: string }) {
   return (
-    <div className="flex flex-col items-center gap-2">
-      <DiagramNode id={idEntra} icon={AzureAd} label="Entra ID" />
-      <div id={idLogins} className="flex items-center gap-2 px-3 py-1.5 rounded-lg border"
-        style={{ borderColor: COLORS.primary, backgroundColor: COLORS.background }}>
-        <HiUserGroup className="w-4 h-4" style={{ color: COLORS.accent }} />
-        <span className="text-[10px] font-semibold" style={{ color: COLORS.muted }}>User Logins</span>
-      </div>
+    <div id={id}>
+      <BoxNode
+        title={
+          <span className="flex items-center justify-center gap-2">
+            <AzureAd className="w-5 h-5" />
+            Entra ID
+          </span>
+        }
+        headerColor={COLORS.primary}
+        bodyColor={COLORS.background}
+        borderColor={COLORS.primary}
+        compact
+        minWidth="150px"
+      >
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
+            <div className="text-[9px] font-bold uppercase tracking-wide" style={{ color: COLORS.muted }}>Identity</div>
+            <NodePill>Users & Groups</NodePill>
+            <NodePill>App Registrations</NodePill>
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="text-[9px] font-bold uppercase tracking-wide" style={{ color: COLORS.muted }}>Sign-in Logs</div>
+            <NodePill>Interactive</NodePill>
+            <NodePill>Non-interactive</NodePill>
+          </div>
+        </div>
+      </BoxNode>
     </div>
   );
 }
@@ -81,7 +116,7 @@ function HttpDiagramInner({ className }: { className?: string }) {
 
   return (
     <div className={`${className || ''} relative flex items-center justify-center gap-16 py-6`}>
-      <SourceColumn idEntra={id('entra')} idLogins={id('logins')} />
+      <EntraSourceBox id={id('entra')} />
       <DiagramNode id={id('scraper')} icon={Http} label="HTTP Scraper" />
       <MissionControlPill id={id('mc')} />
 
@@ -90,11 +125,6 @@ function HttpDiagramInner({ className }: { className?: string }) {
         path="straight"
         startAnchor="right" endAnchor="left"
         labels={{ middle: <ArrowLabel text="MS Graph" /> }}
-      />
-      <Xarrow start={id('logins')} end={id('scraper')}
-        {...secondaryArrowProps}
-        path="straight"
-        startAnchor="right" endAnchor={{ position: 'left', offset: { y: 8 } }}
       />
       <Xarrow start={id('scraper')} end={id('mc')}
         {...primaryArrowProps}
@@ -120,7 +150,7 @@ function LogsDiagramInner({ className }: { className?: string }) {
 
   return (
     <div className={`${className || ''} relative flex items-center justify-center gap-16 py-6`}>
-      <SourceColumn idEntra={id('entra')} idLogins={id('logins')} />
+      <EntraSourceBox id={id('entra')} />
       <DiagramNode id={id('backend')} icon={AzureLogAnalytics} label="Log Analytics" />
       <DiagramNode id={id('scraper')} icon={HiShieldCheck} label="Logs Scraper" />
       <MissionControlPill id={id('mc')} />
@@ -130,11 +160,6 @@ function LogsDiagramInner({ className }: { className?: string }) {
         path="straight"
         startAnchor="right" endAnchor="left"
         labels={{ middle: <ArrowLabel text="Export" /> }}
-      />
-      <Xarrow start={id('logins')} end={id('backend')}
-        {...secondaryArrowProps}
-        path="straight"
-        startAnchor="right" endAnchor={{ position: 'left', offset: { y: 8 } }}
       />
       <Xarrow start={id('backend')} end={id('scraper')}
         {...primaryArrowProps}
@@ -164,7 +189,7 @@ function EventHubDiagramInner({ className }: { className?: string }) {
 
   return (
     <div className={`${className || ''} relative flex items-center justify-center gap-16 py-6`}>
-      <SourceColumn idEntra={id('entra')} idLogins={id('logins')} />
+      <EntraSourceBox id={id('entra')} />
       <DiagramNode id={id('hub')} icon={AzureServiceBus} label="Event Hub" />
       <DiagramNode id={id('consumer')} icon={HiShieldCheck} label="Bridge Consumer" />
       <MissionControlPill id={id('mc')} />
@@ -173,11 +198,6 @@ function EventHubDiagramInner({ className }: { className?: string }) {
         {...primaryArrowProps}
         path="straight"
         startAnchor="right" endAnchor="left"
-      />
-      <Xarrow start={id('logins')} end={id('hub')}
-        {...secondaryArrowProps}
-        path="straight"
-        startAnchor="right" endAnchor={{ position: 'left', offset: { y: 8 } }}
       />
       <Xarrow start={id('hub')} end={id('consumer')}
         {...primaryArrowProps}
