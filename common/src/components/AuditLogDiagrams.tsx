@@ -3,14 +3,12 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 import Xarrow from 'react-xarrows';
 import {
   AzureAd,
+  AzureLogAnalytics,
   MissionControlWhite,
   Http,
-  Opensearch,
-  Loki,
   AzureServiceBus,
 } from '@flanksource/icons/mi';
 import { HiShieldCheck, HiUserGroup } from 'react-icons/hi2';
-import { FaDatabase } from 'react-icons/fa';
 
 const COLORS = {
   primary: '#2d7de4',
@@ -49,20 +47,6 @@ function MissionControlPill({ id }: { id: string }) {
       style={{ borderColor: COLORS.accent, backgroundColor: COLORS.background }}>
       <MissionControlWhite className="w-8 h-8" style={{ color: COLORS.primary }} />
       <span className="text-xs font-bold" style={{ color: COLORS.muted }}>Mission Control</span>
-    </div>
-  );
-}
-
-function LogBackendNode({ id }: { id: string }) {
-  return (
-    <div id={id} className="flex flex-col items-center gap-2 px-4 py-3 rounded-xl border-2 shadow-lg"
-      style={{ borderColor: COLORS.primary, backgroundColor: COLORS.background }}>
-      <div className="flex items-center gap-3">
-        <Opensearch className="w-6 h-6" style={{ color: COLORS.accent }} />
-        <Loki className="w-6 h-6" style={{ color: COLORS.accent }} />
-        <FaDatabase className="w-5 h-5" style={{ color: COLORS.muted }} />
-      </div>
-      <span className="text-xs font-bold" style={{ color: COLORS.muted }}>Log Backend</span>
     </div>
   );
 }
@@ -137,7 +121,7 @@ function LogsDiagramInner({ className }: { className?: string }) {
   return (
     <div className={`${className || ''} relative flex items-center justify-center gap-16 py-6`}>
       <SourceColumn idEntra={id('entra')} idLogins={id('logins')} />
-      <LogBackendNode id={id('backend')} />
+      <DiagramNode id={id('backend')} icon={AzureLogAnalytics} label="Log Analytics" />
       <DiagramNode id={id('scraper')} icon={HiShieldCheck} label="Logs Scraper" />
       <MissionControlPill id={id('mc')} />
 
