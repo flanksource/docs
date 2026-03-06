@@ -6,12 +6,12 @@ sidebar_custom_props:
 
 import Silence from "@site/docs/reference/notifications/_silence.mdx"
 
-A silence is a way to temporarily suppress notifications. Each silence has:
+Silences temporarily suppress notifications. Each silence has:
 
-- A description - explaining why the silence was created
-- A duration - specified by `from` and `until` timestamps in RFC3339 format, datetime or datemath expressions (e.g., `now`, `now+2d`)
-- A scope - defined through selectors and filters to target specific resources
-- A recursive flag - to apply silence to child resources
+- A description explaining why you created the silence
+- A duration specified by `from` and `until` timestamps in RFC3339 format, datetime or datemath expressions (e.g., `now`, `now+2d`)
+- A scope that selectors and filters define to target specific resources
+- A recursive flag to apply silence to child resources
 
 :::note
 Notifications that aren't sent due to silence are still visible in the notification history for auditing purposes.
@@ -21,15 +21,27 @@ Notifications that aren't sent due to silence are still visible in the notificat
 
 ### Selector-based silences
 
-#### Silence by namespace and time window
+#### Silence notifications in test and stage namespaces
 
 ```yaml title="silence-test-env.yaml" file=<rootDir>/modules/mission-control/fixtures/silences/silence-test-env.yaml
 ```
 
-#### Silence by type and tag
+This example:
+
+1. Uses `selectors` to target all resources in the `test` and `stage` namespaces
+2. Sets a time window from January 1 to February 1, 2025
+3. Silences all notification events for resources in those namespaces
+
+#### Silence low-severity Kubernetes Jobs
 
 ```yaml title="silence-test-deployments.yaml" file=<rootDir>/modules/mission-control/fixtures/silences/silence-test-deployments.yaml
 ```
+
+This example:
+
+1. Uses `types` to target Kubernetes Job resources
+2. Uses `tagSelector` to match resources with the `severity=low` tag
+3. Silences notifications from matching Jobs indefinitely (no time window specified)
 
 ### Filter-based silences
 
@@ -38,21 +50,41 @@ Notifications that aren't sent due to silence are still visible in the notificat
 ```yaml title="checks-date-window.yaml" file=<rootDir>/modules/mission-control/fixtures/silences/checks-date-window.yaml
 ```
 
-#### Silence a specific StatefulSet
+This example:
+
+1. Uses a CEL `filter` expression to match canary unhealthy events
+2. Uses `source_event` to check the event type is `config.unhealthy`
+3. Uses `time.InTimeRange()` with `event_time` to silence events between 6:00 AM and 7:00 AM daily
+4. Matches only resources of type `MissionControl::Canary`
+
+#### Silence notifications from PostgreSQL StatefulSet
 
 ```yaml title="postgresql-sts.yaml" file=<rootDir>/modules/mission-control/fixtures/silences/postgresql-sts.yaml
 ```
 
-#### Silence AWS RDS maintenance
+This example:
+
+1. Uses a CEL `filter` expression to match a specific resource
+2. Checks the config name is `postgresql` and the type is `Kubernetes::StatefulSet`
+3. Silences all notification events for this resource
+
+#### Silence RDS PostgreSQL maintenance in flanksource account
 
 ```yaml title="rds.yaml" file=<rootDir>/modules/mission-control/fixtures/silences/rds.yaml
 ```
 
+This example:
+
+1. Uses a CEL `filter` to target AWS RDS database instances
+2. Filters by the `account-name` tag matching `flanksource`
+3. Filters by the config `Engine` property matching `postgres`
+4. Silences notifications during maintenance windows and brief status flaps
+
 ## Use cases
 
-- Planned maintenance or deployments - Silence notifications from a namespace or helm release and optionally all their children
-- Non-critical resources - Suppress notifications from resources that routinely trigger expected and harmless alerts
-- Known issues - Temporarily silence alerts for known issues that can't be immediately resolved due to dependencies or resource constraints
+- **Planned maintenance or deployments** - Silence notifications from a namespace or helm release and optionally all their children
+- **Non-critical resources** - Suppress notifications from resources that routinely trigger expected and harmless alerts
+- **Known issues** - Temporarily silence alerts for known issues that you can't immediately resolve due to dependencies or resource constraints
 
 ## Creating Silences
 
@@ -66,11 +98,11 @@ Silences can be created in multiple ways:
 
 ### Resource Selection
 
-Silences can target resources using selectors, filters, or a specific resource. At least one targeting method must be specified.
+You can target resources using selectors, filters, or a specific resource. At least one targeting method must be specified.
 
-1. **Selectors**: Direct resource matching using types, names, namespaces, labels, and tags
-2. **Filters**: Complex matching using CEL expressions
-3. **Specific Resource**: Selecting a specific config, check, canary, or component (via UI)
+1. **Selectors**: Match resources directly using types, names, namespaces, labels, and tags
+2. **Filters**: Match resources using complex CEL expressions
+3. **Specific Resource**: Select a specific config, check, canary, or component (via UI)
 
 :::info
 When both `filter` and `selectors` are specified, the filter is evaluated first. If the filter matches, the silence is applied. Selectors are only evaluated if the filter does not match.
@@ -82,18 +114,18 @@ Selectors use [Resource Selectors](/docs/reference/resource-selector) to target 
 
 #### Filters
 
-A filter is a CEL expression that evaluates to a boolean value. The notification is silenced when the filter returns true. Filters provide powerful, flexible matching capabilities.
+Filters use CEL expressions that evaluate to a boolean value. Mission Control silences the notification when the filter returns true. Filters provide powerful, flexible matching capabilities.
 
 ##### Filter Examples
 
-| Filter                                                                                                                                                                                                         | Description                                                    |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| `check.type == 'http'`                                                                                                                                                                                        | Silences HTTP check notifications                              |
-| `regexp.Match("^check-[0-9]+", check.name)`                                                                                                                                                                   | Matches checks with prefix `check-`                            |
-| `config.name == "postgresql" && config.type == "Kubernetes::StatefulSet"`                                                                                                                                      | Silences notifications from a specific StatefulSet             |
-| `config.type == "Kubernetes::Pod" && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming").size > 0 && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming")[0].tags.?env.orValue("") == "prod"` | Matches pods in production namespaces                          |
-| `config.health == "unhealthy" && config.name.endsWith("-canary") && time.Since(timestamp(config.updated_at)) < duration("15m")`                                                                               | Silences recent `config.unhealthy` canary updates              |
-| `source_event == 'config.unhealthy' && config.type == 'MissionControl::Canary' && time.InTimeRange(event_time, "06:00", "07:00")`                                                                             | Silences canary unhealthy events during a daily time window    |
+| Filter                                                                                                                                                 | Description                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- |
+| `check.type == 'http'`                                                                                                                                 | Silences HTTP check notifications                              |
+| `regexp.Match("^check-[0-9]+", check.name)`                                                                                                            | Matches checks with prefix `check-`                            |
+| `config.name == "postgresql" && config.type == "Kubernetes::StatefulSet"`                                                                              | Silences notifications from a specific StatefulSet             |
+| `config.health == "unhealthy" && config.name.endsWith("-canary") && time.Since(timestamp(config.updated_at)) < duration("15m")`                       | Silences recent `config.unhealthy` canary updates              |
+| `source_event == 'config.unhealthy' && config.type == 'MissionControl::Canary' && time.InTimeRange(event_time, "06:00", "07:00")`                     | Silences canary unhealthy events during a daily time window    |
+| `config.type == "Kubernetes::Pod" && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming")[0].tags.?env.orValue("") == "prod"`             | Matches pods in production namespaces                          |
 
 ##### Available Template Variables
 
