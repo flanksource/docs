@@ -17,9 +17,36 @@ A silence is a way to temporarily suppress notifications. Each silence has:
 Notifications that aren't sent due to silence are still visible in the notification history for auditing purposes.
 :::
 
+## Examples
 
-```yaml title="" file=<rootDir>/modules/mission-control/fixtures/silences/silence-test-env.yaml
-``` 
+### Selector-based silences
+
+#### Silence by namespace and time window
+
+```yaml title="silence-test-env.yaml" file=<rootDir>/modules/mission-control/fixtures/silences/silence-test-env.yaml
+```
+
+#### Silence by type and tag
+
+```yaml title="silence-test-deployments.yaml" file=<rootDir>/modules/mission-control/fixtures/silences/silence-test-deployments.yaml
+```
+
+### Filter-based silences
+
+#### Silence canary unhealthy events in a daily time window
+
+```yaml title="checks-date-window.yaml" file=<rootDir>/modules/mission-control/fixtures/silences/checks-date-window.yaml
+```
+
+#### Silence a specific StatefulSet
+
+```yaml title="postgresql-sts.yaml" file=<rootDir>/modules/mission-control/fixtures/silences/postgresql-sts.yaml
+```
+
+#### Silence AWS RDS maintenance
+
+```yaml title="rds.yaml" file=<rootDir>/modules/mission-control/fixtures/silences/rds.yaml
+```
 
 ## Use cases
 
@@ -30,6 +57,7 @@ Notifications that aren't sent due to silence are still visible in the notificat
 ## Creating Silences
 
 Silences can be created in multiple ways:
+
 1. Through the notification page UI
 2. Using the silence button on Slack notifications (when using default templates)
 3. By applying a NotificationSilence custom resource
@@ -58,21 +86,32 @@ A filter is a CEL expression that evaluates to a boolean value. The notification
 
 ##### Filter Examples
 
-| Filter | Description |
-|--------|-------------|
-| `check.type == 'http'` | Silences HTTP check notifications |
-| `regexp.Match("^check-[0-9]+", check.name)` | Matches checks with prefix `check-` |
-| `config.name == "postgresql" && config.type == "Kubernetes::StatefulSet"` | Silences notifications from a specific StatefulSet |
-| `config.type == "Kubernetes::Pod" && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming").size > 0 && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming")[0].tags.?env.orValue("") == "prod"` | Matches pods in production namespaces |
+| Filter                                                                                                                                                                                                         | Description                                                    |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `check.type == 'http'`                                                                                                                                                                                        | Silences HTTP check notifications                              |
+| `regexp.Match("^check-[0-9]+", check.name)`                                                                                                                                                                   | Matches checks with prefix `check-`                            |
+| `config.name == "postgresql" && config.type == "Kubernetes::StatefulSet"`                                                                                                                                      | Silences notifications from a specific StatefulSet             |
+| `config.type == "Kubernetes::Pod" && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming").size > 0 && catalog.traverse(config.id, "Kubernetes::Namespace", "incoming")[0].tags.?env.orValue("") == "prod"` | Matches pods in production namespaces                          |
+| `config.health == "unhealthy" && config.name.endsWith("-canary") && time.Since(timestamp(config.updated_at)) < duration("15m")`                                                                               | Silences recent `config.unhealthy` canary updates              |
+| `source_event == 'config.unhealthy' && config.type == 'MissionControl::Canary' && time.InTimeRange(event_time, "06:00", "07:00")`                                                                             | Silences canary unhealthy events during a daily time window    |
 
 ##### Available Template Variables
 
-Filters can reference these variables:
+In addition to the resource-specific variables below, the following common variables are available in silence filters:
+
+| Variable       | Description                                                                                      | Schema      |
+| -------------- | ------------------------------------------------------------------------------------------------ | ----------- |
+| `source_event` | The event that triggered the notification (e.g., `config.unhealthy`, `check.passed`)             | `string`    |
+| `event_time`   | The timestamp when the event was created                                                         | `time.Time` |
+
+Resource-specific variables:
+
 - [CheckEvents](/docs/reference/notifications/template_vars/checks)
 - [ConfigEvents](/docs/reference/notifications/template_vars/config)
 
 ### Recursive Mode
 
 When `recursive: true` is set, the silence applies to all child resources of the matched resources. For example:
+
 - Silencing a namespace affects all deployments, statefulsets, pods, etc. within it
 - Silencing a statefulset affects all its pods
