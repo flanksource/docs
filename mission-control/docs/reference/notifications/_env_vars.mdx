@@ -37,6 +37,16 @@ export function CheckHealthEnv() {
         "description": "The notification channel, e.g. `slack`, `email`"
       },
       {
+        "field": "source_event",
+        "scheme": "string",
+        "description": "The event that triggered the notification (e.g. `check.passed`, `check.failed`)"
+      },
+      {
+        "field": "event_time",
+        "scheme": "`time.Time`",
+        "description": "The timestamp when the event was created"
+      },
+      {
         "field": "groupedResources",
         "scheme": "`[]string`",
         "description": "A list of grouped resource names. Only available when notifications are grouped using `waitFor`."
@@ -82,6 +92,16 @@ export function ConfigEventsTemplateVars() {
         "field": "channel",
         "scheme": "string",
         "description": "The notification channel, e.g. `slack`, `email`"
+      },
+      {
+        "field": "source_event",
+        "scheme": "string",
+        "description": "The event that triggered the notification (e.g. `config.unhealthy`, `config.created`, `config.updated`, `config.deleted`)"
+      },
+      {
+        "field": "event_time",
+        "scheme": "`time.Time`",
+        "description": "The timestamp when the event was created"
       },
       {
         "field": "groupedResources",
