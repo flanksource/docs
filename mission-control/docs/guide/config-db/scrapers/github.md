@@ -24,7 +24,7 @@ The GitHub Actions scraper creates configuration items from GitHub Actions workf
 
 The GitHub Repository scraper creates `GitHub::Repository` config items and optionally fetches security alerts (Dependabot, code scanning, secret scanning) and OpenSSF Scorecard data as analyses.
 
-```yaml title='github.yaml' file=<rootDir>/modules/config-db/fixtures/github.yaml
+```yaml title='github.yaml'
 
 ```
 

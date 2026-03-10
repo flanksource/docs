@@ -9,15 +9,13 @@ import { Card, Cards } from '@site/../common/src/components/Card'
 
 This guide walks you through setting up the Entra ID scraper — from Azure Portal configuration to a working access audit.
 
-## Prerequisites
 
 :::info Prerequisites
 - Azure AD tenant with Global Administrator or Application Administrator access
 - Mission Control installed via Helm
 :::
 
-<details>
-<summary>Create a new Azure App Registration</summary>
+<details summary="Azure App Registration Setup">
 
 1. In the Azure Portal, go to **Microsoft Entra ID > App registrations > New registration**
 2. Set the **Name** (e.g. `mission-control-scraper`)
@@ -388,7 +386,7 @@ Microsoft Graph API enforces per-tenant rate limits. Increase the schedule inter
   <Card icon="azure" title="Azure Integration" href="/docs/integrations/azure">
     Azure resource scraping (VMs, databases, networking)
   </Card>
-  <Card icon="scraper" title="Access Control Audit" href="/docs/guide/audit/access-control">
+  <Card icon="scraper" title="Identity & Access Audit" href="/docs/guide/audit/identity-access">
     Multi-provider access control auditing
   </Card>
   <Card icon="lucide:package" title="Applications" href="/docs/guide/audit/applications">

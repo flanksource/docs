@@ -1,0 +1,38 @@
+---
+title: Core Concepts
+sidebar_position: 1
+sidebar_custom_props:
+  icon: mdi:database-outline
+---
+
+import AuditConceptDiagram from '@site/src/components/AuditConceptDiagram'
+
+Mission Control's audit system stores four categories of data: identities (who), permissions (what they can access), access events (what they actually accessed), and resources (infrastructure state). Understanding how these relate is key to building effective audits.
+
+## Domain Model
+
+<AuditConceptDiagram className="mx-auto overflow-x-auto" />
+
+## How Entities Relate
+
+**Identity providers** (Entra ID, AWS IAM, Kubernetes RBAC, databases) are scraped into **users**, **groups**, and **roles**. Users belong to groups, and roles define permission sets.
+
+**Permissions** link users, groups, and roles to specific **resources** — the infrastructure items in your catalog (AWS accounts, Azure subscriptions, Kubernetes clusters, databases, etc.). This answers "who _can_ access what."
+
+**Access events** record individual access actions — who accessed a resource, when, and whether they used MFA. This answers "who _did_ access what."
+
+The [Application CRD](/docs/guide/audit/applications) ties all of this together, mapping identity data, permissions, and infrastructure into a single auditable unit per application.
+
+## Key Terms
+
+| Concept | Description |
+|---|---|
+| **User** | A user from an identity provider (Entra ID, IAM, database). |
+| **Group** | A team, department, or security group from an identity provider. |
+| **Role** | A permission set (e.g. `Admin`, `Reader`) that can be assigned to users or groups. |
+| **Permission** | A record linking a user, group, or role to a resource — represents a permission grant. (DB: `config_access`) |
+| **Access Event** | An individual access action with timestamp, MFA status, and metadata. (DB: `config_access_log`) |
+| **Resource** | An infrastructure item in the catalog (config item) that permissions and events reference. |
+| **Application** | A CRD that maps all of the above into a single auditable unit for a specific application. |
+
+See [Config Access Reference](/docs/reference/config-db/config_access) for the full database schema and field reference.

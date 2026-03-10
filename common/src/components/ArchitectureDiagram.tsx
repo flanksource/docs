@@ -13,6 +13,7 @@ import {
   Datadog,
   Github,
   Postgres,
+  PostgresWhite,
   ConfigDbWhite,
   CanaryCheckerWhite,
   Playbook,
@@ -25,6 +26,7 @@ import {
   SqlServer,
   AzureDevops,
   Gitlab,
+  MissionControlWhite,
 } from '@flanksource/icons/mi';
 import { PiBrain } from 'react-icons/pi';
 
@@ -96,24 +98,30 @@ function MissionControlBox() {
   ];
 
   return (
-    <div id="arch-missionControl" className="rounded-2xl overflow-hidden bg-gradient-to-br from-slate-700 to-slate-900 border-2 border-blue-500 shadow-2xl">
-      <div className="px-6 py-3 text-center border-b border-blue-800/50">
-        <span className="text-white text-lg font-bold tracking-wide">MISSION CONTROL</span>
+    <div id="arch-missionControl" className="rounded-2xl overflow-hidden border-2 shadow-2xl"
+      style={{ borderColor: '#007fdf', backgroundColor: '#f7fbfe' }}>
+      <div className="px-6 py-3 text-center" style={{ backgroundColor: '#007fdf' }}>
+        <div className="flex items-center justify-center gap-2">
+          <MissionControlWhite className="w-6 h-6 text-white" />
+          <span className="text-white text-lg font-bold tracking-wide">Mission Control</span>
+        </div>
       </div>
       <div className="p-4 flex flex-col gap-3">
         <div className="grid grid-cols-2 gap-3">
           {features.map(({ Icon, label }) => (
             <div
               key={label}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 transition-colors rounded-lg px-3 py-2 cursor-default"
+              className="flex items-center gap-2 rounded-lg px-3 py-2 cursor-default"
+              style={{ backgroundColor: '#007fdf' }}
             >
               <Icon className="w-5 h-5 text-white" />
               <span className="text-white text-xs font-medium">{label}</span>
             </div>
           ))}
         </div>
-        <div className="flex items-center justify-center gap-2 bg-slate-600 rounded-lg px-3 py-2">
-          <Postgres className="w-5 h-5" />
+        <div className="flex items-center justify-center gap-2 rounded-lg px-3 py-2"
+          style={{ backgroundColor: '#607689' }}>
+          <PostgresWhite className="w-5 h-5 text-white" />
           <span className="text-white text-xs font-medium">Postgres</span>
         </div>
       </div>
