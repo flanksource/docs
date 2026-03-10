@@ -1,0 +1,88 @@
+---
+title: Azure AD / Entra ID
+sidebar_custom_props:
+  icon: entra
+---
+
+import DocCardList from '@theme/DocCardList';
+import { Card, Cards } from '@site/../common/src/components/Card'
+import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+import EntraDataFlowDiagram from '@site/src/components/EntraDataFlowDiagram'
+
+<CapabilityBadges>
+  <CapabilityBadge type="scraper" />
+</CapabilityBadges>
+
+Mission Control scrapes identity data from Entra ID and stores it in a unified catalog alongside your infrastructure (AWS, Azure, Kubernetes, SQL Server, Azure DevOps) and custom applications. The [Application CRD](/docs/guide/audit/applications) maps this catalog data into access and audit reports — giving you a single view of who has access to what, when they last used it, and whether it's been reviewed.
+
+<EntraDataFlowDiagram className="mx-auto" />
+
+---
+
+<CapabilityHeading type="scraper" />
+
+**Use cases:**
+- Discover users, groups, and their memberships across your tenant
+- Track app registrations, client secrets, and certificate expiry
+- Audit app role assignments — who has access to which applications and when
+- Correlate identity data with AWS IAM, Kubernetes RBAC, Azure DevOps, and SQL Server access
+- Build access and audit reports for both infrastructure and custom applications using the [Application CRD](/docs/guide/audit/applications)
+
+## What Gets Scraped
+
+### Config Types
+
+| Config Type | Class | Description |
+|---|---|---|
+| `Azure::User` | - | Scraped as external users (not config items) |
+| `Azure::Group` | - | Scraped as external groups with membership |
+| `Azure::AppRegistration` | `AppRegistration` | Applications registered in the tenant |
+| `Azure::AppRegistration::ClientSecret` | `ClientSecret` | Client secret credentials (child of app registration) |
+| `Azure::AppRegistration::Certificate` | `ClientCertificate` | Certificate credentials (child of app registration) |
+| `Azure::EnterpriseApplication` | `EnterpriseApplication` | Service principals representing apps |
+| `Azure::AuthenticationMethod` | `AuthenticationMethod` | Tenant-level auth method policies (MFA, FIDO2, etc.) |
+
+:::note
+Users and groups are stored as **external users** and **external groups**, not as config items. They appear in the access control views when linked through an [Application CRD](/docs/guide/audit/applications). App registrations and enterprise applications are stored as config items in the catalog.
+:::
+
+### Relationships
+
+- **App Registration -> Client Secrets / Certificates**: Parent-child relationship. Secrets and certificates appear as children of their app registration.
+- **Enterprise Application -> App Registration**: Linked via `AppServicePrincipal` relationship. Each enterprise app is the service principal for an app registration.
+- **Groups -> Users**: Group membership is tracked through external user-group mappings.
+- **Enterprise Application -> Users/Groups**: App role assignments link users and groups to enterprise applications via config access records.
+
+### App Role Assignments and Config Access
+
+When `appRoleAssignments` is configured, the scraper creates **config access records** linking users and groups to enterprise applications:
+
+- For each app role assignment, a `ConfigAccess` record is created with the user or group as the principal
+- If the assignment has a specific app role (not the default nil role), the role is recorded as an `ExternalRole`
+- This data powers the access control views in [Applications](/docs/guide/audit/applications)
+
+### Permissions
+
+| Permission | What It Enables |
+|---|---|
+| `User.Read.All` | Users and alias resolution |
+| `Group.Read.All` | Groups |
+| `GroupMember.Read.All` | Group memberships |
+| `Application.Read.All` | App registrations, enterprise applications |
+| `Directory.Read.All` | Service principal metadata, directory roles |
+| `AuditLog.Read.All` | Sign-in logs via [HTTP scraper](./audit-logs/http-scraper) only (requires P1/P2 license) |
+| `Policy.Read.All` | Authentication method policies (MFA, FIDO2, etc.) |
+
+See [Getting Started](./getting-started) for the full permissions table and setup walkthrough.
+
+:::tip
+After deploying, follow the [verification steps](./getting-started#verification) to confirm resources are being scraped correctly. For large tenants (10K+ users), see [Performance & Scheduling](./getting-started#performance--scheduling) for schedule recommendations and rate limit guidance.
+:::
+
+---
+
+## Sub-pages
+
+<DocCardList />
+
+For advanced MS Graph API queries (custom `$filter`, user attributes, pagination), see [Microsoft Graph API](./ms-graph).

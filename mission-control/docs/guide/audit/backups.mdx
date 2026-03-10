@@ -1,0 +1,123 @@
+---
+title: Backups
+sidebar_position: 5
+sidebar_custom_props:
+  icon: mdi:backup-restore
+---
+
+import {Card, Cards} from '@site/../common/src/components/Card'
+
+Mission Control provides comprehensive auditing for your backup infrastructure, covering health monitoring, storage locations, retention policies, and restore capability. This centralized visibility helps you verify compliance with recovery point objectives (RPOs) and recovery time objectives (RTOs), and ensures your disaster recovery strategy is backed by real evidence rather than assumptions.
+
+## Health Checks
+
+Mission Control performs regular health checks on your backup jobs and storage, verifying successful completion and freshness. Proactive monitoring ensures your backups are viable and alerts you before a missed backup window becomes a compliance issue.
+
+Use [AWS Config Rule checks](/docs/reference/canary-checker) for managed backup services, or [SQL health checks](/docs/reference/canary-checker) for custom backup systems:
+
+```yaml title="rds-backup-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: rds-backup-check
+spec:
+  schedule: "@every 1h"
+  awsConfigRule:
+    - name: rds-backup-verification
+      connection: connection://aws/prod
+      rules:
+        - "RDS_BACKUP_PLAN_ENABLED"
+      complianceTypes:
+        - NON_COMPLIANT
+```
+
+For custom backup systems, verify the last backup timestamp with a SQL check:
+
+```yaml title="custom-backup-check.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: database-backup-check
+spec:
+  schedule: "@every 1h"
+  postgres:
+    - name: postgres-backup-freshness
+      connection: connection://postgres/prod
+      query: |
+        SELECT EXTRACT(EPOCH FROM (NOW() - MAX(last_archived_time))) as age_seconds
+        FROM pg_stat_archiver
+      results: 1
+      test:
+        expr: results[0].age_seconds < 86400
+```
+
+See [Health Checks](/docs/reference/canary-checker) for the full list of supported check types.
+
+## Location & Region Tracking
+
+Mission Control tracks the storage locations and geographical regions of your backups. This is vital for meeting data residency requirements and ensuring geographical redundancy for disaster recovery.
+
+Use [scraper transforms](/docs/guide/config-db/concepts/transform) to extract backup location metadata from scraped configurations. See the [AWS scraper](/docs/guide/config-db/scrapers/aws) for RDS and S3 backup configuration options.
+
+## Backup Events from Changes
+
+Track backup-related events by mapping [change types](/docs/guide/config-db/concepts/changes) in your scraper. CloudTrail events like `CreateDBSnapshot`, `DeleteDBSnapshot`, and `RestoreDBInstanceFromDBSnapshot` can be mapped to named change types for clearer audit reporting:
+
+```yaml title="backup-change-tracking.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-with-backup-events
+spec:
+  schedule: "@every 1h"
+  aws:
+    - connection: connection://aws/prod
+      cloudtrail:
+        exclude:
+          - DescribeInstances
+          - GetObject
+      include:
+        - RDSInstance
+        - S3Bucket
+      transform:
+        changes:
+          mapping:
+            - filter: >
+                change.change_type == 'CloudTrail' &&
+                change.summary.contains("CreateDBSnapshot")
+              type: BackupCreated
+            - filter: >
+                change.change_type == 'CloudTrail' &&
+                change.summary.contains("RestoreDBInstanceFromDBSnapshot")
+              type: BackupRestored
+```
+
+## Restore Testing
+
+Verifying that backups can be successfully restored is paramount for confidence in your disaster recovery strategy. Mission Control can automate periodic restore tests using [Playbooks](/docs/guide/playbooks/), giving you documented evidence that your recovery process works.
+
+See [Playbooks](/docs/guide/playbooks/) for scheduling automated restore tests and [Exec actions](/docs/guide/playbooks/actions/exec) for running restore scripts.
+
+## Tying It Together with an Application
+
+Use the [Application CRD](/docs/guide/audit/applications) to map backup data sources to a specific application. The `mapping.datasources` field links databases and storage to the application, automatically surfacing backup and restore events in the application's audit view:
+
+```yaml title="application-datasources.yaml"
+mapping:
+  datasources:
+    - types:
+        - AWS::RDS::DBInstance
+      tagSelector: app=payments
+```
+
+See [Applications](/docs/guide/audit/applications) for the full spec.
+
+## Related
+
+<Cards>
+  <Card title="Applications" link="/docs/guide/audit/applications" icon="lucide:package" />
+  <Card title="Changes" link="/docs/guide/config-db/concepts/changes" icon="octicon:diff-16" />
+  <Card title="AWS Scraper" link="/docs/guide/config-db/scrapers/aws" icon="aws" />
+  <Card title="Playbooks" link="/docs/guide/playbooks/" />
+  <Card title="Health Checks" link="/docs/reference/canary-checker" />
+</Cards>

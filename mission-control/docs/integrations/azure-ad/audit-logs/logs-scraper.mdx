@@ -1,0 +1,108 @@
+---
+title: Logs Scraper
+sidebar_position: 1
+sidebar_custom_props:
+  icon: opensearch
+---
+
+import { LogsScraperDiagram } from '@site/src/components/AuditLogDiagrams'
+import ComparisonBox from '@site/../common/src/components/ComparisonBox'
+import {Card, Cards} from '@site/../common/src/components/Card'
+
+If your Entra ID logs are already forwarded to a log backend (via Azure Monitor Diagnostic Settings), use the [Logs scraper](/docs/guide/config-db/scrapers/logs) to pull them into Mission Control.
+
+<LogsScraperDiagram className="mx-auto" />
+
+<ComparisonBox>
+  <ComparisonBox.Pros>
+    <li>Logs already forwarded to OpenSearch, Loki, or BigQuery</li>
+    <li>Backend handles retention, indexing, and search</li>
+    <li>No direct Graph API calls needed</li>
+    <li>You want to query logs alongside non-Entra data in the same backend</li>
+  </ComparisonBox.Pros>
+  <ComparisonBox.Cons>
+    <li>No existing log backend — use <a href="./http-scraper">HTTP Scraper</a> instead</li>
+    <li>You need real-time latency — use <a href="./event-hub">Event Hub</a></li>
+    <li>You want to avoid maintaining an export pipeline (Diagnostic Settings + consumer)</li>
+  </ComparisonBox.Cons>
+</ComparisonBox>
+
+## Prerequisites
+
+- **Azure Monitor Diagnostic Settings** configured to export **SignInLogs** and **AuditLogs** to a supported backend
+- **Entra ID P1 or P2 license** — Microsoft does not generate these log categories without it
+- A supported log backend: OpenSearch, Loki, BigQuery, or GCP Cloud Logging
+- Credentials for Mission Control to query the log backend
+
+## Azure Setup
+
+1. In the Azure Portal, go to **Microsoft Entra ID > Diagnostic settings > Add diagnostic setting**
+2. Select log categories: **SignInLogs**, **AuditLogs** (and optionally **NonInteractiveUserSignInLogs**, **ServicePrincipalSignInLogs**)
+3. Choose a destination: **Event Hub** (for streaming to OpenSearch, Loki, etc.) or **Log Analytics workspace**
+4. Deploy a consumer that writes to your log backend (e.g. a function app or agent — consult your log backend's documentation for Event Hub ingestion)
+
+## OpenSearch Example
+
+```yaml title="entra-logs-opensearch.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: entra-signin-logs-opensearch
+  namespace: mc
+spec:
+  schedule: "@every 15m"
+  logs:
+    - name: entra-signins
+      type: OpenSearch
+      opensearch:
+        url: https://opensearch.example.com
+        index: entra-signins-*
+        username:
+          valueFrom:
+            secretKeyRef:
+              name: opensearch-credentials
+              key: username
+        password:
+          valueFrom:
+            secretKeyRef:
+              name: opensearch-credentials
+              key: password
+        query: |
+          {
+            "query": {
+              "range": {
+                "createdDateTime": {
+                  "gte": "now-30m"
+                }
+              }
+            },
+            "sort": [{"createdDateTime": "desc"}],
+            "size": 500
+          }
+      transform:
+        expr: |
+          dyn(config).map(e, {
+            'config_type': 'Azure::SignIn',
+            'id': e.id,
+            'name': e.userPrincipalName + ' -> ' + e.appDisplayName,
+            'config_access': [{
+              'external_user_aliases': [e.userPrincipalName, e.userId],
+              'config_name': e.appDisplayName,
+              'config_type': 'Azure::EnterpriseApplication',
+              'status': e.status.errorCode == 0 ? 'success' : 'failure',
+              'ip': e.?ipAddress.orValue(''),
+              'created_at': e.createdDateTime
+            }]
+          }).toJSON()
+```
+
+See the [Logs scraper reference](/docs/guide/config-db/scrapers/logs) for all backend options (Loki, BigQuery, GCP Cloud Logging).
+
+## Related
+
+<Cards>
+  <Card title="HTTP Scraper" link="/docs/integrations/azure-ad/audit-logs/http-scraper" icon="http" />
+  <Card title="Event Hub Streaming" link="/docs/integrations/azure-ad/audit-logs/event-hub" icon="azure" />
+  <Card title="Logs Scraper Reference" link="/docs/guide/config-db/scrapers/logs" />
+  <Card title="Identity & Access" link="/docs/guide/audit/identity-access" icon="mdi:account-lock" />
+</Cards>

@@ -1,0 +1,238 @@
+---
+title: HTTP + MS Graph
+sidebar_position: 0
+sidebar_custom_props:
+  icon: http
+---
+
+import { HttpScraperDiagram } from '@site/src/components/AuditLogDiagrams'
+import ComparisonBox from '@site/../common/src/components/ComparisonBox'
+import {Card, Cards} from '@site/../common/src/components/Card'
+
+The simplest approach: poll the Microsoft Graph API directly using the [HTTP scraper](/docs/guide/config-db/scrapers/http). No log forwarding infrastructure needed.
+
+<HttpScraperDiagram className="mx-auto" />
+
+<ComparisonBox>
+  <ComparisonBox.Pros>
+    <li>Simplest setup — just a ScrapeConfig and credentials</li>
+    <li>You need full control over <code>$filter</code>, <code>$select</code>, <code>$orderby</code></li>
+    <li>No existing log forwarding infrastructure</li>
+    <li>Works with any Entra ID P1/P2 tenant immediately</li>
+  </ComparisonBox.Pros>
+  <ComparisonBox.Cons>
+    <li>You need sub-minute latency (use <a href="./event-hub">Event Hub</a> instead)</li>
+    <li>You have &gt;999 sign-ins per polling interval (no auto-pagination)</li>
+    <li>Logs are already forwarded to a backend (use <a href="./logs-scraper">Logs Scraper</a>)</li>
+    <li>You're hitting Graph API rate limits across multiple scrapers</li>
+  </ComparisonBox.Cons>
+</ComparisonBox>
+
+## Prerequisites
+
+- [Connection](../getting-started#connection) to Entra ID with OAuth2 client credentials
+- **`AuditLog.Read.All`** — Application permission, admin-consented
+- **Entra ID P1 or P2 license** on the tenant
+
+## Endpoints
+
+| Graph API Endpoint | Description |
+|---|---|
+| `/auditLogs/signIns` | Interactive and non-interactive sign-in events |
+| `/auditLogs/directoryAudits` | Directory changes (user/group/app modifications) |
+
+## Field Mapping: Sign-In Logs
+
+| Graph API Field | Mission Control Field | Description |
+|---|---|---|
+| `id` | `id` | Unique sign-in event ID |
+| `createdDateTime` | `created_at` | When the sign-in occurred |
+| `userPrincipalName` | `external_user_id` (alias) | User who signed in |
+| `appDisplayName` | `config_name` | Application signed into |
+| `ipAddress` | `ip` | Client IP address |
+| `status.errorCode` | `status` | `0` = success, non-zero = failure |
+| `location` | `metadata.location` | City/country from IP geolocation |
+| `conditionalAccessStatus` | `metadata.conditionalAccess` | Conditional access policy result |
+
+## Sign-In Logs
+
+```yaml title="entra-signin-logs.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: entra-signin-logs
+  namespace: mc
+spec:
+  schedule: "@every 15m"
+  full: true
+  http:
+    - url: "https://graph.microsoft.com/v1.0/auditLogs/signIns?$top=500&$orderby=createdDateTime desc"
+      oauth:
+        tokenURL: https://login.microsoftonline.com/{{.tenant_id}}/oauth2/v2.0/token
+        clientID:
+          valueFrom:
+            secretKeyRef:
+              name: azure-entra-credentials
+              key: AZURE_CLIENT_ID
+        clientSecret:
+          valueFrom:
+            secretKeyRef:
+              name: azure-entra-credentials
+              key: AZURE_CLIENT_SECRET
+        scope:
+          - https://graph.microsoft.com/.default
+      env:
+        - name: tenant_id
+          valueFrom:
+            secretKeyRef:
+              name: azure-entra-credentials
+              key: AZURE_TENANT_ID
+      transform:
+        expr: |
+          dyn(config).value.map(e, {
+            'config_type': 'Azure::SignIn',
+            'id': e.id,
+            'name': e.userPrincipalName + ' -> ' + e.appDisplayName,
+            'config': {
+              'id': e.id,
+              'userPrincipalName': e.userPrincipalName,
+              'userId': e.userId,
+              'appDisplayName': e.appDisplayName,
+              'appId': e.appId,
+              'ipAddress': e.ipAddress,
+              'status': e.status,
+              'createdDateTime': e.createdDateTime,
+              'location': e.?location.orValue({}),
+              'conditionalAccessStatus': e.?conditionalAccessStatus.orValue('')
+            },
+            'config_access': [{
+              'external_user_aliases': [e.userPrincipalName, e.userId],
+              'config_name': e.appDisplayName,
+              'config_type': 'Azure::EnterpriseApplication',
+              'status': e.status.errorCode == 0 ? 'success' : 'failure',
+              'ip': e.?ipAddress.orValue(''),
+              'created_at': e.createdDateTime
+            }]
+          }).toJSON()
+```
+
+<details>
+<summary>Example sign-in log output</summary>
+
+After scraping, each sign-in event produces a config item and a `config_access` record:
+
+```json
+{
+  "config_type": "Azure::SignIn",
+  "id": "66ea54eb-6301-4ee5-be62-ff5a759b0100",
+  "name": "jane.doe@contoso.com -> Payments API",
+  "config": {
+    "id": "66ea54eb-6301-4ee5-be62-ff5a759b0100",
+    "userPrincipalName": "jane.doe@contoso.com",
+    "userId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "appDisplayName": "Payments API",
+    "appId": "11112222-3333-4444-5555-666677778888",
+    "ipAddress": "203.0.113.42",
+    "status": { "errorCode": 0 },
+    "createdDateTime": "2025-01-15T14:32:00Z",
+    "location": { "city": "Sydney", "countryOrRegion": "AU" },
+    "conditionalAccessStatus": "success"
+  },
+  "config_access": [{
+    "external_user_aliases": ["jane.doe@contoso.com", "a1b2c3d4-e5f6-7890-abcd-ef1234567890"],
+    "config_name": "Payments API",
+    "config_type": "Azure::EnterpriseApplication",
+    "status": "success",
+    "ip": "203.0.113.42",
+    "created_at": "2025-01-15T14:32:00Z"
+  }]
+}
+```
+
+</details>
+
+## Directory Audit Logs
+
+```yaml title="entra-directory-audits.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: entra-directory-audits
+  namespace: mc
+spec:
+  schedule: "@every 15m"
+  full: true
+  http:
+    - url: "https://graph.microsoft.com/v1.0/auditLogs/directoryAudits?$top=500&$orderby=activityDateTime desc"
+      oauth:
+        tokenURL: https://login.microsoftonline.com/{{.tenant_id}}/oauth2/v2.0/token
+        clientID:
+          valueFrom:
+            secretKeyRef:
+              name: azure-entra-credentials
+              key: AZURE_CLIENT_ID
+        clientSecret:
+          valueFrom:
+            secretKeyRef:
+              name: azure-entra-credentials
+              key: AZURE_CLIENT_SECRET
+        scope:
+          - https://graph.microsoft.com/.default
+      env:
+        - name: tenant_id
+          valueFrom:
+            secretKeyRef:
+              name: azure-entra-credentials
+              key: AZURE_TENANT_ID
+      transform:
+        expr: |
+          dyn(config).value.map(e, {
+            'config_type': 'Azure::DirectoryAudit',
+            'id': e.id,
+            'name': e.activityDisplayName,
+            'config': {
+              'id': e.id,
+              'activityDisplayName': e.activityDisplayName,
+              'activityDateTime': e.activityDateTime,
+              'category': e.category,
+              'result': e.result,
+              'initiatedBy': e.?initiatedBy.orValue({}),
+              'targetResources': e.?targetResources.orValue([])
+            }
+          }).toJSON()
+```
+
+For custom `$filter` queries and user attribute selection, see [Microsoft Graph API](/docs/integrations/azure-ad/ms-graph) for the full HTTP scraper pattern with CEL transforms.
+
+## Filtering High-Volume Sign-In Logs
+
+Use `$filter` in the URL to reduce volume and focus on relevant events:
+
+**Failed sign-ins only:**
+```
+/auditLogs/signIns?$filter=status/errorCode ne 0&$top=500&$orderby=createdDateTime desc
+```
+
+**Sign-ins for a specific application:**
+```
+/auditLogs/signIns?$filter=appDisplayName eq 'Payments API'&$top=500&$orderby=createdDateTime desc
+```
+
+**Sign-ins without MFA:**
+```
+/auditLogs/signIns?$filter=authenticationRequirement eq 'singleFactorAuthentication'&$top=500&$orderby=createdDateTime desc
+```
+
+:::warning
+Not all OData `$filter` operators are supported on sign-in log endpoints. The `eq`, `ne`, `startsWith`, and `ge`/`le` operators work on most fields, but `contains` and `endsWith` are not supported. See the [MS Graph signIn resource documentation](https://learn.microsoft.com/en-us/graph/api/signin-list) for supported filter properties.
+:::
+
+## Related
+
+<Cards>
+  <Card title="Microsoft Graph API" link="/docs/integrations/azure-ad/ms-graph" icon="entra" />
+  <Card title="Logs Scraper" link="/docs/integrations/azure-ad/audit-logs/logs-scraper" icon="opensearch" />
+  <Card title="Event Hub Streaming" link="/docs/integrations/azure-ad/audit-logs/event-hub" icon="azure" />
+  <Card title="HTTP Scraper Reference" link="/docs/guide/config-db/scrapers/http" icon="http" />
+  <Card title="Identity & Access" link="/docs/guide/audit/identity-access" icon="mdi:account-lock" />
+</Cards>
