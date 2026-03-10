@@ -8,11 +8,10 @@ sidebar_custom_props:
 import DocCardList from '@theme/DocCardList';
 import { Card, Cards } from '@site/../common/src/components/Card'
 
-Entra ID generates sign-in logs and directory audit logs that can be scraped into Mission Control as [access logs](/docs/guide/config-db/concepts/access-logs). There are three approaches depending on your infrastructure and latency requirements.
+Entra ID generates sign-in logs and directory audit logs that can be scraped into Mission Control as [access logs](/docs/guide/audit/access-logs). There are three approaches depending on your infrastructure and latency requirements.
 
 :::warning Required Permissions
 All approaches require:
-- **`AuditLog.Read.All`** — Application permission, admin-consented. Without this permission, all `/auditLogs/*` Graph API calls return `403 Forbidden`.
 - **Entra ID P1 or P2 license** — Hard requirement from Microsoft. Free-tier tenants do not generate sign-in logs at all.
 
 These are in addition to the base permissions (`User.Read.All`, `Group.Read.All`, etc.) needed by the [Entra ID scraper](../getting-started#permissions).
@@ -59,13 +58,13 @@ For longer retention, export logs via Azure Monitor Diagnostic Settings to a log
 ## Related
 
 <Cards>
-  <Card icon="entra" title="Microsoft Graph API" href="/docs/guide/audit/ms-graph">
+  <Card icon="entra" title="Microsoft Graph API" href="/docs/integrations/azure-ad/ms-graph">
     Custom HTTP scraper with MS Graph for advanced queries
   </Card>
   <Card icon="entra" title="Entra ID Getting Started" href="/docs/integrations/azure-ad/getting-started">
     Full setup walkthrough and scraper configuration
   </Card>
-  <Card icon="scraper" title="Access Logs" href="/docs/guide/config-db/concepts/access-logs">
+  <Card icon="scraper" title="Access Logs" href="/docs/guide/audit/access-logs">
     Access log schema and examples
   </Card>
   <Card icon="lock" title="Config Access Reference" href="/docs/reference/config-db/config_access">

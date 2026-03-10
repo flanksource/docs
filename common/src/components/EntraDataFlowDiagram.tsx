@@ -3,6 +3,9 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 import Xarrow from 'react-xarrows';
 import {
   AzureAd,
+  AzureLogAnalytics,
+  AzureServiceBus,
+  Http,
   MissionControlWhite,
 } from '@flanksource/icons/mi';
 import BoxNode from './diagrams/BoxNode';
@@ -56,10 +59,24 @@ function NodeSection({ title, items, id }: { title: string; items: string[]; id?
   );
 }
 
+
+function IconNode({ id, icon: Icon, label }: {
+  id: string;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  label: string;
+}) {
+  return (
+    <div id={id} className="flex flex-col items-center gap-1 px-2 py-1">
+      <Icon className="w-7 h-7" style={{ color: COLORS.accent }} />
+      <span className="text-[10px] font-bold" style={{ color: COLORS.muted }}>{label}</span>
+    </div>
+  );
+}
+
 const auditRows = [
-  { name: 'J. Smith', role: 'Global Admin', lastAccess: '2h ago', reviewed: '30d ago' },
-  { name: 'A. Chen', role: 'App Owner', lastAccess: '1d ago', reviewed: '7d ago' },
-  { name: 'svc-deploy', role: 'Contributor', lastAccess: '5m ago', reviewed: 'Never' },
+  { name: 'J. Smith', role: 'Admin', lastAccess: '2h ago', reviewed: '30d ago' },
+  { name: 'A. Chen', role: 'User', lastAccess: '1d ago', reviewed: '7d ago' },
+  { name: 'svc-deploy', role: 'User', lastAccess: '5m ago', reviewed: 'Never' },
 ];
 
 function AuditTable() {
@@ -101,75 +118,73 @@ function EntraDataFlowDiagramInner({ className }: EntraDataFlowDiagramProps) {
   const id = (name: string) => `${prefix}-${name}`;
 
   return (
-    <div className={`${className || ''} relative flex items-center justify-center gap-12 py-8`}
-      style={{ minWidth: '900px' }}>
+    <div className={`${className || ''} relative py-8`} style={{ minWidth: '950px' }}>
+      <div className="flex items-start justify-center gap-6">
 
-      {/* Left: Entra ID */}
-      <div id={id('entra')}>
-        <BoxNode
-          title={
-            <span className="flex items-center justify-center gap-2">
-              <AzureAd className="w-5 h-5" />
-              Entra ID
-            </span>
-          }
-          headerColor={COLORS.primary}
-          bodyColor={COLORS.background}
-          borderColor={COLORS.primary}
-        >
-          <div className="flex flex-col gap-2">
-            <NodeSection title="Identity" items={[
-              'Users & Groups', 'App Registrations', 'Enterprise Apps', 'Role Assignments',
-            ]} />
-            <NodeSection title="Activity" items={['Sign-in Logs']} />
-          </div>
-        </BoxNode>
-      </div>
-
-      {/* Center: Mission Control */}
-      <div id={id('mc')}>
-        <BoxNode
-          title={
-            <span className="flex items-center justify-center gap-2">
-              <MissionControlWhite className="w-5 h-5" />
-              Mission Control
-            </span>
-          }
-          headerColor={COLORS.primary}
-          bodyColor={COLORS.background}
-          borderColor={COLORS.primary}
-          minWidth="280px"
-        >
-          <div className="flex gap-4">
-            <div id={id('ingestion')}>
-              <NodeSection title="Ingestion" items={['HTTP Scraper', 'Logs Scraper', 'Event Hub']} />
-            </div>
-            <div className="w-px" style={{ backgroundColor: COLORS.primary, opacity: 0.3 }} />
-            <div id={id('catalog')}>
-              <NodeSection title="Catalog" items={['Users & Groups', 'Access Records']} />
-            </div>
-          </div>
-        </BoxNode>
-      </div>
-
-      {/* Right: Outputs */}
-      <div className="flex flex-col gap-4">
-        <div id={id('app')}>
+        {/* Col 1: Entra ID */}
+        <div id={id('entra')} className="self-center">
           <BoxNode
-            title="Application CRD"
+            title={
+              <span className="flex items-center justify-center gap-2">
+                <AzureAd className="w-5 h-5" />
+                Entra ID
+              </span>
+            }
             headerColor={COLORS.primary}
             bodyColor={COLORS.background}
             borderColor={COLORS.primary}
-            compact
+            minWidth="180px"
           >
-            <div className="flex flex-col gap-1">
-              {['Access Control', 'Backups', 'Cost', 'Environments'].map((item) => (
-                <NodePill key={item}>{item}</NodePill>
-              ))}
+            <div className="flex flex-col gap-3">
+              <NodeSection title="Identity" items={[
+                'Users & Groups', 'App Registrations', 'Enterprise Apps', 'Role Assignments',
+              ]} />
+              <NodeSection id={id('signin')} title="Sign-in Logs" items={[
+                'Interactive', 'Non-interactive',
+              ]} />
             </div>
           </BoxNode>
         </div>
-        <div id={id('views')}>
+
+        {/* Col 2: Middle — icons sit below the sign-in arrow line */}
+        <div className="flex flex-col items-center self-end mb-2" style={{ minWidth: '180px' }}>
+          <div className="flex gap-3">
+            <IconNode id={id('loganalytics')} icon={AzureLogAnalytics} label="Log Analytics" />
+            <IconNode id={id('eventhub')} icon={AzureServiceBus} label="Event Hub" />
+          </div>
+        </div>
+
+        {/* Col 3: Mission Control */}
+        <div id={id('mc')} className="self-center">
+          <BoxNode
+            title={
+              <span className="flex items-center justify-center gap-2">
+                <MissionControlWhite className="w-5 h-5" />
+                Mission Control
+              </span>
+            }
+            headerColor={COLORS.primary}
+            bodyColor={COLORS.background}
+            borderColor={COLORS.primary}
+            minWidth="240px"
+          >
+            <div className="flex flex-col gap-3">
+              <NodeSection title="Catalog" items={[
+                'Users & Groups', 'Roles & Policies', 'Access Records', 'Sign-in Logs',
+              ]} />
+              <div className="w-full h-px" style={{ backgroundColor: COLORS.primary, opacity: 0.2 }} />
+              <NodeSection title="Scrapers" items={[
+                'HTTP Scraper', 'Logs Scraper', 'PubSub Scraper',
+              ]} />
+            </div>
+          </BoxNode>
+        </div>
+
+        {/* Spacer between MC and Audit Report for longer arrow */}
+        <div style={{ minWidth: '60px' }} />
+
+        {/* Col 4: Audit Report */}
+        <div id={id('report')} className="self-center">
           <BoxNode
             title="Audit Report"
             headerColor={COLORS.outputBorder}
@@ -183,26 +198,24 @@ function EntraDataFlowDiagramInner({ className }: EntraDataFlowDiagramProps) {
         </div>
       </div>
 
-      {/* Entra → MC ingestion */}
-      <Xarrow start={id('entra')} end={id('ingestion')}
+      {/* --- Arrows --- */}
+
+      {/* Entra → MC (primary, box border to box border) */}
+      <Xarrow start={id('entra')} end={id('mc')}
         {...primaryArrowProps}
         startAnchor="right" endAnchor="left"
       />
 
-      {/* Ingestion → Catalog (internal MC flow) */}
-      <Xarrow start={id('ingestion')} end={id('catalog')}
+      {/* Sign-in Logs → MC (gray line, aligned between Interactive/Non-interactive) */}
+      <Xarrow start={id('entra')} end={id('mc')}
         {...secondaryArrowProps}
-        startAnchor="right" endAnchor="left"
-      />
-
-      {/* MC → Application CRD */}
-      <Xarrow start={id('mc')} end={id('app')}
-        {...primaryArrowProps}
-        startAnchor="right" endAnchor="left"
+        startAnchor={{ position: 'right', offset: { y: 110 } }}
+        endAnchor={{ position: 'left', offset: { y: 110 } }}
+        path="straight"
       />
 
       {/* MC → Audit Report */}
-      <Xarrow start={id('mc')} end={id('views')}
+      <Xarrow start={id('mc')} end={id('report')}
         {...primaryArrowProps}
         startAnchor="right" endAnchor="left"
       />

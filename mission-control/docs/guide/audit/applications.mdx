@@ -1,9 +1,13 @@
 ---
 title: Applications
-sidebar_position: 0
+sidebar_position: 7
 sidebar_custom_props:
   icon: lucide:package
 ---
+
+:::tip Prerequisites
+This page ties together concepts from [Identity & Access](/docs/guide/audit/identity-access), [Access Logs](/docs/guide/audit/access-logs), [Inventory](/docs/guide/audit/inventory), and [Backups](/docs/guide/audit/backups). Read those first if you're new to Mission Control's audit system.
+:::
 
 The `Application` CRD is the top-level unit for audit and compliance reporting. It maps an application to its infrastructure, data sources, user access, environments, and locations - giving you a single pane of glass for each application you need to audit.
 
@@ -361,7 +365,7 @@ For Entra ID applications, follow the [verification steps](/docs/integrations/az
 
 ## Related
 
-- [Access Control](/docs/guide/audit/access-control) - Scraping IAM, RBAC, and database access
+- [Identity & Access](/docs/guide/audit/identity-access) - Scraping IAM, RBAC, and database access
 - [Backups](/docs/guide/audit/backups) - Backup monitoring and restore testing
-- [Access Logs](/docs/guide/config-db/concepts/access-logs) - Access log scraping details
+- [Access Logs](/docs/guide/audit/access-logs) - Access log scraping details
 - [Config Access Reference](/docs/reference/config-db/config_access) - Full access schema reference

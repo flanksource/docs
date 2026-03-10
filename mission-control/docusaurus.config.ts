@@ -80,6 +80,21 @@ export default async function createConfigAsync() {
               to: '/docs/reference/connections/pushover',
               from: '/docs/reference/connections/Notifications/pushover',
             },
+            // Access logs moved from config-db/concepts to audit section
+            {
+              to: '/docs/guide/audit/access-logs',
+              from: '/docs/guide/config-db/concepts/access-logs',
+            },
+            // Access control renamed to identity-access
+            {
+              to: '/docs/guide/audit/identity-access',
+              from: '/docs/guide/audit/access-control',
+            },
+            // MS Graph moved from audit to integrations
+            {
+              to: '/docs/integrations/azure-ad/ms-graph',
+              from: '/docs/guide/audit/ms-graph',
+            },
             // Permissions concepts moved up one level
             {
               to: '/docs/guide/permissions/roles',

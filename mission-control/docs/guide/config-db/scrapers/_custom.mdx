@@ -108,7 +108,7 @@ With `full: true`, the scraper expects each item to have these top-level fields:
 | `id` | string | Unique identifier for the config item |
 | `config` | object | The actual configuration data to store |
 | `changes` | array | Change events (see [Changes](/docs/guide/config-db/concepts/changes#extracting-changes)) |
-| `access_logs` | array | Access log entries (see [Access Logs](/docs/guide/config-db/concepts/access-logs)) |
+| `access_logs` | array | Access log entries (see [Access Logs](/docs/guide/audit/access-logs)) |
 | `config_access` | array | Access permissions linking users/groups/roles to configs |
 | `external_users` | array | User definitions from external identity systems |
 | `external_groups` | array | Group definitions from external systems |
@@ -309,4 +309,4 @@ This allows you to reference entities by any of their known identifiers (email, 
 
 ## Extracting Changes & Access Logs
 
-When you enable `full: true`, custom scrapers can ingest [changes](/docs/guide/config-db/concepts/changes#extracting-changes) and [access logs](/docs/guide/config-db/concepts/access-logs) from external systems by separating the config data from change events in your source.
+When you enable `full: true`, custom scrapers can ingest [changes](/docs/guide/config-db/concepts/changes#extracting-changes) and [access logs](/docs/guide/audit/access-logs) from external systems by separating the config data from change events in your source.

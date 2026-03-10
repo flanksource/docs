@@ -5,13 +5,24 @@ sidebar_custom_props:
 sidebar_position: 2
 ---
 
+import EntityModelDiagram from '@site/../common/src/components/EntityModelDiagram'
+
 Config Access tracks who has access to configuration items and their access history. This enables compliance auditing, security monitoring, and periodic access reviews.
+
+## Entity Model
+
+<EntityModelDiagram className="mx-auto overflow-x-auto" />
 
 ## External User
 
 External users represent individuals or service accounts from your identity providers or external systems.
 
 <Fields rows={[
+  {
+    field: "id",
+    description: "Unique identifier (auto-generated)",
+    scheme: "uuid"
+  },
   {
     field: "name",
     description: "Display name of the user",
@@ -36,8 +47,14 @@ External users represent individuals or service accounts from your identity prov
   },
   {
     field: "aliases",
-    description: "Alternative identifiers for alias resolution",
+    description: "Alternative identifiers for alias resolution (e.g. `userPrincipalName`, `mail`, `onPremisesSamAccountName`)",
     scheme: "[]string"
+  },
+  {
+    field: "scraper_id",
+    description: "ID of the scraper that created this user",
+    scheme: "uuid",
+    required: true
   }
 ]}/>
 
@@ -46,6 +63,11 @@ External users represent individuals or service accounts from your identity prov
 External groups represent teams, departments, or security groups from your identity systems.
 
 <Fields rows={[
+  {
+    field: "id",
+    description: "Unique identifier (auto-generated)",
+    scheme: "uuid"
+  },
   {
     field: "name",
     description: "Group name",
@@ -67,6 +89,12 @@ External groups represent teams, departments, or security groups from your ident
     field: "aliases",
     description: "Alternative identifiers for alias resolution",
     scheme: "[]string"
+  },
+  {
+    field: "scraper_id",
+    description: "ID of the scraper that created this group",
+    scheme: "uuid",
+    required: true
   }
 ]}/>
 
@@ -75,6 +103,11 @@ External groups represent teams, departments, or security groups from your ident
 External roles define permission sets that can be assigned to users or groups.
 
 <Fields rows={[
+  {
+    field: "id",
+    description: "Unique identifier (auto-generated)",
+    scheme: "uuid"
+  },
   {
     field: "name",
     description: "Role name",
@@ -101,6 +134,16 @@ External roles define permission sets that can be assigned to users or groups.
     field: "aliases",
     description: "Alternative identifiers for alias resolution",
     scheme: "[]string"
+  },
+  {
+    field: "application_id",
+    description: "ID of the Application this role belongs to",
+    scheme: "uuid"
+  },
+  {
+    field: "scraper_id",
+    description: "ID of the scraper that created this role",
+    scheme: "uuid"
   }
 ]}/>
 
@@ -125,7 +168,7 @@ Links external users to their group memberships.
 
 ## Config Access
 
-Records which users, groups, and roles have access to specific configuration items.
+Records which users, groups, and roles have access to specific configuration items. At least one of `external_user_id`, `external_group_id`, or `external_role_id` must be set.
 
 <Fields rows={[
   {
@@ -154,6 +197,21 @@ Records which users, groups, and roles have access to specific configuration ite
     field: "external_role_id",
     description: "ID of the external role granting access",
     scheme: "uuid"
+  },
+  {
+    field: "application_id",
+    description: "ID of the Application this access record belongs to",
+    scheme: "uuid"
+  },
+  {
+    field: "scraper_id",
+    description: "ID of the scraper that created this record",
+    scheme: "uuid"
+  },
+  {
+    field: "source",
+    description: "Source identifier for this access record",
+    scheme: "string"
   },
   {
     field: "last_reviewed_at",
@@ -199,6 +257,11 @@ Records individual access events for audit purposes.
     field: "mfa",
     description: "Whether multi-factor authentication was used",
     scheme: "bool"
+  },
+  {
+    field: "count",
+    description: "Number of aggregated access events (default: 1)",
+    scheme: "int"
   },
   {
     field: "properties",

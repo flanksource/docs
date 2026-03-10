@@ -1,0 +1,183 @@
+---
+title: Diagram Style Guide
+sidebar_position: 3
+draft: true
+sidebar_custom_props:
+  icon: mdi:vector-polyline
+---
+
+import {
+  ColorPalette,
+  SemanticPalette,
+  NodeTypesShowcase,
+  ContentPatternsShowcase,
+  ArrowShowcase,
+  MiniPipeline,
+  TypographyShowcase,
+} from '@site/../common/src/components/DiagramShowcase'
+import HowItWorksDiagram from '@site/../common/src/components/HowItWorksDiagram'
+
+# Diagram Style Guide
+
+Live reference for all diagram building blocks defined in [AGENTS.md](/AGENTS.md#5-diagrams--visuals). Use these components and colors when creating new React diagrams.
+
+---
+
+## Color System
+
+### COLORS Palette (Default)
+
+The canonical 4-color palette for data-flow, pipeline, fan-in/fan-out, and entity model diagrams.
+
+```tsx
+const COLORS = {
+  primary: '#007fdf',   // Borders, arrows, headers, accent text
+  background: '#f7fbfe', // Node fills, light backgrounds
+  muted: '#607689',      // Secondary text, inactive borders
+  outputBorder: '#00ba85', // Output/result nodes (green)
+};
+```
+
+<ColorPalette />
+
+### Multi-Color Semantic Palette (Alternative)
+
+For product overviews and architecture diagrams where each stage needs distinct visual identity. Uses Tailwind color classes.
+
+<SemanticPalette />
+
+:::tip When to use which
+- **COLORS palette** (default): Data flow, pipeline, fan-in/fan-out, entity model — visual consistency
+- **Multi-color semantic**: Product overviews, architecture — color-coding aids comprehension
+- **Do not mix** in a single diagram
+:::
+
+---
+
+## Node Types
+
+All node types available for building diagrams. Each shows the live rendered component.
+
+<NodeTypesShowcase />
+
+### Usage
+
+| Node Type | When to Use |
+|---|---|
+| **BoxNode** | Primary containers with header + body content |
+| **Icon+Label (bordered)** | Standalone pipeline nodes for a single concept |
+| **IconNode (borderless)** | Intermediary services between major nodes |
+| **Mission Control** | Visually heavy anchor node with `shadow-2xl` |
+| **Output Node** | Result/report nodes — green header distinguishes outputs |
+| **Dashed Group** | Hub & spoke: grouping related icons around a central node |
+
+---
+
+## Content Patterns
+
+Reusable patterns for content inside boxes.
+
+<ContentPatternsShowcase />
+
+| Pattern | When to Use |
+|---|---|
+| **NodePill** | Labeled item inside a box body |
+| **NodeSection** | Titled group of pills with section header |
+| **Feature Pill** | Solid-fill pill (hub & spoke diagrams) — colored background, white text |
+| **Catalog Pill** | Icon+label row inside Mission Control box |
+| **Section Divider** | Thin line between NodeSections inside a single box |
+
+---
+
+## Arrow Styles
+
+All arrow line styles from the catalog. Arrows use `react-xarrows`.
+
+<ArrowShowcase />
+
+| Style | Stroke | Line | Animation | Heads | When to Use |
+|---|---|---|---|---|---|
+| **Primary** | 3px, `primary` | Dashed (10/5) | Yes | arrow1 | Main data flow |
+| **Secondary** | 2px, `muted` | Dashed (6/4) | Yes | arrow1 | Supplementary flows |
+| **ER Relationship** | 1.5px, `muted` | Solid | No | arrow1 | Foreign key / structural |
+| **Static Connection** | 2px, `primary` | Solid | No | circle | Hub & spoke overviews |
+| **Bidirectional** | 2px, `muted` | Solid | No | circle both | Non-directional sync |
+
+---
+
+## Typography
+
+Text sizing reference for diagram elements.
+
+<TypographyShowcase />
+
+---
+
+## Layout: Mini Pipeline
+
+A horizontal pipeline showing the most common layout pattern — source node, intermediary icon, Mission Control hub, and output node.
+
+<MiniPipeline />
+
+---
+
+## Layout: Hub & Spoke
+
+The `HowItWorksDiagram` demonstrates the hub & spoke layout with multi-color semantic palette, step badges, persona rows, and a dark gradient central hub.
+
+<HowItWorksDiagram className="mx-auto" />
+
+---
+
+## Canonical Diagram Styles
+
+| Style | Description | Layout |
+|---|---|---|
+| **Data Flow** | Horizontal flow with intermediary services between source and target | Horizontal with intermediaries |
+| **Fan-in/Fan-out** | Multiple sources → central hub → multiple outputs | Vertical (multi-row) |
+| **Pipeline** | Sequential chain: source → processor → destination | Horizontal |
+| **Entity Model** | ER-style diagram with tables, PK/FK badges, relationship arrows | Vertical (multi-row) |
+| **Hub & Spoke** | Central product node with peripheral groups connected via simple lines | Central node + compass positions |
+
+---
+
+## Quick Reference
+
+### COLORS constant
+
+```tsx
+const COLORS = {
+  primary: '#007fdf',
+  background: '#f7fbfe',
+  muted: '#607689',
+  outputBorder: '#00ba85',
+};
+```
+
+### Arrow props
+
+```tsx
+const primaryArrowProps = {
+  color: COLORS.primary, strokeWidth: 3, headSize: 4,
+  dashness: { strokeLen: 10, nonStrokeLen: 5, animation: 1 },
+} as const;
+
+const secondaryArrowProps = {
+  color: COLORS.muted, strokeWidth: 2, headSize: 3,
+  dashness: { strokeLen: 6, nonStrokeLen: 4, animation: 1 },
+} as const;
+```
+
+### Required wrapper
+
+```tsx
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+export default function MyDiagram(props) {
+  return (
+    <BrowserOnly fallback={<div className="w-full" />}>
+      {() => <MyDiagramInner {...props} />}
+    </BrowserOnly>
+  );
+}
+```

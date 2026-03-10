@@ -1,6 +1,6 @@
 ---
-title: Access Control
-sidebar_position: 1
+title: Identity & Access
+sidebar_position: 2
 sidebar_custom_props:
   icon: mdi:account-lock
 ---
@@ -143,19 +143,13 @@ spec:
         FROM pg_roles ORDER BY rolname
 ```
 
-## Access Log Scraping
-
-Beyond static configuration, Mission Control can ingest access logs that record who accessed what, when, and how they authenticated. This complements configuration-based audits by capturing real-world usage patterns - enabling detection of access from unusual locations, access without MFA, and inactive accounts with active permissions.
-
-When using custom scrapers with `full: true`, each config item can include `access_logs`, `external_users`, and `config_access` fields. See [Access Logs](/docs/guide/config-db/concepts/access-logs) for the schema and [Config Access Reference](/docs/reference/config-db/config_access) for the full field reference.
-
-## Related
+## Next Steps
 
 <Cards>
-  <Card title="Azure AD / Entra ID" link="/docs/integrations/azure-ad" icon="entra" />
-  <Card title="Microsoft Graph API" link="/docs/guide/audit/ms-graph" icon="http" />
+  <Card title="Access Logs" link="/docs/guide/audit/access-logs" icon="mdi:account-clock" />
   <Card title="Applications" link="/docs/guide/audit/applications" icon="lucide:package" />
-  <Card title="Access Logs" link="/docs/guide/config-db/concepts/access-logs" />
+  <Card title="Azure AD / Entra ID" link="/docs/integrations/azure-ad" icon="entra" />
+  <Card title="Microsoft Graph API" link="/docs/integrations/azure-ad/ms-graph" icon="entra" />
   <Card title="Config Access Reference" link="/docs/reference/config-db/config_access" />
   <Card title="AWS Scraper" link="/docs/guide/config-db/scrapers/aws" icon="aws" />
   <Card title="Kubernetes Scraper" link="/docs/guide/config-db/scrapers/kubernetes" icon="k8s" />

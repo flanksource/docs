@@ -19,6 +19,7 @@ import {
   Azure,
   GoogleCloud,
   Postgres,
+  MissionControlWhite,
 } from '@flanksource/icons/mi';
 import { FaCheckCircle, FaBan, FaEdit } from 'react-icons/fa';
 import { HiUserGroup, HiCommandLine, HiCog6Tooth } from 'react-icons/hi2';
@@ -175,9 +176,13 @@ function UsersBox() {
 // Mission Control Container
 function MissionControlBox() {
   return (
-    <div id="missionControl" className="rounded-2xl overflow-hidden bg-gradient-to-br from-slate-700 to-slate-900 border-3 border-blue-500 shadow-2xl">
-      <div className="px-6 py-3 text-center border-b border-blue-800/50">
-        <span className="text-white text-lg font-bold tracking-wide">MISSION CONTROL</span>
+    <div id="missionControl" className="rounded-2xl overflow-hidden border-2 shadow-2xl"
+      style={{ borderColor: '#007fdf', backgroundColor: '#f7fbfe' }}>
+      <div className="px-6 py-3 text-center" style={{ backgroundColor: '#007fdf' }}>
+        <div className="flex items-center justify-center gap-2">
+          <MissionControlWhite className="w-6 h-6 text-white" />
+          <span className="text-white text-lg font-bold tracking-wide">Mission Control</span>
+        </div>
       </div>
       <div className="p-4">
         <StagesBox />
@@ -192,7 +197,7 @@ function MissionControlBox() {
 function GitIaCBox() {
   return (
     <div id="gitIaC">
-      <BoxNode title={<span className="flex items-center text-lg"><Github className="mr-2 h-6 w-auto" /> Git / IaC</span>} className="bg-emerald-500" bodyClassName="bg-emerald-50" border="solid">
+      <BoxNode title={<span className="flex items-center text-lg"><Github className="mr-2 h-6 w-auto text-white fill-white" /> Git / IaC</span>} className="bg-emerald-500" bodyClassName="bg-emerald-50" border="solid">
         <IconGrid
           items={[
 

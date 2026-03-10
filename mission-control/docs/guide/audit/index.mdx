@@ -12,39 +12,38 @@ import AuditDiagram from '@site/src/components/AuditDiagram'
 
 # Audit & Compliance
 
-Mission Control provides the building blocks for audit-ready infrastructure reporting. Config scrapers pull identity data, infrastructure state, and access logs from your cloud providers, identity systems, and databases into a unified catalog. The [Application CRD](/docs/guide/audit/applications) ties it all together into a single auditable unit per application - mapping access control, backups, environments, and compliance findings into one view.
-
-## How It Works
+Mission Control provides audit-ready infrastructure reporting by scraping identity data, infrastructure state, and access logs from your cloud providers, identity systems, and databases into a unified catalog.
 
 <AuditDiagram className="mx-auto" />
 
-**Scrapers** continuously pull data from three categories of sources:
+## What Mission Control Audits
 
-- **Identity Providers** (Entra ID, AWS IAM, Kubernetes RBAC) - users, groups, roles, and access assignments
-- **Infrastructure** (AWS, Azure, GCP, Kubernetes) - resources, configurations, and health status
-- **Data Sources** (databases, CloudTrail, audit logs) - access logs, change events, and compliance metadata
+- **Identity & Access** — Who has access to what, via Entra ID, AWS IAM, Kubernetes RBAC, and database roles
+- **Access Logs** — Who actually accessed resources, when, and whether they used MFA
+- **Infrastructure Inventory** — Complete catalog of resources with health status and change history
+- **Backups** — Backup health, location, retention, and restore capability
+- **Configuration Changes** — Immutable audit trail of every config change via diffs, CloudTrail, and Kubernetes events
 
-All data flows into a **Unified Catalog** that stores users, groups, roles, access records, configuration changes, and infrastructure state in a single Postgres database.
+## Compliance Frameworks
 
-From the catalog, three outputs serve audit and compliance needs:
+Access logs and identity data provide the audit trail required for:
 
-- **[Application CRD](/docs/guide/audit/applications)** - maps catalog data to a specific application, surfacing access control, backup status, and environment locations in one view
-- **[Views](/docs/guide/views/)** - custom dashboards for inventory, change trails, and access summaries
-- **[Notifications](/docs/guide/notifications/)** - alerts on security-sensitive changes, access anomalies, and backup failures
+- **SOC 2** — Access controls and monitoring evidence
+- **HIPAA** — Track access to systems containing PHI
+- **PCI-DSS** — Monitor access to cardholder data environments
+- **ISO 27001** — Evidence for access management controls
+
+## Getting Started
+
+Follow these pages in order — each builds on the previous:
 
 <Cards>
-  <Card link="/docs/guide/audit/applications" title="Applications" icon="lucide:package"/>
-  <Card link="/docs/guide/audit/access-control" title="Access Control" icon="mdi:account-lock"/>
-  <Card link="/docs/guide/audit/ms-graph" title="Microsoft Graph API" icon="entra"/>
+  <Card link="/docs/guide/audit/concepts" title="Core Concepts" icon="mdi:database-outline"/>
+  <Card link="/docs/guide/audit/identity-access" title="Identity & Access" icon="mdi:account-lock"/>
+  <Card link="/docs/guide/audit/access-logs" title="Access Logs" icon="mdi:account-clock"/>
+  <Card link="/docs/guide/audit/inventory" title="Infrastructure Inventory" icon="mdi:server"/>
   <Card link="/docs/guide/audit/backups" title="Backups" icon="mdi:backup-restore"/>
   <Card link="/docs/guide/audit/change-tracking" title="Change Tracking" icon="octicon:diff-16"/>
-  <Card link="/docs/guide/audit/inventory" title="Infrastructure Inventory" icon="mdi:server"/>
+  <Card link="/docs/guide/audit/applications" title="Applications" icon="lucide:package"/>
+  <Card link="/docs/reference/config-db/config_access" title="Entity Model Reference" icon="mdi:database-outline"/>
 </Cards>
-
-## Concepts
-
-- [Applications](/docs/guide/audit/applications) - The `Application` CRD ties infrastructure, access control, backups, and environments together into a single auditable unit
-- [Access Control](/docs/guide/audit/access-control) - Track who has access to which resources via IAM, RBAC, and database roles
-- [Backup Monitoring](/docs/guide/audit/backups) - Verify backup health, location, retention, and restore capability
-- [Change Tracking](/docs/guide/audit/change-tracking) - Audit trail of every config change via diffs, CloudTrail, and Kubernetes events
-- [Infrastructure Inventory](/docs/guide/audit/inventory) - Complete catalog of all resources with health status
