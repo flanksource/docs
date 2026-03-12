@@ -1,0 +1,193 @@
+---
+title: Logging
+sidebar_position: 110
+sidebar_custom_props:
+  icon: mdi:text-box-outline
+---
+
+# Logging
+
+Mission Control uses structured logging with named loggers and configurable log levels. Log levels can be set at startup via CLI flags or environment variables, and changed at runtime via the `/debug/loggers` API or system properties.
+
+## Log Levels
+
+| Level    | Value | Description                                   |
+| -------- | ----- | --------------------------------------------- |
+| `silent` | 10    | Suppress all logs                             |
+| `trace4` | 6     | Most verbose trace level                      |
+| `trace3` | 5     | Extra-detailed tracing                        |
+| `trace2` | 4     | Detailed tracing                              |
+| `trace1` | 3     | Basic tracing with extra detail               |
+| `trace`  | 2     | Trace-level messages                          |
+| `debug`  | 1     | Debug messages                                |
+| `info`   | 0     | Informational messages (default)              |
+| `warn`   | -1    | Warnings                                      |
+| `error`  | -2    | Errors only                                   |
+| `fatal`  | -3    | Fatal errors that cause shutdown              |
+
+The `-v` flag can also be used as a count to increase verbosity: `-v` = debug, `-vv` = trace, `-vvv` = trace1, etc.
+
+## CLI Flags
+
+| Flag              | Default | Description                         |
+| ----------------- | ------- | ----------------------------------- |
+| `--log-level`     | `info`  | Set the default log level           |
+| `-v`              |         | Increase verbosity (repeatable)     |
+| `--json-logs`     | `false` | Output logs in JSON format          |
+| `--color`         | `true`  | Enable colored log output           |
+| `--report-caller` | `false` | Include caller info in log messages |
+
+## Changing Log Levels at Runtime
+
+### `/debug/loggers` API
+
+The debug API allows you to view and temporarily change log levels without restarting the service.
+
+:::info
+On Mission Control, the `/debug/loggers` endpoint requires the `monitor:update` RBAC permission. On Canary Checker and Config DB, no RBAC is required.
+:::
+
+#### List all loggers
+
+```bash
+curl http://localhost:8080/debug/loggers
+```
+
+```json
+{
+  "root": "info",
+  "http": "info",
+  "db": "info",
+  "jobs": "trace1",
+  "events": "info",
+  "notifications": "info"
+}
+```
+
+#### Change a logger's level
+
+```bash
+curl -X POST http://localhost:8080/debug/loggers \
+  -d "logger=db" \
+  -d "level=debug"
+```
+
+#### Change level temporarily
+
+Set the level for a specific duration, after which it reverts automatically:
+
+```bash
+curl -X POST http://localhost:8080/debug/loggers \
+  -d "logger=db" \
+  -d "level=trace" \
+  -d "duration=5m"
+```
+
+| Parameter  | Required | Description                                                              |
+| ---------- | -------- | ------------------------------------------------------------------------ |
+| `logger`   | Yes      | Name of the logger (e.g., `root`, `db`, `http`, `jobs`)                 |
+| `level`    | Yes      | Target level (`trace`, `debug`, `info`, `warn`, `error`)                 |
+| `duration` | No       | Go duration (e.g., `5m`, `1h`, `30s`). Level reverts after this period   |
+
+### System Properties
+
+Log levels can also be changed via system properties, either in the database or via the `/debug/property` API:
+
+```bash
+curl -X POST http://localhost:8080/debug/property \
+  -d "name=log.level.db" \
+  -d "value=debug"
+```
+
+| Property               | Default | Description                            |
+| ---------------------- | ------- | -------------------------------------- |
+| `log.level`            | `info`  | Root log level for all loggers         |
+| `log.level.<name>`     |         | Log level for a specific named logger  |
+| `db.log.level`         |         | Database query logger level            |
+| `log.json`             | `false` | Enable JSON log output                 |
+| `log.color`            | `true`  | Enable colored log output              |
+| `log.caller`           | `false` | Include caller info                    |
+| `log.caller.<name>`    | `false` | Include caller info for specific logger |
+
+## Named Loggers
+
+Loggers are organized hierarchically by name. Setting the level on a parent logger affects all children unless overridden.
+
+### Common Loggers
+
+These loggers are present in all services (Mission Control, Canary Checker, Config DB):
+
+| Logger        | Description                         |
+| ------------- | ----------------------------------- |
+| `root`        | Root logger, parent of all loggers  |
+| `db`          | Database query logging              |
+| `http`        | HTTP access logging                 |
+| `jobs`        | Background job execution            |
+| `postq`       | Postgres async queue processing     |
+| `operator`    | Kubernetes operator reconciliation  |
+
+### Mission Control
+
+| Logger                         | Description                          |
+| ------------------------------ | ------------------------------------ |
+| `events`                       | Event queue processing               |
+| `notifications`                | Notification dispatch and delivery   |
+| `notification.debug.trace`     | Detailed notification tracing        |
+| `auth`                         | Authentication and authorization     |
+| `git`                          | Git connector operations             |
+| `view`                         | View rendering                       |
+| `resourceSelector`             | Resource selector query logging      |
+
+### Canary Checker
+
+| Logger                         | Description                          |
+| ------------------------------ | ------------------------------------ |
+| `controllers.canary`           | Canary controller reconciliation     |
+| `controllers.system`           | System controller reconciliation     |
+| `Canary[namespace/name]`       | Per-canary execution logging         |
+| `Topology[name]`               | Topology component lookup            |
+
+### Config DB
+
+| Logger                         | Description                          |
+| ------------------------------ | ------------------------------------ |
+| `namespace/name`               | Per-scraper execution logging        |
+| `watch.name`                   | Kubernetes informer watching         |
+| `watch[namespace/name]`        | Incremental scraper watching         |
+| `pyroscope`                    | Continuous profiling integration     |
+
+## Access Logging
+
+HTTP access logging is controlled via system properties:
+
+| Property                         | Default | Description                              |
+| -------------------------------- | ------- | ---------------------------------------- |
+| `access.log`                     | `true`  | Enable/disable access logging            |
+| `access.log.debug`               | `false` | Use detailed pretty-print access logging |
+| `access.log.request.header`      | `true`  | Log request headers                      |
+| `access.log.request.body`        | `false` | Log request bodies                       |
+| `access.log.response.body`       | `false` | Log response bodies                      |
+| `access.log.skip.sanitize`       | `false` | Skip secret sanitization in logs         |
+| `access.log.colors`              | `true`  | Colored access log output                |
+| `access.log.userAgent`           | `false` | Include User-Agent in access logs        |
+| `access.log.request.id`          | `false` | Include request ID in access logs        |
+| `access.log.spanId`              | `true`  | Include span ID in access logs           |
+| `access.log.traceId`             | `true`  | Include trace ID in access logs          |
+| `access.log.request.body.max`    | `2048`  | Max request body size to log (bytes)     |
+| `access.log.response.body.max`   | `8192`  | Max response body size to log (bytes)    |
+
+Access logging automatically skips `/health` and `/metrics` endpoints.
+
+## Other Debug Endpoints
+
+| Endpoint                | Method | Description                              |
+| ----------------------- | ------ | ---------------------------------------- |
+| `/debug/loggers`        | GET    | List all named loggers and their levels  |
+| `/debug/loggers`        | POST   | Change a logger's level                  |
+| `/debug/properties`     | GET    | List all supported properties            |
+| `/debug/system/properties` | GET | List current system property values      |
+| `/debug/property`       | POST   | Set a system property                    |
+| `/debug/routes`         | GET    | List all registered HTTP routes          |
+| `/debug/cron`           | GET    | List all cron jobs and their schedules   |
+| `/debug/cron/run`       | POST   | Trigger a cron job immediately           |
+| `/debug/pprof/*`        | GET    | Go pprof profiling (localhost only)      |
