@@ -1,3 +1,10 @@
+---
+title: Common Types
+sidebar_position: 40
+sidebar_custom_props:
+  icon: fluent:library-16-regular
+---
+
 # Common Types
 
 This document provides a reference for common types used in the configuration and operation of the system.

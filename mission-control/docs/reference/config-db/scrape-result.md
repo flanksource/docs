@@ -1,6 +1,7 @@
 ---
 title: Scrape Result
 description: Fields available during scrape transform
+sidebar_position: 7
 ---
 
 | Field          | Description                                            | Scheme                               |

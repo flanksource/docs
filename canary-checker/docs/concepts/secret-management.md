@@ -2,7 +2,7 @@
 title: Env Vars
 sidebar_custom_props:
   icon: shield-lock
-sidebar_position: 1
+sidebar_position: 10
 ---
 
 import { K8SCustomresourcedefinition } from '@flanksource/icons/mi'

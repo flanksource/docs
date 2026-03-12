@@ -1,5 +1,6 @@
 ---
 title: Image Variants
+sidebar_position: 150
 sidebar_custom_props:
   icon: settings
 ---
