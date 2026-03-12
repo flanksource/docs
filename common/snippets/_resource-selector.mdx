@@ -44,7 +44,25 @@ The `search` field provides a powerful query language for filtering resources.
 field1=value1 field2>value2 field3=value3* field4=*value4
 ```
 
-Multiple conditions are combined with AND logic.
+Multiple conditions are combined with AND logic. Use `|` to combine conditions with OR logic.
+
+```
+type=Kubernetes::Pod | type=Kubernetes::Deployment
+```
+
+Parentheses can be used for grouping:
+
+```
+(type=Kubernetes::Pod | type=Kubernetes::Deployment) health=unhealthy
+```
+
+A bare word (without a field name) is treated as a name prefix search:
+
+```
+nginx
+```
+
+is equivalent to `name=nginx*`.
 
 ### Operators
 
@@ -55,6 +73,21 @@ Multiple conditions are combined with AND logic.
 | `=*`     | `name=*-prod` or `name=api-*`    | Prefix or suffix match                         | `string` `int`        |
 | `>`      | `created_at>now-24h`             | Greater than                                   | `datetime` `int`      |
 | `<`      | `updated_at<2025-01-01`          | Less than                                      | `datetime` `int`      |
+| `>=`     | `cost_total_30d>=100`            | Greater than or equal                          | `datetime` `int`      |
+| `<=`     | `cost_total_30d<=1000`           | Less than or equal                             | `datetime` `int`      |
+
+### Existence Checks
+
+Check whether a label, tag, or property key exists (or does not exist):
+
+```
+labels.app          # matches resources that have the label "app"
+!labels.app         # matches resources that do NOT have the label "app"
+tags.environment    # matches resources that have the tag "environment"
+!tags.environment   # matches resources that do NOT have the tag "environment"
+properties.cpu      # matches resources with a "cpu" property
+!properties.cpu     # matches resources without a "cpu" property
+```
 
 ### Date Queries
 
@@ -72,43 +105,72 @@ tags.env=production
 config.spec.replicas>3
 ```
 
+### Type Prefix Matching
+
+The `type` field supports partial matching — a search for a short type name will match against all known types by suffix. For example:
+
+```
+type=pod          # matches Kubernetes::Pod
+type=Deployment   # matches Kubernetes::Deployment
+type=EC2          # matches AWS::EC2::Instance
+```
+
+### Common Fields
+
+These fields are available in any search query regardless of resource type:
+
+| Field     | Description                                                    |
+| --------- | -------------------------------------------------------------- |
+| `limit`   | Limit the number of results returned                           |
+| `sort`    | Sort results by a column. Prefix with `-` for descending order |
+| `offset`  | Skip the first N results                                       |
+| `@order`  | Alias for sort                                                 |
+
 ### Searchable Fields
 
 #### Catalog Items (Configs)
 
-| Field        | Type       | Description                           |
-| ------------ | ---------- | ------------------------------------- |
-| `name`       | `string`   | Resource name                         |
-| `namespace`  | `string`   | Kubernetes namespace or equivalent    |
-| `type`       | `string`   | Resource type (e.g., `Kubernetes::Pod`)|
-| `status`     | `string`   | Current status                        |
-| `health`     | `string`   | Health status                         |
-| `source`     | `string`   | Source identifier                     |
-| `agent`      | `string`   | Agent that scraped this resource      |
-| `labels`     | `json`     | Kubernetes-style labels               |
-| `tags`       | `json`     | Scraper-assigned tags                 |
-| `config`     | `json`     | Full configuration data               |
-| `created_at` | `datetime` | Creation timestamp                    |
-| `updated_at` | `datetime` | Last update timestamp                 |
-| `deleted_at` | `datetime` | Soft deletion timestamp               |
+| Field              | Type       | Description                                          |
+| ------------------ | ---------- | ---------------------------------------------------- |
+| `name`             | `string`   | Resource name                                        |
+| `namespace`        | `string`   | Kubernetes namespace (alias for `tags.namespace`)    |
+| `type`             | `string`   | Resource type (e.g., `Kubernetes::Pod`). Aliases: `config_type` |
+| `config_class`     | `string`   | Config class (e.g., `Deployment`, `Node`)            |
+| `status`           | `string`   | Current status                                       |
+| `health`           | `string`   | Health status                                        |
+| `source`           | `string`   | Source identifier                                    |
+| `external_id`      | `string`   | External identifier                                  |
+| `agent`            | `string`   | Agent name or ID (alias for `agent_id`)              |
+| `labels.<key>`     | `json`     | Kubernetes-style labels (dot notation)               |
+| `tags.<key>`       | `json`     | Scraper-assigned tags (dot notation)                 |
+| `config.<path>`    | `json`     | Full configuration data (JSON path)                  |
+| `properties.<key>` | `json`     | Resource properties                                  |
+| `cost_per_minute`  | `float`    | Cost per minute                                      |
+| `cost_total_1d`    | `float`    | Total cost over 1 day                                |
+| `cost_total_7d`    | `float`    | Total cost over 7 days                               |
+| `cost_total_30d`   | `float`    | Total cost over 30 days                              |
+| `created_at`       | `datetime` | Creation timestamp. Aliases: `created`               |
+| `updated_at`       | `datetime` | Last update timestamp. Aliases: `updated`            |
+| `deleted_at`       | `datetime` | Soft deletion timestamp. Aliases: `deleted`          |
+| `related`          | `special`  | Find configs related to a given config ID. See [Related Configs](#related-configs) |
 
 #### Config Changes
 
-| Field            | Type       | Description                           |
-| ---------------- | ---------- | ------------------------------------- |
-| `id`             | `string`   | Change ID                             |
-| `config_id`      | `string`   | Parent config ID                      |
-| `name`           | `string`   | Change name                           |
-| `type`           | `string`   | Config type                           |
-| `change_type`    | `string`   | Type of change (e.g., `diff`, `event`)|
-| `severity`       | `string`   | Change severity                       |
-| `summary`        | `string`   | Change summary                        |
-| `count`          | `int`      | Occurrence count                      |
-| `agent_id`       | `string`   | Agent ID                              |
-| `tags`           | `json`     | Change tags                           |
-| `details`        | `json`     | Additional details                    |
-| `created_at`     | `datetime` | Change timestamp                      |
-| `first_observed` | `datetime` | First observation time                |
+| Field              | Type       | Description                                          |
+| ------------------ | ---------- | ---------------------------------------------------- |
+| `id`               | `string`   | Change ID                                            |
+| `config_id`        | `string`   | Parent config ID                                     |
+| `name`             | `string`   | Change name                                          |
+| `type`             | `string`   | Config type                                          |
+| `change_type`      | `string`   | Type of change (e.g., `diff`, `event`). Aliases: `changeType` |
+| `severity`         | `string`   | Change severity                                      |
+| `summary`          | `string`   | Change summary                                       |
+| `count`            | `int`      | Occurrence count                                     |
+| `agent_id`         | `string`   | Agent ID. Aliases: `agent`                           |
+| `tags.<key>`       | `json`     | Change tags (dot notation)                           |
+| `details.<path>`   | `json`     | Additional details (JSON path)                       |
+| `created_at`       | `datetime` | Change timestamp. Aliases: `created`                 |
+| `first_observed`   | `datetime` | First observation time                               |
 
 {!props.hideCheck && (
 <CommonLink to="/docs/reference/canary-checker/check">Health Checks</CommonLink>
@@ -117,19 +179,91 @@ config.spec.replicas>3
 {!props.hideCheck && (
 <Fields rows={[
   {field: "name", scheme: "string", description: "Check name"},
-  {field: "canary_id", scheme: "string", description: "Parent canary ID"},
   {field: "namespace", scheme: "string", description: "Check namespace"},
-  {field: "type", scheme: "string", description: "Check type (e.g., `http`, `tcp`)"},
-  {field: "status", scheme: "string", description: "Current status"},
-  {field: "health", scheme: "string", description: "Health status"},
-  {field: "labels", scheme: "json", description: "Check labels"},
-  {field: "agent", scheme: "string", description: "Agent ID"},
-  {field: "created_at", scheme: "datetime", description: "Creation timestamp"},
-  {field: "updated_at", scheme: "datetime", description: "Last update timestamp"},
-  {field: "deleted_at", scheme: "datetime", description: "Deletion timestamp"},
+  {field: "canary_id", scheme: "string", description: "Parent canary ID"},
+  {field: "type", scheme: "string", description: "Check type (e.g., `http`, `tcp`). Aliases: `check_type`"},
+  {field: "status", scheme: "string", description: "Current status. Note: `health` is an alias for `status`"},
+  {field: "agent_id", scheme: "string", description: "Agent ID. Aliases: `agent`"},
+  {field: "labels.<key>", scheme: "json", description: "Check labels (dot notation)"},
+  {field: "spec.<path>", scheme: "json", description: "Check spec (JSON path)"},
+  {field: "created_at", scheme: "datetime", description: "Creation timestamp. Aliases: `created`"},
+  {field: "updated_at", scheme: "datetime", description: "Last update timestamp. Aliases: `updated`"},
+  {field: "deleted_at", scheme: "datetime", description: "Deletion timestamp. Aliases: `deleted`"},
 ]}/>
-
 )}
+
+#### Components
+
+| Field              | Type       | Description                                          |
+| ------------------ | ---------- | ---------------------------------------------------- |
+| `name`             | `string`   | Component name                                       |
+| `namespace`        | `string`   | Component namespace                                  |
+| `topology_id`      | `string`   | Parent topology ID                                   |
+| `type`             | `string`   | Component type. Aliases: `component_type`            |
+| `status`           | `string`   | Current status                                       |
+| `health`           | `string`   | Health status                                        |
+| `agent_id`         | `string`   | Agent ID. Aliases: `agent`                           |
+| `labels.<key>`     | `json`     | Component labels (dot notation)                      |
+| `summary.<key>`    | `json`     | Component summary (JSON path)                        |
+| `properties.<key>` | `json`     | Component properties                                 |
+| `created_at`       | `datetime` | Creation timestamp. Aliases: `created`               |
+| `updated_at`       | `datetime` | Last update timestamp. Aliases: `updated`            |
+| `deleted_at`       | `datetime` | Deletion timestamp. Aliases: `deleted`               |
+| `component_config_traverse` | `special` | Find components related to a config via config relationships. Value: `<componentID>[,<direction>]` |
+
+#### Canaries
+
+| Field              | Type       | Description                                          |
+| ------------------ | ---------- | ---------------------------------------------------- |
+| `id`               | `string`   | Canary ID                                            |
+| `name`             | `string`   | Canary name                                          |
+| `namespace`        | `string`   | Canary namespace                                     |
+| `agent_id`         | `string`   | Agent ID. Aliases: `agent`                           |
+| `labels.<key>`     | `json`     | Canary labels (dot notation)                         |
+| `spec.<path>`      | `json`     | Canary spec (JSON path)                              |
+| `created_at`       | `datetime` | Creation timestamp. Aliases: `created`               |
+| `updated_at`       | `datetime` | Last update timestamp. Aliases: `updated`            |
+| `deleted_at`       | `datetime` | Deletion timestamp. Aliases: `deleted`               |
+
+#### Playbooks
+
+| Field              | Type       | Description                                          |
+| ------------------ | ---------- | ---------------------------------------------------- |
+| `id`               | `string`   | Playbook ID                                          |
+| `name`             | `string`   | Playbook name                                        |
+| `namespace`        | `string`   | Playbook namespace                                   |
+| `created_at`       | `datetime` | Creation timestamp. Aliases: `created`               |
+| `updated_at`       | `datetime` | Last update timestamp. Aliases: `updated`            |
+| `deleted_at`       | `datetime` | Deletion timestamp. Aliases: `deleted`               |
+
+#### Connections
+
+| Field              | Type       | Description                                          |
+| ------------------ | ---------- | ---------------------------------------------------- |
+| `id`               | `string`   | Connection ID                                        |
+| `name`             | `string`   | Connection name                                      |
+| `namespace`        | `string`   | Connection namespace                                 |
+| `type`             | `string`   | Connection type                                      |
+
+### Related Configs
+
+The `related` field on catalog items finds configs related to a given config through relationship traversal.
+
+**Syntax**: `related=<config_id>[,direction=<direction>][,depth=<depth>][,type=<type>]`
+
+| Parameter   | Values                                | Default | Description                    |
+| ----------- | ------------------------------------- | ------- | ------------------------------ |
+| `direction` | `incoming`, `outgoing`, `all`         | `all`   | Relationship direction         |
+| `depth`     | integer                               | `5`     | Maximum traversal depth        |
+| `type`      | `hard`, `soft`, `both`                | `both`  | Relationship type              |
+
+```yaml
+# Find all configs related to a specific config
+search: related=3b1a2c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+
+# Find outgoing hard relationships only, max 3 hops
+search: related=3b1a2c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d,direction=outgoing,depth=3,type=hard
+```
 
 ## Examples
 
@@ -208,6 +342,24 @@ search: type=Kubernetes::Pod labels.app=nginx tags.cluster=prod
 
 # Complex query with date range
 search: updated_at>2025-01-01 updated_at<2025-01-31 type=Kubernetes::Deployment
+
+# Find high-cost resources
+search: cost_total_30d>1000
+
+# Find resources by partial type (matches Kubernetes::Pod)
+search: type=pod
+
+# Use OR to match multiple types
+search: type=Kubernetes::Pod | type=Kubernetes::Deployment
+
+# Check for existence of a label
+search: labels.app
+
+# Sort results by name descending
+search: type=Kubernetes::Pod @order=-name
+
+# Find configs related to another config
+search: related=abc-123,direction=outgoing,type=hard
 ```
 
 ### Multi-Agent Selection
