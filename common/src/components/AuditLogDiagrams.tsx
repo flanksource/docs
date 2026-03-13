@@ -31,13 +31,6 @@ const primaryArrowProps = {
   dashness: { strokeLen: 10, nonStrokeLen: 5, animation: 1 },
 } as const;
 
-const secondaryArrowProps = {
-  color: COLORS.muted,
-  strokeWidth: 2,
-  headSize: 3,
-  dashness: { strokeLen: 6, nonStrokeLen: 4, animation: 1 },
-} as const;
-
 function NodePill({ children }: { children: React.ReactNode }) {
   return (
     <div className="text-[10px] rounded px-2 py-1 text-center" style={pillStyle}>

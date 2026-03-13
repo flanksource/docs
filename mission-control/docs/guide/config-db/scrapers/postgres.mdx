@@ -102,7 +102,7 @@ spec:
                 version: data.version,
                 encoding: data.encoding
               },
-              external_users: data.users.map(function(u) {
+              users: data.users.map(function(u) {
                 return {
                   name: u.usename,
                   account_id: u.usename,
@@ -110,7 +110,7 @@ spec:
                   aliases: [u.usesysid]
                 };
               }),
-              external_roles: data.roles.map(function(r) {
+              roles: data.roles.map(function(r) {
                 return {
                   name: r.rolname,
                   account_id: r.rolname,
@@ -124,10 +124,10 @@ spec:
                   aliases: [r.oid]
                 };
               }),
-              external_user_groups: data.memberships.map(function(m) {
+              user_groups: data.memberships.map(function(m) {
                 return {
-                  external_user_id: m.member,
-                  external_group_id: m.role
+                  user: m.member,
+                  group: m.role
                 };
               })
             };
@@ -430,7 +430,7 @@ spec:
               config: { database: config.database },
               access_logs: logs.map(function(log) {
                 return {
-                  external_user_id: log.user_name,
+                  user: log.user_name,
                   created_at: log.log_time,
                   properties: {
                     command: log.command_tag,

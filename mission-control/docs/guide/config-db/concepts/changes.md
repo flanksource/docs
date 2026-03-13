@@ -58,7 +58,7 @@ Consider a file containing:
   ],
   "access_logs": [
     {
-      "external_user_id": "user-123",
+      "user": "user-123",
       "created_at": "2025-01-01"
     }
   ]

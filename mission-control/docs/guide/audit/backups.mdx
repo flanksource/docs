@@ -61,7 +61,7 @@ Use [scraper transforms](/docs/guide/config-db/concepts/transform) to extract ba
 
 ## Backup Events from Changes
 
-Track backup-related events by mapping [change types](/docs/guide/config-db/concepts/changes) in your scraper. CloudTrail events like `CreateDBSnapshot`, `DeleteDBSnapshot`, and `RestoreDBInstanceFromDBSnapshot` can be mapped to named change types for clearer audit reporting:
+Track backup-related events by mapping [change types](/docs/guide/config-db/concepts/changes) in your scraper. You can map CloudTrail events like `CreateDBSnapshot`, `DeleteDBSnapshot`, and `RestoreDBInstanceFromDBSnapshot` to named change types for clearer audit reporting:
 
 ```yaml title="backup-change-tracking.yaml"
 apiVersion: configs.flanksource.com/v1

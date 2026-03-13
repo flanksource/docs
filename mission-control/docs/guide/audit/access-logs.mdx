@@ -96,7 +96,7 @@ When `full` mode is enabled, the scraper expects each configuration item to pote
 
 ## Entra ID Audit Logs
 
-Entra ID generates sign-in logs and directory audit logs that can be scraped as access logs. There are three approaches depending on your infrastructure and latency requirements:
+Entra ID generates sign-in logs and directory audit logs that Mission Control scrapes as access logs. There are three approaches depending on your infrastructure and latency requirements:
 
 | | [HTTP + MS Graph](/docs/integrations/azure-ad/audit-logs/http-scraper) | [Logs Scraper](/docs/integrations/azure-ad/audit-logs/logs-scraper) | [Event Hub](/docs/integrations/azure-ad/audit-logs/event-hub) |
 |---|---|---|---|
@@ -113,6 +113,10 @@ For longer retention (beyond 30 days), export logs via Azure Monitor Diagnostic 
 
 ## Example: Custom Scraper with Access Logs
 
+:::note
+The `config_id` and `user_id` fields reference UUIDs in the database, but scrapers resolve them by matching on external identifiers (names, aliases, or scraper-assigned IDs). The example below uses human-readable strings to show the scraper input format — Mission Control resolves these to UUIDs internally.
+:::
+
 ```json title="config-with-access-logs.json"
 {
   "id": "db-prod-001",
@@ -124,7 +128,7 @@ For longer retention (beyond 30 days), export logs via Azure Monitor Diagnostic 
   "access_logs": [
     {
       "config_id": "db-prod-001",
-      "external_user_id": "user-123",
+      "user": "user-123",
       "created_at": "2025-01-08T10:30:00Z",
       "mfa": true,
       "properties": {
@@ -134,7 +138,7 @@ For longer retention (beyond 30 days), export logs via Azure Monitor Diagnostic 
     },
     {
       "config_id": "db-prod-001",
-      "external_user_id": "user-456",
+      "user": "user-456",
       "created_at": "2025-01-08T11:45:00Z",
       "mfa": false
     }

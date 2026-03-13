@@ -1,12 +1,12 @@
 ---
-title: Github
+title: GitHub
 show_title: false
 sidebar_position: 9
 sidebar_custom_props:
   icon: github
 ---
 
-# <Icon name="github"/> Github
+# <Icon name="github"/> GitHub
 
 ## GitHub Actions
 

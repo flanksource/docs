@@ -13,9 +13,9 @@ Config Access tracks who has access to configuration items and their access hist
 
 <EntityModelDiagram className="mx-auto overflow-x-auto" />
 
-## External User
+## User
 
-External users represent individuals or service accounts from your identity providers or external systems.
+Users represent individuals or service accounts from your identity providers or external systems.
 
 <Fields rows={[
   {
@@ -58,9 +58,9 @@ External users represent individuals or service accounts from your identity prov
   }
 ]}/>
 
-## External Group
+## Group
 
-External groups represent teams, departments, or security groups from your identity systems.
+Groups represent teams, departments, or security groups from your identity systems.
 
 <Fields rows={[
   {
@@ -98,9 +98,9 @@ External groups represent teams, departments, or security groups from your ident
   }
 ]}/>
 
-## External Role
+## Role
 
-External roles define permission sets that can be assigned to users or groups.
+Roles define permission sets that can be assigned to users or groups.
 
 <Fields rows={[
   {
@@ -147,20 +147,20 @@ External roles define permission sets that can be assigned to users or groups.
   }
 ]}/>
 
-## External User Group
+## User Group
 
-Links external users to their group memberships.
+Links users to their group memberships.
 
 <Fields rows={[
   {
     field: "external_user_id",
-    description: "ID of the external user",
+    description: "ID of the external user (resolved from `user` alias during scraping)",
     scheme: "uuid",
     required: true
   },
   {
     field: "external_group_id",
-    description: "ID of the external group the user belongs to",
+    description: "ID of the external group the user belongs to (resolved from `group` alias during scraping)",
     scheme: "uuid",
     required: true
   }

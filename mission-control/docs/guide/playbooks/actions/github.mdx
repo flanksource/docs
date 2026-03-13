@@ -1,5 +1,5 @@
 ---
-title: Github
+title: GitHub
 sidebar_custom_props:
   icon: github
 
@@ -8,9 +8,9 @@ import Templating from '@site/docs/reference/playbooks/context.mdx'
 
 <!-- Source: modules/mission-control/api/v1/playbook_actions.go#GithubAction -->
 
-# <Icon name="github"/> Github Action
+# <Icon name="github"/> GitHub Action
 
-Github Action allows you to invoke GitHub workflows from the playbooks.
+GitHub Action allows you to invoke GitHub workflows from the playbooks.
 
 :::note
 You must configure your GitHub Actions workflow to run when the [workflow_dispatch](https://docs.github.com/en/webhooks/webhook-events-and-payloads#workflow_dispatch) webhook event occurs
@@ -20,7 +20,7 @@ You must configure your GitHub Actions workflow to run when the [workflow_dispat
 ```
 
 <Action rows={[
-    {field: "github", description: "Github Action", scheme: "[Github](#github)"},
+    {field: "github", description: "GitHub Action", scheme: "[GitHub](#github)"},
 ]} />
 
 ## GitHub
@@ -28,12 +28,12 @@ You must configure your GitHub Actions workflow to run when the [workflow_dispat
 <Fields rows={[
   {field: "username", description: "The account owner of the repository (case insensitive)", scheme: "string", required: true},
   {field: "repo", description: "The name of the repository without the `.git` extension", scheme: "string", required: true},
-  {field: "token", description: "Github personal access token", scheme: "[EnvVar](/docs/reference/env-var)", required: true},
+  {field: "token", description: "GitHub personal access token", scheme: "[EnvVar](/docs/reference/env-var)", required: true},
   {field: "workflows", description: "List of workflows to invoke", scheme: "[`[]Workflow`](#github-workflow)", required: true}
 
 ]}/>
 
-### Github Workflow
+### GitHub Workflow
 
 | Field   | Description                                             | Type     | Required | Templatable |
 | ------- | ------------------------------------------------------- | -------- | -------- | ----------- |

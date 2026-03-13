@@ -7,7 +7,7 @@ sidebar_custom_props:
 
 :::tip Integrations
 
-The integration [charts](/docs/integrations) include many common relationships for Argo, Flux, etc out of the box.
+The integration [charts](/docs/integrations) include many common relationships for Argo, Flux, etc. out of the box.
 
 :::
 
@@ -55,7 +55,7 @@ You can see changes on the incoming relationships (and their parents) by choosin
 
 ## Dynamic Linking
 
-Sometimes the logic for when to form a relationship is complex. A CEL expression can be used to return a list of [ResourceSelectors](/docs/reference/resource-selector) dynamically.
+Sometimes the logic for when to form a relationship is complex. Use a CEL expression to return a list of [ResourceSelectors](/docs/reference/resource-selector) dynamically.
 
 See [Dynamic Relationships](/docs/reference/config-db/transformation#dynamic-relationships) for the schema.
 

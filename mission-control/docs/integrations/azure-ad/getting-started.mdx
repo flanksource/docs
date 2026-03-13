@@ -36,7 +36,7 @@ This guide walks you through setting up the Entra ID scraper — from Azure Port
 
 | Permission | Type | Used For | Functionality Enabled |
 |---|---|---|---|
-| `User.Read.All` | Application | Read all user profiles | Scrape users as external users; alias resolution for access log matching |
+| `User.Read.All` | Application | Read all user profiles | Scrape users; alias resolution for access log matching |
 | `Group.Read.All` | Application | Read group properties | Discover groups in tenant; enable group-based role mapping in Application CRD |
 | `GroupMember.Read.All` | Application | Read group memberships | Map users to groups; required for role-based access audit |
 | `Application.Read.All` | Application | Read app registrations and enterprise apps | Catalog app registrations, client secrets/certificates, enterprise applications |
@@ -226,7 +226,7 @@ This walkthrough shows how to go from zero to a working access audit for an appl
 
 **Step 1**: Deploy the connection and scraper (see [Configuration](#configuration) above)
 
-**Step 2**: Verify resources appear in the catalog. After the first scrape cycle, you should see `Azure::AppRegistration` and `Azure::EnterpriseApplication` items in the catalog, and external users/groups in the access views.
+**Step 2**: Verify resources appear in the catalog. After the first scrape cycle, you should see `Azure::AppRegistration` and `Azure::EnterpriseApplication` items in the catalog, and users/groups in the access views.
 
 **Step 3**: Create an [Application](/docs/guide/audit/applications) that maps Entra resources to your app:
 
@@ -281,9 +281,9 @@ Open the Mission Control catalog and filter by type:
 
 If these types don't appear, check that `include` contains `entra` and that `Application.Read.All` permission is granted.
 
-### Verify External Users and Groups
+### Verify Users and Groups
 
-Navigate to any Application's **Access Control** tab to see external users and groups. Alternatively, verify via the API:
+Navigate to any Application's **Access Control** tab to see users and groups. Alternatively, verify via the API:
 
 ```bash
 kubectl exec -n mc deploy/mission-control -- curl -s localhost:8080/api/db/external_users | jq '.[0:3]'

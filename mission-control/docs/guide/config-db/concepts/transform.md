@@ -128,7 +128,7 @@ spec:
 
 ### Change Traversal
 
-Changes can be redirected to other config items using `move-up`, `copy-up`, `move`, and `copy` actions.
+Redirect changes to other config items using `move-up`, `copy-up`, `move`, and `copy` actions.
 
 - **`move-up`** redirects a change to an ancestor config (walks the parent chain). Use `ancestor_type` to target a specific type; omit it for the immediate parent.
 - **`copy-up`** is the same as `move-up` but keeps the original change as well.

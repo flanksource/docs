@@ -116,7 +116,7 @@ spec:
                 version: data.version,
                 edition: data.edition
               },
-              external_users: data.logins.map(function(l) {
+              users: data.logins.map(function(l) {
                 return {
                   name: l.name,
                   account_id: l.principal_id,
@@ -124,7 +124,7 @@ spec:
                   aliases: [l.sid]
                 };
               }),
-              external_roles: data.server_roles.map(function(r) {
+              roles: data.server_roles.map(function(r) {
                 return {
                   name: r.name,
                   account_id: r.principal_id,
@@ -132,10 +132,10 @@ spec:
                   description: r.is_fixed_role ? 'Fixed server role' : 'User-defined server role'
                 };
               }),
-              external_user_groups: data.role_members.map(function(m) {
+              user_groups: data.role_members.map(function(m) {
                 return {
-                  external_user_id: m.member_principal_id,
-                  external_group_id: m.role_principal_id
+                  user: m.member_principal_id,
+                  group: m.role_principal_id
                 };
               })
             };
@@ -504,7 +504,7 @@ spec:
                 return ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'EXECUTE'].indexOf(e.action_id) >= 0;
               }).map(function(e) {
                 return {
-                  external_user_id: e.server_principal_name,
+                  user: e.server_principal_name,
                   created_at: e.event_time,
                   properties: {
                     action: e.action_id,

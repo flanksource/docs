@@ -11,7 +11,7 @@ When the built-in [Entra ID scraper](/docs/integrations/azure-ad) doesn't cover 
 
 ## Prerequisites
 
-- [Connection](/docs/integrations/azure-ad/getting-started#connection) to Entra ID with OAuth2 client credentials
+- **OAuth2 client credentials** for your Entra ID app registration (tenant ID, client ID, client secret). You can supply these inline via `oauth` and `env` fields (shown below) or through a reusable [Connection](/docs/integrations/azure-ad/getting-started#connection).
 - **Application** permissions below, admin-consented
 
 | Permission | Purpose |
@@ -31,9 +31,9 @@ See the [Entra ID integration guide](/docs/integrations/azure-ad/getting-started
 
 ## ScrapeConfig
 
-The scraper below uses `full: true` so that each HTTP entry's CEL transform can emit reserved keys (`external_groups`, `external_users`, `external_user_groups`) that Mission Control processes as identity data rather than config items.
+The scraper below uses `full: true` so that each HTTP entry's CEL transform can emit reserved keys (`groups`, `users`, `user_groups`) that Mission Control processes as identity data rather than config items.
 
-Both entries authenticate inline via OAuth2 client credentials — no Connection object is needed, though you can use one if you prefer.
+Both entries authenticate inline via OAuth2 client credentials. You can also reference a [Connection](/docs/integrations/azure-ad/getting-started#connection) instead of inlining the secrets.
 
 ```yaml title="ms-graph-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/http-ms-graph.yaml
 ```
@@ -42,7 +42,7 @@ Adjust the `$filter` on the groups URL and `$select` on both entries to match th
 
 ## How Aliases Work
 
-Every identity string added to the `aliases` array on an `external_user` is stored in the `aliases` column of the `external_users` table. When Mission Control processes a [`config_access`](/docs/reference/config-db/config_access) record, it resolves `external_user_aliases` by matching against these aliases.
+Every identity string added to the `aliases` array on a user is stored in the `aliases` column of the users table. When Mission Control processes an [`access`](/docs/reference/config-db/config_access) record, it resolves user aliases by matching against these aliases.
 
 This means if a database access log references a user by `onPremisesSamAccountName` (e.g. `jdoe`) and the Entra scraper stored that same string as an alias, Mission Control links the access record to the correct user — no manual mapping needed.
 

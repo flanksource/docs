@@ -91,7 +91,7 @@ const entities = {
     ],
   },
   externalUser: {
-    title: 'ExternalUser',
+    title: 'User',
     fields: [
       { name: 'id', type: 'uuid', pk: true },
       { name: 'name', type: 'string' },
@@ -103,7 +103,7 @@ const entities = {
     ],
   },
   externalGroup: {
-    title: 'ExternalGroup',
+    title: 'Group',
     fields: [
       { name: 'id', type: 'uuid', pk: true },
       { name: 'name', type: 'string' },
@@ -114,18 +114,20 @@ const entities = {
     ],
   },
   externalRole: {
-    title: 'ExternalRole',
+    title: 'Role',
     fields: [
       { name: 'id', type: 'uuid', pk: true },
       { name: 'name', type: 'string' },
       { name: 'account_id', type: 'string' },
       { name: 'role_type', type: 'string' },
+      { name: 'description', type: 'string' },
+      { name: 'aliases', type: '[]string' },
       { name: 'application_id', type: 'uuid', fk: true },
       { name: 'scraper_id', type: 'uuid', fk: true },
     ],
   },
   externalUserGroup: {
-    title: 'ExternalUserGroup',
+    title: 'UserGroup',
     fields: [
       { name: 'external_user_id', type: 'uuid', pk: true, fk: true },
       { name: 'external_group_id', type: 'uuid', pk: true, fk: true },
@@ -141,7 +143,9 @@ const entities = {
       { name: 'external_role_id', type: 'uuid', fk: true },
       { name: 'application_id', type: 'uuid', fk: true },
       { name: 'scraper_id', type: 'uuid', fk: true },
+      { name: 'source', type: 'string' },
       { name: 'last_reviewed_at', type: 'timestamp' },
+      { name: 'last_reviewed_by', type: 'uuid' },
     ],
   },
   configAccessLog: {
@@ -150,6 +154,7 @@ const entities = {
       { name: 'config_id', type: 'uuid', pk: true, fk: true },
       { name: 'external_user_id', type: 'uuid', pk: true, fk: true },
       { name: 'scraper_id', type: 'uuid', pk: true, fk: true },
+      { name: 'created_at', type: 'timestamp' },
       { name: 'mfa', type: 'bool' },
       { name: 'count', type: 'int' },
       { name: 'properties', type: 'jsonb' },
@@ -173,14 +178,14 @@ function EntityModelDiagramInner({ className }: EntityModelDiagramProps) {
         <EntityBox id={id('configItem-box')} accent={COLORS.accent} {...entities.configItem} />
       </div>
 
-      {/* Row 2: ExternalUser — ConfigAccess (center) — ExternalRole */}
+      {/* Row 2: User — ConfigAccess (center) — Role */}
       <div className="flex justify-center items-start gap-12 mb-12">
         <EntityBox id={id('externalUser-box')} {...entities.externalUser} />
         <EntityBox id={id('configAccess-box')} accent={COLORS.fk} {...entities.configAccess} />
         <EntityBox id={id('externalRole-box')} {...entities.externalRole} />
       </div>
 
-      {/* Row 3: ExternalUserGroup — ExternalGroup — ConfigAccessLog */}
+      {/* Row 3: UserGroup — Group — ConfigAccessLog */}
       <div className="flex justify-center items-start gap-12">
         <EntityBox id={id('externalUserGroup-box')} accent={COLORS.muted} {...entities.externalUserGroup} />
         <EntityBox id={id('externalGroup-box')} {...entities.externalGroup} />
@@ -202,20 +207,20 @@ function EntityModelDiagramInner({ className }: EntityModelDiagramProps) {
         startAnchor={{ position: 'top', offset: { x: -20 } }}
         endAnchor="bottom"
       />
-      {/* ConfigAccess → ExternalUser */}
+      {/* ConfigAccess → User */}
       <Xarrow start={id('configAccess-box')} end={id('externalUser-box')}
         {...arrowProps}
         path="straight"
         startAnchor="left" endAnchor="right"
         labels={{ middle: <RelLabel text="N:1" /> }}
       />
-      {/* ConfigAccess → ExternalRole */}
+      {/* ConfigAccess → Role */}
       <Xarrow start={id('configAccess-box')} end={id('externalRole-box')}
         {...arrowProps}
         path="straight"
         startAnchor="right" endAnchor="left"
       />
-      {/* ConfigAccess → ExternalGroup */}
+      {/* ConfigAccess → Group */}
       <Xarrow start={id('configAccess-box')} end={id('externalGroup-box')}
         {...arrowProps}
         path="straight"
@@ -228,28 +233,28 @@ function EntityModelDiagramInner({ className }: EntityModelDiagramProps) {
         startAnchor="right"
         endAnchor={{ position: 'right', offset: { y: 10 } }}
       />
-      {/* ConfigAccessLog → ExternalUser */}
+      {/* ConfigAccessLog → User */}
       <Xarrow start={id('configAccessLog-box')} end={id('externalUser-box')}
         {...arrowProps}
         startAnchor={{ position: 'left', offset: { y: -10 } }}
         endAnchor={{ position: 'bottom', offset: { x: 20 } }}
       />
 
-      {/* ExternalRole → Application */}
+      {/* Role → Application */}
       <Xarrow start={id('externalRole-box')} end={id('application-box')}
         {...arrowProps}
         startAnchor="top" endAnchor="bottom"
         labels={{ middle: <RelLabel text="N:1" /> }}
       />
 
-      {/* ExternalUserGroup → ExternalUser */}
+      {/* UserGroup → User */}
       <Xarrow start={id('externalUserGroup-box')} end={id('externalUser-box')}
         {...arrowProps}
         path="straight"
         startAnchor="top" endAnchor="bottom"
         labels={{ middle: <RelLabel text="N:1" /> }}
       />
-      {/* ExternalUserGroup → ExternalGroup */}
+      {/* UserGroup → Group */}
       <Xarrow start={id('externalUserGroup-box')} end={id('externalGroup-box')}
         {...arrowProps}
         path="straight"
