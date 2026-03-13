@@ -98,12 +98,57 @@ When using script transformations (`expr`, `gotemplate`, `jsonpath`, `javascript
   },
   {
     field: "result",
-    description: "Current scrape result with metadata",
+    description: "Current scrape result with metadata (id, name, config_type, labels, tags, etc.)",
     scheme: "[ScrapeResult](/docs/reference/config-db/scrape-result)"
+  },
+  {
+    field: "last_scrape_summary",
+    description: "Summary from the previous scrape run. Contains per-type counts (`config_types` map with `added`/`updated`/`unchanged`/`changes`/`deduped`) and entity counts (`external_users`, `external_groups`, `external_roles`, `config_access`, `access_logs` each with `scraped`/`saved`/`skipped`/`deleted`).",
+    scheme: "[ScrapeSummary](#scrape-summary)"
   }
 ]}/>
 
 Script transformations must return a JSON array of [ScrapeResult](/docs/reference/config-db/scrape-result) objects.
+
+### Scrape Summary
+
+The `last_scrape_summary` provides counts from the previous scrape run, useful for conditional logic (e.g. skip processing if no changes).
+
+<Fields rows={[
+  {
+    field: "config_types",
+    description: "Map of config type name to per-type counts",
+    scheme: "map[string]ConfigTypeSummary"
+  },
+  {
+    field: "external_users",
+    description: "Entity counts for external users",
+    scheme: "EntitySummary"
+  },
+  {
+    field: "external_groups",
+    description: "Entity counts for external groups",
+    scheme: "EntitySummary"
+  },
+  {
+    field: "external_roles",
+    description: "Entity counts for external roles",
+    scheme: "EntitySummary"
+  },
+  {
+    field: "config_access",
+    description: "Entity counts for config access records",
+    scheme: "EntitySummary"
+  },
+  {
+    field: "access_logs",
+    description: "Entity counts for access log entries",
+    scheme: "EntitySummary"
+  }
+]}/>
+
+Where `ConfigTypeSummary` has fields: `added`, `updated`, `unchanged`, `changes`, `deduped` (all integers).
+And `EntitySummary` has fields: `scraped`, `saved`, `skipped`, `deleted` (all integers).
 
 ```yaml title="cel-transform-example.yaml"
 transform:
@@ -212,6 +257,12 @@ Create relationships between configuration items. See [Relationships Guide](/doc
     required: false
   },
   {
+    field: "external_id",
+    description: "External ID of the related config",
+    scheme: "[Lookup](#lookup)",
+    required: false
+  },
+  {
     field: "name",
     description: "Name of the related config",
     scheme: "[Lookup](#lookup)",
@@ -232,6 +283,12 @@ Create relationships between configuration items. See [Relationships Guide](/doc
   {
     field: "agent",
     description: "Agent of the related config (`self` for local)",
+    scheme: "[Lookup](#lookup)",
+    required: false
+  },
+  {
+    field: "scope",
+    description: "Scope for the related config (e.g. scraper ID). Use `all` to disregard scope.",
     scheme: "[Lookup](#lookup)",
     required: false
   },

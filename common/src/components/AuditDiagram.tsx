@@ -306,6 +306,11 @@ function AuditDiagramInner({ className }: AuditDiagramProps) {
         path="straight"
         startAnchor="right" endAnchor="left"
       />
+      <Xarrow start={id('catalog')} end={id('views')}
+        {...primaryArrowProps}
+        path="straight"
+        startAnchor="right" endAnchor="left"
+      />
       <Xarrow start={id('catalog')} end={id('alerts')}
         {...primaryArrowProps}
         path="straight"

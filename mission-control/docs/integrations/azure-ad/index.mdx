@@ -34,8 +34,8 @@ Mission Control scrapes identity data from Entra ID and stores it in a unified c
 
 | Config Type | Class | Description |
 |---|---|---|
-| `Azure::User` | - | Scraped as external users (not config items) |
-| `Azure::Group` | - | Scraped as external groups with membership |
+| `Azure::User` | - | Scraped as users (not config items) |
+| `Azure::Group` | - | Scraped as groups with membership |
 | `Azure::AppRegistration` | `AppRegistration` | Applications registered in the tenant |
 | `Azure::AppRegistration::ClientSecret` | `ClientSecret` | Client secret credentials (child of app registration) |
 | `Azure::AppRegistration::Certificate` | `ClientCertificate` | Certificate credentials (child of app registration) |
@@ -43,14 +43,14 @@ Mission Control scrapes identity data from Entra ID and stores it in a unified c
 | `Azure::AuthenticationMethod` | `AuthenticationMethod` | Tenant-level auth method policies (MFA, FIDO2, etc.) |
 
 :::note
-Users and groups are stored as **external users** and **external groups**, not as config items. They appear in the access control views when linked through an [Application CRD](/docs/guide/audit/applications). App registrations and enterprise applications are stored as config items in the catalog.
+Mission Control stores users and groups as **users** and **groups**, not as config items. They appear in the access control views when linked through an [Application CRD](/docs/guide/audit/applications). Mission Control stores app registrations and enterprise applications as config items in the catalog.
 :::
 
 ### Relationships
 
 - **App Registration -> Client Secrets / Certificates**: Parent-child relationship. Secrets and certificates appear as children of their app registration.
 - **Enterprise Application -> App Registration**: Linked via `AppServicePrincipal` relationship. Each enterprise app is the service principal for an app registration.
-- **Groups -> Users**: Group membership is tracked through external user-group mappings.
+- **Groups -> Users**: Group membership is tracked through user-group mappings.
 - **Enterprise Application -> Users/Groups**: App role assignments link users and groups to enterprise applications via config access records.
 
 ### App Role Assignments and Config Access
@@ -58,7 +58,7 @@ Users and groups are stored as **external users** and **external groups**, not a
 When `appRoleAssignments` is configured, the scraper creates **config access records** linking users and groups to enterprise applications:
 
 - For each app role assignment, a `ConfigAccess` record is created with the user or group as the principal
-- If the assignment has a specific app role (not the default nil role), the role is recorded as an `ExternalRole`
+- If the assignment has a specific app role (not the default nil role), the role is recorded as an `Role`
 - This data powers the access control views in [Applications](/docs/guide/audit/applications)
 
 ### Permissions

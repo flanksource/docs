@@ -15,7 +15,7 @@ Mission Control's audit system stores four categories of data: identities (who),
 
 ## How Entities Relate
 
-**Identity providers** (Entra ID, AWS IAM, Kubernetes RBAC, databases) are scraped into **users**, **groups**, and **roles**. Users belong to groups, and roles define permission sets.
+Mission Control scrapes **identity providers** (Entra ID, AWS IAM, Kubernetes RBAC, databases) into **users**, **groups**, and **roles**. Users belong to groups, and roles define permission sets.
 
 **Permissions** link users, groups, and roles to specific **resources** — the infrastructure items in your catalog (AWS accounts, Azure subscriptions, Kubernetes clusters, databases, etc.). This answers "who _can_ access what."
 

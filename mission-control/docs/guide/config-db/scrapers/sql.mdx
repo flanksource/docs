@@ -312,13 +312,13 @@ spec:
         FROM applications
 ```
 
-## External Users, Groups & Roles
+## Users, Groups & Roles
 
 Scrape IAM/RBAC data to track who has access to your configurations. This enables access reviews, compliance reporting, and security monitoring.
 
 ### Data Structures
 
-**ExternalUser**
+**User**
 | Field | Description |
 |-------|-------------|
 | `name` | Display name of the user |
@@ -327,7 +327,7 @@ Scrape IAM/RBAC data to track who has access to your configurations. This enable
 | `email` | Email address |
 | `aliases` | Alternative identifiers |
 
-**ExternalGroup**
+**Group**
 | Field | Description |
 |-------|-------------|
 | `name` | Group name |
@@ -335,7 +335,7 @@ Scrape IAM/RBAC data to track who has access to your configurations. This enable
 | `group_type` | Type of group (e.g., `role`, `team`, `department`) |
 | `aliases` | Alternative identifiers |
 
-**ExternalRole**
+**Role**
 | Field | Description |
 |-------|-------------|
 | `name` | Role name |
@@ -369,8 +369,8 @@ spec:
                 version: db.version,
                 encoding: db.encoding
               },
-              // External users from database roles
-              external_users: db.users.map(function(u) {
+              // Users from database roles
+              users: db.users.map(function(u) {
                 return {
                   name: u.username,
                   account_id: u.username,
@@ -379,8 +379,8 @@ spec:
                   aliases: [u.oid]
                 };
               }),
-              // External groups (role groups)
-              external_groups: db.role_groups.map(function(g) {
+              // Groups (role groups)
+              groups: db.role_groups.map(function(g) {
                 return {
                   name: g.group_name,
                   account_id: g.group_name,
@@ -388,8 +388,8 @@ spec:
                   aliases: [g.oid]
                 };
               }),
-              // External roles
-              external_roles: db.roles.map(function(r) {
+              // Roles
+              roles: db.roles.map(function(r) {
                 return {
                   name: r.role_name,
                   account_id: r.role_name,
@@ -399,10 +399,10 @@ spec:
                 };
               }),
               // User-group memberships
-              external_user_groups: db.memberships.map(function(m) {
+              user_groups: db.memberships.map(function(m) {
                 return {
-                  external_user_id: m.user_id,
-                  external_group_id: m.group_id
+                  user: m.user_id,
+                  group: m.group_id
                 };
               })
             };
@@ -458,9 +458,9 @@ Links users, groups, or roles to specific config items:
 | Field | Description |
 |-------|-------------|
 | `config_id` | ID of the config item |
-| `external_user_id` | User who has access |
-| `external_group_id` | Group that has access |
-| `external_role_id` | Role that grants access |
+| `user` | User who has access |
+| `group` | Group that has access |
+| `role` | Role that grants access |
 
 ### ConfigAccessLog
 
@@ -469,7 +469,7 @@ Records access events for compliance and auditing:
 | Field | Description |
 |-------|-------------|
 | `config_id` | ID of the accessed config |
-| `external_user_id` | User who accessed the config |
+| `user` | User who accessed the config |
 | `created_at` | Timestamp of access |
 | `mfa` | Whether MFA was used |
 | `properties` | Additional access metadata |
@@ -496,17 +496,17 @@ spec:
                 id: row.app_id,
                 name: row.app_name,
                 config: row.settings,
-                // Config access permissions
-                config_access: row.permissions.map(function(p) {
+                // Access permissions
+                access: row.permissions.map(function(p) {
                   return {
-                    external_user_id: p.user_id,
-                    external_role_id: p.role_id
+                    user: p.user_id,
+                    role: p.role_id
                   };
                 }),
                 // Access logs from audit table
                 access_logs: row.access_logs.map(function(log) {
                   return {
-                    external_user_id: log.user_id,
+                    user: log.user_id,
                     created_at: log.accessed_at,
                     mfa: log.mfa_used,
                     properties: {
@@ -657,7 +657,7 @@ spec:
                   };
                 }),
                 // Users with access
-                external_users: (row.users || []).map(function(u) {
+                users: (row.users || []).map(function(u) {
                   return {
                     name: u.display_name,
                     account_id: u.user_id,
@@ -666,7 +666,7 @@ spec:
                   };
                 }),
                 // Roles
-                external_roles: (row.roles || []).map(function(r) {
+                roles: (row.roles || []).map(function(r) {
                   return {
                     name: r.role_name,
                     account_id: r.role_id,
@@ -675,16 +675,16 @@ spec:
                   };
                 }),
                 // Access permissions
-                config_access: (row.permissions || []).map(function(p) {
+                access: (row.permissions || []).map(function(p) {
                   return {
-                    external_user_id: p.user_id,
-                    external_role_id: p.role_id
+                    user: p.user_id,
+                    role: p.role_id
                   };
                 }),
                 // Recent access logs
                 access_logs: (row.access_logs || []).map(function(l) {
                   return {
-                    external_user_id: l.user_id,
+                    user: l.user_id,
                     created_at: l.accessed_at,
                     mfa: l.mfa_used,
                     properties: {

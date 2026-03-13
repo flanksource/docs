@@ -13,8 +13,8 @@ Mission Control provides an immutable audit trail of all configuration modificat
 
 Changes are recorded in two ways:
 
-- **Diff changes**: Mission Control compares each scrape result with the previous version and records the diff automatically. No additional configuration is needed beyond setting up a scraper.
-- **Event-based changes**: External events (CloudTrail, Kubernetes events) are ingested as named change types, providing richer context about who made a change and why.
+- **Diff changes**: Mission Control compares each scrape result with the previous version and records the diff automatically. You don't need additional configuration beyond setting up a scraper.
+- **Event-based changes**: Mission Control ingests external events (CloudTrail, Kubernetes events) as named change types, providing richer context about who made a change and why.
 
 See [Changes](/docs/guide/config-db/concepts/changes) for details on change types, severity mapping, and retention.
 

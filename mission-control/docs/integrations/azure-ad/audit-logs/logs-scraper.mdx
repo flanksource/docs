@@ -9,7 +9,7 @@ import { LogsScraperDiagram } from '@site/src/components/AuditLogDiagrams'
 import ComparisonBox from '@site/../common/src/components/ComparisonBox'
 import {Card, Cards} from '@site/../common/src/components/Card'
 
-If your Entra ID logs are already forwarded to a log backend (via Azure Monitor Diagnostic Settings), use the [Logs scraper](/docs/guide/config-db/scrapers/logs) to pull them into Mission Control.
+If you already forward your Entra ID logs to a log backend (via Azure Monitor Diagnostic Settings), use the [Logs scraper](/docs/guide/config-db/scrapers/logs) to pull them into Mission Control.
 
 <LogsScraperDiagram className="mx-auto" />
 
@@ -86,7 +86,7 @@ spec:
             'id': e.id,
             'name': e.userPrincipalName + ' -> ' + e.appDisplayName,
             'config_access': [{
-              'external_user_aliases': [e.userPrincipalName, e.userId],
+              'user': [e.userPrincipalName, e.userId],
               'config_name': e.appDisplayName,
               'config_type': 'Azure::EnterpriseApplication',
               'status': e.status.errorCode == 0 ? 'success' : 'failure',
