@@ -1,0 +1,395 @@
+---
+title: Getting Started
+sidebar_position: 0
+sidebar_custom_props:
+  icon: getting-started
+---
+
+import { Card, Cards } from '@site/../common/src/components/Card'
+
+This guide walks you through setting up the Entra ID scraper — from Azure Portal configuration to a working access audit.
+
+
+:::info Prerequisites
+- Azure AD tenant with Global Administrator or Application Administrator access
+- Mission Control installed via Helm
+:::
+
+<details summary="Azure App Registration Setup">
+
+1. In the Azure Portal, go to **Microsoft Entra ID > App registrations > New registration**
+2. Set the **Name** (e.g. `mission-control-scraper`)
+   - Set **Supported account types** to "Accounts in this organizational directory only"
+   - Leave **Redirect URI** blank and click **Register**
+3. Note the **Application (client) ID** and **Directory (tenant) ID** from the overview page
+4. Go to **Certificates & secrets > Client secrets > New client secret**
+   - Add a description and choose an expiry (recommended: 12 months)
+   - Click **Add** and copy the secret **Value** immediately (it won't be shown again)
+5. Go to **API permissions > Add a permission > Microsoft Graph > Application permissions**
+   - Add the permissions from the [table below](#permissions)
+6. Click **Grant admin consent for \{tenant\}** (requires Global Administrator or Privileged Role Administrator)
+7. Create a [Connection](#connection)
+
+</details>
+
+### Permissions
+
+| Permission | Type | Used For | Functionality Enabled |
+|---|---|---|---|
+| `User.Read.All` | Application | Read all user profiles | Scrape users; alias resolution for access log matching |
+| `Group.Read.All` | Application | Read group properties | Discover groups in tenant; enable group-based role mapping in Application CRD |
+| `GroupMember.Read.All` | Application | Read group memberships | Map users to groups; required for role-based access audit |
+| `Application.Read.All` | Application | Read app registrations and enterprise apps | Catalog app registrations, client secrets/certificates, enterprise applications |
+| `Directory.Read.All` | Application | Broad directory read access | Service principal metadata, directory roles, additional attributes |
+| `AuditLog.Read.All` | Application | Sign-in and audit logs | Only needed for [HTTP scraper](./audit-logs/http-scraper) sign-in log ingestion (requires P1/P2 license) |
+| `Policy.Read.All` | Application | Authentication method policies | Scrape tenant-level MFA, FIDO2, passwordless, and other auth method configs |
+
+:::info Note
+- All permissions must be **Application** type (not Delegated)
+- Admin consent is required for all permissions
+- Sign-in log access requires an **Entra ID P1 or P2 license** on the tenant
+- `Directory.Read.All` is a broad permission; if you only need users and groups, `User.Read.All` + `Group.Read.All` is sufficient
+:::
+
+## Connection
+
+Store the credentials as a Kubernetes secret and reference them in a Connection:
+
+```yaml title="azure-entra-connection.yaml"
+apiVersion: v1
+kind: Secret
+metadata:
+  name: azure-entra-credentials
+  namespace: mc
+type: Opaque
+stringData:
+  AZURE_CLIENT_ID: "<your-client-id>"
+  AZURE_CLIENT_SECRET: "<your-client-secret>"
+  AZURE_TENANT_ID: "<your-tenant-id>"
+---
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: entra
+  namespace: mc
+spec:
+  azure:
+    clientID:
+      valueFrom:
+        secretKeyRef:
+          name: azure-entra-credentials
+          key: AZURE_CLIENT_ID
+    clientSecret:
+      valueFrom:
+        secretKeyRef:
+          name: azure-entra-credentials
+          key: AZURE_CLIENT_SECRET
+    tenantID:
+      valueFrom:
+        secretKeyRef:
+          name: azure-entra-credentials
+          key: AZURE_TENANT_ID
+```
+
+## Configuration
+
+The Azure scraper uses the `include` array to control which Entra ID resource sets are scraped:
+
+| Value | Description |
+|---|---|
+| `entra` | Users, groups, app registrations, enterprise applications |
+| `appRoles` | App role assignments — creates `ConfigAccess` records linking users/groups to enterprise apps |
+| `authMethods` | Tenant-level authentication method policies (MFA, FIDO2, passwordless) |
+
+Within the `entra` block, each resource type uses [resource selectors](/docs/reference/resource-selector) to filter what gets scraped. An empty selector (`{}`) scrapes all items of that type.
+
+### Users and Groups
+
+```yaml title="entra-users-groups.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: azure-entra-users-groups
+spec:
+  schedule: "@every 1h"
+  azure:
+    - connection: connection://mc/entra
+      include:
+        - entra
+      entra:
+        users:
+          - {}
+        groups:
+          - {}
+```
+
+Requires: `User.Read.All`, `Group.Read.All`
+
+### Apps and Roles
+
+```yaml title="entra-apps-roles.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: azure-entra-apps-roles
+spec:
+  schedule: "@every 1h"
+  azure:
+    - connection: connection://mc/entra
+      include:
+        - entra
+        - appRoles
+      entra:
+        users:
+          - {}
+        groups:
+          - {}
+        appRegistrations:
+          - {}
+        enterpriseApps:
+          - {}
+        appRoleAssignments:
+          - {}
+```
+
+Requires: `User.Read.All`, `Group.Read.All`, `Application.Read.All`, `Directory.Read.All`
+
+### With Authentication Methods
+
+```yaml title="entra-full.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: azure-entra-full
+spec:
+  schedule: "@every 1h"
+  azure:
+    - connection: connection://mc/entra
+      include:
+        - entra
+        - appRoles
+        - authMethods
+      entra:
+        users:
+          - {}
+        groups:
+          - {}
+        appRegistrations:
+          - {}
+        enterpriseApps:
+          - {}
+        appRoleAssignments:
+          - {}
+```
+
+Requires: all permissions above + `Policy.Read.All` for auth method policies.
+
+### Filtering with Resource Selectors
+
+You can filter scraped resources using [resource selectors](/docs/reference/resource-selector):
+
+```yaml
+entra:
+  users:
+    - name: "John*"   # Only users matching name pattern
+  groups:
+    - name: "app-*"   # Only groups starting with "app-"
+  enterpriseApps:
+    - name: "Payments*"
+  appRoleAssignments:
+    - name: "Payments*"  # Assignments for matching enterprise apps
+```
+
+**Filter for a single enterprise app and its role assignments:**
+
+```yaml
+entra:
+  enterpriseApps:
+    - name: "Payments API"
+  appRoleAssignments:
+    - name: "Payments API"
+```
+
+**Filter users by domain pattern:**
+
+```yaml
+entra:
+  users:
+    - name: "*@engineering.contoso.com"
+  groups:
+    - {}
+```
+
+## End-to-End: Audit an Application
+
+This walkthrough shows how to go from zero to a working access audit for an application.
+
+**Step 1**: Deploy the connection and scraper (see [Configuration](#configuration) above)
+
+**Step 2**: Verify resources appear in the catalog. After the first scrape cycle, you should see `Azure::AppRegistration` and `Azure::EnterpriseApplication` items in the catalog, and users/groups in the access views.
+
+**Step 3**: Create an [Application](/docs/guide/audit/applications) that maps Entra resources to your app:
+
+```yaml title="my-app-audit.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Application
+metadata:
+  name: my-app
+  namespace: mc
+spec:
+  type: Application
+  description: My application
+  mapping:
+    logins:
+      - search: type=Azure::EnterpriseApplication name="My App"
+    roles:
+      - search: type=Azure::Group name=my-app-users
+        role: User
+      - search: type=Azure::Group name=my-app-admins
+        role: Admin
+```
+
+The Application automatically surfaces:
+- All users and groups that have access via the enterprise application
+- Their assigned roles (User, Admin)
+- Authentication method policies from the tenant
+
+See [Applications](/docs/guide/audit/applications) for the full spec and more examples.
+
+## Verification
+
+After deploying your scraper, verify that resources are being scraped correctly.
+
+### Check Scraper Status
+
+```bash
+kubectl get scrapeconfigs -n mc
+kubectl describe scrapeconfig azure-entra-full -n mc
+```
+
+Look for:
+- **Status**: should show `Healthy` or `Succeeded`
+- **Last Scrape Time**: should be recent (within your schedule interval)
+- **Events**: no error events like `403 Forbidden` or `Authentication failed`
+
+### Verify Config Items
+
+Open the Mission Control catalog and filter by type:
+- `Azure::AppRegistration` — app registrations from your tenant
+- `Azure::EnterpriseApplication` — enterprise applications (service principals)
+- `Azure::AuthenticationMethod` — tenant-level auth method policies (if `authMethods` is enabled)
+
+If these types don't appear, check that `include` contains `entra` and that `Application.Read.All` permission is granted.
+
+### Verify Users and Groups
+
+Navigate to any Application's **Access Control** tab to see users and groups. Alternatively, verify via the API:
+
+```bash
+kubectl exec -n mc deploy/mission-control -- curl -s localhost:8080/api/db/external_users | jq '.[0:3]'
+kubectl exec -n mc deploy/mission-control -- curl -s localhost:8080/api/db/external_groups | jq '.[0:3]'
+```
+
+### Verify App Role Assignments
+
+If `appRoles` is in your `include` list, navigate to an enterprise application's **Access** tab in the catalog. You should see users and groups with their assigned roles.
+
+## Performance & Scheduling
+
+### Schedule Recommendations
+
+| Tenant Size | Recommended Schedule | Notes |
+|---|---|---|
+| < 1,000 users | `@every 1h` | Default, suitable for most tenants |
+| 1,000 – 10,000 users | `@every 2h` | Reduces API call volume |
+| 10,000+ users | `@every 4h` | Use resource selectors to narrow scope |
+
+### Rate Limits
+
+Microsoft Graph API enforces per-tenant rate limits. If you encounter `429 Too Many Requests` errors:
+
+1. **Increase the schedule interval** — scrape less frequently
+2. **Narrow resource selectors** — scrape only the users, groups, and apps you need
+3. **Stagger scrapers** — if running multiple ScrapeConfigs against the same tenant, offset their schedules
+
+:::info
+The built-in Azure scraper handles pagination automatically. You do not need to worry about page sizes or `@odata.nextLink` tokens — the scraper follows all pages until the collection is fully scraped.
+:::
+
+**Example: reduced-scope config for large tenants:**
+
+```yaml title="entra-large-tenant.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: azure-entra-scoped
+spec:
+  schedule: "@every 4h"
+  azure:
+    - connection: connection://mc/entra
+      include:
+        - entra
+        - appRoles
+      entra:
+        users:
+          - name: "*@engineering.contoso.com"
+        groups:
+          - name: "app-*"
+        enterpriseApps:
+          - name: "Payments*"
+        appRoleAssignments:
+          - name: "Payments*"
+```
+
+## Troubleshooting
+
+### "Insufficient privileges" or "Authorization_RequestDenied"
+
+Admin consent has not been granted. In the Azure Portal, go to **App registrations > your app > API permissions** and click **Grant admin consent**.
+
+### Empty results / no users or groups
+
+- Verify the `entra` block has at least one resource selector (use `- {}` to select all)
+- Ensure `include` contains `entra`
+- Check that admin consent has been granted (a green checkmark should appear next to each permission)
+
+### "Application not found" or authentication errors
+
+- Verify the **tenant ID**, **client ID**, and **client secret** are correct
+- Ensure the secret has not expired (check **Certificates & secrets** in the Azure Portal)
+
+### Client secret expired
+
+1. Go to **App registrations > your app > Certificates & secrets**
+2. Create a new client secret
+3. Update the Kubernetes secret with the new value
+4. The scraper will use the new secret on the next cycle
+
+### No app registrations or enterprise apps
+
+Ensure `Application.Read.All` and `Directory.Read.All` permissions are granted and consented. The app registration must have **Application** type permissions, not Delegated.
+
+### Authentication methods not appearing
+
+Ensure `authMethods` is in the `include` list and `Policy.Read.All` permission is granted.
+
+### Rate limiting / 429 errors
+
+Microsoft Graph API enforces per-tenant rate limits. Increase the schedule interval, reduce scope with resource selectors, or stagger multiple scrapers. See [Performance & Scheduling](#performance--scheduling) for details.
+
+## Next Steps
+
+<Cards>
+  <Card icon="entra" title="Audit Logs" href="/docs/integrations/azure-ad/audit-logs">
+    Scrape sign-in and audit logs from Entra ID
+  </Card>
+  <Card icon="azure" title="Azure Integration" href="/docs/integrations/azure">
+    Azure resource scraping (VMs, databases, networking)
+  </Card>
+  <Card icon="scraper" title="Identity & Access Audit" href="/docs/guide/audit/identity-access">
+    Multi-provider access control auditing
+  </Card>
+  <Card icon="lucide:package" title="Applications" href="/docs/guide/audit/applications">
+    Map Entra resources to applications for audit
+  </Card>
+</Cards>

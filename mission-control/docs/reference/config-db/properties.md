@@ -1,6 +1,7 @@
 ---
 title: Property
 description: Property fields for config items
+sidebar_position: 6
 ---
 
 | Field      | Description                                                                  | Scheme                               | Required   |

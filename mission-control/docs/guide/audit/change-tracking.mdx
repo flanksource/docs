@@ -1,0 +1,126 @@
+---
+title: Change Tracking
+sidebar_position: 6
+sidebar_custom_props:
+  icon: octicon:diff-16
+---
+
+import {Card, Cards} from '@site/../common/src/components/Card'
+
+Mission Control provides an immutable audit trail of all configuration modifications across your infrastructure. It automatically detects and records configuration diffs on each scrape cycle, and ingests external event streams like AWS CloudTrail and Kubernetes events. This detailed log is essential for forensic analysis, incident response, and demonstrating compliance with change management policies.
+
+## How Changes Are Captured
+
+Changes are recorded in two ways:
+
+- **Diff changes**: Mission Control compares each scrape result with the previous version and records the diff automatically. You don't need additional configuration beyond setting up a scraper.
+- **Event-based changes**: Mission Control ingests external events (CloudTrail, Kubernetes events) as named change types, providing richer context about who made a change and why.
+
+See [Changes](/docs/guide/config-db/concepts/changes) for details on change types, severity mapping, and retention.
+
+## AWS CloudTrail Integration
+
+Mission Control integrates with AWS CloudTrail to ingest management and data events from your AWS accounts. This provides a time-stamped record of API calls and resource changes, essential for auditing who did what and when within your AWS environment.
+
+Configure CloudTrail ingestion on the [AWS scraper](/docs/guide/config-db/scrapers/aws) using the `cloudtrail` field:
+
+```yaml title="aws-cloudtrail-scraper.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-audit-trail
+spec:
+  schedule: "@every 30m"
+  aws:
+    - connection: connection://aws/prod
+      cloudtrail:
+        maxAge: 7d
+        exclude:
+          - DescribeInstances
+          - DescribeVolumes
+          - GetObject
+      include:
+        - EC2Instance
+        - RDSInstance
+        - IAMUser
+        - IAMRole
+        - SecurityGroup
+```
+
+Use `cloudtrail.exclude` to filter out high-volume read-only API calls that add noise without audit value.
+
+## Kubernetes Event Tracking
+
+Mission Control captures Kubernetes events including pod lifecycle changes, resource mutations, and scheduling decisions. This provides a granular audit trail of cluster activity, vital for understanding operational changes and investigating incidents.
+
+Enable event tracking on the [Kubernetes scraper](/docs/guide/config-db/scrapers/kubernetes) using the `event` field. Use `exclusions.reasons` to filter out routine events:
+
+```yaml title="k8s-change-tracking.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: k8s-change-audit
+spec:
+  schedule: "@every 15m"
+  kubernetes:
+    - clusterName: production
+      event:
+        exclusions:
+          reasons:
+            - SuccessfulCreate
+            - Pulling
+            - Pulled
+            - Started
+            - Created
+        severityKeywords:
+          error:
+            - failed
+            - error
+          warn:
+            - backoff
+            - unhealthy
+            - oom
+```
+
+## Alerting on Changes
+
+Use [Notifications](/docs/guide/notifications/) to alert on security-sensitive configuration changes. For example, to notify when IAM roles or security groups are modified:
+
+```yaml title="critical-change-notification.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Notification
+metadata:
+  name: critical-config-change
+spec:
+  events:
+    - config.changed
+  filter: >
+    config.type in [
+      'AWS::IAM::Role',
+      'AWS::IAM::Policy',
+      'AWS::EC2::SecurityGroup',
+      'Kubernetes::ClusterRole',
+      'Kubernetes::ClusterRoleBinding'
+    ]
+  to:
+    connection: connection://slack/security
+  title: "Security-sensitive change: {{.config.name}}"
+  template: |
+    A security-sensitive configuration was modified:
+
+    **Resource**: {{.config.name}} ({{.config.type}})
+    **State**: {{.new_state}}
+
+    [View Resource]({{.permalink}})
+```
+
+See [Notifications](/docs/guide/notifications/) for channel configuration and filter syntax.
+
+## Related
+
+<Cards>
+  <Card title="Changes" link="/docs/guide/config-db/concepts/changes" icon="octicon:diff-16" />
+  <Card title="AWS Scraper" link="/docs/guide/config-db/scrapers/aws" icon="aws" />
+  <Card title="Kubernetes Scraper" link="/docs/guide/config-db/scrapers/kubernetes" icon="k8s" />
+  <Card title="Notifications" link="/docs/guide/notifications/" />
+</Cards>

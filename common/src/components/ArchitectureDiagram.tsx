@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import Xarrow from 'react-xarrows';
 import {
@@ -13,6 +13,7 @@ import {
   Datadog,
   Github,
   Postgres,
+  PostgresWhite,
   ConfigDbWhite,
   CanaryCheckerWhite,
   Playbook,
@@ -25,6 +26,7 @@ import {
   SqlServer,
   AzureDevops,
   Gitlab,
+  MissionControlWhite,
 } from '@flanksource/icons/mi';
 import { PiBrain } from 'react-icons/pi';
 
@@ -78,16 +80,16 @@ function BoxNode({ id, title, className = '', bodyClassName = '', border = 'soli
   );
 }
 
-function K8SCRDsBox() {
+function K8SCRDsBox({ id }: { id: string }) {
   return (
-    <div id="arch-k8s-crds" className="flex items-center gap-3 bg-blue-600 rounded-xl px-5 py-3 shadow-lg border-2 border-blue-400">
+    <div id={id} className="flex items-center gap-3 bg-blue-600 rounded-xl px-5 py-3 shadow-lg border-2 border-blue-400">
       <K8S className="w-8 h-8 text-white" />
       <span className="text-white font-bold text-sm">K8S CRDs</span>
     </div>
   );
 }
 
-function MissionControlBox() {
+function MissionControlBox({ id }: { id: string }) {
   const features = [
     { Icon: CanaryCheckerWhite, label: 'Health Checks' },
     { Icon: ConfigDbWhite, label: 'Unified Catalog' },
@@ -96,24 +98,30 @@ function MissionControlBox() {
   ];
 
   return (
-    <div id="arch-missionControl" className="rounded-2xl overflow-hidden bg-gradient-to-br from-slate-700 to-slate-900 border-2 border-blue-500 shadow-2xl">
-      <div className="px-6 py-3 text-center border-b border-blue-800/50">
-        <span className="text-white text-lg font-bold tracking-wide">MISSION CONTROL</span>
+    <div id={id} className="rounded-2xl overflow-hidden border-2 shadow-2xl"
+      style={{ borderColor: '#007fdf', backgroundColor: '#f7fbfe' }}>
+      <div className="px-6 py-3 text-center" style={{ backgroundColor: '#007fdf' }}>
+        <div className="flex items-center justify-center gap-2">
+          <MissionControlWhite className="w-6 h-6 text-white" />
+          <span className="text-white text-lg font-bold tracking-wide">Mission Control</span>
+        </div>
       </div>
       <div className="p-4 flex flex-col gap-3">
         <div className="grid grid-cols-2 gap-3">
           {features.map(({ Icon, label }) => (
             <div
               key={label}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 transition-colors rounded-lg px-3 py-2 cursor-default"
+              className="flex items-center gap-2 rounded-lg px-3 py-2 cursor-default"
+              style={{ backgroundColor: '#007fdf' }}
             >
               <Icon className="w-5 h-5 text-white" />
               <span className="text-white text-xs font-medium">{label}</span>
             </div>
           ))}
         </div>
-        <div className="flex items-center justify-center gap-2 bg-slate-600 rounded-lg px-3 py-2">
-          <Postgres className="w-5 h-5" />
+        <div className="flex items-center justify-center gap-2 rounded-lg px-3 py-2"
+          style={{ backgroundColor: '#607689' }}>
+          <PostgresWhite className="w-5 h-5 text-white" />
           <span className="text-white text-xs font-medium">Postgres</span>
         </div>
       </div>
@@ -121,16 +129,16 @@ function MissionControlBox() {
   );
 }
 
-function MCPServerBox() {
+function MCPServerBox({ id }: { id: string }) {
   return (
-    <div id="arch-mcp-server" className="flex items-center gap-3 bg-indigo-600 rounded-xl px-5 py-3 shadow-lg border-2 border-indigo-400">
+    <div id={id} className="flex items-center gap-3 bg-indigo-600 rounded-xl px-5 py-3 shadow-lg border-2 border-indigo-400">
       <Mcp className="w-7 h-7 text-white fill-white" />
       <span className="text-white font-bold text-sm">MCP Server</span>
     </div>
   );
 }
 
-function IntegrationsBox() {
+function IntegrationsBox({ id }: { id: string }) {
   const integrations = [
     { Icon: Aws },
     { Icon: Azure },
@@ -155,7 +163,7 @@ function IntegrationsBox() {
   ];
 
   return (
-    <div id="arch-integrations">
+    <div id={id}>
       <BoxNode
         title="40+ Integrations"
         className="bg-slate-500"
@@ -174,16 +182,19 @@ interface ArchitectureDiagramProps {
 }
 
 function ArchitectureDiagramInner({ className }: ArchitectureDiagramProps) {
+  const prefix = useId();
+  const id = (name: string) => `${prefix}-${name}`;
+
   return (
     <div className={`${className || ''} relative flex flex-col items-center gap-10 py-8`}>
-      <K8SCRDsBox />
-      <MissionControlBox />
-      <MCPServerBox />
-      <IntegrationsBox />
+      <K8SCRDsBox id={id('k8s-crds')} />
+      <MissionControlBox id={id('missionControl')} />
+      <MCPServerBox id={id('mcp-server')} />
+      <IntegrationsBox id={id('integrations')} />
 
       <Xarrow
-        start="arch-k8s-crds"
-        end="arch-missionControl"
+        start={id('k8s-crds')}
+        end={id('missionControl')}
         color="#3b82f6"
         strokeWidth={3}
         startAnchor="bottom"
@@ -192,8 +203,8 @@ function ArchitectureDiagramInner({ className }: ArchitectureDiagramProps) {
         dashness={{ strokeLen: 10, nonStrokeLen: 5, animation: 1 }}
       />
       <Xarrow
-        start="arch-missionControl"
-        end="arch-mcp-server"
+        start={id('missionControl')}
+        end={id('mcp-server')}
         color="#6366f1"
         strokeWidth={3}
         startAnchor="bottom"
@@ -202,8 +213,8 @@ function ArchitectureDiagramInner({ className }: ArchitectureDiagramProps) {
         dashness={{ strokeLen: 10, nonStrokeLen: 5, animation: 1 }}
       />
       <Xarrow
-        start="arch-mcp-server"
-        end="arch-integrations"
+        start={id('mcp-server')}
+        end={id('integrations')}
         color="#6366f1"
         strokeWidth={3}
         startAnchor="bottom"

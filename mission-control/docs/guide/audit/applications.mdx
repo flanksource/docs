@@ -1,0 +1,366 @@
+---
+title: Applications
+sidebar_position: 7
+sidebar_custom_props:
+  icon: lucide:package
+---
+
+:::tip Prerequisites
+This page ties together concepts from [Identity & Access](/docs/guide/audit/identity-access), [Access Logs](/docs/guide/audit/access-logs), [Inventory](/docs/guide/audit/inventory), and [Backups](/docs/guide/audit/backups). Read those first if you're new to Mission Control's audit system.
+:::
+
+The `Application` CRD is the top-level unit for audit and compliance reporting. It maps an application to its infrastructure, data sources, user access, environments, and locations - giving you a single pane of glass for each application you need to audit.
+
+## Overview
+
+An Application brings together:
+
+- **Access Control** - Which users and groups can access the application, their roles, and authentication methods
+- **Data Sources** - Databases and storage whose backups and restores are tracked
+- **Environments** - Where the application runs (regions, accounts, clusters) and the purpose of each environment (primary, backup, DR)
+- **Findings** - Security and compliance findings from scrapers
+- **Custom Sections** - Views embedded directly in the application page
+
+```yaml title="application.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Application
+metadata:
+  name: payments-api
+  namespace: mc
+spec:
+  type: Application
+  description: Payment processing service
+  properties:
+    - label: Classification
+      text: Confidential
+      icon: shield
+    - label: Criticality
+      text: High
+      icon: alert-triangle
+  mapping:
+    logins:
+      - search: type=Azure::EnterpriseApplication name="Payments API"
+    roles:
+      - search: type=Azure::Group name=payments-users
+        role: User
+      - search: type=Azure::Group name=payments-admins
+        role: Admin
+    datasources:
+      - types:
+          - AWS::RDS::DBInstance
+        tagSelector: app=payments
+    environments:
+      "Prod":
+        - search: type=AWS::*
+          tagSelector: env=prod,app=payments
+          purpose: primary
+      "DR":
+        - search: type=AWS::*
+          tagSelector: env=dr,app=payments
+          purpose: backup
+```
+
+## Spec
+
+<Fields rows={[
+  {
+    field: 'type',
+    description: 'Application type (e.g. `Application`, `ERP`, `App Registration`)',
+    scheme: 'string',
+    required: true
+  },
+  {
+    field: 'description',
+    description: 'Human-readable description of the application',
+    scheme: 'string'
+  },
+  {
+    field: 'schedule',
+    description: 'How often to sync mappings',
+    scheme: '[Cron](/docs/reference/types#cron)'
+  },
+  {
+    field: 'properties',
+    description: 'Key-value properties displayed in the application header',
+    scheme: '[`[]Property`](#properties)'
+  },
+  {
+    field: 'mapping',
+    description: 'Maps the application to infrastructure, users, and environments (including custom view sections)',
+    scheme: '[`Mapping`](#mapping)'
+  }
+]}/>
+
+### Properties
+
+Properties are displayed as badges in the application header.
+
+<Fields rows={[
+  {
+    field: 'label',
+    description: 'Display label',
+    scheme: 'string',
+    required: true
+  },
+  {
+    field: 'text',
+    description: 'Display value',
+    scheme: 'string'
+  },
+  {
+    field: 'icon',
+    description: 'Icon name (lucide icon set)',
+    scheme: 'string'
+  },
+  {
+    field: 'order',
+    description: 'Display order (lower numbers appear first)',
+    scheme: 'int'
+  },
+  {
+    field: 'tooltip',
+    description: 'Tooltip text on hover',
+    scheme: 'string'
+  },
+  {
+    field: 'links',
+    description: 'Clickable links associated with the property',
+    scheme: '`[]Link`'
+  }
+]}/>
+
+### Mapping
+
+Mapping connects the application to catalog items using [resource selectors](/docs/reference/resource-selector).
+
+<Fields rows={[
+  {
+    field: 'logins',
+    description: 'Config items representing identity providers (e.g. Azure Enterprise Applications) whose users and groups are scraped',
+    scheme: '[`[]ResourceSelector`](/docs/reference/resource-selector)'
+  },
+  {
+    field: 'roles',
+    description: 'Maps groups to named roles for the application',
+    scheme: '[`[]RoleMapping`](#role-mapping)'
+  },
+  {
+    field: 'accessReviews',
+    description: 'Config items representing access review records (e.g. Sailpoint roles)',
+    scheme: '[`[]ResourceSelector`](/docs/reference/resource-selector)'
+  },
+  {
+    field: 'datasources',
+    description: 'Config items representing data sources (databases, storage) whose backups and restores are monitored',
+    scheme: '[`[]ResourceSelector`](/docs/reference/resource-selector)'
+  },
+  {
+    field: 'environments',
+    description: 'Maps environment names to infrastructure selectors with a purpose (primary, backup, DR)',
+    scheme: '`map[string][]Environment`'
+  },
+  {
+    field: 'sections',
+    description: 'Custom view sections to embed in the application page',
+    scheme: '`[]ViewSection`'
+  }
+]}/>
+
+### Role Mapping
+
+<Fields rows={[
+  {
+    field: 'role',
+    description: 'Name of the role to assign (e.g. `User`, `Admin`, `ReadOnly`)',
+    scheme: 'string',
+    required: true
+  },
+  {
+    field: 'search',
+    description: 'Search query to match groups (e.g. `type=Azure::Group name=app-admins`)',
+    scheme: 'string'
+  },
+  {
+    field: 'types',
+    description: 'Config types to match',
+    scheme: '`[]string`'
+  },
+  {
+    field: 'tagSelector',
+    description: 'Tag-based selector',
+    scheme: 'string'
+  }
+]}/>
+
+### Environment
+
+<Fields rows={[
+  {
+    field: 'purpose',
+    description: 'Purpose of the environment: `primary`, `backup`, `dr`, `staging`, etc.',
+    scheme: 'string',
+    required: true
+  },
+  {
+    field: 'search',
+    description: 'Search query to match infrastructure in this environment',
+    scheme: 'string'
+  },
+  {
+    field: 'types',
+    description: 'Config types to match',
+    scheme: '`[]string`'
+  },
+  {
+    field: 'tagSelector',
+    description: 'Tag-based selector (e.g. `env=prod,app=payments`)',
+    scheme: 'string'
+  }
+]}/>
+
+## Examples
+
+### GCP Application
+
+```yaml title="gcp-application.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Application
+metadata:
+  name: gcp
+  namespace: mc
+spec:
+  type: Application
+  description: Google Cloud Platform
+  schedule: "@every 10m"
+  properties:
+    - label: Classification
+      text: Confidential
+      icon: shield
+    - label: Criticality
+      text: High
+      icon: alert-triangle
+    - label: Usage
+      text: Internal
+      icon: globe
+    - label: Source
+      text: COTS
+      icon: box
+  mapping:
+    logins:
+      - tagSelector: project=workload-prod-eu-02
+        types:
+          - GCP::*
+    datasources:
+      - types:
+          - GCP::Sqladmin::Instance
+    environments:
+      "Prod":
+        - search: type=GCP::*
+          tagSelector: project=workload-prod-eu-02
+          purpose: primary
+      "Non-Prod":
+        - search: type=GCP::*
+          tagSelector: project=flanksource-sandbox
+          purpose: backup
+    sections:
+      - title: Deployments
+        icon: git-pull-request-arrow
+        viewRef:
+          namespace: mc
+          name: deployments
+      - title: Pipelines
+        icon: rocket
+        viewRef:
+          namespace: mc
+          name: pipelines
+```
+
+### Enterprise Application with Access Reviews
+
+```yaml title="sap-erp-application.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Application
+metadata:
+  name: sap-erp
+  namespace: mc
+spec:
+  type: ERP
+  schedule: "@every 1h"
+  properties:
+    - label: Classification
+      text: Confidential
+      icon: shield
+    - label: Criticality
+      text: High
+      icon: alert-triangle
+  mapping:
+    logins:
+      - search: type=Azure::EnterpriseApplication name="SAP-ERP"
+    accessReviews:
+      - search: type=Sailpoint::Role name=SAP ERP*
+    roles:
+      - search: type=Azure::Group name=sap-erp-group
+        role: User
+      - search: type=Azure::Group name=sap-erp-group-admins
+        role: Admin
+    datasources:
+      - search: type=AWS::RDS,AWS::S3,AWS::EFS account=12345
+    environments:
+      "Prod":
+        - search: type=AWS::*
+          tagSelector: account-name='flanksource'
+          purpose: primary
+      "Non-Prod":
+        - search: type=AWS::*
+          tagSelector: account-name='flanksource'
+          purpose: backup
+```
+
+### Entra ID Application Audit
+
+A focused audit of a single enterprise application with three role tiers:
+
+```yaml title="entra-app-audit.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Application
+metadata:
+  name: contoso-crm
+  namespace: mc
+spec:
+  type: Application
+  description: Contoso CRM — customer relationship management
+  mapping:
+    logins:
+      - search: type=Azure::EnterpriseApplication name="Contoso CRM"
+    roles:
+      - search: type=Azure::Group name=crm-viewers
+        role: Viewer
+      - search: type=Azure::Group name=crm-editors
+        role: Editor
+      - search: type=Azure::Group name=crm-admins
+        role: Admin
+```
+
+This surfaces all users with access to the Contoso CRM enterprise application, grouped by their Viewer/Editor/Admin role. Combined with [sign-in log scraping](/docs/integrations/azure-ad/audit-logs), the Application page also shows who actually accessed the app, when, and from where.
+
+## What the Application Surfaces
+
+Once deployed, the Application CRD automatically aggregates:
+
+| Section | Source | Description |
+|---------|--------|-------------|
+| **Access Control** | `mapping.logins` + `mapping.roles` | Users, groups, roles, and authentication methods |
+| **Backups** | `mapping.datasources` | Backup events from linked databases and storage |
+| **Restores** | `mapping.datasources` | Restore events with status and completion time |
+| **Locations** | `mapping.environments` | Cloud regions, accounts, and resource counts per environment |
+| **Findings** | Linked config insights | Security and compliance findings from Trivy, Trusted Advisor, etc. |
+| **Incidents** | Linked incidents | Open and resolved incidents affecting the application |
+
+For Entra ID applications, follow the [verification steps](/docs/integrations/azure-ad/getting-started#verification) to confirm users, groups, and role assignments appear correctly.
+
+## Related
+
+- [Identity & Access](/docs/guide/audit/identity-access) - Scraping IAM, RBAC, and database access
+- [Backups](/docs/guide/audit/backups) - Backup monitoring and restore testing
+- [Access Logs](/docs/guide/audit/access-logs) - Access log scraping details
+- [Config Access Reference](/docs/reference/config-db/config_access) - Full access schema reference

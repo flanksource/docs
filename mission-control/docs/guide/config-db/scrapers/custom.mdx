@@ -1,0 +1,301 @@
+---
+title: Custom Scraper
+sidebar_custom_props:
+  icon: hugeicons:code
+sidebar_position: 20
+description: Full scraper output schema for custom scrapers with users, groups, roles, access logs, and alias resolution
+---
+
+import Fields from '@site/src/components/Fields'
+
+When you enable `full: true`, custom scrapers can return complex objects containing config data, changes, access logs, users, groups, and roles. This enables IAM scraping and compliance auditing.
+
+For transforming scraped configs before they are saved (field exclusions, masking, relationships, etc.), see the [Transformation Reference](/docs/reference/config-db/transformation).
+
+## Top-Level Fields
+
+With `full: true`, the scraper expects each item to have these top-level fields.
+
+| Field | Schema | Description |
+|-------|--------|-------------|
+| `config` | object | The actual configuration data to store |
+| `changes` | [][Change](/docs/guide/config-db/concepts/changes#extracting-changes) | Change events |
+| `logs` | [][AccessLog](#access-log) | Access log entries |
+| `access` | [][ConfigAccess](#config-access) | Access permissions linking users/groups/roles to configs |
+| `users` | [][User](#user) | User definitions from identity systems |
+| `groups` | [][Group](#group) | Group definitions from identity systems |
+| `roles` | [][Role](#role) | Role definitions from identity systems |
+| `user_groups` | [][UserGroup](#user-group) | User-to-group membership mappings |
+
+Additional top-level fields for config identification:
+
+| Field | Description |
+|-------|-------------|
+| `id` | Unique identifier for the config item |
+| `external_id` | External identifier for the config (used by `access_logs` and `config_access` to resolve config references) |
+| `config_type` or `type` | Config type (used alongside `external_id` for config reference resolution) |
+| `uuid` or `config_id` | UUID of the config item (used for direct config reference) |
+
+## User
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Display name of the user",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Account identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "user_type",
+    description: "Type of user: `human`, `service`, or `system`",
+    scheme: "string"
+  },
+  {
+    field: "email",
+    description: "User's email address",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers used for alias resolution in `config_access` and `access_logs` (e.g. `userPrincipalName`, `mail`, `onPremisesSamAccountName`)",
+    scheme: "[]string"
+  }
+]}/>
+
+## Group
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Group name",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Group identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "group_type",
+    description: "Type of group: `team`, `role`, `department`, or `security`",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers used for alias resolution in `config_access`",
+    scheme: "[]string"
+  }
+]}/>
+
+## Role
+
+<Fields rows={[
+  {
+    field: "name",
+    description: "Role name",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "account_id",
+    description: "Role identifier from the source system",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "role_type",
+    description: "Type of role: `builtin`, `custom`, `database`, or `application`",
+    scheme: "string"
+  },
+  {
+    field: "description",
+    description: "Human-readable description of the role's purpose",
+    scheme: "string"
+  },
+  {
+    field: "aliases",
+    description: "Alternative identifiers used for alias resolution in `config_access`",
+    scheme: "[]string"
+  }
+]}/>
+
+## User Group
+
+<Fields rows={[
+  {
+    field: "user",
+    description: "User name or alias to resolve against `users[].aliases`",
+    scheme: "string or []string",
+    required: true
+  },
+  {
+    field: "group",
+    description: "Group name or alias to resolve against `groups[].aliases`",
+    scheme: "string or []string",
+    required: true
+  }
+]}/>
+
+## Config Access
+
+The `access` array links users, groups, and roles to specific config items.
+
+<Fields rows={[
+  {
+    field: "id",
+    description: "Unique identifier for this access record",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "config_id",
+    description: "UUID or external ID of the config item",
+    scheme: "string"
+  },
+  {
+    field: "user",
+    description: "User name or alias to resolve against `users[].aliases`",
+    scheme: "string or []string"
+  },
+  {
+    field: "group",
+    description: "Group name or alias to resolve against `groups[].aliases`",
+    scheme: "string or []string"
+  },
+  {
+    field: "role",
+    description: "Role name or alias to resolve against `roles[].aliases`",
+    scheme: "string or []string"
+  },
+  {
+    field: "source",
+    description: "Source identifier for this access record",
+    scheme: "string"
+  }
+]}/>
+
+At least one of `user`, `group`, or `role` must be set.
+
+## Access Log
+
+The `logs` array records individual access events.
+
+<Fields rows={[
+  {
+    field: "config_id",
+    description: "UUID or external ID of the config item",
+    scheme: "string"
+  },
+  {
+    field: "user",
+    description: "User name or alias to resolve against `users[].aliases`. If no matching user exists, one is auto-created.",
+    scheme: "string or []string"
+  },
+  {
+    field: "created_at",
+    description: "Timestamp when the access occurred",
+    scheme: "timestamp"
+  },
+  {
+    field: "mfa",
+    description: "Whether multi-factor authentication was used",
+    scheme: "bool"
+  },
+  {
+    field: "count",
+    description: "Number of aggregated access events (default: 1)",
+    scheme: "int"
+  },
+  {
+    field: "properties",
+    description: "Additional access metadata (IP address, session info, client, etc.)",
+    scheme: "map[string]string"
+  }
+]}/>
+
+`user` must be set.
+
+## Alias Resolution
+
+When processing `access` and `logs` entries, the scraper resolves aliases to actual entity IDs:
+
+1. `user` is matched against the `aliases` field of each `users` entry
+2. `group` is matched against the `aliases` field of each `groups` entry
+3. `role` is matched against the `aliases` field of each `roles` entry
+
+If no matching entity is found, one is auto-created with the alias as its name.
+
+### Config Reference Resolution
+
+Config items in `access` and `logs` can be referenced by `config_id` — either a UUID pointing directly to a config item, or a non-UUID string treated as an external ID.
+
+If not provided, the top-level `id`/`external_id`/`config_type` fields are used as defaults.
+
+## Example
+
+```json title="config-with-access.json"
+{
+  "id": "test-org-role-access",
+  "config": {
+    "name": "Test Organization",
+    "type": "organization"
+  },
+  "users": [
+    {
+      "name": "Charlie Brown",
+      "account_id": "org-789",
+      "user_type": "human",
+      "email": "charlie@example.com",
+      "aliases": ["charlie-brown", "charlie@example.com"]
+    }
+  ],
+  "roles": [
+    {
+      "name": "Editor",
+      "account_id": "org-789",
+      "role_type": "custom",
+      "description": "Edit access",
+      "aliases": ["editor-role", "edit-access"]
+    }
+  ],
+  "groups": [
+    {
+      "name": "Editors Group",
+      "account_id": "org-789",
+      "group_type": "team",
+      "aliases": ["editors-group", "edit-team"]
+    }
+  ],
+  "access": [
+    {
+      "id": "role-access-001",
+      "external_config_id": {
+        "config_type": "Organization",
+        "external_id": "test-org-role-access"
+      },
+      "user": "charlie-brown",
+      "role": "editor-role",
+      "group": "editors-group"
+    }
+  ],
+  "changes": [
+    {
+      "change_type": "permission_grant",
+      "summary": "Charlie granted editor access",
+      "created_at": "2025-01-08T10:00:00Z"
+    }
+  ]
+}
+```
+
+## Extracting Changes & Access Logs
+
+When you enable `full: true`, custom scrapers can ingest [changes](/docs/guide/config-db/concepts/changes#extracting-changes) and [access logs](/docs/guide/audit/access-logs) from external systems by separating the config data from change events in your source.

@@ -1,0 +1,110 @@
+---
+title: Microsoft Graph API
+sidebar_position: 3
+sidebar_custom_props:
+  icon: entra
+---
+
+import {Card, Cards} from '@site/../common/src/components/Card'
+
+When the built-in [Entra ID scraper](/docs/integrations/azure-ad) doesn't cover your needs — custom `$filter` queries, specific user attributes, or endpoints not yet supported — you can use the [HTTP scraper](/docs/guide/config-db/scrapers/http) with [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/overview) directly.
+
+## Prerequisites
+
+- **OAuth2 client credentials** for your Entra ID app registration (tenant ID, client ID, client secret). You can supply these inline via `oauth` and `env` fields (shown below) or through a reusable [Connection](/docs/integrations/azure-ad/getting-started#connection).
+- **Application** permissions below, admin-consented
+
+| Permission | Purpose |
+|---|---|
+| `User.Read.All` | Read user profiles and attributes |
+| `Group.Read.All` | Read group properties |
+| `GroupMember.Read.All` | Read group membership |
+| `Directory.Read.All` | Broad directory read access |
+| `Application.Read.All` | Read app registrations and enterprise apps |
+
+<details>
+<summary>Create a new Azure App Registration</summary>
+
+See the [Entra ID integration guide](/docs/integrations/azure-ad/getting-started) for step-by-step Azure Portal instructions.
+
+</details>
+
+## ScrapeConfig
+
+The scraper below uses `full: true` so that each HTTP entry's CEL transform can emit reserved keys (`groups`, `users`, `user_groups`) that Mission Control processes as identity data rather than config items.
+
+Both entries authenticate inline via OAuth2 client credentials. You can also reference a [Connection](/docs/integrations/azure-ad/getting-started#connection) instead of inlining the secrets.
+
+```yaml title="ms-graph-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/http-ms-graph.yaml
+```
+
+Adjust the `$filter` on the groups URL and `$select` on both entries to match the groups and attributes you need.
+
+## How Aliases Work
+
+Every identity string added to the `aliases` array on a user is stored in the `aliases` column of the users table. When Mission Control processes an [`access`](/docs/reference/config-db/config_access) record, it resolves user aliases by matching against these aliases.
+
+This means if a database access log references a user by `onPremisesSamAccountName` (e.g. `jdoe`) and the Entra scraper stored that same string as an alias, Mission Control links the access record to the correct user — no manual mapping needed.
+
+Store every known login identifier as an alias: `id`, `mail`, `userPrincipalName`, `onPremisesSamAccountName`, `mailNickname`, `employeeId`.
+
+### Common User Attributes
+
+| Attribute | Description | Useful As Alias? |
+|---|---|---|
+| `id` | Azure AD object ID (GUID) | Yes — stable, unique identifier |
+| `mail` | Primary email address | Yes — commonly used in access logs |
+| `userPrincipalName` | UPN (e.g. `user@contoso.com`) | Yes — default sign-in identifier |
+| `onPremisesSamAccountName` | On-prem AD sAMAccountName (e.g. `jdoe`) | Yes — matches database and VPN logs |
+| `employeeId` | HR system employee ID | Yes — matches HR and ITSM systems |
+| `mailNickname` | Exchange alias (e.g. `jdoe`) | Yes — matches legacy mail systems |
+| `department` | User's department | No — useful for filtering, not identification |
+| `jobTitle` | User's job title | No — useful for reporting |
+
+## Custom `$filter` Examples
+
+The MS Graph API supports OData `$filter` queries to narrow results. Use these with the `url` parameter in the HTTP scraper.
+
+**Filter groups by display name prefix:**
+```
+https://graph.microsoft.com/v1.0/groups?$filter=startsWith(displayName,'app-')&$select=id,displayName,description
+```
+
+**Filter users by department:**
+```
+https://graph.microsoft.com/v1.0/users?$filter=department eq 'Engineering'&$select=id,userPrincipalName,mail,department
+```
+
+**List only enabled users:**
+```
+https://graph.microsoft.com/v1.0/users?$filter=accountEnabled eq true&$select=id,userPrincipalName,mail,accountEnabled
+```
+
+:::info
+Some advanced `$filter` queries (e.g. using `endsWith`, `NOT`, or property paths not indexed by default) require the `ConsistencyLevel: eventual` HTTP header and the `$count=true` query parameter. See the [Microsoft Graph advanced query documentation](https://learn.microsoft.com/en-us/graph/aad-advanced-queries) for details.
+:::
+
+## Pagination
+
+The HTTP scraper does **not** automatically follow `@odata.nextLink` pagination tokens. This means a single request returns at most the number of items specified by `$top` (maximum 999 for most MS Graph endpoints).
+
+For collections with fewer than 999 items, set `$top=999` to retrieve everything in one request.
+
+For larger collections:
+- **Partition via `$filter`** — split requests by department, domain, or another attribute to keep each response under the limit
+- **Use the built-in Entra scraper** — the [Azure scraper](/docs/integrations/azure-ad/getting-started) handles pagination automatically and is recommended for full-tenant scrapes
+
+:::tip
+If you need all users or groups regardless of count, use the [built-in Entra ID scraper](/docs/integrations/azure-ad/getting-started) instead of the HTTP scraper. It handles pagination, rate limiting, and incremental updates automatically.
+:::
+
+## Next Steps
+
+<Cards>
+  <Card title="HTTP Scraper" link="/docs/guide/config-db/scrapers/http" icon="http" />
+  <Card title="Azure AD / Entra ID" link="/docs/integrations/azure-ad" icon="entra" />
+  <Card title="Identity & Access" link="/docs/guide/audit/identity-access" icon="mdi:account-lock" />
+  <Card title="Applications" link="/docs/guide/audit/applications" icon="lucide:package" />
+  <Card title="Access Logs" link="/docs/guide/audit/access-logs" icon="mdi:account-clock" />
+  <Card title="Config Access Reference" link="/docs/reference/config-db/config_access" />
+</Cards>

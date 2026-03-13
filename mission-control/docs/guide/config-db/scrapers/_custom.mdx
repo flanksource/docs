@@ -93,6 +93,8 @@ You can still access non-JSON content in scripts using `config.content`.
 
 The UI formats and renders XML appropriately.
 
-## Extracting Changes & Access Logs
+## Full Scraper Output
 
-When you enable `full: true`, custom scrapers can ingest [changes](/docs/guide/config-db/concepts/changes#extracting-changes) and [access logs](/docs/guide/config-db/concepts/access-logs) from external systems by separating the config data from change events in your source.
+When you enable `full: true`, custom scrapers can return complex objects containing config data, changes, access logs, and external entities.
+
+See the [Custom Scraper](/docs/guide/config-db/scrapers/custom) page for the full output schema, shorthand keys, external entity schemas, and alias resolution.

@@ -1,0 +1,679 @@
+---
+title: Transformation
+sidebar_position: 3
+sidebar_custom_props:
+  icon: hugeicons:code
+description: Schema reference for config-db transformation options
+---
+
+Transformations modify scraped configuration items before they are saved to the database. They are applied in the following order:
+
+1. **Script transformations** - Modify config using CEL, Go template, JSONPath, or JavaScript
+2. **Field exclusions** - Remove specified fields from the config
+3. **Masking** - Replace sensitive fields with hashes or static strings
+4. **Relationships** - Create links between configuration items
+5. **Change transformations** - Filter and categorize detected changes
+6. **Locations & Aliases** - Add metadata for grouping and lookup
+
+## Transform
+
+<Fields rows={[
+  {
+    field: "expr",
+    description: "CEL expression to transform config",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: false
+  },
+  {
+    field: "gotemplate",
+    description: "Go template expression",
+    scheme: "[Go Template](/docs/reference/scripting/gotemplate)",
+    required: false
+  },
+  {
+    field: "jsonpath",
+    description: "JSONPath expression",
+    scheme: "JSONPath",
+    required: false
+  },
+  {
+    field: "javascript",
+    description: "JavaScript expression",
+    scheme: "[JavaScript](/docs/reference/scripting/javascript)",
+    required: false
+  },
+  {
+    field: "exclude",
+    description: "Remove fields from config",
+    scheme: "[[]Exclude](#field-exclusions)",
+    required: false
+  },
+  {
+    field: "mask",
+    description: "Replace sensitive fields with hash or static string",
+    scheme: "[[]Mask](#masking)",
+    required: false
+  },
+  {
+    field: "relationship",
+    description: "Create relationships between config items",
+    scheme: "[[]Relationship](#relationships)",
+    required: false
+  },
+  {
+    field: "changes.exclude",
+    description: "CEL expressions to ignore changes",
+    scheme: "[[]CEL](#change-exclusions)",
+    required: false
+  },
+  {
+    field: "changes.mapping",
+    description: "Categorize and modify changes",
+    scheme: "[[]Mapping](#change-mapping)",
+    required: false
+  },
+  {
+    field: "locations",
+    description: "Add location metadata for grouping",
+    scheme: "[[]LocationOrAlias](#locations)",
+    required: false
+  },
+  {
+    field: "aliases",
+    description: "Add config aliases for lookup",
+    scheme: "[[]LocationOrAlias](#aliases)",
+    required: false
+  }
+]}/>
+
+## Script Context
+
+When using script transformations (`expr`, `gotemplate`, `jsonpath`, `javascript`), these variables are available:
+
+<Fields rows={[
+  {
+    field: "config",
+    description: "Raw configuration data as JSON",
+    scheme: "JSON"
+  },
+  {
+    field: "result",
+    description: "Current scrape result with metadata (id, name, config_type, labels, tags, etc.)",
+    scheme: "[ScrapeResult](/docs/reference/config-db/scrape-result)"
+  },
+  {
+    field: "last_scrape_summary",
+    description: "Summary from the previous scrape run. Contains per-type counts (`config_types` map with `added`/`updated`/`unchanged`/`changes`/`deduped`) and entity counts (`external_users`, `external_groups`, `external_roles`, `config_access`, `access_logs` each with `scraped`/`saved`/`skipped`/`deleted`).",
+    scheme: "[ScrapeSummary](#scrape-summary)"
+  }
+]}/>
+
+Script transformations must return a JSON array of [ScrapeResult](/docs/reference/config-db/scrape-result) objects.
+
+### Scrape Summary
+
+The `last_scrape_summary` provides counts from the previous scrape run, useful for conditional logic (e.g. skip processing if no changes).
+
+<Fields rows={[
+  {
+    field: "config_types",
+    description: "Map of config type name to per-type counts",
+    scheme: "map[string]ConfigTypeSummary"
+  },
+  {
+    field: "external_users",
+    description: "Entity counts for external users",
+    scheme: "EntitySummary"
+  },
+  {
+    field: "external_groups",
+    description: "Entity counts for external groups",
+    scheme: "EntitySummary"
+  },
+  {
+    field: "external_roles",
+    description: "Entity counts for external roles",
+    scheme: "EntitySummary"
+  },
+  {
+    field: "config_access",
+    description: "Entity counts for config access records",
+    scheme: "EntitySummary"
+  },
+  {
+    field: "access_logs",
+    description: "Entity counts for access log entries",
+    scheme: "EntitySummary"
+  }
+]}/>
+
+Where `ConfigTypeSummary` has fields: `added`, `updated`, `unchanged`, `changes`, `deduped` (all integers).
+And `EntitySummary` has fields: `scraped`, `saved`, `skipped`, `deleted` (all integers).
+
+```yaml title="cel-transform-example.yaml"
+transform:
+  expr: |
+    [result.merge({
+      'config': config.merge({
+        'normalized_name': config.name.lowerAscii().replace(' ', '-'),
+        'environment': config.tags.?env.orValue('unknown')
+      })
+    })].toJSON()
+```
+
+## Field Exclusions
+
+Remove fields from the scraped configuration. Useful for removing sensitive data or fields that change frequently without material impact.
+
+<Fields rows={[
+  {
+    field: "types",
+    description: "Config types to apply exclusion to. If empty, applies to all types.",
+    scheme: "[]string",
+    required: false
+  },
+  {
+    field: "jsonpath",
+    description: "JSONPath to the field(s) to remove",
+    scheme: "JSONPath",
+    required: true
+  }
+]}/>
+
+```yaml title="exclude-managed-fields.yaml"
+transform:
+  exclude:
+    - types:
+        - Kubernetes::Pod
+      jsonpath: '.metadata.managedFields'
+    - types:
+        - Kubernetes::Node
+      jsonpath: '.status.images'
+```
+
+## Masking
+
+Replace sensitive fields with a hash or static string. Using a hash enables change detection without exposing the actual value.
+
+<Fields rows={[
+  {
+    field: "selector",
+    description: "CEL expression to select which configs to mask",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: false
+  },
+  {
+    field: "jsonpath",
+    description: "JSONPath to the field(s) to mask",
+    scheme: "JSONPath",
+    required: true
+  },
+  {
+    field: "value",
+    description: "Hash function (`md5sum`) or static replacement string",
+    scheme: "string",
+    required: true
+  }
+]}/>
+
+### Hash Functions
+
+| Function | Description |
+|----------|-------------|
+| `md5sum` | MD5 hash of the value - enables change detection while masking content |
+
+```yaml title="mask-secrets.yaml"
+transform:
+  mask:
+    - selector: config_type == "Kubernetes::Secret"
+      jsonpath: $.data
+      value: md5sum
+    - selector: config_type.startsWith("AWS::")
+      jsonpath: $.Credentials
+      value: '***REDACTED***'
+```
+
+## Relationships
+
+Create relationships between configuration items. See [Relationships Guide](/docs/guide/config-db/concepts/relationships) for detailed usage.
+
+<Fields rows={[
+  {
+    field: "filter",
+    description: "CEL expression to select which configs to apply the relationship to",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: true
+  },
+  {
+    field: "expr",
+    description: "CEL expression returning a list of relationship selectors (for dynamic relationships)",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: false
+  },
+  {
+    field: "id",
+    description: "ID or external ID of the related config",
+    scheme: "[Lookup](#lookup)",
+    required: false
+  },
+  {
+    field: "external_id",
+    description: "External ID of the related config",
+    scheme: "[Lookup](#lookup)",
+    required: false
+  },
+  {
+    field: "name",
+    description: "Name of the related config",
+    scheme: "[Lookup](#lookup)",
+    required: false
+  },
+  {
+    field: "type",
+    description: "Type of the related config",
+    scheme: "[Lookup](#lookup)",
+    required: false
+  },
+  {
+    field: "namespace",
+    description: "Namespace of the related config",
+    scheme: "[Lookup](#lookup)",
+    required: false
+  },
+  {
+    field: "agent",
+    description: "Agent of the related config (`self` for local)",
+    scheme: "[Lookup](#lookup)",
+    required: false
+  },
+  {
+    field: "scope",
+    description: "Scope for the related config (e.g. scraper ID). Use `all` to disregard scope.",
+    scheme: "[Lookup](#lookup)",
+    required: false
+  },
+  {
+    field: "labels",
+    description: "Labels to match on the related config",
+    scheme: "map[string][Lookup](#lookup)",
+    required: false
+  },
+  {
+    field: "parent",
+    description: "If true, matched configs become parents; if false, they become children",
+    scheme: "bool",
+    required: false
+  }
+]}/>
+
+### Lookup
+
+Lookup provides multiple ways to specify a value for relationship matching. At least one of `expr`, `value`, or `label` must be specified.
+
+<Fields rows={[
+  {
+    field: "expr",
+    description: "CEL expression returning the value",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: false
+  },
+  {
+    field: "value",
+    description: "Static value",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "label",
+    description: "Get value from an existing label",
+    scheme: "string",
+    required: false
+  }
+]}/>
+
+```yaml title="relationship-static.yaml"
+transform:
+  relationship:
+    - filter: config_type == "Kubernetes::Service"
+      type:
+        value: 'Kubernetes::Deployment'
+      name:
+        expr: |
+          has(config.spec.selector) && has(config.spec.selector.name) ? config.spec.selector.name : ''
+```
+
+### Dynamic Relationships
+
+For complex relationship logic, use an `expr` that returns a list of [ResourceSelectors](/docs/reference/resource-selector):
+
+```yaml title="relationship-dynamic.yaml"
+transform:
+  relationship:
+    - filter: config_type == 'Kubernetes::Pod'
+      expr: |
+        config.spec.volumes.
+          filter(item, has(item.persistentVolumeClaim)).
+          map(item, {
+            "type": "Kubernetes::PersistentVolumeClaim",
+            "name": item.persistentVolumeClaim.claimName
+          }).
+          toJSON()
+```
+
+## Change Transformations
+
+Transform detected changes by excluding irrelevant ones or categorizing them.
+
+### Change Exclusions
+
+CEL expressions that exclude changes from being recorded. Uses [Change Context](/docs/reference/config-db/changes).
+
+```yaml title="exclude-node-image-changes.yaml"
+transform:
+  changes:
+    exclude:
+      - 'config_type == "Kubernetes::Node" && details.message == "status.images"'
+```
+
+### Change Mapping
+
+<Fields rows={[
+  {
+    field: "filter",
+    description: "CEL expression to select which changes to apply mapping to",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: true
+  },
+  {
+    field: "type",
+    description: "Set the change type",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "severity",
+    description: "Set the change severity",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "action",
+    description: "`delete` marks the config as deleted, `ignore` skips the change, `move-up` redirects to an ancestor, `copy-up` copies to an ancestor, `move` redirects to a target, `copy` copies to targets",
+    scheme: "`delete` | `ignore` | `move-up` | `copy-up` | `move` | `copy`",
+    required: false
+  },
+  {
+    field: "summary",
+    description: "Replace the change summary",
+    scheme: "[Go Template](/docs/reference/scripting/gotemplate)",
+    required: false
+  },
+  {
+    field: "ancestor_type",
+    description: "Config type of ancestor to target for `move-up`/`copy-up`. Walks the parent chain until a match is found. If omitted, the immediate parent is used.",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "target",
+    description: "Selector for `copy`/`move` actions. Mutually exclusive with `ancestor_type`.",
+    scheme: "[RelationshipSelectorTemplate](/docs/reference/resource-selector)",
+    required: false
+  },
+  {
+    field: "config_id",
+    description: "CEL expression returning the target config's external ID for redirecting changes.",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: false
+  },
+  {
+    field: "config_type",
+    description: "Target config type for redirecting changes.",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "scraper_id",
+    description: "Scraper ID for target config lookup. Use `\"all\"` for cross-scraper lookups.",
+    scheme: "string",
+    required: false
+  }
+]}/>
+
+```yaml title="categorize-changes.yaml"
+transform:
+  changes:
+    mapping:
+      - filter: >
+          change.change_type == 'diff' &&
+          change.summary == "status.containerStatuses" &&
+          patch != null && has(patch.status) &&
+          has(patch.status.containerStatuses) &&
+          patch.status.containerStatuses.size() > 0 &&
+          has(patch.status.containerStatuses[0].restartCount)
+        type: PodCrashLooping
+      - filter: >
+          change.change_type == 'diff' &&
+          change.summary == "status.images" &&
+          config.kind == "Node"
+        type: ImageUpdated
+```
+
+```yaml title="move-change-to-parent-cluster.yaml"
+transform:
+  changes:
+    mapping:
+      # Move pod crash events up to the Cluster
+      - filter: change.change_type == "PodCrashLooping"
+        action: move-up
+        ancestor_type: Kubernetes::Cluster
+      # Copy deployment changes to related service configs
+      - filter: change.change_type == "diff" && config.config_type == "Kubernetes::Deployment"
+        action: copy
+        target:
+          type: Kubernetes::Service
+          labels:
+            app: '$(.config.labels.app)'
+```
+
+## Locations
+
+Add location metadata to config items for grouping and filtering.
+
+<Fields rows={[
+  {
+    field: "type",
+    description: "Config types to apply to (supports wildcards like `AWS::*`)",
+    scheme: "MatchExpression",
+    required: true
+  },
+  {
+    field: "filter",
+    description: "CEL expression that must return true for the location to apply",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: false
+  },
+  {
+    field: "values",
+    description: "Location values (supports Go templates)",
+    scheme: "[]string",
+    required: false
+  },
+  {
+    field: "withParent",
+    description: "Parent type for hierarchical locations",
+    scheme: "string",
+    required: false
+  }
+]}/>
+
+```yaml title="add-locations.yaml"
+transform:
+  locations:
+    - type: "AWS::*"
+      values:
+        - "{{.config.Region}}"
+    - type: "Kubernetes::*"
+      filter: has(config.metadata.namespace)
+      values:
+        - "{{.config.metadata.namespace}}"
+```
+
+## Aliases
+
+Add alternative identifiers for config items to enable lookup by different names.
+
+<Fields rows={[
+  {
+    field: "type",
+    description: "Config types to apply to (supports wildcards like `AWS::*`)",
+    scheme: "MatchExpression",
+    required: true
+  },
+  {
+    field: "filter",
+    description: "CEL expression that must return true for the alias to apply",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: false
+  },
+  {
+    field: "values",
+    description: "Alias values (supports Go templates)",
+    scheme: "[]string",
+    required: false
+  },
+  {
+    field: "withParent",
+    description: "Parent type for scoped aliases",
+    scheme: "string",
+    required: false
+  }
+]}/>
+
+```yaml title="add-aliases.yaml"
+transform:
+  aliases:
+    - type: "Kubernetes::Pod"
+      filter: has(config.metadata.labels.app)
+      values:
+        - "{{.config.metadata.labels.app}}"
+```
+
+## Complete Example
+
+```yaml title="comprehensive-transform.yaml"
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: production-scraper
+spec:
+  kubernetes:
+    - clusterName: production
+      transform:
+        # Script transformation - normalize labels
+        expr: |
+          [result.merge({
+            'labels': result.labels.filter(k, !k.startsWith('internal.'))
+          })].toJSON()
+
+        # Remove verbose fields
+        exclude:
+          - types:
+              - Kubernetes::Pod
+            jsonpath: '.metadata.managedFields'
+          - types:
+              - Kubernetes::Node
+            jsonpath: '.status.images'
+
+        # Mask sensitive data
+        mask:
+          - selector: config_type == "Kubernetes::Secret"
+            jsonpath: $.data
+            value: md5sum
+
+        # Build relationships
+        relationship:
+          - filter: config_type == "Kubernetes::Service"
+            type:
+              value: 'Kubernetes::Deployment'
+            name:
+              expr: |
+                has(config.spec.selector.app) ? config.spec.selector.app : ''
+
+        # Categorize changes
+        changes:
+          mapping:
+            - filter: change.summary == "status.images"
+              type: ImageUpdate
+          exclude:
+            - 'config_type == "Kubernetes::Node" && change.summary == "status.conditions"'
+
+        # Add locations
+        locations:
+          - type: "Kubernetes::*"
+            filter: has(config.metadata.namespace)
+            values:
+              - "{{.config.metadata.namespace}}"
+
+        # Add aliases
+        aliases:
+          - type: "Kubernetes::Pod"
+            filter: has(config.metadata.labels.app)
+            values:
+              - "{{.config.metadata.labels.app}}"
+```
+
+## Use Cases
+
+### Compliance - Masking Sensitive Data
+
+```yaml
+transform:
+  mask:
+    - selector: config_type == "Kubernetes::Secret"
+      jsonpath: $.data
+      value: md5sum
+    - selector: config_type == "AWS::IAM::User"
+      jsonpath: $.AccessKeys[*].SecretAccessKey
+      value: '***'
+```
+
+### Change Management - Categorizing Changes
+
+```yaml
+transform:
+  changes:
+    mapping:
+      - filter: change.change_type == 'diff' && change.summary.contains('restart')
+        type: Restart
+        severity: medium
+      - filter: change.change_type == 'diff' && change.summary.contains('scale')
+        type: ScaleEvent
+```
+
+### Topology - Building Relationships
+
+```yaml
+transform:
+  relationship:
+    - filter: config_type == "AWS::EC2::Instance"
+      expr: |
+        config.SecurityGroups.map(sg, {
+          'type': 'AWS::EC2::SecurityGroup',
+          'external_id': sg.GroupId
+        }).toJSON()
+```
+
+### Data Normalization
+
+```yaml
+transform:
+  expr: |
+    [result.merge({
+      'config': config.merge({
+        'environment': config.tags.?Environment.orValue(
+          config.tags.?env.orValue('unknown')
+        ).lowerAscii()
+      })
+    })].toJSON()
+```

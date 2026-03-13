@@ -1,6 +1,7 @@
 ---
 title: Changes
 description: Fields available during change filtering / mapping
+sidebar_position: 5
 ---
 
 | Field                | Description                             | Scheme               |

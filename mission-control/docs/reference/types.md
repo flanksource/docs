@@ -1,1 +1,0 @@
-../snippets/_types.md

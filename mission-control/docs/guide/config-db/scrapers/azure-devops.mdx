@@ -36,10 +36,20 @@ Each time the pipeline is run it will create a change for that configuration ite
 | `personalAccessToken` | Specifies the personal access token to authenticate with Azure DevOps | <CommonLink to="secrets">[]_EnvVar_</CommonLink>      |          |
 | `projects`            | Specifies the Azure DevOps projects to scrape                         | `[]string`                                            | `true`   |
 | `pipelines`           | Specifies the Azure DevOps pipelines to scrape                        | `[]string`                                            | `true`   |
+| `permissions`         | Enable fetching pipeline permissions                                  | [`Permissions`](#permissions)                         |          |
+| `maxAge`              | Limit pipeline run scraping to runs within this age (e.g. `7d`)       | `string`                                              |          |
+| `releases`            | Filter classic release pipelines by name or glob                      | `[]string`                                            |          |
 | `properties`          | Custom templatable properties for the scraped config items.           | [`[]ConfigProperty`](/docs/reference/config-db/properties) |          |
 | `transform`           | Field to transform result                                             | [`Transform`](/docs/guide/config-db/concepts/transform)          |          |
 | `tags`                | Set custom tags on the scraped config items                           | `map[string]string`                                   |          |
 
+
+### Permissions
+
+| Field       | Description                                                         | Scheme   |
+| ----------- | ------------------------------------------------------------------- | -------- |
+| `enabled`   | Enable fetching pipeline permissions                                | `bool`   |
+| `rateLimit` | How often to refresh permissions (e.g. `6h`, `24h`). Defaults to `24h` | `string` |
 
 :::note
 Either the connection name or the credentials (organization & personalAccessToken) are required

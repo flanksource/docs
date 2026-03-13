@@ -33,7 +33,7 @@ When `full: true` is set, the scraper expects each config item to have these top
 
 - `config` - The actual configuration data to store
 - `changes` - An array of change events
-- `access_logs` - Access log entries (see [Access Logs](/docs/guide/config-db/concepts/access-logs))
+- `access_logs` - Access log entries (see [Access Logs](/docs/guide/audit/access-logs))
 
 :::note
 Fields other than these are ignored. Missing fields are treated as empty.
@@ -58,7 +58,7 @@ Consider a file containing:
   ],
   "access_logs": [
     {
-      "external_user_id": "user-123",
+      "user": "user-123",
       "created_at": "2025-01-01"
     }
   ]

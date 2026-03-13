@@ -255,7 +255,7 @@ spec:
               config: {
                 version: data.version
               },
-              external_users: (data.users || []).map(function(u) {
+              users: (data.users || []).map(function(u) {
                 return {
                   name: u.name,
                   account_id: u.id,
@@ -263,7 +263,7 @@ spec:
                   aliases: [u.id]
                 };
               }),
-              external_roles: (data.roles || []).map(function(r) {
+              roles: (data.roles || []).map(function(r) {
                 return {
                   name: r.name,
                   account_id: r.id,
@@ -271,10 +271,10 @@ spec:
                   aliases: [r.id]
                 };
               }),
-              external_user_groups: (data.role_grants || []).map(function(g) {
+              user_groups: (data.role_grants || []).map(function(g) {
                 return {
-                  external_user_id: g.user_name || g.role_name,
-                  external_group_id: g.granted_role_name
+                  user: g.user_name || g.role_name,
+                  group: g.granted_role_name
                 };
               })
             };
@@ -299,7 +299,7 @@ spec:
 
 ## Query Log for Access Tracking
 
-Use the system.query_log table to track who accessed what data. See [Access Logs](/docs/guide/config-db/concepts/access-logs) for more details on the access log schema.
+Use the system.query_log table to track who accessed what data. See [Access Logs](/docs/guide/audit/access-logs) for more details on the access log schema.
 
 ```yaml title="clickhouse-access-logs.yaml"
 apiVersion: configs.flanksource.com/v1
@@ -330,7 +330,7 @@ spec:
                 };
               }
               databases[db].access_logs.push({
-                external_user_id: row.user,
+                user: row.user,
                 created_at: row.event_time,
                 properties: {
                   query_type: row.type,

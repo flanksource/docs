@@ -1,0 +1,49 @@
+---
+title: Audit & Compliance
+sidebar_position: 6
+sidebar_custom_props:
+  icon: mdi:shield-check
+hide_title: true
+pagination_next: null
+---
+
+import {Card, Cards} from '@site/../common/src/components/Card'
+import AuditDiagram from '@site/src/components/AuditDiagram'
+
+# Audit & Compliance
+
+Mission Control provides audit-ready infrastructure reporting by scraping identity data, infrastructure state, and access logs from your cloud providers, identity systems, and databases into a unified catalog.
+
+<AuditDiagram className="mx-auto" />
+
+## What Mission Control Audits
+
+- **Identity & Access** — Who has access to what, via Entra ID, AWS IAM, Kubernetes RBAC, and database roles
+- **Access Logs** — Who actually accessed resources, when, and whether they used MFA
+- **Infrastructure Inventory** — Complete catalog of resources with health status and change history
+- **Backups** — Backup health, location, retention, and restore capability
+- **Configuration Changes** — Immutable audit trail of every config change via diffs, CloudTrail, and Kubernetes events
+
+## Compliance Frameworks
+
+Access logs and identity data provide the audit trail required for:
+
+- **SOC 2** — Access controls and monitoring evidence
+- **HIPAA** — Track access to systems containing PHI
+- **PCI-DSS** — Monitor access to cardholder data environments
+- **ISO 27001** — Evidence for access management controls
+
+## Getting Started
+
+Follow these pages in order — each builds on the previous:
+
+<Cards>
+  <Card link="/docs/guide/audit/concepts" title="Core Concepts" icon="mdi:database-outline"/>
+  <Card link="/docs/guide/audit/identity-access" title="Identity & Access" icon="mdi:account-lock"/>
+  <Card link="/docs/guide/audit/access-logs" title="Access Logs" icon="mdi:account-clock"/>
+  <Card link="/docs/guide/audit/inventory" title="Infrastructure Inventory" icon="mdi:server"/>
+  <Card link="/docs/guide/audit/backups" title="Backups" icon="mdi:backup-restore"/>
+  <Card link="/docs/guide/audit/change-tracking" title="Change Tracking" icon="octicon:diff-16"/>
+  <Card link="/docs/guide/audit/applications" title="Applications" icon="lucide:package"/>
+  <Card link="/docs/reference/config-db/config_access" title="Entity Model Reference" icon="mdi:database-outline"/>
+</Cards>
