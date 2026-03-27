@@ -38,6 +38,7 @@ import { CustomField } from '@site/src/components/Badges'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import { Scraper, CustomScraper } from '@site/src/components/Scraper'
+import ColumnDef from '@site/src/components/ColumnDef'
 import Helm from "@site/src/components/Helm"
 import { Advanced } from '@site/src/components/Badges'
 import TerminalOutput from "@site/src/components/TerminalOutput"
@@ -78,6 +79,7 @@ const MDXComponents = {
   Tabs: Tabs,
   Scraper: Scraper,
   CustomScraper: CustomScraper,
+  ColumnDef: ColumnDef,
   TabItem: TabItem,
   pre: MDXPre,
   details: Details,

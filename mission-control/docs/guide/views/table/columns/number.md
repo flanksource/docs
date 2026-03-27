@@ -6,14 +6,7 @@ sidebar_custom_props:
 
 The `number` column type displays numeric values (integers and decimals).
 
-## Properties
-
-| Property | Type   | Description                                               |
-| -------- | ------ | --------------------------------------------------------- |
-| `type`   | string | Must be `number`                                          |
-| `unit`   | string | Display unit appended to the value (e.g. `pods`, `req/s`) |
-
-See [Common Properties](/guide/views/table/columns) for the full list of fields available on all column types.
+<ColumnDef />
 
 ## Example
 

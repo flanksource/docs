@@ -28,23 +28,9 @@ This example demonstrates multiple column types including gauge, status, health,
 
 ## Common Properties
 
-All column types support these properties:
+All column types share these properties. Each type page lists any additional type-specific fields.
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `name` | string | Column identifier (required) |
-| `type` | string | Column type (required) |
-| `primaryKey` | bool | Include in composite primary key |
-| `width` | string | Display width, e.g. `150px` or a flex weight like `2` |
-| `description` | string | Help text for the column |
-| `hidden` | bool | Hide from table display |
-| `filter` | object | Enable filtering (`type: multiselect`), labels columns support include/exclude per key |
-| `icon` | string | Icon for the column (supports CEL like `row.health`) |
-| `url` | object | Link to configs, views, or custom URLs (see URL column type) |
-| `unit` | string | Unit label for gauges, numbers, and durations |
-| `badge` | object | Badge styling configuration (`color.auto` for value-based colors, or `color.map` for explicit mappings) |
-| `configItem` | object | Options for `config_item` columns (e.g., custom `idField`) |
-| `card` | object | Card layout position (`position`, `useForAccent`) |
+<ColumnDef />
 
 ## Card Positioning
 

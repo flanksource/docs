@@ -6,13 +6,7 @@ sidebar_custom_props:
 
 The `bytes` column type displays byte sizes with automatic unit formatting (B, KB, MB, GB, TB).
 
-## Properties
-
-| Property | Type   | Description     |
-| -------- | ------ | --------------- |
-| `type`   | string | Must be `bytes` |
-
-See [Common Properties](/guide/views/table/columns) for the full list of fields available on all column types.
+<ColumnDef />
 
 ## Auto-Formatting
 
