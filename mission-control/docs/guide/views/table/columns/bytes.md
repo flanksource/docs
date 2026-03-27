@@ -4,7 +4,15 @@ sidebar_custom_props:
   icon: mdi:memory
 ---
 
-The `bytes` column type displays byte sizes with automatic formatting (B, KB, MB, GB, TB).
+The `bytes` column type displays byte sizes with automatic unit formatting (B, KB, MB, GB, TB).
+
+## Properties
+
+| Property | Type   | Description     |
+| -------- | ------ | --------------- |
+| `type`   | string | Must be `bytes` |
+
+See [Common Properties](/guide/views/table/columns) for the full list of fields available on all column types.
 
 ## Auto-Formatting
 
