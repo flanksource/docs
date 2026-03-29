@@ -6,6 +6,8 @@ sidebar_custom_props:
 
 The `string` column type displays text values.
 
+<ColumnDef />
+
 ## Example
 
 ```yaml title="cronjobs.yaml" file=<rootDir>/modules/mission-control/fixtures/views/cronjobs.yaml {18-19}

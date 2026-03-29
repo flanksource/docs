@@ -28,21 +28,9 @@ This example demonstrates multiple column types including gauge, status, health,
 
 ## Common Properties
 
-All column types support these properties:
+All column types share these properties. Each type page lists any additional type-specific fields.
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `name` | string | Column identifier (required) |
-| `type` | string | Column type (required) |
-| `primaryKey` | bool | Include in composite primary key |
-| `description` | string | Help text for the column |
-| `hidden` | bool | Hide from table display |
-| `filter` | object | Enable filtering (`type: multiselect`), labels columns support include/exclude per key |
-| `icon` | string | Icon for the column (supports CEL like `row.health`) |
-| `url` | object | Link to configs, views, or custom URLs (see URL column type) |
-| `unit` | string | Unit label for gauges, numbers, and durations |
-| `configItem` | object | Options for `config_item` columns (e.g., custom `idField`) |
-| `card` | object | Card layout position (`position`, `useForAccent`) |
+<ColumnDef />
 
 ## Card Positioning
 
@@ -54,6 +42,8 @@ Columns can be positioned in card layouts using `card.position`:
 - `body` - Main content area
 - `footer` - Footer area
 - `headerRight` - Right side of header
+
+Set `card.useForAccent: true` on a column (typically `health` or `status`) to use its value as the card accent color.
 
 ## Column Types
 

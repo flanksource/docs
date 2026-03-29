@@ -6,10 +6,10 @@ sidebar_custom_props:
 
 The `boolean` column type renders `true`/`false` values as friendly yes/no text in tables and cards. Use it for readiness, feature flags, or any binary state.
 
+<ColumnDef />
+
 ## Example
 
 ```yaml title="boolean-example.yaml" file=<rootDir>/modules/mission-control/fixtures/views/boolean-example.yaml {24-26}
 
 ```
-
-If you enable `filter.type: multiselect` on a boolean column, Mission Control builds the options from the cached table so users can quickly include or exclude rows by state without triggering a view refresh.

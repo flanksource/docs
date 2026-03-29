@@ -4,7 +4,9 @@ sidebar_custom_props:
   icon: mdi:decimal
 ---
 
-The `decimal` column type displays numeric values with support for high precision. It is similar to `number` but explicitly intended for decimal values.
+The `decimal` column type displays numeric values with support for high precision. Use it for floats, ratios, costs, and any value where decimal accuracy matters.
+
+<ColumnDef />
 
 ## Example
 

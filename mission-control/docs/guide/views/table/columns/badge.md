@@ -6,6 +6,8 @@ sidebar_custom_props:
 
 The `badge` column type displays text values as styled badge/tag elements. Useful for categories, labels, and versions.
 
+<ColumnDef />
+
 ## Example
 
 ```yaml title="backups.yaml" file=<rootDir>/modules/mission-control/fixtures/views/backups.yaml {30-32}

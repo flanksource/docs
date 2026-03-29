@@ -6,6 +6,8 @@ sidebar_custom_props:
 
 The `millicore` column type displays CPU resources in millicores (1000m = 1 CPU core).
 
+<ColumnDef />
+
 ## Conversion
 
 | Value | Display | Meaning         |

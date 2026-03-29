@@ -6,12 +6,7 @@ sidebar_custom_props:
 
 The `number` column type displays numeric values (integers and decimals).
 
-## Properties
-
-| Property    | Type    | Description                          |
-| ----------- | ------- | ------------------------------------ |
-| `precision` | integer | Decimal places to display            |
-| `unit`      | string  | Display unit (e.g., "pods", "req/s") |
+<ColumnDef />
 
 ## Example
 

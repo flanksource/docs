@@ -6,6 +6,8 @@ sidebar_custom_props:
 
 The `status` column type displays status values with appropriate styling. Common values include `Running`, `Pending`, `Failed`, `Succeeded`, etc.
 
+<ColumnDef />
+
 ## Example
 
 ```yaml title="cronjobs.yaml" file=<rootDir>/modules/mission-control/fixtures/views/cronjobs.yaml {20-24}

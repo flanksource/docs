@@ -255,6 +255,11 @@ Column definition for view tables with data types and visualization properties.
     scheme: "bool"
   },
   {
+    field: "width",
+    description: "Display width of the column, e.g. `150px` or a flex weight like `2`",
+    scheme: "string"
+  },
+  {
     field: "description",
     description: "Human-readable description of the column",
     scheme: "string"
@@ -281,8 +286,8 @@ Column definition for view tables with data types and visualization properties.
   },
   {
     field: "badge",
-    description: "Badge configuration for the column",
-    scheme: "BadgeConfig"
+    description: "Badge styling configuration for the column",
+    scheme: "[BadgeConfig](#badge-configuration)"
   },
   {
     field: "unit",
@@ -406,6 +411,16 @@ Configuration for gauge visualizations with thresholds and color coding.
     field: "max",
     description: "Maximum value for the gauge (number or CEL expression)",
     scheme: "string"
+  },
+  {
+    field: "precision",
+    description: "Number of decimal places to display",
+    scheme: "int"
+  },
+  {
+    field: "thresholds[].percent",
+    description: "Threshold as a percentage of the gauge range (0–100)",
+    scheme: "int"
   },
   {
     field: "thresholds[].value",
@@ -567,6 +582,23 @@ Enable `columns[].filter.type: multiselect` to expose server-side filters withou
 ```yaml title="deployments.yaml" file=<rootDir>/modules/mission-control/fixtures/views/deployments.yaml {37-40,72-73}
 
 ```
+
+### Badge Configuration
+
+`columns[].badge` controls the styling of badge/tag values.
+
+<Fields rows={[
+  {
+    field: "color.auto",
+    description: "Use heuristics to choose a color based on the cell value",
+    scheme: "bool"
+  },
+  {
+    field: "color.map",
+    description: "Explicit value-to-color mapping, e.g. `Running: green`",
+    scheme: "map[string]string"
+  }
+]}/>
 
 ### Row Attributes and Grants
 

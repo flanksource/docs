@@ -6,6 +6,8 @@ sidebar_custom_props:
 
 The `datetime` column type displays timestamps with human-readable formatting.
 
+<ColumnDef />
+
 ## Example
 
 ```yaml title="cronjobs.yaml" file=<rootDir>/modules/mission-control/fixtures/views/cronjobs.yaml {32-33}
