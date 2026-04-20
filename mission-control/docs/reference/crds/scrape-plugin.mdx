@@ -1,0 +1,458 @@
+---
+title: ScrapePlugin CRD
+---
+
+# ScrapePlugin
+
+The `ScrapePlugin` CRD allows you to define custom plugins for scraping and transforming data from various sources into components, relationships, and other resources in Mission Control.
+
+## Definition
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapePlugin
+metadata:
+  name: example-scrape-plugin
+spec:
+  # Script that defines the plugin functionality
+  script: |
+    function fetch(source) {
+      // Custom data fetching logic
+      return fetchFromExternalAPI(source.url, source.headers);
+    }
+    
+    function transform(data) {
+      // Custom data transformation logic
+      return data.map(item => ({
+        name: item.name,
+        type: 'custom.service',
+        properties: {
+          status: item.status,
+          version: item.version
+        }
+      }));
+    }
+```
+
+## Schema
+
+The `ScrapePlugin` resource supports the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.name` | Name of the plugin |
+| `spec.description` | Description of the plugin's purpose |
+| `spec.script` | JavaScript/TypeScript code for the plugin |
+| `spec.language` | Script language (javascript or typescript) |
+| `spec.dependencies` | External module dependencies |
+| `spec.source` | Default source configuration |
+| `spec.transform` | Default transformation configuration |
+| `spec.parameters` | Plugin parameters and their defaults |
+| `spec.schedule` | Default schedule for the plugin |
+| `spec.timeout` | Default timeout for the plugin |
+
+## Plugin Script Functions
+
+A ScrapePlugin script can implement several functions:
+
+| Function | Description |
+|----------|-------------|
+| `fetch(source)` | Fetches data from the source |
+| `transform(data, source)` | Transforms the fetched data |
+| `validate(config)` | Validates the scrape configuration |
+| `components(data, source)` | Generates components from the data |
+| `relationships(data, source)` | Generates relationships from the data |
+| `properties(data, source)` | Generates properties from the data |
+| `labels(data, source)` | Generates labels from the data |
+| `metrics(data, source)` | Generates metrics from the data |
+
+## Examples
+
+### Custom API Integration Plugin
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapePlugin
+metadata:
+  name: custom-api-plugin
+spec:
+  name: Custom API Integration
+  description: Scrapes data from a custom API service
+  language: javascript
+  parameters:
+    - name: apiKey
+      type: string
+      required: true
+      description: API Key for authentication
+    - name: region
+      type: string
+      default: us-east-1
+      description: Region to fetch data from
+  script: |
+    async function fetch(source) {
+      const apiKey = source.parameters.apiKey;
+      const region = source.parameters.region || 'us-east-1';
+      const response = await fetch(`https://api.example.com/${region}/services`, {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.statusText}`);
+      }
+      
+      return await response.json();
+    }
+    
+    function components(data, source) {
+      return data.services.map(service => ({
+        name: service.name,
+        type: 'custom.service',
+        icon: service.type === 'database' ? 'database' : 'service',
+        description: service.description,
+        labels: {
+          type: service.type,
+          region: source.parameters.region,
+          environment: service.environment
+        },
+        properties: {
+          status: service.status,
+          version: service.version,
+          endpoint: service.endpoint,
+          lastUpdated: service.lastUpdatedAt
+        }
+      }));
+    }
+    
+    function relationships(data, source) {
+      const relationships = [];
+      
+      data.services.forEach(service => {
+        if (service.dependencies) {
+          service.dependencies.forEach(dep => {
+            relationships.push({
+              source: {
+                selector: {
+                  id: service.name
+                }
+              },
+              target: {
+                selector: {
+                  id: dep.name
+                }
+              },
+              relationship: 'dependsOn',
+              properties: {
+                type: dep.type,
+                critical: dep.critical ? 'true' : 'false'
+              }
+            });
+          });
+        }
+      });
+      
+      return relationships;
+    }
+```
+
+### Log Analysis Plugin
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapePlugin
+metadata:
+  name: log-analysis-plugin
+spec:
+  name: Log Analysis
+  description: Analyzes log files to extract component health and relationships
+  language: javascript
+  dependencies:
+    - lodash
+  script: |
+    const _ = require('lodash');
+    
+    async function fetch(source) {
+      const logs = await readLogsFromSource(source.path, source.patterns);
+      return parseLogEntries(logs);
+    }
+    
+    function readLogsFromSource(path, patterns) {
+      // Implementation to read logs from files, S3, etc.
+      // This is a placeholder - actual implementation would depend on source type
+      return [];
+    }
+    
+    function parseLogEntries(logs) {
+      // Parse log entries into structured data
+      // This is a placeholder
+      return logs.map(log => {
+        try {
+          return JSON.parse(log);
+        } catch (e) {
+          return {
+            raw: log,
+            parsed: false,
+            timestamp: extractTimestamp(log)
+          };
+        }
+      });
+    }
+    
+    function extractTimestamp(logLine) {
+      // Extract timestamp from log line
+      // This is a placeholder
+      const match = logLine.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
+      return match ? match[0] : null;
+    }
+    
+    function components(data, source) {
+      // Group logs by component
+      const componentLogs = _.groupBy(data, log => log.component || 'unknown');
+      
+      return Object.entries(componentLogs).map(([componentName, logs]) => {
+        // Calculate error rate and other metrics
+        const errorLogs = logs.filter(log => log.level === 'error' || log.level === 'fatal');
+        const errorRate = errorLogs.length / logs.length;
+        
+        return {
+          name: componentName,
+          type: 'application',
+          status: errorRate > 0.1 ? 'unhealthy' : 'healthy',
+          properties: {
+            logCount: logs.length,
+            errorCount: errorLogs.length,
+            errorRate: errorRate.toFixed(2),
+            lastSeen: _.maxBy(logs, 'timestamp')?.timestamp
+          }
+        };
+      });
+    }
+    
+    function relationships(data, source) {
+      const relationships = [];
+      
+      // Find service calls in logs
+      data.forEach(log => {
+        if (log.caller && log.callee) {
+          relationships.push({
+            source: {
+              selector: {
+                id: log.caller
+              }
+            },
+            target: {
+              selector: {
+                id: log.callee
+              }
+            },
+            relationship: 'calls',
+            properties: {
+              latency: log.latency,
+              status: log.status,
+              timestamp: log.timestamp
+            }
+          });
+        }
+      });
+      
+      return relationships;
+    }
+```
+
+### Infrastructure Discovery Plugin
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapePlugin
+metadata:
+  name: infrastructure-discovery
+spec:
+  name: Infrastructure Discovery
+  description: Discovers and maps infrastructure components across multiple platforms
+  language: typescript
+  parameters:
+    - name: depth
+      type: number
+      default: 2
+      description: Depth of relationship discovery
+  script: |
+    interface DiscoverySource {
+      type: string;
+      connection: string;
+      parameters: {
+        depth: number;
+        [key: string]: any;
+      };
+    }
+    
+    interface Component {
+      id?: string;
+      name: string;
+      type: string;
+      icon?: string;
+      description?: string;
+      labels?: Record<string, string>;
+      properties?: Record<string, any>;
+    }
+    
+    interface Relationship {
+      source: {
+        selector: {
+          id: string;
+        };
+      };
+      target: {
+        selector: {
+          id: string;
+        };
+      };
+      relationship: string;
+      properties?: Record<string, any>;
+    }
+    
+    async function fetch(source: DiscoverySource): Promise<any> {
+      const discoveryResults = {};
+      
+      switch (source.type) {
+        case 'kubernetes':
+          discoveryResults.kubernetes = await discoverKubernetes(source.connection);
+          break;
+        case 'aws':
+          discoveryResults.aws = await discoverAWS(source.connection);
+          break;
+        case 'azure':
+          discoveryResults.azure = await discoverAzure(source.connection);
+          break;
+        default:
+          throw new Error(`Unsupported discovery type: ${source.type}`);
+      }
+      
+      return discoveryResults;
+    }
+    
+    async function discoverKubernetes(connection: string): Promise<any> {
+      // Kubernetes discovery implementation
+      // This is a placeholder
+      return {};
+    }
+    
+    async function discoverAWS(connection: string): Promise<any> {
+      // AWS discovery implementation
+      // This is a placeholder
+      return {};
+    }
+    
+    async function discoverAzure(connection: string): Promise<any> {
+      // Azure discovery implementation
+      // This is a placeholder
+      return {};
+    }
+    
+    function components(data: any, source: DiscoverySource): Component[] {
+      const allComponents: Component[] = [];
+      
+      // Process Kubernetes resources if available
+      if (data.kubernetes) {
+        const k8sComponents = processKubernetesComponents(data.kubernetes);
+        allComponents.push(...k8sComponents);
+      }
+      
+      // Process AWS resources if available
+      if (data.aws) {
+        const awsComponents = processAWSComponents(data.aws);
+        allComponents.push(...awsComponents);
+      }
+      
+      // Process Azure resources if available
+      if (data.azure) {
+        const azureComponents = processAzureComponents(data.azure);
+        allComponents.push(...azureComponents);
+      }
+      
+      return allComponents;
+    }
+    
+    function processKubernetesComponents(k8sData: any): Component[] {
+      // Process Kubernetes components
+      // This is a placeholder
+      return [];
+    }
+    
+    function processAWSComponents(awsData: any): Component[] {
+      // Process AWS components
+      // This is a placeholder
+      return [];
+    }
+    
+    function processAzureComponents(azureData: any): Component[] {
+      // Process Azure components
+      // This is a placeholder
+      return [];
+    }
+    
+    function relationships(data: any, source: DiscoverySource): Relationship[] {
+      const allRelationships: Relationship[] = [];
+      
+      // Extract relationships based on the discovery depth
+      const depth = source.parameters.depth || 2;
+      
+      // Process Kubernetes relationships if available
+      if (data.kubernetes) {
+        const k8sRelationships = processKubernetesRelationships(data.kubernetes, depth);
+        allRelationships.push(...k8sRelationships);
+      }
+      
+      // Process AWS relationships if available
+      if (data.aws) {
+        const awsRelationships = processAWSRelationships(data.aws, depth);
+        allRelationships.push(...awsRelationships);
+      }
+      
+      // Process Azure relationships if available
+      if (data.azure) {
+        const azureRelationships = processAzureRelationships(data.azure, depth);
+        allRelationships.push(...azureRelationships);
+      }
+      
+      // Cross-cloud relationships
+      if (data.kubernetes && data.aws) {
+        const crossCloudRelationships = processCrossCloudRelationships(data);
+        allRelationships.push(...crossCloudRelationships);
+      }
+      
+      return allRelationships;
+    }
+    
+    function processKubernetesRelationships(k8sData: any, depth: number): Relationship[] {
+      // Process Kubernetes relationships
+      // This is a placeholder
+      return [];
+    }
+    
+    function processAWSRelationships(awsData: any, depth: number): Relationship[] {
+      // Process AWS relationships
+      // This is a placeholder
+      return [];
+    }
+    
+    function processAzureRelationships(azureData: any, depth: number): Relationship[] {
+      // Process Azure relationships
+      // This is a placeholder
+      return [];
+    }
+    
+    function processCrossCloudRelationships(data: any): Relationship[] {
+      // Process relationships across cloud providers
+      // This is a placeholder
+      return [];
+    }
+```
+
+## See Also
+
+- [ScrapeConfig CRD](./scrape-config.mdx)
+- [Component CRD](./component.mdx)
+- [Topology CRD](./topology.mdx)
+- [Scripting](../scripting/index.mdx)

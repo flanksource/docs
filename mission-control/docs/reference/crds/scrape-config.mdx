@@ -1,0 +1,203 @@
+---
+title: ScrapeConfig CRD
+---
+
+# ScrapeConfig
+
+The `ScrapeConfig` CRD allows you to define configurations for scraping data from various sources to populate components, relationships, and other resources in Mission Control.
+
+## Definition
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: example-scrape-config
+spec:
+  # Source to scrape data from
+  source:
+    type: kubernetes
+    connection: production-cluster
+    
+  # How to transform the scraped data
+  transform:
+    components:
+      - name: "{{.metadata.name}}"
+        type: "kubernetes.{{.kind}}"
+        labels:
+          namespace: "{{.metadata.namespace}}"
+```
+
+## Schema
+
+The `ScrapeConfig` resource supports the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.schedule` | Schedule for the scrape job (cron format) |
+| `spec.source` | Source configuration for data scraping |
+| `spec.source.type` | Type of data source (kubernetes, aws, azure, etc.) |
+| `spec.source.connection` | Connection to use for the source |
+| `spec.source.resource` | Resource type to scrape |
+| `spec.source.query` | Query to filter resources |
+| `spec.source.selector` | Selector to filter resources |
+| `spec.transform` | Transformation configuration |
+| `spec.transform.components` | Component transformation rules |
+| `spec.transform.relationships` | Relationship transformation rules |
+| `spec.transform.properties` | Property transformation rules |
+| `spec.transform.labels` | Label transformation rules |
+| `spec.transform.template` | Custom transformation template |
+| `spec.transform.script` | Custom transformation script |
+| `spec.plugins` | Plugins to use for transformation |
+| `spec.timeout` | Timeout for the scrape job |
+| `spec.backoff` | Backoff configuration for retries |
+
+## Examples
+
+### Kubernetes Resources Scrape
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: k8s-deployments
+spec:
+  schedule: "*/10 * * * *"  # Every 10 minutes
+  source:
+    type: kubernetes
+    connection: production-cluster
+    resource: deployments
+  transform:
+    components:
+      - name: "{{.metadata.name}}"
+        type: kubernetes.deployment
+        icon: kubernetes
+        description: "Kubernetes Deployment in {{.metadata.namespace}}"
+        labels:
+          namespace: "{{.metadata.namespace}}"
+          app: "{{index .metadata.labels \"app\" | default \"\"}}"
+        properties:
+          replicas: "{{.spec.replicas}}"
+          strategy: "{{.spec.strategy.type}}"
+          selector: "{{.spec.selector | toJson}}"
+          image: "{{(index .spec.template.spec.containers 0).image}}"
+```
+
+### AWS EC2 Instances Scrape
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: aws-ec2-instances
+spec:
+  schedule: "*/30 * * * *"  # Every 30 minutes
+  source:
+    type: aws
+    connection: aws-production
+    resource: ec2
+  transform:
+    components:
+      - name: "EC2 {{.InstanceId}}"
+        type: aws.ec2
+        icon: ec2
+        description: "{{tags.Name | default .InstanceId}}"
+        labels:
+          region: "{{.Region}}"
+          type: "{{.InstanceType}}"
+          environment: "{{index .Tags \"Environment\" | default \"\"}}"
+        properties:
+          state: "{{.State.Name}}"
+          privateIp: "{{.PrivateIpAddress}}"
+          publicIp: "{{.PublicIpAddress | default \"\"}}"
+          launchTime: "{{.LaunchTime | formatTime}}"
+          securityGroups: "{{range .SecurityGroups}}{{.GroupName}}, {{end}}"
+          ami: "{{.ImageId}}"
+```
+
+### Database Schema Scrape
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: postgres-schema
+spec:
+  schedule: "0 */6 * * *"  # Every 6 hours
+  source:
+    type: sql
+    connection: production-db
+    query: |
+      SELECT 
+        t.table_name, 
+        t.table_schema,
+        obj_description((t.table_schema || '.' || t.table_name)::regclass) as description,
+        (SELECT COUNT(*) FROM information_schema.columns c WHERE c.table_name = t.table_name AND c.table_schema = t.table_schema) as column_count
+      FROM information_schema.tables t
+      WHERE t.table_schema NOT IN ('pg_catalog', 'information_schema')
+      ORDER BY t.table_schema, t.table_name
+  transform:
+    components:
+      - name: "{{.table_name}}"
+        type: database.table
+        icon: table
+        description: "{{.description | default (printf \"Table %s.%s\" .table_schema .table_name)}}"
+        labels:
+          schema: "{{.table_schema}}"
+          database: "production"
+        properties:
+          columnCount: "{{.column_count}}"
+```
+
+### API Service Scrape with Relationships
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: api-services
+spec:
+  schedule: "*/15 * * * *"  # Every 15 minutes
+  source:
+    type: http
+    connection: service-registry
+    url: /api/services
+  transform:
+    components:
+      - name: "{{.name}}"
+        type: service.api
+        icon: api
+        description: "{{.description}}"
+        labels:
+          version: "{{.version}}"
+          team: "{{.team}}"
+          environment: "{{.environment}}"
+        properties:
+          endpoint: "{{.endpoint}}"
+          status: "{{.status}}"
+          lastDeployed: "{{.lastDeployTime | formatTime}}"
+    relationships:
+      - source:
+          selector:
+            id: "{{.name}}"
+        target:
+          selector:
+            id: "{{.database}}"
+        relationship: dependsOn
+        properties:
+          connectionString: "{{.connectionDetails.type}}://{{.connectionDetails.host}}:{{.connectionDetails.port}}/{{.connectionDetails.database}}"
+      - source:
+          selector:
+            id: "{{.name}}"
+        target:
+          selector:
+            id: "{{range .dependencies}}{{.}},{{end}}"
+        relationship: dependsOn
+```
+
+## See Also
+
+- [ScrapePlugin CRD](./scrape-plugin.mdx)
+- [Component CRD](./component.mdx)
+- [Topology CRD](./topology.mdx)
+- [Connection CRD](./connection.mdx)
