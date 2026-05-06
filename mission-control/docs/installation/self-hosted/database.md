@@ -63,3 +63,14 @@ db:
     name: mission-control-postgres
     key: DB_URL
 ```
+
+### Google Cloud SQL
+
+When you use Google Cloud SQL for PostgreSQL, grant the Mission Control database user the permissions required by startup migrations before you install or upgrade Mission Control:
+
+```sql
+GRANT cloudsqlsuperuser TO your_username;
+ALTER ROLE your_username CREATEROLE;
+```
+<br />
+> Replace `your_username` with the user configured in the Mission Control database secret.
