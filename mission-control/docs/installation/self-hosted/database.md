@@ -72,5 +72,6 @@ When you use Google Cloud SQL for PostgreSQL, grant the Mission Control database
 GRANT cloudsqlsuperuser TO your_username;
 ALTER ROLE your_username CREATEROLE;
 ```
+
 <br />
 > Replace `your_username` with the user configured in the Mission Control database secret.
