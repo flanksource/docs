@@ -28,26 +28,26 @@ The GitHub Repository scraper creates `GitHub::Repository` config items and opti
 
 ```
 
-| Field                 | Description                                                    | Scheme                                              | Required |
-| --------------------- | -------------------------------------------------------------- | --------------------------------------------------- | -------- |
-| `repositories`        | List of repositories to scrape                                 | [`[]GitHubRepository`](#githubrepository)            | `true`   |
-| `personalAccessToken` | Personal access token for authentication                       | <CommonLink to="secrets">[]_EnvVar_</CommonLink>    |          |
-| `connection`          | Connection name for GitHub credential                          | `string`                                            |          |
-| `security`            | Enable Dependabot, code scanning, and secret scanning alerts   | `bool`                                              |          |
-| `openssf`             | Enable OpenSSF Scorecard data                                  | `bool`                                              |          |
-| `securityFilters`     | Filters for security alerts                                    | [`SecurityFilters`](#securityfilters)                |          |
+| Field                 | Description                                                  | Scheme                                           | Required |
+| --------------------- | ------------------------------------------------------------ | ------------------------------------------------ | -------- |
+| `repositories`        | List of repositories to scrape                               | [`[]GitHubRepository`](#githubrepository)        | `true`   |
+| `personalAccessToken` | Personal access token for authentication                     | <CommonLink to="secrets">[]_EnvVar_</CommonLink> |          |
+| `connection`          | Connection name for GitHub credential                        | `string`                                         |          |
+| `security`            | Enable Dependabot, code scanning, and secret scanning alerts | `bool`                                           |          |
+| `openssf`             | Enable OpenSSF Scorecard data                                | `bool`                                           |          |
+| `securityFilters`     | Filters for security alerts                                  | [`SecurityFilters`](#securityfilters)            |          |
 
 ### GitHubRepository
 
-| Field   | Description              | Scheme   | Required |
-| ------- | ------------------------ | -------- | -------- |
-| `owner` | GitHub repository owner  | `string` | `true`   |
-| `repo`  | GitHub repository name   | `string` | `true`   |
+| Field   | Description             | Scheme   | Required |
+| ------- | ----------------------- | -------- | -------- |
+| `owner` | GitHub repository owner | `string` | `true`   |
+| `repo`  | GitHub repository name  | `string` | `true`   |
 
 ### SecurityFilters
 
-| Field      | Description                                      | Scheme     |
-| ---------- | ------------------------------------------------ | ---------- |
-| `severity` | Filter alerts by severity (e.g. `critical`, `high`) | `[]string` |
-| `state`    | Filter alerts by state (e.g. `open`, `fixed`)    | `[]string` |
-| `maxAge`   | Only include alerts newer than this duration (e.g. `7d`, `24h`) | `string` |
+| Field      | Description                                                     | Scheme     |
+| ---------- | --------------------------------------------------------------- | ---------- |
+| `severity` | Filter alerts by severity (e.g. `critical`, `high`)             | `[]string` |
+| `state`    | Filter alerts by state (e.g. `open`, `fixed`)                   | `[]string` |
+| `maxAge`   | Only include alerts newer than this duration (e.g. `7d`, `24h`) | `string`   |
