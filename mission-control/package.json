@@ -82,7 +82,10 @@
       "last 1 safari version"
     ]
   },
+  "overrides": {
+    "webpack": "5.97.1"
+  },
   "engines": {
-    "node": ">=18.0"
+    "node": "22.x"
   }
 }
