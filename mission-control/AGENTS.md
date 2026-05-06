@@ -37,7 +37,7 @@ Symlinks: `docs/modules` → `../modules`, `docs/partials` → shared partials a
 ---
 title: Platform Name
 sidebar_custom_props:
-  icon: platform-icon    # maps to @flanksource/icons or @iconify
+  icon: platform-icon # maps to @flanksource/icons or @iconify
 # draft: true            # uncomment to hide from production
 ---
 ```
@@ -50,7 +50,11 @@ Every integration page needs at minimum:
 
 ```mdx
 import { Card, Cards } from '@site/../common/src/components/Card'
-import { CapabilityBadges, CapabilityBadge, CapabilityHeading } from '@site/../common/src/components/CapabilityBadges'
+import {
+  CapabilityBadges,
+  CapabilityBadge,
+  CapabilityHeading
+} from '@site/../common/src/components/CapabilityBadges'
 ```
 
 Add conditionally:
@@ -87,9 +91,10 @@ Use the `:::info` admonition:
 
 ```mdx
 :::info Prerequisites
+
 - Mission Control installed via Helm
 - [Platform-specific requirement, e.g., API key with read access]
-:::
+  :::
 ```
 
 ### Helm Installation
@@ -106,12 +111,13 @@ The component renders Helm and Flux install tabs automatically.
 
 One section per capability, separated by `---` horizontal rules:
 
-```mdx
+````mdx
 ---
 
 <CapabilityHeading type="scraper" />
 
 **Use cases:**
+
 - [Specific use case 1]
 - [Specific use case 2]
 - [Specific use case 3]
@@ -124,10 +130,11 @@ kind: ScrapeConfig
 metadata:
   name: platform-scraper
 spec:
-  schedule: "@every 5m"
+  schedule: '@every 5m'
   platform:
-    - # minimal working config
+    -  # minimal working config
 ```
+````
 
 <Cards>
   <Card title="Scraper Reference" link="/docs/guide/config-db/scrapers/platform" />
@@ -136,23 +143,24 @@ spec:
 
 CRD apiVersions by capability:
 
-| Capability | apiVersion | Kind |
-|---|---|---|
-| Scraper | `configs.flanksource.com/v1` | `ScrapeConfig` |
-| Health Check | `canaries.flanksource.com/v1` | `Canary` |
-| Playbook | `mission-control.flanksource.com/v1` | `Playbook` |
+| Capability   | apiVersion                           | Kind           |
+| ------------ | ------------------------------------ | -------------- |
+| Scraper      | `configs.flanksource.com/v1`         | `ScrapeConfig` |
+| Health Check | `canaries.flanksource.com/v1`        | `Canary`       |
+| Playbook     | `mission-control.flanksource.com/v1` | `Playbook`     |
 | Notification | `mission-control.flanksource.com/v1` | `Notification` |
 
 ### Optional/Advanced Content
 
 Use `<details>` for variations, alternative configs, or advanced options:
 
-```mdx
+````mdx
 <details summary="Custom Message Template">
 
 ```yaml title="custom-notification.yaml"
 # advanced config here
 ```
+````
 
 </details>
 ```
@@ -193,11 +201,11 @@ End every integration page with:
 ```yaml
 ---
 title: Topic Name
-sidebar_position: 6              # controls ordering in sidebar
+sidebar_position: 6 # controls ordering in sidebar
 sidebar_custom_props:
-  icon: mdi:shield-check          # can use iconify notation
-hide_title: true                  # optional: hide auto-generated h1
-pagination_next: null             # optional: disable "next" link
+  icon: mdi:shield-check # can use iconify notation
+hide_title: true # optional: hide auto-generated h1
+pagination_next: null # optional: disable "next" link
 ---
 ```
 
@@ -206,15 +214,15 @@ pagination_next: null             # optional: disable "next" link
 Pattern: overview paragraph → diagram (if applicable) → concepts list → `<Cards>` grid to sub-pages.
 
 ```mdx
-import {Card, Cards} from '@site/src/components/Card'
+import { Card, Cards } from '@site/src/components/Card'
 
 # Topic Name
 
 [1-2 paragraph overview explaining the feature area]
 
 <Cards>
-  <Card link="/docs/guide/topic/sub1" title="Sub-topic 1" icon="icon-name"/>
-  <Card link="/docs/guide/topic/sub2" title="Sub-topic 2" icon="icon-name"/>
+  <Card link="/docs/guide/topic/sub1" title="Sub-topic 1" icon="icon-name" />
+  <Card link="/docs/guide/topic/sub2" title="Sub-topic 2" icon="icon-name" />
 </Cards>
 
 ## Concepts
@@ -241,7 +249,7 @@ title: Feature Name
 sidebar_position: 3
 sidebar_custom_props:
   icon: hugeicons:code
-description: Schema reference for [feature]    # used for SEO meta tags
+description: Schema reference for [feature] # used for SEO meta tags
 ---
 ```
 
@@ -267,21 +275,21 @@ Use `<Fields>` for documenting configuration schemas:
 
 ## 4. Component Quick Reference
 
-| Component | Purpose | Key Props | Import |
-|---|---|---|---|
-| `CapabilityBadges` | Container for badge row | `children` | `@site/../common/src/components/CapabilityBadges` |
-| `CapabilityBadge` | Single capability pill | `type`, `label` | (same) |
-| `CapabilityHeading` | h2 heading with badge icon | `type` | (same) |
-| `Card` | Linked card with optional icon | `title`, `icon`, `link`/`href`, `size`, `children` | `@site/../common/src/components/Card` |
-| `Cards` | Grid container (3-col responsive) | `columns`, `children` | (same) |
-| `Helm` | Helm/Flux install tabs | `chart`, `namespace`, `values`, `schema`, `repo` | `@site/../common/src/components/Helm.jsx` |
-| `Icon` | Render icon by name | `name`, `height`, `className` | `@site/../common/src/components/Icon` |
-| `Fields` | Config field reference table | `rows` (array of field objects) | `@site/../common/src/components/Fields` |
-| `ComparisonBox` | Two-column pros/cons layout | `children` (`.Pros`, `.Cons`) | `@site/../common/src/components/ComparisonBox` |
-| `BoxNode` | Diagram node with colored header | `id`, `title`, `className`, `bodyClassName`, `border`, `minWidth`, `compact` | `@site/../common/src/components/diagrams/BoxNode` |
-| `DocCardList` | Auto-list child pages | (none) | `@theme/DocCardList` |
-| `Tabs` | Tabbed content container | `children` | `@theme/Tabs` |
-| `TabItem` | Single tab panel | `value`, `label`, `default` | `@theme/TabItem` |
+| Component           | Purpose                           | Key Props                                                                    | Import                                            |
+| ------------------- | --------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------- |
+| `CapabilityBadges`  | Container for badge row           | `children`                                                                   | `@site/../common/src/components/CapabilityBadges` |
+| `CapabilityBadge`   | Single capability pill            | `type`, `label`                                                              | (same)                                            |
+| `CapabilityHeading` | h2 heading with badge icon        | `type`                                                                       | (same)                                            |
+| `Card`              | Linked card with optional icon    | `title`, `icon`, `link`/`href`, `size`, `children`                           | `@site/../common/src/components/Card`             |
+| `Cards`             | Grid container (3-col responsive) | `columns`, `children`                                                        | (same)                                            |
+| `Helm`              | Helm/Flux install tabs            | `chart`, `namespace`, `values`, `schema`, `repo`                             | `@site/../common/src/components/Helm.jsx`         |
+| `Icon`              | Render icon by name               | `name`, `height`, `className`                                                | `@site/../common/src/components/Icon`             |
+| `Fields`            | Config field reference table      | `rows` (array of field objects)                                              | `@site/../common/src/components/Fields`           |
+| `ComparisonBox`     | Two-column pros/cons layout       | `children` (`.Pros`, `.Cons`)                                                | `@site/../common/src/components/ComparisonBox`    |
+| `BoxNode`           | Diagram node with colored header  | `id`, `title`, `className`, `bodyClassName`, `border`, `minWidth`, `compact` | `@site/../common/src/components/diagrams/BoxNode` |
+| `DocCardList`       | Auto-list child pages             | (none)                                                                       | `@theme/DocCardList`                              |
+| `Tabs`              | Tabbed content container          | `children`                                                                   | `@theme/Tabs`                                     |
+| `TabItem`           | Single tab panel                  | `value`, `label`, `default`                                                  | `@theme/TabItem`                                  |
 
 ---
 
@@ -289,21 +297,21 @@ Use `<Fields>` for documenting configuration schemas:
 
 ### When to Use What
 
-| Type | When to Use | Example |
-|---|---|---|
+| Type                    | When to Use                                                                                   | Example                                        |
+| ----------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | React diagram component | Data-flow or architecture diagrams that may evolve, need interactivity, or reuse across pages | `EntraDataFlowDiagram.tsx`, `AuditDiagram.tsx` |
-| Static image (PNG/SVG) | Screenshots of external UIs, one-off visuals that won't change | `docs/integrations/slack-bot/*.png` |
+| Static image (PNG/SVG)  | Screenshots of external UIs, one-off visuals that won't change                                | `docs/integrations/slack-bot/*.png`            |
 
 ### Canonical Diagram Styles
 
 Read these before creating a new diagram. Pick the style closest to your use case.
 
-| Style | Description | Source | Screenshot |
-|---|---|---|---|
-| **Data Flow** | Horizontal flow with intermediary services between source and target | `common/src/components/EntraDataFlowDiagram.tsx` | ![Data Flow](docs/diagrams/diagram-data-flow.png) |
-| **Fan-in/Fan-out** | Multiple sources → central hub → multiple outputs (horizontal multi-column) | `common/src/components/AuditDiagram.tsx` | ![Fan-in/Fan-out](docs/diagrams/diagram-fan-in-out.png) |
-| **Pipeline** | Horizontal sequential chain: source → processor → destination | `common/src/components/AuditLogDiagrams.tsx` | ![Pipeline](docs/diagrams/diagram-pipeline.png) |
-| **Entity Model** | ER-style diagram with tables, PK/FK badges, and relationship arrows | `common/src/components/EntityModelDiagram.tsx` | ![Entity Model](docs/diagrams/diagram-entity-model.png) |
+| Style              | Description                                                                 | Source                                           | Screenshot                                              |
+| ------------------ | --------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
+| **Data Flow**      | Horizontal flow with intermediary services between source and target        | `common/src/components/EntraDataFlowDiagram.tsx` | ![Data Flow](docs/diagrams/diagram-data-flow.png)       |
+| **Fan-in/Fan-out** | Multiple sources → central hub → multiple outputs (horizontal multi-column) | `common/src/components/AuditDiagram.tsx`         | ![Fan-in/Fan-out](docs/diagrams/diagram-fan-in-out.png) |
+| **Pipeline**       | Horizontal sequential chain: source → processor → destination               | `common/src/components/AuditLogDiagrams.tsx`     | ![Pipeline](docs/diagrams/diagram-pipeline.png)         |
+| **Entity Model**   | ER-style diagram with tables, PK/FK badges, and relationship arrows         | `common/src/components/EntityModelDiagram.tsx`   | ![Entity Model](docs/diagrams/diagram-entity-model.png) |
 
 ### Layout Patterns
 
@@ -312,8 +320,8 @@ Pick one layout per diagram. Do not mix vertical and horizontal flow.
 Every diagram file should use `useId()` to scope element IDs and avoid collisions when multiple diagrams appear on the same page:
 
 ```tsx
-const prefix = useId();
-const id = (name: string) => `${prefix}-${name}`;
+const prefix = useId()
+const id = (name: string) => `${prefix}-${name}`
 ```
 
 **Vertical (top-to-bottom)** — for multi-tier flows with distinct stages:
@@ -383,12 +391,17 @@ See `EntraDataFlowDiagram.tsx` for the canonical example of this pattern.
 
 ```tsx
 <BoxNode
-  title={<span className="flex items-center justify-center gap-2"><Icon className="w-5 h-5" />Title</span>}
+  title={
+    <span className="flex items-center justify-center gap-2">
+      <Icon className="w-5 h-5" />
+      Title
+    </span>
+  }
   headerColor={COLORS.primary}
   bodyColor={COLORS.background}
   borderColor={COLORS.primary}
   minWidth="200px"
-  compact  // optional: p-2 instead of p-3
+  compact // optional: p-2 instead of p-3
 >
   {/* body content */}
 </BoxNode>
@@ -397,39 +410,58 @@ See `EntraDataFlowDiagram.tsx` for the canonical example of this pattern.
 **Icon+Label with border** — standalone pipeline nodes representing a single concept (e.g., "HTTP Scraper", "Entra ID"):
 
 ```tsx
-<div id={id} className="flex flex-col items-center gap-2 px-4 py-3 rounded-xl border-2 shadow-lg"
-  style={{ borderColor: COLORS.primary, backgroundColor: COLORS.background }}>
+<div
+  id={id}
+  className="flex flex-col items-center gap-2 px-4 py-3 rounded-xl border-2 shadow-lg"
+  style={{ borderColor: COLORS.primary, backgroundColor: COLORS.background }}
+>
   <Icon className="w-8 h-8" style={{ color: COLORS.accent }} />
-  <span className="text-xs font-bold" style={{ color: COLORS.muted }}>{label}</span>
+  <span className="text-xs font-bold" style={{ color: COLORS.muted }}>
+    {label}
+  </span>
 </div>
 ```
 
 **IconNode (borderless)** — intermediary services that sit between major nodes. No border, no shadow, minimal padding:
 
 ```tsx
-function IconNode({ id, icon: Icon, label }: {
-  id: string;
-  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
-  label: string;
+function IconNode({
+  id,
+  icon: Icon,
+  label
+}: {
+  id: string
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>
+  label: string
 }) {
   return (
     <div id={id} className="flex flex-col items-center gap-1 px-2 py-1">
       <Icon className="w-7 h-7" style={{ color: COLORS.accent }} />
-      <span className="text-[10px] font-bold" style={{ color: COLORS.muted }}>{label}</span>
+      <span className="text-[10px] font-bold" style={{ color: COLORS.muted }}>
+        {label}
+      </span>
     </div>
-  );
+  )
 }
 ```
 
 **Mission Control box** — visually heavier anchor node with `shadow-2xl` and `rounded-2xl`:
 
 ```tsx
-<div id={id} className="rounded-2xl overflow-hidden border-2 shadow-2xl"
-  style={{ borderColor: COLORS.primary, backgroundColor: COLORS.background }}>
-  <div className="px-6 py-3 text-center" style={{ backgroundColor: COLORS.primary }}>
+<div
+  id={id}
+  className="rounded-2xl overflow-hidden border-2 shadow-2xl"
+  style={{ borderColor: COLORS.primary, backgroundColor: COLORS.background }}
+>
+  <div
+    className="px-6 py-3 text-center"
+    style={{ backgroundColor: COLORS.primary }}
+  >
     <div className="flex items-center justify-center gap-2">
       <MissionControlWhite className="w-6 h-6 text-white" />
-      <span className="text-white text-lg font-bold tracking-wide">Mission Control</span>
+      <span className="text-white text-lg font-bold tracking-wide">
+        Mission Control
+      </span>
     </div>
   </div>
   <div className="p-4 grid grid-cols-2 gap-3">
@@ -469,25 +501,25 @@ BoxNode supports both Tailwind classes and inline style props. Prefer inline sty
 <BoxNode title="Title" className="bg-blue-600" bodyClassName="bg-blue-50" />
 ```
 
-| Part | Classes | Notes |
-|---|---|---|
-| Container | `rounded-xl overflow-hidden shadow-lg min-w-[120px] border-2 border-solid` | `min-w-[100px]` for compact horizontal diagrams |
-| Header | `px-3 py-2 text-center` + inline `headerColor` or `bg-{color}-600` | White text only |
-| Header text | `text-white text-xs font-bold` | Include icon with `flex items-center justify-center gap-1.5` |
-| Body | `p-3` (or `p-2` for compact) + inline `bodyColor` or `bg-{color}-50` | Light tint of header color |
-| Body text | `text-[10px]` with `color: '#62758a'` or `text-{color}-700` | Dark tint for contrast on light body |
+| Part        | Classes                                                                    | Notes                                                        |
+| ----------- | -------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Container   | `rounded-xl overflow-hidden shadow-lg min-w-[120px] border-2 border-solid` | `min-w-[100px]` for compact horizontal diagrams              |
+| Header      | `px-3 py-2 text-center` + inline `headerColor` or `bg-{color}-600`         | White text only                                              |
+| Header text | `text-white text-xs font-bold`                                             | Include icon with `flex items-center justify-center gap-1.5` |
+| Body        | `p-3` (or `p-2` for compact) + inline `bodyColor` or `bg-{color}-50`       | Light tint of header color                                   |
+| Body text   | `text-[10px]` with `color: '#62758a'` or `text-{color}-700`                | Dark tint for contrast on light body                         |
 
 ### Color System
 
 Diagrams use a restricted 5-color palette applied via inline `style` props. Do not introduce additional colors.
 
-| Role | Hex | Usage |
-|---|---|---|
-| Primary | `#2d7de4` | Borders, arrows, active headers, source node headers |
-| Background | `#f7fbfe` | Node fills, light backgrounds, arrow label backgrounds |
-| Accent | `#1069dc` | Emphasis text, catalog background, darker active elements |
-| Muted | `#62758a` | Secondary text, inactive borders (e.g. infrastructure source header), secondary arrows |
-| OutputBorder | `#10b981` | Output/result node headers and borders (green) |
+| Role         | Hex       | Usage                                                                                  |
+| ------------ | --------- | -------------------------------------------------------------------------------------- |
+| Primary      | `#2d7de4` | Borders, arrows, active headers, source node headers                                   |
+| Background   | `#f7fbfe` | Node fills, light backgrounds, arrow label backgrounds                                 |
+| Accent       | `#1069dc` | Emphasis text, catalog background, darker active elements                              |
+| Muted        | `#62758a` | Secondary text, inactive borders (e.g. infrastructure source header), secondary arrows |
+| OutputBorder | `#10b981` | Output/result node headers and borders (green)                                         |
 
 Define these as a constant object at the top of each diagram file:
 
@@ -497,8 +529,8 @@ const COLORS = {
   background: '#f7fbfe',
   accent: '#1069dc',
   muted: '#62758a',
-  outputBorder: '#10b981',
-};
+  outputBorder: '#10b981'
+}
 ```
 
 Entity model diagrams may add semantic aliases (`fk: '#10b981'`, `pk: '#f59e0b'`) but must not introduce new base colors.
@@ -510,42 +542,69 @@ Entity model diagrams may add semantic aliases (`fk: '#10b981'`, `pk: '#f59e0b'`
 ```tsx
 function NodePill({ children }: { children: React.ReactNode }) {
   return (
-    <div className="text-[10px] rounded px-2 py-1 text-center"
-      style={{ color: COLORS.muted, backgroundColor: COLORS.background, border: `1px solid ${COLORS.primary}` }}>
+    <div
+      className="text-[10px] rounded px-2 py-1 text-center"
+      style={{
+        color: COLORS.muted,
+        backgroundColor: COLORS.background,
+        border: `1px solid ${COLORS.primary}`
+      }}
+    >
       {children}
     </div>
-  );
+  )
 }
 ```
 
 **NodeSection** — a titled group of pills with a section header:
 
 ```tsx
-function NodeSection({ title, items, id }: { title: string; items: string[]; id?: string }) {
+function NodeSection({
+  title,
+  items,
+  id
+}: {
+  title: string
+  items: string[]
+  id?: string
+}) {
   return (
     <div id={id} className="flex flex-col gap-1">
-      <div className="text-[9px] font-bold uppercase tracking-wide" style={{ color: COLORS.muted }}>
+      <div
+        className="text-[9px] font-bold uppercase tracking-wide"
+        style={{ color: COLORS.muted }}
+      >
         {title}
       </div>
-      {items.map((item) => <NodePill key={item}>{item}</NodePill>)}
+      {items.map((item) => (
+        <NodePill key={item}>{item}</NodePill>
+      ))}
     </div>
-  );
+  )
 }
 ```
 
 **Section divider** — a thin horizontal line between NodeSections inside a single box:
 
 ```tsx
-<div className="w-full h-px" style={{ backgroundColor: COLORS.primary, opacity: 0.2 }} />
+<div
+  className="w-full h-px"
+  style={{ backgroundColor: COLORS.primary, opacity: 0.2 }}
+/>
 ```
 
 **IconGrid** — platform icon grids:
 
 ```tsx
-<div className="grid gap-2" style={{ gridTemplateColumns: `repeat(3, minmax(0, 1fr))` }}>
+<div
+  className="grid gap-2"
+  style={{ gridTemplateColumns: `repeat(3, minmax(0, 1fr))` }}
+>
   <div className="flex flex-col items-center">
     <PlatformIcon className="w-6 h-6" />
-    <span className="text-[9px] mt-0.5" style={{ color: COLORS.muted }}>Label</span>
+    <span className="text-[9px] mt-0.5" style={{ color: COLORS.muted }}>
+      Label
+    </span>
   </div>
 </div>
 ```
@@ -553,10 +612,14 @@ function NodeSection({ title, items, id }: { title: string; items: string[]; id?
 **Catalog pills** — icon+label rows inside Mission Control box:
 
 ```tsx
-<div className="flex items-center gap-2 rounded-lg px-3 py-2 border"
-  style={{ backgroundColor: COLORS.background, borderColor: COLORS.primary }}>
+<div
+  className="flex items-center gap-2 rounded-lg px-3 py-2 border"
+  style={{ backgroundColor: COLORS.background, borderColor: COLORS.primary }}
+>
   <HiIcon className="w-4 h-4" style={{ color: COLORS.accent }} />
-  <span className="text-xs font-medium" style={{ color: COLORS.muted }}>Label</span>
+  <span className="text-xs font-medium" style={{ color: COLORS.muted }}>
+    Label
+  </span>
 </div>
 ```
 
@@ -568,29 +631,33 @@ All arrows use `react-xarrows`. Define shared prop objects as constants to avoid
 
 #### Line Style Catalog
 
-| Style | Color | Stroke | Head | Line | Animation | Curve | Head Shape | When to Use |
-|-------|-------|--------|------|------|-----------|-------|------------|-------------|
-| Primary | `COLORS.primary` | 3 | 4 | Dashed (10/5) | Yes | — | arrow1 | Main data flow in flow/pipeline diagrams |
-| Secondary | `COLORS.muted` | 2 | 3 | Dashed (6/4) | Yes | — | arrow1 | Supplementary flows (e.g., sign-in logs alongside identity data) |
-| ER Relationship | `COLORS.muted` | 1.5 | 4 | Solid | No | 0.4 | arrow1 | Foreign key relationships in entity model diagrams |
-| ER FK Highlight | `COLORS.fk` | 1.5 | 4 | Solid | No | 0.4 | arrow1 | Key relationships to emphasize (e.g., ConfigAccess → ConfigItem) |
-| Bidirectional | `COLORS.muted` | 2 | 3 | Solid | No | — | circle | Bidirectional or non-directional connections |
+| Style           | Color            | Stroke | Head | Line          | Animation | Curve | Head Shape | When to Use                                                      |
+| --------------- | ---------------- | ------ | ---- | ------------- | --------- | ----- | ---------- | ---------------------------------------------------------------- |
+| Primary         | `COLORS.primary` | 3      | 4    | Dashed (10/5) | Yes       | —     | arrow1     | Main data flow in flow/pipeline diagrams                         |
+| Secondary       | `COLORS.muted`   | 2      | 3    | Dashed (6/4)  | Yes       | —     | arrow1     | Supplementary flows (e.g., sign-in logs alongside identity data) |
+| ER Relationship | `COLORS.muted`   | 1.5    | 4    | Solid         | No        | 0.4   | arrow1     | Foreign key relationships in entity model diagrams               |
+| ER FK Highlight | `COLORS.fk`      | 1.5    | 4    | Solid         | No        | 0.4   | arrow1     | Key relationships to emphasize (e.g., ConfigAccess → ConfigItem) |
+| Bidirectional   | `COLORS.muted`   | 2      | 3    | Solid         | No        | —     | circle     | Bidirectional or non-directional connections                     |
 
 #### Decision Rules
 
 **Animated vs non-animated:**
+
 - **Animated dashed lines** (`dashness: { ..., animation: 1 }`) — use for diagrams showing **active data movement**: scraping, streaming, API calls, data pipelines. The animation conveys that data flows continuously through the connection.
 - **Static solid lines** (no `dashness`) — use for diagrams showing **structural relationships**: entity models, schema references, foreign keys. These connections are permanent and don't represent movement.
 
 **Dashed vs solid:**
+
 - **Dashed** — data flow, pipelines, scraper connections (things that run periodically or continuously)
 - **Solid** — entity relationships, foreign keys, schema references (things that exist permanently)
 
 **Primary vs secondary:**
+
 - **Primary** — the main story the diagram tells; the reader should follow these arrows first
 - **Secondary** — additional context that supplements the main flow; thinner stroke and muted color signal lower visual priority
 
 **Arrow end shapes** (react-xarrows `headShape` / `tailShape`):
+
 - `"arrow1"` (default) — standard arrowhead pointing in flow direction. Use for all directional connections.
 - `"circle"` — round dot at the endpoint. Use for bidirectional or non-directional connections (e.g., sync relationships, infrastructure loops).
 - `showHead={false}` — no arrowhead. Use for undirected associations or when a label already conveys the relationship.
@@ -605,12 +672,15 @@ const primaryArrowProps = {
   color: COLORS.primary,
   strokeWidth: 3,
   headSize: 4,
-  dashness: { strokeLen: 10, nonStrokeLen: 5, animation: 1 },
-} as const;
+  dashness: { strokeLen: 10, nonStrokeLen: 5, animation: 1 }
+} as const
 
-<Xarrow start={id('source')} end={id('target')}
+;<Xarrow
+  start={id('source')}
+  end={id('target')}
   {...primaryArrowProps}
-  startAnchor="right" endAnchor="left"
+  startAnchor="right"
+  endAnchor="left"
 />
 ```
 
@@ -621,8 +691,8 @@ const secondaryArrowProps = {
   color: COLORS.muted,
   strokeWidth: 2,
   headSize: 3,
-  dashness: { strokeLen: 6, nonStrokeLen: 4, animation: 1 },
-} as const;
+  dashness: { strokeLen: 6, nonStrokeLen: 4, animation: 1 }
+} as const
 ```
 
 **ER relationship arrows** — solid lines for entity model diagrams (foreign keys, schema references):
@@ -632,11 +702,11 @@ const arrowProps = {
   color: COLORS.muted,
   strokeWidth: 1.5,
   headSize: 4,
-  curveness: 0.4,
-} as const;
+  curveness: 0.4
+} as const
 
 // Override color for key FK relationships
-<Xarrow {...arrowProps} color={COLORS.fk} />
+;<Xarrow {...arrowProps} color={COLORS.fk} />
 ```
 
 **Offset anchors for parallel arrows** — when two arrows connect the same pair of nodes, offset them vertically to avoid overlap. Use `path="straight"` with offset arrows:
@@ -660,8 +730,10 @@ const arrowProps = {
 **Spacer divs for arrow length control** — insert an empty div between nodes to lengthen the arrow gap:
 
 ```tsx
-{/* Spacer between MC and Audit Report for longer arrow */}
-<div style={{ minWidth: '60px' }} />
+{
+  /* Spacer between MC and Audit Report for longer arrow */
+}
+;<div style={{ minWidth: '60px' }} />
 ```
 
 **Arrow labels** — position so the connecting line remains visible:
@@ -688,22 +760,22 @@ endAnchor={{ position: 'left', offset: { y: 40 } }}
 
 ### Typography & Sizing
 
-| Element | Class | Notes |
-|---|---|---|
-| BoxNode header text | `text-white text-xs font-bold` | Always white on dark header |
-| Body/sub-item text | `text-[10px] text-{color}-700` | Dark tint on light body |
-| NodeSection headers | `text-[9px] font-bold uppercase tracking-wide` | Muted color |
-| Icon labels (tiny) | `text-[8px] text-gray-500` | Only for captions directly under icons |
-| Arrow labels | `text-[9px] font-semibold` | In colored pill |
-| Catalog title | `text-white text-lg font-bold tracking-wide` | Larger for visual weight |
+| Element             | Class                                          | Notes                                  |
+| ------------------- | ---------------------------------------------- | -------------------------------------- |
+| BoxNode header text | `text-white text-xs font-bold`                 | Always white on dark header            |
+| Body/sub-item text  | `text-[10px] text-{color}-700`                 | Dark tint on light body                |
+| NodeSection headers | `text-[9px] font-bold uppercase tracking-wide` | Muted color                            |
+| Icon labels (tiny)  | `text-[8px] text-gray-500`                     | Only for captions directly under icons |
+| Arrow labels        | `text-[9px] font-semibold`                     | In colored pill                        |
+| Catalog title       | `text-white text-lg font-bold tracking-wide`   | Larger for visual weight               |
 
 ### Icon Usage
 
-| Library | When to Use | Examples |
-|---|---|---|
-| `@flanksource/icons/mi` | Vendor/service logos | `AzureAd`, `Aws`, `K8S`, `Postgres`, `ConfigDbWhite`, `Http`, `MissionControlWhite` |
-| `react-icons/hi2` | Generic concepts, UI glyphs | `HiUserGroup`, `HiShieldCheck`, `HiKey` |
-| `react-icons/fa` | Supplementary generic icons | `FaHistory`, `FaDatabase`, `FaServer` |
+| Library                 | When to Use                 | Examples                                                                            |
+| ----------------------- | --------------------------- | ----------------------------------------------------------------------------------- |
+| `@flanksource/icons/mi` | Vendor/service logos        | `AzureAd`, `Aws`, `K8S`, `Postgres`, `ConfigDbWhite`, `Http`, `MissionControlWhite` |
+| `react-icons/hi2`       | Generic concepts, UI glyphs | `HiUserGroup`, `HiShieldCheck`, `HiKey`                                             |
+| `react-icons/fa`        | Supplementary generic icons | `FaHistory`, `FaDatabase`, `FaServer`                                               |
 
 Sizes: `w-4 h-4` in headers, `w-5 h-5` medium, `w-6 h-6` default in grids, `w-7 h-7` primary/hero and IconNode icons.
 
@@ -712,14 +784,14 @@ Sizes: `w-4 h-4` in headers, `w-5 h-5` medium, `w-6 h-6` default in grids, `w-7 
 `react-xarrows` measures DOM elements and will break Docusaurus SSR. Every diagram component **must** wrap its rendering:
 
 ```tsx
-import BrowserOnly from '@docusaurus/BrowserOnly';
+import BrowserOnly from '@docusaurus/BrowserOnly'
 
 export default function MyDiagram(props) {
   return (
     <BrowserOnly fallback={<div className="w-full" />}>
       {() => <MyDiagramInner {...props} />}
     </BrowserOnly>
-  );
+  )
 }
 ```
 
@@ -777,18 +849,18 @@ Always provide meaningful alt text.
 - Active voice, present tense ("Mission Control scrapes..." not "will be scraped by...")
 - Use Flanksource terms consistently:
 
-| Use | Don't Use |
-|---|---|
-| scraper | crawler, collector |
-| health check | monitor, probe |
-| playbook | runbook, workflow |
-| catalog | CMDB, inventory (as product name) |
-| config item | resource (when referring to catalog entries) |
-| canary | (only for the CRD kind, not as a general term) |
+| Use          | Don't Use                                      |
+| ------------ | ---------------------------------------------- |
+| scraper      | crawler, collector                             |
+| health check | monitor, probe                                 |
+| playbook     | runbook, workflow                              |
+| catalog      | CMDB, inventory (as product name)              |
+| config item  | resource (when referring to catalog entries)   |
+| canary       | (only for the CRD kind, not as a general term) |
 
 ### Code Blocks
 
-- Always include `title` attribute on YAML blocks: `` ```yaml title="descriptive-name.yaml" ``
+- Always include `title` attribute on YAML blocks: ` ```yaml title="descriptive-name.yaml" `
 - Use complete, minimal examples that can be applied as-is
 - Use correct `apiVersion` and `kind` for each CRD (see table in section 1)
 - Indent YAML with 2 spaces
@@ -796,20 +868,20 @@ Always provide meaningful alt text.
 ### Admonitions
 
 ```mdx
-:::info              # Prerequisites, contextual information
-:::tip               # Best practices, performance recommendations
-:::warning           # Destructive actions, breaking changes, license requirements
-:::note              # Clarifications, edge cases, implementation details
+:::info # Prerequisites, contextual information
+:::tip # Best practices, performance recommendations
+:::warning # Destructive actions, breaking changes, license requirements
+:::note # Clarifications, edge cases, implementation details
 ```
 
 ### Cross-Linking
 
-| Pattern | When to Use |
-|---|---|
-| `<Cards>` with `<Card>` | Navigation sections (Next Steps, related pages, sub-page grids) |
-| `[text](/docs/path)` | Inline contextual references within prose |
-| `<DocCardList />` | Auto-listing children in hierarchical index pages |
-| `<details summary="...">` | Optional/advanced content that most readers can skip |
+| Pattern                   | When to Use                                                     |
+| ------------------------- | --------------------------------------------------------------- |
+| `<Cards>` with `<Card>`   | Navigation sections (Next Steps, related pages, sub-page grids) |
+| `[text](/docs/path)`      | Inline contextual references within prose                       |
+| `<DocCardList />`         | Auto-listing children in hierarchical index pages               |
+| `<details summary="...">` | Optional/advanced content that most readers can skip            |
 
 ### Brand Colors (Reference)
 
