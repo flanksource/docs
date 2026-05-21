@@ -40,9 +40,52 @@ The Prometheus Check connects to the Prometheus host, performs the desired query
       description: 'Bearer token to use for authentication',
       scheme: 'EnvVar'
     },
-    { field: 'oauth', scheme: '[OAuth](#oauth)' }
+    { field: 'oauth', scheme: '[OAuth](#oauth)' },
+    {
+      field: 'tls',
+      description: 'TLS and mutual TLS configuration',
+      scheme: '[TLSConfig](#tls-config)'
+    }
   ]}
 />
+
+## TLS Config
+
+Use `tls.ca` to verify Prometheus with a custom CA. Add `tls.cert` and `tls.key` for mutual TLS.
+
+<Fields
+  rows={[
+    {
+      field: 'ca',
+      description:
+        'PEM encoded CA certificate to verify the Prometheus server certificate',
+      scheme: 'EnvVar'
+    },
+    {
+      field: 'cert',
+      description: 'PEM encoded client certificate',
+      scheme: 'EnvVar'
+    },
+    {
+      field: 'key',
+      description: 'PEM encoded client private key',
+      scheme: 'EnvVar'
+    },
+    {
+      field: 'handshakeTimeout',
+      description: 'TLS handshake timeout. Defaults to 10 seconds',
+      scheme: 'Duration'
+    },
+    {
+      field: 'insecureSkipVerify',
+      description:
+        'Skip verification of the server certificate chain and host name',
+      scheme: 'bool'
+    }
+  ]}
+/>
+
+
 
 ## OAuth
 
@@ -62,21 +105,28 @@ The Prometheus Check connects to the Prometheus host, performs the desired query
 
 ## Result Variables
 
-| Name         | Description             | Scheme                      |
-| ------------ | ----------------------- | --------------------------- |
-| `value`      |                         | _float_                     |
-| `firstValue` | Number of rows returned | _int_                       |
+| Name         | Description             | Scheme                     |
+| ------------ | ----------------------- | -------------------------- |
+| `value`      |                         | _float_                    |
+| `firstValue` | Number of rows returned | _int_                      |
 | `results`    | A list of results       | _[]map[string]interface{}_ |
-
 
 ## Examples
 
 ### Create a check per prometheus job using a transform
 
 ```yaml title="jobs.yaml"  file=<rootDir>/modules/canary-checker/fixtures/prometheus/jobs.yaml
+
 ```
 
 ### Create a check per failing job only
 
 ```yaml title="jobs.yaml"  file=<rootDir>/modules/canary-checker/fixtures/prometheus/jobs-fail-only.yaml
+
+```
+
+### Prometheus with mutual TLS
+
+```yaml title="prometheus-mtls.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/prometheus_mtls.yaml
+
 ```
