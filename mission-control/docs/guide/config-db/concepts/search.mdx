@@ -1,0 +1,233 @@
+---
+title: Search
+sidebar_custom_props:
+  icon: stash:search-box-light
+---
+
+The catalog search uses a field-based query language that lets you filter catalog items by name, type, health, labels, tags, costs, and more. You can combine multiple conditions and use date math to find resources based on when they were created or updated.
+
+## Syntax
+
+A search query is a space-separated list of `field=value` conditions:
+
+```
+field1=value1 field2>value2 field3=value3*
+```
+
+All conditions are combined with AND logic. Use `|` to separate conditions that should be combined with OR logic:
+
+```
+type=Kubernetes::Pod | type=Kubernetes::Deployment
+```
+
+Use parentheses to group conditions:
+
+```
+(type=Kubernetes::Pod | type=Kubernetes::Deployment) health=unhealthy
+```
+
+A bare word without a field name is treated as a name prefix search, so `nginx` is equivalent to `name=nginx*`.
+
+## Operators
+
+| Operator | Example | Description | Supported types |
+| -------- | ------- | ----------- | --------------- |
+| `=` | `status=healthy` | Equals (exact match or wildcard) | `string`, `int`, `json` |
+| `!=` | `health!=unhealthy` | Not equals | `string`, `int`, `json` |
+| `=*` | `name=*-prod` or `name=api-*` | Prefix or suffix wildcard match | `string`, `int` |
+| `>` | `created_at>now-24h` | Greater than | `datetime`, `int` |
+| `<` | `updated_at<2025-01-01` | Less than | `datetime`, `int` |
+| `>=` | `cost_total_30d>=100` | Greater than or equal | `datetime`, `int` |
+| `<=` | `cost_total_30d<=1000` | Less than or equal | `datetime`, `int` |
+
+## Existence Checks
+
+To check whether a label, tag, or property key exists on a resource, reference the key without an operator:
+
+```
+labels.app           # has the label "app"
+!labels.app          # does not have the label "app"
+tags.environment     # has the tag "environment"
+!tags.environment    # does not have the tag "environment"
+properties.cpu       # has a "cpu" property
+!properties.cpu      # does not have a "cpu" property
+```
+
+## Date Queries
+
+Use absolute or relative dates with comparison operators:
+
+- **Absolute**: `2025-01-15`, `2025-01-15T10:30:00Z`
+- **Relative**: `now-24h`, `now-7d`, `now+1w`
+- **Duration units**: `s` (seconds), `m` (minutes), `h` (hours), `d` (days), `w` (weeks), `y` (years)
+
+## JSON Field Access
+
+Access nested fields in labels, tags, and config data using dot notation:
+
+```
+labels.app=nginx
+tags.env=production
+config.spec.replicas>3
+```
+
+## Type Prefix Matching
+
+The `type` field supports partial matching — a short type name matches all known types by suffix:
+
+```
+type=pod          # matches Kubernetes::Pod
+type=Deployment   # matches Kubernetes::Deployment
+type=EC2          # matches AWS::EC2::Instance
+```
+
+## Common Fields
+
+These fields control pagination and ordering and are available in any search query:
+
+| Field | Description |
+| ----- | ----------- |
+| `limit` | Maximum number of results to return |
+| `sort` or `@order` | Sort results by a field. Prefix with `-` for descending order |
+| `offset` | Skip the first N results |
+
+## Searchable Fields
+
+### Catalog Items
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `name` | `string` | Resource name |
+| `namespace` | `string` | Kubernetes namespace (alias for `tags.namespace`) |
+| `type` or `config_type` | `string` | Resource type (e.g., `Kubernetes::Pod`) |
+| `config_class` | `string` | Config class (e.g., `Deployment`, `Node`) |
+| `status` | `string` | Current status |
+| `health` | `string` | Health status |
+| `source` | `string` | Source identifier |
+| `external_id` | `string` | External identifier |
+| `agent` or `agent_id` | `string` | Agent name or ID |
+| `labels.<key>` | `json` | Kubernetes-style labels |
+| `tags.<key>` | `json` | Scraper-assigned tags |
+| `config.<path>` | `json` | Full configuration data |
+| `properties.<key>` | `json` | Resource properties |
+| `cost_per_minute` | `float` | Cost per minute |
+| `cost_total_1d` | `float` | Total cost over 1 day |
+| `cost_total_7d` | `float` | Total cost over 7 days |
+| `cost_total_30d` | `float` | Total cost over 30 days |
+| `created_at` or `created` | `datetime` | Creation timestamp |
+| `updated_at` or `updated` | `datetime` | Last update timestamp |
+| `deleted_at` or `deleted` | `datetime` | Soft deletion timestamp |
+| `related` | `special` | Find configs related to a given config ID. See [Related Configs](#related-configs) |
+
+### Config Changes
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `string` | Change ID |
+| `config_id` | `string` | Parent config ID |
+| `name` | `string` | Change name |
+| `type` | `string` | Config type |
+| `change_type` or `changeType` | `string` | Type of change (e.g., `diff`, `event`) |
+| `severity` | `string` | Change severity |
+| `summary` | `string` | Change summary |
+| `count` | `int` | Occurrence count |
+| `agent_id` or `agent` | `string` | Agent ID |
+| `tags.<key>` | `json` | Change tags |
+| `details.<path>` | `json` | Additional details |
+| `created_at` or `created` | `datetime` | Change timestamp |
+| `first_observed` | `datetime` | First observation time |
+
+## Related Configs
+
+The `related` field traverses the relationship graph to find configs connected to a given config ID.
+
+**Syntax**: `related=<config_id>[,direction=<direction>][,depth=<depth>][,type=<type>]`
+
+| Parameter | Values | Default | Description |
+| --------- | ------ | ------- | ----------- |
+| `direction` | `incoming`, `outgoing`, `all` | `all` | Direction of the relationship traversal |
+| `depth` | integer | `5` | Maximum number of hops to traverse |
+| `type` | `hard`, `soft`, `both` | `both` | Relationship link type |
+
+## Examples
+
+```
+# Find all unhealthy EC2 instances
+type=AWS::EC2::Instance health=unhealthy
+```
+
+This example:
+
+1. Filters by resource type `AWS::EC2::Instance`
+2. Further narrows results to only those with `health=unhealthy`
+
+---
+
+```
+# Find pods or deployments that are unhealthy
+(type=Kubernetes::Pod | type=Kubernetes::Deployment) health=unhealthy
+```
+
+This example:
+
+1. Uses OR logic within parentheses to match either pods or deployments
+2. Applies the AND condition `health=unhealthy` to the grouped result
+
+---
+
+```
+# Find recently created resources
+created_at>now-24h
+```
+
+This example:
+
+1. Uses the relative date `now-24h` to match resources created in the last 24 hours
+
+---
+
+```
+# Find nginx pods in the production cluster
+type=Kubernetes::Pod labels.app=nginx tags.cluster=prod
+```
+
+This example:
+
+1. Filters by pod type
+2. Checks the `app` label value equals `nginx`
+3. Checks the `cluster` tag value equals `prod`
+
+---
+
+```
+# Find configs updated in January 2025
+updated_at>2025-01-01 updated_at<2025-02-01
+```
+
+This example:
+
+1. Uses two date range conditions combined with AND to create a time window
+
+---
+
+```
+# Find high-cost resources, sorted by cost descending
+cost_total_30d>1000 @order=-cost_total_30d
+```
+
+This example:
+
+1. Filters to resources with over $1000 in 30-day costs
+2. Orders results by cost from highest to lowest using the `-` descending prefix
+
+---
+
+```
+# Find configs related to a specific resource
+related=3b1a2c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d,direction=outgoing,depth=3,type=hard
+```
+
+This example:
+
+1. Traverses outgoing hard relationships from the given config ID
+2. Limits traversal to 3 hops
