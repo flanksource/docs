@@ -6,64 +6,95 @@ sidebar_custom_props:
 
 import Inhibition from '../../../reference/notifications/_inhibition.mdx';
 
-Multiple related notifications may be generated within a short time window. Use notification inhibition to send the
-first useful notification and suppress notifications for related config items.
+When something breaks in your infrastructure, it rarely breaks alone. A crashing pod makes its ReplicaSet unhealthy,
+which makes its Deployment unhealthy — and one root cause turns into three notifications.
 
-For example, when a Kubernetes pod becomes unhealthy, its ReplicaSet and Deployment might also become unhealthy. If a
-notification listens for `config.unhealthy`, you can send the pod notification and inhibit the ReplicaSet and Deployment
-notifications that follow.
+Inhibition lets you keep the notification that points closest to the root cause and automatically suppress the related
+notifications that follow it.
 
-## Choose the alert to keep
+## How it works
 
-Start with the notification that gives you the clearest signal, then inhibit the related notifications that add noise.
-For Kubernetes roll-up health, that usually means keeping the Pod alert and suppressing the ReplicaSet or Deployment
-alerts that follow.
+An inhibition rule has two sides:
 
-A sent notification for the `from` resource becomes the inhibitor. During the notification's `repeatInterval`, Mission
-Control checks new config notifications for related resources listed in `to`. When a match is found, Mission Control
-records the later notification as `inhibited` instead of sending it.
+- `from` — the config type whose notification you want to **keep** (the inhibitor)
+- `to` — the related config types whose notifications you want to **suppress**
 
-For example, this rule keeps the Pod notification and inhibits notifications from its parent ReplicaSet or Deployment:
+Once a notification is sent for a `from` resource, it starts inhibiting. For the length of the notification's
+`repeatInterval`, any new event for a related `to` resource is recorded as `inhibited` instead of being delivered.
 
-- `from: Kubernetes::Pod`
-- `to: [Kubernetes::ReplicaSet, Kubernetes::Deployment]`
-- `direction: incoming`
+Walking through the pod example:
 
-:::note
-Set `repeatInterval` on the notification. Mission Control uses it as the inhibition window.
+1. A pod crashes and a `config.unhealthy` notification for it is sent. The rule below lists `Kubernetes::Pod` in
+   `from`, so this notification becomes an inhibitor.
+2. Moments later, the pod's ReplicaSet and Deployment also turn unhealthy. Their types are listed in `to`, so Mission
+   Control walks the relationship graph from each of them, finds the pod that already notified, and suppresses both.
+3. You receive one notification — the pod alert — instead of three.
+
+```yaml
+inhibitions:
+  - direction: incoming
+    from: Kubernetes::Pod
+    to:
+      - Kubernetes::ReplicaSet
+      - Kubernetes::Deployment
+```
+
+:::note Things to keep in mind
+
+- Inhibition requires `repeatInterval` on the notification — it doubles as the inhibition window. Without it,
+  inhibition rules are ignored.
+- Both the kept and the suppressed alerts must come from the **same** Notification resource, so the notification's
+  `events` and `filter` must match all the resource types involved.
+- Inhibition works on catalog (config) events such as `config.unhealthy` — not on check or component events.
+- Order matters: only an already-sent `from` notification can inhibit. If the Deployment's alert happens to arrive
+  before the Pod's, both are sent.
+- Inhibited notifications aren't lost — they appear in the notification send history with the status `inhibited`.
+
 :::
 
-## Add an inhibition
+## Writing your own rule
 
-1. Add `repeatInterval` to the notification.
-2. Set `from` to the config type whose notification you want to keep.
-3. Set `to` to the related config types you want to suppress.
-4. Set `direction` from `from` to `to`:
-   - `incoming` for parent or upstream resources.
-   - `outgoing` for child or downstream resources.
-   - `all` when either direction should match.
-5. Set `depth` when the related resource is more than one relationship away.
-6. Set `soft: true` when the relationship is soft, such as Node-to-Pod.
+1. **Pick the alert to keep.** Choose the resource type that gives the clearest signal about the root cause — that's
+   your `from`. For Kubernetes roll-up health, that's usually the Pod.
+2. **List the noise.** The related types whose alerts repeat the same information go in `to`.
+3. **Choose a direction.** Ask where the `to` resources sit relative to `from` in the relationship graph:
+   - They're parents or owners (Pod → its ReplicaSet/Deployment): use `incoming`.
+   - They're children or dependents (Node → its Pods): use `outgoing`.
+   - Could be either: use `all`.
+4. **Count the hops and set `depth`.** Each relationship level is one hop: Pod → ReplicaSet is 1, Pod → ReplicaSet →
+   Deployment is 2. Defaults to 5 when omitted.
+5. **Set `soft: true` for soft relationships.** Ownership links like Deployment → Pod are hard relationships and match
+   by default. Placement links like Node → Pod are soft, and are only followed when `soft: true`.
+
+## Examples
+
+### Keep the Pod alert, suppress its ReplicaSet and Deployment
+
+A pod's failure usually explains why its parents are unhealthy, so this notification keeps the pod alert and inhibits
+the parent alerts that follow within the 4-hour window. The direction is `incoming` because ReplicaSets and Deployments
+are parents of the pod, and `depth: 2` covers the two hops from Pod up to Deployment.
+
+```yaml title="deployment-with-inhibition.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/deployment-with-inhibition.yaml {9,12-18}
+```
+
+How this plays out:
+
+| Time  | Resource                | Event              | Action                                          |
+| ----- | ----------------------- | ------------------ | ----------------------------------------------- |
+| 10:00 | Pod `api-7d9f`          | `config.unhealthy` | Notification sent _(becomes the inhibitor)_     |
+| 10:01 | ReplicaSet `api-7d9f`   | `config.unhealthy` | Inhibited _(related pod already notified)_      |
+| 10:02 | Deployment `api`        | `config.unhealthy` | Inhibited _(related pod already notified)_      |
+| 15:30 | Deployment `api`        | `config.unhealthy` | Notification sent _(4h window expired)_         |
+
+### Keep the Node alert, suppress its Pods
+
+When a node goes down, every pod scheduled on it raises an alert. This notification keeps the node alert and inhibits
+the pod alerts. The direction is `outgoing` because the pods sit below the node, and `soft: true` is required because
+Node-to-Pod is a soft relationship.
+
+```yaml title="node-with-inhibition.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/node-with-inhibition.yaml {9,12-18}
+```
 
 ## Fields
 
 <Inhibition />
-
-## Examples
-
-### Inhibit parent Kubernetes resources after a pod notification
-
-This example sends the first pod notification. If the related ReplicaSet or Deployment becomes unhealthy within the
-`repeatInterval`, those notifications are inhibited.
-
-```yaml title="deployment-with-inhibition.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/deployment-with-inhibition.yaml
-```
-
-### Inhibit pod notifications after a Node notification
-
-This example sends the first Node notification. If pods scheduled on that Node become unhealthy within the
-`repeatInterval`, those pod notifications are inhibited. It uses `soft: true` because Node-to-Pod relationships are soft
-relationships.
-
-```yaml title="node-with-inhibition.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/node-with-inhibition.yaml
-```
