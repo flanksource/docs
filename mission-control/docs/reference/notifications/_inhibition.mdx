@@ -3,31 +3,30 @@
     {
       field: 'depth',
       scheme: 'int',
-      description: 'Defines how many levels of child or parent resources to traverse.'
+      description: 'Maximum number of relationship levels to traverse. Defaults to 5 when omitted.'
     },
     {
       field: 'direction',
-      scheme: '`inoming`|`outgoing`|`both`',
+      scheme: '`incoming` | `outgoing` | `all`',
       required: true,
-      description: 'Specifies the traversal direction in relation to the "From" resource. Can be "outgoing" (looks for child resources), "incoming" (looks for parent resources), or "all" (considers both).'
+      description: 'Relationship direction from `from` to `to`. Use `outgoing` when `to` resources are downstream or child resources, `incoming` when `to` resources are upstream or parent resources, and `all` to check both directions.'
     },
     {
       field: 'from',
       scheme: '`string`',
       required: true,
-      description: 'Specifies the starting resource type (for example, "Kubernetes::Deployment").'
+      description: 'Config type whose sent notification can inhibit notifications for related `to` resources. For example, `Kubernetes::Deployment`.'
     },
     {
       field: 'soft',
       scheme: 'bool',
-      description: 'When true, relates using soft relationships. Example: Deployment to Pod is hard relationship, but Node to Pod is soft relationship.'
+      description: 'When false, only hard relationships are considered. When true, both hard and soft relationships are considered. For example, Deployment to Pod is a hard relationship, but Node to Pod is a soft relationship.'
     },
     {
       field: 'to',
       scheme: '`[]string`',
       required: true,
-      description: 'Specifies the traversal direction in relation to the `from` resource. `outgoing` looks for child resources and `incoming` looks for parent resources.'
+      description: 'Config types that can be inhibited when they are related to a `from` resource that already sent this notification within the `repeatInterval` window.'
     }
   ]}
 />
-
