@@ -1,0 +1,234 @@
+---
+title: PermissionGroup CRD
+---
+
+# PermissionGroup
+
+The `PermissionGroup` CRD allows you to define groups of permissions for role-based access control (RBAC) in Mission Control.
+
+## Definition
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: PermissionGroup
+metadata:
+  name: example-permission-group
+spec:
+  # Human-readable name of the permission group
+  name: API Team Access
+  
+  # Description of the permission group
+  description: Access permissions for the API team
+  
+  # List of permissions in this group
+  permissions:
+    - name: component.view
+      description: View component details
+      resources:
+        - components
+      verbs:
+        - get
+        - list
+    - name: component.edit
+      description: Edit components
+      resources:
+        - components
+      verbs:
+        - update
+        - patch
+```
+
+## Schema
+
+The `PermissionGroup` resource supports the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.name` | Human-readable name of the permission group |
+| `spec.description` | Description of the permission group |
+| `spec.labels` | Labels to categorize the permission group |
+| `spec.icon` | Icon for the permission group |
+| `spec.permissions` | List of permissions in this group |
+| `spec.permissions[].name` | Name of the permission |
+| `spec.permissions[].description` | Description of the permission |
+| `spec.permissions[].resources` | Resources the permission applies to |
+| `spec.permissions[].verbs` | Actions allowed on the resources |
+| `spec.permissions[].resourceNames` | Specific resource names the permission applies to |
+| `spec.permissions[].labels` | Label selectors for resources |
+| `spec.permissions[].expression` | CEL expression for complex permission rules |
+| `spec.groups` | User groups that have this permission group |
+| `spec.users` | Individual users that have this permission group |
+
+## Examples
+
+### Basic Developer Access
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: PermissionGroup
+metadata:
+  name: developer-access
+spec:
+  name: Developer Access
+  description: Standard access for developers
+  icon: code
+  permissions:
+    - name: component.view
+      description: View components
+      resources:
+        - components
+      verbs:
+        - get
+        - list
+    - name: canary.view
+      description: View canaries
+      resources:
+        - canaries
+      verbs:
+        - get
+        - list
+    - name: incident.view
+      description: View incidents
+      resources:
+        - incidents
+      verbs:
+        - get
+        - list
+  groups:
+    - developers
+```
+
+### Team-Specific Access
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: PermissionGroup
+metadata:
+  name: backend-team
+spec:
+  name: Backend Team Access
+  description: Access for the backend development team
+  permissions:
+    - name: component.manage
+      description: Manage backend components
+      resources:
+        - components
+      verbs:
+        - get
+        - list
+        - create
+        - update
+        - delete
+      labels:
+        team: backend
+    - name: canary.manage
+      description: Manage backend canaries
+      resources:
+        - canaries
+      verbs:
+        - get
+        - list
+        - create
+        - update
+        - delete
+      labels:
+        team: backend
+  groups:
+    - backend-developers
+    - backend-ops
+  users:
+    - backend-lead@example.com
+```
+
+### Admin Access
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: PermissionGroup
+metadata:
+  name: admin-access
+spec:
+  name: Admin Access
+  description: Full administrative access
+  permissions:
+    - name: admin.all
+      description: All administrative functions
+      resources:
+        - "*"
+      verbs:
+        - "*"
+  groups:
+    - system-administrators
+  users:
+    - admin@example.com
+```
+
+### Complex Resource-Specific Permissions
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: PermissionGroup
+metadata:
+  name: devops-team
+spec:
+  name: DevOps Team Access
+  description: Access for DevOps engineers
+  permissions:
+    - name: component.manage
+      description: Manage all components
+      resources:
+        - components
+      verbs:
+        - get
+        - list
+        - create
+        - update
+        - delete
+    - name: canary.manage
+      description: Manage canaries
+      resources:
+        - canaries
+      verbs:
+        - get
+        - list
+        - create
+        - update
+        - delete
+    - name: connection.manage
+      description: Manage connections
+      resources:
+        - connections
+      verbs:
+        - get
+        - list
+        - create
+        - update
+        - delete
+    - name: notification.manage
+      description: Manage notifications
+      resources:
+        - notifications
+        - notificationsilences
+      verbs:
+        - get
+        - list
+        - create
+        - update
+        - delete
+    - name: incident.respond
+      description: Respond to incidents
+      resources:
+        - incidents
+      verbs:
+        - get
+        - list
+        - update
+        - patch
+  groups:
+    - devops-engineers
+```
+
+## See Also
+
+- [Permission CRD](./permission.mdx)
+- [Role-Based Access Control](../rbac.mdx)

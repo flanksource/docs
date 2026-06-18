@@ -1,0 +1,157 @@
+---
+title: Topology CRD
+---
+
+# Topology
+
+The `Topology` CRD allows you to define and organize relationships and dependencies between components in your infrastructure, enabling you to model complex system architectures.
+
+## Definition
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: example-topology
+spec:
+  # Source component selector
+  source:
+    selector:
+      matchLabels:
+        app: frontend
+      
+  # Target component selector
+  target:
+    selector:
+      matchLabels:
+        app: backend
+        
+  # Relationship type
+  relationship: dependsOn
+  
+  # Additional properties
+  properties:
+    protocol: http
+    port: 8080
+```
+
+## Schema
+
+The `Topology` resource supports the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.source` | Source component specification |
+| `spec.source.selector` | Kubernetes label selector for source components |
+| `spec.source.id` | Specific component ID as source |
+| `spec.source.external` | Reference to an external component as source |
+| `spec.target` | Target component specification |
+| `spec.target.selector` | Kubernetes label selector for target components |
+| `spec.target.id` | Specific component ID as target |
+| `spec.target.external` | Reference to an external component as target |
+| `spec.relationship` | Type of relationship between source and target |
+| `spec.properties` | Additional properties for the relationship |
+| `spec.icon` | Icon to represent the relationship |
+| `spec.labels` | Labels to categorize the relationship |
+
+## Relationship Types
+
+Common relationship types include:
+
+| Relationship | Description |
+|--------------|-------------|
+| `dependsOn` | Source depends on target |
+| `contains` | Source contains target |
+| `isPartOf` | Source is part of target |
+| `connects` | Source connects to target |
+| `calls` | Source calls target |
+| `manages` | Source manages target |
+| `consumes` | Source consumes target |
+| `provides` | Source provides for target |
+
+## Examples
+
+### Simple Dependency
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: frontend-depends-on-backend
+spec:
+  source:
+    selector:
+      matchLabels:
+        app: frontend
+  target:
+    selector:
+      matchLabels:
+        app: backend
+  relationship: dependsOn
+```
+
+### Specific Component Relationship
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: payment-to-database
+spec:
+  source:
+    id: payment-service
+  target:
+    id: payment-database
+  relationship: connects
+  properties:
+    protocol: postgres
+    port: 5432
+    encrypted: true
+```
+
+### Complex Relationship with External Systems
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: app-to-external-api
+spec:
+  source:
+    selector:
+      matchLabels:
+        app: shopping-cart
+  target:
+    external:
+      name: Payment Gateway
+      type: external-service
+      icon: payment
+  relationship: calls
+  properties:
+    protocol: https
+    authentication: oauth2
+    criticality: high
+```
+
+### Hierarchical Relationship
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Topology
+metadata:
+  name: platform-contains-services
+spec:
+  source:
+    id: e-commerce-platform
+  target:
+    selector:
+      matchLabels:
+        type: microservice
+        platform: e-commerce
+  relationship: contains
+```
+
+## See Also
+
+- [Component CRD](./component.mdx)
+- [Topology Visualization](../topology/index.mdx)
