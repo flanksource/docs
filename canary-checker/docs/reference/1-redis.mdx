@@ -31,6 +31,11 @@ The Redis check connects to a specified Redis database instance to check its ava
 
 The `tlsConfig` field enables TLS for the Redis connection. Set `enable: true` to use the system trust store. Use `tlsConfig.ca` to verify with a custom CA. Add `tlsConfig.cert` and `tlsConfig.key` for mutual TLS.
 
+:::note
+Native Redis TLS connection string formats are **not** supported — e.g. `rediss://` scheme,
+`ssl=true`, or other query-string flags in the URL. TLS must be configured explicitly via `tlsConfig`.
+:::
+
 <Fields
   rows={[
     {
