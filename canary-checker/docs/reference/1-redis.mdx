@@ -12,6 +12,7 @@ The Redis check connects to a specified Redis database instance to check its ava
 
 ```yaml title="redis.yaml"  file=<rootDir>/modules/canary-checker/fixtures/datasources/redis_pass.yaml
 ```
+
 <HealthCheck name="redis" connection="url" rows={[
   {field: "url", description: "Redis connection URL", scheme: 'string'},
   {field: "connection", description: "Connection name e.g. connection://redis/prod", scheme: 'string'},
@@ -19,8 +20,75 @@ The Redis check connects to a specified Redis database instance to check its ava
   {field: "password", description: "Password for authentication", scheme: 'EnvVar'},
   {field: "db", description: "Database to be selected after connecting to the server", scheme: 'int'},
   {field: "addr", description: "Redis address (deprecated - use url instead)", scheme: 'string'},
-
+  {
+    field: 'tlsConfig',
+    description: 'TLS and mutual TLS configuration',
+    scheme: '[TLSConfig](#tls-config)'
+  },
 ]}/>
 
+## TLS Config
 
+The `tlsConfig` field enables TLS for the Redis connection. Set `enable: true` to use the system trust store. Use `tlsConfig.ca` to verify with a custom CA. Add `tlsConfig.cert` and `tlsConfig.key` for mutual TLS.
+
+<Fields
+  rows={[
+    {
+      field: 'enable',
+      description: 'Explicitly enable TLS when no other TLS field is set (e.g. for publicly-trusted servers that need no CA).',
+      scheme: 'bool'
+    },
+    {
+      field: 'ca',
+      description: 'PEM encoded CA certificate to verify the server certificate',
+      scheme: 'EnvVar'
+    },
+    {
+      field: 'cert',
+      description: 'PEM encoded client certificate for mutual TLS',
+      scheme: 'EnvVar'
+    },
+    {
+      field: 'key',
+      description: 'PEM encoded client private key for mutual TLS',
+      scheme: 'EnvVar'
+    },
+    {
+      field: 'handshakeTimeout',
+      description: 'TLS handshake timeout. Defaults to 10 seconds',
+      scheme: 'Duration'
+    },
+    {
+      field: 'insecureSkipVerify',
+      description: 'Skip verification of the server certificate chain and host name',
+      scheme: 'bool'
+    },
+  ]}
+/>
+
+## Examples
+
+### Redis with TLS (system trust store)
+
+```yaml title="redis-tls.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/redis-tls.yaml
+
+```
+
+### Redis with custom CA
+
+```yaml title="redis-custom-ca.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/redis-custom-ca.yaml
+
+```
+
+### Redis with mutual TLS
+
+```yaml title="redis-mtls.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/redis-mtls.yaml
+
+```
+
+### Redis with insecure TLS (skip verification)
+
+```yaml title="redis-tls-insecure.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/redis-tls-insecure.yaml
+
+```
 
