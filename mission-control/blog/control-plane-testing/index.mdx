@@ -71,7 +71,7 @@ To follow this tutorial, you need:
 
     Before you can create a canary you should start with a working example of a resource, in this example we use a `HelmRelease` to deploy a postgres database.
 
-    ```yaml file=flux.yaml
+    ```yaml title="flux.yaml" file=./flux.yaml
     ```
 
     Once you have verified the helm release is working on its own, you can then begin building the control plane test using `canary-checker`.
@@ -85,13 +85,13 @@ To follow this tutorial, you need:
     This tutorial uses the CLI for faster feedback, in production we recommend installing `canary-checker` as an operator using the [helm chart](https://canarychecker.io/getting-started) or as part of the full Mission Control [platform](/docs/installation/self-hosted).
 1. Next create a `Canary` CustomResourceDefinition (CRD)  using the `kubernetesResource` check type, the layout of the canary is as follows:
 
-    ```yaml title=basic-canary.yaml file=template.yaml
+    ```yaml title="basic-canary.yaml" file=./template.yaml
     ```
     <p/>
 
     Using the workload defined in step 1, the check definition is as follows:
 
-    ```yaml title=basic-canary.yaml file=basic-canary.yaml
+    ```yaml title="basic-canary.yaml" file=./basic-canary.yaml
     ```
     <p/>
 
@@ -183,7 +183,7 @@ To follow this tutorial, you need:
 3. The final test looks like:
 
 
-   ```yaml  file=custom-canary.yaml
+   ```yaml title="custom-canary.yaml" file=./custom-canary.yaml
    ```
 
 ## Conclusion
