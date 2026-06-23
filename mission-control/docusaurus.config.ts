@@ -300,6 +300,7 @@ export default async function createConfigAsync() {
           blog: {
             showReadingTime: true,
             blogTitle: 'Flanksource Blog',
+            remarkPlugins: [codeImport],
             // blogDescription: 'A Docusaurus powered blog!',
             postsPerPage: 'ALL',
             blogSidebarTitle: 'All posts',
