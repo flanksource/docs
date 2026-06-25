@@ -24,7 +24,7 @@ The GitHub Actions scraper creates configuration items from GitHub Actions workf
 
 The GitHub Repository scraper creates `GitHub::Repository` config items and optionally fetches security alerts (Dependabot, code scanning, secret scanning) and OpenSSF Scorecard data as analyses.
 
-```yaml title='github.yaml'
+```yaml title='github.yaml' file=<rootDir>/modules/config-db/fixtures/github.yaml
 
 ```
 
@@ -39,10 +39,20 @@ The GitHub Repository scraper creates `GitHub::Repository` config items and opti
 
 ### GitHubRepository
 
-| Field   | Description             | Scheme   | Required |
-| ------- | ----------------------- | -------- | -------- |
-| `owner` | GitHub repository owner | `string` | `true`   |
-| `repo`  | GitHub repository name  | `string` | `true`   |
+| Field   | Description                                                                                                               | Scheme   | Required |
+| ------- | ------------------------------------------------------------------------------------------------------------------------- | -------- | -------- |
+| `owner` | GitHub repository owner                                                                                                   | `string` | `true`   |
+| `repo`  | Exact repository name or comma-separated `collections.MatchItems` patterns. Pattern selectors skip archived repositories. | `string` | `true`   |
+
+### Repository selectors
+
+Use repository selectors when you want one GitHub scraper to discover multiple repositories for the same owner. The `repo` field supports exact names, `*` wildcards, comma-separated patterns, and `!` exclusions from `collections.MatchItems`.
+
+The following example discovers matching repositories for `flanksource`, mixes selector and exact entries, and deduplicates overlapping matches per GitHub scraper config.
+
+```yaml title='github-repo-selectors.yaml' file=<rootDir>/modules/config-db/fixtures/github-repo-selectors.yaml
+
+```
 
 ### SecurityFilters
 

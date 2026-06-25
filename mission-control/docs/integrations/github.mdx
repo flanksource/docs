@@ -125,22 +125,10 @@ spec:
 - Track repository settings and branch protection rules
 - Monitor organization membership and access
 
-```yaml title="github-scraper.yaml"
-apiVersion: configs.flanksource.com/v1
-kind: ScrapeConfig
-metadata:
-  name: github-repos
-spec:
-  schedule: "@every 6h"
-  github:
-    - organization: your-org
-      personalAccessToken:
-        valueFrom:
-          secretKeyRef:
-            name: github-credentials
-            key: token
-      repositories:
-        - include: "*"
+The following scraper example imports GitHub repositories into the catalog. The `repo` field supports exact repository names and `collections.MatchItems` selectors, so you can scan a group of repositories without listing every repository.
+
+```yaml title="github-repo-selectors.yaml" file=<rootDir>/modules/config-db/fixtures/github-repo-selectors.yaml
+
 ```
 
 ## Next Steps
