@@ -1,13 +1,13 @@
 ---
-title: "Canary Checker v1.1.3: Chained Checks, Generated Checks and TLS Everywhere"
+title: "Canary Checker v1.2: Chained Checks, Generated Checks and TLS Everywhere"
 date: 2026-06-23
-slug: canary-checker-v1.1.3
+slug: canary-checker-v1.2
 tags: [release, canary-checker]
 authors: [yash]
 hide_table_of_contents: false
 ---
 
-# Canary Checker v1.1.3: Chained Checks, Generated Checks and TLS Everywhere
+# Canary Checker v1.2: Chained Checks, Generated Checks and TLS Everywhere
 
 It's been a busy seven months since v1.1.2. The headline of this release isn't a single
 marquee feature — it's that Canary Checker got noticeably more **composable**, more
@@ -183,6 +183,6 @@ and run `helm upgrade` to pick them up.
 
 - [Mohamed Ragab](https://github.com/mrgb7) contributed the request chaining feature.
 - [Immanuel Tikhonov](https://github.com/immanuwell) fixed a duplicate check naming bug.
-- [Scott Miller](https://github.com/sam6258) fixed display issue around error messages for failed checks.
+- [Scott Miller](https://github.com/sam6258) fixed a display issue around error messages for failed checks.
 
 Thanks to everyone who filed issues and sent PRs this cycle. 🐦
