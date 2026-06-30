@@ -179,4 +179,10 @@ If you use any of the removed check types, migrate them to `kubernetesResource` 
 upgrading. As always, review the chart RBAC changes — especially the new `events.k8s.io` grant —
 and run `helm upgrade` to pick them up.
 
+## Contributors :heart:
+
+- [Mohamed Ragab](https://github.com/mrgb7) contributed the request chaining feature.
+- [Immanuel Tikhonov](https://github.com/immanuwell) fixed a duplicate check naming bug.
+- [Scott Miller](https://github.com/sam6258) fixed display issue around error messages for failed checks.
+
 Thanks to everyone who filed issues and sent PRs this cycle. 🐦
