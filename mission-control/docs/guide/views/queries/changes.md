@@ -43,8 +43,8 @@ Change queries provide these columns:
 search: change_type=BackupSuccessful
 
 # Ordering
-search: "@order=-created_at"
+search: '@order=-created_at'
 
 # Combine
-search: "change_type=GitHubActionRun* @order=-created_at"
+search: 'change_type=GitHubActionRun* @order=-created_at'
 ```

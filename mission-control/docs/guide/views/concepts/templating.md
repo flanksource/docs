@@ -434,23 +434,23 @@ spec:
 1. **Use meaningful keys** - Choose variable keys that describe what they filter
 
    ```yaml
-   key: environment  # ✓ Clear
-   key: env_filter   # ✓ Also clear
-   key: x            # ✗ Unclear
+   key: environment # ✓ Clear
+   key: env_filter # ✓ Also clear
+   key: x # ✗ Unclear
    ```
 
 2. **Provide helpful labels** - Give users context about what to select
 
    ```yaml
-   label: "Production Environment"  # ✓ Descriptive
-   label: "Prod"                    # ✗ Too vague
+   label: 'Production Environment' # ✓ Descriptive
+   label: 'Prod' # ✗ Too vague
    ```
 
 3. **Set sensible defaults** - Most users select default, so choose a good one
 
    ```yaml
-   default: "production"  # ✓ Safe, commonly used
-   default: "dev"        # ? May not be what most users need
+   default: 'production' # ✓ Safe, commonly used
+   default: 'dev' # ? May not be what most users need
    ```
 
 4. **Order variables logically** - Put base filters first, dependent filters later

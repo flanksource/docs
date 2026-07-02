@@ -64,23 +64,23 @@ Either the `connection` name or the credentials (`clientID`, `clientSecret` & `t
 
 The following Azure resources are scraped and mapped to Mission Control config types:
 
-| Resource Type                              | Config Class          |
+| Resource Type | Config Class |
 | ------------------------------------------ | --------------------- | --- |
-| microsoft.compute/virtualmachines          | VirtualMachine        |
-| microsoft.compute/virtualmachinescalesets  | Node                  |
-| microsoft.network/loadbalancers            | LoadBalancer          |
-| microsoft.network/virtualnetworks          | VirtualNetwork        |
-| microsoft.containerregistry/registries     | ContainerRegistry     |
-| microsoft.network/azurefirewalls           | Firewall              |
-| microsoft.sql/servers                      | RelationalDatabase    |
-| microsoft.dbforpostgresql/servers          | RelationalDatabase    |
-| microsoft.containerservice/managedclusters | KubernetesCluster     |
-| microsoft.resources/resourcegroups         | ResourceGroup         |
-| subscription                               | Subscription          |
-| microsoft.storage/storageaccounts          | StorageAccount        |
-| microsoft.web/sites                        | AppService            |
-| microsoft.network/dnszones                 | DNSZone               |
-| microsoft.network/privatednszones          | PrivateDNSZone        |
-| microsoft.network/trafficmanagerprofiles   | TrafficManagerProfile |
-| microsoft.network/networksecuritygroups    | SecurityGroup         |
-| microsoft.network/publicipaddresses        | PublicIPAddress       | +   |
+| microsoft.compute/virtualmachines | VirtualMachine |
+| microsoft.compute/virtualmachinescalesets | Node |
+| microsoft.network/loadbalancers | LoadBalancer |
+| microsoft.network/virtualnetworks | VirtualNetwork |
+| microsoft.containerregistry/registries | ContainerRegistry |
+| microsoft.network/azurefirewalls | Firewall |
+| microsoft.sql/servers | RelationalDatabase |
+| microsoft.dbforpostgresql/servers | RelationalDatabase |
+| microsoft.containerservice/managedclusters | KubernetesCluster |
+| microsoft.resources/resourcegroups | ResourceGroup |
+| subscription | Subscription |
+| microsoft.storage/storageaccounts | StorageAccount |
+| microsoft.web/sites | AppService |
+| microsoft.network/dnszones | DNSZone |
+| microsoft.network/privatednszones | PrivateDNSZone |
+| microsoft.network/trafficmanagerprofiles | TrafficManagerProfile |
+| microsoft.network/networksecuritygroups | SecurityGroup |
+| microsoft.network/publicipaddresses | PublicIPAddress | + |
