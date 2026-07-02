@@ -37,12 +37,9 @@ const integrations = [
   { icon: "playwright", url: "/examples/playwright" },
 
   { icon: "aws-config" },
-  { icon: "helm" },
-  { icon: "docker", url: "containerd" },
   { icon: "bash", url: "exec" },
   { icon: "powershell", url: "exec" },
 
-  { icon: "github", url: "git" },
   { icon: "azure-devops" },
 ];
 
@@ -72,4 +69,3 @@ export function Integrations() {
     </div>
   )
 }
-

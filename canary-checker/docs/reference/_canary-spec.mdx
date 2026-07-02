@@ -28,15 +28,11 @@ title: Canary Spec
 | `azureDevops`      | List of Azure DevOps checks to run.              | [`[]AzureDevopsCheck`](./azure-devops)                 |
 | `catalog`          | List of Catalog checks to run.                   | [`[]CatalogCheck`](./catalog)                          |
 | `cloudwatch`       | List of CloudWatch checks to run.                | [`[]CloudWatchCheck`](./cloudwatch)                    |
-| `containerd`       | List of containerd pull checks to run.           | [`[]ContainerdPullCheck`](./containerd)                |
-| `containerdPush`   | List of containerd push checks to run.           | [`[]ContainerdPushCheck`](./containerd)                |
 | `databaseBackup`   | List of database backup checks to run.           | [`[]DatabaseBackupCheck`](./gcs-database-backup)       |
 | `dns`              | List of DNS checks to run.                       | [`[]DNSCheck`](./dns)                                  |
 | `elasticsearch`    | List of ElasticSearch checks to run.             | [`[]ElasticsearchCheck`](./elasticsearch)              |
 | `exec`             | List of exec checks to run.                      | [`[]ExecCheck`](./exec)                                |
 | `folder`           | List of folder checks to run.                    | [`[]FolderCheck`](./folder)                            |
-| `github`           | List of GitHub checks to run.                    | [`[]GitHubCheck`](./git)                               |
-| `helm`             | List of Helm checks to run.                      | [`[]HelmCheck`](./helm)                                |
 | `http`             | List of HTTP checks to run.                      | [`[]HTTPCheck`](./http)                                |
 | `icmp`             | List of ICMP checks to run.                      | [`[]ICMPCheck`](./icmp)                                |
 | `jmeter`           | List of JMeter load test checks to run.          | [`[]JmeterCheck`](./jmeter)                            |
@@ -47,9 +43,7 @@ title: Canary Spec
 | `mongodb`          | List of MongoDB checks to run.                   | [`[]MongoDBCheck`](./mongo)                            |
 | `mssql`            | List of MSSQL checks to run.                     | [`[]MssqlCheck`](./sql)                                |
 | `mysql`            | List of MySQL checks to run.                     | [`[]MysqlCheck`](./sql)                                |
-| `namespace`        | List of namespace checks to run.                 | [`[]NamespaceCheck`](./namespace)                      |
 | `opensearch`       | List of OpenSearch checks to run.                | [`[]OpenSearchCheck`](./elasticsearch)                 |
-| `pod`              | List of pod checks to run.                       | [`[]PodCheck`](./pod)                                  |
 | `postgres`         | List of Postgres checks to run.                  | [`[]PostgresCheck`](./sql)                             |
 | `prometheus`       | List of Prometheus checks to run.                | [`[]PrometheusCheck`](./prometheus)                    |
 | `pubsub`           | List of PubSub checks to run.                    | [`[]PubSubCheck`](./pubsub)                            |
@@ -58,4 +52,3 @@ title: Canary Spec
 | `s3`               | List of S3 checks to run.                        | [`[]S3Check`](./s3-protocol)                           |
 | `tcp`              | List of TCP checks to run.                       | [`[]TCPCheck`](./tcp)                                  |
 | `webhook`          | Webhook check configuration.                     | [`WebhookCheck`](./webhook)                            |
-

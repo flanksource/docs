@@ -89,7 +89,7 @@ function Home() {
                         Infrastructure
                       </h4>
                       <p className="mt-2 text-base leading-6 text-description">
-                        Batteries including support for HTTP, DNS, ICMP, LDAP, Prometheus, SQL, Mongo, Redis, Github, Azure Devops, JMeter, K6, Playwright, Newman/Postman, SMB, SFTP,
+                        Batteries including support for HTTP, DNS, ICMP, LDAP, Prometheus, SQL, Mongo, Redis, Azure Devops, JMeter, K6, Playwright, Newman/Postman, SMB, SFTP, S3, and Kubernetes resources.
                       </p>
                     </div>
                   </div>
@@ -209,11 +209,11 @@ function Home() {
           title="Active Infrastructure Checks"
           image="infrastructure-check.png"
           url="https://flanksource.com/docs/blog/infrastructure-testing-with-canary-checker-and-flux">
-          Proactive infrastructure checks ensure your control plane has ample buffer/ or capacity. These checks validate the ability to schedule new pods, launch EC2 instances, and  push/pull to docker and helm repositories.
+          Proactive infrastructure checks ensure your control plane has ample buffer or capacity. These checks validate Kubernetes resources, cloud resources, and critical service dependencies.
           <div className='space-x-2 flex flex-row' >
             <Icon name="k8s" url={`./reference/kubernetes-resource`} height={32} />
-            <Icon name="docker" url={`./reference/containerd`} height={32} />
-            <Icon name="helm" url={`./reference/helm`} height={32} />
+            <Icon name="aws" url={`./reference/aws-config`} height={32} />
+            <Icon name="prometheus" url={`./reference/prometheus`} height={32} />
           </div>
         </Feature >
 
