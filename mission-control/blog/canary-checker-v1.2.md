@@ -181,8 +181,17 @@ and run `helm upgrade` to pick them up.
 
 ## Contributors :heart:
 
-- [Mohamed Ragab](https://github.com/mrgb7) contributed the request chaining feature.
-- [Immanuel Tikhonov](https://github.com/immanuwell) fixed a duplicate check naming bug.
-- [Scott Miller](https://github.com/sam6258) fixed a display issue around error messages for failed checks.
+Thanks to everyone who filed issues and sent PRs in this release cycle. 🐦
 
-Thanks to everyone who filed issues and sent PRs this cycle. 🐦
+- [Mohamed Ragab](https://github.com/mrgb7)
+- [Immanuel Tikhonov](https://github.com/immanuwell)
+- [Scott Miller](https://github.com/sam6258)
+- [rrossouw01](https://github.com/rrossouw01)
+- [Andrew](https://github.com/atsai1220)
+- [Ali Irshad](https://github.com/Irshu786)
+- [Lukas M](https://github.com/lukasmrtvy)
+- [Harry McIntyre](https://github.com/mcintyre321)
+- [naveenkumarsp](https://github.com/naveenkumarsp)
+- [Oussama Rouabah](https://github.com/oussamarouabah)
+- [Pierre Oblin](https://github.com/poblin-orange)
+- [Kevin](https://github.com/Strazz1337)
