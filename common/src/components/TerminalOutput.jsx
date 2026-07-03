@@ -1,8 +1,46 @@
 
+import { useEffect, useRef, useState } from 'react'
 import Convert from 'ansi-to-html'
 
-import CopyButton from '@theme/CodeBlock/CopyButton'
+function CopyButton({ code, className = '' }) {
+  const [copied, setCopied] = useState(false)
+  const timeoutRef = useRef()
 
+  useEffect(() => () => window.clearTimeout(timeoutRef.current), [])
+
+  async function copyToClipboard() {
+    const text = String(code ?? '')
+
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(text)
+    } else {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      textarea.setAttribute('readonly', '')
+      textarea.style.position = 'absolute'
+      textarea.style.left = '-9999px'
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+    }
+
+    setCopied(true)
+    timeoutRef.current = window.setTimeout(() => setCopied(false), 1000)
+  }
+
+  return (
+    <button
+      type="button"
+      aria-label={copied ? 'Copied' : 'Copy code to clipboard'}
+      title={copied ? 'Copied' : 'Copy'}
+      className={className}
+      onClick={copyToClipboard}
+    >
+      {copied ? 'Copied' : 'Copy'}
+    </button>
+  )
+}
 
 function ansi2HTML(str, command) {
 

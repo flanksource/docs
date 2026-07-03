@@ -204,7 +204,7 @@ export default async function createConfigAsync() {
                   util: require.resolve('util/'),
                   process: require.resolve('process/browser'),
                   buffer: require.resolve('buffer/'),
-                  fs: require.resolve("browserify-fs"),
+                  fs: false,
                   url: require.resolve("url/")
                 },
               },
