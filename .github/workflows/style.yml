@@ -2,6 +2,9 @@ name: Vale
 on:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   vale:
     name: runner / vale

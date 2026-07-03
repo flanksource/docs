@@ -3,6 +3,15 @@ import React, { useState, useRef } from 'react';
 import { FaChevronDown, FaChevronUp, FaBars, FaTimes, FaBullseye, FaSearch, FaDatabase, FaExclamationTriangle, FaRocket, FaTools, FaLifeRing, FaSync, FaLightbulb, FaEye, FaRobot } from 'react-icons/fa';
 import { SiPostgresql } from 'react-icons/si';
 
+const isGitHubUrl = (href) => {
+  try {
+    const url = new URL(href);
+    return url.protocol === 'https:' && url.hostname === 'github.com';
+  } catch {
+    return false;
+  }
+};
+
 const Navigation = ({
   logo = <img src="/img/mission-control-logo.svg" />,
   loginButton = { href: "https://app.flanksource.com/", text: "Login" },
@@ -241,8 +250,8 @@ const Navigation = ({
                               key={index}
                               href={product.href}
                               className="flex items-start p-1 rounded-lg hover:bg-gray-50 transition-colors"
-                              target={product.href.includes('github.com') ? '_blank' : '_self'}
-                              rel={product.href.includes('github.com') ? 'noopener noreferrer' : ''}
+                              target={isGitHubUrl(product.href) ? '_blank' : '_self'}
+                              rel={isGitHubUrl(product.href) ? 'noopener noreferrer' : ''}
                             >
                               <div className="mr-2 mt-1">{product.icon}</div>
                               <div>
@@ -451,8 +460,8 @@ const Navigation = ({
                           key={index}
                           href={product.href}
                           className="flex items-start p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                          target={product.href.includes('github.com') ? '_blank' : '_self'}
-                          rel={product.href.includes('github.com') ? 'noopener noreferrer' : ''}
+                          target={isGitHubUrl(product.href) ? '_blank' : '_self'}
+                          rel={isGitHubUrl(product.href) ? 'noopener noreferrer' : ''}
                         >
                           <div className="mr-3 mt-1">{product.icon}</div>
                           <div>
