@@ -1,7 +1,8 @@
 (function (Prism) {
 
 	var interpolation = /\\\((?:[^()]|\([^()]*\))*\)/.source;
-	var string = RegExp(/(^|[^\\])"(?:[^"\r\n\\]|\\[^\r\n(]|__)*"/.source.replace(/__/g, function () { return interpolation; }));
+	// Keep the string matcher linear-time; interpolation highlighting is handled below.
+	var string = /(^|[^\\])"(?:[^"\r\n\\]|\\[^\r\n])*"/;
 	var stringInterpolation = {
 		'interpolation': {
 			pattern: RegExp(/((?:^|[^\\])(?:\\{2})*)/.source + interpolation),
