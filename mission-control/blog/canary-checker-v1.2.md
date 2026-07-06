@@ -1,5 +1,5 @@
 ---
-title: "Canary Checker v1.2: Chained Checks, Generated Checks and TLS Everywhere"
+title: 'Canary Checker v1.2: Chained Checks, Generated Checks and TLS Everywhere'
 date: 2026-06-23
 slug: canary-checker-v1.2
 tags: [release, canary-checker]
@@ -22,7 +22,7 @@ Two features in this release move Canary Checker from "a list of independent pro
 "a small workflow engine for health checks."
 
 **Request chaining** lets a check depend on another and reuse its output. The classic example
-is an authenticated API: one check logs in and *exports* the token, and a downstream check
+is an authenticated API: one check logs in and _exports_ the token, and a downstream check
 references it directly in its template:
 
 ```yaml
@@ -36,7 +36,7 @@ http:
     url: https://api.example.com/me
     headers:
       - name: Authorization
-        value: "Bearer {{.responses.login.token}}"
+        value: 'Bearer {{.responses.login.token}}'
 ```
 
 Behind the scenes a topological sort guarantees `login` runs before `get-profile`. And because
@@ -44,12 +44,12 @@ we promoted `dependsOn` to the shared check spec, this isn't HTTP-only — any c
 depend on any other. (SQL checks also picked up a `timeout` in the same change, so a slow query
 no longer hangs a check indefinitely.)
 
-**Transformed canaries** go a step further: a check can now *generate brand-new checks* from its
+**Transformed canaries** go a step further: a check can now _generate brand-new checks_ from its
 output. This grew out of a real request ([#2731](https://github.com/flanksource/canary-checker/issues/2731)) —
 select all the Ingresses or HTTPRoutes in a cluster and automatically spin up an HTTP health
 check for each endpoint. The generated canaries are persisted as first-class objects, and a
 cleanup job prunes orphans every 12 hours (with cascading deletes when the parent goes away).
-You describe *what* you want checked once, and Canary Checker keeps the concrete checks in sync
+You describe _what_ you want checked once, and Canary Checker keeps the concrete checks in sync
 with reality.
 
 ```yaml
@@ -58,12 +58,12 @@ kind: Canary
 metadata:
   name: ingress-canary
 spec:
-  schedule: "@every 5m"
+  schedule: '@every 5m'
   kubernetes:
     - name: ingress-http-checks
       kind: Ingress
       namespaceSelector:
-        name: "*"                       # scan Ingresses in every namespace
+        name: '*' # scan Ingresses in every namespace
       transform:
         expr: |
           {
@@ -89,7 +89,7 @@ say exactly which agents should execute a canary using glob patterns and negatio
 
 ```yaml
 spec:
-  agentSelector: "eu-west-*, !team-b"
+  agentSelector: 'eu-west-*, !team-b'
 ```
 
 Canary Checker creates a derived copy of the canary for each matched agent. Great for "run this
@@ -138,17 +138,17 @@ fixed several bugs that were quietly distorting dashboards:
   `1 + success`, which is nonsense. It now correctly computes `(success / (failed + success)) * 100`,
   with guards against nil/empty/NaN so an idle window returns `0` instead of panicking.
 - With `--metric-labels-allowlist` configured, a couple of metrics were mismatching label sets
-  (causing silently-swallowed Prometheus panics) or emitting label *names* where *values* belonged.
+  (causing silently-swallowed Prometheus panics) or emitting label _names_ where _values_ belonged.
 
 We also caught a sneaky scheduling bug ([#2984](https://github.com/flanksource/canary-checker/pull/2984)):
 concurrent `SyncCanaryJob` calls could race and leave an **orphaned cron entry** that survived
 every cleanup sweep and fired on every tick — silently doubling check inserts. It's now serialized
-per canary. And a self-comparison bug that meant `lastTransitionedTime` was *never* populated
+per canary. And a self-comparison bug that meant `lastTransitionedTime` was _never_ populated
 ([#3001](https://github.com/flanksource/canary-checker/issues/3001)) is fixed.
 
 One more operational gotcha worth calling out: the controllers emit Kubernetes events through the
 v2 EventRecorder, which writes `events.k8s.io/v1` objects — but the shipped RBAC only granted
-permissions on core events. Because events are only emitted on the *failure* path, passing
+permissions on core events. Because events are only emitted on the _failure_ path, passing
 canaries hid the problem entirely. The chart and kustomize RBAC now grant the right permission.
 Worth a `helm upgrade`.
 
