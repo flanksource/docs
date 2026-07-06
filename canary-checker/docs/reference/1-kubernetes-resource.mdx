@@ -9,15 +9,16 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#KubernetesResourceCheck -->
 
-The Kubernetes resource check creates kubernetes resources based on the provided manifests & perform checks on them. Some common use case of this
-check would be to see if a service is accessible via the ingress as shown in the example below.
+The Kubernetes Resource check creates Kubernetes resources from the provided manifests and performs checks on them. Use this check to verify that Kubernetes can create resources and that the created resources work as expected.
+
+Configure this check with `spec.kubernetesResource`. Check results use the runtime type `kubernetes_resource`.
 
 ```yaml title="ingress_test.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes_resource_ingress_pass.yaml
 
 ```
 
 <HealthCheck
-  name="kubernetes"
+  name="kubernetesResource"
   edition="standard"
   connection="kubernetes"
   rows={[
@@ -36,7 +37,7 @@ check would be to see if a service is accessible via the ingress as shown in the
     {
       field: 'checks',
       description:
-        'canary spec for the checks to be performed after the resources are created',
+        'Canary spec for the checks to perform after the resources are created',
       scheme: 'CanarySpec'
     },
     {
@@ -54,11 +55,13 @@ check would be to see if a service is accessible via the ingress as shown in the
     {
       field: 'waitFor',
       description:
-        'Specify the desired state of the static/non-static resources before running the checks',
+        'Specify the desired state of the static and non-static resources before running the checks',
       scheme: '[WaitFor](#wait-for)'
     }
   ]}
 />
+
+By default, a Kubernetes Resource check can create up to 10 total resources across `resources` and `staticResources`. You can change this limit with `checks.kubernetesResource.maxResources`.
 
 ### Check Retries
 
@@ -102,19 +105,19 @@ check would be to see if a service is accessible via the ingress as shown in the
     {
       field: 'delete',
       description:
-        'When set to true, the check waits for the resources to be deleted',
+        'When set to true, cleanup waits for non-static resources to be deleted, including startup cleanup when `clearResources` is true',
       scheme: 'bool'
     },
     {
       field: 'timeout',
       description:
-        'Timeout to wait for all static & non-static resources to satisfy the expression. _(Default: 10m)_',
+        'Timeout to wait for all static and non-static resources to satisfy the expression. _(Default: 10m)_',
       scheme: 'Duration'
     },
     {
       field: 'interval',
       description:
-        'Interval to check if all static & non-static resources are ready. _(Default: 5s)_',
+        'Interval to check if all static and non-static resources are ready. _(Default: 5s)_',
       scheme: 'Duration'
     }
   ]}
@@ -132,7 +135,7 @@ Either the kubeconfig itself or the path to the kubeconfig can be provided.
 
 #### Kubeconfig inline
 
-```yaml title="remote-cluster.yaml" yaml title="remote-cluster.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-resource-check-inline-kubeconfig.yaml {12-33}
+```yaml title="remote-cluster.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-resource-check-inline-kubeconfig.yaml {12-33}
 ```
 
 #### Kubeconfig from local filesystem
@@ -143,11 +146,10 @@ Either the kubeconfig itself or the path to the kubeconfig can be provided.
 ### Templating
 
 The `resources` and `staticResources` fields can be templated using <CommonLink to="gotemplate">Go Templates</CommonLink>.
-This is helpful in creating resources with random names.
-Example: you can setup a resource to create a pod with random name on each check run. This way you don't have to wait for the pod to be deleted on every check.
+Use templating to create resources with random names. For example, you can create a pod with a random name on each check run so the check does not wait for the previous pod to be deleted.
 
 :::info
-Templating the **Group**, **Version**, **Kind** & **Namespace** however isn't allowed.
+Templating the **Group**, **Version**, **Kind**, and **Namespace** is not allowed.
 :::
 
 <details summary="Creating a pod with a unique name on every run">
@@ -171,7 +173,7 @@ Templating the **Group**, **Version**, **Kind** & **Namespace** however isn't al
 
 :::warning
 Since static resources are deleted when the canary is deleted, extra care must be taken when providing their manifests.
-When this canary is deleted, the **test** namespace is deleted and consequently all the other resources within it, even those not created by this check.
+When this canary is deleted, the **test** namespace is deleted. This also deletes every resource in that namespace, including resources that this check did not create.
 :::
 
 </div>
@@ -180,7 +182,7 @@ When this canary is deleted, the **test** namespace is deleted and consequently 
 <details summary="Crossplane Example">
 <div>
 
-```yaml title="namespace_creation.yaml" file=<rootDir>/modules/canary-checker/fixtures/external/crossplane-kubernetes-resource.yaml
+```yaml title="crossplane-kubernetes-resource.yaml" file=<rootDir>/modules/canary-checker/fixtures/external/crossplane-kubernetes-resource.yaml
 
 ```
 

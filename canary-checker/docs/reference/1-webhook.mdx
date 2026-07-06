@@ -18,12 +18,15 @@ Webhooks allow you to create and update checks by sending HTTP POST requests to 
 <HealthCheck name="webhook" rows={[
   {
     field: "token",
-    description: "Optional authorization token to run this check",
+    description: "Optional authorization token. When set, pass the resolved value as `?token=<value>` or in the `Webhook-Token` header",
     scheme: "EnvVar"
   }
 ]}/>
 
+Choose a webhook name that is unique across canaries because `/webhook/:id` does not include a namespace.
+
 This example:
+
 1. Defines a webhook named `Github` accessible via `http://<host>/webhook/Github`
 2. Transforms the incoming JSON into [check](#output)
 
@@ -74,16 +77,16 @@ The request is available to the transformation function with these fields:
 <Fields rows={[
   {
     field: 'results.json',
-        description: 'If `Content-Type: application/json` unmarshalls the request body to a JSON ',
-    scheme: '`JSON Object|Array`'
+    description: 'When `Content-Type` is exactly `application/json`, Canary Checker decodes the request body into `results.json`.',
+    scheme: '`JSON Object`'
   },
     {
     field: 'results.headers',
-
+    description: 'Request headers',
     scheme: "`map[string]string`"
   },  {
     field: 'results.content',
-    description: 'Request body text, See <CommonLink to="cel" anchor="yaml">YAML</CommonLink> and See <CommonLink to="cel" anchor="csv">CSV</CommonLink> for handling other file formats',
+    description: 'For other content types, Canary Checker stores up to the first 10 KiB of the request body in `results.content`. See <CommonLink to="cel" anchor="yaml">YAML</CommonLink> and See <CommonLink to="cel" anchor="csv">CSV</CommonLink> for handling other file formats',
 
   }
 ]}/>

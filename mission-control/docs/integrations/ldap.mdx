@@ -28,119 +28,19 @@ Mission Control integrates with LDAP directories to monitor authentication infra
 
 Test LDAP connectivity, authentication, and user searches.
 
-```yaml title="ldap-connection-check.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: ldap-connectivity
-spec:
-  interval: 60
-  ldap:
-    - name: ldap-bind
-      url: ldaps://ldap.example.com:636
-      bindDN: cn=readonly,dc=example,dc=com
-      username:
-        valueFrom:
-          secretKeyRef:
-            name: ldap-credentials
-            key: username
-      password:
-        valueFrom:
-          secretKeyRef:
-            name: ldap-credentials
-            key: password
+```yaml title="ldap.yaml" file=<rootDir>/modules/canary-checker/fixtures/ldap/ldap_pass.yaml
 ```
-
-<details summary="User Search Validation">
-
-```yaml title="ldap-search-check.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: ldap-user-search
-spec:
-  interval: 300
-  ldap:
-    - name: search-admin-users
-      url: ldaps://ldap.example.com:636
-      bindDN: cn=readonly,dc=example,dc=com
-      username:
-        valueFrom:
-          secretKeyRef:
-            name: ldap-credentials
-            key: username
-      password:
-        valueFrom:
-          secretKeyRef:
-            name: ldap-credentials
-            key: password
-      userSearch: "(&(objectClass=user)(memberOf=cn=admins,ou=groups,dc=example,dc=com))"
-```
-</details>
-
-<details summary="Active Directory Check">
-
-```yaml title="ldap-ad-check.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: active-directory
-spec:
-  interval: 60
-  ldap:
-    - name: ad-connectivity
-      url: ldaps://dc.corp.example.com:636
-      bindDN: CN=Service Account,OU=Service Accounts,DC=corp,DC=example,DC=com
-      username:
-        valueFrom:
-          secretKeyRef:
-            name: ad-credentials
-            key: username
-      password:
-        valueFrom:
-          secretKeyRef:
-            name: ad-credentials
-            key: password
-      userSearch: "(sAMAccountName=testuser)"
-```
-</details>
-
-<details summary="Skip TLS Verification (Development Only)">
-
-```yaml title="ldap-insecure-check.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: ldap-dev
-spec:
-  interval: 60
-  ldap:
-    - name: ldap-dev-check
-      url: ldaps://ldap-dev.example.com:636
-      bindDN: cn=admin,dc=dev,dc=example,dc=com
-      username:
-        valueFrom:
-          secretKeyRef:
-            name: ldap-dev-credentials
-            key: username
-      password:
-        valueFrom:
-          secretKeyRef:
-            name: ldap-dev-credentials
-            key: password
-      skipTLSVerify: true  # Only for development/testing
-```
-</details>
 
 ## Configuration Options
 
 | Field | Description | Default |
-|-------|-------------|---------|
-| `url` | LDAP server URL (`ldap://` or `ldaps://`) | Required |
-| `bindDN` | Distinguished name for binding | Required |
-| `username` | Bind username | Required |
-| `password` | Bind password | Required |
-| `userSearch` | LDAP filter to search for users | Optional |
+| ----- | ----------- | ------- |
+| `connection` | Connection URL that supplies the LDAP server URL and credentials. | Optional |
+| `url` | LDAP server URL, such as `ldap://` or `ldaps://`. Required unless `connection` supplies the URL. | Optional |
+| `bindDN` | Base DN for the LDAP search. | Required |
+| `username` | Bind username. Required unless `connection` supplies the username. | Optional |
+| `password` | Bind password. Required unless `connection` supplies the password. | Optional |
+| `userSearch` | LDAP search filter. | Optional |
 | `skipTLSVerify` | Skip TLS certificate verification | `false` |
 
 ## Common LDAP Filters

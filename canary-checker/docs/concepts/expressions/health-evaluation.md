@@ -2,11 +2,11 @@
 title: Health Evaluation
 ---
 
-All checks expose a health stats of passing (Green) or failing (Red).
-For example the HTTP check fails if the status is `200 >= code < 299`
-these default behaviors can be changed using the `test` field:
+All checks expose a health status of passing or failing.
+HTTP checks pass for `200 <= code < 300` by default, and fail otherwise.
+You can change default behavior using the `test` field:
 
-In the example below the http check fails if the HTTP response header contains an 'Authorization' field.
+In the following example, the HTTP check fails if the HTTP response header contains an `Authorization` field.
 
 ```yaml title=http-check-expr.yaml file=<rootDir>/modules/canary-checker/fixtures/minimal/http_no_auth_pass.yaml
 
@@ -16,10 +16,10 @@ In the example below the http check fails if the HTTP response header contains a
 `test` expressions must return a bool or boolean type string (`'true'` or `'false`')
 :::
 
-See <CommonLink to="cel">Cel Expressions</CommonLink> for a function reference
+See <CommonLink to="cel">CEL expressions</CommonLink> for a function reference.
 
-:::note Javascript and Go Templating
-While `test` fields do support Javascript and Go Templates, they are not recommended for health evaluations due to their verbosity and performance.
+:::note JavaScript and Go templates
+While `test` fields support JavaScript and Go templates, they are not recommended for health evaluations because of their verbosity and performance.
 :::
 
 ## Variables

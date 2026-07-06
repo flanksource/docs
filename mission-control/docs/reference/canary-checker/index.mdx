@@ -6,36 +6,43 @@ sidebar_custom_props:
   icon: tabler:heart
 ---
 
-| Field            | Description                                                                                   | Type                                                | Required |
-| ---------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------- |
-| `env`            | Environment variables.                                                                        | `map[string]`<CommonLink to="authentication">`EnvVar`</CommonLink>            |          |
-| `schedule`       | Schedule to run checks on.\Supports all cron expression.\Also supports golang duration. | `cron`                                            |          |
-| `icon`           | Icon to use for the check.                                                                    | `string`                                            |          |
-| `severity`       | Severity of the check.                                                                        | `string`                                            |          |
-| `resultmode`     | Result mode of the check.                                                                     | `string`                                            |          |
-| `alertmanager`   | List of AlertManager checks to run.                                                           | [`[]AlertManager`](/docs/guide/canary-checker/reference/alert-manager)         |          |
-| `awsConfig`      | List of AWS Config checks to run.                                                             | [`[]AwsConfig`](/docs/guide/canary-checker/reference/aws-config)               |          |
-| `awsConfigRule`  | List of AWS Config Rule checks to run.                                                        | [`[]AwsConfigRule`](/docs/guide/canary-checker/reference/aws-config-rule)      |          |
-| `cloudwatch`     | List of CloudWatch checks to run.                                                             | [`[]CloudWatch`](/docs/guide/canary-checker/reference/aws-cloudwatch)              |          |
-| `catalog`       | List of config DB checks to run.                                                              | [`[]Catalog`](/docs/guide/canary-checker/reference/catalog)                  |          |
-| `gcsDatabaseBackup` | List of GCP database backup checks to run.                                                        | [`[]DatabaseBackup`](/docs/guide/canary-checker/reference/gcs-database-backup) |          |
-| `dns`            | List of DNS checks to run.                                                                    | [`[]DNS`](/docs/guide/canary-checker/reference/dns)                            |          |
-| `elasticsearch`  | List of ElasticSearch checks to run.                                                          | [`[]Elasticsearch`](/docs/guide/canary-checker/reference/elasticsearch)        |          |
-| `exec`           | List of exec checks to run.                                                                   | [`[]Exec`](/docs/guide/canary-checker/reference/exec)                          |          |
-| `folder`         | List of folder checks to run.                                                                 | [`[]Folder`](/docs/guide/canary-checker/reference/folder)                      |          |
-| `http`           | List of HTTP checks to run.                                                                   | [`[]HTTP`](/docs/guide/canary-checker/reference/http)                          |          |
-| `icmp`           | List of ICMP checks to run.                                                                   | [`[]ICMP`](/docs/guide/canary-checker/reference/icmp)                          |          |
-| `jmeter`         | List of JMeter load test checks to run.                                                       | [`[]Jmeter`](/docs/guide/canary-checker/reference/jmeter)                      |          |
-| `junit`          | List of JUnit test result checks to run.                                                      | [`[]Junit`](/docs/guide/canary-checker/reference/junit)                        |          |
-| `kubernetes`     | List of Kubernetes checks to run.                                                             | [`[]Kubernetes`](/docs/guide/canary-checker/reference/kubernetes)              |          |
-| `kubernetesResource`     | Kubernetes Resource Checks                                                           | [`[]KubernetesResource`](/docs/guide/canary-checker/reference/kubernetes-resource)              |          |
-| `ldap`           | List of LDAP checks to run.                                                                   | [`[]LDAP`](/docs/guide/canary-checker/reference/ldap)                          |          |s
-| `mongodb`        | List of MongoDB checks to run.                                                                | [`[]MongoDB`](/docs/guide/canary-checker/reference/mongo)                      |          |
-| `mssql`          | List of MSSQL checks to run.                                                                  | [`[]Mssql`](/docs/guide/canary-checker/reference/sql)                        |          |
-| `mysql`          | List of MySQL checks to run.                                                                  | [`[]Mysql`](/docs/guide/canary-checker/reference/sql)                        |          |
-| `postgres`       | List of Postgres checks to run.                                                               | [`[]Postgres`](/docs/guide/canary-checker/reference/sql)                  |          |
-| `prometheus`     | List of Prometheus checks to run.                                                             | [`[]Prometheus`](/docs/guide/canary-checker/reference/prometheus)              |          |
-| `redis`          | List of Redis checks to run.                                                                  | [`[]Redis`](/docs/guide/canary-checker/reference/redis)                        |          |
-| `restic`         | List of restic backup checks to run.                                                          | [`[]Restic`](/docs/guide/canary-checker/reference/restic)                      |          |
-| `s3`             | List of S3 checks to run.                                                                     | [`[]S3`](/docs/guide/canary-checker/reference/s3-protocol)                              |          |
-| `tcp`            | List of TCP checks to run.                                                                    | [`[]TCP`](/docs/guide/canary-checker/reference/tcp)                            |          |
+| Field | Description | Type | Required |
+| ----- | ----------- | ---- | -------- |
+| `env` | Environment variables. | `map[string]EnvVar` | |
+| `schedule` | Schedule to run checks on. Supports cron expressions and Go durations, such as `@every 5m`. | `cron` | |
+| `icon` | Icon to use for the check. | `string` | |
+| `severity` | Severity of the check. | `string` | |
+| `owner` | Contact person responsible for the canary. | `string` | |
+| `resultMode` | Result mode of the check. | `string` | |
+| `agentSelector` | Agents that should run this canary. Supports prefix and suffix matches, such as `eu-west-*`, and negations, such as `!team-b`. | `[]string` | |
+| `alertmanager` | List of Alertmanager checks to run. | [`[]AlertManagerCheck`](/docs/guide/canary-checker/reference/alert-manager) | |
+| `awsConfig` | List of AWS Config checks to run. | [`[]AwsConfigCheck`](/docs/guide/canary-checker/reference/aws-config) | |
+| `awsConfigRule` | List of AWS Config Rule checks to run. | [`[]AwsConfigRuleCheck`](/docs/guide/canary-checker/reference/aws-config-rule) | |
+| `azureDevops` | List of Azure DevOps checks to run. | [`[]AzureDevopsCheck`](/docs/guide/canary-checker/reference/azure-devops) | |
+| `catalog` | List of Catalog checks to run. | [`[]CatalogCheck`](/docs/guide/canary-checker/reference/catalog) | |
+| `cloudwatch` | List of CloudWatch checks to run. | [`[]CloudWatchCheck`](/docs/guide/canary-checker/reference/aws-cloudwatch) | |
+| `databaseBackup` | List of database backup checks to run. | [`[]DatabaseBackupCheck`](/docs/guide/canary-checker/reference/gcs-database-backup) | |
+| `dns` | List of DNS checks to run. | [`[]DNSCheck`](/docs/guide/canary-checker/reference/dns) | |
+| `dynatrace` | List of Dynatrace checks to run. | [`[]DynatraceCheck`](/docs/guide/canary-checker/reference/dynatrace) | |
+| `elasticsearch` | List of Elasticsearch checks to run. | [`[]ElasticsearchCheck`](/docs/guide/canary-checker/reference/elasticsearch) | |
+| `exec` | List of exec checks to run. | [`[]ExecCheck`](/docs/guide/canary-checker/reference/exec) | |
+| `folder` | List of folder checks to run. | [`[]FolderCheck`](/docs/guide/canary-checker/reference/folder) | |
+| `http` | List of HTTP checks to run. | [`[]HTTPCheck`](/docs/guide/canary-checker/reference/http) | |
+| `icmp` | List of ICMP checks to run. | [`[]ICMPCheck`](/docs/guide/canary-checker/reference/icmp) | |
+| `jmeter` | List of JMeter load test checks to run. | [`[]JmeterCheck`](/docs/guide/canary-checker/reference/jmeter) | |
+| `junit` | List of JUnit test result checks to run. | [`[]JunitCheck`](/docs/guide/canary-checker/reference/junit) | |
+| `kubernetes` | List of Kubernetes checks to run. | [`[]KubernetesCheck`](/docs/guide/canary-checker/reference/kubernetes) | |
+| `kubernetesResource` | List of Kubernetes Resource checks to run. | [`[]KubernetesResourceCheck`](/docs/guide/canary-checker/reference/kubernetes-resource) | |
+| `ldap` | List of LDAP checks to run. | [`[]LDAPCheck`](/docs/guide/canary-checker/reference/ldap) | |
+| `mongodb` | List of MongoDB checks to run. | [`[]MongoDBCheck`](/docs/guide/canary-checker/reference/mongo) | |
+| `mssql` | List of SQL Server checks to run. | [`[]MssqlCheck`](/docs/guide/canary-checker/reference/sql) | |
+| `mysql` | List of MySQL checks to run. | [`[]MysqlCheck`](/docs/guide/canary-checker/reference/sql) | |
+| `opensearch` | List of OpenSearch checks to run. | [`[]OpenSearchCheck`](/docs/guide/canary-checker/reference/opensearch) | |
+| `postgres` | List of PostgreSQL checks to run. | [`[]PostgresCheck`](/docs/guide/canary-checker/reference/sql) | |
+| `prometheus` | List of Prometheus checks to run. | [`[]PrometheusCheck`](/docs/guide/canary-checker/reference/prometheus) | |
+| `pubsub` | List of Pub/Sub checks to run. | [`[]PubSubCheck`](/docs/guide/canary-checker/reference/pubsub) | |
+| `redis` | List of Redis checks to run. | [`[]RedisCheck`](/docs/guide/canary-checker/reference/redis) | |
+| `restic` | List of Restic backup checks to run. | [`[]ResticCheck`](/docs/guide/canary-checker/reference/restic) | |
+| `s3` | List of S3 checks to run. | [`[]S3Check`](/docs/guide/canary-checker/reference/s3-protocol) | |
+| `tcp` | List of TCP checks to run. | [`[]TCPCheck`](/docs/guide/canary-checker/reference/tcp) | |
+| `webhook` | Webhook check configuration. | [`WebhookCheck`](/docs/guide/canary-checker/reference/webhook) | |

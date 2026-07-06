@@ -8,10 +8,10 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#AwsConfigCheck -->
 
-AWS Config checks
+The AWS Config check runs a SQL query against AWS Config resources.
 
 
-```yaml title="aws-config-rule.yaml"  file=<rootDir>/modules/canary-checker/fixtures/aws/aws_config_pass.yaml
+```yaml title="aws-config.yaml" file=<rootDir>/modules/canary-checker/fixtures/aws/aws_config_pass.yaml
 ```
 
 
@@ -20,7 +20,7 @@ AWS Config checks
   {
     field: "query",
     required: true,
-    description: "Specify one or more Config rule names to filter the results by rule",
+    description: "SQL query to run against AWS Config resources",
     scheme: 'string'
   },
   {
@@ -29,5 +29,4 @@ AWS Config checks
     scheme: 'string'
   }
 ]}/>
-
 

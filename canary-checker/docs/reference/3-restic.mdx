@@ -9,27 +9,24 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#ResticCheck -->
 
-    <FullImage />
+<FullImage />
 
 The Restic check:
 
-* Queries a Restic Repository for content
-* Checks the integrity and consistency of the repository and data-blobs
-* Checks for backup freshness.
+- Queries a Restic repository for content.
+- When `checkIntegrity` is true, reads a file from the latest snapshot to verify that Restic can restore data.
+- Checks backup freshness.
 
-
-```yaml title="restic.yaml"  file=<rootDir>/modules/canary-checker/fixtures/restic/restic_without_integrity_pass.yaml
+```yaml title="restic.yaml" file=<rootDir>/modules/canary-checker/fixtures/restic/restic_without_integrity_pass.yaml
 ```
 <HealthCheck name="restic" rows={[
-  {field: "repository", description: "The restic repository path e.g., `rest:https://user:pass@host:8000/` or `rest:https://host:8000/` or `s3:s3.amazonaws.com/bucket_name`", required: true, scheme: "string"},
-  {field: "password", description: "Password for the restic repository", required: true, scheme: "EnvVar"},
-  {field: "maxAge", description: "Max age for backup freshness", required: true, scheme: "Duration"},
-  {field: "checkIntegrity", description: "When enabled, checks the integrity and consistency of the restic repository", scheme: "bool"},
-  {field: "caCert", description: "Path to the root cert for self-signed certificates", scheme: "string"},
-  {field: "connection", description: "Connection name used to derive restic password", scheme: "string"},
-  {field: "awsConnectionName", description: "AWS connection name used to derive the access key and secret key", scheme: "string"},
-  {field: "accessKey", description: "Access key ID for connection with AWS S3, MinIO, Wasabi, Alibaba OSS", scheme: "EnvVar"},
-  {field: "secretKey", description: "Secret access key for connection with AWS S3, MinIO, Wasabi, Alibaba OSS", scheme: "EnvVar"}
+  {field: "repository", description: "Restic repository path, such as `rest:https://user:pass@host:8000/`, `rest:https://host:8000/`, or `s3:s3.amazonaws.com/bucket_name`. The CRD requires this field even when `connection` supplies the runtime value.", scheme: "string", required: true},
+  {field: "password", description: "Password for the Restic repository. The CRD requires this field even when `connection` supplies the runtime value.", scheme: "EnvVar", required: true},
+  {field: "maxAge", description: "Maximum age for backup freshness. The CRD requires this field even when `connection` supplies the runtime value.", scheme: "Duration", required: true},
+  {field: "checkIntegrity", description: "Read a file from the latest snapshot to verify that Restic can restore data.", scheme: "bool"},
+  {field: "caCert", description: "Path to the root certificate for self-signed certificates.", scheme: "string"},
+  {field: "connection", description: "Connection URL, such as `connection://restic/prod`, that supplies runtime values for the repository URL, password, certificate, and optional `checkIntegrity` or `maxAge` properties.", scheme: "string"},
+  {field: "awsConnectionName", description: "AWS connection URL that supplies the access key and secret key.", scheme: "string"},
+  {field: "accessKey", description: "Access key ID for AWS S3, MinIO, Wasabi, or Alibaba OSS. Current runtime requires this field unless `awsConnectionName` is set.", scheme: "EnvVar"},
+  {field: "secretKey", description: "Secret access key for AWS S3, MinIO, Wasabi, or Alibaba OSS. Current runtime requires this field unless `awsConnectionName` is set.", scheme: "EnvVar"}
 ]}/>
-
-

@@ -1,0 +1,22 @@
+---
+title: OpenSearch
+sidebar_custom_props:
+  icon: opensearch
+---
+
+# <Icon name="opensearch" /> OpenSearch
+
+<!-- Source: modules/canary-checker/api/v1/checks.go#OpenSearchCheck -->
+
+The OpenSearch check runs a query against an OpenSearch index and verifies that the hit count equals `results`.
+
+```yaml title="opensearch.yaml" file=<rootDir>/modules/canary-checker/fixtures/opensearch/opensearch_pass.yaml
+
+```
+
+<HealthCheck name="opensearch" connection="url" rows={[
+  {field: "url", description: "OpenSearch URL. Required unless `connection` supplies the URL", scheme: "string"},
+  {field: "index", description: "OpenSearch index to query", scheme: "string", required: true},
+  {field: "query", description: "OpenSearch query body", scheme: "JSON", required: true},
+  {field: "results", description: "Expected hit count. Defaults to `0`. The check fails unless the hit count equals this value.", scheme: "int"},
+]}/>

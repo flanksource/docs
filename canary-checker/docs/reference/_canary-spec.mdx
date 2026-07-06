@@ -22,15 +22,16 @@ title: Canary Spec
 
 | Field              | Description                                      | Type                                                   |
 | ------------------ | ------------------------------------------------ | ------------------------------------------------------ |
-| `alertmanager`     | List of AlertManager checks to run.              | [`[]AlertManagerCheck`](./alert-manager)               |
+| `alertmanager`     | List of Alertmanager checks to run.              | [`[]AlertManagerCheck`](./alert-manager)               |
 | `awsConfig`        | List of AWS Config checks to run.                | [`[]AwsConfigCheck`](./aws-config)                     |
 | `awsConfigRule`    | List of AWS Config Rule checks to run.           | [`[]AwsConfigRuleCheck`](./aws-config-rule)            |
 | `azureDevops`      | List of Azure DevOps checks to run.              | [`[]AzureDevopsCheck`](./azure-devops)                 |
 | `catalog`          | List of Catalog checks to run.                   | [`[]CatalogCheck`](./catalog)                          |
-| `cloudwatch`       | List of CloudWatch checks to run.                | [`[]CloudWatchCheck`](./cloudwatch)                    |
+| `cloudwatch`       | List of CloudWatch checks to run.                | [`[]CloudWatchCheck`](./aws-cloudwatch)                |
 | `databaseBackup`   | List of database backup checks to run.           | [`[]DatabaseBackupCheck`](./gcs-database-backup)       |
 | `dns`              | List of DNS checks to run.                       | [`[]DNSCheck`](./dns)                                  |
-| `elasticsearch`    | List of ElasticSearch checks to run.             | [`[]ElasticsearchCheck`](./elasticsearch)              |
+| `dynatrace`        | List of Dynatrace checks to run.                 | [`[]DynatraceCheck`](./dynatrace)                      |
+| `elasticsearch`    | List of Elasticsearch checks to run.             | [`[]ElasticsearchCheck`](./elasticsearch)              |
 | `exec`             | List of exec checks to run.                      | [`[]ExecCheck`](./exec)                                |
 | `folder`           | List of folder checks to run.                    | [`[]FolderCheck`](./folder)                            |
 | `http`             | List of HTTP checks to run.                      | [`[]HTTPCheck`](./http)                                |
@@ -41,14 +42,30 @@ title: Canary Spec
 | `kubernetesResource` | List of Kubernetes Resource checks to run.     | [`[]KubernetesResourceCheck`](./kubernetes-resource)   |
 | `ldap`             | List of LDAP checks to run.                      | [`[]LDAPCheck`](./ldap)                                |
 | `mongodb`          | List of MongoDB checks to run.                   | [`[]MongoDBCheck`](./mongo)                            |
-| `mssql`            | List of MSSQL checks to run.                     | [`[]MssqlCheck`](./sql)                                |
+| `mssql`            | List of SQL Server checks to run.                | [`[]MssqlCheck`](./sql)                                |
 | `mysql`            | List of MySQL checks to run.                     | [`[]MysqlCheck`](./sql)                                |
-| `opensearch`       | List of OpenSearch checks to run.                | [`[]OpenSearchCheck`](./elasticsearch)                 |
-| `postgres`         | List of Postgres checks to run.                  | [`[]PostgresCheck`](./sql)                             |
+| `opensearch`       | List of OpenSearch checks to run.                | [`[]OpenSearchCheck`](./opensearch)                    |
+| `postgres`         | List of PostgreSQL checks to run.                | [`[]PostgresCheck`](./sql)                             |
 | `prometheus`       | List of Prometheus checks to run.                | [`[]PrometheusCheck`](./prometheus)                    |
-| `pubsub`           | List of PubSub checks to run.                    | [`[]PubSubCheck`](./pubsub)                            |
+| `pubsub`           | List of Pub/Sub checks to run.                   | [`[]PubSubCheck`](./pubsub)                            |
 | `redis`            | List of Redis checks to run.                     | [`[]RedisCheck`](./redis)                              |
-| `restic`           | List of restic backup checks to run.             | [`[]ResticCheck`](./restic)                            |
+| `restic`           | List of Restic backup checks to run.             | [`[]ResticCheck`](./restic)                            |
 | `s3`               | List of S3 checks to run.                        | [`[]S3Check`](./s3-protocol)                           |
 | `tcp`              | List of TCP checks to run.                       | [`[]TCPCheck`](./tcp)                                  |
 | `webhook`          | Webhook check configuration.                     | [`WebhookCheck`](./webhook)                            |
+
+## Removed Check Fields
+
+The following fields remain in the API schema for compatibility, but the runner no longer executes them. Use [`kubernetesResource`](./kubernetes-resource) or [`exec`](./exec) instead.
+
+| Field | Replacement |
+| ----- | ----------- |
+| `containerd` | [`exec`](./exec) |
+| `containerdPush` | [`exec`](./exec) |
+| `docker` | [`exec`](./exec) |
+| `dockerPush` | [`exec`](./exec) |
+| `gitProtocol` | [`exec`](./exec) |
+| `github` | [`exec`](./exec) |
+| `helm` | [`kubernetesResource`](./kubernetes-resource) or [`exec`](./exec) |
+| `namespace` | [`kubernetesResource`](./kubernetes-resource) |
+| `pod` | [`kubernetesResource`](./kubernetes-resource) |

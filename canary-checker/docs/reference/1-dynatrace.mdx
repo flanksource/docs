@@ -1,0 +1,22 @@
+---
+title: Dynatrace
+sidebar_class_name: beta
+sidebar_custom_props:
+  icon: dynatrace
+---
+
+# <Icon name="dynatrace" /> Dynatrace
+
+<!-- Source: modules/canary-checker/api/v1/checks.go#DynatraceCheck -->
+
+The Dynatrace check connects to the Dynatrace API and imports Dynatrace problems as check results.
+
+```yaml title="dynatrace.yaml" file=<rootDir>/modules/canary-checker/fixtures/external/dynatrace.yaml
+
+```
+
+<HealthCheck name="dynatrace" edition="standard" rows={[
+  {field: "host", description: "Dynatrace tenant host", scheme: "string", required: true},
+  {field: "scheme", description: "URL scheme for the tenant", scheme: "string"},
+  {field: "apiKey", description: "Dynatrace API token", scheme: "EnvVar", required: true},
+]}/>

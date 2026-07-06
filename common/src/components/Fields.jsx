@@ -136,6 +136,16 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
       scheme: "EnvVar"
     },
     {
+      field: "sessionToken",
+      description: "Session token",
+      scheme: "EnvVar"
+    },
+    {
+      field: "assumeRole",
+      description: "Role ARN to assume",
+      scheme: "string"
+    },
+    {
       field: "region",
       description: "The AWS region",
       scheme: "string"
@@ -206,7 +216,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     rows = rows.concat([
       {
         field: oss ? null : "connection",
-        description: "The connection url to use, mutually exclusive with `username` and `password`",
+        description: "Connection reference or URL to use. Inline username and password can supply credentials when the check supports them",
         scheme: "Connection",
       },
       {
@@ -233,7 +243,7 @@ export default function Fields({ common = [], rows = [], oneOf, anyOf, connectio
     rows = rows.concat([
       {
         field: oss ? null : "connection",
-        description: "The connection url or name to use`",
+        description: "Connection reference or URL to use",
         scheme: "Connection",
       },
       {

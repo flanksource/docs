@@ -8,7 +8,7 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#ExecCheck -->
 
-Executes a bash (Linux) or powershell (Windows) script. The check is considered passing if the script exits with `0`
+Executes a Bash (Linux) or PowerShell (Windows) script. The check passes when the script exits with `0`.
 
 :::tip Docker Image variants
 See <CommonLink to="image-variants">Image Variants</CommonLink> for a list of installed applications
@@ -42,23 +42,15 @@ See <CommonLink to="image-variants">Image Variants</CommonLink> for a list of in
 },
 {
   field: "connections",
-  description: "Setup connections for the script (e.g.: aws credentials)",
-  scheme: "[`ExecConnection`](#exec-connection)",
+  description: "Set up connections for the script",
+  scheme: "[`ExecConnections`](#exec-connections)",
 }
 ]}/>
 
 
 ## Shell Language
 
-Use a shebang (`#!`) line to choose a different shell (`python`, `bash` and `pwsh` are included in the base image)
-
-```yaml
-exec:
-  script: |
-    //highlight-next-line
-    #! pwsh
-    Get-Items | ConvertTo-JSON
-```
+Use a shebang (`#!`) line as the first line of `script` to choose a different shell. The base image includes `python`, `bash`, and `pwsh`.
 
 
 
@@ -71,15 +63,20 @@ exec:
 
 
 <SkipOSS>
-### Exec Connection
+### Exec Connections
 
-Exec connections allow you to specify credentials for a list of CLI tools that are needed by your scripts. Eg: You can specify the AWS connection name and the credential files along with the necessary environment variables are setup on the host running the script.
+Exec connections provide credentials and context for CLI tools used by your scripts.
 
-| Field   | Description      | Type                                                    | Required |
-| ------- | ---------------- | ------------------------------------------------------- | -------- |
-| `aws`   | AWS connection   | [`AWSConnection`](/docs/reference/connections/aws)     |          |
-| `gcp`   | GCP connection   | [`GCPConnection`](/docs/reference/connections/gcp)     |          |
-| `azure` | Azure connection | [`AzureConnection`](/docs/reference/connections/azure) |          |
+| Field | Description | Type | Required |
+| ----- | ----------- | ---- | -------- |
+| `aws` | AWS connection | [`AWSConnection`](/docs/reference/connections/aws) | |
+| `azure` | Azure connection | [`AzureConnection`](/docs/reference/connections/azure) | |
+| `eksPodIdentity` | Use EKS Pod Identity credentials | `boolean` | |
+| `fromConfigItem` | Load connection details from a config item | `string` | |
+| `gcp` | GCP connection | [`GCPConnection`](/docs/reference/connections/gcp) | |
+| `kubernetes` | Kubernetes connection | [`KubernetesConnection`](/docs/reference/connections/kubernetes) | |
+| `opensearch` | OpenSearch connection | `OpensearchConnection` | |
+| `serviceAccount` | Use the pod service account credentials | `boolean` | |
 
 
 <details summary="Exec with a Connection">
@@ -94,7 +91,7 @@ Exec connections allow you to specify credentials for a list of CLI tools that a
 
 | Field  | Description   | Type     | Required |
 | ------ | ------------- | -------- | -------- |
-| `path` | Path or glob. | `string` | `true`   |
+| `path` | Path, glob, `/dev/stdout`, or `/dev/stderr`. | `string` | `true` |
 
 See [artifacts](/docs/installation/artifacts)
 
@@ -119,6 +116,8 @@ See [artifacts](/docs/installation/artifacts)
 </details>
 
 <Fields connection="git" rows={[
-  {field: "destination", description: "Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL is used as the dir name", type: "string"},
+  {field: "branch", description: "Git branch to check out", scheme: "string"},
+  {field: "depth", description: "Clone depth", scheme: "int"},
+  {field: "type", description: "Git checkout type", scheme: "string"},
+  {field: "destination", description: "Deprecated. Destination path for the checkout. If left empty, the SHA-256 hash of the URL is used as the directory name.", scheme: "string", deprecated: true},
 ]}/>
-

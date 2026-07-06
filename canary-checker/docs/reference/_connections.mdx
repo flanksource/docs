@@ -29,38 +29,11 @@ By using the AWS [Instance Profile](https://docs.aws.amazon.com/AWSEC2/latest/Us
 1. Connection
 
 Using a shared <CommonLink to="connection">Connection</CommonLink>
-```yaml title="aws-connection.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: cloudwatch-check
-spec:
-  interval: 30
-  cloudwatch:
-    - connection: connection://aws/internal
-      region: us-east-1 # optional if specified in the connection
+```yaml title="aws-connection.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/exec_connection_aws_fail.yaml
 ```
 1. Inline
 
-```yaml title="inline.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: cloudwatch-check
-spec:
-  interval: 30
-  cloudwatch:
-    - accessKey:
-        valueFrom:
-          secretKeyRef:
-            name: aws-credentials
-            key: AWS_ACCESS_KEY_ID
-      secretKey:
-        valueFrom:
-          secretKeyRef:
-            name: aws-credentials
-            key: AWS_SECRET_ACCESS_KEY
-      region: us-east-1
+```yaml title="aws-inline.yaml" file=<rootDir>/modules/canary-checker/fixtures/aws/minimal/aws_exec_pass.yaml
 ```
 
 ## GCP
@@ -82,39 +55,13 @@ GKE [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/w
 
 1. Connection
 
-```yaml title="gcs-connection.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: database-backup-check
-spec:
-  interval: 60
-  folder:
-    - name: gcs auth test
-      path: gcs://somegcsbucket
-      gcpConnection:
-        connection: connection://gcp/internal
+```yaml title="gcp-connection.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/database_backup_cred_from_connection.yaml
 ```
 
 
 1. Inline
 
-```yaml title="gcp-inline.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: database-backup-check
-spec:
-  interval: 60
-  folder:
-    - name: gcs auth test
-      path: gcs://somegcsbucket
-      gcpConnection:
-        credentials:
-          valueFrom:
-            secretKeyRef:
-              name: gcp-credentials
-              key: AUTH_ACCESS_TOKEN
+```yaml title="gcp-inline.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/database_backup_cred.yaml
 ```
 
 ## Azure

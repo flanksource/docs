@@ -10,16 +10,16 @@ sidebar_custom_props:
 
 The Redis check connects to a specified Redis database instance to check its availability.
 
-```yaml title="redis.yaml"  file=<rootDir>/modules/canary-checker/fixtures/datasources/redis_pass.yaml
+```yaml title="redis.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/redis_pass.yaml
 ```
 
-<HealthCheck name="redis" connection="url" rows={[
-  {field: "url", description: "Redis connection URL", scheme: 'string'},
-  {field: "connection", description: "Connection name e.g. connection://redis/prod", scheme: 'string'},
+<HealthCheck name="redis" rows={[
+  {field: "url", description: "Redis address in `host:port` format. Required unless `connection` supplies the address", scheme: 'string'},
+  {field: "connection", description: "Connection URL, such as `connection://redis/prod`, that supplies Redis connection details", scheme: 'string'},
   {field: "username", description: "Username for authentication", scheme: 'EnvVar'},
   {field: "password", description: "Password for authentication", scheme: 'EnvVar'},
   {field: "db", description: "Database to be selected after connecting to the server", scheme: 'int'},
-  {field: "addr", description: "Redis address (deprecated - use url instead)", scheme: 'string'},
+  {field: "addr", description: "Deprecated. Use `url` instead", scheme: 'string'},
   {
     field: 'tlsConfig',
     description: 'TLS and mutual TLS configuration',
@@ -33,14 +33,14 @@ The `tlsConfig` field enables TLS for the Redis connection. Set `enable: true` t
 
 :::note
 Native Redis TLS connection string formats are **not** supported — e.g. `rediss://` scheme,
-`ssl=true`, or other query-string flags in the URL. TLS must be configured explicitly via `tlsConfig`.
+`ssl=true`, or other query-string flags in `url`. TLS must be configured explicitly via `tlsConfig`.
 :::
 
 <Fields
   rows={[
     {
       field: 'enable',
-      description: 'Explicitly enable TLS when no other TLS field is set (e.g. for publicly-trusted servers that need no CA).',
+      description: 'Explicitly enable TLS when no other TLS field is set (for example, for publicly trusted servers that need no CA).',
       scheme: 'bool'
     },
     {
@@ -96,4 +96,3 @@ Native Redis TLS connection string formats are **not** supported — e.g. `redis
 ```yaml title="redis-tls-insecure.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/redis-tls-insecure.yaml
 
 ```
-

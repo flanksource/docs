@@ -8,7 +8,7 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#JunitCheck -->
 
-JUnit check performs a Unit test, parses the JUnit test reports in a container at a specified path as defined in `testResults`.
+Use a JUnit check to run a Kubernetes pod and ingest JUnit XML reports from `testResults`.
 
 
 ```yaml title="junit.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/junit_pass.yaml
@@ -43,14 +43,14 @@ JUnit check performs a Unit test, parses the JUnit test reports in a container a
 
 | Name       | Description                                      | Scheme                         |
 | ---------- | ------------------------------------------------ | ------------------------------ |
-| `suites`   |                                                  | [`[]JunitSuite`](#junit-suite) |
+| `suites`   |                                                  | [`[]JunitTestSuite`](#junit-test-suite) |
 | `passed`   | Number of passing tests                          | _int_                          |
 | `failed`   | Number of failed tests                           | _int_                          |
-| `skipped`  | NUmber of tests that were skipped                | _int_                          |
+| `skipped`  | Number of skipped tests                          | _int_                          |
 | `error`    | Number of errors produced when running the tests | _int_                          |
 | `duration` | Total time in seconds                            | _float64_                      |
 
-### Junit Suite
+### JUnit Test Suite
 
 | Name       | Description                                      | Scheme                       |
 | ---------- | ------------------------------------------------ | ---------------------------- |
@@ -58,11 +58,11 @@ JUnit check performs a Unit test, parses the JUnit test reports in a container a
 | `tests`    |                                                  | [`[]JunitTest`](#junit-test) |
 | `passed`   | Number of passing tests                          | _int_                        |
 | `failed`   | Number of failed tests                           | _int_                        |
-| `skipped`  | NUmber of tests that were skipped                | _int_                        |
+| `skipped`  | Number of skipped tests                          | _int_                        |
 | `error`    | Number of errors produced when running the tests | _int_                        |
 | `duration` | Total time in seconds                            | _float64_                    |
 
-### Junit Test
+### JUnit Test
 
 | Name         | Description                                             | Scheme              |
 | ------------ | ------------------------------------------------------- | ------------------- |
@@ -70,7 +70,7 @@ JUnit check performs a Unit test, parses the JUnit test reports in a container a
 | `classname`  | an additional descriptor for the hierarchy of the test. | _string_            |
 | `duration`   | Time in seconds                                         | _float64_           |
 | `status`     | One of `passed`, `skipped`, `failed` or `error`         | _string_            |
-| `message`    | Description optionally included with a skipped,         | _string_            |
+| `message`    | Text included with a skipped, failed, or errored test case | _string_            |
 | `properties` | Additional info about the test                          | `map[string]string` |
 | `error`      | Any errors encountered when running a test              | _string_            |
 | `stdout`     | Standard output produced during test                    | _string_            |

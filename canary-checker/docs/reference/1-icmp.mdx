@@ -8,15 +8,18 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#ICMPCheck -->
 
-Performs ICMP (ping) requests for information on ICMP packet loss, duration, and response.
+The ICMP check sends ping requests and measures packet loss, duration, and response.
 
 :::info
-Canary checker supports both `privileged` and `unprivileged` ping modes using the `PING_MODE` environment variable or `pingMode` helm value.
+Canary Checker supports both `privileged` and `unprivileged` ping modes using the `PING_MODE` environment variable or `pingMode` Helm value.
 
-When using `unprivileged` you need to run:
-```shell
+Run the following command to allow unprivileged ICMP sockets:
+
+```shell title="Enable unprivileged ping"
 sudo sysctl -w net.ipv4.ping_group_range="0 2147483647"
 ```
+
+The command allows all groups to create ICMP sockets without elevated privileges.
 :::
 
 
@@ -26,14 +29,14 @@ sudo sysctl -w net.ipv4.ping_group_range="0 2147483647"
 
 
 <HealthCheck name="icmp"  rows={[
-  {field: "endpoint", description: "Host to ping", scheme: 'string', required: true},
+  {field: "endpoint", description: "Hostname or IPv4 host to ping. Do not include a URL scheme or path.", scheme: 'string', required: true},
   {field: "packetCount", description: "Total number of packets to send per check", default: '5', scheme: 'int'},
   {field: "packetLossThreshold", description: "Percent of total packets that are allowed to be lost", scheme: 'int64'},
-  {field: "thresholdMillis", description: "Maximum response time in milliseconds", scheme: 'int64'}
+  {field: "thresholdMillis", description: "Maximum response time in milliseconds. Set a non-zero value.", scheme: 'int64', required: true}
 ]}/>
 
 ## Metrics
 
-| **Metric**                                       |       |                                      |
-| ------------------------------------------------ | ----- | ------------------------------------ |
-| canary_check_icmp_packetloss{'{'}endpoint = "", ip = ""{'}'} | Gauge | Packet loss percentage in ICMP check |
+| Metric | Type | Description |
+| ------ | ---- | ----------- |
+| `canary_check_icmp_packetloss{endpoint="",ip=""}` | Gauge | Packet loss percentage in ICMP check |

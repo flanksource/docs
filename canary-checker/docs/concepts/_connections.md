@@ -14,20 +14,8 @@ Whenever a field uses the `EnvVar` object type you have the option of specifying
 
 Using a HTTP health check as an example for static values:
 
-```yaml title="http-basic-auth-static.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-basic-auth
-spec:
-  http:
-    - endpoint: https://httpbin.org/basic-auth/hello/world
-      responseCodes: [200]
-      authentication:
-        username:
-          value: hello
-        password:
-          value: world
+```yaml title="http-basic-auth-static.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_auth_static_pass.yaml
+
 ```
 
 ### Kubernetes Configmaps
@@ -38,26 +26,8 @@ Create a configmap:
 kubectl create configmap basic-auth --from-literal=user=hello --from-literal=pass=world -n default
 ```
 
-```yaml title="http-basic-auth-configmap.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-basic-auth-configmap
-spec:
-  http:
-    - endpoint: https://httpbin.org/basic-auth/hello/world
-      responseCodes: [200]
-      authentication:
-        username:
-          valueFrom:
-            configMapKeyRef:
-              name: basic-auth
-              key: user
-        password:
-          valueFrom:
-            configMapKeyRef:
-              name: basic-auth
-              key: pass
+```yaml title="http-basic-auth-configmap.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_auth_from_config_map.yaml
+
 ```
 
 ### Kubernetes Secrets
@@ -68,24 +38,6 @@ Create secret:
 kubectl create secret generic basic-auth --from-literal=user=hello --from-literal=pass=world -n default
 ```
 
-```yaml title="http-basic-auth-secret.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-basic-auth-configmap
-spec:
-  http:
-    - endpoint: https://httpbin.org/basic-auth/hello/world
-      responseCodes: [200]
-      authentication:
-        username:
-          valueFrom:
-            secretKeyRef:
-              name: basic-auth
-              key: user
-        password:
-          valueFrom:
-            secretKeyRef:
-              name: basic-auth
-              key: pass
+```yaml title="http-basic-auth-secret.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_auth_from_secret.yaml
+
 ```

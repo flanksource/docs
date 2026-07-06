@@ -11,7 +11,7 @@ import ResourceSelector from '@site/docs/snippets/\_resource-selector.mdx';
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#CatalogCheck -->
 
-Runs a [config-db](https://github.com/flanksource/config-db) query.
+The Catalog check runs a [Config DB](https://github.com/flanksource/config-db) resource selector query.
 
 ```yaml title="catalog.yaml"  file=<rootDir>/modules/canary-checker/fixtures/external/catalog.yaml
 ```
@@ -19,7 +19,7 @@ Runs a [config-db](https://github.com/flanksource/config-db) query.
 <HealthCheck name="catalog"  rows={[
   {
     field: "selector" ,
-    scheme: '[ResourceSelector](#resource-selectors)',
+    scheme: '[ResourceSelector](#resource-selector)',
     required: true
   },
 ]}/>
@@ -28,28 +28,8 @@ Runs a [config-db](https://github.com/flanksource/config-db) query.
 
 <ResourceSelector hideComponent={true} hideCheck={true} />
 
-### Examples
+### Example
 
-```yaml title="catalog-pod-check.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: k8s-checks
-spec:
-  schedule: '@every 30s'
-  catalog:
-    - name: pod-catalog-check
-      selector:
-        - labelSelector: 'kubernetes.io/app=notification-listener'
-          types:
-            - Kubernetes::Pod
-      test:
-        expr: "size(results) > 0"
+```yaml title="catalog.yaml" file=<rootDir>/modules/canary-checker/fixtures/external/catalog.yaml
 
-    # Only namespace starting with kube should be kube-system, kube-public and kube-node-lease
-    - name: namespace-search-check
-      selector:
-        - search: 'kube-* type=Kubernetes::Namespace'
-      test:
-        expr: "size(results) == 3"         
 ```

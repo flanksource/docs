@@ -8,14 +8,14 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#FolderCheck -->
 
-Checks the contents of a folder for size, age, and count. Folder based checks are useful in a number of scenarios:
+The Folder check verifies folder contents by size, age, and count. Folder-based checks are useful for:
 
 - Verifying that backups have been uploaded and are the appropriate size
 - Checking that logs or other temporary files are being cleaned up
 - For batch processes:
-  - Checking if files are being processed (and/or produced)
-  - Checking the size of queue processing backlog
-  - Checking if any error (`.err` or `.log`) files have been produced.
+  - Checking whether files are being processed or produced
+  - Checking the size of a queue processing backlog
+  - Checking whether error files, such as `.err` or `.log`, have been produced
 
 ```yaml title="folder-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/folder_single_pass.yaml
 ```
@@ -23,7 +23,7 @@ Checks the contents of a folder for size, age, and count. Folder based checks ar
 <HealthCheck name="folder" edition="standard" rows={[
   {
     field: 'path',
-    description: "A local folder path or a remote folder `smb://`, `sftp://`, `s3://` or `gcs://`",
+    description: "Local path or remote folder path. Supported remote paths are `smb://`, UNC paths, `s3://`, and `gcs://`. For SFTP, set `sftpConnection` and use the remote path.",
     required: true
   },
   {
@@ -31,28 +31,28 @@ Checks the contents of a folder for size, age, and count. Folder based checks ar
     description: "When set to true, recursively scans the folder to list all files (symlinks are listed but not traversed)",
     scheme: "bool"
   },
-  {    field: 'sftpConnection',description: "Connection details", scheme: "[SFTP](#sftp)"  },
+  {    field: 'sftpConnection',description: "SFTP connection details. Use this field with a remote `path`.", scheme: "[SFTP](#sftp)"  },
   { field: "gcpConnection", description: "Connection details for GCP", scheme: "[GCP](#gcp)" },
 {field: "awsConnection", description: "AWS Access credentials", scheme: "[S3](#s3)" },
   {field: "smbConnection", description: "SMB connection details", scheme: "[SMB](#smb)"},
     {
     field: "filter.maxAge",
-    description: "MaxAge the latest object should be younger than defined age",
+    description: "Include files modified within this age",
     scheme: "Duration"
   },
   {
     field: "filter.maxSize",
-    description: "MaxSize of the files inside the searchPath",
+    description: "Include files no larger than this size",
     scheme: "Size"
   },
   {
     field: "filter.minAge",
-    description: "MinAge the latest object should be older than defined age",
+    description: "Include files older than this age",
     scheme: "Duration"
   },
   {
     field: "filter.minSize",
-    description: "MinSize of the files inside the searchPath",
+    description: "Include files at least this size",
     scheme: "Size"
   },
   {
@@ -62,7 +62,7 @@ Checks the contents of a folder for size, age, and count. Folder based checks ar
   },
   {
     field: "filter.since",
-    description: "Filter files created since this time",
+    description: "Include files modified since this time",
     scheme: "string"
   },
   {field: "minCount", description: "The minimum number of files inside the `path`", scheme: "int"},
@@ -76,9 +76,7 @@ Checks the contents of a folder for size, age, and count. Folder based checks ar
 ]}/>
 
 
-In the example below it checks a local folder for files matching`pg-backups-.*.zip`, the check fails if:
-- No files is created within the last `1d`
-- The size of the matching files us smaller than `10mb`
+The following example checks a local folder for files matching `pg-backups-.*.zip`. The check fails if no matching files were modified within the last `1d`, or if the matching files are smaller than `10mb`.
 
 
 ```yaml title="postgres-backup-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/folder_with_filter.yaml
@@ -86,19 +84,19 @@ In the example below it checks a local folder for files matching`pg-backups-.*.z
 
 ## Result Variables
 
-The following fields are available in `test`, `display` and `transform` [expressions](../concepts/expressions)
+The following fields are available in `test`, `display`, and `transform` [expressions](../concepts/expressions).
 
-| Field                                               | Scheme                                             |
-| --------------------------------------------------- | -------------------------------------------------- |
-| `Oldest`                                            | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
-| `Newest`                                            | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
-| `MinSize`                                           | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
-| `MaxSize`                                           | [os.FileInfo](https://pkg.go.dev/io/fs#FileInfo)   |
-| `SupportsTotalSize` (Only true for SMB folders)     | bool                                               |
-| `SupportsAvailableSize` (Only true for SMB folders) | bool                                               |
-| `TotalSize`                                         | int64                                              |
-| `AvailableSize`                                     | int64                                              |
-| `Files`                                             | [[]os.FileInfo](https://pkg.go.dev/io/fs#FileInfo) |
+| Field | Scheme |
+| ----- | ------ |
+| `oldest` | `File` |
+| `newest` | `File` |
+| `smallest` | `File` |
+| `largest` | `File` |
+| `size` | `int64` |
+| `availableSize` | `int64` |
+| `files` | `[]File` |
+
+`File` contains `name`, `size`, `mode`, `modified`, and `is_dir`.
 
 
 ## Connection Types
@@ -116,7 +114,21 @@ The following fields are available in `test`, `display` and `transform` [express
 
 ### S3
 
-<Fields connection="aws" />
+<Fields
+  connection="aws"
+  rows={[
+    {
+      field: 'objectPath',
+      description: 'Object key prefix for S3 requests. The bucket comes from `path`, such as `s3://bucket-name`.',
+      scheme: 'string'
+    },
+    {
+      field: 'usePathStyle',
+      description: 'Use path-style requests for S3-compatible endpoints.',
+      scheme: 'bool'
+    },
+  ]}
+/>
 
 
 <div className="mt-5"/>

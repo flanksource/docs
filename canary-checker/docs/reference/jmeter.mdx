@@ -1,5 +1,6 @@
 ---
-title: Jmeter
+title: JMeter
+sidebar_class_name: beta
 ---
 
 # <Icon name="jmeter" /> JMeter
@@ -9,24 +10,21 @@ title: Jmeter
   <Standard />
   <FullImage />
 
-This check executes the JMeter CLI to execute the JMX test plan on the specified host.
+The JMeter check runs the JMeter CLI with a JMX test plan.
 
 ```yaml title='jmeter-check.yaml' file=<rootDir>/modules/canary-checker/fixtures/minimal/jmeter.yaml
 ```
 
 | Field | Description | Scheme | Required |
 | ----- | ----------- | ------ | -------- |
-| **`jmx`** | Jmx defines the ConfigMap or Secret reference to get the JMX test plan | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes |
-| `properties` | Properties defines the local JMeter properties | *\[\]string* |  |
-| `responseDuration` | Duration under which all the tests should pass | *string* |  |
-| `systemProperties` | SystemProperties defines the Java system property | *\[\]string* |  |
-| `host` | Host is the server against which test plan needs to be executed | *string* | |
-| `port` | Port on which the server is running | *int32* | |
+| **`jmx`** | ConfigMap or Secret reference that contains the JMX test plan | <CommonLink to="authentication">*EnvVar*</CommonLink> | Yes |
+| `properties` | Local JMeter properties | *\[\]string* | |
+| `responseDuration` | Maximum total JTL elapsed time. The check fails when the elapsed time exceeds this duration. | *Duration* | |
+| `systemProperties` | Java system properties | *\[\]string* | |
+| `host` | Proxy host passed to the JMeter CLI `-H` flag. The JMX plan defines the target under test. | *string* | |
+| `port` | Proxy port passed to the JMeter CLI `-P` flag. | *int32* | |
 | **`name`**    | Name of the check, must be unique within the canary         | `string`                                     | Yes      |
 | `description` | Description for the check                                   | `string`                                     |          |
 | `icon`        | Icon for overwriting default icon on the dashboard          | `string`                                     |          |
 | `labels`      | Labels for check                                            | `map[string]string`                          |          |
-| `test`        | Evaluate whether a check is healthy                         | [`Expression`](../concepts/expressions/health-evaluation)  |          |
-| `display`     | Expression to change the formatting of the display          | [`Expression`](../concepts/expressions/display-formatting ) |          |
-| `transform`   | Transform data from a check into multiple individual checks | [`Expression`](../concepts/expressions/transforms)          |          |
 | `metrics`     | Metrics to export from                                      | [`[]Metrics`](../concepts/metrics#custom-metrics)    |          |
