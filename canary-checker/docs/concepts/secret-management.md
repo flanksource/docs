@@ -139,12 +139,11 @@ metadata:
   name: http-basic-auth-configmap
 spec:
   http:
-
     interval: 30
   http:
     - name: vault-example-sre
-      description: "HashiCorp Vault functionality check."
-      url:  https://vault.example/v1/auth/kubernetes/login
+      description: 'HashiCorp Vault functionality check.'
+      url: https://vault.example/v1/auth/kubernetes/login
       env:
         - name: TOKEN
           valueFrom:
@@ -155,7 +154,6 @@ spec:
           "jwt": "$(TOKEN)",
           "role": "example-role"
         }
-
 ```
 
 :::note
