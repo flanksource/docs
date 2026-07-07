@@ -8,12 +8,11 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#MongoDBCheck -->
 
-The Mongo check tries to connect to a specified Mongo Database to ensure connectivity.
+The MongoDB check connects to MongoDB and pings the primary to verify availability.
 
-```yaml title="icmp.yaml"  file=<rootDir>/modules/canary-checker/fixtures/datasources/mongo_pass.yaml
+```yaml title="mongodb.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/mongo_pass.yaml
 ```
-<HealthCheck name="mongo" connection="url" rows={[
-  {field: "url", description: "MongoDB [connection-string](https://docs.mongodb.com/manual/reference/connection-string/) e.g.  `mongodb://:27017/?authSource=admin`", required: true},
+<HealthCheck name="mongodb" connection="url" rows={[
+  {field: "url", description: "MongoDB [connection string](https://www.mongodb.com/docs/manual/reference/connection-string/), such as `mongodb://:27017/?authSource=admin`. Required unless `connection` supplies the URL.", scheme: "string"},
 
 ]}/>
-

@@ -6,10 +6,10 @@ import TransformFields from './_transform_fields.mdx'
 
 The `transform` can be used to convert one check into multiple checks programmatically.
 
-```yaml title="alertmanager-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/alertmanager.yaml
+```yaml title="alertmanager-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/alertmanager_mix.yaml
 ```
 
-In the above example, the check returns multiple alerts from alertmanager. By default, all those alerts are grouped in a single check.
+In the above example, the check returns multiple alerts from Alertmanager. By default, all those alerts are grouped in a single check.
 
 But if we want to display each alert as its own check in the UI, we can use the `transform` function for this. The transform function takes a `Template` as input and the output from the template expected are the checks in JSON format.
 
@@ -27,7 +27,6 @@ The update a check in place, return a JSON string of `TransformResult` with the 
 ## Creating new checks
 
 To create a new check, return a JSON string of `[]TransformResult` containing the new checks.
-
 
 
 

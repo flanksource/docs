@@ -8,19 +8,17 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#TCPCheck -->
 
-Checks if a network port is reachable.
+The TCP check verifies that a network port is reachable.
 
-
-```yaml title="tcp.yaml"  file=<rootDir>/modules/canary-checker/fixtures/minimal/tcp.yaml
+```yaml title="tcp.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/tcp.yaml
 ```
 
-<HealthCheck name="tcp"  rows={[
-  {    field: "endpoint", description: "Host to ping", scheme: 'string', required: true  },
+<HealthCheck name="tcp" rows={[
+  {field: "endpoint", description: "Hostname or IPv4 address and port in `HOST:PORT` format. Do not include a URL scheme or path. IPv6 literals are not supported", scheme: 'string', required: true},
   {
     field: "thresholdMillis",
-    description: "Maximum response time in milliseconds",
-    scheme: 'int'
+    description: "Connection timeout in milliseconds. When unset or `0`, the check does not set an explicit timeout",
+    scheme: 'int64'
   }
 
 ]}/>
-

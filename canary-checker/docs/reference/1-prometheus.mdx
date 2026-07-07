@@ -9,7 +9,7 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#PrometheusCheck -->
 
-The Prometheus Check connects to the Prometheus host, performs the desired query, and displays the results.
+The Prometheus check connects to Prometheus, runs a PromQL query, and displays the results.
 
 ```yaml title="prometheus.yaml"  file=<rootDir>/modules/canary-checker/fixtures/datasources/prometheus.yaml
 
@@ -21,10 +21,20 @@ The Prometheus Check connects to the Prometheus host, performs the desired query
     {
       field: 'url',
       description:
-        'Prometheus instance, defaults to `--prometheus` command line argument',
-      required: true
+        'Prometheus URL. Required unless `connection` or `--prometheus` supplies the URL',
+      scheme: 'string'
+    },
+    {
+      field: 'connection',
+      description: 'Connection URL that supplies Prometheus connection details',
+      scheme: 'string'
     },
     { field: 'query', description: 'PromQL query to execute', required: true },
+    {
+      field: 'headers',
+      description: 'HTTP headers to send with the query request',
+      scheme: '[]EnvVar'
+    },
     {
       field: 'username',
       description: 'Username for basic auth',
@@ -42,9 +52,20 @@ The Prometheus Check connects to the Prometheus host, performs the desired query
     },
     { field: 'oauth', scheme: '[OAuth](#oauth)' },
     {
+      field: 'awsSigV4',
+      description: 'AWS Signature Version 4 signing configuration',
+      scheme: 'AWSSigV4'
+    },
+    {
       field: 'tls',
       description: 'TLS and mutual TLS configuration',
       scheme: '[TLSConfig](#tls-config)'
+    },
+    {
+      field: 'host',
+      description: 'Deprecated. Use `url`; setting `host` fails the check.',
+      scheme: 'string',
+      deprecated: true
     }
   ]}
 />
@@ -107,13 +128,13 @@ Use `tls.ca` to verify Prometheus with a custom CA. Add `tls.cert` and `tls.key`
 
 | Name         | Description             | Scheme                     |
 | ------------ | ----------------------- | -------------------------- |
-| `value`      |                         | _float_                    |
-| `firstValue` | Number of rows returned | _int_                      |
-| `results`    | A list of results       | _[]map[string]interface{}_ |
+| `value`      | First sample value, or `0` when the query returns no samples | _float_ |
+| `firstResult` | First result map, including labels and value | _map[string]interface{}_ |
+| `results`    | List of result maps. Each map contains labels and `value`. | _[]map[string]interface{}_ |
 
 ## Examples
 
-### Create a check per prometheus job using a transform
+### Create a check per Prometheus job using a transform
 
 ```yaml title="jobs.yaml"  file=<rootDir>/modules/canary-checker/fixtures/prometheus/jobs.yaml
 
@@ -121,7 +142,7 @@ Use `tls.ca` to verify Prometheus with a custom CA. Add `tls.cert` and `tls.key`
 
 ### Create a check per failing job only
 
-```yaml title="jobs.yaml"  file=<rootDir>/modules/canary-checker/fixtures/prometheus/jobs-fail-only.yaml
+```yaml title="jobs-fail-only.yaml" file=<rootDir>/modules/canary-checker/fixtures/prometheus/jobs-fail-only.yaml
 
 ```
 

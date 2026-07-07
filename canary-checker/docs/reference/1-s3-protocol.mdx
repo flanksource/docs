@@ -4,35 +4,34 @@ sidebar_className: infra
 sidebar_custom_props:
   icon: logos:aws-s3
 tags:
-- enterprise
+  - enterprise
 ---
 
 # <Icon name="aws-s3" /> S3 Protocol
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#S3Check -->
 
-Checks if S3 compatible endpoints (like Minio, EMC ECS) are functioning correctly,
+The S3 protocol check verifies that S3-compatible endpoints, such as MinIO and EMC ECS, can list, put, and get objects.
 
 :::info
-To check the contents of a S3 bucket use: [S3 Bucket](folder#s3)
+To check the contents of an S3 bucket, use the [folder check](folder#s3).
 :::
 
 The S3 check:
 
-- Lists objects in the bucket to check for Read permissions
-- Puts an object into the bucket for Write permissions
-- Downloads previously uploaded object to check for Get permissions
+- Lists objects in the bucket to check read permissions.
+- Puts an object into the bucket to check write permissions.
+- Downloads the uploaded object to check get permissions.
 
+Each run writes random test content to `objectPath`, reads it back, and leaves the object in the bucket. Use a dedicated disposable key because the check can overwrite an existing object at that key.
 
-```yaml title="s3-protocol"  file=<rootDir>/modules/canary-checker/fixtures/aws/s3-protocol.yaml
+```yaml title="s3-protocol.yaml" file=<rootDir>/modules/canary-checker/fixtures/aws/s3-protocol.yaml
 ```
 <HealthCheck name="s3" edition="enterprise" connection="aws" rows={[
 
   {field: "bucketName", description: "Bucket name to test against", scheme: "string", required: true},
-  {field: "storageClass", description: "Storage Class of the test object to create", scheme: "string"},
-  {field: "objectPath", description: "Glob path to restrict matches to a subset", scheme: "string"},
-  {field: "usePathStyle", description: "Use path style path: http://s3.amazonaws.com/BUCKET/KEY instead of http://BUCKET.s3.amazonaws.com/KEY", scheme: "boolean"},
+  {field: "storageClass", description: "Storage class of the test object to create", scheme: "string"},
+  {field: "objectPath", description: "Object key to create and read during the check", scheme: "string"},
+  {field: "usePathStyle", description: "Use path-style requests, such as `http://s3.amazonaws.com/BUCKET/KEY`, instead of virtual-hosted-style requests, such as `http://BUCKET.s3.amazonaws.com/KEY`", scheme: "boolean"},
 
 ]}/>
-
-

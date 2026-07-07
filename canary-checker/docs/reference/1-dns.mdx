@@ -8,10 +8,10 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#DNSCheck -->
 
-Performs queries to a DNS server, typical use cases include:
+The DNS check queries DNS records and measures DNS response latency. Use this check to:
 
-* Checking the latency of the DNS server in a Kubernetes cluster
-* Verifying that there are serving records for a DNS based load balancer.
+* Check the latency of the DNS server in a Kubernetes cluster.
+* Verify that a DNS-based load balancer has serving records.
 
 ```yaml title="dns.yaml"  file=<rootDir>/modules/canary-checker/fixtures/minimal/dns_pass.yaml
 ```
@@ -20,9 +20,8 @@ Performs queries to a DNS server, typical use cases include:
 <HealthCheck name="dns"  rows={[
   {
     field: "server" ,
-    description: "Address of DNS server to query e.g. `8.8.8.8`",
-    scheme: 'string',
-    required: true
+    description: "DNS server to query. If omitted, Canary Checker uses the host resolver.",
+    scheme: 'string'
 
   },
   {
@@ -33,13 +32,13 @@ Performs queries to a DNS server, typical use cases include:
   },
   {
     field: "query",
-    description: "Domain name to lookup",
+    description: "Domain name to look up",
     scheme: 'string',
     required: true
   },
   {
     field: "querytype",
-    description: "Record type to query e.g. `A`, `CNAME`, `TXT`, `SRV`",
+    description: "Record type to query. Supported values are `A`, `CNAME`, `SRV`, `MX`, `PTR`, `TXT`, and `NS`.",
     scheme: 'string',
     default: "A",
   },
@@ -60,7 +59,8 @@ Performs queries to a DNS server, typical use cases include:
   },
   {
     field: "timeout",
-    description: "Timeout in seconds",
+    description: "Check timeout in seconds",
+    default: "10",
     scheme: 'int'
   }
 

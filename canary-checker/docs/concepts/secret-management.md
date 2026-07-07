@@ -29,20 +29,8 @@ Avoid in-lining secrets, use `valueFrom` and <CommonLink to="authentication">Env
 
 Using a HTTP health check as an example for static values:
 
-```yaml title="http-basic-auth-static.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-basic-auth
-spec:
-  http:
-    - url: https://httpbin.org/basic-auth/hello/world
-      responseCodes: [200]
-      authentication:
-        username:
-          value: hello
-        password:
-          value: world
+```yaml title="http-basic-auth-static.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_auth_static_pass.yaml
+
 ```
 
 ## <K8SConfigmap size={25}/> Kubernetes Config Maps
@@ -53,26 +41,8 @@ To use a configmap, we first need to create the configmap:
 kubectl create configmap basic-auth --from-literal=user=hello --from-literal=pass=world -n default
 ```
 
-```yaml title="http-basic-auth-configmap.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-basic-auth-configmap
-spec:
-  http:
-    - url: https://httpbin.org/basic-auth/hello/world
-      responseCodes: [200]
-      authentication:
-        username:
-          valueFrom:
-            configMapKeyRef:
-              name: basic-auth
-              key: user
-        password:
-          valueFrom:
-            configMapKeyRef:
-              name: basic-auth
-              key: pass
+```yaml title="http-basic-auth-configmap.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_auth_from_config_map.yaml
+
 ```
 
 ## <K8SSecret size={25}/> Kubernetes Secrets
@@ -83,24 +53,8 @@ To use a secret, first we create the secret:
 kubectl create secret generic basic-auth --from-literal=user=hello --from-literal=pass=world -n default
 ```
 
-```yaml title="http-basic-auth-secret.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-basic-auth-configmap
-spec:
-  http:
-    - url: https://httpbin.demo.aws.flanksource.com/basic-auth/hello/world
-      username:
-        valueFrom:
-          secretKeyRef:
-            name: basic-auth
-            key: user
-      password:
-        valueFrom:
-          secretKeyRef:
-            name: basic-auth
-            key: pass
+```yaml title="http-basic-auth-secret.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_auth_from_secret.yaml
+
 ```
 
 ## <Helm size={25}/> Helm Values
@@ -111,82 +65,29 @@ To use a secret, first we deploy a helm chart
 helm install podinfo  podinfo/podinfo -n podinfo --set ingress.enabled=true
 ```
 
-```yaml title="http-from-helm.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-from-helm
-spec:
-  http:
-    - env:
-        - name: url
-          valueFrom:
-            helmRef:
-              name: podinfo
-              key: .ingress.hosts[0].host
+```yaml title="http-from-helm.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_auth_from_helm_ref.yaml
 
-      url: $(url)
 ```
 
 ## <K8SServiceaccount size={25}/> Kubernetes Service Accounts
 
 Checks can use service accounts for authentication with external services that have existing trust established
 
-```yaml title="http-service-accounts.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: http-basic-auth-configmap
-spec:
-  http:
-    interval: 30
-  http:
-    - name: vault-example-sre
-      description: 'HashiCorp Vault functionality check.'
-      url: https://vault.example/v1/auth/kubernetes/login
-      env:
-        - name: TOKEN
-          valueFrom:
-            serviceAccount: default-account
-      templateBody: true
-      body: |
-        {
-          "jwt": "$(TOKEN)",
-          "role": "example-role"
-        }
+```yaml title="http-service-accounts.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_auth_from_service_account.yaml
+
 ```
 
 :::note
-For service account token issuing the canary-checker service account `canary-checker-sa` needs to be granted permissions to issue tokens using:
+To issue service account tokens, grant the `canary-checker-sa` service account access to `serviceaccounts/token`:
 
-```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: canary-checker-sa-issuing-rolebinding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: canary-checker-sa-issuing
-subjects:
-  - kind: ServiceAccount
-    name: canary-checker-sa
-    namespace: canary-checker
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  creationTimestamp: null
-  name: canary-checker-sa-issuing
-rules:
+```bash
+kubectl create clusterrole canary-checker-sa-issuing \
+  --verb=create,get \
+  --resource=serviceaccounts,serviceaccounts/token
 
-- apiGroups: [""]
-  resources:
-  - "serviceaccounts/token"
-  - "serviceaccounts"
-  verbs:
-  - "create"
-  - "get
+kubectl create clusterrolebinding canary-checker-sa-issuing-rolebinding \
+  --clusterrole=canary-checker-sa-issuing \
+  --serviceaccount=canary-checker:canary-checker-sa
 ```
 
 :::

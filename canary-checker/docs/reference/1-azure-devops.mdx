@@ -4,11 +4,11 @@ sidebar_custom_props:
   icon: azure-devops
 ---
 
-# <Icon name="azure-devops" /> Azure Devops
+# <Icon name="azure-devops" /> Azure DevOps
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#AzureDevopsCheck -->
 
-Azure Devops checks for healthy pipeline runs.
+The Azure DevOps check verifies that the latest completed matching pipeline run succeeded.
 
 
 ```yaml title="azure-devops.yaml" file=<rootDir>/modules/canary-checker/fixtures/azure/devops.yaml
@@ -17,41 +17,41 @@ Azure Devops checks for healthy pipeline runs.
 <HealthCheck name="azureDevops" edition="standard" rows={[
   {
     field: "connection",
-    description: "Connection name for Azure DevOps credentials",
+    description: "Connection URL for Azure DevOps credentials, such as `connection://namespace/name`. Use either `connection` or `personalAccessToken`.",
     scheme: "string"
   },
   {
     field: "organization",
-    description: "Name of the Azure Organization",
+    description: "Azure DevOps organization",
     required: true
   }, {
     field: "project",
-    description: "The name or ID of the project",
+    description: "Project name or ID",
     required: true
   }, {
     field: "pipeline",
-    description: "Name/Regexp to select the interested pipeline.",
+    description: "Pipeline name or regular expression to match",
     required: true
   },
 
   {
     field: "variables",
-    description: "Only match those runs that match these variables",
+    description: "Only match runs with these variable values",
     scheme: "map[string]string"
   },
   {
     field: "branch",
-    description: "Only match those runs that are run on these branch.",
+    description: "Only match runs from these branches",
     scheme: "[]string"
   },
   {
     field: "thresholdMillis",
-    description: "Maximum duration of a run after which it's considered unhealthy",
+    description: "Maximum run duration in milliseconds before the check is unhealthy",
     scheme: 'int'
   },
   {
     field: "personalAccessToken",
-    description: "See [Creating ADO PAT's](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=Windows)",
+    description: "Azure DevOps personal access token. Use either `personalAccessToken` or `connection`.",
     scheme: "EnvVar",
     required: true
   }

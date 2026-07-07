@@ -61,6 +61,7 @@ Ansible
 anyOf
 api
 API's
+apiKey
 APIs
 apiVersion
 argocd
@@ -489,3 +490,13 @@ OpenAI
 Ollama
 Slack
 WebSocket
+accessKey
+Alibaba
+availableSize
+errored
+liveness
+maxRedirects
+rollout
+secretKey
+skipTLSVerify
+totalSize

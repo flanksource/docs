@@ -4,14 +4,12 @@ sidebar_position: 0
 sidebar_custom_props:
   icon: k8s
 ---
-import ReactMarkdown from 'react-markdown';
-import ResourceSelector from '@site/docs/snippets/\_resource-selector.mdx';
 
 # <Icon name="k8s" /> Kubernetes
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#KubernetesCheck -->
 
-The Kubernetes check performs requests on Kubernetes resources such as Pods to get the desired information.
+The Kubernetes check queries Kubernetes resources such as Pods and evaluates their health or readiness.
 
 
 ```yaml title="kubernetes.yaml"  file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-minimal_pass.yaml
@@ -19,15 +17,10 @@ The Kubernetes check performs requests on Kubernetes resources such as Pods to g
 
 <HealthCheck name="kubernetes" edition="standard" connection="kubernetes"  rows={[
   {field: "kind", description: "Kubernetes object kind", scheme: 'string', required: true},
+  {field: "apiVersion", description: "Kubernetes API version for the resource", scheme: 'string'},
   {field: "resource", description: "Filters resources by name, namespace, or labels", scheme: '[Resource Selector](#resource-selector)'},
   {field: "namespaceSelector", description: "Filters namespaces by name or labels", scheme: '[Resource Selector](#resource-selector)'},
-  {field: "namespace", description:
-    <ReactMarkdown>
-    Failing checks are placed in this namespace, useful if you have shared namespaces.
-
-    **NOTE:** this does not change the namespace of the resources being queried</ReactMarkdown>
-  },
-  {field: "ignore", description: "Ignore the specified resources from the fetched resources. Can be a glob pattern.", scheme: '[]glob'},
+  {field: "ignore", description: "Exclude resources by name. Values are glob patterns.", scheme: '[]string'},
   {field: "healthy", description: "Fail the check if any resources are unhealthy", scheme: 'bool'},
   {field: "ready", description: "Fail the check if any resources are not ready", scheme: 'bool'},
 
@@ -36,61 +29,46 @@ The Kubernetes check performs requests on Kubernetes resources such as Pods to g
 
 ## Resource Selector
 
-<ResourceSelector hideComponent={true} hideCheck={true} />
+<Fields rows={[
+  {field: "name", description: "Resource name or glob pattern", scheme: "string"},
+  {field: "labelSelector", description: "Kubernetes label selector", scheme: "string"},
+  {field: "fieldSelector", description: "Kubernetes field selector", scheme: "string"},
+  {field: "search", description: "Search expression", scheme: "string"},
+]}/>
 
-```yaml title="catalog-pod-check.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: k8s-checks
-spec:
-  schedule: '@every 30s'
-  kubernetes:
-    - name: notification-pod-health-check
-      selector:
-        - labelSelector: 'kubernetes.io/app=notification-listener'
-          types:
-            - Kubernetes::Pod
-      test:
-        expr: dyn(results).all(x, k8s.isHealthy(x))
+The following example uses `namespaceSelector` and `resource` to select Kubernetes resources.
+
+```yaml title="kubernetes.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes_pass.yaml
+```
+
+## API Version
+
+Use `apiVersion` when the same Kubernetes kind exists in more than one API group.
+
+```yaml title="kubernetes-apiversion.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes_apiversion_pass.yaml
+
 ```
 
 ## Healthy
 
-Using `healthy: true` is functionally equivalent to:
+Using `healthy: true` is functionally equivalent to this CEL expression:
 
-```yaml
-  test:
-        expr: dyn(results).all(x, k8s.isHealthy(x))
+```cel
+dyn(results).all(x, k8s.isHealthy(x))
 ```
 
-```yaml title="kubnetes-healthy.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: kube-system-checks
-spec:
-  interval: 30
-  kubernetes:
-    - namespace: kube-system
-      name: kube-system
-      kind: Pod
-      //highlight-next-line
-      healthy: true
-      resource:
-        labelSelector: k8s-app=kube-dns
-      namespaceSelector:
-        name: kube-system
+The following example uses `healthy: true`.
 
+```yaml title="kubernetes-healthy.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes-minimal_pass.yaml
 ```
 
 See the CEL function <CommonLink to="cel" anchor="k8sishealthy">k8s.isHealthy</CommonLink> for more details
 
 ## Ready
 
-Similar to the `healthy` flag, there's also a `ready` flag which is functionally equivalent to having the following test expression
+Similar to the `healthy` flag, the `ready` flag is functionally equivalent to this CEL expression:
 
-```
+```cel
 dyn(results).all(x, k8s.isReady(x))
 ```
 

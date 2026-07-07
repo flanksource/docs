@@ -1,21 +1,22 @@
 ---
-title: PubSub
+title: Pub/Sub
 sidebar_custom_props:
   icon: aws-sqs
 ---
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#PubSubCheck -->
 
-This check connects to a PubSub Queue (SQS, GCP PubSub, RabbitMQ, Kafka, NATs) and pulls messages.
+The Pub/Sub check connects to a queue, such as Amazon SQS, Google Cloud Pub/Sub, RabbitMQ, Kafka, NATS, or an in-memory queue, and pulls messages.
 
 ```yaml title="pubsub-gcp.yaml" file=<rootDir>/modules/canary-checker/fixtures/external/pubsub-gcp.yaml
 ```
 <HealthCheck name="pubsub" rows={[
   {field: "sqs", description: "Amazon SQS queue configuration", scheme: "[SQS](#sqs)"},
-  {field: "pubsub", description: "Google Cloud Pub/Sub configuration", scheme: "[GCP PubSub](#gcp-pubsub)"},
+  {field: "pubsub", description: "Google Cloud Pub/Sub configuration", scheme: "[Google Cloud Pub/Sub](#google-cloud-pubsub)"},
   {field: "rabbitmq", description: "RabbitMQ queue configuration", scheme: "[RabbitMQ](#rabbitmq)"},
   {field: "kafka", description: "Apache Kafka queue configuration", scheme: "[Kafka](#kafka)"},  
-  {field: "nats", description: "NATS messaging system configuration", scheme: "[NATS](#nats)"}
+  {field: "nats", description: "NATS queue configuration", scheme: "[NATS](#nats)"},
+  {field: "memory", description: "In-memory queue configuration", scheme: "[Memory](#memory)"}
 ]}/>
 
 ## SQS
@@ -23,7 +24,7 @@ This check connects to a PubSub Queue (SQS, GCP PubSub, RabbitMQ, Kafka, NATs) a
 <Fields connection="aws" rows={[
   {field: "queue", description: "Amazon SQS queue ARN", scheme: "string", required: true},
   {field: "raw", description: "Enable raw message delivery without JSON wrapping", scheme: "bool", required: true},
-  {field: "waitTime", description: "Time in seconds to long-poll for messages (default: 15, max: 20)", scheme: "int"}
+  {field: "waitTime", description: "Time in seconds to long-poll for messages (default: 5, max: 20)", scheme: "int"}
 ]}/>
 
 
@@ -35,27 +36,34 @@ This check connects to a PubSub Queue (SQS, GCP PubSub, RabbitMQ, Kafka, NATs) a
   {field: "group", description: "Kafka consumer group ID", scheme: "string", required: true}
 ]}/>
 
-## GCP PubSub
+## Google Cloud Pub/Sub
 
 <Fields connection="gcp" rows={[
   {field: "project_id", description: "Google Cloud project ID", scheme: "string", required: true},
+  {field: "project", description: "Google Cloud project", scheme: "string"},
   {field: "subscription", description: "Pub/Sub subscription name", scheme: "string", required: true}
 ]}/>
 
 ## NATS
 
 <Fields rows={[
-  {field: "url", description: "NATS server URL", scheme: "string", required: true},
+  {field: "url", description: "NATS server URL", scheme: "string"},
   {field: "subject", description: "NATS subject pattern", scheme: "string", required: true},
-  {field: "queue", description: "NATS queue group name for load balancing", scheme: "string", required: true}
+  {field: "queue", description: "NATS queue group name for load balancing", scheme: "string"}
 ]}/>
 
 ## RabbitMQ
 
 <Fields rows={[
   {field: "host", description: "RabbitMQ server hostname", scheme: "string", required: true},
-  {field: "port", description: "RabbitMQ server port", scheme: "int"},
-  {field: "username", description: "RabbitMQ authentication username", scheme: "string"},
-  {field: "password", description: "RabbitMQ authentication password", scheme: "string"},
+  {field: "port", description: "RabbitMQ server port", scheme: "int", required: true},
+  {field: "username", description: "RabbitMQ authentication username", scheme: "string", required: true},
+  {field: "password", description: "RabbitMQ authentication password", scheme: "string", required: true},
   {field: "queue", description: "RabbitMQ queue name", scheme: "string", required: true}
+]}/>
+
+## Memory
+
+<Fields rows={[
+  {field: "queue", description: "In-memory queue name", scheme: "string", required: true}
 ]}/>

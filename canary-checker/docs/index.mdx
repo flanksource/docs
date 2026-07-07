@@ -13,12 +13,12 @@ sidebar_custom_props:
 <Screenshot img="/img/health-checks.svg" size="900px" />
 
 
-Mission control provides the ability to define and run periodic health checks against services, infrastructure, and applications.
+Canary Checker defines and runs periodic health checks against services, infrastructure, and applications.
 
-1. **Synthetic** - checks  run periodically to directly test services/applications by generating requests using http, sql, mongo, redis, ldap, etc.
-1. **Passive** checks consolidate alerts from monitoring systems like Prometheus, Datadog, Dynatrace, CloudWatch and ElasticSearch
-1. **Infrastructure** checks provision infrastructure (e.g. EC2 Instances, Kubernetes Pods) and then run synthetic checks against them to verify the ability to provision infrastructure. This allows detecting issues in infrastructure provisioning processes.
-1. **Integration** checks run automated test suites using tools like Playwright, JUnit, Newman and K6 to validate end-to-end functionality across services and infrastructure.
+1. **Synthetic** checks test services and applications by generating requests using HTTP, SQL, MongoDB, Redis, LDAP, and other protocols.
+1. **Passive** checks consolidate alerts from monitoring systems like Prometheus, Datadog, Dynatrace, CloudWatch, and Elasticsearch.
+1. **Infrastructure** checks verify Kubernetes resources, object storage, databases, and cloud APIs.
+1. **Integration** checks run automated test suites using tools like Playwright, JUnit, Newman, and k6 to validate end-to-end functionality across services and infrastructure.
 
 :::info
 Under the hood health checks are implemented using the open-source [flanksource/canary-checker](https://github.com/flanksource/canary-checker) project
@@ -26,27 +26,26 @@ Under the hood health checks are implemented using the open-source [flanksource/
 
 ### Metrics Exporter
 
-In addition to returning a pass/fail status, health checks can export metrics to Prometheus, replacing the need for many custom prometheus exporters.
+In addition to returning a pass/fail status, health checks can export metrics to Prometheus, replacing the need for many custom Prometheus exporters.
 
 ### Scripting
 
-Evaluate the health of checks using scripts in CEL, Javascript or Go Templating. Scripts can also be used to filter and transform alerts from external systems.
+Evaluate the health of checks using scripts in CEL, JavaScript, or Go templates. Scripts can also filter and transform alerts from external systems.
 
 
- ### Dashboard
-The health checks page provides a high level view of the overall health of all services, infrastructure, and applications. It surfaces recent failures and provides a high level latency and reliability metrics.
+### Dashboard
+
+The health checks page provides a high-level view of the overall health of all services, infrastructure, and applications. It surfaces recent failures and provides high-level latency and reliability metrics.
 
 ![](./images/canary-dashboard.png)
 
 
 ### Prometheus
 
-[Prometheus](/docs/guide/canary-checker/concepts/metrics) metrics are exposed from health checks to provide high level visibility into latency, error rates and other metrics. This allows monitoring the health of services and applications using existing Prometheus alerts and <CommonLink to="grafana">Grafana</CommonLink> dashboards.
+[Prometheus](/docs/guide/canary-checker/concepts/metrics) metrics are exposed from health checks to provide high-level visibility into latency, error rates, and other metrics. This lets you monitor the health of services and applications using existing Prometheus alerts and <CommonLink to="grafana">Grafana</CommonLink> dashboards.
 
 ### Synthetic
 
-Synthetic checks are periodically run by canary checker to directly test services/applications by generating requests using http, sql, mongo, redis, ldap, etc.
-
-
+Synthetic checks test services and applications by generating requests using HTTP, SQL, MongoDB, Redis, LDAP, and other protocols.
 
 

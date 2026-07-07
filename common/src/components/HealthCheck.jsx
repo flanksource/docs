@@ -38,12 +38,22 @@ export default function HealthCheck({ name, edition, rows, ...props }) {
       scheme: "map[string]string"
     },
     {
-      field: "test",
+      field: "namespace",
+      description: "Namespace to insert the check result into when it differs from the canary namespace",
+      scheme: "string"
+    },
+    {
+      field: "dependsOn",
+      description: "Checks that must complete before this check runs",
+      scheme: "[]string"
+    },
+    {
+      field: ["mongo", "mongodb", "redis"].includes(name) ? null : "test",
       description: "Evaluate whether a check is healthy",
       scheme: "[`Expression`](../concepts/expressions/health-evaluation)"
     },
     {
-      field: "display",
+      field: ["mongo", "mongodb", "redis"].includes(name) ? null : "display",
       description: "Expression to change the formatting of the display",
       scheme: "[`Expression`](../concepts/expressions/display-formatting)"
     },
@@ -53,7 +63,17 @@ export default function HealthCheck({ name, edition, rows, ...props }) {
       scheme: "bool"
     },
     {
-      field: "transform",
+      field: "transformDeleteStrategy",
+      description: "Status to apply to transformed checks when the source check no longer returns them",
+      scheme: "string"
+    },
+    {
+      field: ["pubsub", "mongo", "mongodb"].includes(name) ? null : "relationships",
+      description: "Relationships that link check results to components or configs",
+      scheme: "Relationship"
+    },
+    {
+      field: ["mongo", "mongodb", "redis"].includes(name) ? null : "transform",
       description: "Transform data from a check into multiple individual checks",
       scheme: "[`Expression`](../concepts/expressions/transforms)"
     },

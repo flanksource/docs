@@ -1,6 +1,5 @@
 ---
-title: GCS Database Backup
-sidebar_class_name: beta
+title: Google Cloud SQL Backups
 sidebar_custom_props:
   icon: google-cloud
 ---
@@ -11,14 +10,14 @@ sidebar_custom_props:
 
 Checks if a Google Cloud SQL instance has been successfully backed up recently.
 
-```yaml title="gcs-database.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/database_backup.yaml
+```yaml title="google-cloud-sql-backup.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/database_backup.yaml
 ```
 
 <HealthCheck name="databaseBackup" edition="standard" rows={[
-  {field: "maxAge", description: "Max age for backup allowed", scheme: "Duration", required: true},
+  {field: "maxAge", description: "Maximum backup age. Set this field to validate backup freshness.", scheme: "Duration"},
   {field: "gcp.project", description: "GCP project ID", required: true, scheme: "string"},
   {field: "gcp.instance", description: "Cloud SQL instance ID", required: true, scheme: "string"},
-  {field: "gcp.gcpConnection", description: "GCP connection credentials", scheme: "GCPConnection"}
+  {field: "gcp.gcpConnection", description: "Google Cloud connection credentials", scheme: "GCPConnection"}
 ]}/>
 
 
@@ -28,12 +27,12 @@ Checks if a Google Cloud SQL instance has been successfully backed up recently.
 There are 3 options when connecting to GCP:
 
 1. GKE [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) (the default if no `connection` or `credentials` is specified)
-2. `connection`, this is the recommended method, connections are reusable and secure
+2. `connection`, this is the recommended method. Connections are reusable and secure.
 
 ```yaml title="database-backup-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/database_backup_cred_from_connection.yaml
 ```
 
-3. `accessKey` and `secretKey` <CommonLink to="authentication">_EnvVar_</CommonLink> with the credentials stored in a secret.
+3. `credentials` <CommonLink to="authentication">_EnvVar_</CommonLink> with Google Cloud service account JSON stored in a secret.
 
-```yaml title="gcs-database-backup.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/database_backup_cred.yaml
+```yaml title="google-cloud-sql-backup.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/GCP/database_backup_cred.yaml
 ```

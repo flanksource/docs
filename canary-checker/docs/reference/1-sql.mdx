@@ -10,58 +10,44 @@ import { AzureSqlServer } from "@flanksource/icons/mi"
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#PostgresCheck, #MssqlCheck, #MysqlCheck -->
 
-This check connects to a specified Postgres database, run a query against it and verify the results.
+The SQL checks connect to a database, run a query, and fail when the returned row count is less than `results`. If `results` is omitted, the threshold is `0`. Set `markFailOnEmpty: true` to fail on zero rows. Use the `postgres`, `mysql`, or `mssql` field for the database engine that you want to check. The following fields apply to all three SQL check types.
 
-```yaml file=<rootDir>/modules/canary-checker/fixtures/datasources/postgres.yaml
+```yaml title="postgres.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/postgres.yaml
 ```
 
-<HealthCheck name="postgres"  connection="url" rows={[
-  {field: "query", description: "Query to execute against the Postgres database", scheme: 'SQL', required: true},
-  {field: "results", description: "Number of expected rows in results", scheme: 'int'},
-  {field: "timeout", description: "Timeout in seconds for query execution (default: 60)", scheme: 'int'}
+<HealthCheck name="postgres" rows={[
+  {field: "connection", description: "Connection URL, such as `connection://postgres/prod`, that supplies the database connection string", scheme: 'string'},
+  {field: "url", description: "Database connection string. Required unless `connection` supplies the URL. For MySQL, use a go-sql-driver/mysql DSN; the checker also accepts the same DSN with a leading `mysql://` prefix.", scheme: 'string'},
+  {field: "username", description: "Username that can be used when templating `url` with `$(username)`", scheme: 'EnvVar'},
+  {field: "password", description: "Password that can be used when templating `url` with `$(password)`", scheme: 'EnvVar'},
+  {field: "query", description: "SQL query to execute. Defaults to `SELECT 1` when omitted.", scheme: 'SQL'},
+  {field: "results", description: "Minimum number of expected rows. Defaults to `0`.", scheme: 'int'},
+  {field: "timeout", description: "Query timeout in seconds. Defaults to `60`.", scheme: 'int'}
 ]}/>
 
 ## Result Variables
 
-| Name    | Description             | Scheme                     |
-| ------- | ----------------------- | -------------------------- |
-| `rows`  |                         | *[]map[string]interface{}* |
-| `count` | Number of rows returned | *int*                      |
+Use `.results.rows` and `.results.count` in Go templates.
 
-
-## <Icon name="sqlserver" /> SQL Server
-
-```yaml title=canary-mssql.yaml
-# ...
-kind: Canary
-spec:
-  mssql:
-  //highlight-next-line
-   - url: "server=mssql.default.svc;user id=$(username);password=$(password);port=1433;database=master"
-      # ...
-```
+| Name | Description | Scheme |
+| ---- | ----------- | ------ |
+| `results.rows` | Rows returned by the query. | *[]map[string]interface{}* |
+| `results.count` | Number of rows returned. | *int* |
 
 ## <Icon name="mysql" /> MySQL
 
-```yaml title=lookup-mysql.yaml
-# ...
-kind: Canary
-spec:
-  mysql:
-    //highlight-next-line
-    - url: "$(username):$(password)@tcp(mysql.default.svc:3306)/mysqldb"
-    # ...
+```yaml title="mysql.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/mysql_pass.yaml
+
 ```
 
-## <Icon name="postgres" /> Postgres
+## <Icon name="postgres" /> PostgreSQL {#postgres}
 
-```yaml title=canary-postgres.yaml
-# ...
-kind: Canary
-spec:
-   mysql:
-     //highlight-next-line
-    - url: "postgres://$(username):$(password)@postgres.default.svc:5432/postgres?sslmode=disable"
-        # ...
+```yaml title="postgres.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/postgres_pass.yaml
+
 ```
 
+## <Icon name="sqlserver" /> SQL Server {#mssql}
+
+```yaml title="mssql.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/mssql_pass.yaml
+
+```

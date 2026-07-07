@@ -15,38 +15,37 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#AlertManagerCheck -->
 
-Checks [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/) for any firing alerts.
+Fetches alerts from the Prometheus Alertmanager `/api/v2/alerts` endpoint and stores the alerts in `results.alerts`.
 
-The following example [transforms](../concepts/expressions/transforms) the list of alerts so that each alert becomes a single check result. Without the transform the health check fails if any alerts are firing.
+The following example [transforms](../concepts/expressions/transforms) `results.alerts` so that each alert becomes a single check result. To fail when Alertmanager returns alerts, add a `test` expression in an imported fixture, such as `results.alerts.size() == 0`.
 
 ```yaml title="alert-manager-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/alertmanager_mix.yaml
 ```
 
-<HealthCheck name="alertmanager" rows={[
+<HealthCheck name="alertmanager" connection="url" rows={[
   {
     field: "url",
-    description: "The URL of the Prometheus Alertmanager instance",
-    scheme: "string",
-    required: true
+    description: "Prometheus Alertmanager URL. Required unless connection supplies the URL",
+    scheme: "string"
   },
   {
     field: "alerts",
-    description: "A list of alert prefix names to include",
+    description: "Alert name regular expressions to include",
     scheme: '[]string'
   },
   {
     field: "ignore",
-    description: "A list of alert prefix names to exclude",
+    description: "Alert name regular expressions to exclude",
     scheme: '[]string'
   },
   {
     field: "filters",
-    description: "A map of label to value prefixes to find alerts on",
+    description: "Label regular expressions to include",
     scheme: "map[string]string"
   },
   {
     field: "exclude_filters",
-    description: "A map of label to value prefixes to exclude alerts on",
+    description: "Label values to exclude",
     scheme: "map[string]string"
   }
 ]}/>
@@ -57,13 +56,13 @@ The following example [transforms](../concepts/expressions/transforms) the list 
 <Fields
   rows={[
     {
-      field: 'config',
-      description: 'Select all the configs to link to this check',
+      field: 'configs',
+      description: 'Select configs to link to this check',
       scheme: '[Lookup](#lookup)'
     },
     {
       field: 'components',
-      description: 'Select all the components to link to this check',
+      description: 'Select components to link to this check',
       scheme: '[Lookup](#lookup)'
     }
   ]}
@@ -75,17 +74,17 @@ The following example [transforms](../concepts/expressions/transforms) the list 
   rows={[
     {
       field: 'name',
-      description: 'Initial delay before the checks are run',
+      description: 'Name selector for the related resource',
       scheme: '[Lookup Selector](#lookup-selector)'
     },
     {
       field: 'namespace',
-      description: 'Timeout for the check',
+      description: 'Namespace selector for the related resource',
       scheme: '[Lookup Selector](#lookup-selector)'
     },
     {
       field: 'type',
-      description: 'Timeout for the check',
+      description: 'Type selector for the related resource',
       scheme: '[Lookup Selector](#lookup-selector)'
     }
   ]}
@@ -108,7 +107,7 @@ Lookup specifies the type of lookup to perform.
       scheme: 'string'
     },
     {
-      field: 'value',
+      field: 'label',
       description: 'Label specifies the key to lookup on the label',
       scheme: 'string'
     }
@@ -126,5 +125,4 @@ and need to be assigned their respective namespace.
 ```yaml title="alert-manager-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/alertmanager_mix.yaml {20}
 ```
 
-The above alertmanager canary can reside on any namespace and the check it generates are assigned the correct namespace derived from the alerts.
-
+The Alertmanager canary can reside in any namespace. The transformed checks use the namespace derived from the alerts.

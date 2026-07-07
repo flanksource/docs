@@ -9,13 +9,13 @@ sidebar_custom_props:
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#HTTPCheck -->
 
-This check performs queries on HTTP to monitor their activity.
+The HTTP check sends HTTP requests and evaluates the response.
 
 ```yaml title=http-check.yaml file=<rootDir>/modules/canary-checker/fixtures/minimal/http_single_pass.yaml
 ```
 
 <HealthCheck name="http" connection="url"  rows={[
-  {field: "url", description: "HTTP URL", scheme: "string", required: true},
+  {field: "url", description: "HTTP URL. Required unless `connection` supplies the URL", scheme: "string"},
   {field: "method", description: "HTTP Request method", default: "GET", scheme: "string"},
   {field: "headers", description: "Header fields", scheme: "[]EnvVar"},
   {field: "body", description: "Request Body Contents", scheme: "string"},
@@ -23,16 +23,19 @@ This check performs queries on HTTP to monitor their activity.
   {field: "username", description: "Username for authentication", scheme: "EnvVar"},
   {field: "password", description: "Password for authentication", scheme: "EnvVar"},
   {field: "oauth2", description: "OAuth2 configuration", scheme: "[OAuth2Config](#oauth)"},
+  {field: "digest", description: "Authenticate using HTTP Digest authentication", scheme: "bool"},
+  {field: "awsSigV4", description: "AWS Signature Version 4 signing configuration", scheme: "[AWSSigV4](#aws-signature-version-4)"},
   {field: "tlsConfig", description: "TLS config", scheme: "[TLSConfig](#tls-config)"},
   {field: "templateBody", description: "If true body is templated", default: false, scheme: "bool"},
   {field: "responseCodes", description: <>Expected HTTP response codes<br/>Equivalent to <code>test.expr: code in [200, 201]</code></>, scheme: "[]int"},
   {field: "responseContent", description: <>Expected response body content<br/>Equivalent to <code>test.expr: content.contains("value")</code></>, scheme: "string"},
-  {field: "responseJSONContent", description: "Deprecated: Use expr and jsonpath function", scheme: "JSONCheck", deprecated: true},
-  {field: "thresholdMillis", description: "Maximum duration in milliseconds for the HTTP request. It will fail the check if it takes longer", default: 5000, scheme: "int"},
+  {field: "responseJSONContent", description: "Deprecated and no-op. Use `test.expr` with `json` or `jsonpath` instead.", scheme: "JSONCheck", deprecated: true},
+  {field: "thresholdMillis", description: "Maximum duration in milliseconds for the HTTP request. When unset, the HTTP client timeout is used.", scheme: "int"},
+  {field: "maxRedirects", description: "Maximum number of redirects to follow", default: 10, scheme: "int"},
   {field: "maxSSLExpiry", description: <>Maximum number of days until the SSL Certificate expires<br/>Equivalent to <code>test.expr: sslAge &lt; Age("7d")</code></>, scheme: "int"},
   {field: "env", description: "Environment variables that are accessible while templating", scheme: "[]EnvVar"},
-  {field: "ntlm", description: "When set to true will authenticate using NTLM v1 protocol", scheme: "bool"},
-  {field: "ntlmv2", description: "When set to true will authenticate using NTLM v2 protocol", scheme: "bool"},
+  {field: "ntlm", description: "When set to true, authenticates using NTLM v1 protocol", scheme: "bool"},
+  {field: "ntlmv2", description: "When set to true, authenticates using NTLM v2 protocol", scheme: "bool"},
   {field: "crawl", description: "Crawl configuration for following links", scheme: "[Crawl](#crawl-configuration)"},
   {field: "endpoint", description: "Deprecated: Use url instead", scheme: "string", deprecated: true},
 ]}/>
@@ -62,10 +65,21 @@ This check performs queries on HTTP to monitor their activity.
   {field: "params", description: "Parameters for OAuth", scheme: "map[string]string"},
 ]}/>
 
+### AWS Signature Version 4
+
+Use `awsSigV4` to sign requests with AWS Signature Version 4.
+
+<Fields connection="aws" rows={[
+  {field: "service", description: "AWS service name for request signing", scheme: "string"},
+]}/>
+
+```yaml title="http-aws-sigv4.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_aws_sigv4_pass.yaml
+
+```
+
 ### Crawl Configuration
 
 <Fields rows={[
-  {field: "filters", description: "List of regex filters to apply to the crawled links", scheme: "[]string"},
   {field: "depth", description: "Maximum number of links to follow", scheme: "int"},
   {field: "allowedDomains", description: "List of domains to crawl", scheme: "[]string"},
   {field: "disallowedDomains", description: "List of domains to exclude from crawling", scheme: "[]string"},
@@ -75,6 +89,10 @@ This check performs queries on HTTP to monitor their activity.
   {field: "randomDelay", description: "Extra randomized duration to wait added to Delay before creating a new request", default: "100ms", scheme: "Duration"},
   {field: "parallelism", description: "Number of the maximum allowed concurrent requests", default: 2, scheme: "int"},
 ]}/>
+
+```yaml title="http-crawl.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http-crawl_pass.yaml
+
+```
 
 ### Result Variables
 

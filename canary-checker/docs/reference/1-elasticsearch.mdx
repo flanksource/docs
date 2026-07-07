@@ -4,14 +4,14 @@ sidebar_custom_props:
   icon: elasticsearch
 ---
 
-# <Icon name="elasticsearch" /> ElasticSearch
+# <Icon name="elasticsearch" /> Elasticsearch
 
 <!-- Source: modules/canary-checker/api/v1/checks.go#ElasticsearchCheck -->
 
-This check connects to a specified ElasticSearch database, run a query against it and verify the results.
+The Elasticsearch check connects to an Elasticsearch database, runs a query, and verifies the result count.
 
-:::info Opensearch
-To connect to Opensearch use `opensearch` field instead of `elasticsearch`
+:::info OpenSearch
+To connect to OpenSearch, use the `opensearch` field instead of `elasticsearch`.
 :::
 
 
@@ -23,24 +23,19 @@ To connect to Opensearch use `opensearch` field instead of `elasticsearch`
 
 {
   field: "url",
-  description: "Elasticsearch URL",
-  required: true
+  description: "Elasticsearch URL. Required unless connection supplies the URL",
 },
 {
   field: "index",
-  description: "Index against which query should be ran",
-  required: true,
+  description: "Index to query",
 }, {
   field: "query",
   description: "Query that needs to be executed on the server",
   scheme: 'JSON',
-  required: true,
-
 },
 {
   field: "results",
-  description: "Number of expected hits",
+  description: "Expected hit count. Defaults to `0`. The check fails unless the hit count equals this value.",
   scheme: 'int',
 }
 ]}/>
-
