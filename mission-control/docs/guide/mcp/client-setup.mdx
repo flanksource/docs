@@ -6,82 +6,177 @@ sidebar_custom_props:
   icon: getting-started
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
 
 # MCP Client Setup
 
-This guide provides step-by-step instructions for connecting popular MCP clients to Mission Control.
+This guide shows how to connect MCP clients to Mission Control.
 
-## Prerequisites
+## MCP server URL
 
-Before connecting any client, you'll need:
+Use the Setup MCP flow to get the MCP server URL for your Mission Control tenant.
 
-1. **MCP Server URL**
-   - SaaS users: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
-   - Self-hosted users: `https://your.domain.com/api/mcp`
+1. In Mission Control, open the user menu and select **Setup MCP**.
 
-2. **Authorization Token**
-   - Create a token with `mcp.*` permissions in Mission Control
-   - Navigate to Settings → API Tokens → Create New Token
-   - Select "MCP" permissions scope
+<Screenshot
+  img="/img/mcp-profile-menu.png"
+  size="420px"
+  alt="Mission Control user menu with Setup MCP option"
+/>
 
-:::info
-The authorization token is a Basic token with credentials - user: `token` & password: `<token value>`
+2. Copy the MCP server URL from the setup dialog.
 
-Hence, it needs to be encoded to base64(`token:<token_value>`) when using the `Authorization: Basic <base64_token>` header.
-:::
+The MCP server URL uses one of these formats:
 
-## Creating a token
-To generate a token for MCP, a setup wizard is available.
+- SaaS users: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
+- Self-hosted users: `https://your.domain.com/api/mcp`
 
-Click on the user avatar and choose "Setup MCP"
+## Choose an authentication method
 
-<Screenshot img="/img/mcp-user-profile.png" size="300px" alt="User profile"/>
+Mission Control supports two MCP authentication flows:
 
-Choose the name for the token
+- OAuth: Use an MCP client that supports OAuth for remote MCP servers.
+- Access token: Create a Mission Control access token and add it to your MCP client configuration.
 
-<Screenshot img="/img/mcp-create-token.png" size="600px" alt="Create token"/>
+<Tabs groupId="mcp-auth" queryString>
+<TabItem value="oauth" label="OAuth" default>
 
-Copy the generated config for your relevant client, or use the token directly
+## OAuth
 
-<Screenshot img="/img/mcp-copy-token.png" size="600px" alt="Use token"/>
+Use this approach when your MCP client supports OAuth for remote MCP servers.
 
-## Client Setup Instructions
+### Claude Code
 
-<!-- Source: modules/flanksource-ui/src/components/Tokens/Add/TokenDisplayModal.tsx#McpSetupTabs -->
+Create or edit `.mcp.json` in your project root and add the Mission Control MCP server.
 
-<Tabs>
-<TabItem value="claude-desktop" label="Claude Desktop">
-
-Claude Desktop supports MCP connections through its configuration file.
-
-### Setup Steps
-
-1. Open Claude Desktop settings
-2. Navigate to Developer → Edit Config
-3. Add the Mission Control MCP server:
-
-```json
+```json title=".mcp.json"
 {
   "mcpServers": {
     "mission-control": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-http",
-        "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
-      ],
-      "env": {
-        "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
+      "name": "mission-control",
+      "type": "http",
+      "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
+      "oauth": {
+        "clientId": "mc-cli"
       }
     }
   }
 }
 ```
 
-4. Restart Claude Desktop
-5. The Mission Control tools will appear in the tools menu
+### VS Code
+
+Create or edit `.vscode/mcp.json` in your project root and add the Mission Control MCP server.
+
+```json title=".vscode/mcp.json"
+{
+  "servers": {
+    "mission-control": {
+      "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
+    }
+  },
+  "inputs": []
+}
+```
+
+### Claude Desktop Connectors
+
+Claude Desktop supports remote MCP servers through Connectors.
+
+1. In Claude Desktop, open **Settings** → **Connectors**.
+2. Select **Add** → **Custom connector**.
+
+The **Connectors** page lists existing web connectors and custom connectors.
+
+<Screenshot
+  img="/img/claude-connectors-list.png"
+  size="700px"
+  alt="Claude Desktop connectors settings"
+/>
+
+The **Add custom connector** dialog creates a remote MCP connector.
+
+<Screenshot
+  img="/img/claude-add-custom-connector.png"
+  size="500px"
+  alt="Claude Desktop add custom connector dialog"
+/>
+
+3. In **Name**, enter `Mission-Control`.
+4. In **Remote MCP server URL**, enter your MCP server URL.
+5. Expand **Advanced settings** and enter `mc-cli` in **OAuth Client ID**.
+6. Leave **OAuth Client Secret** empty unless your Mission Control deployment provides one.
+7. Select **Add**.
+8. On the **Connectors** page, select **Connect** for the Mission Control connector.
+9. Complete the authentication flow.
+
+Mission Control tools appear in Claude Desktop after the OAuth flow completes.
+
+</TabItem>
+<TabItem value="access-token" label="Access Token">
+
+## Access token
+
+Use this approach when your MCP client does not support OAuth, or when you want to pass a Mission Control access token in the client configuration.
+
+### Create an access token
+
+Use the Setup MCP flow to create an access token with MCP permissions.
+
+1. In Mission Control, open the user menu and select **Setup MCP**.
+
+<Screenshot img="/img/mcp-user-profile.png" size="300px" alt="User profile" />
+
+2. Enter a token name.
+
+<Screenshot img="/img/mcp-create-token.png" size="600px" alt="Create token" />
+
+3. Copy the generated config for your MCP client, or copy the token value.
+
+<Screenshot img="/img/mcp-copy-token.png" size="600px" alt="Use token" />
+
+:::info
+Some MCP clients use the access token as a bearer token. Other MCP clients use Basic authentication with username `token` and password `<token value>`.
+
+When you use the `Authorization: Basic <base64_token>` header, encode `token:<token_value>` as the `base64_token` value.
+:::
+
+### Configure a client
+
+<!-- Source: modules/flanksource-ui/src/components/Tokens/Add/TokenDisplayModal.tsx#McpSetupTabs -->
+
+<Tabs>
+<TabItem value="claude-desktop" label="Claude Desktop">
+
+Use the Claude Desktop configuration file when you need to pass an MCP bearer token directly from Claude Desktop.
+
+1. Open Claude Desktop settings.
+2. Select **Developer** → **Edit Config**.
+3. Add the Mission Control MCP server configuration.
+
+```json title="claude_desktop_config.json"
+{
+  "mcpServers": {
+    "mission-control": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote@latest",
+        "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer YOUR_TOKEN_HERE"
+      }
+    }
+  }
+}
+```
+
+4. Restart Claude Desktop.
+5. Mission Control tools appear in the tools menu.
 
 </TabItem>
 <TabItem value="claude-code" label="Claude Code">
@@ -92,20 +187,22 @@ Claude Code CLI supports MCP through the `.mcp.json` configuration file.
 
 1. Create or edit the `.mcp.json` file in your project root or home directory
 2. Add the Mission Control MCP server configuration:
-  ```json title=".mcp.json"
-  {
-    "mcpServers": {
-      "mission-control": {
-        "name": "mission-control",
-        "type": "http",
-        "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
-        "headers": {
-          "Authorization": "Bearer YOUR_TOKEN_HERE"
-        }
+
+```json title=".mcp.json"
+{
+  "mcpServers": {
+    "mission-control": {
+      "name": "mission-control",
+      "type": "http",
+      "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_TOKEN_HERE"
       }
     }
   }
-  ```
+}
+```
+
 3. Save the file and restart Claude Code
 4. Mission Control tools will be available in your sessions
 
@@ -118,6 +215,7 @@ GitHub Copilot Chat in VS Code supports MCP through the Copilot extensibility AP
 
 1. Ensure you have GitHub Copilot Chat installed in VS Code
 2. Install the MCP extension for Copilot:
+
    ```bash
    code --install-extension github.copilot-mcp
    ```
@@ -290,23 +388,28 @@ curl -X POST https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
 For clients supporting WebSocket:
 
 ```javascript
-const ws = new WebSocket('wss://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp/ws', {
-  headers: {
-    'Authorization': 'Basic YOUR_TOKEN_HERE'
+const ws = new WebSocket(
+  'wss://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp/ws',
+  {
+    headers: {
+      Authorization: 'Basic YOUR_TOKEN_HERE'
+    }
   }
-});
+)
 
 ws.on('open', () => {
-  ws.send(JSON.stringify({
-    jsonrpc: '2.0',
-    method: 'initialize',
-    params: {
-      protocolVersion: '2024-11-05',
-      capabilities: {}
-    },
-    id: 1
-  }));
-});
+  ws.send(
+    JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'initialize',
+      params: {
+        protocolVersion: '2024-11-05',
+        capabilities: {}
+      },
+      id: 1
+    })
+  )
+})
 ```
 
 </TabItem>
@@ -342,46 +445,13 @@ npx @modelcontextprotocol/cli connect \
   --header "Authorization: Basic YOUR_TOKEN_HERE"
 ```
 
-## Next Steps
-
-Once connected, explore the available tools:
-- [Catalog Tools](./tools/catalog_tools.mdx) - Query and manage configuration items
-- [Connection Tools](./tools/connection_tools.mdx) - Manage connections and integrations
-- [Playbook Tools](./tools/playbook_tools.mdx) - Execute and manage playbooks
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Connection Refused**
-   - Verify the server URL is correct
-   - Check if you're behind a firewall or proxy
-   - Ensure the token has proper permissions
-
-2. **Authentication Failed**
-   - Verify token is valid and not expired
-   - Ensure token has `mcp.*` permissions
-   - Check if Basic prefix is included
-
-3. **Tools Not Appearing**
-   - Restart the client application
-   - Check client logs for errors
-   - Verify MCP server is properly configured
-
-### Testing Connection
-
-You can test your MCP connection using the MCP CLI:
-
-```bash
-npx @modelcontextprotocol/cli connect \
-  --transport http \
-  --url https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
-  --header "Authorization: Basic YOUR_TOKEN_HERE"
-```
+</TabItem>
+</Tabs>
 
 ## Next Steps
 
 Once connected, explore the available tools:
+
 - [Catalog Tools](./tools/catalog_tools.mdx) - Query and manage configuration items
 - [Connection Tools](./tools/connection_tools.mdx) - Manage connections and integrations
 - [Playbook Tools](./tools/playbook_tools.mdx) - Execute and manage playbooks

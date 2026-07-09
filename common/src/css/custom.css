@@ -646,6 +646,64 @@ a {
   color: #3578e5;
 }
 
+.markdown .theme-tabs-container {
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.markdown .theme-tabs-container > .tabs {
+  align-items: flex-end;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  padding-left: 0;
+  padding-inline-start: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--gray-200);
+  overflow-x: auto;
+}
+
+.markdown .theme-tabs-container > .tabs > .tabs__item {
+  margin: 0 !important;
+  padding: 0.75rem 1rem;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+  color: var(--gray-600);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.markdown .theme-tabs-container > .tabs > .tabs__item:hover {
+  background-color: var(--gray-100);
+  color: var(--gray-900);
+}
+
+.markdown .theme-tabs-container > .tabs > .tabs__item--active {
+  position: relative;
+  z-index: 1;
+  margin-bottom: -1px !important;
+  border-color: var(--gray-200);
+  background-color: var(--white);
+  color: var(--gray-950);
+}
+
+.markdown .theme-tabs-container > .margin-top--md {
+  margin-top: 0 !important;
+  padding: 1.5rem;
+  border: 1px solid var(--gray-200);
+  border-top: 0;
+  border-radius: 0 0 6px 6px;
+}
+
+.markdown .theme-tabs-container > .margin-top--md > :first-child {
+  margin-top: 0;
+}
+
+.markdown .theme-tabs-container > .margin-top--md > :last-child {
+  margin-bottom: 0;
+}
+
 table.fields > tbody > tr > td > p {
   margin-top: 0px;
   margin-bottom: 0px;
@@ -900,7 +958,5 @@ html[data-theme='dark'] .header-github-link:before {
   transform: scale(1.05);
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1)) brightness(1.05);
 }
-
-
 
 
