@@ -14,6 +14,8 @@ marquee feature — it's that Canary Checker got noticeably more **composable**,
 **secure**, and considerably more **correct** in the numbers it reports. We also
 took the opportunity to clean house by deprecating a lot of unused check types and dead code.
 
+Give the new release a try: [github.com/flanksource/canary-checker](https://github.com/flanksource/canary-checker)
+
 Here's what's worth knowing:
 
 ## Checks that build on other checks
