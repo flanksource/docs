@@ -3,7 +3,6 @@ import Translate, {translate} from '@docusaurus/Translate';
 import PaginatorNavLink from '@theme/PaginatorNavLink';
 export default function BlogPostPaginator(props) {
   const {nextItem, prevItem} = props;
-  return null;
   return (
     <nav
       className="pagination-nav docusaurus-mt-lg"

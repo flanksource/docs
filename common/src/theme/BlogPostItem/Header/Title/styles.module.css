@@ -16,7 +16,8 @@
   Blog post title should be smaller on smaller devices
 **/
 @media (max-width: 576px) {
-  .title {
+  .title,
+  .title.postTitle {
     font-size: 2rem;
   }
 }

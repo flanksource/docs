@@ -312,8 +312,8 @@ footer {
   .blog-post-page .theme-code-block [class*='codeBlockContent'],
   .blog-post-page .theme-code-block pre,
   .blog-post-page .theme-code-block pre code {
-    width: calc(100vw - 2rem);
-    max-width: calc(100vw - 2rem);
+    width: 100%;
+    max-width: 100%;
     min-width: 0;
   }
 

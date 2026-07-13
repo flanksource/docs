@@ -6,7 +6,7 @@ import BlogPostItemHeader from '@theme/BlogPostItem/Header'
 import BlogPostItemContent from '@theme/BlogPostItem/Content'
 import BlogPostItemFooter from '@theme/BlogPostItem/Footer'
 import styles from './styles.module.css'
-// apply a bottom margin in list view
+
 function useContainerClassName() {
   const { isBlogPostPage } = useBlogPost()
   return !isBlogPostPage ? 'margin-bottom--xl' : undefined
