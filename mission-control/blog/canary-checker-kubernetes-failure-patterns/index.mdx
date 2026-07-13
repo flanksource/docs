@@ -1,0 +1,232 @@
+---
+title: Your pods are running, can Kubernetes start the next?
+description: Use Kubernetes Resource checks to test deployment, configuration, storage, and dependency paths before a production change depends on them.
+slug: catch-common-kubernetes-failures-with-canary-checker
+authors: [aditya]
+tags: [canary-checker, kubernetes, synthetic-testing, reliability]
+hide_table_of_contents: false
+date: 2026-07-13
+---
+
+A Kubernetes cluster can serve every request and still be unable to start one new Pod.
+Existing workloads show that admission, scheduling, image pulls, configuration, networking,
+and storage worked when those workloads started. A rollout, scale-up, or node replacement can
+be the first time your cluster tests those paths again.
+
+**Your Pods are running. Can Kubernetes start the next one?**
+
+> **Create** → **Admission** → **Scheduling** → **Pod network** → **Image pull** →
+> **Configuration and volume setup** → **Ready** → **Service routing**
+
+The [`kubernetesResource`](https://canarychecker.io/reference/kubernetes-resource) check in
+[Canary Checker](https://canarychecker.io/) turns that risk into a scheduled test. It creates
+temporary Kubernetes resources, waits for the state you define, runs functional checks against
+the resources, and removes the temporary resources after each run.
+
+<!--truncate-->
+
+## Six recurring failure categories
+
+At SCALE 23x, Mickael Alliel presented lessons from an analysis of more than one million
+production Kubernetes incidents. The
+[talk groups the incidents into six categories](https://www.socallinuxexpo.org/scale/23x/presentations/why-your-kubernetes-cluster-will-fail-lessons-1-million-real-world):
+resource exhaustion, image and deployment issues, configuration and secret management,
+cascading failures, storage and persistence, and application-versus-infrastructure failures.
+
+These categories contain symptoms as well as root causes. The
+[presentation](https://www.socallinuxexpo.org/sites/default/files/2026-03/why_0.pdf) also makes
+an important point: the same Kubernetes error can have different causes in different clusters.
+A `CrashLoopBackOff`, for example, does not tell you whether the application, its configuration,
+or a dependency failed.
+
+Canary Checker does not predict every possible incident in these categories. It tests the paths
+that your next workload needs and reports the stage where the test fails. Start with deployment,
+configuration, and storage because each path has a clear contract that you can test without
+touching a production workload.
+
+## Test the image and deployment path
+
+An HTTP check against an existing application confirms that the application answers now. It does
+not confirm that Kubernetes can create its replacement.
+
+A Kubernetes Resource check can create a representative Pod and Service, wait for both resources
+to become ready, call the Service, and clean up. This transaction exercises more than the image
+registry. It also covers admission, scheduling, image-pull credentials, container startup, Pod
+networking, readiness, Service selection, and cluster DNS.
+
+The following fixture defines that complete transaction:
+
+```yaml title="fresh-workload.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes_resource_service_pass.yaml
+
+```
+
+The check separates resource readiness from application behavior. If the Pod never becomes ready,
+the result contains the Kubernetes resource health. If the Pod and Service become ready but the
+nested HTTP check fails, investigation starts at routing or application behavior instead of the
+image-pull path.
+
+Adapt the temporary Pod so that it uses the same registry, service account, image-pull secret,
+resource requests, node selectors, tolerations, runtime class, and admission labels as your
+workloads. A small generic Pod proves little about a workload that requires a private registry,
+dedicated nodes, or injected sidecars.
+
+### Catch broken admission
+
+Existing Pods do not pass through admission again. An unavailable validating webhook or an
+expired certificate on an Istio, Vault, Kyverno, Gatekeeper, or other mutating webhook can leave
+every running Pod healthy while Kubernetes rejects the next Pod.
+
+Run the temporary Pod in a namespace with the labels that activate your admission policies and
+injectors. A custom `waitFor` expression can assert that the created Pod contains the expected
+sidecar, volume, annotation, or security setting. The check fails at admission if the API server
+rejects the Pod or the webhook times out.
+
+### Test fresh workload networking
+
+A new Pod also tests paths that old Pods no longer exercise. Kubernetes must create the network
+sandbox, allocate a Pod IP, publish an EndpointSlice, resolve the Service through cluster DNS,
+and route traffic through kube-proxy or an eBPF data plane. NetworkPolicy must allow the same
+traffic that the application expects.
+
+The nested HTTP check in the fixture calls the new backend through its Service. Retries allow time
+for endpoint programming while still failing the transaction when the new workload never becomes
+reachable.
+
+:::note Know what the image test proves
+
+A scheduled check with a fixed image catches failures in the cluster's image-pull path, such as
+expired credentials, registry access, DNS, egress, or node architecture. It cannot predict that a
+future release uses a missing tag or a broken image. Run the Kubernetes Resource check in CI with
+the candidate image when you need to validate the release artifact.
+
+:::
+
+## Test configuration and secret consumption
+
+Checking that a ConfigMap or Secret exists tests the Kubernetes API object. It does not prove that
+a new Pod can consume the expected keys, mount the volume, decode the value, or start with the new
+configuration.
+
+Build the check around the consumer contract. Create disposable configuration with the same key
+names and value shapes, start a representative Pod that consumes the values through the same
+environment variables or volume mounts, and run a functional assertion inside or against the Pod.
+For a rotation test, supply the candidate secret through your normal secret delivery path and
+assert that authentication succeeds.
+
+This distinction matters because Kubernetes handles configuration in different ways. Mounted
+ConfigMaps receive updates after a propagation delay, while
+[ConfigMaps used as environment variables require a Pod restart](https://kubernetes.io/docs/concepts/configuration/configmap/#mounted-configmaps-are-updated-automatically).
+A fresh-Pod test covers the restart path before a rollout depends on it.
+
+Use synthetic values where possible. The test should validate the configuration contract without
+copying production credentials into the Canary custom resource. Canary Checker can read values
+from Kubernetes Secrets, ConfigMaps, and external connections when the functional check needs real
+authentication.
+
+:::note Know what the configuration test proves
+
+A disposable ConfigMap and Secret validate creation and consumption. They do not detect drift in
+an existing production object unless the check reads and asserts that object. A rotation test only
+validates the candidate value when the check uses that candidate value.
+
+:::
+
+## Test dynamic storage provisioning
+
+Bound persistent volume claims show that existing volumes still work. They do not prove that the CSI controller can
+provision and attach the next volume.
+
+A storage transaction creates a small PVC with the production StorageClass, creates a Pod that
+mounts the claim, writes data, reads it back, and removes the resources. The Pod is part of the
+test because a StorageClass with `WaitForFirstConsumer` can delay provisioning until a Pod requests
+the claim. Kubernetes recommends watching for claims that do not bind because that state can
+[indicate missing dynamic storage support](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#writing-portable-configuration).
+
+This test can expose a missing or changed StorageClass, CSI controller failure, expired cloud
+credentials, topology conflicts, quota exhaustion, attach failures, mount failures, and file-system
+permission problems. Use the smallest supported volume, confirm that the StorageClass reclaim
+policy matches the cleanup expectation, and alert on resources that remain after a failed run.
+
+:::warning Test storage cleanup first
+
+Dynamic provisioning can create billable cloud resources. Run the check in a non-production
+cluster first, verify deletion of the PVC and backing volume, and set a schedule that matches the
+risk you need to measure.
+
+:::
+
+## Extend the same pattern across all six categories
+
+The first three checks provide a useful starting point. The same apply, wait, assert, and clean-up
+lifecycle covers more of the failure paths from the SCALE analysis.
+
+| Failure category | Proactive Kubernetes Resource check | Boundary of the result |
+| --- | --- | --- |
+| Resource exhaustion | Create a Pod with representative requests and limits, then run a bounded workload or nested test. | Tests current scheduling headroom and the chosen load. It does not predict a memory leak or GPU thermal event that the workload does not reproduce. |
+| Image and deployment | Create a fresh Pod or Deployment, wait for readiness, and call it through a Service. | A fixed image tests the pull path. Use the candidate image in CI to test a future release. |
+| Configuration and secrets | Create or reference the expected configuration, consume it from a fresh Pod, and assert application behavior. | Synthetic values test the contract. Read existing objects when you need drift detection. |
+| Cascading failures | Create a small dependency chain, such as configuration, backend, Service, and client, then assert each boundary. | Tests the dependency chain represented in the check, not every production dependency. |
+| Storage and persistence | Create a PVC, mount it in a Pod, and verify a write and read through the target StorageClass. | Tests new provisioning and attachment. It does not verify the integrity of existing application data. |
+| Application versus infrastructure | Combine resource readiness with an HTTP, SQL, DNS, exec, JUnit, or other nested functional check. | The failed stage narrows the search; it does not prove a single root cause. GPU and node faults still require relevant telemetry. |
+
+## Go beyond passive monitoring
+
+Kubernetes metrics and resource-state alerts tell you about objects that exist. Endpoint probes
+tell you whether a target responds. Both signals remain useful, but neither one proves that the
+cluster can create the next workload.
+
+[Prometheus Blackbox Exporter](https://github.com/prometheus/blackbox_exporter) supports HTTP,
+HTTPS, DNS, TCP, ICMP, and gRPC endpoint probes. It does not manage a Kubernetes resource lifecycle.
+[Kuberhealthy](https://github.com/kuberhealthy/kuberhealthy) does support Kubernetes synthetic
+checks, including deployment, image-pull, and storage checks. Its documented extension model uses
+prebuilt checks or a custom checker container.
+
+Canary Checker's Kubernetes Resource check takes a manifest-first approach. You can create any
+Kubernetes object or custom resource, define readiness with a CEL expression, and compose the
+resource lifecycle with Canary Checker's built-in checks. The same model works for a Pod and
+Service, a CSI-backed PVC, a Flux `HelmRelease`, a Crossplane resource, or an operator-specific
+custom resource. You can also target remote clusters with a kubeconfig and run checks from the CLI
+in CI before you install the scheduled Canary custom resource.
+
+The difference is the contract you test:
+
+| Approach | Question answered |
+| --- | --- |
+| Resource-state alert | Are existing Kubernetes objects reporting a known bad state? |
+| Endpoint check | Does this existing endpoint respond from this location? |
+| Kubernetes Resource check | Can Kubernetes create, make ready, and exercise the resources that the next change needs? |
+
+## Test controllers and operators
+
+The fresh-resource contract also applies above the built-in Kubernetes workload controllers. A
+healthy Flux or Crossplane controller Pod does not prove that the controller can reconcile a new
+custom resource.
+
+The following fixture creates a Flux `HelmRelease`, waits for Flux to install PostgreSQL, and runs
+a SQL query against the resulting database. One check covers the source controller, Helm
+controller, chart registry, admission, scheduling, container startup, Service routing, and
+PostgreSQL behavior.
+
+```yaml title="flux-helmrelease.yaml" file=<rootDir>/modules/canary-checker/fixtures/k8s/kubernetes_resource_postgresql_helmrelease.yaml
+
+```
+
+This pattern works with any operator that exposes status on a custom resource. Define readiness
+with a CEL expression, then use a nested check to verify the resource's real behavior. Keep
+side-effecting resources small and confirm cleanup before you add a schedule.
+
+## Start with one fresh-workload contract
+
+Begin with the application whose rollout carries the most risk. Model one disposable transaction
+that uses its registry, admission labels, service account, scheduling constraints, configuration,
+and network path. Run the check on a schedule, then add the candidate image or configuration to the
+same check in CI.
+
+Do not try to reproduce every production failure in one test. Add a storage transaction for each
+critical StorageClass and a configuration transaction for each secret delivery pattern. Each check
+should answer one operational question and leave no resources behind.
+
+[Install Canary Checker](https://canarychecker.io/installation/) or review the
+[`kubernetesResource` reference](https://canarychecker.io/reference/kubernetes-resource) to create
+your first fresh-workload check. The next rollout should consume evidence from a recent test, not
+be the test itself.
