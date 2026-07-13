@@ -8,8 +8,7 @@ export default function BlogPostItems({
   component: BlogPostItemComponent = BlogPostItem,
 }) {
   return (
-    <div className='pt-10 container text--center'>
-      <h1>Flanksource Blog</h1>
+    <div className='pt-16 container'>
       <Cards>
         {items.map(({ content: BlogPostContent }) => (
           <BlogPostProvider
@@ -25,4 +24,3 @@ export default function BlogPostItems({
     </div>
   );
 }
-

@@ -21,7 +21,8 @@ This repository contains documentation for multiple Flanksource projects built w
 
 ## Guidelines
 
-- Never write yaml examples directly. The examples/fixtures should come from the submodules mission-control | duty | config-db | canary-checker.
+- Never write yaml examples directly in the documentation. Yaml examples on the blog posts are fine though.
+  The examples/fixtures should come from the submodules mission-control | duty | config-db | canary-checker.
   use code blocks with file=directive to import the fixtures. Example:
 
   ```yaml title="canary.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http_simple.yaml

@@ -42,8 +42,8 @@ export default function BlogPostItemFooter() {
             lastUpdatedBy={lastUpdatedBy}
           />
         )}
-        <span className='flex text-slate-500 font-light uppercase'>Written By</span>
-        <BlogPostItemHeaderAuthors short={false} />
+        <span className='margin-top--lg flex text-slate-500 font-light uppercase'>Written By</span>
+        <BlogPostItemHeaderAuthors short={false} compact />
         {tagsExists && (
           <TagsListInline tags={tags} />
         )}

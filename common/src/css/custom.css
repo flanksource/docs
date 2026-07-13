@@ -21,7 +21,8 @@ html {
   --gray-950: #030712;
   --font-sans: SuisseIntl, -apple-system, BlinkMacSystemFont, Helvetica, Arial;
   --font-serif: 'Merriweather', Georgia, serif;
-  --font-mono: 'Fira Code', monospace;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Code', 'Roboto Mono',
+    Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
 
   --ifm-font-sans: var(--font-sans);
   --ifm-font-family-base: var(--font-sans);
@@ -52,6 +53,7 @@ html {
     0px 4px 4px hsla(0, 0%, 0%, 0.16), 0px 4px 2px hsla(0, 0%, 0%, 0.04);
   --white: white;
   --ifm-font-size-base: 16px;
+  --ifm-font-family-monospace: var(--font-mono);
   --ifm-code-font-size: 14px;
   --ifm-font-color-base: #061431;
   --ifm-color-primary: #3578e5;
@@ -267,6 +269,11 @@ footer {
     font-size: 1.1rem;
   }
 
+  article .markdown h2,
+  article .markdown h3 {
+    font-weight: 400;
+  }
+
   h4,
   h5,
   h6 {
@@ -286,6 +293,40 @@ footer {
     font-family: SuisseIntl, -apple-system, BlinkMacSystemFont, Helvetica, Arial,
       sans-serif;
     font-weight: 400;
+  }
+}
+
+@media (max-width: 996px) {
+  .navbar__items--right
+    > a[href^='https://demo.flanksource.com/'],
+  .navbar__items--right > a[href='https://app.flanksource.com/'] {
+    display: none;
+  }
+
+  .navbar__items--right
+    > a[href^='https://accounts.flanksource.com/sign-up'] {
+    margin-right: 2.5rem;
+    margin-left: auto;
+  }
+
+  .blog-post-page .theme-code-block [class*='codeBlockContent'],
+  .blog-post-page .theme-code-block pre,
+  .blog-post-page .theme-code-block pre code {
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+    min-width: 0;
+  }
+
+  footer [class~='gap-x-[1.88rem]'] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  footer [class~='gap-x-[5.63rem]'] {
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: wrap;
+    column-gap: 2rem;
   }
 }
 
@@ -549,6 +590,13 @@ li.popular > a::after {
 
 .theme-code-block > code {
   padding: 0px !important ;
+}
+
+.theme-code-block pre,
+.theme-code-block pre code {
+  font-family: var(--font-mono);
+  font-size: var(--ifm-code-font-size);
+  line-height: 1.5;
 }
 
 span.step-container {
@@ -958,5 +1006,3 @@ html[data-theme='dark'] .header-github-link:before {
   transform: scale(1.05);
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1)) brightness(1.05);
 }
-
-
