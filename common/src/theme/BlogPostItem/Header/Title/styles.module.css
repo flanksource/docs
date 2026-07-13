@@ -2,6 +2,16 @@
   font-size: 3rem;
 }
 
+.title.postTitle {
+  max-width: 1000px;
+  margin: 0 auto;
+  font-size: 48px;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
 /**
   Blog post title should be smaller on smaller devices
 **/

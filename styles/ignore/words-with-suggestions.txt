@@ -500,3 +500,7 @@ rollout
 secretKey
 skipTLSVerify
 totalSize
+Alliel
+Istio
+Kyverno
+Mickael

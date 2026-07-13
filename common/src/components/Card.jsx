@@ -11,6 +11,8 @@ export const Card = ({
   link,
   href,
   variant = 'primary',
+  bordered = true,
+  padded = true,
   sidebar,
   children
 }) => {
@@ -26,7 +28,7 @@ export const Card = ({
     icon = <Icon name={icon} />
   }
   const cardContent = (
-    <div className={clsx(height, "flex border border-slate-200 border-solid hover:border-slate-300 hover:shadow-lg rounded-lg", size == "md" && "p-2 sm:p-5", size == "sm" && "p-1 sm:p-2", size)}>
+    <div className={clsx(height, "flex rounded-lg", bordered && "border border-slate-200 border-solid hover:border-slate-300 hover:shadow-lg", padded && size == "md" && "p-2 sm:p-5", padded && size == "sm" && "p-1 sm:p-2", size)}>
       <div className="items-start flex-col flex-grow justify-around flex">
         <span className="flex flex-row items-center space-x-1 ">
           {icon && icon}<span className={clsx(size == "md" && 'text-2xl', size == "sm" && "text-xl")}>{title}</span>
@@ -50,7 +52,5 @@ export const Cards = ({ columns = 3, children }) => {
     </div>
   );
 };
-
-
 
 

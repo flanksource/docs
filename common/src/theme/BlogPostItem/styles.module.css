@@ -1,0 +1,30 @@
+.postArticle.postArticle {
+  width: calc(100vw - 2rem);
+  max-width: 1200px;
+}
+
+.postBody {
+  display: grid;
+  grid-template-columns: minmax(0, 900px) minmax(180px, 220px);
+  gap: 3rem;
+  align-items: start;
+}
+
+.postContent {
+  min-width: 0;
+}
+
+.postToc {
+  min-width: 0;
+  align-self: stretch;
+}
+
+@media (max-width: 996px) {
+  .postBody {
+    display: block;
+  }
+
+  .postToc {
+    display: none;
+  }
+}

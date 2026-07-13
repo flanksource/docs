@@ -1,0 +1,13 @@
+.postHeader {
+  width: min(100%, calc(100vw - 2rem));
+  max-width: 1100px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: clamp(4rem, 9vw, 7rem) 1rem clamp(2rem, 4vw, 3rem);
+  text-align: center;
+}
+
+.postInfo {
+  margin-bottom: 2rem;
+  color: var(--ifm-color-emphasis-700);
+}

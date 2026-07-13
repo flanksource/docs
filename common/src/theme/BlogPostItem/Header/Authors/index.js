@@ -4,7 +4,7 @@ import { useBlogPost } from '@docusaurus/plugin-content-blog/client';
 import BlogAuthor from '@theme/Blog/Components/Author';
 import styles from './styles.module.css';
 // Component responsible for the authors layout
-export default function BlogPostItemHeaderAuthors({ className, short = false }) {
+export default function BlogPostItemHeaderAuthors({ className, short = false, compact = false }) {
   const {
     metadata: { authors },
     assets,
@@ -18,7 +18,7 @@ export default function BlogPostItemHeaderAuthors({ className, short = false }) 
   return (
     <div
       className={clsx(
-        'margin-top--md margin-bottom--sm',
+        compact ? 'margin-top--sm margin-bottom--sm' : 'margin-top--md margin-bottom--sm',
         imageOnly ? styles.imageOnlyAuthorRow : 'row',
         className,
       )}>
