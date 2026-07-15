@@ -50,7 +50,19 @@ See <CommonLink to="image-variants">Image Variants</CommonLink> for a list of in
 
 ## Shell Language
 
-Use a shebang (`#!`) line as the first line of `script` to choose a different shell. The base image includes `python`, `bash`, and `pwsh`.
+Use a shebang (`#!`) line as the first line of `script` to choose a different interpreter. The base image includes `bash`, `python`, and `pwsh` (PowerShell). Canary Checker installs additional runtimes, including Bun and UV, when first used.
+
+### Bun
+
+Use `#!/usr/bin/env bun` to run JavaScript or TypeScript with [Bun](https://bun.sh). Canary Checker detects the shebang, installs Bun when necessary, and runs the script with the configured environment and connections.
+
+### Python with UV
+
+Use `#!/usr/bin/env python3` to run Python with [`uv run --quiet`](https://docs.astral.sh/uv/). UV manages the Python runtime, virtual environment, and dependencies declared with [PEP 723](https://peps.python.org/pep-0723/) inline script metadata.
+
+### PowerShell
+
+Use `#! pwsh` or `#!/usr/bin/env pwsh` to run a PowerShell script. Canary Checker installs PowerShell when necessary and runs the script from a `.ps1` file with a non-interactive execution policy.
 
 
 

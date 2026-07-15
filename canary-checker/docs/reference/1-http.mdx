@@ -37,6 +37,7 @@ The HTTP check sends HTTP requests and evaluates the response.
   {field: "ntlm", description: "When set to true, authenticates using NTLM v1 protocol", scheme: "bool"},
   {field: "ntlmv2", description: "When set to true, authenticates using NTLM v2 protocol", scheme: "bool"},
   {field: "crawl", description: "Crawl configuration for following links", scheme: "[Crawl](#crawl-configuration)"},
+  {field: "dependsOn", description: "Check names that must complete before this check runs. See [Request Chaining](../concepts/request-chaining)", scheme: "[]string"},
   {field: "endpoint", description: "Deprecated: Use url instead", scheme: "string", deprecated: true},
 ]}/>
 
@@ -93,6 +94,19 @@ Use `awsSigV4` to sign requests with AWS Signature Version 4.
 ```yaml title="http-crawl.yaml" file=<rootDir>/modules/canary-checker/fixtures/minimal/http-crawl_pass.yaml
 
 ```
+
+### HAR Capture
+
+HTTP checks can record a [HAR 1.2](http://www.softwareishard.com/blog/har-12-spec/) file containing the requests and responses collected during a Canary run.
+
+Enable HAR capture with the `http.har` Canary property. Set `http.har.location` to choose the output directory.
+
+| Property | Description | Default |
+| -------- | ----------- | ------- |
+| `http.har` | Enable HAR capture for HTTP traffic in the Canary | `false` |
+| `http.har.location` | Directory where the HAR file is written | `.` |
+
+HAR files use the name `<namespace>_<canary>_<timestamp>.har`.
 
 ### Result Variables
 
