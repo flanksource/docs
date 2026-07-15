@@ -8,7 +8,7 @@ sidebar_custom_props:
 
 Tools for working with playbooks in Mission Control.
 
-## playbook_list_all
+## get_all_playbooks
 
 List all available playbooks
 
@@ -60,7 +60,7 @@ List all available playbooks
 ]
 ```
 
-## playbook_recent_runs
+## get_playbook_recent_runs
 
 Get recent playbook execution runs
 
@@ -97,7 +97,7 @@ Get recent playbook execution runs
 ]
 ```
 
-## playbook_failed_runs
+## get_playbook_failed_runs
 
 Get recent failed playbook execution runs
 
@@ -131,16 +131,16 @@ Get recent failed playbook execution runs
 ]
 ```
 
-## playbook_exec_run
+## Dynamic Playbook Tools
 
-Execute a playbook with specified parameters
+Each playbook generates a dedicated execution tool at session start. The tool name follows the pattern `{name}_{namespace}_{category}` (e.g. `deploy-app_prod_ops`). Parameters are derived from the playbook's spec.
 
 <Fields rows={[
   {field: "id", scheme: "string", description: "Playbook ID (UUID format)", required: true},
   {field: "params", scheme: "object", description: "Parameters required for playbook execution", required: true}
 ]} />
 
-**Note:** This is a destructive operation that will modify system state. Parameters are playbook-specific and can be found using the playbook_list_all tool.
+**Note:** This is a destructive operation that will modify system state. Parameters are playbook-specific and can be found using the `get_all_playbooks` tool.
 
 ### Example Usage
 

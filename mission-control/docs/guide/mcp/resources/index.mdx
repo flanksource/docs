@@ -9,6 +9,15 @@ import DocCardList from '@theme/DocCardList';
 
 # MCP Resources
 
-Mission Control provides various resources through the MCP interface that can be accessed using URI templates.
+Mission Control exposes the following resources through MCP. Clients can access them using URI templates.
+
+| Resource | URI Template | Description |
+|----------|-------------|-------------|
+| [Config Item](./config_item.mdx) | `config_item://{id}` | Retrieve detailed config item data by UUID |
+| [Connection](./connection.mdx) | `connection://{namespace}/{name}` | Retrieve connection configuration details |
+| [Playbook](./playbooks.mdx) | `playbook://{idOrName}` | Get playbook parameters and metadata |
+| View | `view://{namespace}/{name}` | Get view definition and metadata |
+
+All resources return `application/json`.
 
 <DocCardList />

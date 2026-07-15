@@ -137,9 +137,7 @@ Use the Setup MCP flow to create an access token with MCP permissions.
 <Screenshot img="/img/mcp-copy-token.png" size="600px" alt="Use token" />
 
 :::info
-Some MCP clients use the access token as a bearer token. Other MCP clients use Basic authentication with username `token` and password `<token value>`.
-
-When you use the `Authorization: Basic <base64_token>` header, encode `token:<token_value>` as the `base64_token` value.
+Use the access token as a bearer token: `Authorization: Bearer <token_value>`.
 :::
 
 ### Configure a client
@@ -235,7 +233,7 @@ GitHub Copilot Chat in VS Code supports MCP through the Copilot extensibility AP
         "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
       ],
       "env": {
-        "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
+        "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
       }
     }
   }
@@ -274,7 +272,7 @@ Cline supports MCP through its settings configuration.
         "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
       ],
       "env": {
-        "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
+        "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
       }
     }
   }
@@ -309,7 +307,7 @@ Continue.dev supports MCP servers through its configuration file.
         "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
       ],
       "env": {
-        "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
+        "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
       }
     }
   ]
@@ -343,7 +341,7 @@ Zed supports MCP through its assistant configuration.
             "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
           ],
           "env": {
-            "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
+            "AUTHORIZATION": "Bearer YOUR_TOKEN_HERE"
           }
         }
       }
@@ -364,13 +362,13 @@ For custom integrations or clients that support direct HTTP connections:
 
 - **Base URL**: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
 - **Protocol**: HTTP with SSE (Server-Sent Events)
-- **Authentication**: Basic token in Authorization header
+- **Authentication**: Bearer token in the Authorization header
 
 ### Example Request
 
 ```bash
 curl -X POST https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
-  -H "Authorization: Basic YOUR_TOKEN_HERE" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -392,7 +390,7 @@ const ws = new WebSocket(
   'wss://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp/ws',
   {
     headers: {
-      Authorization: 'Basic YOUR_TOKEN_HERE'
+      Authorization: 'Bearer YOUR_TOKEN_HERE'
     }
   }
 )
@@ -427,7 +425,7 @@ ws.on('open', () => {
 2. **Authentication Failed**
    - Verify token is valid and not expired
    - Ensure token has `mcp.*` permissions
-   - Check if Basic prefix is included
+   - Check if the Bearer prefix is included
 
 3. **Tools Not Appearing**
    - Restart the client application
@@ -442,7 +440,7 @@ You can test your MCP connection using the MCP CLI:
 npx @modelcontextprotocol/cli connect \
   --transport http \
   --url https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
-  --header "Authorization: Basic YOUR_TOKEN_HERE"
+  --header "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
 
 </TabItem>

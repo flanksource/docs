@@ -9,6 +9,72 @@ import DocCardList from '@theme/DocCardList';
 
 # MCP Tools
 
-Mission Control provides various tools through the MCP interface to interact with different aspects of the system.
+Mission Control provides the following tools through MCP. Tool names and descriptions are discoverable by any MCP client via the protocol's `tools/list` method.
+
+## Catalog
+
+| Tool | Description | Read-Only |
+|------|-------------|-----------|
+| `search_catalog` | Search and find configuration items in the catalog | Yes |
+| `describe_catalog` | Get all data for specific config items | Yes |
+| `search_catalog_changes` | Search for configuration change events | Yes |
+| `get_related_configs` | Find configs related to a specific config item | Yes |
+| `list_catalog_types` | List all available configuration types | Yes |
+
+## Health Checks
+
+| Tool | Description | Read-Only |
+|------|-------------|-----------|
+| `search_health_checks` | Search and find health checks | Yes |
+| `get_check_status` | Get health check execution history | Yes |
+| `list_all_checks` | List all health checks with complete metadata | Yes |
+| `run_health_check` | Execute a health check immediately | No |
+
+## Playbooks
+
+| Tool | Description | Read-Only |
+|------|-------------|-----------|
+| `get_all_playbooks` | List all available playbooks | Yes |
+| `get_playbook_recent_runs` | Get recent playbook execution history | Yes |
+| `get_playbook_failed_runs` | Get recent failed playbook runs | Yes |
+| `get_playbook_run_steps` | Get detailed information about a specific playbook run | Yes |
+| _Per-playbook tools_ | Each playbook generates an execution tool (e.g. `deploy-app_prod_ops`) | No |
+
+Per-playbook tools are registered dynamically at session start. Their names follow the pattern `{name}_{namespace}_{category}` and their input schemas are derived from the playbook's parameter spec.
+
+## Views
+
+| Tool | Description | Read-Only |
+|------|-------------|-----------|
+| `list_all_views` | List all available view tools | Yes |
+| _Per-view tools_ | Each view generates a query tool (e.g. `view_incidents_prod`) | Yes |
+
+Per-view tools are synced every hour. Their names follow the pattern `view_{name}_{namespace}`.
+
+## Connections
+
+| Tool | Description | Read-Only |
+|------|-------------|-----------|
+| `list_connections` | List all configured connections | Yes |
+
+## Artifacts
+
+| Tool | Description | Read-Only |
+|------|-------------|-----------|
+| `read_artifact_metadata` | Get artifact metadata by ID | Yes |
+| `read_artifact_content` | Read the content of an artifact file | Yes |
+
+## Notifications
+
+| Tool | Description | Read-Only |
+|------|-------------|-----------|
+| `get_notification_detail` | Get detailed information about a specific notification | Yes |
+| `get_notifications_for_resource` | Get notification history for a specific resource | Yes |
+
+## Templates
+
+| Tool | Description | Read-Only |
+|------|-------------|-----------|
+| `run_template` | Evaluate a CEL expression or Go template | No |
 
 <DocCardList />
