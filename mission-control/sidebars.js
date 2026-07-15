@@ -48,6 +48,11 @@ const sidebars = {
       type: 'doc',
       id: 'how-it-works',
     },
+    {
+      type: 'doc',
+      id: 'changes',
+      label: "What's New",
+    },
 
     {
       type: 'category',

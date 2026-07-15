@@ -22,6 +22,7 @@ Actions are the fundamental tasks executed by a playbook. A playbook can compris
 | `sql`                 | Specify sql of action.                                                                                                                                                              | [Sql`](./sql)                                        |          |
 | `pod`                 | Specify pod of action.                                                                                                                                                              | [Pod](./pod)                                         |          |
 | `notification`        | Specify notification of action.                                                                                                                                                     | [Notification](./notification)                       |          |
+| `report`              | Generate reports from Views or config catalogs as JSON, CSV, HTML, PDF, Markdown, or Slack output                                                                                   | [Report](./report)                                   |          |
 
 :::note
 Specify one or more actions; but at least one.

@@ -51,6 +51,8 @@ spec:
   {field: "mapping.severity", description: "Source field names for log level/severity", scheme: "[]string"},
   {field: "mapping.message", description: "Source field names for log message content", scheme: "[]string"},
   {field: "mapping.id", description: "Source field names for unique log identifier", scheme: "[]string"},
+  {field: "mapping.groupBy", description: "Fields to group logs by; each unique combination of values becomes a separate log group", scheme: "[]string"},
+  {field: "mapping.dedupBy", description: "Fields used to identify duplicate log entries for deduplication within groups", scheme: "[]string"},
   {field: "cloudwatch", priority: 1, description: "Query logs from AWS CloudWatch Logs", scheme: "[CloudWatch](#cloudwatch)"},
   {field: "kubernetes", priority: 1, description: "Fetch logs directly from Kubernetes pods", scheme: "[Kubernetes](#kubernetes)"},
   {field: "loki", priority: 1, description: "Query logs from Grafana Loki", scheme: "[Loki](#loki)"},

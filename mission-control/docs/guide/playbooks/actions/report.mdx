@@ -1,0 +1,181 @@
+---
+title: Report
+sidebar_custom_props:
+  icon: file-chart
+
+---
+import Templating from "@site/docs/reference/playbooks/context.mdx"
+
+<!-- Source: modules/mission-control/api/v1/playbook_actions.go#ReportAction -->
+
+# <Icon name="file-chart"/> Report Action
+
+The Report action generates formatted output from Views or inline config catalog queries. Use it to produce JSON, CSV, HTML, PDF, Markdown, or Slack-formatted data for downstream actions like notifications or artifact storage.
+
+```yaml title="weekly-report.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: weekly-compliance-report
+spec:
+  on:
+    schedule:
+      - schedule: "0 9 * * MON"
+  actions:
+    - name: generate-report
+      report:
+        view: default/compliance-summary
+        format: facet-pdf
+        facet:
+          connection: connection://facet/renderer
+          pdfOptions:
+            pageSize: A4
+            landscape: false
+        variables:
+          env: production
+    - name: send-report
+      notification:
+        connection: connection://smtp/company-email
+        title: "Weekly Compliance Report"
+        body: "Please find the weekly compliance report attached."
+        attachments:
+          - "$(actions.generate-report.artifacts[0])"
+```
+
+<Action rows={[
+    {field: "report", description: "Report Action", scheme: "[Report](#report)"},
+]} />
+
+## Report
+
+<Fields rows={[
+  {field: "view", description: "Reference an existing View by `namespace/name` or just `name`. Mutually exclusive with `configs`", scheme: "string", templateable: true},
+  {field: "configs", description: "Inline config catalog query as an alternative to `view`. Mutually exclusive with `view`", scheme: "[ResourceSelector](/docs/reference/resource-selector)"},
+  {field: "format", description: "Output format for the report", scheme: "`json` \\| `csv` \\| `html` \\| `pdf` \\| `markdown` \\| `slack` \\| `facet-html` \\| `facet-pdf`"},
+  {field: "variables", description: "Variables passed to the view queries", scheme: "map[string]string", templateable: true},
+  {field: "facet", description: "Facet rendering options, required for `facet-html` and `facet-pdf` formats", scheme: "[FacetOptions](#facet)"},
+]}/>
+
+## Facet
+
+Facet options configure remote HTML/PDF rendering via a [Facet connection](/docs/reference/connections/facet).
+
+<Fields rows={[
+  {field: "connection", description: "Name of the Facet connection to use for rendering", scheme: "[Connection](/docs/reference/connections/facet)", templateable: true},
+  {field: "url", description: "Direct URL of the Facet rendering service, overrides the connection URL", scheme: "string", templateable: true},
+  {field: "pdfOptions.pageSize", description: "PDF page size (e.g. `A4`, `Letter`, `A3`)", scheme: "string"},
+  {field: "pdfOptions.landscape", description: "Render PDF in landscape orientation", scheme: "bool"},
+  {field: "pdfOptions.margins.top", description: "Top margin in mm", scheme: "int"},
+  {field: "pdfOptions.margins.bottom", description: "Bottom margin in mm", scheme: "int"},
+  {field: "pdfOptions.margins.left", description: "Left margin in mm", scheme: "int"},
+  {field: "pdfOptions.margins.right", description: "Right margin in mm", scheme: "int"},
+  {field: "header", description: "HTML content for the PDF header (rendered on every page)", scheme: "string", templateable: true},
+  {field: "footer", description: "HTML content for the PDF footer (rendered on every page)", scheme: "string", templateable: true},
+  {field: "timestampUrl", description: "RFC 3161 timestamp authority URL for cryptographic PDF signing", scheme: "string", templateable: true},
+]}/>
+
+## Output
+
+The report action produces a binary artifact accessible via `.actions.<name>.artifacts[0]` in subsequent actions.
+
+```yaml
+actions:
+  - name: build-report
+    report:
+      view: default/infra-summary
+      format: pdf
+  - name: notify
+    notification:
+      connection: connection://slack/ops
+      message: "Report ready: $(actions.build-report.artifacts[0])"
+```
+
+<details summary="Example: Inline configs query to JSON artifact">
+
+```yaml title="configs-json-report.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: export-unhealthy-configs
+spec:
+  actions:
+    - name: find-unhealthy
+      report:
+        configs:
+          health: unhealthy
+          types:
+            - Kubernetes::Deployment
+        format: json
+        variables:
+          cluster: production
+```
+
+</details>
+
+<details summary="Example: View to HTML email report">
+
+```yaml title="html-email-report.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: daily-html-report
+spec:
+  on:
+    schedule:
+      - schedule: "@every 24h"
+  actions:
+    - name: generate
+      report:
+        view: default/daily-summary
+        format: html
+        variables:
+          date: "$(now | date \"2006-01-02\")"
+    - name: email
+      notification:
+        connection: connection://smtp/alerts
+        title: "Daily Summary Report"
+        body: "$(actions.generate.artifacts[0])"
+```
+
+</details>
+
+<details summary="Example: Scheduled PDF report with facet rendering">
+
+```yaml title="scheduled-pdf-report.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: monthly-pdf-report
+spec:
+  on:
+    schedule:
+      - schedule: "0 8 1 * *"
+  actions:
+    - name: render-pdf
+      report:
+        view: default/monthly-metrics
+        format: facet-pdf
+        facet:
+          connection: connection://facet/renderer
+          pdfOptions:
+            pageSize: A4
+            landscape: true
+            margins:
+              top: 20
+              bottom: 20
+              left: 15
+              right: 15
+          header: |
+            <div style="font-size:10px;text-align:center">Monthly Report — $(now | date "January 2006")</div>
+          footer: |
+            <div style="font-size:8px;text-align:center">Page <span class="pageNumber"></span> of <span class="totalPages"></span></div>
+          timestampUrl: https://freetsa.org/tsr
+        variables:
+          month: "$(now | date \"2006-01\")"
+```
+
+</details>
+
+## Templating
+
+<Templating/>
