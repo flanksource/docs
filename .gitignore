@@ -17,3 +17,8 @@ claude.md
 mission-control/src/components/datasheets/Generated*.tsx
 .playwright-mcp/
 solutions/
+datasheets/
+*.png
+**/specs/
+.facet/
+.DS_Store

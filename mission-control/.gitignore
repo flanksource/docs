@@ -28,3 +28,4 @@ starlight/
 .*cache
 branding/
 .playwright-mcp/
+.todos/
