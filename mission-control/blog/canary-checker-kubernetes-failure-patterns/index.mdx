@@ -1,326 +1,199 @@
 ---
 title: Your Pods are running. Can Kubernetes start the next one?
-description: Use Kubernetes Resource checks to test deployment, configuration, storage, and dependency paths before a production change depends on them.
+description: Use Kubernetes Resource checks to proactively catch unhealthy clusters
 slug: catch-common-kubernetes-failures-with-canary-checker
 authors: [aditya]
-tags: [canary-checker, kubernetes, synthetic-testing, reliability]
+tags: [kubernetesCheck]
 hide_table_of_contents: false
 date: 2026-07-13
 ---
 
-A Kubernetes cluster can serve every request and still be unable to start one new Pod.
-Existing workloads prove that admission, scheduling, image pulls, configuration, networking,
-and storage worked when those workloads started. A rollout, scale-up, or node replacement can
-be the first time your cluster tests those paths again.
-
-**Your Pods are running. Can Kubernetes start the next one?**
-
-> **Apply** → **Wait for readiness** → **Verify behavior** → **Clean up**
-
-The [`kubernetesResource`](https://canarychecker.io/reference/kubernetes-resource) check in
-[Canary Checker](https://canarychecker.io/) turns that question into a repeatable transaction.
-It creates temporary Kubernetes resources, waits for the state you define, runs checks against
-the resources, and deletes the temporary resources after each run.
+A Kubernetes cluster can run its existing workloads successfully but fail to provision new ones.
+Existing Pods may be running and monitoring dashboards may be green, but those signals describe
+only workloads that are already in place. They do not verify that admission, scheduling, image
+pulls, configuration, networking, and storage will succeed for a new Pod. The next rollout,
+scale-up, or node replacement may be the first event to expose a broken provisioning path.
 
 <!--truncate-->
 
-## Start with the failure, not the object
+## Common Kubernetes failure patterns
 
-At SCALE 23x, Mickael Alliel presented lessons from an analysis of more than one million
-production Kubernetes incidents. The
-[talk groups the incidents into six categories](https://www.socallinuxexpo.org/scale/23x/presentations/why-your-kubernetes-cluster-will-fail-lessons-1-million-real-world):
-resource exhaustion, image and deployment issues, configuration and secret management,
-cascading failures, storage and persistence, and application-versus-infrastructure failures.
+In a
+[presentation at SCALE 23x](https://www.socallinuxexpo.org/scale/23x/presentations/why-your-kubernetes-cluster-will-fail-lessons-1-million-real-world),
+[Komodor](https://komodor.com/) grouped common Kubernetes failures into six patterns.
+They claim to have analyzed more than a million production Kubernetes incidents across
+thousands of clusters.
 
-These categories mix symptoms with causes. A `CrashLoopBackOff`, for example, tells you that a
-container keeps failing. It does not tell you whether the image, application, configuration, or
-a dependency caused the failure.
+![Komodor slide showing six common Kubernetes failure categories and examples](./kubernetes-failure-categories.png)
 
-A useful synthetic check starts with an operational question instead:
+- **Resource exhaustion:** Pods run out of memory, workloads consume more resources over time,
+  or the cluster lacks capacity for new workloads.
+- **Image and deployment issues:** Kubernetes cannot pull an image or complete a rollout.
+- **Configuration and secret management:** Configuration drifts or a secret rotation breaks an
+  application.
+- **Cascading failures:** One missing resource or unavailable dependency causes failures in
+  multiple workloads.
+- **Storage and persistence:** Claims conflict or the Container Storage Interface (CSI) driver
+  cannot provision or attach a volume.
+- **Application and infrastructure failures:** Similar symptoms, such as a `CrashLoopBackOff`,
+  can originate in the application or its underlying infrastructure.
+
+## Why common failures go unnoticed
+
+These failures do not always interrupt workloads that are already running. Some affect paths
+that Kubernetes uses only when it creates or replaces a workload. Until that happens, workload
+and endpoint monitoring can continue to report that everything is healthy.
+
+### A new admission policy rejects the next Pod
+
+A platform team might add a validating admission policy that rejects new Pods unless
+`securityContext.runAsNonRoot` is set to `true`. Policy engines such as
+[Kyverno](https://kyverno.io/) and
+[OPA Gatekeeper](https://open-policy-agent.github.io/gatekeeper/website/) can enforce these
+policies when Kubernetes admits a resource. Existing Pods continue running because Kubernetes
+does not send them through admission again.
+
+These tools can audit existing resources and report policy violations, but they do not remove
+the existing Pods. If those audit results are not monitored, the incompatibility remains hidden
+until a rollout tries to create replacement Pods from the same configuration.
+
+### The registry is unavailable to a new node
+
+A running container does not need continued access to the registry that supplied its image. The
+registry credentials can expire, or registry DNS and network access can fail, without affecting
+the container.
+
+The failure can remain hidden for longer when a workload uses `imagePullPolicy: IfNotPresent`.
+Replacement Pods may start on nodes that already have the image, while the first Pod scheduled
+to a new or uncached node fails with `ImagePullBackOff`.
+
+### Existing volumes hide a provisioning failure
+
+Running workloads use volumes that have already been provisioned, attached, and mounted. A
+failure in a CSI controller, exhausted storage quota, or lost access to the storage provider can
+prevent new volumes from being created without disrupting volumes that are already in use.
+
+The problem appears when a new workload creates a PersistentVolumeClaim. That request invokes
+the StorageClass provisioner, and the workload cannot start if
+[dynamic volume provisioning](https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/)
+fails.
+
+Each case has the same blind spot: existing workloads show that provisioning succeeded before.
+They do not prove that the cluster can repeat it now. Detecting these failures requires the
+cluster to exercise its provisioning paths regularly.
+
+## Detect hidden failures with Kubernetes Resource checks
+
+The approach is deliberately simple. Canary Checker provisions a representative workload on a
+schedule and verifies that it works. It does not try to infer whether the provisioning path is
+healthy; it exercises the path directly. The most reliable way to find out whether Kubernetes
+can provision the next workload is to ask it to do so:
 
 > Can the cluster create and exercise the resources that the next change needs?
 
-The Kubernetes Resource check answers that question in four stages:
+Canary Checker's [`kubernetesResource`](https://canarychecker.io/reference/kubernetes-resource)
+turns that question into a repeatable transaction. A check can combine long-lived test
+dependencies with disposable resources. On each run, Canary Checker applies both sets, waits
+for the state you define, and then deletes the disposable resources while preserving the
+long-lived dependencies for the next run.
 
-1. It applies every manifest in `resources`.
-2. It polls the created objects until the default readiness test or your `waitFor` expression
-   passes.
-3. It runs the checks under `checks`, with the retry policy in `checkRetries`.
-4. It deletes the resources, even when readiness or a nested check fails.
+A minimal check can preserve a Namespace between runs while creating a fresh Pod inside it:
 
-Resources under `staticResources` follow a different lifecycle. Canary Checker applies them on
-each run but preserves them until you delete the Canary. Use `staticResources` only for shared
-test dependencies that must outlive one run. Keep disposable workloads, configuration, and
-claims under `resources`.
-
-This lifecycle gives you two useful signals. Resource readiness tells you whether Kubernetes
-can build the workload. A nested HTTP, SQL, Kubernetes, DNS, or other check tells you whether the
-result works.
-
-## Build a fresh-workload transaction
-
-An endpoint check shows whether an existing application responds now. It does not show whether
-Kubernetes can create its replacement.
-
-The following Canary creates a Pod and Service in the Canary's namespace, waits for both objects
-to become ready, and calls the new Pod through the Service. Use a dedicated namespace, such as
-`platform-tests`, so that its admission labels and network policies match the workloads you want
-to test.
-
-```yaml title="fresh-workload.yaml"
+```yaml title="namespace-and-pod.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
-  name: fresh-workload
-  namespace: platform-tests
+  name: namespace-and-pod
 spec:
   schedule: '@every 5m'
   kubernetesResource:
-    - name: create-and-route-to-a-pod
-      description: Create a Pod and reach it through a Service
+    - name: create-pod
       clearResources: true
+      staticResources:
+        - apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: platform-tests
       resources:
         - apiVersion: v1
           kind: Pod
           metadata:
-            name: fresh-workload
-            labels:
-              app: fresh-workload
+            name: test-pod
+            namespace: platform-tests
           spec:
             containers:
               - name: web
                 image: nginx:1.27.4-alpine
-                imagePullPolicy: Always
-                ports:
-                  - name: http
-                    containerPort: 80
-                readinessProbe:
-                  httpGet:
-                    path: /
-                    port: http
-                  periodSeconds: 2
-                resources:
-                  requests:
-                    cpu: 25m
-                    memory: 32Mi
-                  limits:
-                    memory: 64Mi
-        - apiVersion: v1
-          kind: Service
-          metadata:
-            name: fresh-workload
-          spec:
-            selector:
-              app: fresh-workload
-            ports:
-              - name: http
-                port: 80
-                targetPort: http
       waitFor:
-        interval: 2s
         timeout: 2m
         delete: true
-      checks:
-        - http:
-            - name: route-through-service
-              url: http://fresh-workload.platform-tests.svc/
-              responseCodes: [200]
-      checkRetries:
-        delay: 2s
-        interval: 3s
-        timeout: 1m
 ```
 
-This example:
+Canary Checker applies the Namespace on every run but does not remove it afterward. It creates
+the Pod, waits for it to become ready, and then deletes it.
 
-1. Uses `imagePullPolicy: Always` to make the `kubelet` query the registry on every run, which
-   exercises registry DNS, credentials, egress, and image resolution.
-2. Uses the default `waitFor` expression, which waits until every resource reports ready.
-3. Retries the HTTP check while DNS, EndpointSlices, and the network data plane converge.
-4. Uses `clearResources` to remove objects left by an interrupted run and `waitFor.delete` to
-   wait for the declared resources to disappear during cleanup.
+The Kubernetes Resource check follows this lifecycle:
 
-The stage that fails narrows the investigation:
+1. It applies every manifest in `staticResources`. Applying them on each run creates missing
+   resources and reconciles existing ones.
+2. If `clearResources` is enabled, it removes disposable resources left by an interrupted run.
+   It then applies every manifest in `resources`.
+3. It polls both sets of resources until the default readiness test or your `waitFor` expression
+   passes.
+4. It deletes the resources under `resources`, even when readiness fails.
 
-| Failed stage | Start the investigation at |
-| --- | --- |
-| Apply | API access, admission policies, admission webhooks, or manifest compatibility |
-| Wait for readiness | Scheduling, capacity, image pulls, container startup, or readiness probes |
-| Nested HTTP check | Service selection, EndpointSlices, cluster DNS, network policy, routing, or application behavior |
-| Cleanup | Delete permissions, `finalizers`, or controllers that retain the resource |
+Canary Checker preserves `staticResources` until you delete the Canary. A `Namespace`,
+`ServiceAccount`, `RoleBinding`, `Ingress`, or `HelmRepository` can be static when disposable
+test workloads depend on it. The distinction depends on what you want to test: keep a Namespace
+static when it contains each run's resources, but put it under `resources` when the check needs
+to verify Namespace creation itself.
 
-The example is useful only when it represents your workload. Match the production service
-account, registry, image-pull secret, resource requests, node selectors, tolerations, runtime
-class, and admission labels. A generic Pod can pass while Kubernetes cannot schedule a workload
-that needs a private registry or dedicated node pool.
+## Test three failure patterns with one check
 
-### Exercise admission again
+One Kubernetes Resource check can cover more than one failure category. The following example
+focuses on three: image and deployment issues, configuration and secret management, and storage
+and persistence.
 
-Running Pods do not pass through admission again. An unavailable validating webhook or an
-expired certificate on a mutating webhook can leave every existing Pod healthy while the API
-server rejects the next Pod.
+It creates a ConfigMap, Secret, PersistentVolumeClaim, and Pod in the static Namespace from the
+previous example. On each run, the kubelet contacts the image registry and mounts the
+configuration, secret, and volume into the new Pod.
 
-Run the Canary in a namespace with the labels that activate your policies and injectors. Give
-the test Pod the same labels, annotations, and service account as the target workload. When the
-API server rejects the Pod or a webhook times out, the transaction fails during apply. When an
-injector admits the Pod but produces an invalid result, readiness fails. For stricter coverage,
-replace the default `waitFor` behavior with a CEL expression that also checks for the expected
-sidecar, volume, annotation, or security setting.
-
-### Test the network path you need
-
-The HTTP check runs from Canary Checker and calls the temporary backend through its Service.
-That path covers cluster DNS, Service selection, EndpointSlice publication, and routing from the
-Canary Checker Pod. It also exercises any NetworkPolicy that applies to that source and
-destination.
-
-It does not prove that every workload can reach the Service. If a production caller uses a
-different namespace, service account, node pool, or network policy, run the check from a matching
-agent or create a temporary client Pod as part of the transaction.
-
-:::note Know what a fixed image proves
-
-A scheduled check with a fixed image tests the cluster's current image-pull path. It cannot
-predict that a future release references a missing tag, contains a broken application, or lacks
-support for a node architecture. Run the same transaction from CI with the candidate image when
-you need to validate a release artifact.
-
-:::
-
-## Test the configuration contract
-
-The existence of a ConfigMap or Secret does not prove that a new Pod can consume it. A key can
-be missing, a volume can be mounted at the wrong path, or the process can refuse the value.
-
-Test configuration through a consumer. The following Canary creates disposable configuration,
-starts a Pod that reads one value from an environment variable and another from a mounted
-Secret, and checks the process exit code. The synthetic values make the example safe to store in
-the Canary.
-
-```yaml title="configuration-contract.yaml"
+```yaml title="three-failure-patterns.yaml"
 apiVersion: canaries.flanksource.com/v1
 kind: Canary
 metadata:
-  name: configuration-contract
-  namespace: platform-tests
+  name: three-failure-patterns
 spec:
-  schedule: '@every 10m'
+  schedule: '@every 1h'
   kubernetesResource:
-    - name: consume-config-and-secret
-      description: Verify that a new Pod receives the expected configuration
+    - name: provision-representative-pod
       clearResources: true
+      staticResources:
+        - apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: platform-tests
       resources:
         - apiVersion: v1
           kind: ConfigMap
           metadata:
-            name: configuration-contract
+            name: test-config
+            namespace: platform-tests
           data:
             mode: synthetic
         - apiVersion: v1
           kind: Secret
           metadata:
-            name: configuration-contract
+            name: test-secret
+            namespace: platform-tests
           type: Opaque
           stringData:
-            token: rotation-candidate
-        - apiVersion: v1
-          kind: Pod
-          metadata:
-            name: configuration-consumer
-          spec:
-            restartPolicy: Never
-            containers:
-              - name: consumer
-                image: busybox:1.36.1
-                command: ['/bin/sh', '-ec']
-                args:
-                  - |
-                    test "$MODE" = "synthetic"
-                    test "$(cat /etc/credentials/token)" = "rotation-candidate"
-                env:
-                  - name: MODE
-                    valueFrom:
-                      configMapKeyRef:
-                        name: configuration-contract
-                        key: mode
-                volumeMounts:
-                  - name: credentials
-                    mountPath: /etc/credentials
-                    readOnly: true
-            volumes:
-              - name: credentials
-                secret:
-                  secretName: configuration-contract
-      waitFor:
-        expr: >-
-          dyn(resources).exists(r,
-          r.Object.kind == "Pod" &&
-          has(r.Object.status) &&
-          has(r.Object.status.phase) &&
-          r.Object.status.phase in ["Succeeded", "Failed"])
-        interval: 2s
-        timeout: 1m
-        delete: true
-      checks:
-        - kubernetes:
-            - name: verify-consumer-exit-code
-              kind: Pod
-              namespaceSelector:
-                name: platform-tests
-              resource:
-                name: configuration-consumer
-              test:
-                expr: >-
-                  size(results) == 1 &&
-                  results[0].Object.status.containerStatuses[0].state.terminated.exitCode == 0
-```
-
-This example:
-
-1. Verifies the key names, environment-variable mapping, volume name, mount path, file name, and
-   value shape as one contract.
-2. Uses a custom `waitFor` expression to wait for the one-shot Pod to reach `Succeeded` or
-   `Failed` rather than waiting for the Pod to remain ready.
-3. Uses a nested Kubernetes check to distinguish a successful process exit from a Pod that only
-   reached a terminal state.
-
-Adapt the consumer to parse the configuration or authenticate to a disposable dependency. For a
-rotation test, deliver the candidate Secret through the same external secret controller or
-deployment path that production uses. Do not copy a production credential into the Canary
-manifest.
-
-Kubernetes also exposes configuration through different update paths. Mounted ConfigMaps receive
-updates after a propagation delay, while
-[ConfigMaps used as environment variables require a Pod restart](https://kubernetes.io/docs/concepts/configuration/configmap/#mounted-configmaps-are-updated-automatically).
-The example tests the fresh-Pod path. Use a long-running consumer when you need to test propagation
-to an existing mount.
-
-## Test dynamic storage provisioning
-
-An existing bound persistent volume claim proves that one volume is available. It does not prove
-that the CSI controller can provision and attach the next volume.
-
-The following transaction creates a small claim, mounts it in a Pod, writes a marker from an init
-container, reads the marker from the main container, and checks that the Pod exits successfully.
-Replace `standard` with the StorageClass used by the workload you want to protect.
-
-```yaml title="storage-path.yaml"
-apiVersion: canaries.flanksource.com/v1
-kind: Canary
-metadata:
-  name: storage-path
-  namespace: platform-tests
-spec:
-  schedule: '@every 1h'
-  kubernetesResource:
-    - name: provision-mount-and-read
-      description: Provision a volume and verify file access from a Pod
-      clearResources: true
-      resources:
+            token: synthetic-token
         - apiVersion: v1
           kind: PersistentVolumeClaim
           metadata:
-            name: storage-path
+            name: test-storage
+            namespace: platform-tests
           spec:
             accessModes: [ReadWriteOnce]
             storageClassName: standard
@@ -330,128 +203,119 @@ spec:
         - apiVersion: v1
           kind: Pod
           metadata:
-            name: storage-consumer
+            name: representative-workload
+            namespace: platform-tests
           spec:
-            restartPolicy: Never
-            initContainers:
-              - name: writer
-                image: busybox:1.36.1
-                command: ['/bin/sh', '-ec']
-                args:
-                  - printf 'storage-path-ok' > /data/probe
-                volumeMounts:
-                  - name: data
-                    mountPath: /data
             containers:
-              - name: reader
+              - name: workload
                 image: busybox:1.36.1
-                command: ['/bin/sh', '-ec']
-                args:
-                  - test "$(cat /data/probe)" = "storage-path-ok"
+                imagePullPolicy: Always
+                command: ['sleep', '3600']
                 volumeMounts:
+                  - name: config
+                    mountPath: /etc/test-config
+                    readOnly: true
+                  - name: secret
+                    mountPath: /etc/test-secret
+                    readOnly: true
                   - name: data
                     mountPath: /data
             volumes:
+              - name: config
+                configMap:
+                  name: test-config
+              - name: secret
+                secret:
+                  secretName: test-secret
               - name: data
                 persistentVolumeClaim:
-                  claimName: storage-path
+                  claimName: test-storage
       waitFor:
-        expr: >-
-          dyn(resources).exists(r,
-          r.Object.kind == "Pod" &&
-          has(r.Object.status) &&
-          has(r.Object.status.phase) &&
-          r.Object.status.phase in ["Succeeded", "Failed"])
-        interval: 5s
         timeout: 5m
         delete: true
-      checks:
-        - kubernetes:
-            - name: verify-storage-consumer-exit-code
-              kind: Pod
-              namespaceSelector:
-                name: platform-tests
-              resource:
-                name: storage-consumer
-              test:
-                expr: >-
-                  size(results) == 1 &&
-                  results[0].Object.status.containerStatuses[0].state.terminated.exitCode == 0
 ```
 
-This example:
+This one transaction exercises three failure categories:
 
-1. Creates a consumer Pod so that a StorageClass with `WaitForFirstConsumer` can select topology
-   and provision the volume.
-2. Covers claim binding, scheduling, volume provisioning, attachment, mounting, permissions, and
-   file access.
-3. Confirms cleanup of the declared Pod and PVC before the check finishes.
-
-The transaction does not test data durability across detach and reattach, restore behavior, or
-the integrity of existing application data. It also cannot guarantee that a cloud volume has
-finished deleting after the PVC disappears. Verify the StorageClass reclaim policy and provider
-cleanup before you schedule the check.
-
-:::warning Control the cost and cleanup risk
-
-Dynamic provisioning can create billable resources. Start in a non-production cluster, use the
-smallest supported volume, confirm deletion in Kubernetes and the storage provider, and choose a
-schedule that matches the risk you need to measure.
-
-:::
-
-## Map the transaction to all six categories
-
-The three examples establish a pattern: create the dependency, wait for its Kubernetes state,
-exercise its behavior, and remove it. Extend that pattern one operational question at a time.
-
-| Failure category | Transaction to run | Boundary of the result |
-| --- | --- | --- |
-| Resource exhaustion | Create a Pod with representative requests, limits, selectors, and tolerations. | Tests current scheduling headroom for that Pod. It does not predict future growth or a memory leak. |
-| Image and deployment | Create a fresh Pod or Deployment, wait for readiness, and call it through a Service. | A fixed image tests the pull and startup path. Use a candidate image in CI to test a release. |
-| Configuration and secrets | Deliver configuration to a fresh consumer and assert its behavior. | Synthetic values test the contract. Read an existing object when you need drift detection. |
-| Cascading failures | Create a small dependency chain and assert each boundary in order. | Tests only the dependencies represented in the transaction. |
-| Storage and persistence | Create a PVC, mount it, and verify file access through the target StorageClass. | Tests new provisioning and attachment, not existing data integrity or restore behavior. |
-| Application versus infrastructure | Combine Kubernetes readiness with a nested protocol or behavior check. | The failed stage narrows the search but does not prove one root cause. |
-
-This is the difference between passive observation and a fresh-resource transaction:
-
-| Signal | Question answered |
+| Failure category | What the transaction exercises |
 | --- | --- |
-| Resource-state alert | Are existing Kubernetes objects reporting a known bad state? |
-| Endpoint check | Does an existing endpoint respond from this location? |
-| Kubernetes Resource check | Can Kubernetes create, make ready, and exercise the resources that the next change needs? |
+| Image and deployment | The kubelet contacts the registry, resolves the image, downloads any uncached layers, and starts the container. |
+| Configuration and secret management | Kubernetes creates the ConfigMap and Secret, and the kubelet mounts both into a new Pod. |
+| Storage and persistence | The CSI provisioner creates a volume for the StorageClass, Kubernetes attaches it, and the kubelet mounts it into the Pod. |
 
-Use all three signals. The synthetic transaction fills the gap between a healthy existing
-workload and an untested future rollout.
+The transaction does not repair a registry, configuration path, or storage provisioner. It
+exposes a failure before a production rollout depends on the same path.
 
-## Extend the contract to controllers
+_The example uses the `standard` StorageClass and creates a potentially billable volume. Replace
+it with the StorageClass used by your workload, choose the smallest supported volume, and confirm
+that the storage provider deletes the volume after the check finishes._
 
-The same lifecycle works for custom resources. A healthy Flux, Crossplane, or database operator
-Pod does not prove that the controller can reconcile a new object.
+Readiness proves that Kubernetes created the resources and started a Pod with the declared
+mounts. It does not prove that an application can interpret the configuration, read and write
+data correctly, or serve traffic. Those behaviors require additional checks.
 
-Place a small custom resource under `resources`, define its successful status with `waitFor.expr`,
-and add a nested check against the result. A Flux transaction can wait for a `HelmRelease` and
-then query the installed database. A Crossplane transaction can wait for the provider status and
-then access the provisioned service. This checks the controller, its credentials, its external
-dependencies, and the resource it creates as one chain.
+## Verify behavior with additional checks
 
-Keep side effects small. Canary Checker supports up to 10 resources per Kubernetes Resource check
-by default, and cleanup only knows about the resources declared in the check. Confirm how the
-controller deletes child and external resources before you add a schedule.
+The `checks` field runs other Canary Checker checks after the resources satisfy `waitFor`.
+The following example creates an NGINX Pod and Service, then uses an HTTP check to call the
+Service:
 
-## Start with one contract
+```yaml title="nginx-service.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: nginx-service
+  namespace: platform-tests
+spec:
+  schedule: '@every 5m'
+  kubernetesResource:
+    - name: create-and-call-nginx
+      clearResources: true
+      resources:
+        - apiVersion: v1
+          kind: Pod
+          metadata:
+            name: nginx
+            labels:
+              app: nginx
+          spec:
+            containers:
+              - name: nginx
+                image: nginx:1.27.4-alpine
+                ports:
+                  - name: http
+                    containerPort: 80
+        - apiVersion: v1
+          kind: Service
+          metadata:
+            name: nginx
+          spec:
+            selector:
+              app: nginx
+            ports:
+              - name: http
+                port: 80
+                targetPort: http
+      waitFor:
+        timeout: 2m
+        delete: true
+      checks:
+        - http:
+            - name: call-nginx
+              url: http://nginx.platform-tests.svc/
+              responseCodes: [200]
+```
 
-Choose the workload whose next rollout carries the most risk. Build one disposable transaction
-that uses its registry, admission path, service account, scheduling constraints, configuration,
-and network route. Run the stable version on a schedule to test the cluster path. Run the same
-contract with the candidate image or configuration in CI to test the next change.
+`waitFor` confirms that Kubernetes created the Pod and Service and that they report ready. The
+HTTP check confirms that Canary Checker can resolve the Service and receive a response from
+NGINX. If readiness passes but the HTTP check fails, start with Service selection, EndpointSlices,
+DNS, or network routing.
 
-Do not reproduce every production failure in one Canary. Add one storage transaction for each
-critical StorageClass and one configuration transaction for each secret delivery pattern. Each
-check should answer one operational question and leave no resources behind.
+---
 
+Running Pods show that Kubernetes provisioned a workload successfully in the past. A scheduled
+Kubernetes Resource check provides evidence that the same paths still work now. Start with one
+representative transaction and verify the behavior that matters.
 [Install Canary Checker](https://canarychecker.io/installation/) or review the
-[`kubernetesResource` reference](https://canarychecker.io/reference/kubernetes-resource) to build
-your first fresh-workload transaction. The next rollout should consume evidence from a recent
-test instead of becoming the test.
+[`kubernetesResource` reference](https://canarychecker.io/reference/kubernetes-resource) to test
+the paths that your next rollout depends on.
