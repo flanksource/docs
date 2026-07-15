@@ -10,7 +10,7 @@
 	commit = 8897c67d86a15ce1afcdec26ada3ccf29133c34a
 [submodule "docs-vale-package"]
 	path = docs-vale-package
-	url = https://github.com/flanksource/docs-vale-package
+	url = https://github.com/digitalocean/vale-package
 [submodule "modules/duty"]
 	path = modules/duty
 	url = https://github.com/flanksource/duty.git
