@@ -1,0 +1,116 @@
+---
+title: Insights
+sidebar_position: 3
+sidebar_custom_props:
+  icon: fluent-mdl2:insights
+description: Attach security, cost, and performance insights to config items from custom scrapers
+---
+
+import Fields from '@site/src/components/Fields'
+
+When `full: true` is set, each scraped item can include an `analysis` array of insight findings. These appear as insights on the config item and can be filtered by type, severity, and analyzer.
+
+See [Insights](/docs/guide/config-db/concepts/insights) for the built-in insight providers (Trivy, AWS Trusted Advisor, Azure Advisor).
+
+## Example
+
+```json title="config-with-insights.json"
+{
+  "id": "i-0abc123def456",
+  "type": "EC2Instance",
+  "config": {
+    "instance_type": "m5.4xlarge",
+    "state": "running"
+  },
+  // highlight-start
+  "analysis": [
+    {
+      "analyzer": "cost-optimization",
+      "analysis_type": "cost",
+      "severity": "medium",
+      "summary": "Instance is underutilized — average CPU usage is 5% over 14 days",
+      "source": "AWS Trusted Advisor",
+      "first_observed": "2025-01-01T00:00:00Z",
+      "last_observed": "2025-01-08T00:00:00Z",
+      "status": "open",
+      "messages": [
+        "Consider downsizing to m5.xlarge",
+        "Estimated monthly savings: $200"
+      ]
+    },
+    {
+      "analyzer": "security",
+      "analysis_type": "security",
+      "severity": "high",
+      "summary": "Instance has a public IP with unrestricted SSH access",
+      "source": "Security Scanner"
+    }
+  ]
+  // highlight-end
+}
+```
+
+## Analysis Schema
+
+<Fields rows={[
+  {
+    field: "analyzer",
+    description: "Name of the analyzer that produced this finding",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "analysis_type",
+    description: "`security`, `cost`, `performance`, `compliance`, `reliability`, `integration`, `availability`, or `recommendation`",
+    scheme: "string"
+  },
+  {
+    field: "severity",
+    description: "`critical`, `high`, `medium`, `low`, or `info`",
+    scheme: "string"
+  },
+  {
+    field: "summary",
+    description: "Human-readable summary of the finding",
+    scheme: "string"
+  },
+  {
+    field: "status",
+    description: "Status of the finding (e.g. `open`, `resolved`)",
+    scheme: "string"
+  },
+  {
+    field: "source",
+    description: "Source system that produced the finding",
+    scheme: "string"
+  },
+  {
+    field: "messages",
+    description: "Additional detail messages or recommendations",
+    scheme: "[]string"
+  },
+  {
+    field: "analysis",
+    description: "Structured analysis data",
+    scheme: "map[string]any"
+  },
+  {
+    field: "first_observed",
+    description: "When this finding was first seen",
+    scheme: "timestamp"
+  },
+  {
+    field: "last_observed",
+    description: "When this finding was last seen",
+    scheme: "timestamp"
+  },
+  {
+    field: "external_id",
+    description: "External identifier for the config item this finding targets",
+    scheme: "string"
+  }
+]}/>
+
+## Related
+
+- [Insights Concepts](/docs/guide/config-db/concepts/insights) — built-in insight providers

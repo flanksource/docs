@@ -15,27 +15,7 @@ import {
 import { HiUserGroup, HiShieldCheck, HiKey } from 'react-icons/hi2';
 import { FaHistory } from 'react-icons/fa';
 import BoxNode from './diagrams/BoxNode';
-
-const COLORS = {
-  primary: '#2d7de4',
-  background: '#f7fbfe',
-  accent: '#1069dc',
-  muted: '#62758a',
-};
-
-const primaryArrowProps = {
-  color: COLORS.primary,
-  strokeWidth: 3,
-  headSize: 4,
-  dashness: { strokeLen: 10, nonStrokeLen: 5, animation: 1 },
-} as const;
-
-const secondaryArrowProps = {
-  color: COLORS.muted,
-  strokeWidth: 2,
-  headSize: 3,
-  dashness: { strokeLen: 6, nonStrokeLen: 4, animation: 1 },
-} as const;
+import { COLORS, primaryArrowProps, secondaryArrowProps } from './diagrams/diagramUtils';
 
 interface IconGridProps {
   items: Array<{ Icon: React.ComponentType<{ className?: string }>; label?: string }>;
