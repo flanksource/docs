@@ -1,30 +1,23 @@
-# create superuser like privileges on a single database/scheme
+# External PostgreSQL
 
-```
-CREATE ROLE "canary-checker" LOGIN PASSWORD 'r03wYPFDSdMc3aaJ';
-ALTER ROLE  "canary-checker"  SUPERUSER;
-GRANT CREATE, SELECT, UPDATE, DELETE, INSERT ON ALL TABLES IN SCHEMA public TO "canary-checker";
-GRANT CREATE ON SCHEMA public TO "canary-checker";
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT CREATE, SELECT, UPDATE, DELETE, INSERT ON TABLES TO "canary-checker";
+Use a dedicated, empty database owned by the Mission Control login. Run the
+following commands as your database administrator, replacing the role and
+database names:
 
-
-ALTER SCHEMA public OWNER TO "canary-checker";
+```sql
+ALTER ROLE "mission-control" CREATEROLE;
+CREATE DATABASE mission_control OWNER "mission-control";
 ```
 
-```
--- Create an event trigger function
-CREATE OR REPLACE FUNCTION public.pgrst_watch()
-RETURNS event_trigger AS $$
-BEGIN
-    NOTIFY pgrst, 'reload schema';
-END
-$$ LANGUAGE plpgsql;
-```
+The `CREATEROLE` attribute lets startup migrations create the `postgrest_api`
+and `postgrest_anon` roles. On PostgreSQL 16 and later, duty grants the Mission
+Control login `SET TRUE, INHERIT FALSE` membership in those roles. This lets
+PostgREST assume them without automatically exposing their privileges to the
+login. No manual role grants or `createrole_self_grant` setting are required.
 
-mission-control-55f5cb65d5-vlpcd
+Database ownership provides the privileges needed to install trusted extensions
+and create schema objects, so no additional grants are required with the default
+`public` schema configuration.
 
-CREATE EXTENSION IF NOT EXISTS hstore;
-
-GRANT "canary-checker" to postgrest_anon;
-
-GRANT "canary-checker" to postgrest_api;
+If the database already contains Mission Control objects, ensure that the
+Mission Control role owns them before running migrations.
