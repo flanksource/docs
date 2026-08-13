@@ -45,7 +45,27 @@ psql -U postgres localhost -p 5432 mission_control
 
 ## Using an External Database
 
-In order to connect to an existing /docs/guide/canary-checker/reference/database a secret needs to be created with the following key:
+Use a dedicated, empty database for Mission Control. Before installing or upgrading Mission Control, grant its database role the privileges required by startup migrations:
+
+```sql
+CREATE ROLE "mission-control" LOGIN PASSWORD '<password>' CREATEROLE;
+
+GRANT CONNECT, CREATE, TEMPORARY
+ON DATABASE mission_control
+TO "mission-control";
+
+\connect mission_control
+
+GRANT USAGE, CREATE
+ON SCHEMA public
+TO "mission-control";
+```
+
+Replace the role, database, and password with your values. The `CREATEROLE` attribute lets migrations create the PostgREST roles. The database and schema grants let migrations install trusted extensions and create schema objects. Mission Control owns the objects that it creates, so it does not need preemptive table privileges.
+
+If the database already contains Mission Control objects, ensure that the Mission Control role owns them before running migrations.
+
+Create a secret with the following key:
 
 - `DB_URL`
 
@@ -63,15 +83,3 @@ db:
     name: mission-control-postgres
     key: DB_URL
 ```
-
-### Google Cloud SQL
-
-When you use Google Cloud SQL for PostgreSQL, grant the Mission Control database user the permissions required by startup migrations before you install or upgrade Mission Control:
-
-```sql
-GRANT cloudsqlsuperuser TO your_username;
-ALTER ROLE your_username CREATEROLE;
-```
-
-<br />
-> Replace `your_username` with the user configured in the Mission Control database secret.
