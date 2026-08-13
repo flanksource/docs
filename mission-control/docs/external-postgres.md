@@ -10,9 +10,14 @@ CREATE DATABASE mission_control OWNER "mission-control";
 ```
 
 The `CREATEROLE` attribute lets startup migrations create the `postgrest_api`
-and `postgrest_anon` roles. Database ownership provides the privileges needed to
-install trusted extensions and create schema objects, so no additional grants
-are required with the default `public` schema configuration.
+and `postgrest_anon` roles. On PostgreSQL 16 and later, duty grants the Mission
+Control login `SET TRUE, INHERIT FALSE` membership in those roles. This lets
+PostgREST assume them without automatically exposing their privileges to the
+login. No manual role grants or `createrole_self_grant` setting are required.
+
+Database ownership provides the privileges needed to install trusted extensions
+and create schema objects, so no additional grants are required with the default
+`public` schema configuration.
 
 If the database already contains Mission Control objects, ensure that the
 Mission Control role owns them before running migrations.
