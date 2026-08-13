@@ -45,23 +45,14 @@ psql -U postgres localhost -p 5432 mission_control
 
 ## Using an External Database
 
-Use a dedicated, empty database for Mission Control. Before installing or upgrading Mission Control, grant its database role the privileges required by startup migrations:
+Use a dedicated, empty database owned by the Mission Control login. Before installing or upgrading Mission Control, configure it as your database administrator:
 
 ```sql
-CREATE ROLE "mission-control" LOGIN PASSWORD '<password>' CREATEROLE;
-
-GRANT CONNECT, CREATE, TEMPORARY
-ON DATABASE mission_control
-TO "mission-control";
-
-\connect mission_control
-
-GRANT USAGE, CREATE
-ON SCHEMA public
-TO "mission-control";
+ALTER ROLE "mission-control" CREATEROLE;
+CREATE DATABASE mission_control OWNER "mission-control";
 ```
 
-Replace the role, database, and password with your values. The `CREATEROLE` attribute lets migrations create the PostgREST roles. The database and schema grants let migrations install trusted extensions and create schema objects. Mission Control owns the objects that it creates, so it does not need preemptive table privileges.
+Replace the role and database names with your values. The `CREATEROLE` attribute lets migrations create the PostgREST roles. Database ownership provides the privileges needed to install trusted extensions and create schema objects, so no additional grants are required with the default `public` schema configuration.
 
 If the database already contains Mission Control objects, ensure that the Mission Control role owns them before running migrations.
 
