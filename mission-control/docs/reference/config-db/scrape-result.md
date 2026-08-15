@@ -22,3 +22,5 @@ sidebar_position: 7
 | `analysis`     | Analysis result of the config item                     | `*AnalysisResult`                    |
 | `action`       | Action related to the config item                      | `string`                             |
 | `properties`   | Properties associated with the config item             | `types.Properties`                   |
+| `config_access` | Config access records (who has access). Also accepts `access` as a key | `[]`[ExternalConfigAccess](/docs/reference/config-db/config_access#config-access) |
+| `access_logs`  | Access log entries (who actually accessed). Also accepts `logs` as a key | `[]`[ExternalConfigAccessLog](/docs/reference/config-db/config_access#config-access-log) |

@@ -4,6 +4,8 @@ sidebar_custom_props:
   icon: mdi:variable
 ---
 
+import ViewsVariablesDiagram from '@site/../common/src/components/ViewsVariablesDiagram'
+
 Variables make views interactive by allowing users to dynamically control which data is fetched. Variables are defined in the `templating` section and their values are substituted into queries using the `$(var.<key>)` syntax.
 
 ## Overview
@@ -20,39 +22,7 @@ Variables in Mission Control allow you to:
 
 Mission Control has two ways to filter view data. Both are server-side, but they operate at different stages:
 
-```
-┌─────────────────────────────────────┐
-│  Sources                            │
-│  (configs, prometheus, checks, etc) │
-└──────────────────┬──────────────────┘
-                   │
-                   ▼
-        ┌──────────────────┐
-        │  Execute Queries │ ◀── Variables filter here
-        └────────┬─────────┘     (only matching data is fetched)
-                 │
-                 ▼
-      ┌────────────────────┐
-      │  In-memory SQLite  │
-      │  (joins/merge)     │
-      └──────────┬─────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────┐
-│  PostgreSQL Table                   │
-│  (view_<namespace>_<name>)          │
-└──────────────────┬──────────────────┘
-                   │
-                   ▼
-          ┌────────────────┐
-          │ PostgREST API  │ ◀── Column Filters add WHERE clauses here
-          └───────┬────────┘
-                  │
-                  ▼
-            ┌──────────┐
-            │    UI    │
-            └──────────┘
-```
+<ViewsVariablesDiagram className="mx-auto" />
 
 |                            | Variables                                                  | Column Filters                                           |
 | -------------------------- | ---------------------------------------------------------- | -------------------------------------------------------- |

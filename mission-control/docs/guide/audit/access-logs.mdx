@@ -7,25 +7,61 @@ sidebar_custom_props:
 
 import {Card, Cards} from '@site/../common/src/components/Card'
 
-Access logs track who accessed configuration items and when. This enables compliance auditing, security monitoring, and access reviews for your infrastructure.
+Config access tracking has two parts:
+
+- **Config Access** — records who _has_ access to a config item (permissions, role assignments, group memberships)
+- **Access Logs** — records who _actually accessed_ a config item and when
+
+Both are scraped alongside configuration data and feed into [Application](/docs/guide/audit/applications) access control views and [Identity & Access](/docs/guide/audit/identity-access) reports.
 
 ## Overview
 
-When scraping configurations from external systems, you can also capture access logs that record:
+When scraping configurations from external systems, you can capture:
 
-- **Who** accessed a resource (external user)
+- **Who** has access or accessed a resource (users, roles, groups)
 - **What** was accessed (config item)
 - **When** the access occurred
 - **How** they authenticated (MFA status, properties)
 
-Access logs are stored separately from configuration data and can be queried independently for audit purposes. They feed into [Application](/docs/guide/audit/applications) access control views and [Identity & Access](/docs/guide/audit/identity-access) reports.
+## Input Fields
+
+When providing `config_access` or `access_logs` in scraper output, the following shorthand fields are available alongside the standard schema fields. These are resolved during scraping and do not appear in the stored data.
+
+### Shorthand Fields
+
+| Field | Applies To | Resolves To | Description |
+|-------|-----------|-------------|-------------|
+| `user` | `config_access`, `access_logs` | `external_user_aliases` | Matches against user aliases to resolve the user |
+| `role` | `config_access` | `external_role_aliases` | Matches against role aliases to resolve the role |
+| `group` | `config_access` | `external_group_aliases` | Matches against group aliases to resolve the group |
+| `config_id` | both | `config_id` (UUID) or `external_config_id.external_id` (non-UUID) | If a valid UUID, used directly. If a string, treated as an external ID for lookup |
+| `config_type` / `type` | both | `external_config_id.config_type` | Config type for external ID lookup |
+
+### Alternative JSON Keys
+
+The scraper accepts these alternative key names in the JSON output:
+
+| Standard Key | Alternative |
+|-------------|-------------|
+| `config_access` | `access` |
+| `access_logs` | `logs` |
+
+### Config Reference Defaulting
+
+When entries in `config_access` or `access_logs` don't specify a config reference, they inherit from the parent config object's top-level fields:
+
+- `uuid` or `config_id` → used as the config UUID
+- `external_id` or `id` → used as the external ID
+- `type` or `config_type` → used as the config type
+
+This means if the parent object has `"id": "db-prod-001"` and `"type": "Database"`, all access entries without their own config reference automatically target that config item.
 
 ## Access Log Schema
 
 <Fields rows={[
   {
     field: 'config_id',
-    description: 'ID of the config item that was accessed',
+    description: 'ID of the config item that was accessed. Can also be provided as a non-UUID string (resolved via external ID lookup with `config_type`)',
     scheme: 'uuid',
     required: true
   },
@@ -37,7 +73,7 @@ Access logs are stored separately from configuration data and can be queried ind
   },
   {
     field: 'scraper_id',
-    description: 'ID of the scraper that captured this access log',
+    description: 'ID of the scraper that captured this access log (auto-populated from scraper context)',
     scheme: 'uuid',
     required: true
   },
@@ -59,7 +95,59 @@ Access logs are stored separately from configuration data and can be queried ind
   {
     field: 'properties',
     description: 'Additional access metadata (IP address, session info, etc.)',
-    scheme: 'map[string]string'
+    scheme: 'map[string]any'
+  }
+]}/>
+
+:::info Deduplication
+Access logs are deduplicated by the composite key `(config_id, external_user_id, scraper_id)`. When a duplicate is found, the `count` is incremented and `created_at`, `mfa`, and `properties` are updated only if the new record has a more recent `created_at`.
+:::
+
+## Config Access Schema
+
+Records which users, roles, and groups have access to specific configuration items. At least one of `user`, `role`, or `group` (or their resolved UUID equivalents) must be set.
+
+<Fields rows={[
+  {
+    field: 'id',
+    description: 'Unique identifier. Auto-generated from a hash of (config_id, user, role, group, scraper_id) if not provided',
+    scheme: 'string'
+  },
+  {
+    field: 'config_id',
+    description: 'ID of the config item. Can also be a non-UUID string (resolved via external ID lookup with `config_type`)',
+    scheme: 'uuid',
+    required: true
+  },
+  {
+    field: 'external_user_id',
+    description: 'ID of the external user with access',
+    scheme: 'uuid'
+  },
+  {
+    field: 'external_role_id',
+    description: 'ID of the external role granting access',
+    scheme: 'uuid'
+  },
+  {
+    field: 'external_group_id',
+    description: 'ID of the external group with access',
+    scheme: 'uuid'
+  },
+  {
+    field: 'scraper_id',
+    description: 'ID of the scraper (auto-populated from scraper context). At least one of `scraper_id`, `application_id`, or `source` must be set',
+    scheme: 'uuid'
+  },
+  {
+    field: 'application_id',
+    description: 'ID of the Application this access record belongs to',
+    scheme: 'uuid'
+  },
+  {
+    field: 'source',
+    description: 'Source identifier for this access record',
+    scheme: 'string'
   }
 ]}/>
 
@@ -111,15 +199,18 @@ All approaches require an **Entra ID P1 or P2 license**. Free-tier tenants do no
 
 For longer retention (beyond 30 days), export logs via Azure Monitor Diagnostic Settings to a log backend and use the [Logs scraper](/docs/integrations/azure-ad/audit-logs/logs-scraper) approach.
 
-## Example: Custom Scraper with Access Logs
+## Examples
 
 :::note
-The `config_id` and `user_id` fields reference UUIDs in the database, but scrapers resolve them by matching on external identifiers (names, aliases, or scraper-assigned IDs). The example below uses human-readable strings to show the scraper input format — Mission Control resolves these to UUIDs internally.
+The `config_id` and `user` fields reference UUIDs in the database, but scrapers resolve them by matching on external identifiers (names, aliases, or scraper-assigned IDs). The examples below use human-readable strings to show the scraper input format — Mission Control resolves these to UUIDs internally.
 :::
+
+### Access Logs
 
 ```json title="config-with-access-logs.json"
 {
   "id": "db-prod-001",
+  "type": "Database",
   "config": {
     "name": "production-database",
     "engine": "postgres",
@@ -127,7 +218,7 @@ The `config_id` and `user_id` fields reference UUIDs in the database, but scrape
   },
   "access_logs": [
     {
-      "config_id": "db-prod-001",
+      // highlight-next-line
       "user": "user-123",
       "created_at": "2025-01-08T10:30:00Z",
       "mfa": true,
@@ -137,10 +228,37 @@ The `config_id` and `user_id` fields reference UUIDs in the database, but scrape
       }
     },
     {
-      "config_id": "db-prod-001",
       "user": "user-456",
       "created_at": "2025-01-08T11:45:00Z",
       "mfa": false
+    }
+  ]
+}
+```
+
+Both entries inherit `config_id` from the parent object's `id: "db-prod-001"` and `type: "Database"` — no need to repeat them. The `user` shorthand resolves against user aliases.
+
+### Config Access
+
+```json title="config-with-access.json"
+{
+  "id": "db-prod-001",
+  "type": "Database",
+  "config": {
+    "name": "production-database",
+    "engine": "postgres"
+  },
+  "config_access": [
+    {
+      // highlight-start
+      "user": "alice@example.com",
+      "role": "db-admin"
+      // highlight-end
+    },
+    {
+      "group": "dba-team",
+      "config_id": "db-prod-001",
+      "config_type": "Database"
     }
   ]
 }

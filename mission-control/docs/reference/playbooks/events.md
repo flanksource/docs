@@ -73,6 +73,48 @@ spec:
         message: 'Description: {{.component.description}}'
 ```
 
+## Schedule
+
+Playbooks can be triggered on a recurring cron-based schedule using the `on.schedule` trigger.
+
+| Field        | Description                                                                                                                                                                                           | Scheme              | Required |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | -------- |
+| `schedule`   | Cron expression. Supports standard cron (`0 9 * * MON`), `@every <duration>` (e.g. `@every 1h`), and aliases (`@hourly`, `@daily`, `@weekly`, `@monthly`). Prefix with `CRON_TZ=<timezone>` to set timezone. Evaluated in UTC by default. | `string`            | `true`   |
+| `parameters` | Default parameters passed to each scheduled run (supports template expressions evaluated at run time)                                                                                                | `map[string]string` |          |
+
+```yaml title="scheduled-every-hour.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: hourly-cleanup
+spec:
+  on:
+    schedule:
+      - schedule: "@every 1h"
+  actions:
+    - name: cleanup
+      exec:
+        script: /opt/scripts/cleanup.sh
+```
+
+```yaml title="scheduled-cron-with-timezone.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: daily-morning-report
+spec:
+  on:
+    schedule:
+      - schedule: "CRON_TZ=America/New_York 0 9 * * MON-FRI"
+        parameters:
+          environment: production
+  actions:
+    - name: generate-report
+      report:
+        view: default/daily-summary
+        format: pdf
+```
+
 ## Config
 
 Config events relate to activities on config items.

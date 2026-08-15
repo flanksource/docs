@@ -9,42 +9,7 @@ import {
   MissionControlWhite,
 } from '@flanksource/icons/mi';
 import BoxNode from './diagrams/BoxNode';
-
-const COLORS = {
-  primary: '#2d7de4',
-  background: '#f7fbfe',
-  accent: '#1069dc',
-  muted: '#62758a',
-  outputBorder: '#10b981',
-};
-
-const pillStyle: React.CSSProperties = {
-  color: COLORS.muted,
-  backgroundColor: COLORS.background,
-  border: `1px solid ${COLORS.primary}`,
-};
-
-const primaryArrowProps = {
-  color: COLORS.primary,
-  strokeWidth: 3,
-  headSize: 4,
-  dashness: { strokeLen: 10, nonStrokeLen: 5, animation: 1 },
-} as const;
-
-const secondaryArrowProps = {
-  color: COLORS.muted,
-  strokeWidth: 2,
-  headSize: 3,
-  dashness: { strokeLen: 6, nonStrokeLen: 4, animation: 1 },
-} as const;
-
-function NodePill({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="text-[10px] rounded px-2 py-1 text-center" style={pillStyle}>
-      {children}
-    </div>
-  );
-}
+import { COLORS, primaryArrowProps, secondaryArrowProps, NodePill } from './diagrams/diagramUtils';
 
 function NodeSection({ title, items, id }: { title: string; items: string[]; id?: string }) {
   return (

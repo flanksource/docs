@@ -832,7 +832,7 @@ import MyDiagram from '@site/../common/src/components/MyDiagram'
 
 ### Static Images
 
-Store images alongside the `.mdx` file that uses them. Use standard markdown:
+Store images alongside the `.mdx` file that uses them. Use standard Markdown:
 
 ```mdx
 ![Description of what the image shows](./image-name.png)

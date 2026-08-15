@@ -1,0 +1,39 @@
+---
+title: Facet
+description: Configure remote HTML/PDF rendering services for report generation
+sidebar_custom_props:
+  icon: file-pdf
+---
+
+Facet connections configure access to remote HTML/PDF rendering services used by the [Report Action](/docs/guide/playbooks/actions/report).
+
+## Used By
+
+- [Report Action](/docs/guide/playbooks/actions/report) — Generate HTML and PDF reports from Views or config catalog queries
+
+## Schema
+
+| Field          | Description                                                          | Scheme                                         | Required |
+|----------------|----------------------------------------------------------------------|------------------------------------------------|----------|
+| `url`          | URL of the Facet rendering service                                   | string                                         | `true`   |
+| `token`        | Authentication token for the rendering service                       | <CommonLink to="secrets">_EnvVar_</CommonLink> |          |
+| `timestampUrl` | RFC 3161 timestamp authority URL for cryptographic PDF signing       | string                                         |          |
+
+## Example
+
+```yaml title="facet-connection.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: renderer
+  namespace: default
+spec:
+  facet:
+    url: https://facet.example.com
+    token:
+      valueFrom:
+        secretKeyRef:
+          name: facet-credentials
+          key: token
+    timestampUrl: https://freetsa.org/tsr
+```

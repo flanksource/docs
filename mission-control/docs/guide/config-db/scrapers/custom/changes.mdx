@@ -1,0 +1,138 @@
+---
+title: Changes
+sidebar_position: 1
+sidebar_custom_props:
+  icon: octicon:diff-16
+description: Ingest change events from custom scrapers using the full extraction mode
+---
+
+import Fields from '@site/src/components/Fields'
+
+When `full: true` is set, each scraped item can include a `changes` array of change events. These are recorded separately from the config data and appear in the config item's change history.
+
+See [Changes](/docs/guide/config-db/concepts/changes) for background on how Mission Control tracks changes.
+
+## Example
+
+```json title="config-with-changes.json"
+{
+  "id": "db-prod-001",
+  "type": "Database",
+  "config": {
+    "engine": "postgres",
+    "version": "15.2"
+  },
+  // highlight-start
+  "changes": [
+    {
+      "change_type": "upgrade",
+      "summary": "Upgraded PostgreSQL from 15.1 to 15.2",
+      "severity": "low",
+      "created_at": "2025-01-08T10:00:00Z",
+      "created_by": "alice@example.com",
+      "external_change_id": "CR-2025-0108"
+    },
+    {
+      "change_type": "config_change",
+      "summary": "Increased max_connections from 100 to 200",
+      "created_at": "2025-01-07T14:30:00Z",
+      "details": {
+        "parameter": "max_connections",
+        "old_value": "100",
+        "new_value": "200"
+      }
+    }
+  ]
+  // highlight-end
+}
+```
+
+With a scraper:
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: database-changes
+spec:
+  # highlight-next-line
+  full: true
+  file:
+    - type: Database
+      id: $.id
+      paths:
+        - databases/*.json
+```
+
+The scraper stores only the `config` object and records each change event on the config item.
+
+## Change Schema
+
+<Fields rows={[
+  {
+    field: "change_type",
+    description: "Type of the change (e.g. `upgrade`, `config_change`, `permission_grant`)",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "summary",
+    description: "Human-readable summary of the change",
+    scheme: "string"
+  },
+  {
+    field: "action",
+    description: "`delete` to mark the config as deleted, `ignore` to skip recording",
+    scheme: "string"
+  },
+  {
+    field: "severity",
+    description: "Severity level of the change",
+    scheme: "string"
+  },
+  {
+    field: "source",
+    description: "Source system that produced the change",
+    scheme: "string"
+  },
+  {
+    field: "created_at",
+    description: "When the change occurred",
+    scheme: "timestamp"
+  },
+  {
+    field: "created_by",
+    description: "Who made the change",
+    scheme: "string"
+  },
+  {
+    field: "external_change_id",
+    description: "ID of the change in the external system (e.g. a ticket or CR number)",
+    scheme: "string"
+  },
+  {
+    field: "external_id",
+    description: "External identifier for the config item this change belongs to",
+    scheme: "string"
+  },
+  {
+    field: "details",
+    description: "Additional structured metadata",
+    scheme: "map[string]any"
+  },
+  {
+    field: "diff",
+    description: "Unified diff of the change",
+    scheme: "string"
+  },
+  {
+    field: "patches",
+    description: "JSON patches representing the change",
+    scheme: "string"
+  }
+]}/>
+
+## Related
+
+- [Changes Concepts](/docs/guide/config-db/concepts/changes) — diff vs event-based changes, change traversal
+- [Transformation Changes](/docs/guide/config-db/concepts/transform#changes) — change exclusions, mapping, and severity overrides

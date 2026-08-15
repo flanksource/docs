@@ -33,10 +33,16 @@ When `full: true` is set, the scraper expects each config item to have these top
 
 - `config` - The actual configuration data to store
 - `changes` - An array of change events
-- `access_logs` - Access log entries (see [Access Logs](/docs/guide/audit/access-logs))
+- `config_access` (or `access`) - Config access records (see [Access Logs](/docs/guide/audit/access-logs))
+- `access_logs` (or `logs`) - Access log entries (see [Access Logs](/docs/guide/audit/access-logs))
+- `analysis` - Analysis results
 
 :::note
 Fields other than these are ignored. Missing fields are treated as empty.
+:::
+
+:::tip Config Reference Defaulting
+Top-level fields like `id`/`external_id`, `uuid`/`config_id`, and `type`/`config_type` are used as defaults for `changes`, `access_logs`, `config_access`, and `analysis` entries that don't specify their own config reference.
 :::
 
 ### Example

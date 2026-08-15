@@ -1,0 +1,112 @@
+---
+title: Custom Scraper
+sidebar_custom_props:
+  icon: hugeicons:code
+sidebar_position: 20
+description: Scrape config items from any source using file, exec, HTTP, or SQL scrapers with JSONPath mapping
+---
+
+import Custom from '../_custom.mdx'
+import {Card, Cards} from '@site/../common/src/components/Card'
+import CustomScraperDiagram from '@site/src/components/CustomScraperDiagram'
+
+Custom scrapers let you import config items from any source — files, scripts, HTTP APIs, or SQL queries. You define how to extract each item's identity (`id`, `type`, `name`) from the raw data using JSONPath or static values.
+
+<CustomScraperDiagram className="mx-auto overflow-x-auto" />
+
+## Mapping
+
+<Custom/>
+
+## Example: Backstage Catalog
+
+This scraper checks out the [Backstage](https://backstage.io) repository and imports its catalog entities (Components, APIs, Systems, Domains) as config items with relationships.
+
+```yaml title='exec-backstage-catalog.yaml' file=<rootDir>/modules/config-db/fixtures/exec-backstage-catalog.yaml
+
+```
+
+The Python script reads Backstage YAML catalog files and outputs a JSON array. Each item maps to a config item via the `id`, `type`, and `name` fields in the scraper spec.
+
+### Relationships
+
+The `transform.relationship` expressions create links between catalog items using [CEL](/docs/reference/scripting/cel):
+
+- **Component → System** via `spec.system`
+- **Component → API** via `spec.consumesApis` and `spec.dependsOn`
+- **Component/System/Domain → Owner** via `spec.owner`
+- **System → Domain** via `spec.domain`
+
+See [Relationships](/docs/guide/config-db/concepts/relationships) and [Transformation](/docs/guide/config-db/concepts/transform) for more details.
+
+## Full Mode
+
+When you set `full: true`, each scraped item can include additional data beyond just the config:
+
+```yaml
+spec:
+  # highlight-next-line
+  full: true
+  file:
+    - type: $.type
+      id: $.id
+      paths:
+        - configs/*.json
+```
+
+With `full: true`, the scraper expects each item to be a JSON object with these top-level fields:
+
+| Field | Alternative Key | Description |
+|-------|----------------|-------------|
+| `config` | | The actual configuration data to store |
+| `changes` | | Change events to record on this config item |
+| `config_access` | `access` | Access permissions (who _has_ access) |
+| `access_logs` | `logs` | Access log events (who _actually accessed_) |
+| `analysis` | | Insights (security, cost, performance findings) |
+| `users` | `external_users` | User definitions from identity systems |
+| `groups` | `external_groups` | Group definitions |
+| `roles` | `external_roles` | Role definitions |
+| `user_groups` | `external_user_groups` | User-to-group memberships |
+
+Fields other than these are ignored. Missing fields are treated as empty.
+
+### Config Reference Defaulting
+
+Top-level identification fields are used as defaults for child entries (`changes`, `access_logs`, `config_access`, `analysis`) that don't specify their own config reference:
+
+| Field | Alternative |
+|-------|------------|
+| `uuid` | `config_id` |
+| `external_id` | `id` |
+| `type` | `config_type` |
+
+```json title="example.json"
+{
+  // highlight-start
+  "id": "db-prod-001",
+  "type": "Database",
+  // highlight-end
+  "config": { "engine": "postgres", "version": "15.2" },
+  "changes": [
+    {
+      // No config reference needed — inherits id + type from above
+      "change_type": "upgrade",
+      "summary": "Upgraded to 15.2"
+    }
+  ],
+  "access": [
+    { "user": "alice@example.com", "role": "db-admin" }
+  ],
+  "logs": [
+    { "user": "alice@example.com", "created_at": "2025-01-08T10:30:00Z" }
+  ]
+}
+```
+
+## Sub-Pages
+
+<Cards>
+  <Card title="Changes" link="./changes" icon="octicon:diff-16" />
+  <Card title="Access Mapping" link="./access-mapping" icon="mdi:account-lock" />
+  <Card title="Insights" link="./insights" icon="fluent-mdl2:insights" />
+</Cards>

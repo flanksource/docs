@@ -7,11 +7,12 @@ sidebar_custom_props:
 ---
 
 import View from "@site/docs/reference/views/\_view.mdx"
+import ViewsDiagram from '@site/../common/src/components/ViewsDiagram'
 
 Views are dynamic, data-driven dashboards in Mission Control that aggregate and visualize data from multiple sources.
 They collect data from multiple sources into an in-memory SQLite database, enabling you to run any SQL query for filtering, joining, and aggregating your observability data.
 
-<Screenshot img="/img/views.svg" className="h-auto" alt="Views Concept" shadow="false" size="800px"/>
+<ViewsDiagram className="mx-auto" />
 
 Views serve as a powerful data aggregation and visualization layer in Mission Control. They:
 

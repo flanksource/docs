@@ -20,7 +20,7 @@ List all available configuration types in the system
 
 **Result:** Returns a list of all configuration types like `AWS::EC2::Instance`, `Kubernetes::Pod`, `Azure::VM::Instance`, etc.
 
-## catalog_search
+## search_catalog
 
 Search across the entire configuration catalog
 
@@ -53,7 +53,7 @@ Search across the entire configuration catalog
 
 **Result:** Returns recent pods with full resource data
 
-## catalog_changes_search
+## search_catalog_changes
 
 Search for configuration changes across the catalog
 
@@ -64,7 +64,7 @@ Search for configuration changes across the catalog
 
 **Features:**
 - Search by change-specific fields like severity, change type, and summary
-- Same query syntax as catalog_search with additional change-related fields
+- Same query syntax as search_catalog with additional change-related fields
 
 ### Example Usage
 
@@ -86,7 +86,7 @@ Search for configuration changes across the catalog
 
 **Result:** Returns the 10 most recent changes to any AWS resources including the change type, summary, and affected resources.
 
-## related_configs
+## get_related_configs
 
 Find configurations related to a specific config item
 

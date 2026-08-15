@@ -31,9 +31,8 @@ Users represent individuals or service accounts from your identity providers or 
   },
   {
     field: "account_id",
-    description: "Account identifier from the source system",
-    scheme: "string",
-    required: true
+    description: "Account identifier from the source system. Auto-populated during scraping if not provided",
+    scheme: "string"
   },
   {
     field: "user_type",
@@ -52,9 +51,8 @@ Users represent individuals or service accounts from your identity providers or 
   },
   {
     field: "scraper_id",
-    description: "ID of the scraper that created this user",
-    scheme: "uuid",
-    required: true
+    description: "ID of the scraper that created this user. Auto-populated from scraper context",
+    scheme: "uuid"
   }
 ]}/>
 
@@ -168,20 +166,26 @@ Links users to their group memberships.
 
 ## Config Access
 
-Records which users, groups, and roles have access to specific configuration items. At least one of `external_user_id`, `external_group_id`, or `external_role_id` must be set.
+Records which users, groups, and roles have access to specific configuration items. At least one of `external_user_id`, `external_group_id`, or `external_role_id` (or their shorthand equivalents `user`, `role`, `group`) must be set.
+
+At least one of `scraper_id`, `application_id`, or `source` must be set. When run via a scraper, `scraper_id` is auto-populated from context.
 
 <Fields rows={[
   {
     field: "id",
-    description: "Unique identifier for this access record",
-    scheme: "string",
-    required: true
+    description: "Unique identifier. Auto-generated from a deterministic hash of `(config_id, external_user_id, external_role_id, external_group_id, scraper_id)` if not provided",
+    scheme: "string"
   },
   {
     field: "config_id",
-    description: "ID of the config item being accessed",
+    description: "ID of the config item being accessed. Accepts a UUID (used directly) or a non-UUID string (treated as an external ID and resolved via lookup with `config_type`)",
     scheme: "uuid",
     required: true
+  },
+  {
+    field: "external_config_id",
+    description: "External config reference for lookup when `config_id` is not a UUID",
+    scheme: "[ExternalID](#externalid)"
   },
   {
     field: "external_user_id",
@@ -189,14 +193,29 @@ Records which users, groups, and roles have access to specific configuration ite
     scheme: "uuid"
   },
   {
+    field: "external_user_aliases",
+    description: "Aliases used to resolve the user. Populated by the `user` shorthand",
+    scheme: "[]string"
+  },
+  {
     field: "external_group_id",
     description: "ID of the external group with access",
     scheme: "uuid"
   },
   {
+    field: "external_group_aliases",
+    description: "Aliases used to resolve the group. Populated by the `group` shorthand",
+    scheme: "[]string"
+  },
+  {
     field: "external_role_id",
     description: "ID of the external role granting access",
     scheme: "uuid"
+  },
+  {
+    field: "external_role_aliases",
+    description: "Aliases used to resolve the role. Populated by the `role` shorthand",
+    scheme: "[]string"
   },
   {
     field: "application_id",
@@ -205,7 +224,7 @@ Records which users, groups, and roles have access to specific configuration ite
   },
   {
     field: "scraper_id",
-    description: "ID of the scraper that created this record",
+    description: "ID of the scraper that created this record (auto-populated from scraper context)",
     scheme: "uuid"
   },
   {
@@ -225,16 +244,58 @@ Records which users, groups, and roles have access to specific configuration ite
   }
 ]}/>
 
-## Config Access Log
+### Input Shorthands
 
-Records individual access events for audit purposes.
+These fields are accepted in scraper input and resolved during processing:
+
+| Shorthand | Resolves To | Description |
+|-----------|-------------|-------------|
+| `user` | `external_user_aliases` | Matched against user aliases |
+| `role` | `external_role_aliases` | Matched against role aliases |
+| `group` | `external_group_aliases` | Matched against group aliases |
+| `config_id` (non-UUID) | `external_config_id.external_id` | External ID for config lookup |
+| `config_type` / `type` | `external_config_id.config_type` | Config type for external ID lookup |
+
+### ExternalID {#externalid}
 
 <Fields rows={[
   {
     field: "config_id",
-    description: "ID of the config item that was accessed",
+    description: "Config ID (UUID string)",
+    scheme: "string"
+  },
+  {
+    field: "config_type",
+    description: "Config type for external ID lookup",
+    scheme: "string"
+  },
+  {
+    field: "external_id",
+    description: "External identifier for the config item",
+    scheme: "string"
+  },
+  {
+    field: "scraper_id",
+    description: "Scraper ID to scope the lookup",
+    scheme: "string"
+  }
+]}/>
+
+## Config Access Log
+
+Records individual access events for audit purposes. Deduplicated by `(config_id, external_user_id, scraper_id)` — on conflict, `count` is incremented and `created_at`, `mfa`, and `properties` are updated only if the new record has a more recent `created_at`.
+
+<Fields rows={[
+  {
+    field: "config_id",
+    description: "ID of the config item that was accessed. Accepts a UUID or a non-UUID string (resolved via external ID lookup with `config_type`)",
     scheme: "uuid",
     required: true
+  },
+  {
+    field: "external_config_id",
+    description: "External config reference for lookup when `config_id` is not a UUID",
+    scheme: "[ExternalID](#externalid)"
   },
   {
     field: "external_user_id",
@@ -243,8 +304,13 @@ Records individual access events for audit purposes.
     required: true
   },
   {
+    field: "external_user_aliases",
+    description: "Aliases used to resolve the user. Populated by the `user` shorthand",
+    scheme: "[]string"
+  },
+  {
     field: "scraper_id",
-    description: "ID of the scraper that captured this access log",
+    description: "ID of the scraper that captured this access log (auto-populated from scraper context)",
     scheme: "uuid",
     required: true
   },
@@ -266,6 +332,14 @@ Records individual access events for audit purposes.
   {
     field: "properties",
     description: "Additional access metadata (IP address, session info, client, etc.)",
-    scheme: "map[string]string"
+    scheme: "map[string]any"
   }
 ]}/>
+
+### Input Shorthands
+
+| Shorthand | Resolves To | Description |
+|-----------|-------------|-------------|
+| `user` | `external_user_aliases` | Matched against user aliases |
+| `config_id` (non-UUID) | `external_config_id.external_id` | External ID for config lookup |
+| `config_type` / `type` | `external_config_id.config_type` | Config type for external ID lookup |

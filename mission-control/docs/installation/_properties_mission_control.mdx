@@ -9,8 +9,13 @@ import Container from './_properties_container.mdx'
 | image.pullPolicy                             | Defaults to `IfNotPresent`                         |
 | image.tag                                    |                                                    |
 | otel.serviceName                             | Defaults to `mission-control`                      |
+| `properties.<feature>.disable`               | Disable UI features when set to `"true"`. Supported features include `topology`, `health`, `incidents`, `config`, `logs`, `playbooks`, `applications`, `views`, `ai`, `agents`, and `settings.*`. |
+| properties.dashboard.default.view            | Backend dashboard view selector. Defaults to `mission-control-dashboard`. |
+| properties.defaults.dashboard_view           | UI sidebar dashboard navigation selector. |
+| properties.flanksource.ui.snippets           | Local JavaScript function expression executed once by the UI after user load. |
 | properties.incidents.disable                 | Defaults to `{}`                                   |
 | properties.logs.disable                      | Defaults to `true`                                 |
+| properties.proxy.disable                     | In Clerk auth mode, force direct backend access instead of proxy access when set to `"true"`. |
 | kmsConnection                                | Provide the KMS connection string to use for secret parameters. See [KMS connection documentation](/docs/reference/connections/KMS/) for details. |
 | replicas                                     | Defaults to `1`                                    |
 | resources.limits.cpu                         | Defaults to `500m`                                 |

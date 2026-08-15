@@ -82,6 +82,35 @@ The following example checks a local folder for files matching `pg-backups-.*.zi
 ```yaml title="postgres-backup-check.yaml" file=<rootDir>/modules/canary-checker/fixtures/datasources/folder_with_filter.yaml
 ```
 
+## Templated Paths
+
+The `path` field supports Go template expressions, which is particularly useful for S3 and GCS
+bucket checks. Instead of scanning an entire bucket prefix on every check run, you can narrow
+the listing to a specific date-partitioned or environment-scoped prefix.
+
+```yaml title="templated-s3-path.yaml"
+apiVersion: canaries.flanksource.com/v1
+kind: Canary
+metadata:
+  name: daily-backup-check
+spec:
+  schedule: "@every 1h"
+  folder:
+    - name: check-todays-backups
+      path: 's3://my-bucket/backups/{{.properties.env}}/{{ now.Format "2006/01/02" }}/'
+      filter:
+        maxAge: 24h
+      minCount: 1
+      minSize: 10mb
+```
+
+:::tip Performance
+Templated paths can dramatically improve S3 check performance. A fixed path like `s3://bucket/backups/`
+lists **all** objects under that prefix, which can take minutes for buckets with millions of objects.
+A templated path like `s3://bucket/backups/{{ now.Format "2006/01/02" }}/` narrows the `ListObjects`
+call to a single date partition.
+:::
+
 ## Result Variables
 
 The following fields are available in `test`, `display`, and `transform` [expressions](../concepts/expressions).

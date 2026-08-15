@@ -10,7 +10,7 @@ import DocCardList from '@theme/DocCardList';
 
 # MCP
 
-Mission Control supports MCP for those who want to link it with their LLM Clients.
+Mission Control supports [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) for connecting AI assistants to your infrastructure. See the [MCP integration overview](/docs/integrations/mcp) for a high-level introduction.
 
 ## Setup
 
@@ -24,6 +24,51 @@ For detailed setup instructions for popular MCP clients, see [Client Setup](./cl
 
 ## Permissions
 
-To access the mcp server, `Authorization` header can be used with a token. The token must have `mcp.*` permission.
+Access to the MCP server requires a token with the `mcp:run` permission, passed via the `Authorization` header.
+
+- **`mcp:run`** is the single permission that controls access to all MCP tools — there is no per-tool granularity
+- **Admin users** bypass the permission check entirely
+- **Deny support**: A permission with `Deny: true` blocks MCP access even if another grant exists
+- **Row-Level Security (RLS)**: All tool results are filtered based on the user's existing RBAC scopes (namespace, team, tags). Users only see catalog items, playbooks, views, and health checks they already have access to
+
+### Creating a Token
+
+The easiest way to create a token is via the setup wizard: click your user avatar and choose **Setup MCP**. This generates a token with the correct permissions and provides ready-to-use client configuration snippets.
+
+You can also create tokens via Settings → API Tokens, ensuring the token has `mcp:run` permission.
+
+:::info
+Use the token as a Bearer token: `Authorization: Bearer <token_value>`
+:::
+
+## What's Available
+
+### Tools
+
+Mission Control exposes 20+ static tools plus dynamic tools generated from your playbooks and views:
+
+| Category | Examples |
+|----------|---------|
+| [Catalog](/docs/guide/mcp/tools/catalog_tools) | `search_catalog`, `describe_catalog`, `search_catalog_changes`, `get_related_configs`, `list_catalog_types` |
+| [Health Checks](/docs/guide/mcp/tools) | `search_health_checks`, `get_check_status`, `run_health_check`, `list_all_checks` |
+| [Playbooks](/docs/guide/mcp/tools/playbook_tools) | `get_all_playbooks`, `get_playbook_recent_runs`, `get_playbook_failed_runs`, `get_playbook_run_steps` |
+| Views | `list_all_views` + per-view query tools (synced hourly) |
+| [Connections](/docs/guide/mcp/tools/connection_tools) | `list_connections` |
+| Artifacts | `read_artifact_metadata`, `read_artifact_content` |
+| Notifications | `get_notification_detail`, `get_notifications_for_resource` |
+| Templates | `run_template` |
+
+**Dynamic tools**: Each playbook generates an execution tool (e.g. `deploy-app_prod_incident-response`). Each view generates a query tool (e.g. `view_incidents_prod`). These are registered per-session for playbooks and synced hourly for views.
+
+### Resources
+
+MCP resources provide direct access to specific items via URI templates:
+
+| Resource | URI Template |
+|----------|-------------|
+| [Config Item](/docs/guide/mcp/resources/config_item) | `config_item://{id}` |
+| [Connection](/docs/guide/mcp/resources/connection) | `connection://{namespace}/{name}` |
+| [Playbook](/docs/guide/mcp/resources/playbooks) | `playbook://{idOrName}` |
+| View | `view://{namespace}/{name}` |
 
 <DocCardList />
