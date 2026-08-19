@@ -1,0 +1,138 @@
+---
+title: "Faro, Mission Control MCP, or kubectl: What Works Best for LLMs?"
+description: Compare Faro, Mission Control MCP, and kubectl as interfaces for LLM-powered operations
+slug: faro-mcp-kubectl-for-llms
+authors: [yash]
+tags: [faro, mcp, kubernetes, llm, mission-control]
+hide_table_of_contents: false
+date: 2026-08-13
+---
+
+A large language model (LLM) walks into a cluster and asks, "What is broken?" `kubectl` answers with a wall of JSON, the context window fills up, and the fault is still hiding on line 8,412.
+
+The joke is cheap. The token bill is not.
+
+Giving an LLM access to infrastructure takes one credential. Giving it the right context, in a useful shape, with safe boundaries takes more work. Faro, the [Mission Control MCP server](/docs/guide/mcp), and `kubectl` each solve a different part of that problem. The best choice depends on where the model runs and what the model needs to do.
+
+<!--truncate -->
+
+## What an LLM needs from an operations tool
+
+A useful LLM interface helps the model form a small request and returns enough context for the next decision. Four details matter:
+
+- **Structure:** Stable fields beat terminal decoration and loose prose.
+- **Scope:** Focused results save tokens and reduce false leads.
+- **Meaning:** Health, changes, and relationships often matter more than raw objects.
+- **Control:** Reads and writes need separate permissions and clear targets.
+
+No tool leads in every category. `kubectl` covers Kubernetes, MCP is built for models, and Faro brings Mission Control context into the shell.
+
+## The short comparison
+
+| Area | Faro CLI | Mission Control MCP | kubectl CLI |
+| --- | --- | --- | --- |
+| Interface | Shell commands | Native MCP tools and resources | Shell commands |
+| Scope | Mission Control catalog, relationships, changes, insights, connections, playbooks, and plugins | Mission Control catalog, relationships, health checks, connections, and playbooks | Kubernetes API resources and custom resources |
+| LLM output | Compact results, JSON, Markdown, and color-free output | Typed tool inputs with focused responses | JSON and JSONPath; default output targets people |
+| Context | Cross-cluster and cross-cloud data from Mission Control | Cross-cluster and cross-cloud data from Mission Control | One selected Kubernetes API context per command |
+| Freshness | Uses data and actions exposed by Mission Control | Uses data and actions exposed by Mission Control | Reads the Kubernetes API at request time |
+| Best fit | Coding agents and shell-based automation | MCP clients and conversational agents | Live Kubernetes inspection and narrow fallback actions |
+
+The practical answer is not "pick one forever." Start with the interface that gives the model the most meaning for the least access.
+
+## Faro: Mission Control for shell-based agents
+
+Faro is a slim Mission Control client. It gives terminal-based agents access to config items from Kubernetes, cloud platforms, Git, CI/CD, and other connected sources. Faro also inspects changes and insights, runs playbooks, and loads commands exposed by Mission Control plugins.
+
+That scope matters during an incident. A broken pod may link to a Deployment, a Flux `HelmRelease`, a Git source, a cloud node, and a recent change. `kubectl` inspects the pod. Faro helps the model ask what surrounds it and what changed.
+
+Faro output suits LLM workflows. Searches return compact records by default. The model can set a limit, then request complete records with `--full` after it finds a useful target.
+
+The following command finds unhealthy Kubernetes Deployments and returns compact JSON for a shell-based agent:
+
+```bash title="Search the Mission Control catalog with Faro"
+faro catalog search 'health!=healthy type=Kubernetes::Deployment' \
+  --limit 20 \
+  --json
+```
+
+The query narrows the catalog before output reaches the model. `--limit 20` bounds the result, while `--json` preserves fields for the next tool call. Add `--full` only for a complete config item.
+
+JSON fits code-driven loops. Markdown fits output sent to a prompt or incident note. The next command returns a small Markdown table without terminal color codes:
+
+```bash title="Return prompt-ready Markdown from Faro"
+faro catalog insights search 'status=open severity=critical' \
+  --limit 10 \
+  --markdown \
+  --no-color
+```
+
+`--markdown` avoids fixed-width column parsing. `--no-color` removes ANSI escape sequences that add noise outside a terminal.
+
+Faro fits coding agents that already run commands, inspect exit codes, and chain results. The model must still select flags, quote queries, and understand command help. The agent harness must control which commands can run.
+
+## Mission Control MCP: the agent-native route
+
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io/) replaces command construction with named tools and input schemas. Instead of teaching a model how to quote a catalog query in a shell, a Mission Control MCP client presents a catalog search tool with a defined query argument.
+
+Mission Control MCP exposes catalog, relationship, change, health check, connection, and playbook tools. The model can move from a broad question to a focused action:
+
+1. Search for unhealthy config items.
+2. Fetch related config items.
+3. Check recent changes.
+4. Find a playbook that applies to the target.
+5. Start an approval-gated playbook. Mission Control holds the run until an authorized user approves it.
+
+This sequence is where MCP has an edge. Tool names and schemas describe the available actions, while Mission Control adds domain context to raw objects. MCP and Faro use the caller's Mission Control permissions. `kubectl` uses the Kubernetes identity and RBAC rules referenced by its kubeconfig.
+
+MCP is the best default when the LLM client supports it. The [MCP client setup guide](/docs/guide/mcp/client-setup) covers Claude Desktop, Claude Code, Copilot, Cline, and Continue.
+
+MCP adds a protocol layer, while CLI commands remain easier to reproduce by hand. Teams should log MCP calls and require approval for playbooks that restart, delete, or scale workloads.
+
+## kubectl: broad, live, and sharp
+
+`kubectl` provides the most complete Kubernetes interface. It covers built-in and custom resources, discovery, logs, events, exec sessions, patches, and applies. It reads the selected cluster at request time, which helps when Mission Control has not scraped a recent update.
+
+The following command reads one labeled set of pods from an explicit context and namespace as JSON:
+
+```bash title="Read a focused set of live Kubernetes objects"
+kubectl --context prod-eu -n payments get pods \
+  --selector app=checkout \
+  --output json
+```
+
+The explicit context and namespace avoid hidden local defaults. The label selector reduces the response before `--output json` returns structured data.
+
+Kubernetes objects still carry managed fields, conditions, annotations, and large specs. This data can fill a context window before the useful detail appears. JSONPath selects smaller fields, but the model must know which fields matter.
+
+`kubectl` can expose the references and revision fields stored on Flux objects, but it does not provide Mission Control's normalized cross-system relationship graph or off-cluster change history. Use it as a read-only drill-down tool where possible. Give agents narrow RBAC permissions, explicit contexts, and approval steps for writes. Structured output helps parsing; it does not make mutations safe.
+
+## A practical decision path
+
+Start with the question, not the tool.
+
+**Use Mission Control MCP** to investigate across systems, follow relationships, or choose a governed playbook. Discovery, inputs, and authorization are part of the interface.
+
+**Use Faro** when the model lives in a terminal. Coding agents get compact Mission Control results as JSON or Markdown, plus commands that engineers can reproduce.
+
+**Use `kubectl`** for a live Kubernetes field, a custom resource schema, or data that has not reached the catalog. Keep requests narrow and prefer reads.
+
+A useful chain lets MCP or Faro find the config item and change history, then uses `kubectl` to confirm one live field. A Mission Control playbook handles the write under the team's approval policy.
+
+## Common pitfalls
+
+Do not ask for everything. Avoid `--full`, all namespaces, and unbounded discovery searches. Search, limit, inspect, then expand one result.
+
+Do not confuse fresh data with complete context. `kubectl` may have the newest pod status, while Mission Control has the relationship or change that explains it.
+
+Structured output is not a safety feature. JSON helps parsing but cannot stop a destructive request. RBAC, playbook controls, target validation, and human approval solve that problem.
+
+Last, match the interface to the runtime. Chat clients, coding agents, and incident services have different strengths.
+
+## Conclusion
+
+For LLMs, the best operations tool is the one that answers the smallest useful question with the least dangerous access.
+
+Mission Control MCP wins for MCP-capable agents through named tools, operational context, and server-side controls. Faro wins in the terminal. Compact defaults, limits, JSON, Markdown, and color-free output keep Mission Control data useful without hauling in the whole catalog. `kubectl` is the live Kubernetes specialist and needs the tightest guardrails.
+
+This is a toolbox, not a contest. Let Mission Control explain the neighborhood. Let Faro or MCP guide the investigation. Let `kubectl` inspect the last few millimeters. Do not hand the model a chainsaw when the job needs a flashlight.
