@@ -120,7 +120,7 @@ hr {
   @apply border-solid border-t-0 border-x-0 border-zinc-200;
 }
 
-footer {
+.site-footer {
   a {
     @apply text-white;
   }
@@ -142,39 +142,13 @@ footer {
   .border-gray-700 {
     border-color: #222d3d;
   }
-
-  .avatar {
-    @apply border-solid border-slate-200 shadow-sm rounded-lg p-5;
-  }
 }
 
-/* Ensure footer links are white on all pages */
-.blog-list-page footer a,
-.blog-authors-posts-page footer a,
-.blog-post-page footer a {
-  color: white !important;
+.blog-post-page footer .avatar {
+  @apply border-solid border-slate-200 shadow-sm rounded-lg p-5;
 }
 
-.blog-list-page footer a:hover,
-.blog-authors-posts-page footer a:hover,
-.blog-post-page footer a:hover {
-  color: rgba(255, 255, 255, 0.5) !important;
-  text-decoration: none;
-}
-
-.blog-list-page footer a.secondary,
-.blog-authors-posts-page footer a.secondary,
-.blog-post-page footer a.secondary {
-  color: rgba(255, 255, 255, 0.5) !important;
-}
-
-.blog-list-page footer a.secondary:hover,
-.blog-authors-posts-page footer a.secondary:hover,
-.blog-post-page footer a.secondary:hover {
-  color: white !important;
-}
-
-.blog-list-page, .blog-authors-posts-page  {
+.blog-list-page, .blog-authors-posts-page, .blog-tags-post-list-page {
   h2 {
     font-size: 1.25em;
     margin-bottom: 6px;
@@ -317,12 +291,12 @@ footer {
     min-width: 0;
   }
 
-  footer [class~='gap-x-[1.88rem]'] {
+  .site-footer [class~='gap-x-[1.88rem]'] {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  footer [class~='gap-x-[5.63rem]'] {
+  .site-footer [class~='gap-x-[5.63rem]'] {
     width: 100%;
     max-width: 100%;
     flex-wrap: wrap;

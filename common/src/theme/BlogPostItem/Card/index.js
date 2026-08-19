@@ -16,11 +16,13 @@ function useContainerClassName() {
 export default function BlogPostCard({ children, post, url, }) {
   const containerClassName = useContainerClassName();
   return (
-    <Card link={post.metadata.permalink} height="h-64" bordered={false} padded={false}>
-      <BlogPostItemContainer >
+    <Card link={post.metadata.permalink} height="h-72">
+      <BlogPostItemContainer className="h-full flex flex-col">
         <BlogPostItemHeader />
         <span className='text-left text-gray-900 line-clamp-2 mb-2'>{post.metadata.description}</span>
-        <TagsListInline tags={post.metadata.tags} />
+        <div className='mt-auto'>
+          <TagsListInline tags={post.metadata.tags} />
+        </div>
       </BlogPostItemContainer >
     </Card>
 

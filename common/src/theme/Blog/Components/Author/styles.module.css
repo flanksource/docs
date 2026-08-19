@@ -35,8 +35,9 @@ column-gap: 4px;
 
 
 .authorName {
-  font-size: 1.1rem;
-  line-height: 1.1rem;
+  font-size: 1.25rem;
+  line-height: 1.4rem;
+  color: var(--gray-900);
   display: flex;
   flex-direction: row;
 }
@@ -62,8 +63,8 @@ column-gap: 4px;
 }
 
 .authorTitle {
-  font-size: 0.8rem;
-  line-height: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.3rem;
   display: -webkit-box;
   overflow: hidden;
   line-clamp: 1;

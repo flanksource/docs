@@ -1,0 +1,15 @@
+/* Header above the post grid on a tag page, holding the tag title
+   and the link back to the full tag list. */
+
+.header {
+  padding-top: 4rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.allTagsLink {
+  color: var(--ifm-link-color);
+}
