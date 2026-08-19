@@ -1,5 +1,5 @@
 export default function Footer() {
-  return <footer className=''>
+  return <footer className='site-footer'>
 
     <div className="text-gray-700 text-lg" style={{
       backgroundColor: '#131f3b',

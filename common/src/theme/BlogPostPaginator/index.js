@@ -5,7 +5,7 @@ export default function BlogPostPaginator(props) {
   const {nextItem, prevItem} = props;
   return (
     <nav
-      className="pagination-nav docusaurus-mt-lg"
+      className="pagination-nav docusaurus-mt-lg mb-12"
       aria-label={translate({
         id: 'theme.blog.post.paginator.navAriaLabel',
         message: 'Blog post page navigation',

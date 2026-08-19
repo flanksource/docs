@@ -14,6 +14,7 @@ import SearchMetadata from '@theme/SearchMetadata';
 import BlogPostItems from '@theme/BlogPostItems';
 import Unlisted from '@theme/ContentVisibility/Unlisted';
 import Heading from '@theme/Heading';
+import styles from './styles.module.css';
 function BlogTagsPostsPageMetadata({ tag }) {
   const title = useBlogTagsPostsPageTitle(tag);
   return (
@@ -28,10 +29,10 @@ function BlogTagsPostsPageContent({ tag, items, sidebar, listMetadata }) {
   return (
     <BlogLayout sidebar={sidebar}>
       {tag.unlisted && <Unlisted />}
-      <header className="my-5">
-        <Heading as="h1">{title}</Heading>
+      <header className={clsx('container', styles.header)}>
+        <Heading as="h1" className={styles.title}>{title}</Heading>
         {tag.description && <p>{tag.description}</p>}
-        <Link href={tag.allTagsPath}>
+        <Link href={tag.allTagsPath} className={styles.allTagsLink}>
           <Translate
             id="theme.tags.tagsPageLink"
             description="The label of the link targeting the tag list page">
@@ -49,7 +50,7 @@ export default function BlogTagsPostsPage(props) {
     <HtmlClassNameProvider
       className={clsx(
         ThemeClassNames.wrapper.blogPages,
-        // ThemeClassNames.page.blogTagPostListPage,
+        ThemeClassNames.page.blogTagPostListPage,
       )}>
       <BlogTagsPostsPageMetadata {...props} />
       <BlogTagsPostsPageContent {...props} />

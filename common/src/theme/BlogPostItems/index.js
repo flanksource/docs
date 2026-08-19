@@ -8,8 +8,8 @@ export default function BlogPostItems({
   component: BlogPostItemComponent = BlogPostItem,
 }) {
   return (
-    <div className='pt-16 container'>
-      <Cards>
+    <div className='pt-16 pb-16 container'>
+      <Cards gap="gap-x-8 gap-y-8">
         {items.map(({ content: BlogPostContent }) => (
           <BlogPostProvider
             key={BlogPostContent.metadata.permalink}

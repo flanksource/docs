@@ -45,9 +45,9 @@ export const Card = ({
 
   return cardContent;
 };
-export const Cards = ({ columns = 3, children }) => {
+export const Cards = ({ columns = 3, gap = 'gap-x-4 gap-y-4', children }) => {
   return (
-    <div className="text-slate-900 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-4">
+    <div className={clsx("text-slate-900 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3", gap)}>
       {children}
     </div>
   );
