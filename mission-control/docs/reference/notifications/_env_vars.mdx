@@ -1,3 +1,5 @@
+<!-- vale Flanksource.Spelling = NO -->
+
 export function CheckHealthEnv() {
   return <Fields
     rows={[
@@ -39,12 +41,12 @@ export function CheckHealthEnv() {
       {
         "field": "source_event",
         "scheme": "string",
-        "description": "The event that triggered the notification (e.g. `check.passed`, `check.failed`)"
+        "description": "The event that triggered the notification, for example, `check.passed` or `check.failed`"
       },
       {
         "field": "event_time",
         "scheme": "`time.Time`",
-        "description": "The timestamp when the event was created"
+        "description": "The event creation timestamp, including its timezone"
       },
       {
         "field": "groupedResources",
@@ -96,12 +98,12 @@ export function ConfigEventsTemplateVars() {
       {
         "field": "source_event",
         "scheme": "string",
-        "description": "The event that triggered the notification (e.g. `config.unhealthy`, `config.created`, `config.updated`, `config.deleted`)"
+        "description": "The event that triggered the notification, for example, `config.unhealthy`, `config.created`, `config.updated`, or `config.deleted`"
       },
       {
         "field": "event_time",
         "scheme": "`time.Time`",
-        "description": "The timestamp when the event was created"
+        "description": "The event creation timestamp, including its timezone"
       },
       {
         "field": "groupedResources",
@@ -497,3 +499,5 @@ export function CheckStatus() {
     />
   )
 }
+
+<!-- vale Flanksource.Spelling = YES -->
