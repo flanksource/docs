@@ -6,17 +6,17 @@
   },
   {
     field: "from",
-    description: "Start time of the silence period in RFC3339 format, datetime or datemath expression (e.g., \"now\", \"now+2h\", \"2025-01-01\")",
+    description: "Start time of the silence period in RFC3339 format, as a date and time, or as a date math expression (for example, \"now\", \"now+2h\", or \"2025-01-01\")",
     scheme: "string"
   },
   {
     field: "until",
-    description: "End time of the silence period in RFC3339 format, datetime or datemath expression (e.g., \"now\", \"now+2d\", \"2025-02-01\")",
+    description: "End time of the silence period in RFC3339 format, as a date and time, or as a date math expression (for example, \"now\", \"now+2d\", or \"2025-02-01\")",
     scheme: "string"
   },
   {
     field: "recursive",
-    description: "When true, the silence applies to all child resources of the matched resources. For example, silencing a namespace would silence all deployments, statefulsets, pods, etc. within it.",
+    description: "When true, a silence that targets a specific config item or component also applies to its descendants. This field doesn't expand filter or selector matches and doesn't apply to a specific check or canary.",
     scheme: "boolean"
   },
   {
@@ -36,5 +36,5 @@
 ]}/>
 
 :::info
-At least one of `filter` or `selectors` must be specified to target resources for the silence. When both are specified, `filter` takes precedence.
+In a `NotificationSilence` custom resource, specify at least one `filter` or selector. When you specify both, Mission Control applies the silence when the filter returns `true` or any selector matches. Mission Control evaluates the selectors only when the filter returns `false`.
 :::
