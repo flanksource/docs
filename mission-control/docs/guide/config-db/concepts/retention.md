@@ -7,17 +7,17 @@ sidebar_custom_props:
 
 After scraping we can choose to retain results on the basis of name, age, count and more.
 
-## Default Retention Periods
+## Default retention periods
 
-When retention rules are not explicitly configured, config-db applies the following default retention periods:
+Config DB cleanup jobs use the following retention periods by default:
 
-| Type            | Default Period | Description                                         |
-| --------------- | -------------- | --------------------------------------------------- |
-| Config Items    | 7 days         | Configuration items are retained for 7 days         |
-| Changes         | 60 days        | Change records are retained for 60 days             |
-| Config Analysis | 60 days        | Configuration analysis data is retained for 60 days |
+| Record          | Default period                 | Cleanup behavior                             |
+| --------------- | ------------------------------ | -------------------------------------------- |
+| Config item     | 7 days after soft deletion     | Permanently delete soft-deleted config items |
+| Config change   | 60 days after creation         | Delete changes not linked to evidence        |
+| Config analysis | 60 days after last observation | Delete analysis not linked to evidence       |
 
-These defaults ensure that your database doesn't grow unbounded while maintaining a reasonable history of configuration changes and analysis.
+The cleanup jobs run once per day. The `staleItemAge` field controls when Config DB soft-deletes an unseen config item; the 7-day default controls when Config DB permanently deletes that item.
 
 The retention rules are applied for each unique catalog item. If `changes` is specified with type `X` and count `20`, last 20 changes of `X` type would be kept for each catalog item
 
