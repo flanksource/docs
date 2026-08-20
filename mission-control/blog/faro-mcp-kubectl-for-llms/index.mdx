@@ -33,12 +33,12 @@ No tool leads in every category. `kubectl` covers Kubernetes, MCP is built for m
 | --- | --- | --- | --- |
 | Interface | Shell commands | Native MCP tools and resources | Shell commands |
 | Scope | Mission Control catalog, relationships, changes, insights, connections, playbooks, and plugins | Mission Control catalog, relationships, health checks, connections, and playbooks | Kubernetes API resources and custom resources |
-| LLM output | Compact results, JSON, Markdown, and color-free output | Typed tool inputs with focused responses | JSON and JSONPath; default output targets people |
+| LLM output | Compact results, TOON, JSON, Markdown, and color-free output | Typed tool inputs with focused responses | JSON and JSONPath; default output targets people |
 | Context | Cross-cluster and cross-cloud data from Mission Control | Cross-cluster and cross-cloud data from Mission Control | One selected Kubernetes API context per command |
 | Freshness | Uses data and actions exposed by Mission Control | Uses data and actions exposed by Mission Control | Reads the Kubernetes API at request time |
 | Best fit | Coding agents and shell-based automation | MCP clients and conversational agents | Live Kubernetes inspection and narrow fallback actions |
 
-The practical answer is not "pick one forever." Start with the interface that gives the model the most meaning for the least access.
+Do not pick one forever. Start with the interface that gives the most meaning for the least access.
 
 ## Faro: Mission Control for shell-based agents
 
@@ -58,18 +58,19 @@ faro catalog search 'health!=healthy type=Kubernetes::Deployment' \
 
 The query narrows the catalog before output reaches the model. `--limit 20` bounds the result, while `--json` preserves fields for the next tool call. Add `--full` only for a complete config item.
 
-JSON fits code-driven loops. Markdown fits output sent to a prompt or incident note. The next command returns a small Markdown table without terminal color codes:
+Faro also supports [Token-Oriented Object Notation (TOON)](https://toonformat.dev/), a compact format for structured data in LLM prompts. This command returns critical insights as TOON:
 
-```bash title="Return prompt-ready Markdown from Faro"
+```bash title="Return token-efficient TOON from Faro"
 faro catalog insights search 'status=open severity=critical' \
   --limit 10 \
-  --markdown \
-  --no-color
+  --format toon
 ```
 
-`--markdown` avoids fixed-width column parsing. `--no-color` removes ANSI escape sequences that add noise outside a terminal.
+TOON declares field names once for uniform lists instead of repeating each key for every record. Catalog results often have this shape, so TOON can use fewer tokens than JSON while preserving structure. This leaves more context for evidence and reasoning. Savings depend on the data and model. Deep or irregular records may work better as JSON, so test both formats.
 
-Faro fits coding agents that already run commands, inspect exit codes, and chain results. The model must still select flags, quote queries, and understand command help. The agent harness must control which commands can run.
+JSON fits code-driven loops. Markdown fits prompts and incident notes, while `--no-color` removes terminal escape sequences.
+
+Faro fits coding agents that run commands and chain results. The model must still select flags and quote queries. The agent harness must control which commands can run.
 
 ## Mission Control MCP: the agent-native route
 
@@ -87,7 +88,7 @@ This sequence is where MCP has an edge. Tool names and schemas describe the avai
 
 MCP is the best default when the LLM client supports it. The [MCP client setup guide](/docs/guide/mcp/client-setup) covers Claude Desktop, Claude Code, Copilot, Cline, and Continue.
 
-MCP adds a protocol layer, while CLI commands remain easier to reproduce by hand. Teams should log MCP calls and require approval for playbooks that restart, delete, or scale workloads.
+MCP adds a protocol layer, while CLI commands are easier to reproduce. Teams should log MCP calls and require approval for playbooks that change workloads.
 
 ## kubectl: broad, live, and sharp
 
@@ -131,7 +132,7 @@ Last, match the interface to the runtime. Chat clients, coding agents, and incid
 
 ## Conclusion
 
-For LLMs, the best operations tool is the one that answers the smallest useful question with the least dangerous access.
+For LLMs, the best tool answers a useful question with the least dangerous access.
 
 Mission Control MCP wins for MCP-capable agents through named tools, operational context, and server-side controls. Faro wins in the terminal. Compact defaults, limits, JSON, Markdown, and color-free output keep Mission Control data useful without hauling in the whole catalog. `kubectl` is the live Kubernetes specialist and needs the tightest guardrails.
 
