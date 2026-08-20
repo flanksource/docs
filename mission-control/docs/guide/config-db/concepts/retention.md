@@ -7,6 +7,18 @@ sidebar_custom_props:
 
 After scraping we can choose to retain results on the basis of name, age, count and more.
 
+## Default retention periods
+
+Config DB cleanup jobs use the following retention periods by default:
+
+| Record          | Default period                 | Cleanup behavior                             |
+| --------------- | ------------------------------ | -------------------------------------------- |
+| Config item     | 7 days after soft deletion     | Permanently delete soft-deleted config items |
+| Config change   | 60 days after creation         | Delete changes not linked to evidence        |
+| Config analysis | 60 days after last observation | Delete analysis not linked to evidence       |
+
+The cleanup jobs run once per day. The `staleItemAge` field controls when Config DB soft-deletes an unseen config item; the 7-day default controls when Config DB permanently deletes that item.
+
 The retention rules are applied for each unique catalog item. If `changes` is specified with type `X` and count `20`, last 20 changes of `X` type would be kept for each catalog item
 
 | Field          | Description                                                        | Scheme                                     |
@@ -53,7 +65,7 @@ metadata:
   name: kubernetes-scraper
 spec:
   retention:
-  	//highlight-next-line
+    //highlight-next-line
     staleItemAge: 30m
   kubernetes:
     clusterName: local
