@@ -1,0 +1,152 @@
+---
+title: Component CRD
+---
+
+# Component
+
+The `Component` CRD allows you to define and organize components in your infrastructure, enabling you to model, visualize, and track various elements of your system.
+
+## Definition
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Component
+metadata:
+  name: example-component
+spec:
+  # Human readable name of the component
+  name: Example Service
+
+  # Optional type classification
+  type: service
+
+  # Description of the component
+  description: An example component for demonstration purposes
+
+  # Owner of the component
+  owner: platform-team
+
+  # Icon to represent the component
+  icon: https://example.com/icons/service.svg
+
+  # Labels for categorization
+  labels:
+    environment: production
+    tier: frontend
+```
+
+## Schema
+
+The `Component` resource supports the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.name` | Human-readable name of the component |
+| `spec.displayName` | Alternative display name for the component |
+| `spec.description` | Description of the component's purpose |
+| `spec.type` | Type classification (e.g., service, database, app) |
+| `spec.subtype` | Sub-classification of the component type |
+| `spec.icon` | Icon URL or name to visually represent the component |
+| `spec.owner` | Owner of the component (team/person) |
+| `spec.labels` | Key-value pairs for categorizing the component |
+| `spec.config` | Component-specific configuration |
+| `spec.items` | Child items or sub-components |
+| `spec.properties` | Additional properties as key-value pairs |
+| `spec.checks` | Health checks to perform for this component |
+| `spec.dashboards` | Associated dashboards for monitoring |
+| `spec.costs` | Cost tracking configuration |
+| `spec.ticket` | Ticketing system integration |
+| `spec.slo` | Service Level Objectives |
+| `spec.statusMessage` | Custom status message |
+| `spec.statusReason` | Reason for the current status |
+
+## Status
+
+The Component controller updates the resource with status information, including:
+
+| Status Field | Description |
+|--------------|-------------|
+| `status.health` | Overall health status of the component |
+| `status.costPerMonth` | Monthly cost of the component |
+| `status.artifacts` | Associated artifacts |
+| `status.dependencies` | Component dependencies |
+| `status.incidents` | Active incidents related to the component |
+| `status.lastScrape` | Timestamp of the last data scrape |
+| `status.lastSeen` | Timestamp when the component was last seen |
+
+## Examples
+
+### Basic Component
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Component
+metadata:
+  name: frontend-web
+spec:
+  name: Frontend Web Application
+  type: web-application
+  description: Customer-facing web application for product browsing and purchasing
+  owner: web-team
+  labels:
+    tier: frontend
+    environment: production
+    criticality: high
+```
+
+### Component with Checks
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Component
+metadata:
+  name: payment-service
+spec:
+  name: Payment Processing Service
+  type: microservice
+  description: Handles all payment processing operations
+  owner: payments-team
+  checks:
+    http:
+      - name: api-health
+        url: https://payments.example.com/health
+        interval: 1m
+        thresholdMillis: 300
+    tcp:
+      - name: db-connection
+        host: payments-db.example.com
+        port: 5432
+        interval: 5m
+```
+
+### Hierarchical Component
+
+```yaml
+apiVersion: canaries.flanksource.com/v1
+kind: Component
+metadata:
+  name: e-commerce-platform
+spec:
+  name: E-Commerce Platform
+  type: platform
+  description: Complete e-commerce solution
+  owner: platform-team
+  items:
+    - name: Web Frontend
+      type: web-application
+      owner: web-team
+    - name: Authentication Service
+      type: microservice
+      owner: auth-team
+    - name: Payment Processing
+      type: microservice
+      owner: payments-team
+    - name: Order Management
+      type: microservice
+      owner: orders-team
+```
+
+## See Also
+
+- [Topology CRD](./topology.mdx)
+- [Component Relationships](../topology/relationships.mdx)

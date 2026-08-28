@@ -1,0 +1,150 @@
+---
+title: NotificationSilence CRD
+---
+
+# NotificationSilence
+
+The `NotificationSilence` CRD allows you to define periods when specific notifications should be silenced to prevent alert fatigue and manage maintenance windows.
+
+## Definition
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: NotificationSilence
+metadata:
+  name: example-silence
+spec:
+  # Time period for the silence
+  start: "2023-06-01T10:00:00Z"
+  end: "2023-06-01T14:00:00Z"
+  
+  # Selector for events to silence
+  selector:
+    components:
+      - database-cluster
+      - api-service
+    labels:
+      environment: production
+      
+  # Reason for the silence
+  reason: "Scheduled database maintenance"
+```
+
+## Schema
+
+The `NotificationSilence` resource supports the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.start` | Start time of the silence period (ISO 8601 format) |
+| `spec.end` | End time of the silence period (ISO 8601 format) |
+| `spec.duration` | Alternative to end time - duration from start time |
+| `spec.selector` | Selector for matching events to silence |
+| `spec.selector.severity` | Severity levels to silence |
+| `spec.selector.labels` | Labels to match on events |
+| `spec.selector.components` | Components to silence |
+| `spec.selector.expression` | CEL expression for complex matching |
+| `spec.reason` | Reason for the silence period |
+| `spec.creator` | Person or system that created the silence |
+| `spec.comment` | Additional comments about the silence |
+| `spec.jira` | Associated JIRA ticket information |
+| `spec.createdBy` | User who created the silence |
+
+## Status
+
+The NotificationSilence controller updates the resource with status information:
+
+| Status Field | Description |
+|--------------|-------------|
+| `status.active` | Whether the silence is currently active |
+| `status.created` | Timestamp when the silence was created |
+| `status.updated` | Timestamp when the silence was last updated |
+| `status.events` | Count of silenced events |
+
+## Examples
+
+### Maintenance Window
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: NotificationSilence
+metadata:
+  name: database-maintenance
+spec:
+  start: "2023-06-01T10:00:00Z"
+  end: "2023-06-01T14:00:00Z"
+  selector:
+    components:
+      - database-cluster
+      - database-api
+    labels:
+      tier: database
+  reason: "Scheduled database upgrade"
+  creator: "Database Team"
+  comment: "Upgrading to PostgreSQL 15"
+  jira: "MAINT-1234"
+```
+
+### Silence by Duration
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: NotificationSilence
+metadata:
+  name: api-deployment
+spec:
+  start: "2023-07-15T08:00:00Z"
+  duration: 2h
+  selector:
+    components:
+      - api-gateway
+      - auth-service
+    labels:
+      environment: production
+  reason: "API Gateway Deployment"
+  creator: "DevOps Team"
+```
+
+### Weekend Maintenance Window
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: NotificationSilence
+metadata:
+  name: weekend-maintenance
+spec:
+  start: "2023-08-05T22:00:00Z"
+  end: "2023-08-06T06:00:00Z"
+  selector:
+    severity:
+      - low
+      - medium
+    expression: "!contains(labels.keys(), 'critical-path')"
+  reason: "Weekend system maintenance"
+  creator: "System Administrator"
+  comment: "Regular weekly maintenance window"
+```
+
+### Complex Selector with Expression
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: NotificationSilence
+metadata:
+  name: testing-environment
+spec:
+  start: "2023-09-10T00:00:00Z"
+  end: "2023-09-12T00:00:00Z"
+  selector:
+    expression: |
+      labels.environment == 'testing' && 
+      (severity == 'low' || severity == 'medium')
+  reason: "Extended testing period"
+  creator: "QA Team"
+```
+
+## See Also
+
+- [Notification CRD](./notification.mdx)
+- [Incident Management](../../incidents/index.mdx)
+- [Alert Management](../../incidents/alerts.mdx)

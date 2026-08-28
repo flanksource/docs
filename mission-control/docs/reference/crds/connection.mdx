@@ -1,0 +1,168 @@
+---
+title: Connection CRD
+---
+
+# Connection
+
+The `Connection` CRD allows you to define connections to external systems and services that can be referenced by other resources in Mission Control.
+
+## Definition
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: example-connection
+spec:
+  # Type of connection
+  type: postgres
+  
+  # URL for the connection
+  url: postgres://user:password@host:5432/dbname
+  
+  # Optional name that can be used to reference this connection
+  name: My Database
+  
+  # Labels for categorization
+  labels:
+    environment: production
+    tier: database
+```
+
+## Schema
+
+The `Connection` resource supports the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `spec.type` | Type of the connection (e.g., postgres, http, aws, etc.) |
+| `spec.url` | Connection URL or endpoint |
+| `spec.name` | Human-readable name for the connection |
+| `spec.description` | Description of the connection |
+| `spec.labels` | Key-value pairs for categorizing the connection |
+| `spec.icon` | Icon URL or name to visually represent the connection |
+| `spec.properties` | Additional connection properties |
+| `spec.username` | Username for authentication |
+| `spec.password` | Password for authentication (should use secretRef instead for production) |
+| `spec.secretRef` | Reference to a Kubernetes secret containing credentials |
+| `spec.caCert` | CA certificate for TLS validation |
+| `spec.clientCert` | Client certificate for mutual TLS |
+| `spec.clientKey` | Client key for mutual TLS |
+| `spec.insecureSkipVerify` | Skip TLS verification (not recommended for production) |
+
+## Connection Types
+
+The Connection CRD supports various connection types including:
+
+| Type | Description |
+|------|-------------|
+| `postgres` | PostgreSQL database connection |
+| `mysql` | MySQL database connection |
+| `mssql` | Microsoft SQL Server connection |
+| `mongodb` | MongoDB connection |
+| `http` | HTTP/HTTPS endpoint |
+| `aws` | AWS service connection |
+| `azure` | Azure service connection |
+| `gcp` | Google Cloud Platform connection |
+| `kubernetes` | Kubernetes cluster connection |
+| `prometheus` | Prometheus metrics connection |
+| `elastic` | Elasticsearch connection |
+| `ldap` | LDAP directory connection |
+| `smtp` | Email server connection |
+| `redis` | Redis database connection |
+| `webhook` | Webhook connection |
+
+## Examples
+
+### Database Connection
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: production-db
+spec:
+  type: postgres
+  name: Production Database
+  description: Main production database for the e-commerce platform
+  url: postgres://postgres:postgres@db.example.com:5432/production
+  labels:
+    environment: production
+    tier: database
+  secretRef:
+    name: db-credentials
+    namespace: database
+```
+
+### Cloud Provider Connection
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: aws-production
+spec:
+  type: aws
+  name: AWS Production
+  description: Production AWS account
+  properties:
+    region: us-west-2
+  secretRef:
+    name: aws-credentials
+    key: credentials
+  labels:
+    environment: production
+    provider: aws
+```
+
+### HTTP API Connection
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: payment-gateway
+spec:
+  type: http
+  name: Payment Gateway API
+  description: Connection to external payment processing service
+  url: https://api.payment-gateway.com/v1
+  secretRef:
+    name: payment-api-key
+    key: api-key
+  properties:
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+  insecureSkipVerify: false
+  labels:
+    service: payments
+    criticality: high
+```
+
+### Kubernetes Cluster Connection
+
+```yaml
+apiVersion: mission-control.flanksource.com/v1
+kind: Connection
+metadata:
+  name: production-cluster
+spec:
+  type: kubernetes
+  name: Production Kubernetes Cluster
+  description: Main production Kubernetes cluster
+  properties:
+    server: https://k8s.example.com:6443
+  secretRef:
+    name: kubeconfig
+    key: config
+  labels:
+    environment: production
+    infrastructure: kubernetes
+```
+
+## See Also
+
+- [Canary CRD](./canary.mdx) - Use connections in health checks
+- [Component CRD](./component.mdx) - Associate components with connections
+- [Playbook CRD](./playbook.mdx) - Use connections in automated workflows
