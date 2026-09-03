@@ -46,6 +46,16 @@ Mission Control supports two MCP authentication flows:
 
 Use this approach when your MCP client supports OAuth for remote MCP servers.
 
+Point the client at the MCP server URL. You do not configure a client ID or client secret.
+
+Mission Control prefers Client ID Metadata Documents (CIMD) for OAuth client registration. Compatible clients use an HTTPS metadata URL as the client ID. Mission Control fetches that document during authorization.
+
+Clients that do not support CIMD fall back to Dynamic Client Registration (DCR) at `/oauth/register`.
+
+The client discovers the authorization server, registers with CIMD or DCR, and opens a browser for you to sign in. On the consent screen, check the client name and redirect address before you allow access.
+
+The authenticating user needs the `mcp:use` permission.
+
 ### Claude Code
 
 Create or edit `.mcp.json` in your project root and add the Mission Control MCP server.
@@ -56,10 +66,7 @@ Create or edit `.mcp.json` in your project root and add the Mission Control MCP 
     "mission-control": {
       "name": "mission-control",
       "type": "http",
-      "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
-      "oauth": {
-        "clientId": "mc-cli"
-      }
+      "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
     }
   }
 }
@@ -105,11 +112,10 @@ The **Add custom connector** dialog creates a remote MCP connector.
 
 3. In **Name**, enter `Mission-Control`.
 4. In **Remote MCP server URL**, enter your MCP server URL.
-5. Expand **Advanced settings** and enter `mc-cli` in **OAuth Client ID**.
-6. Leave **OAuth Client Secret** empty unless your Mission Control deployment provides one.
-7. Select **Add**.
-8. On the **Connectors** page, select **Connect** for the Mission Control connector.
-9. Complete the authentication flow.
+5. Leave **OAuth Client ID** and **OAuth Client Secret** empty.
+6. Select **Add**.
+7. On the **Connectors** page, select **Connect** for the Mission Control connector.
+8. Complete the authentication flow.
 
 Mission Control tools appear in Claude Desktop after the OAuth flow completes.
 
@@ -426,7 +432,7 @@ ws.on('open', () => {
 
 2. **Authentication Failed**
    - Verify token is valid and not expired
-   - Ensure token has `mcp.*` permissions
+   - Ensure the user or token has the `mcp:use` permission
    - Check if Basic prefix is included
 
 3. **Tools Not Appearing**

@@ -22,8 +22,10 @@ For self hosted users: `https://your.domain.com/api/mcp`
 
 For detailed setup instructions for popular MCP clients, see [Client Setup](./client-setup.mdx).
 
-## Permissions
+## Authentication
 
-To access the mcp server, `Authorization` header can be used with a token. The token must have `mcp.*` permission.
+Mission Control authenticates MCP clients with OAuth. Compatible clients use Client ID Metadata Documents (CIMD). Clients that do not support CIMD fall back to Dynamic Client Registration (DCR).
+
+You can also use an access token in the `Authorization` header. The authenticating user or token needs the `mcp:use` permission.
 
 <DocCardList />
