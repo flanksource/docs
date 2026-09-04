@@ -38,31 +38,15 @@ Mission Control exposes an MCP server endpoint that AI assistants can connect to
 
 ### Connecting Claude Desktop
 
-Add Mission Control to your Claude Desktop configuration:
+Add a custom connector that points at your Mission Control MCP URL. Claude discovers the authorization server and registers with CIMD or DCR.
 
-```json title="claude_desktop_config.json"
-{
-  "mcpServers": {
-    "mission-control": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://your-mission-control.example.com/mcp",
-        "--header",
-        "Authorization: Bearer ${MISSION_CONTROL_TOKEN}"
-      ]
-    }
-  }
-}
-```
+For client-specific setup, see [Client Setup](/docs/guide/mcp/client-setup).
 
 ### Authentication
 
-The MCP server requires authentication with the `mcp:run` permission. Create an API token with appropriate RBAC permissions:
+Mission Control authenticates MCP clients with OAuth. Compatible clients use Client ID Metadata Documents (CIMD). Clients that do not support CIMD fall back to Dynamic Client Registration (DCR).
 
-```bash
-kubectl create token mission-control-mcp --duration=8760h
-```
+Point the client at the MCP server URL. The authenticating user needs the `mcp:use` permission.
 
 ### Example Interactions
 

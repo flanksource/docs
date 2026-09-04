@@ -326,6 +326,8 @@ ntlm
 Ntfy
 oauth
 OAuth
+CIMD
+DCR
 objectPath
 oneOf
 Opensearch
