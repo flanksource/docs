@@ -33,17 +33,51 @@ For example, when a Kubernetes pod fails, it examines the pod spec, ConfigMap ch
  {field: "analysis.since", description: "Select the analysis of the playbook resource to feed into the AI", scheme: "duration"},
  {field: "apiKey", description: "AI service API key", scheme: "[EnvVar](/docs/reference/env-var)"},
  {field: "apiURL", description: "Custom API endpoint _(applicable when behind a proxy or using Ollama)_", scheme: "string"},
- {field: "backend", description: "LLM provider", scheme: "`openai` | `anthropic` | `ollama`"},
+ {field: "awsAccessKeyId", description: "AWS access key ID. _(applicable when the backend is `bedrock`)_", scheme: "[EnvVar](/docs/reference/env-var)"},
+ {field: "awsRegion", description: "AWS region. _(applicable when the backend is `bedrock`)_", scheme: "string"},
+ {field: "awsSecretAccessKey", description: "AWS secret access key. _(applicable when the backend is `bedrock`)_", scheme: "[EnvVar](/docs/reference/env-var)"},
+ {field: "backend", description: "LLM provider", scheme: "`openai` | `anthropic` | `ollama` | `gemini` | `bedrock`"},
  {field: "changes.since", description: "Select the changes of the playbook resource to feed into the AI", scheme: "duration"},
+ {field: "config", description: "The config item to build the context from. Defaults to the config the playbook is running on", scheme: "string", templatable: true},
  {field: "connection", description: "Connection string for the LLM", scheme: "string"},
  {field: "dryRun", description: "When enabled, the prompt is simply saved without passing it on to the LLM", scheme: "bool"},
- {field: "formats", description: "Output format", scheme: "[]AIActionFormat"},
+ {field: "formats", description: "Output format", scheme: "`markdown` | `slack` | `recommendPlaybook`"},
  {field: "model", description: "LLM model (e.g. gpt-4)", scheme: "string"},
+ {field: "outputSchema", description: "A JSON schema that the response must conform to", scheme: "[OutputSchema](#output-schema)"},
  {field: "prompt", description: "Main prompt", scheme: "string", required: true, templatable: true},
  {field: "recommendPlaybooks", description: "Specify selectors for playbooks. The LLM will recommend the best suited playbooks", scheme: "[]ResourceSelector"},
  {field: "relationships", description: "Select the related configs and their changes and analysis to feed into the AI", scheme: "[[]Relationship](#relationship)"},
+ {field: "skills", description: "Skill libraries that the model can load on demand", scheme: "[[]Skill](#skills)"},
  {field: "systemPrompt", description: "Context-setting system prompt", scheme: "string", required: true},
  {field: "playbooks", description: "List of playbooks to execute and use as context", scheme: "[[]ContextProviderPlaybook](#context-provider-playbook)"}
+]}/>
+
+### Output schema
+
+Constrain the model's response to a JSON schema. The schema can be given inline, read from a configMap or secret, or fetched from a git repository.
+
+<Fields rows={[
+  {field: "value", description: "Inline JSON schema", scheme: "string"},
+  {field: "valueFrom", description: "Read the schema from a configMap or a secret", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "checkout", description: "Fetch the schema from a git repository", scheme: "[Checkout](#output-schema-checkout)"}
+]}/>
+
+#### Output schema checkout
+
+<Fields rows={[
+  {field: "connection", description: "Git connection to use e.g. `connection://github/my-org`", scheme: "string", required: true},
+  {field: "path", description: "Path of the JSON schema file within the repository", scheme: "string", required: true},
+  {field: "branch", description: "Branch or tag to checkout. Defaults to the repository's default branch", scheme: "string"}
+]}/>
+
+### Skills
+
+Skills point at a directory of skill libraries, each with its own `SKILL.md`. The model loads them on demand rather than receiving them all upfront.
+
+<Fields rows={[
+  {field: "path", description: "Path to the directory that contains the skill sub-directories. This is the parent of the skill directories, not a skill directory itself", scheme: "string", required: true},
+  {field: "connection", description: "Git connection to fetch the skills from e.g. `connection://github/my-org`. When empty, the path is read from the local filesystem", scheme: "string"},
+  {field: "branch", description: "Branch or tag to checkout. Defaults to the repository's default branch", scheme: "string"}
 ]}/>
 
 ### Context provider playbook

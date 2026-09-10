@@ -1,0 +1,161 @@
+---
+title: Report
+sidebar_custom_props:
+  icon: view-details
+
+---
+import Templating from "@site/docs/reference/playbooks/context.mdx"
+
+<!-- Source: modules/mission-control/api/v1/playbook_actions.go#ReportAction -->
+
+# <Icon name="view-details"/> Report Action
+
+Report action renders a catalog report for a set of config items and saves it as an [artifact](/docs/installation/artifacts). A report gathers everything Mission Control knows about the selected config items — their changes, insights, relationships, access and access logs — and renders it as HTML, PDF, JSON, CSV, Markdown or Slack.
+
+The config items to report on come from one of three places, which are mutually exclusive:
+
+- `configsFromParams` — reuse the config items already resolved from a playbook parameter named `configs` of type `configs`. This avoids a second database query and guarantees the report covers exactly what the user selected.
+- `configs` — an inline resource selector.
+- `view` — an existing [View](/docs/guide/views).
+
+```yaml title="catalog-report.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: catalog-report
+spec:
+  title: Catalog Report
+  category: Reporting
+  description: >-
+    Generates a catalog report for one or more root config items and uploads it
+    as an artifact.
+  parameters:
+    - name: configs
+      label: Root configs
+      description: Select one or more root config items
+      type: configs
+      required: true
+    - name: format
+      label: Format
+      type: list
+      default: html
+      properties:
+        options:
+          - label: HTML
+            value: html
+          - label: PDF
+            value: pdf
+          - label: JSON
+            value: json
+    - name: since
+      label: Time period
+      description: 'Time range for changes and access logs (e.g. 7d, 30d, 90d)'
+      type: text
+      default: 30d
+    - name: recursive
+      label: Include all descendant config items
+      type: checkbox
+      default: 'false'
+  actions:
+    - name: Generate Report
+      report:
+        # Reuse the already-resolved `configs` parameter instead of querying the selected IDs again.
+        configsFromParams: true
+        format: '{{ .params.format }}'
+        since: '{{ .params.since }}'
+        recursive: '{{ .params.recursive }}'
+        file:
+          path: report/CatalogReport.tsx
+        facet:
+          connection: connection://mission-control/facet
+        sections:
+          changes: true
+          insights: true
+          relationships: true
+          access: true
+```
+
+<Action rows={[
+    {field: "report", description: "Report Action", scheme: "[Report](#report)"},
+]} />
+
+## Report
+
+<Fields oneOf={["configsFromParams", "configs", "view"]} rows={[
+  {field: "configsFromParams", description: "Use the config items resolved from the playbook parameter named `configs`. The playbook must declare a parameter with that name and the type `configs`", scheme: "bool"},
+  {field: "configs", description: "Inline selector for the config items to report on", scheme: "[ResourceSelector](/docs/reference/resource-selector)", templatable: true},
+  {field: "view", description: "Reference an existing view by `namespace/name` or just `name`", scheme: "string", templatable: true},
+  {field: "title", description: "Overrides the default report title", scheme: "string", templatable: true},
+  {field: "format", description: "Output format", scheme: "`html` | `pdf` | `json` | `csv` | `markdown` | `slack` | `facet-html` | `facet-pdf`", templatable: true},
+  {field: "file", description: "The TSX template that renders the report. When unset, the embedded `CatalogReport.tsx` is used", scheme: "[File](#file)", templatable: true},
+  {field: "facet", description: "Rendering options for the `facet-html` and `facet-pdf` formats", scheme: "[Facet](#facet)", templatable: true},
+  {field: "variables", description: "Variables passed to the view queries", scheme: "map[string]string", templatable: true},
+  {field: "since", description: "Time range for changes, access logs and resolved insights e.g. `30d`. Defaults to `30d`", scheme: "duration", templatable: true},
+  {field: "recursive", description: "Include all descendant config items", scheme: "bool", templatable: true},
+  {field: "groupBy", description: "How descendant data is grouped. Defaults to `none`", scheme: "`none` | `merged` | `config`", templatable: true},
+  {field: "filters", description: "Filters appended to the report's own filters. Explicitly selected roots remain selected; filters only apply to recursive descendants", scheme: "[]string", templatable: true},
+  {field: "sections", description: "Which sections to include in the report", scheme: "[Sections](#sections)", templatable: true},
+  {field: "changeArtifacts", description: "Embed artifacts associated with the included config changes", scheme: "bool", templatable: true},
+  {field: "expandGroups", description: "Expand group-granted access into a row per active group member", scheme: "bool", templatable: true},
+  {field: "audit", description: "Include build details, effective settings, query logs, scrapers and groups", scheme: "bool", templatable: true}
+]}/>
+
+:::note
+`recursive`, `changeArtifacts`, `expandGroups`, `audit` and every field under `sections` accept either a literal boolean or a template that renders to `true` or `false`. Actions are decoded before templates run, so `'{{ .params.recursive }}'` is valid in all of them.
+:::
+
+### Sections
+
+Each section defaults to the report template's own setting.
+
+<Fields rows={[
+  {field: "changes", description: "Include config changes", scheme: "bool", templatable: true},
+  {field: "insights", description: "Include config insights", scheme: "bool", templatable: true},
+  {field: "resolvedInsights", description: "Include recently resolved insights", scheme: "bool", templatable: true},
+  {field: "insightDetails", description: "Render each insight's message under the affected resource. Without it, insights are only grouped and counted", scheme: "bool", templatable: true},
+  {field: "relationships", description: "Include config relationships", scheme: "bool", templatable: true},
+  {field: "access", description: "Include RBAC access", scheme: "bool", templatable: true},
+  {field: "accessLogs", description: "Include access logs", scheme: "bool", templatable: true},
+  {field: "configJSON", description: "Include the raw config JSON", scheme: "bool", templatable: true}
+]}/>
+
+### File
+
+Selects the TSX template used to render the report, either from a local path or from a git repository.
+
+<Fields oneOf={["path", "git"]} rows={[
+  {field: "path", description: "Path to a local TSX file. A relative path is resolved against the working directory e.g. `report/CatalogReport.tsx`. The file's directory must contain the report scaffold", scheme: "string", templatable: true},
+  {field: "git", description: "A TSX file inside a git repository", scheme: "[Git](#git)", templatable: true}
+]}/>
+
+#### Git
+
+<Fields rows={[
+  {field: "url", description: "URL of the git repository", scheme: "string", required: true, templatable: true},
+  {field: "file", description: "Path to the TSX file within the repository", scheme: "string", required: true, templatable: true},
+  {field: "connection", description: "Connection name used for credentials to the git repo", scheme: "string", templatable: true},
+  {field: "base", description: "Branch to clone. Defaults to `main`", scheme: "string", templatable: true}
+]}/>
+
+### Facet
+
+The `facet-html` and `facet-pdf` formats render the report through a facet server.
+
+<Fields rows={[
+  {field: "connection", description: "Connection to the facet server e.g. `connection://mission-control/facet`", scheme: "string", templatable: true},
+  {field: "url", description: "URL of the facet server", scheme: "string", templatable: true},
+  {field: "timeout", description: "Timeout for the render e.g. `10m`. When unset the facet server's own render timeout applies", scheme: "duration", templatable: true},
+  {field: "header", description: "HTML rendered as the page header", scheme: "string", templatable: true},
+  {field: "footer", description: "HTML rendered as the page footer", scheme: "string", templatable: true},
+  {field: "timestampUrl", description: "RFC 3161 timestamp authority used to timestamp the rendered document", scheme: "string", templatable: true},
+  {field: "pageSize", description: "Page size e.g. `A4`, `Letter`", scheme: "string"},
+  {field: "landscape", description: "Render in landscape orientation", scheme: "bool"},
+  {field: "margins.top", description: "Top margin", scheme: "int"},
+  {field: "margins.bottom", description: "Bottom margin", scheme: "int"},
+  {field: "margins.left", description: "Left margin", scheme: "int"},
+  {field: "margins.right", description: "Right margin", scheme: "int"}
+]}/>
+
+## Templating
+
+<Templating/>

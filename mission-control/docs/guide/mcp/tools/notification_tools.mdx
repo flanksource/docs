@@ -1,0 +1,44 @@
+---
+title: Notification
+sidebar_custom_props:
+  icon: bell-dark
+---
+
+# Notification Tools
+
+Tools for inspecting [notification](/docs/guide/notifications) history.
+
+## get_notifications_for_resource
+
+Get the notification history for a specific resource — a config item, component, check or canary — with optional time and status filtering.
+
+Returns minimal fields by default to keep responses small. Follow up with [`get_notification_detail`](#get_notification_detail) for the full record.
+
+<Fields rows={[
+  {field: "resource_id", scheme: "string", description: "UUID of the resource, from the catalog, a component, or a health check", required: true},
+  {field: "limit", scheme: "number", description: "Maximum number of notifications to return. Defaults to 10"},
+  {field: "since", scheme: "string", description: "Start time filter, as a datemath expression e.g. `now-24h`, `now-7d`"},
+  {field: "before", scheme: "string", description: "End time filter, as a datemath expression e.g. `now-1h`"},
+  {field: "status", scheme: "string", description: "Filter by status: `sent`, `error`, `pending`, `silenced`, `repeat-interval`, `inhibited`, `pending_playbook_run`, `pending_playbook_completion`, `evaluating-waitfor` or `attempting_fallback`"},
+  {field: "select", scheme: "[]string", description: "Columns to return"}
+]} />
+
+### Example Usage
+
+**Prompt:** "Did we alert on this deployment in the last day?"
+
+**Result:** Returns the notifications sent for that config item in the last 24 hours, including any that were silenced or inhibited and why.
+
+## get_notification_detail
+
+Get detailed information about a single notification, including its status, rendered body (`body_markdown`), recipients, resource details, and related entities.
+
+<Fields rows={[
+  {field: "send_id", scheme: "string", description: "UUID of the notification send history record", required: true}
+]} />
+
+### Example Usage
+
+**Prompt:** "Show me exactly what that alert said and who received it"
+
+**Result:** Returns the rendered notification body along with its recipients and delivery status.

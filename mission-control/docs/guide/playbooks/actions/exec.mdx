@@ -32,7 +32,7 @@ Exec action allows you to executes a command or a script file on the target host
   {field: 'checkout', scheme: '[Checkout](#git-checkout)', description: 'Checkout a git repository before running the script'},
   {field: 'artifacts', scheme: '[Artifacts](#artifacts)', description: 'Artifacts produced by the action'},
   {field: 'connections', scheme: '[Connections](#connections)', description: 'Connections used by the action'},
-  {field: 'setup', scheme: '[Setup](#setup)', description: 'Install runtime dependencies (Bun, Python) before execution'}
+  {field: 'setup', scheme: '[Setup](#setup)', description: 'Install runtime dependencies (Bun, Python, PowerShell, Playwright) before execution'}
 ]}/>
 
 ## Output
@@ -96,6 +96,11 @@ will be setup on the host running the script.
     scheme: "[KubernetesConnection](/docs/reference/connections/kubernetes)",
   },
   {
+    field: "opensearch",
+    description: "OpenSearch connection",
+    scheme: "[OpenSearchConnection](/docs/reference/connections/opensearch)",
+  },
+  {
     field: "eksPodIdentity",
     description: "EKSPodIdentity when enabled will allow access to AWS_* env vars",
     scheme: "bool",
@@ -126,15 +131,21 @@ will be setup on the host running the script.
 ```yaml title="exec-checkout.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/exec-checkout.yaml
 ```
 
-<Fields connection="git" rows={[
-  {field: "destination", description: "Destination is the full path to where the contents of the URL should be downloaded to. If left empty, the sha256 hash of the URL will be used as the dir name", scheme: "string"},
+<Fields connection="git" oneOf={["connection", "url"]} rows={[
+  {field: "connection", description: "Connection name to use for the git credentials", scheme: "string"},
+  {field: "url", description: "URL of the git repository", scheme: "string"},
+  {field: "username", description: "Username to authenticate with", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "password", description: "Password or access token to authenticate with", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "certificate", description: "SSH private key to authenticate with", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "type", description: "Git repository type", scheme: "`github`, `gitlab`, `azure_devops`, `http`, `git`"},
+  {field: "branch", description: "Branch or tag to checkout. Defaults to the repository's default branch", scheme: "string"},
   {field: "depth", description: "Git clone depth for shallow clones", scheme: "int"},
 ]}/>
 
 
 ### Setup
 
-The `setup` field allows you to automatically install runtime environments before executing your script. This is useful when your script requires specific versions of Bun or Python that may not be available in the base image.
+The `setup` field allows you to automatically install runtime environments before executing your script. This is useful when your script requires specific versions of Bun, Python, PowerShell or Playwright that may not be available in the base image.
 
 #### Bun
 
@@ -153,6 +164,8 @@ For Python scripts, you can declare dependencies inline using [PEP 723 inline sc
 <Fields rows={[
   {field: 'bun', scheme: '[RuntimeSetup](#runtimesetup)', description: 'Install Bun runtime'},
   {field: 'python', scheme: '[RuntimeSetup](#runtimesetup)', description: 'Install Python runtime via uv'},
+  {field: 'powershell', scheme: '[RuntimeSetup](#runtimesetup)', description: 'Install PowerShell'},
+  {field: 'playwright', scheme: '[RuntimeSetup](#runtimesetup)', description: 'Install Playwright and its browsers'},
 ]}/>
 
 #### RuntimeSetup

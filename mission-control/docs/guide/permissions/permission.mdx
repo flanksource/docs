@@ -66,6 +66,26 @@ Deny rules always override Allow rules.
       scheme: 'string',
     },
     {
+      field: 'subject.plugin',
+      description: '`<namespace>/<name>` or `/<name>` of the plugin',
+      scheme: 'string',
+    },
+    {
+      field: 'subject.canary',
+      description: '`<namespace>/<name>` of the canary',
+      scheme: 'string',
+    },
+    {
+      field: 'subject.scraper',
+      description: '`<namespace>/<name>` of the scraper',
+      scheme: 'string',
+    },
+    {
+      field: 'subject.topology',
+      description: '`<namespace>/<name>` of the topology',
+      scheme: 'string',
+    },
+    {
       field: 'object.playbooks',
       description: 'List of playbook resource selectors',
       scheme: '[ResourceSelector](/docs/reference/resource-selector)',
@@ -86,6 +106,21 @@ Deny rules always override Allow rules.
       scheme: '[ResourceSelector](/docs/reference/resource-selector)',
     },
     {
+      field: 'object.views',
+      description: 'List of view references, by `id` or `namespace`/`name`',
+      scheme: '[]ViewRef',
+    },
+    {
+      field: 'object.scopes',
+      description: 'List of [Scopes](./concepts/scope) to expand into selectors, by `id` or `namespace`/`name`',
+      scheme: '[]ScopeRef',
+    },
+    {
+      field: 'object.mcp',
+      description: 'Grant the global MCP object permission. Cannot be combined with any selector or scope',
+      scheme: 'bool',
+    },
+    {
       field: 'deny',
       description: 'Specifies if this is a deny rule. _(Default: false)_',
       scheme: 'bool',
@@ -93,20 +128,22 @@ Deny rules always override Allow rules.
   ]}
 />
 
-### Multi-Tenancy Fields
+### Deprecated fields
 
-For [agent and tag-based permissions](./multi-tenancy), you can also use these fields:
+:::warning Deprecated
+`agents` and `tags` are deprecated and **ignored**. Use a [Scope](./concepts/scope) with `object.scopes` instead.
+:::
 
 <Fields
   rows={[
     {
       field: 'agents',
-      description: 'List of agent names to restrict this permission to',
+      description: '**Deprecated and ignored.** List of agent names to restrict this permission to',
       scheme: '`[]string`',
     },
     {
       field: 'tags',
-      description: 'Key-value pairs of tags to restrict this permission to',
+      description: '**Deprecated and ignored.** Key-value pairs of tags to restrict this permission to',
       scheme: '`map[string]string`',
     },
   ]}
@@ -122,6 +159,9 @@ Objects define the resources the permission targets. You can define Objects usin
 | `configs` | Configuration items in the catalog |
 | `connections` | Connection configurations for external systems |
 | `components` | Topology components |
+| `views` | Views (dashboards) |
+| `scopes` | [Scopes](./concepts/scope), which expand into the selectors they define |
+| `mcp` | The global MCP object. Cannot be combined with any of the above |
 
 A permission can target multiple object types. If you define multiple objects, Mission Control grants the permission only if the request matches **all** defined objects (AND condition).
 
@@ -281,6 +321,21 @@ spec:
 <details summary="Restrict by Agent (Multi-Tenancy)">
 <div>
 
+Define a [Scope](./concepts/scope) for the agent's resources, then reference it from the permission:
+
+```yaml title="dev-agent-scope.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Scope
+metadata:
+  name: dev-agent-configs
+  namespace: mc
+spec:
+  description: Configs from the dev cluster agent
+  targets:
+    - config:
+        agent: dev-cluster-agent
+```
+
 ```yaml title="agent-restricted-permission.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Permission
@@ -293,8 +348,10 @@ spec:
   actions:
     - read
     - playbook:run
-  agents:
-    - dev-cluster-agent
+  object:
+    scopes:
+      - namespace: mc
+        name: dev-agent-configs
 ```
 
 </div>
@@ -302,6 +359,19 @@ spec:
 
 <details summary="Restrict by Tags (Multi-Tenancy)">
 <div>
+
+```yaml title="prod-scope.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Scope
+metadata:
+  name: prod-configs
+  namespace: mc
+spec:
+  description: All production configs
+  targets:
+    - config:
+        tagSelector: environment=production
+```
 
 ```yaml title="tag-restricted-permission.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -314,8 +384,10 @@ spec:
     team: viewers
   actions:
     - read
-  tags:
-    environment: production
+  object:
+    scopes:
+      - namespace: mc
+        name: prod-configs
 ```
 
 </div>

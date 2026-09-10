@@ -1,0 +1,38 @@
+---
+title: View
+sidebar_custom_props:
+  icon: view-details
+---
+
+# View Tools
+
+Every [view](/docs/guide/views) the caller is allowed to read is registered as its own MCP tool, so the model can run a curated query rather than assembling one itself.
+
+The tool name is derived from the view:
+
+```
+view_<name>_<namespace>
+```
+
+So a view named `deployments` in the `mc` namespace becomes the tool `view_deployments_mc`.
+
+Table rows are returned by default. Use the parameters below to control the size and shape of the output:
+
+<Fields rows={[
+  {field: "withRows", scheme: "bool", description: "Return the view's table rows. Defaults to `true`. Set to `false` to fetch only the panels"},
+  {field: "select", scheme: "[]string", description: "Columns to include in the result"},
+  {field: "page", scheme: "number", description: "Page of results to return"},
+  {field: "limit", scheme: "number", description: "Number of rows per page"}
+]} />
+
+The view's own [`templating` variables](/docs/guide/views/concepts/templating) are exposed as additional parameters.
+
+Use the [`mcp` field](/docs/reference/views) on the view spec to control the tool's title, description, tags and behavioural hints. Views are marked read-only by default.
+
+### Example Usage
+
+**Prompt:** "Which deployments are running an outdated image?"
+
+**Tool Called:** `view_deployments_mc`
+
+**Result:** Returns the view's rows, already joined and mapped by the view's own queries.

@@ -83,6 +83,21 @@ The `kubernetes` scraper collects all of the resources and events in a Kubernete
       field: 'relationships',
       description: 'Create relationships between kubernetes objects',
       scheme: '[`[]Relationship`](#relationships)'
+    },
+    {
+      field: 'useCache',
+      description: 'Serve the scrape from the watch cache instead of listing the cluster again',
+      scheme: 'bool'
+    },
+    {
+      field: 'allowIncomplete',
+      description: 'Continue the scrape when some resources cannot be listed, instead of failing the run',
+      scheme: 'bool'
+    },
+    {
+      field: 'maxInflight',
+      description: 'Maximum number of concurrent requests made to the Kubernetes API',
+      scheme: 'int'
     }
   ]}
 />

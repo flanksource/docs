@@ -5,10 +5,10 @@ title: Webhook
 | Field                     | Description                      | Scheme              | Required |
 | ------------------------- | -------------------------------- | ------------------- | -------- |
 | `path`                    | Unique endpoint for the webhook. | `string`            | `true`   |
-| `authentication[].basic`  | Basic Auth                       | [`Basic`](#basic)   |          |
-| `authentication[].github` | Github Auth                      | [`Github`](#github) |          |
-| `authentication[].svix`   | Svix Auth                        | [`Svix`](#svix)     |          |
-| `authentication[].jwt`    | JWT Auth                         | [`JWT`](#jwt)       |          |
+| `authentication.basic`  | Basic Auth                       | [`Basic`](#basic)   |          |
+| `authentication.github` | Github Auth                      | [`Github`](#github) |          |
+| `authentication.svix`   | Svix Auth                        | [`Svix`](#svix)     |          |
+| `authentication.jwt`    | JWT Auth                         | [`JWT`](#jwt)       |          |
 
 ### Basic
 

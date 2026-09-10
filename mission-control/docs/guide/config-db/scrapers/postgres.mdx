@@ -9,9 +9,46 @@ import Custom from './_custom.mdx'
 
 # <Icon name="postgres"/> PostgreSQL
 
-The PostgreSQL scraper uses the SQL scraper to query PostgreSQL databases and create configuration items. This page provides PostgreSQL-specific examples and queries.
+There are two ways to bring PostgreSQL into the catalog:
 
-See [SQL Scraper](./sql) for full documentation on transform scripts, relationships, changes, and access tracking.
+- The dedicated `postgres` scraper, which discovers the server's configuration — and optionally its roles and privileges — with no queries to write.
+- The [SQL scraper](./sql), for anything else you want to pull out of a database. Most of this page covers that approach; see the SQL scraper for full documentation on transform scripts, relationships, changes, and access tracking.
+
+## Postgres scraper
+
+<!-- Source: modules/config-db/api/v1/postgres.go#Postgres -->
+
+```yaml title="postgres-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/postgres.yaml
+
+```
+
+<CustomScraper rows={[
+  {
+    field: 'connection',
+    description: 'The connection string itself, or the name of a connection to look up e.g. `connection://postgres/production`',
+    scheme: 'string',
+    required: true
+  },
+  {
+    field: 'auth.username',
+    description: 'Username to authenticate with, when it is not part of the connection string',
+    scheme: '[EnvVar](/docs/reference/env-var)'
+  },
+  {
+    field: 'auth.password',
+    description: 'Password to authenticate with, when it is not part of the connection string',
+    scheme: '[EnvVar](/docs/reference/env-var)'
+  },
+  {
+    field: 'permissions',
+    description: 'Scrape PostgreSQL roles, memberships and effective privileges as [access](/docs/guide/audit/identity-access) records',
+    scheme: 'bool'
+  }
+]}/>
+
+## Using the SQL scraper
+
+This page provides PostgreSQL-specific examples and queries.
 
 ## Connection
 

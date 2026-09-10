@@ -22,22 +22,57 @@ HTTP action makes an HTTP request.
 ## HTTP
 
 <Fields rows={[
-  {field: "url", description: "Url to make the request to", scheme: "string", required: true},
-  {field: "method", description: "HTTP method to use", scheme: "string", required: true, default: "GET"},
-  {field: "headers", description: "Header fields to be used in the request", scheme: "[]EnvVar"},
+  {field: "url", description: "Url to make the request to", scheme: "string", required: true, templatable: true},
+  {field: "method", description: "HTTP method to use", scheme: "string", default: "GET", templatable: true},
+  {field: "headers", description: "Header fields to be used in the request", scheme: "[[]EnvVar](/docs/reference/env-var)", templatable: true},
   {field: "body", description: "Request Body Contents", scheme: "string", templatable: true},
-  {field: "templatedBody", description: "When set to true the request body is templated", scheme: "bool"},
-  {field: "connection", description: "Connection name. e.g. connection://http/google", scheme: "Connection"},
-  {field: "username", description: "Username to authenticate with", scheme: "EnvVar"},
-  {field: "password", description: "Password to authenticate with", scheme: "EnvVar"},
+  {field: "templateBody", description: "When set to true the request body is templated", scheme: "bool"},
+  {field: "connection", description: "Connection name. e.g. connection://http/google", scheme: "Connection", templatable: true},
+  {field: "username", description: "Username to authenticate with", scheme: "[EnvVar](/docs/reference/env-var)", templatable: true},
+  {field: "password", description: "Password to authenticate with", scheme: "[EnvVar](/docs/reference/env-var)", templatable: true},
+  {field: "bearer", description: "Bearer token to authenticate with", scheme: "[EnvVar](/docs/reference/env-var)", templatable: true},
+  {field: "ntlm", description: "Use NTLM authentication", scheme: "bool"},
+  {field: "ntlmv2", description: "Use NTLMv2 authentication", scheme: "bool"},
+  {field: "digest", description: "Use digest authentication", scheme: "bool"},
+  {field: "oauth", description: "Authenticate using the OAuth client credentials flow", scheme: "[OAuth](#oauth)", templatable: true},
+  {field: "awsSigV4", description: "Sign the request with AWS Signature Version 4", scheme: "[AWSSigV4](#aws-sigv4)", templatable: true},
+  {field: "tls", description: "TLS settings for the request", scheme: "[TLS](#tls)", templatable: true},
+]}/>
+
+### OAuth
+
+<Fields rows={[
+  {field: "clientID", description: "OAuth client ID", scheme: "[EnvVar](/docs/reference/env-var)", templatable: true},
+  {field: "clientSecret", description: "OAuth client secret", scheme: "[EnvVar](/docs/reference/env-var)", templatable: true},
+  {field: "tokenURL", description: "URL of the token endpoint", scheme: "string", templatable: true},
+  {field: "scope", description: "Scopes to request", scheme: "[]string", templatable: true},
+  {field: "params", description: "Additional parameters sent to the token endpoint", scheme: "map[string]string", templatable: true},
+]}/>
+
+### AWS SigV4
+
+Accepts every field of an [AWSConnection](/docs/reference/connections/aws), plus:
+
+<Fields rows={[
+  {field: "service", description: "AWS service the request is signed for e.g. `es`, `execute-api`", scheme: "string", templatable: true},
+]}/>
+
+### TLS
+
+<Fields rows={[
+  {field: "insecureSkipVerify", description: "Do not verify the server's certificate chain and host name", scheme: "bool"},
+  {field: "handshakeTimeout", description: "TLS handshake timeout. Defaults to 10 seconds", scheme: "duration"},
+  {field: "ca", description: "PEM encoded certificate of the CA used to verify the server certificate", scheme: "[EnvVar](/docs/reference/env-var)", templatable: true},
+  {field: "cert", description: "PEM encoded client certificate", scheme: "[EnvVar](/docs/reference/env-var)", templatable: true},
+  {field: "key", description: "PEM encoded client private key", scheme: "[EnvVar](/docs/reference/env-var)", templatable: true},
 ]}/>
 
 ## Output
 
 <Fields  rows={[
-  {field: "body", description: "Response Body Contents", scheme: "string"},
+  {field: "content", description: "Response Body Contents", scheme: "string"},
   {field: "headers", description: "Response headers", scheme: "map[string]string"},
-  {field: "statusCode", description: "Response status code", scheme: "int"},
+  {field: "code", description: "Response status code", scheme: "int"},
 ]}/>
 
 ## Templating
