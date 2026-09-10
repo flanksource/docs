@@ -26,6 +26,7 @@ The retention rules are applied for each unique catalog item. If `changes` is sp
 | `types`        | Specify retention rules for config items                           | [`[]ConfigItem`](#config-items)            |
 | `changes`      | Specify retention rules for changes                                | [`[]Change`](#changes)                     |
 | `staleItemAge` | Config items that were last scraped after this age will be deleted | [Duration](/docs/reference/types#duration) |
+| `staleAnalysisAge` | Age after which an analysis the scraper no longer observes is marked as resolved. Defaults to `48h`. Use `keep` to disable auto-resolution | [Duration](/docs/reference/types#duration) |
 
 ## Config Items
 

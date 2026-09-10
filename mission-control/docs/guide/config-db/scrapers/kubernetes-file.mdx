@@ -48,6 +48,16 @@ The KubernetesFile config type is used to scrape the contents of files inside Ku
 ]}/>
 
 
+### Selector
+
+| Field           | Description                                        | Scheme   | Required |
+| --------------- | -------------------------------------------------- | -------- | -------- |
+| `namespace`     | Namespace of the pods                              | `string` |          |
+| `kind`          | Kind of the resource to select pods from           | `string` |          |
+| `name`          | Name of the resource                               | `string` |          |
+| `labelSelector` | Select pods by labels e.g. `app=nginx`             | `string` |          |
+| `fieldSelector` | Select pods by fields e.g. `status.phase=Running`  | `string` |          |
+
 ### File
 
 | Field    | Description                       | Scheme     | Required |

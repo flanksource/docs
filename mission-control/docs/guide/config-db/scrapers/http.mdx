@@ -46,9 +46,39 @@ The HTTP scraper allows you to collect data from HTTP endpoints and APIs. It sup
     {
       field: 'headers',
       description: 'HTTP headers to include in the request',
-      scheme: '[`map[string]EnvVar`](/docs/reference/env-var)'
+      scheme: '[`[]EnvVar`](/docs/reference/env-var)'
+    },
+    {
+      field: 'pagination',
+      description: 'Follow paginated responses and merge the pages',
+      scheme: '[`Pagination`](#pagination)'
     }
   ]}
 />
+
+## Pagination
+
+Paginated APIs are followed by evaluating a CEL expression against each response to find the next page.
+
+| Field          | Description                                                                                                                                                            | Scheme   | Required |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | -------- |
+| `nextPageExpr` | CEL expression that extracts the next page from the response. It receives a `response` map with `body`, `headers`, `status` and `url`, and returns either a string (the next URL), a map (a request spec with `url`, `method`, `body`, `headers`) or `null` to stop | `string` | `true` |
+| `reduceExpr`   | CEL expression that merges pages using an accumulator. It receives `acc` (a list, initially empty) and `page` (the response body), and returns the new accumulator     | `string` |          |
+| `perPage`      | Process each page independently instead of merging them                                                                                                                | `bool`   |          |
+| `maxPages`     | Maximum number of pages to fetch. `0` means unlimited                                                                                                                  | `int`    |          |
+| `delay`        | Delay between page requests e.g. `500ms`, `2s`                                                                                                                         | `string` |          |
+
+```yaml title="http-pagination.yaml"
+http:
+  - url: https://api.example.com/v1/items?page=1
+    type: Example::Item
+    id: $.id
+    name: $.name
+    pagination:
+      nextPageExpr: 'response.body.next_url != null ? response.body.next_url : null'
+      reduceExpr: 'acc + page.items'
+      maxPages: 20
+      delay: 500ms
+```
 
 <Custom/>

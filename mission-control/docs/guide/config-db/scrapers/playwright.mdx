@@ -1,0 +1,139 @@
+---
+title: Playwright
+sidebar_position: 17
+sidebar_custom_props:
+  icon: console
+---
+
+import Custom from './_custom.mdx'
+
+# <Icon name="console"/> Playwright
+
+<!-- Source: modules/config-db/api/v1/playwright.go#Playwright -->
+
+The `playwright` scraper runs a [Playwright](https://playwright.dev) script in a headless browser and scrapes its output as configuration items. Use it for systems that expose no usable API — cloud consoles, admin portals, or SaaS dashboards — where the only reliable source of configuration is the web UI.
+
+The script writes JSON to stdout, which is scraped exactly as the [exec](./exec) scraper does. It can also record HAR files, videos and screenshots as [artifacts](/docs/installation/artifacts).
+
+```yaml title='playwright-scraper.yaml' file=<rootDir>/modules/config-db/fixtures/playwright-simple.yaml
+
+```
+
+## Scraper
+
+| Field        | Description                                                                        | Scheme                                       | Required |
+| ------------ | ---------------------------------------------------------------------------------- | -------------------------------------------- | -------- |
+| `schedule`   | Specify the interval to scrape in cron format. Defaults to every 60 minutes.       | [Cron](/docs/reference/types#cron)           |          |
+| `full`       | Set to `true` to extract [changes](/docs/guide/config-db/concepts/changes#extracting-changes) and [access logs](/docs/guide/audit/access-logs) from scraped configurations. Defaults to `false`. | `bool` |          |
+| `retention`  | Settings for retaining changes, analysis and scraped items                         | [`Retention`](/docs/guide/config-db/concepts/retention) |  |
+| `playwright` | Specifies the list of Playwright configurations to scrape.                         | [`[]Playwright`](#playwright)                |          |
+| `logLevel`   | Specify the level of logging.                                                      | `string`                                     |          |
+
+### Playwright
+
+<CustomScraper rows={[
+  {
+    field: 'script',
+    description: 'Inline TypeScript/JavaScript to run with Playwright. The script should output JSON to stdout.',
+    scheme: 'string',
+    required: true
+  },
+  {
+    field: 'outputMode',
+    description: 'How stdout is parsed. Defaults to `json`',
+    scheme: '`json` | `raw`'
+  },
+  {
+    field: 'headless',
+    description: 'Run the browser headless. Defaults to `true`',
+    scheme: 'bool'
+  },
+  {
+    field: 'timeout',
+    description: 'Timeout in seconds for the script execution. Defaults to `300`',
+    scheme: 'int'
+  },
+  {
+    field: 'login',
+    description: 'Log in automatically before the script runs',
+    scheme: '[Login](#login)'
+  },
+  {
+    field: 'trace',
+    description: 'Configure HAR, video and network recording',
+    scheme: '[Trace](#trace)'
+  },
+  {
+    field: 'har',
+    description: 'Record a HAR (HTTP Archive) file. Shorthand for `trace.har`',
+    scheme: 'bool'
+  },
+  {
+    field: 'checkout',
+    description: 'Checkout a git repository before running the script',
+    scheme: '[GitConnection](/docs/reference/connections/git)'
+  },
+  {
+    field: 'connections',
+    description: 'Connections for AWS/GCP/Azure/Kubernetes credential injection',
+    scheme: 'ExecConnections'
+  },
+  {
+    field: 'env',
+    description: 'Environment variables to set during execution',
+    scheme: '[[]EnvVar](/docs/reference/env-var)'
+  },
+  {
+    field: 'query',
+    description: 'Export existing config items as JSON files that the script can read',
+    scheme: '[]Query'
+  },
+  {
+    field: 'artifacts',
+    description: 'Additional artifact paths to collect after execution',
+    scheme: '[]Artifact'
+  }
+]}/>
+
+### Trace
+
+| Field     | Description                                                                                                                              | Scheme     |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| `har`     | Record a HAR file of the session                                                                                                          | `bool`     |
+| `domains` | Domain patterns to include in the recording. Prefix a pattern with `!` to exclude it — useful for stripping out telemetry and widget traffic | `[]string` |
+| `video`   | When to keep a video recording e.g. `on-error`, `always`                                                                                  | `string`   |
+
+### Login
+
+Specify one login provider.
+
+| Field     | Description                                       | Scheme                    |
+| --------- | ------------------------------------------------- | ------------------------- |
+| `aws`     | Log in to the AWS console via federation          | [`AWS`](#aws-login)       |
+| `browser` | Reuse cookies from an existing browser connection | [`Browser`](#browser-login) |
+
+#### AWS login
+
+Also accepts every field of an [AWSConnection](/docs/reference/connections/aws).
+
+| Field             | Description                                                        | Scheme   |
+| ----------------- | ------------------------------------------------------------------ | -------- |
+| `login`           | Name of the federation login to use                                | `string` |
+| `issuer`          | Issuer passed to the AWS federation endpoint                       | `string` |
+| `sessionDuration` | Length of the federated session, in seconds                        | `int`    |
+
+#### Browser login
+
+| Field        | Description                                          | Scheme   |
+| ------------ | ---------------------------------------------------- | -------- |
+| `connection` | Connection holding the browser cookies to reuse      | `string` |
+
+<details summary="Example: AWS console screenshots">
+
+```yaml title='playwright-aws-rds.yaml' file=<rootDir>/modules/config-db/fixtures/playwright-aws-rds.yaml
+
+```
+
+</details>
+
+<Custom/>

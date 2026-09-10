@@ -53,14 +53,15 @@ kind: Permission
 metadata:
   name: dev-team-access
 spec:
-  subjects:
-    - kind: Group
-      name: dev-team
-  scopes:
-    - prod-agent-configs # Reference to Scope
+  subject:
+    group: dev-team
   actions:
     - read
     - update
+  object:
+    scopes:
+      - namespace: mc
+        name: prod-agent-configs # Reference to Scope
 ```
 
 This permission grants the `dev-team` group read and update access to all resources defined in the `prod-agent-configs` Scope.

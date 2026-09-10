@@ -11,12 +11,18 @@ Actions define what operations a subject can perform on the target objects. The 
 
 | Action | Description |
 |--------|-------------|
+| `create` | Allows creating resources |
 | `read` | Allows reading/viewing resources |
-| `write` | Allows creating or modifying resources |
+| `update` | Allows modifying resources |
 | `delete` | Allows deleting resources |
+| `create,read,update,delete` | Shorthand for all four CRUD actions |
 | `playbook:run` | Allows running playbooks |
 | `playbook:approve` | Allows approving playbook runs that require approval |
 | `playbook:cancel` | Allows canceling playbook runs |
+| `mcp:use` | Allows connecting to the [MCP](/docs/guide/mcp) endpoint |
+| `mcp:run` | Allows running a playbook through MCP. Intended for playbook-scoped permissions |
+| `invoke:<plugin>:<operation>` | Allows invoking an operation on a plugin |
+| `plugin-role:<plugin>:<role>` | Grants a role defined by a plugin |
 
 ## Wildcards
 
@@ -87,7 +93,8 @@ spec:
     person: editor@example.com
   actions:
     - read
-    - write
+    - create
+    - update
   object:
     configs:
       - namespace: production

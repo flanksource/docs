@@ -26,7 +26,16 @@ Notification action sends notification.
     {field: "connection", description: "Connection to use to send the notification", scheme: "NotificationConnection"},
     {field: "title", description: "Title of the notification", scheme: "string", required: true, templatable: true},
     {field: "message", description: "Message is the body of the notification", scheme: "string", required: true, templatable: true},
-    {field: "properties", description: "Notification channel properties", scheme: "map[string]string", templatable: true}
+    {field: "properties", description: "Notification channel properties", scheme: "map[string]string", templatable: true},
+    {field: "attachments", description: "Files to attach to the notification. _Only supported by SMTP_", scheme: "[[]Attachment](#attachment)", templatable: true}
+]}/>
+
+### Attachment
+
+<Fields rows={[
+    {field: "filename", description: "Name of the attached file", scheme: "string", required: true, templatable: true},
+    {field: "content", description: "Body of the attachment", scheme: "string", required: true, templatable: true},
+    {field: "contentType", description: "MIME type of the attachment e.g. `application/pdf`", scheme: "string", templatable: true}
 ]}/>
 
 

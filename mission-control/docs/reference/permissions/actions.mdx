@@ -26,6 +26,25 @@ These actions are specific to playbook resources and provide fine-grained contro
 |--------|-------------|
 | `playbook:run` | Allows execution of playbooks |
 | `playbook:approve` | Allows approving playbook execution requests |
+| `playbook:cancel` | Allows canceling an in-flight playbook run |
+
+## MCP Actions
+
+These actions control access to the [MCP](/docs/guide/mcp) endpoint.
+
+| Action | Description |
+|--------|-------------|
+| `mcp:use` | Allows connecting to and using the MCP endpoint |
+| `mcp:run` | Allows MCP-triggered playbook runs. Intended for playbook-scoped permissions |
+
+## Plugin Actions
+
+Plugins contribute their own actions using two prefixes.
+
+| Action | Description |
+|--------|-------------|
+| `invoke:<plugin>:<operation>` | Allows invoking an operation exposed by a plugin |
+| `plugin-role:<plugin>:<role>` | Grants a role that the plugin defines |
 
 ## Usage Examples
 
@@ -40,7 +59,8 @@ spec:
     team: developers
   object:
     configs:
-      - namespaces: ["dev", "staging"]
+      - namespace: dev
+      - namespace: staging
   actions: 
     - "playbook:run"
     - "playbook:approve"

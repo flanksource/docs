@@ -15,13 +15,6 @@ SQL action makes a SQL query on the provided database.
 ```yaml title="delete-check-statuses.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/sql.yaml
 ```
 
-| Field        | Description                                                                                         | Scheme   | Required | Templatable |
-| ------------ | --------------------------------------------------------------------------------------------------- | -------- | -------- | ----------- |
-| `connection` | Connection identifier.                                     | _string_ |          |             |
-| `url`        | URL is the database connection url.                                                                 | _string_ |          |             |
-| `query`      | Query is the sql query to run. It can also be templated| [Template](/docs/guide/playbooks/concepts/templating)| `true`   | `true`      |
-| `driver`     | Driver is the name of the underlying database to connect to. Example: postgres, mysql, ...          | _string_ | `true`   |             |
-
 <Action rows={[
     {field: "sql", description: "SQL Action", scheme: "[SQL](#sql)"},
 ]} />
@@ -33,7 +26,7 @@ SQL action makes a SQL query on the provided database.
   {field: "connection", description: "Connection path  e.g. `connection://postgres/flanksource`", scheme: "Connection"},
   {field: "url", description: "Database connection URL", scheme: "url"},
   {field: "query", description: "SQL query to run against the database", scheme: "string", required: true, templatable: true},
-  {field: "driver", description: "Database driver", scheme: "`postgres`, `mysql`, `mssql`", required: true},
+  {field: "driver", description: "Database driver. Defaults to `postgres`", scheme: "`postgres`, `mysql`, `mssql`"},
 ]}/>
 
 ## Output
@@ -41,6 +34,8 @@ SQL action makes a SQL query on the provided database.
 <Fields  rows={[
   {field: "rows", description: "List of rows with column name as keys and column data as values", scheme: "[]map[string]any"},
   {field: "count", description: "Number of rows returned", scheme: "int"},
+  {field: "columns", description: "Column names, in the order returned by the query", scheme: "[]string"},
+  {field: "query", description: "The query that was run", scheme: "string"},
 ]}/>
 
 

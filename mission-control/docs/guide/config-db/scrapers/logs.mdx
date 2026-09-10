@@ -9,7 +9,7 @@ sidebar_custom_props:
 
 <!-- Source: modules/config-db/api/v1/logs.go#Logs -->
 
-The Logs scraper queries log aggregation systems to extract configuration changes from log entries. It supports multiple log backends including Loki, GCP Cloud Logging, OpenSearch, and BigQuery. This allows you to create configuration items and track changes based on log data.
+The Logs scraper queries log aggregation systems to extract configuration changes from log entries. It supports multiple log backends including Loki, GCP Cloud Logging, OpenSearch, BigQuery and Azure Log Analytics. This allows you to create configuration items and track changes based on log data.
 
 ## Use Cases
 
@@ -50,6 +50,37 @@ The Logs scraper queries log aggregation systems to extract configuration change
     field: "fieldMapping.id",
     description: "Source field names containing unique identifiers for deduplication. Common values: `id`, `event_id`, `trace_id`, `request_id`",
     scheme: "[]string"
+  },
+  {
+    field: "fieldMapping.host",
+    description: "Source field names containing the host the log came from",
+    scheme: "[]string"
+  },
+  {
+    field: "fieldMapping.source",
+    description: "Source field names containing the log source",
+    scheme: "[]string"
+  },
+  {
+    field: "fieldMapping.ignore",
+    description: "Fields to drop from the log labels",
+    scheme: "[]string"
+  },
+  {
+    field: "fieldMapping.groupBy",
+    description: "Fields to group the returned logs by",
+    scheme: "[]string"
+  },
+  {
+    field: "fieldMapping.dedupBy",
+    description: "Fields to dedupe the returned logs by",
+    scheme: "[]string"
+  },
+  {
+    priority: 1,
+    field: "azureLogAnalytics",
+    description: "Azure Log Analytics configuration",
+    scheme: "[AzureLogAnalytics](#azureloganalytics)"
   },
   {
     priority: 1,
@@ -120,7 +151,7 @@ spec:
   logs:
     # OpenSearch/Elasticsearch logs use @timestamp and message
     - openSearch:
-        url: https://elasticsearch:9200
+        address: https://elasticsearch:9200
         index: app-logs-*
       fieldMapping:
         timestamp: ['@timestamp']
@@ -185,14 +216,24 @@ spec:
     scheme: "string"
   },
   {
-    field: "orderBy",
-    description: "Field to order results by",
+    field: "start",
+    description: "Start time for the query. Supports datemath e.g. `now-24h`",
     scheme: "string"
   },
   {
-    field: "pageSize",
-    description: "Number of entries per page",
-    scheme: "int"
+    field: "end",
+    description: "End time for the query. Defaults to now",
+    scheme: "string"
+  },
+  {
+    field: "limit",
+    description: "Maximum number of log entries to return",
+    scheme: "string"
+  },
+  {
+    field: "connection",
+    description: "GCP connection to use for credentials",
+    scheme: "string"
   },
   {
     field: "credentials",
@@ -215,8 +256,8 @@ spec:
         filter: |
           protoPayload.serviceName="compute.googleapis.com"
           protoPayload.methodName:"compute.instances"
-        orderBy: timestamp desc
-        pageSize: 100
+        start: now-24h
+        limit: '100'
       transform:
         expr: |
           dyn(config.logs).map(line, {
@@ -281,14 +322,92 @@ spec:
 
 </details>
 
+### AzureLogAnalytics
+
+<Fields rows={[
+  {
+    field: "workspaceID",
+    description: "Azure Log Analytics workspace ID to query",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "query",
+    description: "KQL (Kusto Query Language) query to execute",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "connection",
+    description: "Azure connection to use for credentials",
+    scheme: "string"
+  },
+  {
+    field: "clientID",
+    description: "Azure client ID",
+    scheme: "[EnvVar](/docs/reference/env-var)"
+  },
+  {
+    field: "clientSecret",
+    description: "Azure client secret",
+    scheme: "[EnvVar](/docs/reference/env-var)"
+  },
+  {
+    field: "tenantID",
+    description: "Azure tenant ID",
+    scheme: "string"
+  },
+  {
+    field: "start",
+    description: "Start time for the query. Supports datemath e.g. `now-24h`",
+    scheme: "string"
+  },
+  {
+    field: "end",
+    description: "End time for the query. Defaults to now",
+    scheme: "string"
+  },
+  {
+    field: "limit",
+    description: "Maximum number of log entries to return",
+    scheme: "string"
+  }
+]} />
+
+<details summary="Example">
+
+```yaml
+apiVersion: configs.flanksource.com/v1
+kind: ScrapeConfig
+metadata:
+  name: azure-activity-logs
+spec:
+  logs:
+    - azureLogAnalytics:
+        connection: connection://azure/production
+        workspaceID: 00000000-0000-0000-0000-000000000000
+        start: now-24h
+        query: |
+          AzureActivity
+          | where OperationNameValue startswith "MICROSOFT.COMPUTE"
+          | order by TimeGenerated desc
+```
+
+</details>
+
 ### OpenSearch
 
 <Fields rows={[
   {
-    field: "url",
-    description: "OpenSearch cluster URL",
+    field: "address",
+    description: "OpenSearch cluster address",
     scheme: "string",
     required: true
+  },
+  {
+    field: "connection",
+    description: "Connection name for OpenSearch credentials",
+    scheme: "string"
   },
   {
     field: "index",
@@ -299,12 +418,13 @@ spec:
   {
     field: "query",
     description: "OpenSearch query DSL",
-    scheme: "string"
+    scheme: "string",
+    required: true
   },
   {
-    field: "size",
-    description: "Number of results to return",
-    scheme: "int"
+    field: "limit",
+    description: "Maximum number of documents to return",
+    scheme: "string"
   },
   {
     field: "username",
@@ -328,7 +448,7 @@ metadata:
 spec:
   logs:
     - openSearch:
-        url: https://opensearch-cluster:9200
+        address: https://opensearch-cluster:9200
         index: security-logs-*
         query: |
           {
@@ -341,7 +461,7 @@ spec:
               }
             }
           }
-        size: 1000
+        limit: '1000'
         username:
           valueFrom:
             secretKeyRef:

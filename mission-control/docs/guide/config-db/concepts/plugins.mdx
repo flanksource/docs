@@ -39,6 +39,26 @@ For example, if you want to exclude all events with severity="info", a scrape pl
       scheme: '[Mapping](#mapping)'
     },
     {
+      field: 'changes.generate',
+      description: 'Create changes from matching config items, without replacing those items',
+      scheme: '[Generate](/docs/reference/config-db/transformation#change-generation)'
+    },
+    {
+      field: 'configs.mapping',
+      description: 'Override fields on scraped config items',
+      scheme: '[ConfigMapping](/docs/reference/config-db/transformation#config-mapping)'
+    },
+    {
+      field: 'locations',
+      description: 'Add location metadata for grouping',
+      scheme: '[[]LocationOrAlias](/docs/reference/config-db/transformation#locations)'
+    },
+    {
+      field: 'aliases',
+      description: 'Add alternate identifiers used to look up config items',
+      scheme: '[[]LocationOrAlias](/docs/reference/config-db/transformation#aliases)'
+    },
+    {
       field: 'retention',
       description: 'Global retention settings for config items and changes',
       scheme: '[Retention](./retention)'
@@ -63,8 +83,8 @@ For example, the change 'status.images' might not be self-explanatory. To clarif
     },
     {
       field: 'action',
-      description: 'What action to take on the change, if `delete` then the corresponding config item is marked as deleted',
-      scheme: '`delete` | `ignore`'
+      description: 'What action to take on the change. See [Change Mapping](/docs/reference/config-db/transformation#change-mapping)',
+      scheme: '`delete` | `ignore` | `move-up` | `copy-up` | `move` | `copy`'
     },
     {
       field: 'type',

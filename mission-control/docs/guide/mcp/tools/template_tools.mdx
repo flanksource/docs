@@ -1,0 +1,38 @@
+---
+title: Template
+sidebar_custom_props:
+  icon: hugeicons:code
+---
+
+# Template Tools
+
+## eval_template
+
+Evaluate a [CEL expression](/docs/reference/scripting/cel) or [Go template](/docs/reference/scripting/gotemplate) against an environment map and return the rendered string.
+
+This is useful for checking an expression before putting it in a playbook filter, a notification template, or a transform.
+
+Provide exactly one of `cel_expression` or `gotemplate`.
+
+<Fields rows={[
+  {field: "cel_expression", scheme: "string", description: "CEL expression to evaluate against `env`"},
+  {field: "gotemplate", scheme: "string", description: "Go text/template to render using `env`"},
+  {field: "env", scheme: "object", description: "Environment map available to the expression or template"},
+  {field: "config_id", scheme: "string", description: "Config item UUID to fetch and inject into `env` as `config`"},
+  {field: "change_id", scheme: "string", description: "Catalog change UUID to fetch and inject into `env` as `change`"},
+  {field: "check_id", scheme: "string", description: "Check UUID to fetch and inject into `env` as `check`"}
+]} />
+
+### Example Usage
+
+**Prompt:** "Would this notification filter match that pod?"
+
+**Parameters Used:**
+```json
+{
+  "config_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "cel_expression": "config.tags.namespace == 'production'"
+}
+```
+
+**Result:** Returns the rendered result of the expression against the real config item.
