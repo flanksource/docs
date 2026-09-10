@@ -73,6 +73,18 @@ Transformations modify scraped configuration items before they are saved to the 
     required: false
   },
   {
+    field: "changes.generate",
+    description: "Create changes from matching config items, without replacing those items",
+    scheme: "[[]Generate](#change-generation)",
+    required: false
+  },
+  {
+    field: "configs.mapping",
+    description: "Override fields on scraped config items",
+    scheme: "[[]ConfigMapping](#config-mapping)",
+    required: false
+  },
+  {
     field: "locations",
     description: "Add location metadata for grouping",
     scheme: "[[]LocationOrAlias](#locations)",
@@ -474,6 +486,75 @@ transform:
           type: Kubernetes::Service
           labels:
             app: '$(.config.labels.app)'
+```
+
+### Change Generation
+
+Generate creates additional changes from matching config items, leaving those items in place.
+
+<Fields rows={[
+  {
+    field: "expr",
+    description: "CEL expression returning the generated changes as JSON",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: true
+  },
+  {
+    field: "filter",
+    description: "CEL expression selecting the config items to generate changes from",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: false
+  }
+]}/>
+
+```yaml title="generate-changes.yaml"
+transform:
+  changes:
+    generate:
+      - filter: config.config_type == "Kubernetes::Event"
+        expr: |
+          [{
+            "change_type": config.reason,
+            "external_id": config.involvedObject.uid,
+            "summary": config.message,
+            "created_at": config.lastTimestamp
+          }].toJSON()
+```
+
+## Config Mapping
+
+Config mapping overrides fields on scraped config items. Rules are evaluated in order against the pre-mapping values, and the first matching rule wins.
+
+It does not rewrite type strings already embedded in changes, parents, access entries or relationship results, and configs emitted by a transform script do not inherit this mapping.
+
+<Fields rows={[
+  {
+    field: "match",
+    description: "CEL expression selecting which config items this mapping applies to. It receives the full config-item environment, including `config`, `config_type`, `labels` and `tags`. A non-match leaves the item unchanged",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: false
+  },
+  {
+    field: "type.value",
+    description: "Replace the config type with this literal value",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "type.expr",
+    description: "Replace the config type with the result of this CEL expression",
+    scheme: "[CEL](/docs/reference/scripting/cel)",
+    required: false
+  }
+]}/>
+
+```yaml title="config-mapping.yaml"
+transform:
+  configs:
+    mapping:
+      - match: config_type == "Kubernetes::CustomResource" && config.kind == "Certificate"
+        type:
+          value: CertManager::Certificate
 ```
 
 ## Locations

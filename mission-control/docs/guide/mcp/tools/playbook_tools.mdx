@@ -8,64 +8,59 @@ sidebar_custom_props:
 
 Tools for working with playbooks in Mission Control.
 
-## playbook_list_all
+## Playbooks as tools
 
-List all available playbooks
+Every playbook the caller is allowed to run is registered as its own MCP tool, rather than being run through one generic tool. The tool name is derived from the playbook:
+
+```
+<title-or-name>_<namespace>_<category>
+```
+
+So a playbook titled `Scale Deployment` in the `mc` namespace under the `Kubernetes` category becomes the tool `scale-deployment_mc_kubernetes`.
+
+The tool's input schema is generated from the playbook's [parameters](/docs/reference/playbooks/parameters), plus the resource the playbook runs on:
+
+<Fields rows={[
+  {field: "config_id", scheme: "string", description: "UUID of the config item, from `search_catalog` results. Required when the playbook declares `spec.configs`"},
+  {field: "check_id", scheme: "string", description: "UUID of the health check. Required when the playbook declares `spec.checks`"},
+  {field: "component_id", scheme: "string", description: "UUID of the component. Required when the playbook declares `spec.components`"},
+  {field: "agent_id", scheme: "string", description: "UUID of the agent to run the playbook on. Optional"},
+  {field: "params", scheme: "object", description: "The playbook's own parameters. Every value is a string; `checkbox` parameters accept `\"true\"` or `\"false\"`"}
+]} />
+
+Use the [`mcp` field](/docs/reference/playbooks#mcp) on the playbook spec to control the tool's title, description, tags and behavioural hints. The playbook's `category` and MCP tags are appended to the tool description so the model can find it.
+
+:::info Permissions
+A playbook only appears as a tool when the caller holds the `mcp:run` [action](/docs/guide/permissions/actions) on it.
+:::
 
 ### Example Usage
 
-**Prompt:** "What playbooks are available in the system?"
+**Prompt:** "Scale the web-app deployment to 3 replicas in staging"
 
-**AI Response:** "I'll list all the available playbooks in your Mission Control system."
+**AI Response:** "I'll scale the web-app deployment to 3 replicas in the staging namespace."
 
-**Result:** Returns a list of all playbooks with their metadata, parameters, and descriptions.
+**Tool Called:** `scale-deployment_mc_kubernetes`
 
-**Example Output:**
+**Parameters Used:**
 ```json
-[
-  {
-    "id": "delete-pod",
-    "name": "Delete Kubernetes Pod",
-    "description": "Delete a specific Kubernetes pod",
-    "parameters": [
-      {
-        "name": "namespace",
-        "type": "text"
-      },
-      {
-        "name": "pod_name",
-        "type": "text"
-      }
-    ]
-  },
-  {
-    "id": "scale-deployment",
-    "name": "Scale Deployment",
-    "description": "Scale a Kubernetes deployment up or down",
-    "parameters": [
-      {
-        "name": "namespace",
-        "type": "text"
-      },
-      {
-        "name": "deployment_name",
-        "type": "text"
-      },
-      {
-        "name": "replicas",
-        "type": "text"
-      }
-    ]
+{
+  "config_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "params": {
+    "replicas": "3"
   }
-]
+}
 ```
 
-## playbook_recent_runs
+**Result:** Executes the scaling operation and returns the run status.
 
-Get recent playbook execution runs
+## get_playbook_recent_runs
+
+Get recent playbook execution history as a JSON array. Each entry contains run details, status, timing, and results.
 
 <Fields rows={[
-  {field: "limit", scheme: "integer", description: "Number of recent runs to retrieve", default: 20, required: true}
+  {field: "limit", scheme: "number", description: "Maximum number of recent runs to return. Defaults to 20"},
+  {field: "playbook_id", scheme: "string", description: "UUID of a playbook to filter runs by. When omitted, returns runs for all playbooks"}
 ]} />
 
 ### Example Usage
@@ -73,8 +68,6 @@ Get recent playbook execution runs
 **Prompt:** "Show me the last 5 playbook runs"
 
 **AI Response:** "I'll get the 5 most recent playbook execution runs for you."
-
-**Result:** Returns recent playbook runs with execution details, status, and results.
 
 **Example Output:**
 ```json
@@ -97,12 +90,13 @@ Get recent playbook execution runs
 ]
 ```
 
-## playbook_failed_runs
+## get_playbook_failed_runs
 
-Get recent failed playbook execution runs
+Get recent failed playbook runs as a JSON array. Each entry contains failure details, error messages, and timing information.
 
 <Fields rows={[
-  {field: "limit", scheme: "number", description: "Number of failed runs to retrieve", default: 20, required: true}
+  {field: "limit", scheme: "number", description: "Maximum number of failed runs to return. Defaults to 20"},
+  {field: "playbook_id", scheme: "string", description: "UUID of a playbook to filter runs by. When omitted, returns failed runs for all playbooks"}
 ]} />
 
 ### Example Usage
@@ -110,8 +104,6 @@ Get recent failed playbook execution runs
 **Prompt:** "Show me recent playbook failures so I can investigate what went wrong"
 
 **AI Response:** "I'll get the recent failed playbook runs to help you identify issues."
-
-**Result:** Returns failed playbook runs with error details and failure reasons.
 
 **Example Output:**
 ```json
@@ -131,52 +123,17 @@ Get recent failed playbook execution runs
 ]
 ```
 
-## playbook_exec_run
+## get_playbook_run_steps
 
-Execute a playbook with specified parameters
+Get detailed information about a playbook run, including all of its actions. Actions from child runs are included, ordered by start time.
 
 <Fields rows={[
-  {field: "id", scheme: "string", description: "Playbook ID (UUID format)", required: true},
-  {field: "params", scheme: "object", description: "Parameters required for playbook execution", required: true}
+  {field: "run_id", scheme: "string", description: "UUID of the playbook run", required: true},
+  {field: "withResult", scheme: "bool", description: "Include each action's result. Set to `false` to reduce the response size. Defaults to `true`"}
 ]} />
-
-**Note:** This is a destructive operation that will modify system state. Parameters are playbook-specific and can be found using the playbook_list_all tool.
 
 ### Example Usage
 
-**Prompt:** "Restart the nginx pod in the production namespace"
+**Prompt:** "Why did run 4f2a… fail?"
 
-**AI Response:** "I'll execute the restart pod playbook for the nginx pod in the production namespace. This will cause a brief service interruption."
-
-**Parameters Used:**
-```json
-{
-  "id": "delete-pod",
-  "params": {
-    "namespace": "default",
-    "pod_name": "httpbin"
-  }
-}
-```
-
-**Result:** Returns execution status and progress updates as the playbook runs.
-
----
-
-**Prompt:** "Scale the web-app deployment to 3 replicas in the staging environment"
-
-**AI Response:** "I'll scale the web-app deployment to 3 replicas in the staging namespace."
-
-**Parameters Used:**
-```json
-{
-  "id": "scale-deployment",
-  "params": {
-    "namespace": "staging",
-    "deployment_name": "web-app",
-    "replicas": 3
-  }
-}
-```
-
-**Result:** Executes the scaling operation and returns the updated deployment status.
+**Result:** Returns each action in the run with its status, timing, and — unless `withResult` is disabled — the output it produced.

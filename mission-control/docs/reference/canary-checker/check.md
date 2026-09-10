@@ -24,3 +24,18 @@ title: Check
 | `updated_at`           | The updated at of the check                                 | `time`                               |
 | `deleted_at`           | The deleted at of the check                                 | `*time`                              |
 | `silenced_at`          | The silenced at of the check                                | `*time`                              |
+
+## Auxiliary fields
+
+These are not stored on the check itself — they are computed when a check is returned.
+
+| Field             | Description                                             | Scheme     |
+| ----------------- | ------------------------------------------------------- | ---------- |
+| `canary_name`     | Name of the canary that owns the check                  | `string`   |
+| `components`      | IDs of the components the check is linked to            | `[]uuid`   |
+| `uptime`          | Passed and failed counts over the selected range        | `Uptime`   |
+| `latency`         | Latency percentiles over the selected range             | `Latency`  |
+| `display_type`    | How the check is rendered on the UI                     | `string`   |
+| `earliestRuntime` | Earliest run in the selected date range                 | `*time`    |
+| `latestRuntime`   | Latest run in the selected date range                   | `*time`    |
+| `totalRuns`       | Number of runs in the selected date range               | `int`      |

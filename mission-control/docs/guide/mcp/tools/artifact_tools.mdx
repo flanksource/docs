@@ -1,0 +1,32 @@
+---
+title: Artifact
+sidebar_custom_props:
+  icon: folder
+---
+
+# Artifact Tools
+
+Tools for reading [artifacts](/docs/installation/artifacts) produced by playbook runs and health checks.
+
+## read_artifact_metadata
+
+Get an artifact's metadata by ID — filename, size, content type, path, the check or playbook run it belongs to, and its timestamps.
+
+<Fields rows={[
+  {field: "id", scheme: "string", description: "UUID of the artifact", required: true}
+]} />
+
+## read_artifact_content
+
+Read the content of an artifact file.
+
+<Fields rows={[
+  {field: "id", scheme: "string", description: "UUID of the artifact", required: true},
+  {field: "max_length", scheme: "number", description: "Maximum number of bytes to read. Defaults to 1048576 (1 MB). Larger artifacts are truncated with a note"}
+]} />
+
+### Example Usage
+
+**Prompt:** "What was in the log file that run produced?"
+
+**Result:** Returns the artifact's content, truncated if it exceeds `max_length`.

@@ -55,8 +55,36 @@ The Mission Control Registry includes an [AWS](/docs/integrations/aws) Helm char
       description: 'AWS resources to include for scraping',
       scheme: '`[]string`'
     },
+    {
+      field: 'exclusions',
+      description: 'Exclude individual scraped items by type, name and/or tags',
+      scheme: '[`[]Exclusion`](#exclusions)'
+    },
   ]}
 />
+
+## Exclusions
+
+Where `exclude` drops whole resource types, `exclusions` drops individual items. A rule matches when **all** of its populated fields match, and an item is excluded when **any** rule matches.
+
+`type` and `name` accept comma-separated patterns and support globs (`*`, `prefix*`, `*suffix*`) and negation (`!pattern`).
+
+| Field  | Description                                                | Scheme              |
+| ------ | ---------------------------------------------------------- | ------------------- |
+| `type` | Config type patterns to exclude e.g. `AWS::EC2::Instance`  | `string`            |
+| `name` | Name patterns to exclude                                   | `string`            |
+| `tags` | Tags the item must carry, values matched as patterns       | `map[string]string` |
+
+```yaml title="aws-exclusions.yaml"
+aws:
+  - exclusions:
+      # Drop every scratch bucket
+      - type: AWS::S3::Bucket
+        name: 'scratch-*'
+      # Drop anything tagged as ephemeral
+      - tags:
+          lifecycle: ephemeral
+```
 
 ## CloudTrail
 
@@ -73,6 +101,7 @@ The Mission Control Registry includes an [AWS](/docs/integrations/aws) Helm char
 | `table`          | Specify table containing cost and usage data                   | `string` |
 | `database`       | Specify database containing cost and usage data                | `string` |
 | `region`         | Specify region for S3 bucket                                   | `string` |
+| `lookbackDays`   | How many days of the cost and usage report to read on each scrape. Values of `0` or less use the 45 day default | `int` |
 
 ## Trusted Advisor
 

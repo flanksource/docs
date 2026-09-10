@@ -13,6 +13,8 @@ import Custom from './_custom.mdx'
 
 The PubSub scraper subscribes to message queues and pub/sub systems to consume messages and create configuration items from them. This enables real-time configuration tracking based on events and messages published to various messaging systems.
 
+GCP Pub/Sub, AWS SQS, Kafka, NATS and RabbitMQ are supported.
+
 ```yaml title="pubsub-scraper.yaml" file=<rootDir>/modules/config-db/fixtures/pubsub-gcp.yaml
 ```
 
@@ -33,19 +35,36 @@ The PubSub scraper subscribes to message queues and pub/sub systems to consume m
   },
   {
     field: "pubsub",
-    description: "Pub/Sub configuration (currently supports GCP Pub/Sub)",
-    scheme: "[QueueConfig](#queueconfig)",
-    required: true
+    description: "GCP Pub/Sub configuration",
+    scheme: "[GCP Pub/Sub](#gcp-pubsub)"
+  },
+  {
+    field: "sqs",
+    description: "AWS SQS configuration",
+    scheme: "[SQS](#sqs)"
+  },
+  {
+    field: "kafka",
+    description: "Kafka configuration",
+    scheme: "[Kafka](#kafka)"
+  },
+  {
+    field: "nats",
+    description: "NATS configuration",
+    scheme: "[NATS](#nats)"
+  },
+  {
+    field: "rabbitmq",
+    description: "RabbitMQ configuration",
+    scheme: "[RabbitMQ](#rabbitmq)"
   }
 ]} />
 
-### QueueConfig
+Specify exactly one of the queue backends below.
 
-The PubSub scraper supports various message queue systems. Currently, GCP Pub/Sub is the primary supported system.
+### GCP Pub/Sub
 
-#### GCP Pub/Sub Configuration
-
-<Custom rows={[
+<Fields rows={[
   {
     field: "project_id",
     description: "GCP project ID containing the Pub/Sub subscription",
@@ -59,11 +78,64 @@ The PubSub scraper supports various message queue systems. Currently, GCP Pub/Su
     required: true
   },
   {
+    field: "connection",
+    description: "GCP connection to use for credentials",
+    scheme: "string"
+  },
+  {
     field: "credentials",
     description: "GCP service account credentials JSON",
-    scheme: "[EnvVar](/docs/reference/types#envvar)",
-    required: false
+    scheme: "[EnvVar](/docs/reference/env-var)"
   }
+]} />
+
+### SQS
+
+Also accepts every field of an [AWSConnection](/docs/reference/connections/aws).
+
+<Fields rows={[
+  {
+    field: "queue",
+    description: "ARN of the SQS queue",
+    scheme: "string",
+    required: true
+  },
+  {
+    field: "raw",
+    description: "The queue is configured for raw message delivery",
+    scheme: "bool"
+  },
+  {
+    field: "waitTime",
+    description: "Seconds to long-poll for messages. Defaults to 15, max is 20",
+    scheme: "int"
+  }
+]} />
+
+### Kafka
+
+<Fields rows={[
+  {field: "brokers", description: "Broker addresses", scheme: "[]string", required: true},
+  {field: "topic", description: "Topic to consume from", scheme: "string", required: true},
+  {field: "group", description: "Consumer group", scheme: "string", required: true}
+]} />
+
+### NATS
+
+<Fields rows={[
+  {field: "subject", description: "Subject to subscribe to", scheme: "string", required: true},
+  {field: "url", description: "NATS server URL", scheme: "string"},
+  {field: "queue", description: "Queue group to join", scheme: "string"}
+]} />
+
+### RabbitMQ
+
+<Fields rows={[
+  {field: "queue", description: "Queue to consume from", scheme: "string", required: true},
+  {field: "host", description: "RabbitMQ host", scheme: "string", required: true},
+  {field: "port", description: "RabbitMQ port", scheme: "int", required: true},
+  {field: "username", description: "Username to authenticate with", scheme: "string"},
+  {field: "password", description: "Password to authenticate with", scheme: "string"}
 ]} />
 
 ## Use Cases

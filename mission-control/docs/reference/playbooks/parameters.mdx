@@ -52,6 +52,11 @@ Playbook parameter defines a parameter that a playbook needs to run.
     field: "properties",
     description: "Properties of parameter. _Varies based on the type_",
     scheme: "`map[string]string`",
+  },
+  {
+    field: "dependsOn",
+    description: "Names of the parameters that this parameter's default value is derived from. The default is re-evaluated whenever one of them changes.",
+    scheme: "`[]string`",
   }
 ]} />
 
@@ -75,19 +80,22 @@ When running the playbook on a `Deployment` named `mysql` the following is pre-p
 
 ## Types
 
-| name         | Description                        | UI Component | Schema    | Properties                |
-| ------------ | ---------------------------------- | ------------ | --------- | ------------------------- |
-| `check`      | Limits the value to a check.       | Dropdown     | `string`  | [`Check`](#checks)        |
-| `checkbox`   | Boolean value toggle               | Checkbox     | `boolean` | -                         |
-| `code`       | Text area                          | Code Editor  | `string`  | [`Code`](#code)           |
-| `config`     | Limits the value to a config item. | Dropdown     | `string`  | [`Config`](#config)       |
-| `list`       | Specify a custom list of values    | Dropdown     | `string`  | [`List`](#list)           |
-| `people`     | Limits the value to people.        | Dropdown     | `string`  | [`People`](#people)       |
-| `team`       | Limits the value to teams.         | Dropdown     | `string`  | -                         |
-| `text`       | Text input                         | Text Input   | `string`  | [`Text`](#text)           |
-| `millicores` | CPU resource                       | Number       | `string`  | -                         |
-| `bytes`      | Memory resource                    | Number       | `string`  | -                         |
-| `secret`     | Encrypted sensitive data           | Password     | `string`  | -                         |
+| name         | Description                              | UI Component | Schema    | Properties                |
+| ------------ | ---------------------------------------- | ------------ | --------- | ------------------------- |
+| `check`      | Limits the value to a check.             | Dropdown     | `string`  | [`Check`](#checks)        |
+| `checkbox`   | Boolean value toggle                     | Checkbox     | `boolean` | -                         |
+| `code`       | Text area                                | Code Editor  | `string`  | [`Code`](#code)           |
+| `component`  | Limits the value to a component.         | Dropdown     | `string`  | [`Component`](#component) |
+| `config`     | Limits the value to a config item.       | Dropdown     | `string`  | [`Config`](#config)       |
+| `configs`    | Limits the value to several config items. | Dropdown     | `[]string` | [`Config`](#config)      |
+| `duration`   | A duration e.g. `30m`, `7d`              | Text Input   | `string`  | -                         |
+| `list`       | Specify a custom list of values          | Dropdown     | `string`  | [`List`](#list)           |
+| `people`     | Limits the value to people.              | Dropdown     | `string`  | [`People`](#people)       |
+| `team`       | Limits the value to teams.               | Dropdown     | `string`  | -                         |
+| `text`       | Text input                               | Text Input   | `string`  | [`Text`](#text)           |
+| `millicores` | CPU resource                             | Number       | `string`  | -                         |
+| `bytes`      | Memory resource                          | Number       | `string`  | -                         |
+| `secret`     | Encrypted sensitive data                 | Password     | `string`  | -                         |
 
 ```yaml title='params-sink.yaml' file=<rootDir>/modules/mission-control/fixtures/playbooks/params.yaml {20,24,27,32,39,46,51,56,61,72} showLineNumbers
 
@@ -104,6 +112,12 @@ When running the playbook on a `Deployment` named `mysql` the following is pre-p
 | Field         | Description                        | Schema                                             |
 | ------------- | ---------------------------------- | -------------------------------------------------- |
 | `filter[]` | Limit the checks to these resources | [`ResourceSelector`](/docs/reference/resource-selector) |
+
+### component
+
+| Field         | Description                            | Schema                                             |
+| ------------- | -------------------------------------- | -------------------------------------------------- |
+| `filter[]` | Limit the components to these resources | [`ResourceSelector`](/docs/reference/resource-selector) |
 
 ### code
 

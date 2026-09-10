@@ -1,0 +1,65 @@
+---
+title: Health Check
+sidebar_custom_props:
+  icon: health
+---
+
+# Health Check Tools
+
+Tools for finding and running [health checks](/docs/guide/canary-checker).
+
+## list_all_checks
+
+List all health checks with complete metadata, including names, IDs, and current status.
+
+### Example Usage
+
+**Prompt:** "What health checks are configured?"
+
+**Result:** Returns every health check with its ID, name, type and current status.
+
+## search_health_checks
+
+Search and find health checks, returning a JSON array of check metadata.
+
+<Fields rows={[
+  {field: "query", scheme: "[ResourceSelector#search](/docs/reference/resource-selector#search)", description: "Search query using the supported grammar", required: true},
+  {field: "limit", scheme: "number", description: "Number of items to return"}
+]} />
+
+### Example Usage
+
+**Prompt:** "Which HTTP checks are failing?"
+
+**Query Used:** `type=http status=unhealthy`
+
+**Result:** Returns the failing HTTP checks with their name, ID and last error.
+
+## get_check_status
+
+Get a health check's execution history. Each entry contains the status, time, duration, and error if there was one, ordered most recent first.
+
+<Fields rows={[
+  {field: "id", scheme: "string", description: "Health check ID", required: true},
+  {field: "limit", scheme: "number", description: "Number of status entries to return. Defaults to 30"}
+]} />
+
+### Example Usage
+
+**Prompt:** "Has this check been flapping?"
+
+**Result:** Returns the recent run history so the pattern of passes and failures is visible.
+
+## run_health_check
+
+Execute a health check immediately and return the result, along with execution status and timing.
+
+<Fields rows={[
+  {field: "id", scheme: "string", description: "Health check ID to run", required: true}
+]} />
+
+### Example Usage
+
+**Prompt:** "Run the payments API check now"
+
+**Result:** Runs the check out of schedule and returns whether it passed, how long it took, and any error.

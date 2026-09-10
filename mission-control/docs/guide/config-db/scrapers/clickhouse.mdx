@@ -37,8 +37,14 @@ The Clickhouse scraper executes SQL queries against a Clickhouse database or clo
 
 <Fields rows={[
   {
-    field: "clickhouseURL",
+    field: "url",
     description: "Clickhouse connection URL in format: clickhouse://user:password@host:port/database?param1=value1&param2=value2",
+    scheme: "[EnvVar](/docs/reference/env-var)",
+    required: false
+  },
+  {
+    field: "clickhouseURL",
+    description: "**Deprecated**: use `url` instead.",
     scheme: "string",
     required: false
   },
@@ -102,8 +108,22 @@ The Clickhouse scraper executes SQL queries against a Clickhouse database or clo
     description: "AWS region",
     scheme: "string",
     required: false
+  },
+  {
+    field: "format",
+    description: "Format of the objects in the bucket e.g. `Parquet`, `JSONEachRow`, `CSV`",
+    scheme: "string",
+    required: false
+  },
+  {
+    field: "structure",
+    description: "Column definitions for the objects e.g. `id UInt64, name String`",
+    scheme: "string",
+    required: false
   }
 ]} />
+
+The `awsS3` block also accepts every field of an [AWSConnection](/docs/reference/connections/aws).
 
 ### AzureBlobStorage
 
@@ -140,14 +160,14 @@ The Clickhouse scraper executes SQL queries against a Clickhouse database or clo
   }
 ]} />
 
-
+The `azureBlobStorage` block also accepts every field of an [AzureConnection](/docs/reference/connections/azure).
 
 :::info
 An instance of Clickhouse server needs to be deployed for this scraper to function.
 
 Mission Control can deploy an instance by setting `config-db.clickhouse.enabled: true` in the helm chart.
 
-An external Clickhouse server can also be used via the `clickhouseURL` parameter
+An external Clickhouse server can also be used via the `url` parameter
 :::
 
 ## Configuration Examples

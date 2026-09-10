@@ -65,6 +65,30 @@ subject:
   playbook: automation/cleanup-pods
 ```
 
+### Other resource services
+
+The same pattern applies to plugins, canaries, scrapers and topologies. Each grants permission to the service only while it acts for that resource.
+
+```yaml
+subject:
+  scraper: mc/aws-scraper
+```
+
+```yaml
+subject:
+  canary: mc/http-checks
+```
+
+```yaml
+subject:
+  topology: mc/kubernetes
+```
+
+```yaml
+subject:
+  plugin: mc/flux
+```
+
 ## Schema
 
 <Fields
@@ -92,6 +116,26 @@ subject:
     {
       field: 'playbook',
       description: '`<namespace>/<name>` of the playbook',
+      scheme: 'string',
+    },
+    {
+      field: 'plugin',
+      description: '`<namespace>/<name>` or `/<name>` of the plugin',
+      scheme: 'string',
+    },
+    {
+      field: 'canary',
+      description: '`<namespace>/<name>` of the canary',
+      scheme: 'string',
+    },
+    {
+      field: 'scraper',
+      description: '`<namespace>/<name>` of the scraper',
+      scheme: 'string',
+    },
+    {
+      field: 'topology',
+      description: '`<namespace>/<name>` of the topology',
       scheme: 'string',
     },
   ]}

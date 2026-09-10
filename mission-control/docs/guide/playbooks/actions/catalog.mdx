@@ -1,0 +1,62 @@
+---
+title: Catalog
+sidebar_custom_props:
+  icon: config-db
+
+---
+import Templating from "@site/docs/reference/playbooks/context.mdx"
+
+<!-- Source: modules/mission-control/api/v1/playbook_actions.go#CatalogAction -->
+
+# <Icon name="config-db"/> Catalog Action
+
+Catalog action creates a config item in the [catalog](/docs/guide/config-db). Use it to record the output of a playbook — an audit, a report, a review — as a first class config item that can be searched, related to other resources and notified on.
+
+The config item is attached to an existing [scraper](/docs/guide/config-db/scrapers), so it participates in that scraper's retention and change tracking.
+
+```yaml title="record-security-audit.yaml"
+apiVersion: mission-control.flanksource.com/v1
+kind: Playbook
+metadata:
+  name: record-security-audit
+spec:
+  description: Record the result of a security audit in the catalog
+  configs:
+    - types: [Kubernetes::Cluster]
+  actions:
+    - name: audit
+      exec:
+        script: ./audit.sh $(.config.name)
+    - name: Save audit
+      catalog:
+        name: 'Security audit — {{.config.name}}'
+        scraper: mission-control/audits
+        type: 'SecurityAudit::Report'
+        config_class: Report
+        config: '{{ getAction "audit" | .result.stdout }}'
+        health: healthy
+        tags:
+          cluster: '{{.config.name}}'
+```
+
+<Action rows={[
+    {field: "catalog", description: "Catalog Action", scheme: "[Catalog](#catalog)"},
+]} />
+
+## Catalog
+
+<Fields rows={[
+  {field: "name", description: "Name of the config item", scheme: "string", required: true, templatable: true},
+  {field: "scraper", description: "ID, or `namespace/name`, of the config scraper to attach the config item to", scheme: "string", required: true, templatable: true},
+  {field: "type", description: "Type of the config item e.g. `SecurityAudit::Report`", scheme: "string", required: true, templatable: true},
+  {field: "config_class", description: "Class of the config item e.g. `Report`", scheme: "string", templatable: true},
+  {field: "config", description: "JSON body of the config item", scheme: "string", templatable: true},
+  {field: "health", description: "Health of the config item", scheme: "[Health](/docs/guide/config-db/concepts/health_status)", templatable: true},
+  {field: "status", description: "Status of the config item", scheme: "string", templatable: true},
+  {field: "tags", description: "Tags of the config item", scheme: "map[string]string", templatable: true},
+  {field: "labels", description: "Labels of the config item", scheme: "map[string]string", templatable: true}
+]}/>
+
+## Templating
+
+<Templating/>

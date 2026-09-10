@@ -10,7 +10,9 @@ Tools for searching and exploring configuration items in the catalog.
 
 ## list_catalog_types
 
-List all available configuration types in the system
+List all available configuration types in the system.
+
+Call this first — knowing the available types makes every subsequent search more accurate. Results are worth caching for around 15 minutes.
 
 ### Example Usage
 
@@ -20,18 +22,24 @@ List all available configuration types in the system
 
 **Result:** Returns a list of all configuration types like `AWS::EC2::Instance`, `Kubernetes::Pod`, `Azure::VM::Instance`, etc.
 
-## catalog_search
+## search_catalog
 
-Search across the entire configuration catalog
+Search across the entire configuration catalog. Returns summaries — for the full config body, follow up with [`describe_catalog`](#describe_catalog).
 
 <Fields rows={[
-  {field: "query", scheme: "[ResourceSelector#search](/docs/reference/resource-selector#search)", description: "Search query using the supported grammar", required: true}
+  {field: "query", scheme: "[ResourceSelector#search](/docs/reference/resource-selector#search)", description: "Search query using the supported grammar", required: true},
+  {field: "limit", scheme: "number", description: "Number of items to return"},
+  {field: "select", scheme: "[]string", description: "Columns to return. Defaults to `id,name,type,health,status,description,updated_at,created_at`. Narrow this to keep responses small"}
 ]} />
 
 **Features:**
 - Supports complex filtering by type, name, namespace, labels, tags, health status, and dates
 - Wildcard matching for flexible searches
 - Date range queries with relative date math
+
+:::note Cross-agent searches
+Searches are scoped to the local agent by default. Add `agent=all` to the query to search across every agent.
+:::
 
 ### Example Usage
 
@@ -53,18 +61,39 @@ Search across the entire configuration catalog
 
 **Result:** Returns recent pods with full resource data
 
-## catalog_changes_search
+## describe_catalog
 
-Search for configuration changes across the catalog
+Return the complete record for a single config item, including its config body.
 
 <Fields rows={[
-  {field: "query", scheme: "[ResourceSelector#search](/docs/reference/resource-selector#search)", description: "Search query using the supported grammar", required: true},
-  {field: "limit", scheme: "number", description: "Maximum number of results to return"}
+  {field: "id", scheme: "string", description: "Config item ID (UUID) from `search_catalog` results", required: true}
+]} />
+
+Each described config item includes an `available_tools` field listing the tools that can act on it. Those tools accept `config_id=<id>`.
+
+### Example Usage
+
+**Prompt:** "Describe this deployment" (with config ID: `550e8400-e29b-41d4-a716-446655440000`)
+
+**Result:** Returns the full config item — its manifest, properties, labels, tags, health and the tools that can be run against it.
+
+## search_catalog_changes
+
+Search configuration change events, either globally or for a config item and its related configs.
+
+<Fields rows={[
+  {field: "query", scheme: "[ResourceSelector#search](/docs/reference/resource-selector#search)", description: "Global search query. Required unless `config_id` is given"},
+  {field: "config_id", scheme: "string", description: "Config UUID whose changes should be returned. Use instead of `query`"},
+  {field: "related", scheme: "`none` | `downstream` | `upstream` | `all`", description: "Traverse related configs. Requires `config_id`. Defaults to `none`"},
+  {field: "depth", scheme: "int", description: "Maximum related config traversal depth. Requires `config_id` and `related`. Defaults to `5`"},
+  {field: "soft", scheme: "bool", description: "Include soft relationships in the traversal. Requires `config_id` and `related`. Defaults to `false`"},
+  {field: "limit", scheme: "number", description: "Number of results to return"},
+  {field: "select", scheme: "[]string", description: "Columns to return. Avoid `config`, `details` and `diff` unless needed — they carry large JSON payloads"}
 ]} />
 
 **Features:**
 - Search by change-specific fields like severity, change type, and summary
-- Same query syntax as catalog_search with additional change-related fields
+- Same query syntax as `search_catalog` with additional change-related fields
 
 ### Example Usage
 
@@ -86,9 +115,9 @@ Search for configuration changes across the catalog
 
 **Result:** Returns the 10 most recent changes to any AWS resources including the change type, summary, and affected resources.
 
-## related_configs
+## get_related_configs
 
-Find configurations related to a specific config item
+Find configurations related to a specific config item by relationships and dependencies.
 
 <Fields rows={[
   {field: "id", scheme: "string", description: "Config item ID (UUID format)", required: true}
@@ -101,3 +130,80 @@ Find configurations related to a specific config item
 **AI Response:** "I'll find all configurations related to this EC2 instance."
 
 **Result:** Returns related resources like security groups, VPC, subnets, load balancers, and other dependent or associated AWS resources with their relationships explained.
+
+## Access tools
+
+Tools for auditing who has access to a resource and how that access has been used. See [Identity & Access](/docs/guide/audit/identity-access).
+
+### search_catalog_access_mapping
+
+Search the current access state and RBAC mappings for infrastructure resources, to audit who currently holds permissions.
+
+<Fields rows={[
+  {field: "query", scheme: "[ResourceSelector#search](/docs/reference/resource-selector#search)", description: "Search query to filter config items by name or type e.g. `type=Kubernetes::*`, `name=my-app`", required: true},
+  {field: "limit", scheme: "number", description: "Max results to return"}
+]} />
+
+Returns config item name and type, user email and type, assigned role, group name, and timestamps for last sign-in and last review.
+
+**Prompt:** "Who has access to this app?"
+
+### search_catalog_access_log
+
+Search historical sign-in and access activity for a specific config item.
+
+<Fields rows={[
+  {field: "config_id", scheme: "string", description: "Config item ID (UUID)", required: true},
+  {field: "user_id", scheme: "string", description: "External user ID (UUID) to filter by. Use `resolve_external_user` to find one by name or email"},
+  {field: "limit", scheme: "number", description: "Max results to return. Defaults to 50"}
+]} />
+
+Returns a chronological log with user name and email, MFA status, total access count, and activity timestamp.
+
+**Prompt:** "When was this resource last accessed, and was MFA used?"
+
+### search_catalog_access_reviews
+
+Search access review and certification events, to verify when permissions were last audited.
+
+<Fields rows={[
+  {field: "config_id", scheme: "string", description: "Config item ID (UUID). If omitted, searches across all configs"},
+  {field: "since", scheme: "duration", description: "How far back to search e.g. `90d`, `30d`, `24h`. Defaults to `90d`"},
+  {field: "limit", scheme: "number", description: "Max results to return. Defaults to 50"}
+]} />
+
+Returns config item details, the reviewed user and role, the review source, and the certification timestamp.
+
+**Prompt:** "Which resources haven't been access-reviewed in the last 90 days?"
+
+## Resolve tools
+
+Turn a human-readable name into the UUID that the other tools expect. All three accept partial name matches.
+
+### resolve_config
+
+Resolve a config item by ID or name to get its UUID, for use with `describe_catalog`, `search_catalog_access_log` and others.
+
+<Fields rows={[
+  {field: "query", scheme: "string", description: "Config item UUID or name to search for", required: true},
+  {field: "type", scheme: "string", description: "Config type filter e.g. `Kubernetes::Deployment`, `AWS::EC2::Instance`"},
+  {field: "limit", scheme: "number", description: "Max results to return. Defaults to 10"}
+]} />
+
+### resolve_external_user
+
+Resolve an external user by ID, name or email to get their UUID and details, for use with the access audit tools.
+
+<Fields rows={[
+  {field: "query", scheme: "string", description: "User UUID, name or email to search for", required: true},
+  {field: "limit", scheme: "number", description: "Max results to return. Defaults to 10"}
+]} />
+
+### resolve_external_group
+
+Resolve an external group by ID or name to get its UUID and details.
+
+<Fields rows={[
+  {field: "query", scheme: "string", description: "Group UUID or name to search for", required: true},
+  {field: "limit", scheme: "number", description: "Max results to return. Defaults to 10"}
+]} />

@@ -29,21 +29,30 @@ The GCP scrapers scrapes your GCP account to fetch all the resources & save them
 Either the `connection` name or the `credentials` are required (if Workload Identity is not being used)
 :::
 
-<Scraper connection="gcp" rows={[
+<Scraper connection="gcp" oneOf={["organization", "projects", "project"]} rows={[
+  {
+    field: 'organization',
+    description: 'Organization to scrape, as an organization number (`1234567890`) or a qualified name (`organizations/1234567890`). Its resource hierarchy and Security Center findings are scraped at the organization root',
+    scheme: 'string'
+  },
+  {
+    field: 'projects',
+    description: 'Narrow the scrape to these projects, as project ids (`gcp-proj-1`) or qualified names (`projects/gcp-proj-1`). Empty means every project in the organization',
+    scheme: '[]string'
+  },
   {
     field: 'project',
-    description: 'GCP Project ID',
-    scheme: 'string',
-    required: true
+    description: 'GCP Project ID. An alias for a single-entry `projects` list',
+    scheme: 'string'
   },
   {
     field: 'include',
-    description: 'GCP resources to include for scraping',
+    description: 'GCP asset types and/or feature flags to scrape. This is a strict allowlist — see [Include](#include)',
     scheme: '[]string'
   },
   {
     field: 'exclude',
-    description: 'GCP resources to exclude from scraping',
+    description: 'GCP asset types to exclude from scraping',
     scheme: '[]string'
   },
   {
@@ -51,17 +60,59 @@ Either the `connection` name or the `credentials` are required (if Workload Iden
     description: 'Query BigQuery dataset for audit logs',
     scheme: '[`AuditLogs`](#audit-logs)'
   },
+  {
+    field: 'costReporting',
+    description: 'Read the Cloud Billing export from BigQuery',
+    scheme: '[`CostReporting`](#cost-reporting)'
+  },
 ]}
 />
 
+### Include
+
+`include` is a strict allowlist. Leave it empty and everything except `AuditLogs` runs; set it and only what is listed runs. Because it covers both asset types and feature flags, narrowing one dimension turns the other off entirely:
+
+```yaml
+include: [storage.googleapis.com/Bucket]  # buckets only, NO IAM/RBAC
+include: [IAMPolicy]                      # IAM/RBAC only, NO assets
+```
+
+List both to filter assets while keeping the rest:
+
+```yaml
+include: [storage.googleapis.com/Bucket, IAMPolicy, IAMGroupMembers]
+```
+
+Asset types come from the [GCP supported asset types](https://cloud.google.com/asset-inventory/docs/supported-asset-types) list. The feature flags are:
+
+| Flag              | Description                                                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `IAMPolicy`       | RBAC access from IAM policy bindings, and the resource hierarchy (organization and folder config items), read in the same pass   |
+| `IAMGroupMembers` | Expand Google group membership via the Cloud Identity `groups.readonly` scope. Disable with `exclude: [IAMGroupMembers]`         |
+| `AuditLogs`       | BigQuery audit-log access. Opt-in: it runs only when listed here explicitly                                                     |
+
+`SecurityCenter` can be passed to `exclude` to skip Security Center findings.
+
 ### Audit Logs
 
-| Field             | Description                                                              | Scheme              |
-| ----------------- | ------------------------------------------------------------------------ | ------------------- |
-| `dataset`         | BigQuery dataset to query audit logs from (e.g., "default._AllLogs")     | `string`            |
-| `since`           | Time range to query audit logs (e.g., "24h", "7d", "30d")                | `string`            |
-| `userAgents`      | Filter user agents matching these patterns                               | `MatchExpressions`  |
-| `principalEmails` | Filter principal emails matching these patterns                          | `MatchExpressions`  |
-| `permissions`     | Filter permissions matching these patterns                               | `MatchExpressions`  |
-| `serviceNames`    | Filter service names matching these patterns                             | `MatchExpressions`  |
-| `methods`         | Filter methods matching these patterns                                   | `MatchExpressions`  |
+| Field             | Description                                                                                                                                   | Scheme              |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `dataset`         | BigQuery dataset to query audit logs from (e.g., "default._AllLogs")                                                                          | `string`            |
+| `project`         | Project holding the BigQuery dataset. Defaults to the scraped project. An organization-scoped scrape must set this to the project its aggregated log sink writes to | `string` |
+| `since`           | Time range to query audit logs (e.g., "24h", "7d", "30d"). Defaults to the last 7 days                                                        | `string`            |
+| `userAgents`      | Filter user agents matching these patterns                                                                                                    | `MatchExpressions`  |
+| `principalEmails` | Filter principal emails matching these patterns                                                                                               | `MatchExpressions`  |
+| `permissions`     | Filter permissions matching these patterns                                                                                                    | `MatchExpressions`  |
+| `serviceNames`    | Filter service names matching these patterns                                                                                                  | `MatchExpressions`  |
+| `methods`         | Filter methods matching these patterns                                                                                                        | `MatchExpressions`  |
+
+### Cost Reporting
+
+Reads the Cloud Billing export from BigQuery. This must be the **detailed** usage cost export (`gcp_billing_export_resource_v1_<BILLING_ACCOUNT_ID>`) — the standard export carries no resource column, so every charge would be attributed to its project rather than to the resource that incurred it.
+
+| Field          | Description                                                                                                                    | Scheme   |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `project`      | Project holding the billing export dataset. Defaults to the scraped project                                                    | `string` |
+| `dataset`      | Dataset holding the export table e.g. `billing_export`                                                                         | `string` |
+| `table`        | The export table e.g. `gcp_billing_export_resource_v1_01ABCD_2345EF_67890A`                                                    | `string` |
+| `lookbackDays` | How many days of the export to read on each scrape. Values of `0` or less use the 45 day default. BigQuery bills by bytes scanned, so this is the main cost control | `int` |

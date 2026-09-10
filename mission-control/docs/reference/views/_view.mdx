@@ -89,6 +89,16 @@
     field: "sections",
     description: "List of other views to render on the same page",
     scheme: "[[]ViewSection](#sections)"
+  },
+  {
+    field: "pdf",
+    description: "Rendering options used when the view is exported to PDF or HTML through a facet server",
+    scheme: "[Facet](/docs/guide/playbooks/actions/report#facet)"
+  },
+  {
+    field: "mcp",
+    description: "How this view is presented to LLM clients as an [MCP](/docs/guide/mcp) tool",
+    scheme: "[MCP](/docs/reference/playbooks#mcp)"
   }
 ]}/>
 

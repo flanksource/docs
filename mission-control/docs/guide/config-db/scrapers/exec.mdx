@@ -79,16 +79,44 @@ spec:
     field: 'setup',
     description: 'Install runtime dependencies before execution',
     scheme: '[Setup](#setup)'
+  },
+  {
+    field: 'query',
+    description: 'Export existing config items as JSON files that the script can read',
+    scheme: '[[]Query](#query)'
   }
 ]}/>
 
+## Query
+
+`query` runs a config search before the script and writes the matching config items to a JSON file, so a script can build on what has already been scraped.
+
+Each entry takes a `path` plus the fields of a [ResourceSelector](/docs/reference/resource-selector).
+
+<Fields rows={[
+  {field: 'path', scheme: 'string', description: 'File to write the query results to, relative to the script working directory', required: true},
+]}/>
+
+```yaml title="exec-query.yaml"
+exec:
+  - query:
+      - path: clusters.json
+        types:
+          - Kubernetes::Cluster
+    script: |
+      #!/usr/bin/env bash
+      jq '[.[] | {id: .id, type: "Report::Cluster", name: .name, config: .}]' clusters.json
+```
+
 ## Setup
 
-The `setup` field allows you to automatically install runtime environments before executing your script. This is useful when your script requires specific versions of Bun or Python.
+The `setup` field allows you to automatically install runtime environments before executing your script. This is useful when your script requires specific versions of Bun, Python, PowerShell or Playwright.
 
 <Fields rows={[
   {field: 'bun', scheme: '[RuntimeSetup](#runtimesetup)', description: 'Install Bun runtime'},
   {field: 'python', scheme: '[RuntimeSetup](#runtimesetup)', description: 'Install Python runtime via uv'},
+  {field: 'powershell', scheme: '[RuntimeSetup](#runtimesetup)', description: 'Install PowerShell'},
+  {field: 'playwright', scheme: '[RuntimeSetup](#runtimesetup)', description: 'Install Playwright and its browsers'},
 ]}/>
 
 ### RuntimeSetup

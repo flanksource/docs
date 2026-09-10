@@ -39,17 +39,55 @@ Each time the pipeline is run it will create a change for that configuration ite
 | `permissions`         | Enable fetching pipeline permissions                                  | [`Permissions`](#permissions)                         |          |
 | `maxAge`              | Limit pipeline run scraping to runs within this age (e.g. `7d`)       | `string`                                              |          |
 | `releases`            | Filter classic release pipelines by name or glob                      | `[]string`                                            |          |
+| `repositories`        | Filter Git repositories to scrape by name or glob                     | `[]string`                                            |          |
+| `auditLog`            | Fetch organization-level audit log entries as config changes          | [`AuditLog`](#audit-log)                              |          |
 | `properties`          | Custom templatable properties for the scraped config items.           | [`[]ConfigProperty`](/docs/reference/config-db/properties) |          |
 | `transform`           | Field to transform result                                             | [`Transform`](/docs/guide/config-db/concepts/transform)          |          |
 | `tags`                | Set custom tags on the scraped config items                           | `map[string]string`                                   |          |
 
+`maxAge` defaults to the `azuredevops.pipeline.max_age` [system property](/docs/system-properties), which itself defaults to `7d`.
 
 ### Permissions
 
-| Field       | Description                                                         | Scheme   |
-| ----------- | ------------------------------------------------------------------- | -------- |
-| `enabled`   | Enable fetching pipeline permissions                                | `bool`   |
-| `rateLimit` | How often to refresh permissions (e.g. `6h`, `24h`). Defaults to `24h` | `string` |
+| Field       | Description                                                                          | Scheme                |
+| ----------- | -------------------------------------------------------------------------------------- | --------------------- |
+| `enabled`   | Enable fetching pipeline and repository permissions                                  | `bool`                |
+| `rateLimit` | How often to refresh permissions (e.g. `6h`, `24h`). Defaults to `24h`                | `string`              |
+| `groups`    | Fetch organization-level group membership                                            | `bool`                |
+| `roles`     | Map role names to permission strings. See [Roles](#roles)                            | `map[string][]string` |
+
+#### Roles
+
+Roles map a role name to a list of permissions, each prefixed with the resource type it applies to — `Git`, `Pipeline` or `Release`. An identity is assigned a role if it has **any** of the listed permissions for that type.
+
+When left unconfigured, the `Viewer`, `Developer`, `Admin` and `Releaser` roles are used.
+
+| Type       | Permissions                                                                                                                                                                                                                   |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Git`      | `Read`, `Contribute`, `ForcePush`, `CreateBranch`, `CreateTag`, `ManageNotes`, `CreateRepository`, `DeleteRepository`, `RenameRepository`, `ManagePermissions`, `PolicyExempt`                                                 |
+| `Pipeline` | `ViewBuilds`, `EditBuildPipeline`, `DeleteBuilds`, `QueueBuilds`, `StopBuilds`, `AdministerBuildPermissions`                                                                                                                  |
+| `Release`  | `ViewReleaseDefinition`, `EditReleaseDefinition`, `DeleteReleaseDefinition`, `ManageDeployments`, `ManageReleaseApprovers`, `ManageReleases`, `ViewReleases`, `CreateReleases`, `EditReleaseEnvironment`, `DeleteReleaseEnvironment`, `AdministerReleasePermissions`, `DeleteReleases`, `ManageDefinitionReleaseApprovers` |
+
+```yaml title="azure-devops-roles.yaml"
+azureDevops:
+  - permissions:
+      enabled: true
+      groups: true
+      roles:
+        Deployer:
+          - Release:ManageDeployments
+          - Release:CreateReleases
+        Maintainer:
+          - Git:Contribute
+          - Pipeline:EditBuildPipeline
+```
+
+### Audit Log
+
+| Field        | Description                                                           | Scheme     |
+| ------------ | ----------------------------------------------------------------------- | ---------- |
+| `enabled`    | Enable fetching audit log entries                                     | `bool`     |
+| `exclusions` | Action id prefixes to exclude e.g. `AuditLog.AccessLog`               | `[]string` |
 
 :::note
 Either the connection name or the credentials (organization & personalAccessToken) are required

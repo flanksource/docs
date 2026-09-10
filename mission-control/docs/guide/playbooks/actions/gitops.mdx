@@ -65,10 +65,14 @@ Common use cases:
 ### Repository
 
 <Fields oneOf={["connection", "url"]} rows={[
-  {field: "connection", description: "Connection name to use the credentials for the git repo", scheme: "string"},
+  {field: "connection", description: "Connection name to use the credentials for the git repo. When set, `username` and `password` are ignored", scheme: "string"},
   {field: "url", description: "URL of the git repository", scheme: "string"},
+  {field: "username", description: "Username to authenticate with", scheme: "[EnvVar](/docs/reference/env-var)"},
+  {field: "password", description: "Password or access token to authenticate with", scheme: "[EnvVar](/docs/reference/env-var)"},
   {field: "base", description: "Branch to clone. Defaults to `main`", scheme: "string"},
   {field: "branch", description: "The branch to update. Defaults to base", scheme: "string"},
+  {field: "skipExisting", description: "Do not push to branches that already exist", scheme: "bool"},
+  {field: "force", description: "Overwrite history when pushing", scheme: "bool"},
   {field: "type", description: "Git repository type", scheme: "`github`, `gitlab`, `azure_devops`, `http`, `git`"}
 
 ]}/>
@@ -83,10 +87,12 @@ Common use cases:
 
 ### Pull Request
 
-| Field   | Description               | Scheme     | Required | Templatable |
-| ------- | ------------------------- | ---------- | -------- | ----------- |
-| `title` | Title of the Pull request | `string`   | `true`   | `true`      |
-| `tags`  | Tags to add to the PR     | `[]string` |          | `true`      |
+| Field                | Description                                        | Scheme     | Required | Templatable |
+| -------------------- | -------------------------------------------------- | ---------- | -------- | ----------- |
+| `title`              | Title of the Pull request                          | `string`   | `true`   | `true`      |
+| `tags`               | Tags to add to the PR                              | `[]string` |          | `true`      |
+| `autoMerge.enabled`  | Merge the pull request automatically when supported | `bool`     |          |             |
+| `autoMerge.rebase`   | Rebase instead of merging                          | `bool`     |          |             |
 
 ### Patch
 

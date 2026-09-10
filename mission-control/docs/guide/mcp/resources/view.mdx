@@ -1,0 +1,56 @@
+---
+title: View
+sidebar_custom_props:
+  icon: view-details
+---
+
+# View Resource
+
+Access a [view's](/docs/guide/views) definition by namespace and name.
+
+## URI Template
+
+`view://{namespace}/{name}`
+
+**MIME Type:** `application/json`
+
+## Description
+
+This resource returns the view's specification — its display settings, columns, panels, named queries and templating variables. Use it to understand what a view produces before running it.
+
+To run the view and get its rows, call the view's own [tool](/docs/guide/mcp/tools/view_tools) instead.
+
+## Example Usage
+
+### Sample Request
+
+**URI:** `view://mc/deployments`
+
+### Sample Response
+
+```json
+{
+  "namespace": "mc",
+  "name": "deployments",
+  "spec": {
+    "display": {
+      "title": "Deployments",
+      "icon": "kubernetes",
+      "sidebar": true
+    },
+    "columns": [
+      { "name": "name", "type": "string", "primaryKey": true },
+      { "name": "namespace", "type": "string" },
+      { "name": "health", "type": "health" },
+      { "name": "replicas", "type": "number" }
+    ],
+    "queries": {
+      "deployments": {
+        "configs": {
+          "types": ["Kubernetes::Deployment"]
+        }
+      }
+    }
+  }
+}
+```

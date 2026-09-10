@@ -43,11 +43,6 @@ import Inhibition from '../../reference/notifications/_inhibition.mdx';
     scheme: "duration"
   },
   {
-    field: "repeatGroup",
-    description: "RepeatGroup allows notifications to be grouped by certain set of keys and only send one per group within the specified repeat interval. Valid group keys: `resource_id` & `source_event`.",
-    scheme: "`[]string`"
-  },
-  {
     field: "waitFor",
     description: "The duration to delay sending a health-based notification.\n\nAfter this period, the health status is reassessed to confirm it hasn't changed, helping prevent false alarms from transient issues.",
     scheme: "duration"
@@ -100,6 +95,16 @@ import Inhibition from '../../reference/notifications/_inhibition.mdx';
     scheme: "string",
   },
   {
+    field: "to.webhook",
+    description: "Send a structured JSON payload to an HTTP endpoint.",
+    scheme: "[`Webhook`](#webhook)",
+  },
+  {
+    field: "fallback",
+    description: "Recipient to notify when the primary recipient fails. Accepts every `to` field, plus a `delay` after which a send is considered a failure.",
+    scheme: "[`Fallback`](#fallback)",
+  },
+  {
     field: "inhibitions",
     description: "Inhibitions are used to inhibit notifications based on the resource hierarchy.",
     scheme: "[`[]Inhibition`](#inhibition)",
@@ -109,6 +114,30 @@ import Inhibition from '../../reference/notifications/_inhibition.mdx';
 :::info Single Recipient
 Only one recipient can be specified
 :::
+
+### Webhook
+
+The webhook receiver accepts every field of an [HTTPConnection](/docs/guide/playbooks/actions/http#http) — `url`, `connection`, `username`, `password`, `bearer`, `oauth`, `headers`, `tls` and `awsSigV4` — plus:
+
+<Fields rows={[
+  {
+    field: "method",
+    description: "HTTP method to use. Defaults to `POST`",
+    scheme: "string"
+  }
+]}/>
+
+### Fallback
+
+<Fields rows={[
+  {
+    field: "delay",
+    description: "Wait this long before treating the primary send as a failure",
+    scheme: "duration"
+  }
+]}/>
+
+Along with `delay`, a fallback takes any one of the `to.*` recipient fields — `person`, `team`, `email`, `connection`, `url`, `properties`, `playbook` or `webhook`.
 
 ### Inhibition
 
