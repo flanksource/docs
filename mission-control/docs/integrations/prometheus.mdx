@@ -67,11 +67,24 @@ spec:
 
 Mission Control exposes Prometheus metrics for monitoring health checks, notifications, and configuration scraping.
 
+### Authentication
+
+The `/metrics` endpoint requires authentication by default. Prometheus must supply valid credentials when scraping, or you can disable the requirement:
+
+```bash title="Disable metrics authentication"
+helm install mission-control flanksource/mission-control \
+  --set metrics.auth.disabled=true
+```
+
+:::note
+Disabling authentication exposes your metrics endpoint publicly. Only use this setting in trusted network environments.
+:::
+
 ### ServiceMonitor Setup
 
 Enable Prometheus scraping via ServiceMonitor:
 
-```bash
+```bash title="Enable ServiceMonitor"
 helm install mission-control flanksource/mission-control \
   --set serviceMonitor=true
 ```
