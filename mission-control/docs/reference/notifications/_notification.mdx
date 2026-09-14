@@ -1,4 +1,5 @@
 import Inhibition from '../../reference/notifications/_inhibition.mdx';
+import OnResolved from '../../reference/notifications/_on_resolved.mdx';
 
 <Fields withTemplates="true" rows={[
   {
@@ -105,6 +106,11 @@ import Inhibition from '../../reference/notifications/_inhibition.mdx';
     scheme: "[`Fallback`](#fallback)",
   },
   {
+    field: "onResolved",
+    description: "Send a recovery update to the destinations that received the original unhealthy notification. See [Recovery](/docs/guide/notifications/concepts/recovery).",
+    scheme: "[`OnResolved`](#on-resolved)",
+  },
+  {
     field: "inhibitions",
     description: "Inhibitions are used to inhibit notifications based on the resource hierarchy.",
     scheme: "[`[]Inhibition`](#inhibition)",
@@ -138,6 +144,13 @@ The webhook receiver accepts every field of an [HTTPConnection](/docs/guide/play
 ]}/>
 
 Along with `delay`, a fallback takes any one of the `to.*` recipient fields — `person`, `team`, `email`, `connection`, `url`, `properties`, `playbook` or `webhook`.
+
+### On Resolved
+
+<OnResolved />
+
+Set `slack.reply`, `slack.reaction`, or both. A `slack` block that disables `reply` without a `reaction` fails
+validation. See [Recovery](/docs/guide/notifications/concepts/recovery) for the supported destinations.
 
 ### Inhibition
 

@@ -18,62 +18,15 @@ The config items to report on come from one of three places, which are mutually 
 - `configs` — an inline resource selector.
 - `view` — an existing [View](/docs/guide/views).
 
-```yaml title="catalog-report.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Playbook
-metadata:
-  name: catalog-report
-spec:
-  title: Catalog Report
-  category: Reporting
-  description: >-
-    Generates a catalog report for one or more root config items and uploads it
-    as an artifact.
-  parameters:
-    - name: configs
-      label: Root configs
-      description: Select one or more root config items
-      type: configs
-      required: true
-    - name: format
-      label: Format
-      type: list
-      default: html
-      properties:
-        options:
-          - label: HTML
-            value: html
-          - label: PDF
-            value: pdf
-          - label: JSON
-            value: json
-    - name: since
-      label: Time period
-      description: 'Time range for changes and access logs (e.g. 7d, 30d, 90d)'
-      type: text
-      default: 30d
-    - name: recursive
-      label: Include all descendant config items
-      type: checkbox
-      default: 'false'
-  actions:
-    - name: Generate Report
-      report:
-        # Reuse the already-resolved `configs` parameter instead of querying the selected IDs again.
-        configsFromParams: true
-        format: '{{ .params.format }}'
-        since: '{{ .params.since }}'
-        recursive: '{{ .params.recursive }}'
-        file:
-          path: report/CatalogReport.tsx
-        facet:
-          connection: connection://mission-control/facet
-        sections:
-          changes: true
-          insights: true
-          relationships: true
-          access: true
+```yaml title="catalog-report.yaml" file=<rootDir>/modules/mission-control/fixtures/playbooks/catalog-report.yaml {107-134}
 ```
+
+This example:
+
+1. Uses a `configs` parameter of type `configs` so the operator picks the root config items in the UI.
+2. Uses `configsFromParams: true` to reuse those resolved config items instead of querying the selected IDs again.
+3. Uses `file.path` and `facet.connection` to render `CatalogReport.tsx` through a facet server, and `sections` to
+   choose what the report covers.
 
 <Action rows={[
     {field: "report", description: "Report Action", scheme: "[Report](#report)"},
