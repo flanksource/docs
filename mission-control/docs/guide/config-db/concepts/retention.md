@@ -21,11 +21,11 @@ The cleanup jobs run once per day. The `staleItemAge` field controls when Config
 
 The retention rules are applied for each unique catalog item. If `changes` is specified with type `X` and count `20`, last 20 changes of `X` type would be kept for each catalog item
 
-| Field          | Description                                                        | Scheme                                     |
-| -------------- | ------------------------------------------------------------------ | ------------------------------------------ |
-| `types`        | Specify retention rules for config items                           | [`[]ConfigItem`](#config-items)            |
-| `changes`      | Specify retention rules for changes                                | [`[]Change`](#changes)                     |
-| `staleItemAge` | Config items that were last scraped after this age will be deleted | [Duration](/docs/reference/types#duration) |
+| Field              | Description                                                                                                                                | Scheme                                     |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------ |
+| `types`            | Specify retention rules for config items                                                                                                   | [`[]ConfigItem`](#config-items)            |
+| `changes`          | Specify retention rules for changes                                                                                                        | [`[]Change`](#changes)                     |
+| `staleItemAge`     | Config items that were last scraped after this age will be deleted                                                                         | [Duration](/docs/reference/types#duration) |
 | `staleAnalysisAge` | Age after which an analysis the scraper no longer observes is marked as resolved. Defaults to `48h`. Use `keep` to disable auto-resolution | [Duration](/docs/reference/types#duration) |
 
 ## Config Items

@@ -181,7 +181,7 @@ metadata:
   name: clickhouse-orders
 spec:
   clickhouse:
-    - clickhouseURL: "clickhouse://user:password@localhost:9000/ecommerce"
+    - url: "clickhouse://user:password@localhost:9000/ecommerce"
       query: |
         SELECT
           order_id,
@@ -261,7 +261,7 @@ metadata:
 spec:
   full: true
   clickhouse:
-    - clickhouseURL: "clickhouse://admin:password@localhost:9000/system"
+    - url: "clickhouse://admin:password@localhost:9000/system"
       type: Clickhouse::Instance
       id: clickhouse_iam
       transform:
@@ -330,7 +330,7 @@ spec:
   full: true
   schedule: "*/15 * * * *"
   clickhouse:
-    - clickhouseURL: "clickhouse://admin:password@localhost:9000/system"
+    - url: "clickhouse://admin:password@localhost:9000/system"
       type: Clickhouse::Database
       id: $.database
       transform:
@@ -397,7 +397,7 @@ metadata:
 spec:
   full: true
   clickhouse:
-    - clickhouseURL: "clickhouse://user:password@localhost:9000/config_db"
+    - url: "clickhouse://user:password@localhost:9000/config_db"
       type: Configuration
       id: $.config_id
       transform:
@@ -467,7 +467,7 @@ metadata:
   name: clickhouse-inventory
 spec:
   clickhouse:
-    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+    - url: "clickhouse://user:password@localhost:9000/system"
       type: Clickhouse::Database
       id: $.name
       name: $.name
@@ -481,7 +481,7 @@ spec:
         FROM system.databases
         WHERE name NOT IN ('system', 'INFORMATION_SCHEMA', 'information_schema')
 
-    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+    - url: "clickhouse://user:password@localhost:9000/system"
       type: Clickhouse::Table
       id: $.table_id
       name: $.name
@@ -523,7 +523,7 @@ metadata:
   name: clickhouse-cluster
 spec:
   clickhouse:
-    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+    - url: "clickhouse://user:password@localhost:9000/system"
       type: Clickhouse::Cluster
       id: $.cluster
       name: $.cluster
@@ -541,7 +541,7 @@ spec:
         FROM system.clusters
         GROUP BY cluster
 
-    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+    - url: "clickhouse://user:password@localhost:9000/system"
       type: Clickhouse::ReplicatedTable
       id: $.table_id
       name: $.table
@@ -587,7 +587,7 @@ metadata:
   name: clickhouse-metrics
 spec:
   clickhouse:
-    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+    - url: "clickhouse://user:password@localhost:9000/system"
       type: Clickhouse::Metrics
       id: clickhouse_metrics
       name: "ClickHouse Performance Metrics"
@@ -602,7 +602,7 @@ spec:
           (SELECT value FROM system.metrics WHERE metric = 'MemoryTracking') as memory_usage_bytes,
           (SELECT sum(value) FROM system.asynchronous_metrics WHERE metric LIKE '%CacheUsed%') as cache_used_bytes
 
-    - clickhouseURL: "clickhouse://user:password@localhost:9000/system"
+    - url: "clickhouse://user:password@localhost:9000/system"
       type: Clickhouse::DiskUsage
       id: $.name
       name: $.name

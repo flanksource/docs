@@ -78,17 +78,17 @@ spec:
 
 Config events relate to activities on config items.
 
-| Event       | Description                                  |
-| ----------- | -------------------------------------------- |
-| `created`   | When a config item is created                |
-| `updated`   | When a config item is updated                |
-| `changed`   | When a config change is recorded             |
-| `deleted`   | When a config item is deleted                |
-| `healthy`   | When a config item becomes healthy           |
-| `unhealthy` | When a config item becomes unhealthy         |
-| `degraded`  | When a config item becomes degraded          |
-| `warning`   | When a config item enters a warning state    |
-| `unknown`   | When a config item's health becomes unknown  |
+| Event       | Description                                 |
+| ----------- | ------------------------------------------- |
+| `created`   | When a config item is created               |
+| `updated`   | When a config item is updated               |
+| `changed`   | When a config change is recorded            |
+| `deleted`   | When a config item is deleted               |
+| `healthy`   | When a config item becomes healthy          |
+| `unhealthy` | When a config item becomes unhealthy        |
+| `degraded`  | When a config item becomes degraded         |
+| `warning`   | When a config item enters a warning state   |
+| `unknown`   | When a config item's health becomes unknown |
 
 ```yaml title="notify-newly-scraped-pod.yaml"
 apiVersion: mission-control.flanksource.com/v1
@@ -113,10 +113,10 @@ spec:
 
 A playbook can also run on a recurring cron schedule, without any triggering resource. Specify one or more schedules under `on.schedule`.
 
-| Field        | Description                                                                          | Scheme              | Required |
-| ------------ | ------------------------------------------------------------------------------------ | ------------------- | -------- |
-| `schedule`   | Cron expression, e.g. `0 9 * * MON` or `@every 1h`                                   | `string`            | `true`   |
-| `parameters` | Parameters passed to each run. Supports template expressions evaluated at run time   | `map[string]string` | `false`  |
+| Field        | Description                                                                        | Scheme              | Required |
+| ------------ | ---------------------------------------------------------------------------------- | ------------------- | -------- |
+| `schedule`   | Cron expression, e.g. `0 9 * * MON` or `@every 1h`                                 | `string`            | `true`   |
+| `parameters` | Parameters passed to each run. Supports template expressions evaluated at run time | `map[string]string` | `false`  |
 
 Schedules are evaluated in UTC by default. Use the `CRON_TZ` prefix to run in another timezone.
 

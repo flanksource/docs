@@ -231,7 +231,7 @@ spec:
 
 ## Best Practices
 
-- **Message Acknowledgment**: Messages are automatically acknowledged after successful processing
-- **Error Handling**: Failed message processing will be retried based on the Pub/Sub subscription settings
+- **Message Acknowledgment**: Mission Control acknowledges each message after it processes the message successfully
+- **Error Handling**: Each backend controls its own redelivery. For GCP Pub/Sub, the subscription settings decide when Mission Control retries a failed message. SQS, Kafka, NATS and RabbitMQ each use their own acknowledgement and retry controls
 - **Batch Processing**: Use `maxMessages` to control throughput and resource usage
 - **Transform Expressions**: Use CEL expressions to filter and transform messages into the desired configuration format
