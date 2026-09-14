@@ -77,6 +77,10 @@ Common use cases:
 
 ]}/>
 
+:::warning
+`force` overwrites the remote branch history. Any commits a collaborator pushed to that branch since the last clone are discarded. Leave `force` unset unless the branch belongs solely to this playbook.
+:::
+
 ### Commit Detail
 
 | Field     | Description    | Scheme   | Required | Templatable |

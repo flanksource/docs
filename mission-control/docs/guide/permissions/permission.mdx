@@ -117,7 +117,7 @@ Deny rules always override Allow rules.
     },
     {
       field: 'object.mcp',
-      description: 'Grant the global MCP object permission. Cannot be combined with any selector or scope',
+      description: 'Grant the global MCP object permission. Do not combine `object.mcp` with any selector or scope',
       scheme: 'bool',
     },
     {
@@ -131,19 +131,19 @@ Deny rules always override Allow rules.
 ### Deprecated fields
 
 :::warning Deprecated
-`agents` and `tags` are deprecated and **ignored**. Use a [Scope](./concepts/scope) with `object.scopes` instead.
+**Mission Control ignores these fields.** Use a [Scope](./concepts/scope) with `object.scopes` instead.
 :::
 
 <Fields
   rows={[
     {
       field: 'agents',
-      description: '**Deprecated and ignored.** List of agent names to restrict this permission to',
+      description: '**Mission Control ignores this field.** List of agent names to restrict this permission to',
       scheme: '`[]string`',
     },
     {
       field: 'tags',
-      description: '**Deprecated and ignored.** Key-value pairs of tags to restrict this permission to',
+      description: '**Mission Control ignores this field.** Key-value pairs of tags to restrict this permission to',
       scheme: '`map[string]string`',
     },
   ]}
@@ -161,7 +161,7 @@ Objects define the resources the permission targets. You can define Objects usin
 | `components` | Topology components |
 | `views` | Views (dashboards) |
 | `scopes` | [Scopes](./concepts/scope), which expand into the selectors they define |
-| `mcp` | The global MCP object. Cannot be combined with any of the above |
+| `mcp` | The global MCP object. Do not combine `mcp` with any of the object types above |
 
 A permission can target multiple object types. If you define multiple objects, Mission Control grants the permission only if the request matches **all** defined objects (AND condition).
 
@@ -321,37 +321,21 @@ spec:
 <details summary="Restrict by Agent (Multi-Tenancy)">
 <div>
 
-Define a [Scope](./concepts/scope) for the agent's resources, then reference it from the permission:
+Define a [Scope](./concepts/scope) that selects the agent's resources:
 
-```yaml title="dev-agent-scope.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Scope
-metadata:
-  name: dev-agent-configs
-  namespace: mc
-spec:
-  description: Configs from the dev cluster agent
-  targets:
-    - config:
-        agent: dev-cluster-agent
+```yaml title="prod-agent-configs.yaml" file=<rootDir>/modules/mission-control/fixtures/scopes/prod-agent-configs.yaml
+
 ```
 
-```yaml title="agent-restricted-permission.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Permission
-metadata:
-  name: dev-team-dev-agent
-spec:
-  description: Allow dev team to access only dev agent resources
-  subject:
-    team: developers
-  actions:
-    - read
-    - playbook:run
-  object:
-    scopes:
-      - namespace: mc
-        name: dev-agent-configs
+This scope:
+
+1. Uses `targets[].config.agent` to select config items from each production agent.
+2. Combines both targets with OR logic, so a config from either agent matches.
+
+Then reference the scope from a permission:
+
+```yaml title="user-read-scope.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/user-read-scope.yaml
+
 ```
 
 </div>
@@ -360,35 +344,18 @@ spec:
 <details summary="Restrict by Tags (Multi-Tenancy)">
 <div>
 
-```yaml title="prod-scope.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Scope
-metadata:
-  name: prod-configs
-  namespace: mc
-spec:
-  description: All production configs
-  targets:
-    - config:
-        tagSelector: environment=production
+Define a [Scope](./concepts/scope) that selects resources by tag:
+
+```yaml title="homelab-all-resources.yaml" file=<rootDir>/modules/mission-control/fixtures/scopes/homelab-all-resources.yaml
+
 ```
 
-```yaml title="tag-restricted-permission.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Permission
-metadata:
-  name: prod-readonly
-spec:
-  description: Read-only access to production resources
-  subject:
-    team: viewers
-  actions:
-    - read
-  object:
-    scopes:
-      - namespace: mc
-        name: prod-configs
-```
+This scope:
+
+1. Uses `targets[].config.tagSelector` to match config items by their tags.
+2. Accepts Kubernetes selector syntax, so it matches both the cluster and the namespace tag.
+
+Reference it from a permission the same way as the agent example above.
 
 </div>
 </details>

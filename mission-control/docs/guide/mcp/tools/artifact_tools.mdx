@@ -6,7 +6,7 @@ sidebar_custom_props:
 
 # Artifact Tools
 
-Tools for reading [artifacts](/docs/installation/artifacts) produced by playbook runs and health checks.
+Tools for reading the [artifacts](/docs/installation/artifacts) that playbook runs and health checks produce.
 
 ## read_artifact_metadata
 
@@ -22,11 +22,11 @@ Read the content of an artifact file.
 
 <Fields rows={[
   {field: "id", scheme: "string", description: "UUID of the artifact", required: true},
-  {field: "max_length", scheme: "number", description: "Maximum number of bytes to read. Defaults to 1048576 (1 MB). Larger artifacts are truncated with a note"}
+  {field: "max_length", scheme: "number", description: "Maximum number of bytes to read. Defaults to 1048576 (1 MB). The tool truncates larger artifacts and adds a note"}
 ]} />
 
 ### Example Usage
 
 **Prompt:** "What was in the log file that run produced?"
 
-**Result:** Returns the artifact's content, truncated if it exceeds `max_length`.
+**Result:** Returns the artifact's content. The tool truncates the content when it exceeds `max_length`.

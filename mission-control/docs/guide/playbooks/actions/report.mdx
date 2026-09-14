@@ -87,13 +87,13 @@ spec:
   {field: "view", description: "Reference an existing view by `namespace/name` or just `name`", scheme: "string", templatable: true},
   {field: "title", description: "Overrides the default report title", scheme: "string", templatable: true},
   {field: "format", description: "Output format", scheme: "`html` | `pdf` | `json` | `csv` | `markdown` | `slack` | `facet-html` | `facet-pdf`", templatable: true},
-  {field: "file", description: "The TSX template that renders the report. When unset, the embedded `CatalogReport.tsx` is used", scheme: "[File](#file)", templatable: true},
+  {field: "file", description: "The TSX template that renders the report. When unset, Mission Control uses the embedded `CatalogReport.tsx`", scheme: "[File](#file)", templatable: true},
   {field: "facet", description: "Rendering options for the `facet-html` and `facet-pdf` formats", scheme: "[Facet](#facet)", templatable: true},
   {field: "variables", description: "Variables passed to the view queries", scheme: "map[string]string", templatable: true},
   {field: "since", description: "Time range for changes, access logs and resolved insights e.g. `30d`. Defaults to `30d`", scheme: "duration", templatable: true},
   {field: "recursive", description: "Include all descendant config items", scheme: "bool", templatable: true},
   {field: "groupBy", description: "How descendant data is grouped. Defaults to `none`", scheme: "`none` | `merged` | `config`", templatable: true},
-  {field: "filters", description: "Filters appended to the report's own filters. Explicitly selected roots remain selected; filters only apply to recursive descendants", scheme: "[]string", templatable: true},
+  {field: "filters", description: "Filters that Mission Control appends to the report's own filters. Explicitly selected roots remain selected; filters only apply to recursive descendants", scheme: "[]string", templatable: true},
   {field: "sections", description: "Which sections to include in the report", scheme: "[Sections](#sections)", templatable: true},
   {field: "changeArtifacts", description: "Embed artifacts associated with the included config changes", scheme: "bool", templatable: true},
   {field: "expandGroups", description: "Expand group-granted access into a row per active group member", scheme: "bool", templatable: true},
@@ -101,7 +101,7 @@ spec:
 ]}/>
 
 :::note
-`recursive`, `changeArtifacts`, `expandGroups`, `audit` and every field under `sections` accept either a literal boolean or a template that renders to `true` or `false`. Actions are decoded before templates run, so `'{{ .params.recursive }}'` is valid in all of them.
+`recursive`, `changeArtifacts`, `expandGroups`, `audit` and every field under `sections` accept either a literal boolean or a template that renders to `true` or `false`. Mission Control decodes actions before it runs templates, so `'{{ .params.recursive }}'` is valid in all of them.
 :::
 
 ### Sections
