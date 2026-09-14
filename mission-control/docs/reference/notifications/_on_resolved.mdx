@@ -1,0 +1,31 @@
+<Fields rows={[
+  {
+    field: "enabled",
+    description: "Set to `true` to send a recovery update once the resource becomes healthy again. _(Default: `false`)_",
+    scheme: "bool"
+  },
+  {
+    field: "waitFor",
+    description: "How long the resource must stay continuously healthy before Mission Control sends the recovery update. _(Default: `0`)_",
+    scheme: "duration"
+  },
+  {
+    field: "template",
+    description: "Replaces the default recovery body. In addition to the usual template variables, `resource`, `recoveredAt`, `resolvedAt` and `outageDuration` are available.",
+    scheme: "GoTemplate",
+    templateEnv: [
+      {"name": "CheckEvents", "url": "/docs/reference/notifications/template_vars/checks"},
+      {"name": "ConfigEvents", "url": "/docs/reference/notifications/template_vars/config"},
+    ],
+  },
+  {
+    field: "slack.reply",
+    description: "Post the recovery update as a threaded reply to the original message. _(Default: `true`)_",
+    scheme: "bool"
+  },
+  {
+    field: "slack.reaction",
+    description: "Emoji name to add to the original message, for example `white_check_mark`. Give the name on its own, without the surrounding colons.",
+    scheme: "string"
+  }
+]}/>
