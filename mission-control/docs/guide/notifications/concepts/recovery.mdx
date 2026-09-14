@@ -15,12 +15,11 @@ Recovery is opt-in for each notification through `onResolved`.
 
 1. A health event fires and Mission Control delivers the notification as usual, applying `waitFor`, `filter`,
    silences, inhibitions and `repeatInterval`.
-2. Mission Control records the delivery — the Slack channel and message timestamp, or the email recipients, sender
-   and subject — and opens a health episode for the resource.
-3. When the resource turns healthy, the episode ends. Mission Control waits for `onResolved.waitFor` of continuous
-   health before acting, so a resource that flaps back to unhealthy does not produce a premature recovery.
-4. Mission Control posts the recovery update to the recorded destination: a threaded Slack reply, a Slack reaction, or
-   an email that replies to the original message.
+2. Mission Control remembers where that alert landed — the Slack message, or the email recipients and subject.
+3. The resource turns healthy. Mission Control waits for `onResolved.waitFor` of continuous health, so a resource that
+   flaps straight back to unhealthy produces no recovery update.
+4. Mission Control updates the original destination: a threaded Slack reply, a Slack reaction, or an email that
+   replies to the original alert.
 
 Recovery works on the delivery, not on the trigger. A healthy event does not need to appear in `spec.events`, and the
 original `filter`, silences, inhibitions and repeat limits are not applied a second time.
@@ -31,7 +30,7 @@ Only a real transition to healthy resolves an outage. Unknown health, deletion o
 stops matching the notification's `filter` all leave the outage open.
 
 A change between `warning` and `unhealthy` stays inside the same outage. A full healthy-to-unhealthy transition starts
-a new outage, which gets a conversation of its own and resets repeat suppression.
+a new outage, which gets a conversation of its own and resets `repeatInterval`.
 
 :::
 
@@ -49,7 +48,7 @@ message:
 | `fallback`, when the fallback delivery is the one that succeeded | Same as the selected transport |
 
 Grouped notifications, `to.playbook`, `to.webhook`, generic `slack://` URLs and every other Shoutrrr transport are
-rejected when the notification is validated, and again when a send is dispatched.
+rejected when the notification is validated.
 
 :::info Supported events
 `onResolved` accepts `config.healthy`, `config.warning`, `config.unhealthy`, `config.degraded`, the matching
@@ -148,50 +147,29 @@ mail settings and needs no per-notification grant.
 
 ## Retries
 
-Mission Control reconciles pending recovery updates every 15 seconds in the `NotificationRecoveries` job, and runs a
-safety sweep every 5 minutes in `NotificationRecoverySweep`.
-
-A failed recovery retries with exponential backoff — 2, 4, 8, 16, 32, 64 and 128 seconds. Set
+A failed recovery update retries with exponential backoff — 2, 4, 8, 16, 32, 64 and 128 seconds. Set
 `notification.recovery.max-retries` to change the budget; the default is 7 retries after the first attempt. Set it to
 `0` to disable retries.
 
-Once the budget runs out the delivery is marked `recovery-exhausted` and is no longer retried on its own. Raising
-`notification.recovery.max-retries` does not restart an exhausted delivery. Read
-`job_history.details.errors` for the `NotificationRecoveries` job to find the cause, which is usually a revoked
-permission, a deleted Connection or a deleted notification.
-
-:::warning Delivery is not transactional
-A transport call that times out can leave the outcome of a recovery update uncertain. Check the Slack channel or
-mailbox before retrying a delivery by hand.
-:::
+Once the budget runs out, Mission Control stops retrying that update, and raising
+`notification.recovery.max-retries` afterwards does not restart it. The cause is usually a revoked permission on the
+Connection, a deleted Connection, or a deleted notification.
 
 ## Retention
 
-Mission Control prunes resolved recovery state every hour. All of the properties below take the prefix
-`notification.recovery.`, and every duration accepts Go syntax along with the `d`, `w` and `y` units, so `720h`, `30d`
-and `4w2d` are the same value.
+Mission Control deletes recovery state once it is no longer needed. Every property below takes the prefix
+`notification.recovery.` and accepts Go duration syntax along with the `d`, `w` and `y` units, so `720h`, `30d` and
+`4w2d` are the same value.
 
 | Property | Default | Description |
 | --- | --- | --- |
-| `max-retries` | `7` | Retries after the first recovery attempt |
-| `wake.batch-size` | `20` | Deliveries scheduled per resource when it turns healthy |
-| `sweep.interval` | `5m` | How often the safety sweep runs |
-| `sweep.batch-size` | `100` | Maximum resources per sweep |
-| `sweep.budget` | `5s` | Sweep timeout |
-| `retention.interval` | `1h` | How often cleanup runs |
-| `retention.batch-size` | `500` | Maximum deletes per category per run |
-| `retention.budget` | `5s` | Cleanup transaction timeout |
-| `retention.resolved` | `720h` | Age at which resolved deliveries are deleted |
-| `retention.exhausted` | `2160h` | Age at which exhausted deliveries are deleted |
-| `retention.episodes` | `720h` | Age at which ended health episodes are deleted |
-| `retention.deleted-states` | `720h` | Grace period before a deleted resource's health state is pruned. Values under `720h` are raised to `720h` |
+| `retention.resolved` | `720h` | Age at which a delivered recovery update is deleted |
+| `retention.exhausted` | `2160h` | Age at which a recovery update that ran out of retries is deleted |
+| `retention.episodes` | `720h` | Age at which a finished outage is deleted |
+| `retention.deleted-states` | `720h` | Grace period before the health record of a deleted resource is deleted. Values below `720h` are raised to `720h` |
 
-Set a retention duration to `0` to keep that category forever. Cleanup skips active, unsent and ambiguous deliveries,
-so a delivery is only ever aged out after it is resolved or exhausted. Recovery state holds destination addresses,
-subjects and conversation IDs, so include it in your backup and privacy procedures.
-
-Mission Control reads `sweep.interval` and `retention.interval` when jobs are registered. Restart Mission Control to
-pick up a new interval; the other properties are read on each run.
+Set a duration to `0` to keep that category forever. Mission Control only deletes a recovery update after it is
+delivered or has run out of retries.
 
 ## Fields
 
