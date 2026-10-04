@@ -15,6 +15,15 @@ Mission Control provides a flexible, event-based notification system that enable
 Notifications are triggered by events. An event is a specific occurrence or change in state within the system. For example, notifications can be granular such as a health check failing or a pod crashlooping - or high level based on the health of the system as a whole.
 
 
+The following example sends an email when a pod or deployment in the `prod` cluster becomes unhealthy or enters a warning state, excluding config items named `postgres`.
+
+```yaml title="config-health-match-query.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/config-health-match-query.yaml {9}
+```
+
+The `events` field selects unhealthy and warning events. The [`matchQuery`](/docs/reference/scripting/cel#matchquery) filter narrows those events by config item type, name, and cluster tag.
+
+<details summary="Health Check Notifications">
+
 ```yaml title="check-failed.yaml"
 apiVersion: mission-control.flanksource.com/v1
 kind: Notification
@@ -29,6 +38,9 @@ spec:
 ```
 
 This notification sends an email to `alerts@acme.com` whenever a health check fails.
+
+</details>
+
 
 <Notification/>
 
@@ -62,6 +74,17 @@ Mission Control allows you to fine-tune your notification delivery by filtering 
 
 The CEL filters you define have access to the same set of variables as the templates, providing flexibility in defining your filtering criteria. These variables, representing various attributes and properties of the events, empower you to create highly targeted notifications.
 
+You can use the [`matchQuery`](/docs/reference/scripting/cel#matchquery) CEL function to match config items against a search query.
+Example:
+
+```yaml title="config.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/config-health-match-query.yaml {9}
+```
+
+In this example, the filter matches all unhealthy or warning deployments and pods in the prod cluster except for the postgres deployment.
+
+
+<details summary="Health Check Filters">
+
 To illustrate, consider a scenario where you want to receive notifications exclusively for failed HTTP checks. The following example demonstrates how to achieve this using a CEL filter:
 
 ```yaml title="filter-http.yaml"
@@ -85,14 +108,10 @@ In this example:
 - This expression evaluates to true only when the `type` attribute of the [check](/docs/reference/canary-checker/check) object is equal to `'http'`.
 - So, Mission Control only sends notifications for events that meet this condition, which alerts you when HTTP checks fail.
 
-<details summary="Sophisticated Filters">
-For a more sophisticated filter, you can also use the handy [`matchQuery`](/docs/reference/scripting/cel#matchquery) cel function that supports search query.
-Example:
+You can also use `matchQuery` to filter failed checks by type and labels. This example excludes HTTP checks and checks with the label `Expected-Fail: true`.
 
-```yaml title="config.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/config-health-match-query.yaml {9}
+```yaml title="check-label-match-query.yaml" file=<rootDir>/modules/mission-control/fixtures/notifications/check-label-match-query.yaml {8}
 ```
-
-In this example, the filter matches all unhealthy or warning deployments and pods in the prod cluster except for the postgres deployment.
 
 </details>
 
