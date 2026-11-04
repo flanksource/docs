@@ -138,7 +138,8 @@ A recovery template reads the same variables as the notification `template`, plu
 
 ## Permissions
 
-A notification that delivers through a named Connection needs read permission on that Connection during recovery, not
+A notification that delivers through a named Connection needs
+[`connection:use`](/docs/guide/permissions/roles#seeing-a-connection-versus-using-it) on that Connection during recovery, not
 only during the original send. Credentials are read again for every recovery attempt, so revoking the permission or
 deleting the Connection stops the recovery update. A missing named Connection never falls back to system SMTP.
 

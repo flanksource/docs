@@ -29,11 +29,11 @@ Give it to everyone by creating a RoleBinding from **Settings → Role Bindings*
 | Role     | `mission-control-builtin/viewer` |
 | People   | `*`                              |
 
-`*` means every person who signs in. People who sign in from now on get the Role too.
+`*` means every person who signs in to Mission Control, including people who sign in later. It doesn't include users of an [external identity provider](/docs/guide/permissions/external-identity-providers).
 
 ## 3. Let someone run playbooks
 
-Now let John run playbooks, but only on configs from the `aws` and `demo` clusters. This takes all three resources:
+Now let John run playbooks, but only on configs tagged `cluster=aws` or `cluster=demo`. Mission Control tags each Kubernetes config with its `cluster`, see [Tags](/docs/guide/config-db/concepts/tags). This takes all three kinds of object:
 
 ```yaml title="john-playbook-run.yaml" file=<rootDir>/modules/mission-control/playbook/testdata/rbac/allow-playbook.yaml
 
@@ -43,10 +43,12 @@ Reading it from the top:
 
 1. The `all-playbooks` Scope groups every playbook.
 2. The `aws-and-demo-configs` Scope groups the configs tagged `cluster=aws` or `cluster=demo`.
-3. The `john-playbook-run` Role has a rule each for running, approving and cancelling those playbooks against those configs.
+3. The `john-playbook-run` Role has a rule each for running, [approving](/docs/guide/playbooks/concepts/approval) and cancelling those playbooks against those configs.
 4. The RoleBinding gives the Role to John.
 
-Apply it with `kubectl apply -f john-playbook-run.yaml`. Running a playbook on a config also needs permission to see that config, which John already has from the `viewer` binding in step 2.
+Apply it with `kubectl apply -f john-playbook-run.yaml`, or create the same objects from **Settings**. `john@doe.com` is the email John signs in with.
+
+The objects are in the `default` namespace, but any namespace works. The namespace only groups names: a Role finds a Scope in its own namespace by its bare name, and the namespace of a RoleBinding doesn't limit what it grants. Running a playbook on a config also needs permission to see that config, which John already has from the `viewer` binding in step 2.
 
 To give the same access to a whole team instead, replace `people` with `teams` in the RoleBinding.
 
@@ -58,12 +60,14 @@ A playbook acts with its own permissions, not those of the person who runs it. S
 
 ```
 
-The RoleBinding's subject is the `http-authorized` playbook, and the Role allows `connection:use` on the `httpbin` connection. Notifications that send through a connection need a binding like this one too.
+The RoleBinding's subject is the `http-authorized` playbook, and the Role allows `connection:use` on the `httpbin` connection. The Scope is in `default` but selects a connection in `mc`: a Scope can select resources in any namespace.
+
+Notifications that send through a connection need a binding like this one too. See [Notification permissions](/docs/guide/notifications#permissions). For everything playbooks and other automation may need, see [Permissions for automation](/docs/guide/permissions/role-bindings#permissions-for-automation).
 
 ## 5. Check that it works
 
-- Each Scope, Role and RoleBinding shows a `Ready` status. `Ready=False` comes with a reason, such as a Role that names a Scope that doesn't exist.
-- The **Subjects** page under Settings shows what any person may do, and which rules allow it.
+- Each Scope, Role and RoleBinding has a `Ready` condition, which `kubectl describe` shows. `Ready=False` comes with a reason, such as a Role that names a Scope that doesn't exist.
+- The **Subjects** page under Settings shows what any person may do, and which rules allow it. Admins can open it, and so can anyone with the shipped `access-manage` Role.
 
 ## When something doesn't work
 
@@ -73,9 +77,12 @@ The RoleBinding's subject is the `http-authorized` playbook, and the Role allows
 | Someone can run a playbook, but not on a particular config | They also need to be able to see that config. Give them `read` on it, for example through `viewer`.       |
 | A notification fails to send                              | The notification needs `connection:use` on its connection. Add a RoleBinding whose subject is the notification. |
 | A playbook fails to use a connection                      | The playbook needs `connection:use` on the connection. `read` only lets it see the connection.             |
+| A playbook run can't read a config or run another playbook | The playbook itself needs `read` or `playbook:run`. Bind a Role to the playbook, not only to the person who runs it. |
 
 ## Next steps
 
 - [Scopes](/docs/guide/permissions/scopes) - group the resources you want to grant
 - [Roles](/docs/guide/permissions/roles) - describe what people may do
 - [RoleBindings](/docs/guide/permissions/role-bindings) - give Roles to people, teams and playbooks
+- [Team Mapping](/docs/guide/permissions/team-mapping) - put people in teams from your login provider
+- [Personal Access Tokens](/docs/guide/permissions/personal-access-tokens) - give scripts and AI agents limited access

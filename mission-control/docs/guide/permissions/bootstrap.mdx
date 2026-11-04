@@ -9,7 +9,9 @@ import AdminPassword from '@site/docs/partials/_admin-password.mdx'
 
 Mission Control allows nothing by default: a new user can't see or do anything until a RoleBinding grants them access. So on a fresh installation, someone has to be able to sign in and create the first RoleBindings.
 
-Mission Control solves this by shipping an **`admins` team**, already bound to the shipped `admin` and `plugin-admin` Roles. Whoever is in that team is an admin from their first sign-in. How the first people get into the team depends on how users sign in.
+Mission Control solves this by shipping an **`admins` team**, already bound to the shipped `admin` Role, and to `plugin-admin`, which lets admins run [plugin operations](/docs/reference/permissions/shipped-roles#plugin-admin). Whoever is in that team is an admin from their first sign-in.
+
+How the first people get into the team depends on how users sign in. Mission Control SaaS uses Clerk. A self-hosted installation uses Kratos, optionally with [single sign-on](/docs/installation/self-hosted/sso), unless you configured basic auth.
 
 | Authentication | First admin                                                                  |
 | -------------- | ---------------------------------------------------------------------------- |
@@ -27,16 +29,16 @@ The password comes from the `ADMIN_PASSWORD` environment variable, which the Hel
 
 Once you're signed in:
 
-1. Add the people who should be admins to the `admins` team from **Settings → Teams**.
-2. Bind Roles to everyone else. For example, bind `mission-control-builtin/viewer` to `people: ["*"]` so every user can browse the catalog, then grant narrower Roles to the teams that need more. See the [Quickstart](/docs/guide/permissions/quickstart).
+1. Add the people who should be admins to the `admins` team from **Settings → Teams**. A person appears there once they've signed in, or once you've invited them from **Settings → Users**.
+2. Give everyone else access. For example, give everyone the shipped `viewer` Role so they can browse the catalog, then grant more to the teams that need it. See the [Quickstart](/docs/guide/permissions/quickstart).
 
 If you map your identity provider's groups to teams with a [team mapper](/docs/guide/permissions/team-mapping), you can return `admins` for your admin group instead of adding people by hand. A team mapper never removes `admin@local` from the team.
 
 ## Clerk
 
-There's no `admin@local` with Clerk. Instead, your Clerk organization decides who the first admins are.
+There's no `admin@local` with Clerk. Instead, your Clerk organization decides who the first admins are. See [Getting started with SaaS](/docs/installation/saas/getting-started) for signing up and inviting your team.
 
-When a user signs in, Mission Control runs a team mapper over their Clerk session claims. Unless you configure your own with `--clerk-team-mapper`, the default mapper puts:
+When a user signs in, Mission Control runs a team mapper over their Clerk session claims. Unless a custom mapper is configured, the default mapper puts:
 
 | Clerk user                                                     | Team      |
 | -------------------------------------------------------------- | --------- |
@@ -46,22 +48,22 @@ When a user signs in, Mission Control runs a team mapper over their Clerk sessio
 
 So your Clerk organization admins are Mission Control admins as soon as they sign in, and a user who leaves the admin role in Clerk leaves the `admins` team on their next request.
 
-`viewers` isn't shipped. Until you create a team named `viewers` and bind a Role to it, such as `mission-control-builtin/viewer`, regular members of your organization can sign in but can't see anything.
+`viewers` isn't shipped. Regular members can sign in but can't see anything until you give them access. Either give everyone the `viewer` Role, as in the [Quickstart](/docs/guide/permissions/quickstart), or create a team named `viewers` and bind a Role to it.
 
-If you write your own `--clerk-team-mapper`, make sure it still returns `admins` for the people who should be admins, or no one can manage access. See [Team Mapping](/docs/guide/permissions/team-mapping).
+A custom mapper is set with Mission Control's `--clerk-team-mapper` flag. If you use one, make sure it still returns `admins` for the people who should be admins, or no one can manage access. See [Team Mapping](/docs/guide/permissions/team-mapping).
 
 ## External identity providers
 
-Users who sign in through an [external identity provider](/docs/guide/permissions/external-identity-providers) never become admins on their own. A provider can only put its users in `admins` if its `allowed` list includes that team, and the provider reports a warning when it does.
+Users who sign in through an [external identity provider](/docs/guide/permissions/external-identity-providers) never become admins on their own. A provider can only add its users to `admins` if you list `admins` among the teams it's allowed to manage, and it warns you when you do.
 
 ## Getting admin access back
 
-The `admins` team and its bindings can't be changed or deleted through the UI, the API or Kubernetes, and Mission Control recreates them on every start. A deny RoleBinding never covers RoleBindings, so it can't lock admins out either.
+The `admins` team itself and its two RoleBindings can't be renamed, changed, or deleted. Its members can be, from **Settings → Teams**. If the team or its bindings go missing, Mission Control recreates them when it starts. Even a RoleBinding with `deny: true` (see [Refusing a Role](/docs/guide/permissions/role-bindings#refusing-a-role)) can't stop admins from managing RoleBindings.
 
 If every admin is lost, for example because all members were removed from `admins`:
 
 - **Kratos and basic auth:** restart Mission Control. It adds `admin@local` back to `admins`.
-- **Clerk:** sign in as a Clerk organization admin. The team mapper adds you back to `admins` on your first request.
+- **Clerk:** sign in as a Clerk organization admin. With the default team mapper, or a custom one that returns `admins`, you're added back to `admins` on your first request.
 
 ## Next steps
 

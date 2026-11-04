@@ -5,17 +5,17 @@ sidebar_custom_props:
   icon: group
 ---
 
-A person's teams can follow their login provider through a **team mapper**: a [CEL](/docs/reference/scripting/cel) expression that returns the teams a person belongs to. You then bind Roles to those teams with [RoleBindings](/docs/guide/permissions/role-bindings#teams), so access stays readable from Mission Control's teams and RoleBindings, and the login provider only says who belongs where.
+A **team mapper** puts people into Mission Control teams automatically when they sign in, based on their groups or roles in your login provider. It's a [CEL](/docs/reference/scripting/cel) expression that returns team names. You then bind Roles to those teams with [RoleBindings](/docs/guide/permissions/role-bindings#teams). Your login provider decides who belongs to which team, and Mission Control decides what each team may do.
 
 A team mapper never grants a Role.
 
 | Login                                                                 | Setting                                                            | Input                                                   |
 | --------------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------- |
-| Kratos                                                                | `--identity-role-mapper` flag, or the `identityRoleMapper` [Helm values](/docs/reference/helm/mission-control#identity-mapper) | `identity`, the person's Kratos identity: traits and metadata |
-| Clerk                                                                 | `--clerk-team-mapper` flag                                         | `claims`, the claims of the verified Clerk session token |
+| Kratos, including [single sign-on](/docs/installation/self-hosted/sso) | The `identityRoleMapper` [Helm values](/docs/reference/helm/mission-control#identity-mapper), or the `--identity-role-mapper` flag. The name predates teams: it now returns teams | `identity`, the person's Kratos identity: traits and metadata |
+| Clerk (Mission Control SaaS)                                          | `--clerk-team-mapper` flag                                         | `claims`, the claims of the verified Clerk session token |
 | [External identity provider](/docs/guide/permissions/external-identity-providers) | `spec.identity.teams.mapper`                           | `claims`, the claims of the verified token              |
 
-The flags take the expression inline, or a file path prefixed with `file://`.
+The flags take the expression inline, or a file path prefixed with `file://`. On a Helm install, set the Helm values instead of passing a flag.
 
 ## Output
 
@@ -37,14 +37,14 @@ An object result with any field other than `teams`, such as the `role` field old
 
 ## Behavior
 
-- **When it runs.** On a person's first request after they sign in, and again whenever their claims change. An external identity provider's mapper runs on every request.
+- **When it runs.** On a person's first request after they sign in, and again whenever the identity or claims it reads change. An external identity provider's mapper runs on every request.
 - **Kept in sync.** The person's mapped teams become exactly what the mapper returns. They join new teams and leave mapped teams the mapper no longer returns. Teams an admin added them to directly are never touched.
-- **Existing teams only.** A team that doesn't exist is skipped and logged. Create the team, and bind a Role to it, before a mapper returns it.
+- **Existing teams only.** A team that doesn't exist is skipped and logged. Create the team from **Settings → Teams**, and bind a Role to it, before a mapper returns it.
 - **Without a mapper**, signing in to Kratos adds the person to no team.
-- **Invites** name teams instead of a role. The person joins them when they accept the invite.
+- **Invites.** When you invite someone from **Settings → Users**, you choose their teams. They join those teams when they accept the invite.
 
 :::warning
-A mapper that reads attributes people can change themselves, such as Kratos traits the settings flow lets them edit, lets them choose their own teams. Map from attributes only admins can set, such as Kratos `metadata_public` or the Clerk organization role.
+A mapper that reads attributes people can change themselves, such as Kratos traits the settings flow lets them edit, lets them choose their own teams. Map from attributes only admins or your identity provider can set, such as Kratos `metadata_public` or the Clerk organization role. The examples on this page read `identity.traits.groups`, which is only safe when your SSO claims mapper sets it on sign-in and people can't edit it in their Kratos profile settings.
 :::
 
 ## Clerk default

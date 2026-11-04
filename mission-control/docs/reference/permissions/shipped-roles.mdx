@@ -30,15 +30,15 @@ Mission Control ships a few Roles, the Scopes they use, and an `admins` team in 
 
 ### access-manage
 
-`access-manage` is for subjects who review and manage access without being admins, for example through the Role Bindings, Scopes and Subjects pages under Settings. It's as privileged as `admin`: a holder can bind anyone, themselves included, to any Role.
+`access-manage` is for subjects who review and manage access without being admins, for example through the Role Bindings, Scopes and Subjects pages under Settings. It reads playbooks and connections so those pages can list them when you write Scopes. It's as privileged as `admin`: a holder can bind anyone, themselves included, to any Role.
 
 ### mcp-user
 
-`mcp-user` is for personal access tokens made for AI agents. A token can connect to the MCP server only when both its owner and one of its Roles allow `mcp:use`, so bind a token for an agent to `mcp-user` and to the Roles that say what it may reach, such as `viewer`. The MCP setup flow in the UI selects it when it creates a token. See [MCP client setup](/docs/guide/mcp/client-setup).
+`mcp-user` is for personal access tokens made for AI agents. A token can connect to the MCP server only when both its owner and one of its Roles allow `mcp:use`, so bind a token for an agent to `mcp-user` and to the Roles that say what it may reach, such as `viewer`. To let the agent run playbooks, also bind a Role with [`mcp:run`](/docs/guide/mcp/tools/playbook_tools) on them, since neither `mcp-user` nor `viewer` has it. The MCP setup flow in the UI selects `mcp-user` when it creates a token. See [MCP client setup](/docs/guide/mcp/client-setup).
 
 ### plugin-admin
 
-`plugin-admin` holds a rule for every operation of every installed plugin, and Mission Control rewrites it whenever a plugin is installed, upgraded, or removed. It's kept apart from `admin`, so no plugin can change what `admin` grants. Bind an admin who should run plugin operations to both. `plugin-admin` only exists while some plugin has an operation.
+`plugin-admin` holds a rule for every operation of every installed plugin, and Mission Control rewrites it whenever a plugin is installed, upgraded, or removed. It's kept apart from `admin`, so no plugin can change what `admin` grants. Bind an admin who should run plugin operations to both. `plugin-admin` only exists while some plugin has an operation, and so does the `plugin-admins` binding of it, so neither appears on an installation without plugins.
 
 ## Shipped Scopes
 
@@ -67,7 +67,7 @@ An [external identity provider](/docs/guide/permissions/external-identity-provid
 
 ### Restoring admin access
 
-Mission Control writes the shipped team and bindings when it starts, and recreates them if they were deleted. In the worst case, such as every member removed from `admins`, a restart puts `admin@local` back in the team, and Clerk organization admins rejoin it on their next request. A deny binding can't block this, because a deny never covers RoleBindings.
+The team and its bindings can't be changed or deleted, but the team's members can. Mission Control writes the team and bindings when it starts, and recreates them if they're missing. In the worst case, such as every member removed from `admins`, a restart puts `admin@local` back in the team, and Clerk organization admins rejoin it on their next request. A deny binding can't block this, because a deny never covers RoleBindings.
 
 ## Reserved namespaces
 
