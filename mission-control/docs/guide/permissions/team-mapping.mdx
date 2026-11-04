@@ -1,0 +1,64 @@
+---
+title: Team Mapping
+sidebar_position: 9
+sidebar_custom_props:
+  icon: group
+---
+
+A person's teams can follow their login provider through a **team mapper**: a [CEL](/docs/reference/scripting/cel) expression that returns the teams a person belongs to. You then bind Roles to those teams with [RoleBindings](/docs/guide/permissions/role-bindings#teams), so access stays readable from Mission Control's teams and RoleBindings, and the login provider only says who belongs where.
+
+A team mapper never grants a Role.
+
+| Login                                                                 | Setting                                                            | Input                                                   |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------- |
+| Kratos                                                                | `--identity-role-mapper` flag, or the `identityRoleMapper` [Helm values](/docs/reference/helm/mission-control#identity-mapper) | `identity`, the person's Kratos identity: traits and metadata |
+| Clerk                                                                 | `--clerk-team-mapper` flag                                         | `claims`, the claims of the verified Clerk session token |
+| [External identity provider](/docs/guide/permissions/external-identity-providers) | `spec.identity.teams.mapper`                           | `claims`, the claims of the verified token              |
+
+The flags take the expression inline, or a file path prefixed with `file://`.
+
+## Output
+
+The expression returns a list of team names:
+
+```javascript title="clerk-team-mapper"
+claims.org_role == "org:admin" ? ["clerk-admins"] : ["clerk-members"]
+```
+
+Kratos and Clerk mappers may also return `{"teams": [...]}`. An external identity provider's mapper must return a list.
+
+An object result with any field other than `teams`, such as the `role` field older Kratos scripts returned, is logged as an error and changes nothing. Map those people into a team and bind the Role to the team instead:
+
+```javascript title="identity-role-mapper"
+{
+  "teams": "admins" in identity.traits.groups ? ["admins"] : ["viewers"]
+}
+```
+
+## Behavior
+
+- **When it runs.** On a person's first request after they sign in, and again whenever their claims change. An external identity provider's mapper runs on every request.
+- **Kept in sync.** The person's mapped teams become exactly what the mapper returns. They join new teams and leave mapped teams the mapper no longer returns. Teams an admin added them to directly are never touched.
+- **Existing teams only.** A team that doesn't exist is skipped and logged. Create the team, and bind a Role to it, before a mapper returns it.
+- **Without a mapper**, signing in to Kratos adds the person to no team.
+- **Invites** name teams instead of a role. The person joins them when they accept the invite.
+
+:::warning
+A mapper that reads attributes people can change themselves, such as Kratos traits the settings flow lets them edit, lets them choose their own teams. Map from attributes only admins can set, such as Kratos `metadata_public` or the Clerk organization role.
+:::
+
+## Clerk default
+
+When `--clerk-team-mapper` isn't set, Clerk uses this mapper. It puts organization admins in `admins`, guests in no team, and everyone else in `viewers`:
+
+```javascript title="default-clerk-team-mapper"
+{
+  "teams":
+    (has(claims.role) && claims.role == "admin") ||
+    (has(claims.org_role) && claims.org_role == "org:admin") ? ["admins"] :
+    (has(claims.org_role) && claims.org_role == "org:guest") ? [] :
+    ["viewers"]
+}
+```
+
+`admins` is the shipped team bound to `admin`. `viewers` grants nothing until you create it and bind a Role to it, for example `mission-control-builtin/viewer`.

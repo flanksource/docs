@@ -101,15 +101,15 @@ export default async function createConfigAsync() {
               from: '/docs/guide/permissions/concepts/rbac',
             },
             {
-              to: '/docs/guide/permissions/multi-tenancy',
+              to: '/docs/guide/permission',
               from: '/docs/guide/permissions/concepts/abac',
             },
             {
-              to: '/docs/guide/permissions/multi-tenancy',
+              to: '/docs/guide/permission',
               from: '/docs/guide/permissions/abac',
             },
             {
-              to: '/docs/guide/permissions/multi-tenancy',
+              to: '/docs/guide/permission',
               from: '/docs/guide/permissions/concepts/multi-tenancy',
             },
             {
@@ -120,6 +120,59 @@ export default async function createConfigAsync() {
             {
               to: '/docs/guide/permissions/roles',
               from: '/docs/guide/permissions/rbac',
+            },
+            // Permissions and PermissionGroups replaced by Scopes, Roles and RoleBindings
+            {
+              to: '/docs/guide/permissions/migrating',
+              from: ['/docs/guide/permissions/permission', '/docs/guide/permissions/groups'],
+            },
+            {
+              to: '/docs/guide/permissions/role-bindings',
+              from: '/docs/guide/permissions/subjects',
+            },
+            {
+              to: '/docs/reference/permissions/actions',
+              from: '/docs/guide/permissions/actions',
+            },
+            {
+              to: '/docs/guide/permissions/scopes',
+              from: [
+                '/docs/guide/permissions/concepts/scope',
+                '/docs/guide/permissions/examples',
+                '/docs/guide/permissions/examples/combining-selectors',
+                '/docs/guide/permissions/examples/global-resource-selectors',
+                '/docs/guide/permissions/examples/multiple-resource-types',
+                '/docs/guide/permissions/examples/targeting-by-agent',
+                '/docs/guide/permissions/examples/targeting-by-tags',
+                '/docs/guide/permissions/examples/targeting-canaries',
+                '/docs/guide/permissions/examples/targeting-specific-playbooks',
+                '/docs/guide/permissions/examples/targeting-with-wildcards',
+              ],
+            },
+            {
+              to: '/docs/guide/permission',
+              from: '/docs/guide/permissions/examples/multi-tenancy-patterns',
+            },
+            {
+              to: '/docs/reference/permissions/shipped-roles',
+              from: ['/docs/reference/rbac', '/docs/guide/permissions/shipped-roles'],
+            },
+            {
+              to: '/docs/guide/permissions/bootstrap',
+              from: '/docs/guide/permissions/bootstrapping',
+            },
+            {
+              to: '/docs/guide/permissions/personal-access-tokens',
+              from: '/docs/guide/permissions/access-tokens',
+            },
+            {
+              to: '/docs/guide/permission',
+              from: [
+                '/docs/guide/permissions/multi-tenancy',
+                '/docs/guide/permissions/managing',
+                '/docs/guide/permissions/listings',
+                '/docs/guide/permissions/identities',
+              ],
             },
           ],
 

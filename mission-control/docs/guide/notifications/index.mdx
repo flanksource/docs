@@ -136,13 +136,11 @@ This notification above triggers the playbook `mc/echo-config` whenever a config
 
 #### Permissions
 
-To enable a notification to execute a playbook, the notification must have necessary permissions. i.e.
+A notification that runs a playbook is checked as the notification, so a [RoleBinding](/docs/guide/permissions/role-bindings) must select it and grant a Role with:
 
-- `playbook:run` permission on the playbook
-- `read` permission on the resource the playbook targets
+- `playbook:run` on the playbook, with the config as the rule's `target`
+- `read` on the config the playbook runs on
 
-The example shows two notifications: `check-alerts` and `homelab-config-health-alerts` which belong to a permission group "config-notifications".
-The group has `playbook:run` permission, which both notifications inherit.
+Select the notification with `subjects.notifications`, by its namespace and name. For the example above, a RoleBinding whose subjects are `notifications: [{namespace: <namespace>, name: config-healths}]` lets that notification run playbooks the bound Role allows. The playbook's own actions are then checked as the playbook.
 
-```yaml title="permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/config-notification-group-playbook-permission.yaml
-```
+Sending through a connection also checks [`connection:use`](/docs/guide/permissions/roles#seeing-a-connection-versus-using-it) on that connection, as the notification.

@@ -506,3 +506,8 @@ Alliel
 Istio
 Kyverno
 Mickael
+allowlist
+approvers
+JWTs
+loopback
+userinfo

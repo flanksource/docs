@@ -2,77 +2,53 @@
 slug: /guide/permission
 title: Permissions
 sidebar_position: 6
-hide_title: true
 pagination_prev: guide/mcp/index
 sidebar_custom_props:
   icon: shield-user
 ---
 
-## Permissions
+import { Card, Cards } from '@site/../common/src/components/Card'
 
-Mission Control provides a flexible and strong security model that combines two powerful methods:
-Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC).
+Permissions in Mission Control decide what each person, team or automation can see and do. For example, the platform team can run remediation playbooks on staging configs, everyone can browse the catalog, and only a few people can change connections.
 
-This combined permission system helps you set up detailed access rules.
-For instance, while RBAC can control if a user can run any playbooks in the system,
-detailed ABAC rules let you define exactly which playbooks specific users or teams can access.
+Nothing is allowed by default. A new user can't see anything until you grant them access, so everything someone can do is written down in a place you can review.
 
-## Key Concepts
+## How it fits together
 
-| Concept | Description |
-|---------|-------------|
-| [Permission](./permissions/permission) | A rule that grants or denies specific actions to a subject on target objects |
-| [Subject](./permissions/subjects) | WHO or WHAT gets the permission (person, team, group, or system service) |
-| [Actions](./permissions/actions) | WHAT operations are allowed (read, write, delete, playbook:run, etc.) |
-| [Groups](./permissions/groups) | Groups of subjects for easier permission management |
+You write a grant with three custom resources, each describing one part of it:
 
-## Access Control Models
+- A [**Scope**](/docs/guide/permissions/scopes) picks out a set of resources, such as "every config tagged `env=staging`" or "the playbooks in the `monitoring` namespace".
+- A [**Role**](/docs/guide/permissions/roles) lists what's allowed on those Scopes, such as "read the staging configs" or "run the monitoring playbooks on them". Write a Role once and reuse it for as many people as you need.
+- A [**RoleBinding**](/docs/guide/permissions/role-bindings) gives a Role to people, teams, or to playbooks and notifications that act on their own. A RoleBinding can also narrow the Role to fewer resources, or refuse it outright.
 
-| Model | Description |
-|-------|-------------|
-| [Roles](./permissions/roles) | Role-Based Access Control using built-in roles (admin, editor, viewer, guest) |
-| [ABAC](./permissions/multi-tenancy) | Attribute-Based Access Control based on resource attributes (tags, namespace, name) |
-| [Multi-Tenancy](./permissions/multi-tenancy) | Agent and tag-based permissions for SaaS environments |
+A Scope or a Role on its own grants nothing. Access only starts when a RoleBinding connects a Role to someone.
 
-## Quick Example
+## Example
 
-```yaml title="permission.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Permission
-metadata:
-  name: sre-playbook-access
-spec:
-  description: Allow SRE team to run playbooks on production configs
-  subject:
-    team: sre-team
-  actions:
-    - playbook:run
-  object:
-    playbooks:
-      - name: "*"
-    configs:
-      - labels:
-          environment: production
+This manifest lets `john@doe.com` run, approve and cancel any playbook on configs tagged `cluster=aws` or `cluster=demo`:
+
+```yaml title="john-playbook-run.yaml" file=<rootDir>/modules/mission-control/playbook/testdata/rbac/allow-playbook.yaml
+
 ```
 
-:::info
-Deny rules always override Allow rules.
+- `all-playbooks` and `aws-and-demo-configs` are the Scopes: the playbooks John may use, and the configs he may run them on.
+- `john-playbook-run` is the Role. Each rule pairs an action with the playbooks it acts on (`resource`) and the configs it acts against (`target`).
+- The RoleBinding of the same name gives the Role to John.
+
+Running a playbook on a config also needs `read` on that config, so John also needs a Role that lets him read those configs.
+
+:::warning Permission and PermissionGroup are deprecated
+`Permission` and `PermissionGroup` resources no longer grant anything. Recreate them as Scopes, Roles, and RoleBindings. See [Migrating from Permissions](/docs/guide/permissions/migrating).
 :::
 
-## Getting Started
+## Next steps
 
-1. **[Quickstart](./permissions/quickstart)** - Learn about default permissions and how to enable strict mode
-2. **[Permission](./permissions/permission)** - Understand the Permission CRD schema
-3. **[Subjects](./permissions/subjects)** - Learn about different subject types
-4. **[Actions](./permissions/actions)** - Understand available permission actions
-
-## See Also
-
-- [Quickstart](./permissions/quickstart) - Get started with permissions, including Helm configuration
-- [Permission](./permissions/permission) - Permission CRD schema and examples
-- [Subjects](./permissions/subjects) - Define who gets the permission
-- [Actions](./permissions/actions) - Define what operations are allowed
-- [Permission Groups](./permissions/groups) - Group subjects for simpler permission management
-- [Roles](./permissions/roles) - Role-Based Access Control
-- [ABAC](./permissions/multi-tenancy) - Attribute-Based Access Control
-- [Multi-Tenancy](./permissions/multi-tenancy) - Agent and tag-based permissions for SaaS environments
+<Cards>
+  <Card link="/docs/guide/permissions/bootstrap" title="Bootstrap" icon="mdi:power" />
+  <Card link="/docs/guide/permissions/quickstart" title="Quickstart" icon="rocket" />
+  <Card link="/docs/guide/permissions/scopes" title="Scopes" icon="target" />
+  <Card link="/docs/guide/permissions/roles" title="Roles" icon="lock" />
+  <Card link="/docs/guide/permissions/role-bindings" title="RoleBindings" icon="user" />
+  <Card link="/docs/guide/permissions/personal-access-tokens" title="Personal Access Tokens" icon="mdi:key-variant" />
+  <Card link="/docs/guide/permissions/migrating" title="Migrating from Permissions" icon="tutorial" />
+</Cards>

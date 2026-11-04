@@ -1,0 +1,69 @@
+---
+title: Bootstrap
+sidebar_position: 0.5
+sidebar_custom_props:
+  icon: mdi:power
+---
+
+import AdminPassword from '@site/docs/partials/_admin-password.mdx'
+
+Mission Control allows nothing by default: a new user can't see or do anything until a RoleBinding grants them access. So on a fresh installation, someone has to be able to sign in and create the first RoleBindings.
+
+Mission Control solves this by shipping an **`admins` team**, already bound to the shipped `admin` and `plugin-admin` Roles. Whoever is in that team is an admin from their first sign-in. How the first people get into the team depends on how users sign in.
+
+| Authentication | First admin                                                                  |
+| -------------- | ---------------------------------------------------------------------------- |
+| Kratos         | The local `admin@local` user, which Mission Control creates in `admins`      |
+| Basic auth     | The local `admin@local` user, which Mission Control creates in `admins`      |
+| Clerk          | Your Clerk organization admins, who join `admins` when they sign in          |
+
+## Kratos and basic auth
+
+Mission Control creates a local user, `admin@local`, and adds it to the `admins` team every time it starts. Sign in as `admin@local` to set up access for everyone else.
+
+<AdminPassword/>
+
+The password comes from the `ADMIN_PASSWORD` environment variable, which the Helm chart sets from the `mission-control-admin-password` secret. The chart generates a random password when it creates the secret.
+
+Once you're signed in:
+
+1. Add the people who should be admins to the `admins` team from **Settings → Teams**.
+2. Bind Roles to everyone else. For example, bind `mission-control-builtin/viewer` to `people: ["*"]` so every user can browse the catalog, then grant narrower Roles to the teams that need more. See the [Quickstart](/docs/guide/permissions/quickstart).
+
+If you map your identity provider's groups to teams with a [team mapper](/docs/guide/permissions/team-mapping), you can return `admins` for your admin group instead of adding people by hand. A team mapper never removes `admin@local` from the team.
+
+## Clerk
+
+There's no `admin@local` with Clerk. Instead, your Clerk organization decides who the first admins are.
+
+When a user signs in, Mission Control runs a team mapper over their Clerk session claims. Unless you configure your own with `--clerk-team-mapper`, the default mapper puts:
+
+| Clerk user                                                     | Team      |
+| -------------------------------------------------------------- | --------- |
+| Organization admins (`org_role` is `org:admin`, or `role` is `admin`) | `admins`  |
+| Guests (`org_role` is `org:guest`)                             | No team   |
+| Everyone else                                                  | `viewers` |
+
+So your Clerk organization admins are Mission Control admins as soon as they sign in, and a user who leaves the admin role in Clerk leaves the `admins` team on their next request.
+
+`viewers` isn't shipped. Until you create a team named `viewers` and bind a Role to it, such as `mission-control-builtin/viewer`, regular members of your organization can sign in but can't see anything.
+
+If you write your own `--clerk-team-mapper`, make sure it still returns `admins` for the people who should be admins, or no one can manage access. See [Team Mapping](/docs/guide/permissions/team-mapping).
+
+## External identity providers
+
+Users who sign in through an [external identity provider](/docs/guide/permissions/external-identity-providers) never become admins on their own. A provider can only put its users in `admins` if its `allowed` list includes that team, and the provider reports a warning when it does.
+
+## Getting admin access back
+
+The `admins` team and its bindings can't be changed or deleted through the UI, the API or Kubernetes, and Mission Control recreates them on every start. A deny RoleBinding never covers RoleBindings, so it can't lock admins out either.
+
+If every admin is lost, for example because all members were removed from `admins`:
+
+- **Kratos and basic auth:** restart Mission Control. It adds `admin@local` back to `admins`.
+- **Clerk:** sign in as a Clerk organization admin. The team mapper adds you back to `admins` on your first request.
+
+## Next steps
+
+- [Quickstart](/docs/guide/permissions/quickstart) - grant your first Roles
+- [Shipped Roles](/docs/reference/permissions/shipped-roles) - what `admin`, `viewer` and the other shipped Roles allow

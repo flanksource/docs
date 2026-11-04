@@ -1,86 +1,83 @@
 ---
 title: Actions
 sidebar_position: 1
+sidebar_custom_props:
+  icon: cog
+description: Reference of every action a Role rule can grant, and the checks each operation makes
 ---
 
-# Permission Actions Reference
+Every [Role](/docs/guide/permissions/roles) rule names exactly one action. Actions are matched by exact name: wildcards such as `*` and `playbook:*` aren't supported.
 
-## Core Actions
+## Actions on resources
 
-These are the fundamental CRUD operations that can be applied to any resource in Mission Control.
+| Action                        | Resource                                 | Target                               | Allows                                                                                         |
+| ----------------------------- | ---------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `read`                        | Every type                               | None                                 | Opening and listing resources, and the records that belong to them                             |
+| `create`                      | Every type except check, person and view | None                                 | Creating resources. The Scope must select whole types                                         |
+| `update`                      | Every type except check, person and view | None                                 | Changing resources. The Scope must select whole types                                         |
+| `delete`                      | Every type except check, person and view | None                                 | Deleting resources. The Scope must select whole types                                         |
+| `playbook:run`                | Playbook                                 | Optional: config, component or check | Running a playbook, with no target or on a target in the rule's `target` Scope                 |
+| `playbook:approve`            | Playbook                                 | Optional: config, component or check | Approving a run that needs approval                                                            |
+| `playbook:cancel`             | Playbook                                 | Optional: config, component or check | Cancelling a run                                                                               |
+| `mcp:run`                     | Playbook                                 | None                                 | Running a playbook through MCP. A playbook only appears as an MCP tool to subjects with it     |
+| `invoke:<plugin>:<operation>` | Config                                   | None                                 | Invoking a plugin operation on a config                                                        |
+| `connection:use`              | Connection                               | None                                 | Acting with a connection's credentials, and testing the connection                             |
 
-| Action | Description |
-|--------|-------------|
-| `*` | Grants full access to all operations on the specified resource. Use with caution as this provides unrestricted access. |
-| `create,read,update,delete` | Explicit specification of all CRUD operations. Functionally equivalent to `*` but more explicit. |
-| `create` | Allows creating new instances of a resource |
-| `read` | Allows viewing and listing resources |
-| `update` | Allows modifying existing resources |
-| `delete` | Allows removing resources |
+The types are those of [Scopes](/docs/guide/permissions/scopes#what-you-can-select). Checks are only written by Mission Control itself, people are managed with `person:manage`, and views are only read through the API.
 
-## Playbook-Specific Actions
+## Actions without a resource
 
-These actions are specific to playbook resources and provide fine-grained control over playbook execution and approval workflows.
+A rule with one of these actions omits `resource` and `target`. These rules never apply through a RoleBinding with a constraint.
 
-| Action | Description |
-|--------|-------------|
-| `playbook:run` | Allows execution of playbooks |
-| `playbook:approve` | Allows approving playbook execution requests |
-| `playbook:cancel` | Allows canceling an in-flight playbook run |
+| Action                   | Allows                                                                                                                                                |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `person:manage`          | Inviting, disabling, re-enabling and deleting accounts, and changing their properties, name or email                                                  |
+| `access:review`          | Asking what any subject may do, through `/rbac/subject-access-reviews` and `/rbac/subject-access-search`                                              |
+| `mcp:use`                | Using Mission Control's [MCP](/docs/guide/mcp) server at all. Each MCP tool still checks what it touches                                              |
+| `property:manage`        | Reading private properties, and creating, changing and deleting any property                                                                          |
+| `event:read`             | Reading the event queue, and the recent events playbooks and notifications have handled                                                               |
+| `job:read`               | Reading all job history                                                                                                                               |
+| `kubernetes-proxy:read`  | Kubernetes API requests through Mission Control's proxy, as the Kubernetes user `mission-control-reader`                                              |
+| `kubernetes-proxy:write` | Kubernetes API requests through Mission Control's proxy, as the Kubernetes user `mission-control-writer`                                              |
 
-## MCP Actions
+:::warning Admin-level actions
+`person:manage` and `job:read` are as privileged as `admin`. An invite that names teams grants whatever those teams' bindings grant, and changing a person's email moves bindings from one person to another. Job details and errors mention resources the holder may not otherwise be able to read.
+:::
 
-These actions control access to the [MCP](/docs/guide/mcp) endpoint.
+- `access:review` grants reading nothing. A search only returns resources the reviewer may read, and reviewing access across a type also takes `read` on that type.
+- Properties whose names start with `public.` are readable by any signed-in subject without a rule.
+- `event:read` and `job:read` are all or nothing. A job history row about a resource is listed with `job:read`, even when the subject can't read the resource.
 
-| Action | Description |
-|--------|-------------|
-| `mcp:use` | Allows connecting to and using the MCP endpoint |
-| `mcp:run` | Allows MCP-triggered playbook runs. Intended for playbook-scoped permissions |
+### Kubernetes proxy
 
-## Plugin Actions
+The Kubernetes proxy reaches only the cluster Mission Control runs in. It authenticates as Mission Control's own service account, and impersonates `mission-control-writer` when the subject has `kubernetes-proxy:write`, otherwise `mission-control-reader` when it has `kubernetes-proxy:read`. Otherwise the request is refused. The cluster's RBAC decides what each Kubernetes user may do.
 
-Plugins contribute their own actions using two prefixes.
+Every proxy request is checked as the subject making it, so a token's limit and a deny binding apply to the next request. Downloading a kubeconfig needs either action, and its credential is an [personal access token](/docs/guide/permissions/personal-access-tokens#kubeconfig-downloads) bound to the shipped `kubernetes-proxy` Role.
 
-| Action | Description |
-|--------|-------------|
-| `invoke:<plugin>:<operation>` | Allows invoking an operation exposed by a plugin |
-| `plugin-role:<plugin>:<role>` | Grants a role that the plugin defines |
+## What each operation checks
 
-## Usage Examples
+An operation can make more than one check, and each check needs its own matching rule. A check carries only the resources its action can match: an action without a target is checked on the resource alone.
 
-### Basic Configuration Access
-```yaml
-apiVersion: mission-control.flanksource.com/v1
-kind: Permission
-metadata:
-  name: dev-team-config-access
-spec:
-  subject:
-    team: developers
-  object:
-    configs:
-      - namespace: dev
-      - namespace: staging
-  actions: 
-    - "playbook:run"
-    - "playbook:approve"
-    - "create,read,update,delete"
-```
+| Operation                                                    | Check                                                                    | Resource                         | Target                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------ | -------------------------------- | ----------------------- |
+| Run playbook P with no resource                              | `playbook:run`                                                           | P                                | None                    |
+| Run playbook P on resource X                                 | `playbook:run`, then `read`                                              | P, then X                        | X, then none            |
+| Run playbook P through MCP                                   | `mcp:run`, then the checks of the run                                    | P                                | None                    |
+| Approve or cancel run R                                      | `playbook:approve` or `playbook:cancel`, then `read` if R had a resource | R's playbook, then R's resource  | R's resource, then none |
+| Invoke a plugin operation on config C                        | `invoke:<plugin>:<operation>`, then `read`                               | C, then C                        | None                    |
+| Open resource X                                              | `read`                                                                   | X                                | None                    |
+| Open view V, or read its rows or panels                      | `read`                                                                   | V                                | None                    |
+| Connect to the MCP server                                    | `mcp:use`                                                                | None                             | None                    |
+| Review what a subject may do                                 | `access:review`                                                          | None                             | None                    |
+| Read private properties, or create, change or delete a property | `property:manage`                                                     | None                             | None                    |
+| Read the event queue or recent events                        | `event:read`                                                             | None                             | None                    |
+| Read job history                                             | `job:read`                                                               | None                             | None                    |
+| Send a request through the Kubernetes proxy                  | `kubernetes-proxy:write`, else `kubernetes-proxy:read`                   | None                             | None                    |
+| Download a kubeconfig                                        | `kubernetes-proxy:write` or `kubernetes-proxy:read`                      | None                             | None                    |
+| Use connection C, for example to send a notification         | `connection:use`                                                         | C                                | None                    |
+| Test connection C                                            | `connection:use`                                                         | C                                | None                    |
+| Create, change or delete a resource of type T                | `create`, `update` or `delete`                                           | Every resource of T              | None                    |
 
-### Approval Workflow
-```yaml
-apiVersion: mission-control.flanksource.com/v1
-kind: Permission
-metadata:
-  name: lead-approval-permission
-spec:
-  subject:
-    team: team-leads
-  object:
-    playbooks:
-      - tags:
-          environment: production
-  actions: 
-    - "read"
-    - "playbook:approve"
-```
+Each check is made as the subject performing the operation: the caller or, when there's no caller, the resource doing the work. A plugin's connection lookups are checked as the plugin.
+
+Approving or cancelling a run checks `read` on its resource for the same reason running it does: the run, its parameters and its results are only readable with that resource.

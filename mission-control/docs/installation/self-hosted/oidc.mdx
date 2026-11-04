@@ -21,7 +21,7 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
     * Add an allowed redirect URI of `https://<ingress>/api/.ory/self-service/methods/oidc/callback/microsoft` where `<ingress>` is the `global.ui.host` value specified during setup
     * Token Configuration
       * Add the email optional claim
-      * Add a `groups claim` if you want to map Azure AD Group Membership to roles in Mission Control
+      * Add a `groups claim` if you want to map Azure AD Group Membership to teams in Mission Control
     * Certificates & Secrets
       * Create a new `client secret`
 
@@ -73,8 +73,8 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
     ```
     <p/>
 
-5. Optionally, create a cel expression to map identities from the OIDC provider to a mission control role & team.
-    The following script maps all Azure users in the `SRE` group to the `admin` role and everyone else to the `viewer` role.
+5. Optionally, create a CEL expression to map identities from the OIDC provider into Mission Control teams.
+    The following script puts all Azure users in the `sre` group in the shipped `admins` team, and everyone else in a `viewers` team.
 
     ```yaml
     apiVersion: v1
@@ -84,12 +84,13 @@ See [Providers](https://www.ory.sh/docs/kratos/social-signin/overview) more deta
     data:
       script: >
         {
-          "role": "sre" in identity.traits.groups ?  "admin":  "viewer"
-        }.toJSON()
+          "teams": "sre" in identity.traits.groups ? ["admins"] : ["viewers"]
+        }
     ```
     <p/>
 
-    See [Identity Mapper Schema](/docs/reference/helm/mission-control#identity-mapper) & [RBAC](/docs/reference/rbac)
+    The `admins` team is bound to the `admin` Role. Create the `viewers` team and bind a Role to it, such as `mission-control-builtin/viewer`.
+    See [Identity Mapper Schema](/docs/reference/helm/mission-control#identity-mapper) & [Team Mapping](/docs/guide/permissions/team-mapping)
 
 6. Supply the identity mapper script to mission control.
 

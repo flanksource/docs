@@ -1,0 +1,89 @@
+---
+title: Roles
+sidebar_position: 3
+sidebar_custom_props:
+  icon: lock
+---
+
+A Role describes a job someone does, as a list of things they're allowed to do. "Staging operator" might mean reading the staging configs and running the monitoring playbooks on them. "Auditor" might mean reading Scopes, Roles, and RoleBindings.
+
+Each item in that list is a **rule**. A rule pairs one action, such as `read` or `playbook:run`, with the [Scope](/docs/guide/permissions/scopes) of resources it applies to.
+
+A Role doesn't give anyone anything by itself. You write it once, then give it to people, teams or playbooks with a [RoleBinding](/docs/guide/permissions/role-bindings). The same Role can be bound as many times as you like.
+
+## A first Role
+
+This Role has a single rule: read every config in the `john-catalog-read` Scope.
+
+```yaml title="john-catalog-read.yaml" file=<rootDir>/modules/mission-control/playbook/testdata/rbac/allow-config-read.yaml
+
+```
+
+The manifest has three parts:
+
+1. A Scope that selects every config.
+2. A Role with one rule, `read`, on that Scope.
+3. A RoleBinding that gives the Role to `john@doe.com`.
+
+## Running playbooks: resource and target
+
+Some actions involve two resources. When you run a playbook on a config, the playbook is what you act **on**, and the config is what you act **against**. A rule names each of them:
+
+- `resource` is the Scope of playbooks that may be run.
+- `target` is the Scope of configs, components or checks they may run on.
+
+```yaml title="john-retry-echo-run.yaml" file=<rootDir>/modules/mission-control/playbook/testdata/rbac/allow-retry-playbook.yaml
+
+```
+
+This Role lets John run, approve and cancel the `retry-echo` playbook on any config. Each action needs its own rule, which is why there are three.
+
+A few things to keep in mind when granting playbooks:
+
+- **Running a playbook on a config also needs `read` on that config.** A run works with the data of the config, so whoever starts it must be able to see the config. Give John a separate `read` rule, or bind a Role such as `viewer`.
+- **A rule without a `target` only covers playbooks that run on nothing**, such as one that creates a namespace. To let a playbook run on configs, the rule needs a `target`.
+- **Keep each pairing in its own rule.** A rule pairs its playbooks only with its own targets. If `echo` may run on staging and `restart-pod` only on production, write two rules, so neither playbook can run on the other's configs.
+
+## Common actions
+
+| Action                                                | Lets someone                                                               |
+| ----------------------------------------------------- | -------------------------------------------------------------------------- |
+| `read`                                                | See resources, in listings and when opening them                           |
+| `create`, `update`, `delete`                          | Create, change or delete resources of a type                               |
+| `playbook:run`, `playbook:approve`, `playbook:cancel` | Run playbooks, approve runs that need approval, and cancel runs            |
+| `connection:use`                                      | Act with a connection's credentials, for example to send a notification   |
+| `mcp:use`                                             | Connect to Mission Control's MCP server                                    |
+
+The [Actions reference](/docs/reference/permissions/actions) lists every action, including the plugin actions and the few that act on Mission Control itself, such as `person:manage` for managing users.
+
+### Seeing a connection versus using it
+
+Being able to see a connection and being able to use its credentials are different permissions:
+
+- `read` lets someone see a connection's name, type and settings. Credentials are always hidden.
+- `connection:use` lets someone, or something, act with those credentials.
+
+This matters most for playbooks and notifications. A notification that sends to Slack needs `connection:use` on the Slack connection. A person who only needs to choose a connection in the UI needs `read`.
+
+### Writing is granted for a whole type
+
+`create`, `update` and `delete` are always granted for every resource of a type. Their Scope must select the whole type, such as `mission-control-builtin/all-configs`. You can let someone edit all playbooks, but not only some of them.
+
+## Combining Roles
+
+A person can be bound to several Roles, and they can do everything any of them allows. Order doesn't matter, and adding a Role never takes access away.
+
+So you can build up access from small Roles. Instead of one large "platform engineer" Role, you might bind three: `viewer`, a Role to run the monitoring playbooks, and a Role to use the alerting connections.
+
+To take access away from someone regardless of what else they hold, use a [deny RoleBinding](/docs/guide/permissions/role-bindings#refusing-a-role).
+
+## Tips
+
+- **Start from the shipped Roles.** `viewer` already reads the catalog, topology, health checks, playbooks and views. Bind it first, then write Roles only for what people need beyond that. See [Shipped Roles](/docs/reference/permissions/shipped-roles).
+- **Name rules after what they allow**, such as `read-staging` or `run-monitoring`. The names appear in status messages and access reviews.
+- **Keep Roles small.** If one rule of a Role breaks, for example because its Scope was deleted, the whole Role stops working until it's fixed, and its status shows `Ready=False` with the reason.
+- **Reference Scopes in other namespaces** with `namespace/name`, such as `mission-control-builtin/all-configs`. A bare name refers to a Scope in the Role's own namespace.
+
+## Next steps
+
+Give your Role to someone with a [RoleBinding](/docs/guide/permissions/role-bindings).

@@ -8,7 +8,7 @@ Mission Control configuration is managed through Kubernetes Custom Resource Defi
 
     <Screenshot img="/img/download-kubeconfig.png" size="400px"/>
 
-The access token provided has role-based permissions limited to either [mission-control-reader](https://github.com/flanksource/mission-control-chart/blob/main/chart/templates/rbac.yaml#L130-L143) or [mission-control-writer](https://github.com/flanksource/mission-control-chart/blob/main/chart/templates/rbac.yaml#L145C1-L169C17), based on your selected role. Use this `kubeconfig` file to interact with your Mission Control SaaS instance via `kubectl`.
+Downloading the file needs the [`kubernetes-proxy:read` or `kubernetes-proxy:write`](/docs/reference/permissions/actions#kubernetes-proxy) action. Its personal access token is bound to the shipped `kubernetes-proxy` Role, so it can only use Mission Control's Kubernetes proxy. The proxy acts as [mission-control-writer](https://github.com/flanksource/mission-control-chart/blob/main/chart/templates/rbac.yaml#L145C1-L169C17) when you have `kubernetes-proxy:write`, and as [mission-control-reader](https://github.com/flanksource/mission-control-chart/blob/main/chart/templates/rbac.yaml#L130-L143) when you only have `kubernetes-proxy:read`. Use this `kubeconfig` file to interact with your Mission Control SaaS instance via `kubectl`.
 
 :::tip Production
 For production environments, it is recommended to use GitOps tools like Argo CD or Flux to manage configurations rather than applying them directly with kubectl. Use the kubeconfig file to configure your GitOps tool to target the Mission Control SaaS instance.
