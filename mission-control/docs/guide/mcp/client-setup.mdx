@@ -37,7 +37,7 @@ The MCP server URL uses one of these formats:
 Mission Control supports two MCP authentication flows:
 
 - OAuth: Use an MCP client that supports OAuth for remote MCP servers.
-- Access token: Create a Mission Control access token and add it to your MCP client configuration.
+- Personal access token: Create a Mission Control personal access token and add it to your MCP client configuration.
 
 <Tabs groupId="mcp-auth" queryString>
 <TabItem value="oauth" label="OAuth" default>
@@ -54,7 +54,7 @@ Clients that do not support CIMD fall back to Dynamic Client Registration (DCR) 
 
 The client discovers the authorization server, registers with CIMD or DCR, and opens a browser for you to sign in. On the consent screen, check the client name and redirect address before you allow access.
 
-The authenticating user needs the `mcp:use` permission.
+The authenticating user needs the [`mcp:use`](/docs/reference/permissions/actions#actions-without-a-resource) action.
 
 ### Claude Code
 
@@ -120,15 +120,15 @@ The **Add custom connector** dialog creates a remote MCP connector.
 Mission Control tools appear in Claude Desktop after the OAuth flow completes.
 
 </TabItem>
-<TabItem value="access-token" label="Access Token">
+<TabItem value="access-token" label="Personal Access Token">
 
-## Access token
+## Personal access token
 
-Use this approach when your MCP client does not support OAuth, or when you want to pass a Mission Control access token in the client configuration.
+Use this approach when your MCP client does not support OAuth, or when you want to pass a Mission Control personal access token in the client configuration.
 
-### Create an access token
+### Create a personal access token
 
-Use the Setup MCP flow to create an access token with MCP permissions.
+Use the Setup MCP flow to create a personal access token with MCP permissions. The flow binds the token to the shipped [`mcp-user`](/docs/reference/permissions/shipped-roles#mcp-user) Role, next to the Roles that say what it may reach, such as `viewer`. A token can only reach the MCP server when both you and one of its Roles allow `mcp:use`.
 
 1. In Mission Control, open the user menu and select **Setup MCP**.
 
@@ -143,7 +143,7 @@ Use the Setup MCP flow to create an access token with MCP permissions.
 <Screenshot img="/img/mcp-copy-token.png" size="600px" alt="Use token" />
 
 :::info
-Some MCP clients use the access token as a bearer token. Other MCP clients use Basic authentication with username `token` and password `<token value>`.
+Some MCP clients use the personal access token as a bearer token. Other MCP clients use Basic authentication with username `token` and password `<token value>`.
 
 When you use the `Authorization: Basic <base64_token>` header, encode `token:<token_value>` as the `base64_token` value.
 :::
@@ -432,7 +432,7 @@ ws.on('open', () => {
 
 2. **Authentication Failed**
    - Verify token is valid and not expired
-   - Ensure the user or token has the `mcp:use` permission
+   - Ensure the user has the `mcp:use` action, and the token is bound to a Role with `mcp:use`, such as `mcp-user`
    - Check if Basic prefix is included
 
 3. **Tools Not Appearing**

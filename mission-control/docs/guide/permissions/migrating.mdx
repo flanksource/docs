@@ -1,0 +1,49 @@
+---
+title: Migrating from Permissions
+sidebar_position: 13
+sidebar_custom_props:
+  icon: tutorial
+---
+
+`Permission` and `PermissionGroup` are deprecated and grant nothing. Scopes, Roles and RoleBindings replace them, and built-in roles are gone. Recreate what you had before relying on the upgraded installation.
+
+## What happens to existing objects
+
+- A Permission or PermissionGroup, whether a Kubernetes resource or a row in the database, doesn't allow or deny anything, in checks, listings or the access summary.
+- A Permission or PermissionGroup applied through Kubernetes is marked `Ready=False` with reason `Deprecated`, and nothing of it is stored. Deleting one deletes the row it was stored as, if any.
+- Existing rows are kept, so you can see what they granted and recreate it. They can't be created or changed. Reading them needs `read` on `roleBinding`, and deleting them needs `delete` on `roleBinding`.
+- The built-in `editor` and `guest` roles no longer exist. `admin` and `viewer` are now [shipped Roles](/docs/reference/permissions/shipped-roles) that grant nothing until a RoleBinding binds them.
+- A person who used to get a role by signing in gets nothing until a RoleBinding selects them or their team.
+- The playbook `spec.permissions` field grants nothing. Bind a Role with `playbook:run` instead.
+- The permissive defaults are gone. Playbooks, notifications, scrapers, canaries and topologies no longer read connections, configs or components without a RoleBinding that selects them.
+
+## Map old concepts to new ones
+
+| Before                                          | Now                                                                                                                                                                  |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Permission.spec.subject`                       | `RoleBinding.spec.subjects`: `people`, `teams`, `playbooks`, `notifications`, `scrapers`, `canaries`, `topologies` or `plugins`                                       |
+| `subject.person: "Jane Doe"`                    | `people: [jane@example.com]`. An entry is an email, never a name                                                                                                     |
+| `subject.notification: monitoring/alerts`       | `notifications: [{namespace: monitoring, name: alerts}]`                                                                                                             |
+| `PermissionGroup` and `subject.group`           | A team for people, or a list of resource subjects on the RoleBinding                                                                                                 |
+| `Permission.spec.object`, `agents`, Scope references | A [Scope](/docs/guide/permissions/scopes). Use the `agent` selector field for agent-based permissions                                                           |
+| `Permission.spec.actions`                       | One [Role](/docs/guide/permissions/roles) rule per action                                                                                                            |
+| `actions: ["*"]` or `create,read,update,delete` | Bind `mission-control-builtin/admin`, or write one rule per action                                                                                                   |
+| `playbook:*`                                    | Separate rules for `playbook:run`, `playbook:approve` and `playbook:cancel`. Patterns aren't supported                                                               |
+| `read` on a connection, to use it               | `connection:use`. `read` now only shows a connection, without its credentials                                                                                        |
+| `plugin-role:<plugin>:<role>`                   | `invoke:<plugin>:<operation>` rules, or the shipped `plugin-admin` Role                                                                                              |
+| `deny: true` on a Permission                    | A RoleBinding with `deny: true`. See [Refusing a Role](/docs/guide/permissions/role-bindings#refusing-a-role)                                                                              |
+| The `admin` role                                | Membership of the shipped `admins` team, or a RoleBinding to `mission-control-builtin/admin`                                                                         |
+| The `viewer` role                               | A RoleBinding to `mission-control-builtin/viewer`                                                                                                                    |
+| The `editor` role                               | A Role of your own with the `create`, `update` and `delete` rules editors need                                                                                       |
+| Identity mapper `role` output                   | Map people into teams with a [team mapper](/docs/guide/permissions/team-mapping), and bind Roles to the teams                                                        |
+| The `system` PermissionGroup                    | Bindings that select each playbook, notification or scraper by namespace and name. There's no system subject                                                         |
+
+## Steps
+
+1. List the existing rows from the `permissions` and `permission_groups` tables, as a subject with `read` on `roleBinding`, and collect your Permission manifests from Git.
+2. Create a Scope for each set of resources the Permissions selected.
+3. Create Roles for each set of actions. Keep Roles small and group rules by the Scopes they share.
+4. Create RoleBindings that bind each Role to the people, teams and resources that held the Permission. For playbooks and notifications that use connections, bind a Role with `connection:use`.
+5. Check that every new object is `Ready=True`, and that constrained bindings report `AllRulesApply=True`.
+6. Use the Subjects page under Settings to confirm what each subject may do.
+7. Delete the old Permission and PermissionGroup resources.

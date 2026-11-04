@@ -189,7 +189,15 @@ spec:
 
 ## Permissions
 
-To use a connection, a principal needs the `read` permission on the connection resource.
+Reading a connection and using it are different actions:
 
-```yaml title="connection-permission.yaml" file=<rootDir>/modules/mission-control/fixtures/permissions/playbook-connection-read.yaml
+- `read` lets a subject list and open a connection, without its credentials, which are always masked.
+- `connection:use` lets a subject act with its credentials: a notification sending through it, a playbook or plugin calling it, or a test of the connection.
+
+Mission Control checks `connection:use` as the subject doing the work, such as the playbook or notification, not the person who started it. This manifest lets the `mc/http-authorized` playbook use the `mc/httpbin` connection:
+
+```yaml title="connection-permission.yaml" file=<rootDir>/modules/mission-control/playbook/testdata/rbac/allow-playbook-connection.yaml
+
 ```
+
+See [Seeing a connection versus using it](/docs/guide/permissions/roles#seeing-a-connection-versus-using-it).

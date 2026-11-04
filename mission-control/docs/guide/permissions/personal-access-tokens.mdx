@@ -1,0 +1,83 @@
+---
+title: Personal Access Tokens
+sidebar_position: 7
+sidebar_custom_props:
+  icon: mdi:key-variant
+---
+
+A personal access token is a long-lived credential for clients that aren't a browser, such as scripts, CI and MCP clients. A token is a credential, not an identity. A request made with your token is checked as you, recorded as yours, and limited further by the Roles you created the token with.
+
+## Creating a token
+
+You can create, list and delete your own tokens without any grant, from **Settings → Tokens**, the API, or the `auth token` CLI command. Every token needs at least one Role, chosen when you create it:
+
+| Field        | Description                                                                                                                     |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| `name`       | Unique among your tokens                                                                                                        |
+| `expiry`     | How long the token is valid. Defaults to 90 days through the API, configurable with the `access_token.default_expiry` property, and 4 hours with the `auth token` CLI command |
+| `auto_renew` | Extends the expiry by 30 days whenever the token is used within its last 15 days                                                |
+| `roles`      | The Roles that limit the token, each with a `namespace` and a `name`, such as `mission-control-builtin` and `viewer`. Required |
+
+Send these as JSON in a `POST /auth/create_token` request. The `auth token` CLI command takes each Role as `--role namespace/name`, such as `--role mission-control-builtin/viewer`, and rejects a bare name, because a token has no namespace to resolve one in.
+
+The token is shown once, when it's created. Mission Control stores only a hash of it.
+
+- A token created through the API or the UI is usable as soon as it's returned. One created with the CLI can take a few seconds.
+- A request made with a token can't create, list or delete tokens, whatever its Roles.
+- Users of an external identity provider can't create tokens.
+- No one can create, change or delete a token for another person.
+
+## Using a token
+
+Send the token as `Authorization: Bearer <token>`, or with basic authentication as the user `token` and the token as the password.
+
+## How a token is limited
+
+A token may do what its owner may do, and only what a rule of one of its Roles also matches.
+
+For example, Alice may read, change and delete every config, run playbooks and read connections. With a token bound to `mission-control-builtin/viewer`, she can read configs, playbooks and components, but can't run a playbook, delete a config or read a connection. Her own rules allow each of them, but no rule of `viewer` does.
+
+- **A limit, not a grant.** Each check passes only when the owner's rules allow it and a rule of the token's Roles also matches it. A listing returns the rows both allow.
+- **Any Role.** A token's Roles needn't be bound to anyone else, and you can pick any Role by namespace and name, even one you can't read.
+- **Every check of an operation.** A token meant to run a playbook on a config also needs a Role with `read` on the config.
+- **Live.** Every check uses the owner's current grants. When the owner loses an action, every token of theirs loses it on the next request.
+- **Fixed Roles.** A token's Roles can't change after it's created. To change what a token may do, create a new one.
+- **A token meant to do everything its owner may** is bound to `admin` and `plugin-admin`.
+- **A token whose Roles are all missing or invalid** still signs in, but every check made with it fails.
+- **The owner's deny bindings apply** to every request made with the token.
+
+:::note
+A token can be bound to a Role with rules its owner doesn't hold. Those rules do nothing until the owner gains matching grants, and then take effect for the token. Mission Control doesn't warn about this.
+:::
+
+### Token bindings
+
+Each Role a token is created with becomes a RoleBinding that selects the token, created and deleted in the same transaction as the token. Token bindings live in the reserved `mission-control-access-tokens` namespace, are named `token-<token id>-<hash>`, and name their Role as `namespace/name`.
+
+- Neither a custom resource nor the RoleBinding API can select a token, and both are refused in that namespace, so no one can change another person's token.
+- A token binding never sets `deny`.
+- Your token list shows each token's Roles and whether each binding is `Ready`. The validation message is shown only when you may read the Role.
+- The Role Bindings page and the RoleBinding API leave token bindings out unless you ask for them, for example with `include=access-tokens`.
+
+## Lifetime
+
+| Event      | Effect                                                                                                                    |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Expiry     | A person's token expires after its `expiry`. An agent's token expires after 365 days                                      |
+| Deletion   | Revokes the token at once. The next request with it gets `401 Unauthorized`, and its bindings are deleted with it         |
+| Clean-up   | Expired tokens are deleted on a schedule                                                                                  |
+
+## Agent tokens
+
+An agent's token is created with the agent, by a subject with `create` on `agent`, and has no Roles. It isn't limited on requests made as its agent, which may only push its own data and fetch what's assigned to it.
+
+| Operation                     | Needs              |
+| ----------------------------- | ------------------ |
+| List an agent's tokens        | `read` on `agent`  |
+| Rotate or revoke an agent's token | `update` on `agent` |
+
+Listing an agent's tokens shows when each was created and expires, never the token itself.
+
+## Kubeconfig downloads
+
+Downloading a kubeconfig for Mission Control's Kubernetes proxy needs `kubernetes-proxy:read` or `kubernetes-proxy:write`. Its credential is a new personal access token of yours, bound to the shipped `kubernetes-proxy` Role, so it can only use the proxy, and no more there than you may. See [Kubernetes proxy](/docs/reference/permissions/actions#kubernetes-proxy).

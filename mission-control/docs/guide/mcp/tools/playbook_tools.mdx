@@ -31,7 +31,7 @@ The tool's input schema is generated from the playbook's [parameters](/docs/refe
 Use the [`mcp` field](/docs/reference/playbooks#mcp) on the playbook spec to control the tool's title, description, tags and behavioural hints. The playbook's `category` and MCP tags are appended to the tool description so the model can find it.
 
 :::info Permissions
-A playbook only appears as a tool when the caller holds the `mcp:run` [action](/docs/guide/permissions/actions) on it.
+A playbook only appears as a tool when the caller holds the `mcp:run` [action](/docs/reference/permissions/actions) on it. Running it also makes the checks of an ordinary run, such as `read` on its target.
 :::
 
 ### Example Usage

@@ -26,6 +26,6 @@ For detailed setup instructions for popular MCP clients, see [Client Setup](./cl
 
 Mission Control authenticates MCP clients with OAuth. Compatible clients use Client ID Metadata Documents (CIMD). Clients that do not support CIMD fall back to Dynamic Client Registration (DCR).
 
-You can also use an access token in the `Authorization` header. The authenticating user or token needs the `mcp:use` permission.
+You can also use a personal access token in the `Authorization` header. The authenticating user needs the [`mcp:use`](/docs/reference/permissions/actions#actions-without-a-resource) action. A request made with a personal access token also needs a token Role that allows `mcp:use`, such as the shipped [`mcp-user`](/docs/reference/permissions/shipped-roles#mcp-user) Role.
 
 <DocCardList />

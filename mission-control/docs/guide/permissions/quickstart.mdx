@@ -5,230 +5,77 @@ sidebar_custom_props:
   icon: rocket
 ---
 
-This guide helps you get started with Mission Control permissions, including understanding default permissions and how to customize them.
+This guide sets up access on a new Mission Control installation. By the end, everyone in your organization can browse the catalog, one person can run playbooks on some configs, and a playbook can call an API through a connection.
 
-## Default Behavior
+Remember that Mission Control allows nothing by default. Until you complete step 2, everyone except admins signs in to an empty screen.
 
-By default, Mission Control operates in a permissive mode where:
+## 1. Sign in as an admin
 
-- **Editors** can run any playbook and read any connection
-- **Notifications** can run any playbook and read configs/components
-- **System services** (canaries, scrapers, playbooks, topologies, notifications) can read all connections, configs, and components
+On a new installation, only the members of the shipped `admins` team can manage access:
 
-This default behavior is suitable for small teams or development environments where fine-grained access control isn't required.
+- With Kratos or basic auth, sign in as `admin@local`.
+- With Clerk, sign in as an admin of your Clerk organization.
 
-## Enabling Strict Permissions
+[Bootstrap](/docs/guide/permissions/bootstrap) explains where the password comes from, and how to add more admins.
 
-For production environments or multi-tenant setups, you should enable strict permission mode via Helm values:
+## 2. Let everyone browse
 
-```yaml title="values.yaml"
-permissions:
-  # Require explicit permissions to run playbooks
-  playbooks: true
-  # Require explicit permissions to read connections
-  connections: true
-  # Require explicit permissions for system services to read configs
-  configs: true
-  # Require explicit permissions for system services to read components
-  components: true
+Mission Control ships a `viewer` Role that reads the catalog, topology, health checks, playbooks, and views. It can't see connections, notifications or anything that configures access, so it's safe to give to everyone.
+
+Give it to everyone by creating a RoleBinding from **Settings → Role Bindings**:
+
+| Field    | Value                            |
+| -------- | -------------------------------- |
+| Role     | `mission-control-builtin/viewer` |
+| People   | `*`                              |
+
+`*` means every person who signs in. People who sign in from now on get the Role too.
+
+## 3. Let someone run playbooks
+
+Now let John run playbooks, but only on configs from the `aws` and `demo` clusters. This takes all three resources:
+
+```yaml title="john-playbook-run.yaml" file=<rootDir>/modules/mission-control/playbook/testdata/rbac/allow-playbook.yaml
+
 ```
 
-When these are set to `true`, the default permissive rules are disabled and you must explicitly grant permissions.
+Reading it from the top:
 
-## Helm Values Reference
+1. The `all-playbooks` Scope groups every playbook.
+2. The `aws-and-demo-configs` Scope groups the configs tagged `cluster=aws` or `cluster=demo`.
+3. The `john-playbook-run` Role has a rule each for running, approving and cancelling those playbooks against those configs.
+4. The RoleBinding gives the Role to John.
 
-| Value | Default | Description |
-|-------|---------|-------------|
-| `permissions.playbooks` | `false` | When `true`, users need explicit permission to run playbooks |
-| `permissions.connections` | `false` | When `true`, users need explicit permission to read connections |
-| `permissions.configs` | `false` | When `true`, system services need explicit permission to read configs |
-| `permissions.components` | `false` | When `true`, system services need explicit permission to read components |
+Apply it with `kubectl apply -f john-playbook-run.yaml`. Running a playbook on a config also needs permission to see that config, which John already has from the `viewer` binding in step 2.
 
-## Default Permission Groups
+To give the same access to a whole team instead, replace `people` with `teams` in the RoleBinding.
 
-Mission Control creates a `system` permission group that includes all system services:
+## 4. Let a playbook use a connection
 
-```yaml
-apiVersion: mission-control.flanksource.com/v1
-kind: PermissionGroup
-metadata:
-  name: system
-spec:
-  canaries:
-    - name: "*"
-  scrapers:
-    - name: "*"
-  playbooks:
-    - name: "*"
-  topologies:
-    - name: "*"
-  notifications:
-    - name: "*"
+A playbook acts with its own permissions, not those of the person who runs it. So when a playbook calls an HTTP endpoint through a connection, give the playbook itself permission to use the connection:
+
+```yaml title="playbook-connection.yaml" file=<rootDir>/modules/mission-control/playbook/testdata/rbac/allow-playbook-connection.yaml
+
 ```
 
-This group is used to grant system-wide permissions to Mission Control's internal services.
+The RoleBinding's subject is the `http-authorized` playbook, and the Role allows `connection:use` on the `httpbin` connection. Notifications that send through a connection need a binding like this one too.
 
-## Quick Setup Examples
+## 5. Check that it works
 
-### Allow a Team to Run Playbooks
+- Each Scope, Role and RoleBinding shows a `Ready` status. `Ready=False` comes with a reason, such as a Role that names a Scope that doesn't exist.
+- The **Subjects** page under Settings shows what any person may do, and which rules allow it.
 
-```yaml title="team-playbook-permission.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Permission
-metadata:
-  name: sre-team-playbooks
-spec:
-  description: Allow SRE team to run all playbooks
-  subject:
-    team: sre-team
-  actions:
-    - playbook:run
-  object:
-    playbooks:
-      - name: "*"
-```
+## When something doesn't work
 
-### Allow a Notification to Use a Connection
+| What you see                                              | Why, and what to do                                                                                        |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Someone signs in and sees nothing                         | No RoleBinding gives them a Role. Bind `viewer` to them, their team, or `*`.                               |
+| Someone can run a playbook, but not on a particular config | They also need to be able to see that config. Give them `read` on it, for example through `viewer`.       |
+| A notification fails to send                              | The notification needs `connection:use` on its connection. Add a RoleBinding whose subject is the notification. |
+| A playbook fails to use a connection                      | The playbook needs `connection:use` on the connection. `read` only lets it see the connection.             |
 
-When strict permissions are enabled, notifications need explicit access to connections:
+## Next steps
 
-```yaml title="notification-connection-permission.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Permission
-metadata:
-  name: alert-notification-slack
-spec:
-  description: Allow alert notification to use Slack connection
-  subject:
-    notification: monitoring/critical-alerts
-  actions:
-    - read
-  object:
-    connections:
-      - name: slack-alerts
-```
-
-### Allow a Playbook to Access AWS Connection
-
-```yaml title="playbook-aws-permission.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Permission
-metadata:
-  name: cleanup-playbook-aws
-spec:
-  description: Allow cleanup playbook to use AWS connection
-  subject:
-    playbook: automation/cleanup-resources
-  actions:
-    - read
-  object:
-    connections:
-      - name: aws-production
-```
-
-### Restrict Access by Namespace
-
-```yaml title="namespace-permission.yaml"
-apiVersion: mission-control.flanksource.com/v1
-kind: Permission
-metadata:
-  name: dev-team-dev-namespace
-spec:
-  description: Allow dev team to run playbooks only in dev namespace
-  subject:
-    team: developers
-  actions:
-    - playbook:run
-  object:
-    playbooks:
-      - namespace: development
-    configs:
-      - namespace: development
-```
-
-## Migration from Permissive to Strict Mode
-
-When transitioning to strict permissions:
-
-1. **Audit current usage** - Review which users, teams, and services are running playbooks and accessing connections
-
-2. **Create permissions incrementally** - Start by creating permissions for the most critical workflows:
-   ```yaml
-   # First, ensure system services still work
-   apiVersion: mission-control.flanksource.com/v1
-   kind: Permission
-   metadata:
-     name: system-connections
-   spec:
-     subject:
-       group: system
-     actions:
-       - read
-     object:
-       connections:
-         - name: "*"
-   ```
-
-3. **Enable strict mode one feature at a time**:
-   ```yaml title="values.yaml"
-   permissions:
-     playbooks: true    # Enable first
-     connections: false  # Enable after playbook permissions are tested
-     configs: false
-     components: false
-   ```
-
-4. **Test thoroughly** - Verify that notifications, playbooks, and scrapers continue to function
-
-5. **Monitor for permission errors** - Check logs for access denied errors and create missing permissions
-
-## Common Issues
-
-### Notification Fails to Send
-
-If notifications fail after enabling strict permissions, ensure the notification has read access to any connections it uses:
-
-```yaml
-apiVersion: mission-control.flanksource.com/v1
-kind: Permission
-metadata:
-  name: notification-connection-access
-spec:
-  subject:
-    notification: <namespace>/<notification-name>
-  actions:
-    - read
-  object:
-    connections:
-      - name: <connection-name>
-```
-
-### Playbook Cannot Access Resources
-
-If a playbook fails with permission errors, grant it access to required connections and configs:
-
-```yaml
-apiVersion: mission-control.flanksource.com/v1
-kind: Permission
-metadata:
-  name: playbook-resource-access
-spec:
-  subject:
-    playbook: <namespace>/<playbook-name>
-  actions:
-    - read
-  object:
-    connections:
-      - name: <connection-name>
-    configs:
-      - name: "*"
-```
-
-## Next Steps
-
-- [Roles](./roles) - Understand built-in roles
-- [Subjects](./subjects) - Learn about different subject types
-- [Actions](./actions) - Understand available permission actions
-- [Permission Groups](./groups) - Group subjects for easier management
-- [Multi-Tenancy](./multi-tenancy) - Set up agent and tag-based permissions for SaaS environments
-- [ABAC](./multi-tenancy) - Attribute-based access control for fine-grained permissions
+- [Scopes](/docs/guide/permissions/scopes) - group the resources you want to grant
+- [Roles](/docs/guide/permissions/roles) - describe what people may do
+- [RoleBindings](/docs/guide/permissions/role-bindings) - give Roles to people, teams and playbooks

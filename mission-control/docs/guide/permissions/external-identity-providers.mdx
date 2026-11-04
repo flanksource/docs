@@ -1,0 +1,136 @@
+---
+title: External Identity Providers
+sidebar_position: 8
+sidebar_custom_props:
+  icon: mdi:badge-account-outline
+---
+
+An `ExternalIdentityProvider` lets an external application send its own users to Mission Control. The application signs a JWT for the user with its own issuer, and Mission Control accepts it as a bearer token, as a person in the teams the provider maps them into.
+
+A provider answers three questions, in this order:
+
+| Question                              | Answered by                      | Result                                    |
+| ------------------------------------- | -------------------------------- | ----------------------------------------- |
+| Is this token real, and is it for us? | [Verification](#verification)    | The token is accepted or rejected         |
+| Who is this person?                   | [`identity`](#identity)          | A person                                  |
+| Which teams are they in?              | [`identity.teams`](#teams)       | Team memberships, limited to an allowlist |
+
+What the person may do is never decided by the provider. It comes from [RoleBindings](/docs/guide/permissions/role-bindings) that select the person or their teams, and RoleBindings never read claims.
+
+ExternalIdentityProviders are managed through Kubernetes only.
+
+## Fields
+
+| Field                        | Required | Default                                         | Description                                                                         |
+| ---------------------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `spec.issuer`                | Yes      |                                                 | Must exactly match the token's `iss` claim. Can't be changed                        |
+| `spec.audience`              | Yes      |                                                 | Must be one of the token's `aud` claims, usually the Mission Control URL            |
+| `spec.jwksURL`               | No       | `jwks_uri` of the issuer's OpenID configuration | Where the issuer's signing keys are fetched from                                    |
+| `spec.algorithms`            | No       | `RS256`, `ES256`                                | Signature algorithms accepted                                                       |
+| `spec.maxTokenAge`           | No       | `5m`                                            | Longest lifetime (`exp - iat`) a token may have                                     |
+| `spec.identity.username`     | Yes      |                                                 | [CEL](/docs/reference/scripting/cel) expression returning the person's username   |
+| `spec.identity.name`         | No       | The username                                    | CEL expression returning the person's display name                                  |
+| `spec.identity.email`        | No       |                                                 | CEL expression returning an email, shown on the person only                         |
+| `spec.identity.teams.mapper` | Yes, with `teams` |                                        | CEL expression returning a list of team names                                       |
+| `spec.identity.teams.allowed` | Yes, with `teams` |                                       | The only teams this provider may add anyone to. At least one                        |
+| `spec.disabled`              | No       | `false`                                         | Rejects every token from this provider, without removing it                         |
+
+For example, a provider named `oipa`, with issuer `https://auth.oipa.example.com`, `identity.username` set to `claims.user.id`, and a team mapper with `allowed: [acme-operator, acme-viewer]`, signs in a token whose `user.id` claim is `u-4821` as the person `oipa:u-4821`.
+
+## Authentication
+
+Mission Control reads a bearer token's `iss` claim before verifying it:
+
+- If no provider has that issuer, Mission Control's other authenticators try the token as usual.
+- If a provider has that issuer, the token must pass that provider's verification. A token that fails gets `401 Unauthorized` and isn't passed to other authenticators.
+
+A provider whose `issuer` is one that Mission Control's own authentication uses, such as its embedded OIDC issuer or the configured Clerk issuer, is `Ready=False` and claims no tokens.
+
+There's no session or cookie: the application sends a token on every request.
+
+## Verification
+
+A token is accepted only when these checks pass:
+
+| Check     | Rule                                                                       |
+| --------- | -------------------------------------------------------------------------- |
+| Provider  | The provider isn't `disabled`                                              |
+| Signature | Signed with one of `algorithms`, by a key from the provider's signing keys |
+| `iss`     | Exactly `issuer`                                                           |
+| `aud`     | Contains `audience`                                                        |
+| `exp`     | Present, and not in the past                                               |
+| `iat`     | Present, and not in the future                                             |
+| `nbf`     | If present, not in the future                                              |
+| Lifetime  | `exp - iat` is at most `maxTokenAge`                                       |
+| Username  | `identity.username` returns a non-empty string without `*`                 |
+
+Time checks tolerate 30 seconds of clock skew. Mission Control can't revoke these tokens, so `maxTokenAge` keeps them short-lived. An application that needs longer sessions issues new tokens, not longer ones.
+
+Every token that passes these checks is trusted, so the issuer must be dedicated to your application. Shared issuers that sign tokens for many unrelated applications, such as Google, GitHub Actions or multi-tenant Microsoft Entra, aren't supported.
+
+### Algorithms and keys
+
+- Only asymmetric algorithms are accepted: `RS256`, `RS384`, `RS512`, `PS256`, `PS384`, `PS512`, `ES256`, `ES384`, `ES512` and `EdDSA`. `HS256` and `none` are rejected.
+- Signing keys are fetched from `jwksURL` or, without one, from the `jwks_uri` of `<issuer>/.well-known/openid-configuration`.
+- `issuer`, `jwksURL` and a discovered `jwks_uri` must use `https`. Plain `http` is only allowed for `localhost` and loopback addresses. Redirects are followed at most 5 times, and never from https to http.
+- Keys are fetched on the provider's first token, cached, and refreshed in the background. If they can't be fetched, the request fails with `500 Internal Server Error`, and the next token retries.
+
+## Identity
+
+Each user of a provider is a person, created on their first request. Their key is `<provider name>:<username>`, such as `oipa:u-4821`, and that's how [RoleBindings](/docs/guide/permissions/role-bindings#people) name them.
+
+`username`, `name` and `email` are CEL expressions over `claims`, which holds every claim of the verified token:
+
+```javascript title="identity.name"
+[claims.user.first_name,
+ has(claims.user.middle_name) ? claims.user.middle_name : "",
+ claims.user.last_name].filter(s, s != "").join(" ")
+```
+
+- If `username` fails, or doesn't return a non-empty string, the token is rejected with `401`. Convert a numeric user ID with `string()`.
+- A username containing `*` is rejected, so it can't be confused with `<provider>:*`.
+- If `name` or `email` fails, the person keeps the stored value.
+- The username must be unique and stable in your application. A username that changes makes a new person, without the old one's teams or bindings.
+- These people are separate from Mission Control's own users. An external user whose email is `alice@example.com` gets none of the Mission Control user `alice@example.com`'s access. Mission Control never verifies, matches on, or sends anything to that email.
+- Wherever a person is shown, such as in approvals and team members, a provider's person is shown with their key.
+
+## Teams
+
+The person's teams from the provider become exactly the teams the mapper returns that are also in `allowed`:
+
+```javascript title="identity.teams.mapper"
+has(claims.org.roles) ? claims.org.roles.map(r, "acme-" + r) : []
+```
+
+- **Allowed teams only.** A returned team that isn't in `allowed` is skipped and logged. Including the shipped `admins` team in `allowed` makes the provider report a warning, since your application's claims then decide who is a Mission Control admin.
+- **Existing teams only.** The provider never creates teams. An `allowed` entry naming a team that doesn't exist is reported in the provider's status.
+- **Kept in sync both ways.** The person joins returned teams and leaves teams this provider added them to that it no longer returns.
+- **Only its own memberships.** The provider never removes a membership an admin added. A membership an admin removes comes back on the next sync if the mapper still returns it. To keep a user out of a team, change `allowed` or the claims.
+- **On every request.** The mapper runs before each request is checked, and memberships are written only when they change.
+- **A failing mapper refuses the request** with `401` and a body saying that team mapping failed. The stored memberships stay as they are.
+- **Removing a team from `allowed`**, or removing `identity.teams`, removes this provider's memberships of those teams at once.
+- **Without `teams`**, the provider adds no one to any team. Its users get only what RoleBindings grant them by name.
+
+Memberships count everywhere a membership counts, including team approvers and access reviews, until the person's next request changes them.
+
+## How changes take effect
+
+| Change                                        | Effect                                                                                                                                  |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| A valid provider is applied                   | Takes effect at once                                                                                                                    |
+| A provider becomes invalid                    | `Ready=False`. Its tokens get `401`, and its people keep their memberships                                                              |
+| `disabled: true`                              | Its tokens get `401`, and everything else is kept                                                                                       |
+| `issuer` changes                              | Rejected. A provider for another issuer is a new provider                                                                               |
+| Teams are added to `allowed`, or the mapper changes | Apply on each person's next request                                                                                               |
+| The provider is deleted                       | Its people are retired: kept for audit, removed from every team, and never signed in as again. RoleBindings that name `<provider>:...` stay, and select the users of whichever provider later has that name |
+
+`issuer` must be unique across all providers, and `name` across all namespaces. Of providers that share either, the one with the earliest creation timestamp wins and the others are `Ready=False`.
+
+A provider is rejected when its `issuer` uses `http`, it uses `HS256`, `maxTokenAge` isn't a positive duration, `audience` or `identity.username` is missing, or a team mapper has no `allowed`. A provider whose CEL expression doesn't compile is stored as `Ready=False` with reason `Invalid`.
+
+## Limitations
+
+- Only JWT bearer tokens are supported: no opaque tokens, introspection or userinfo lookups.
+- Tokens can't be revoked before they expire. Disable or delete the provider to cut off all its users at once.
+- Access belongs to the person, not the token. Your application can't give the same user different access per request, such as by switching a tenant claim between tokens.
+- Users of a provider can't create [personal access tokens](/docs/guide/permissions/personal-access-tokens).

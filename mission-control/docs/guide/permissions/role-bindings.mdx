@@ -1,0 +1,96 @@
+---
+title: RoleBindings
+sidebar_position: 4
+sidebar_custom_props:
+  icon: user
+---
+
+A RoleBinding is where access actually starts. It takes a [Role](/docs/guide/permissions/roles) and gives it to someone: a person, a team, or a playbook or notification that acts on its own.
+
+Think of the Role as a job description and the RoleBinding as handing that job to people. You write a Role such as "staging operator" once, then create a RoleBinding for each team that does that job.
+
+## A first RoleBinding
+
+This is the RoleBinding Mission Control ships to make every member of the `admins` team an admin:
+
+```yaml title="admins-binding.yaml" file=<rootDir>/modules/mission-control/rbac/shipped/shipped.yaml#L682-L692
+
+```
+
+It has two parts every RoleBinding has:
+
+- `role` names the Role to give. A Role in another namespace is written as `namespace/name`, such as `mission-control-builtin/viewer`.
+- `subjects` says who gets it.
+
+## Who you can give a Role to
+
+### People
+
+List people by email under `subjects.people`. This binding gives John read access to every config:
+
+```yaml title="john-catalog-read.yaml" file=<rootDir>/modules/mission-control/playbook/testdata/rbac/allow-config-read.yaml
+
+```
+
+Use `*` on its own to give a Role to everyone who signs in, which is the usual way to give everyone the shipped `viewer` Role. Users of an [external identity provider](/docs/guide/permissions/external-identity-providers) are named as `<provider>:<username>`, and `*` doesn't include them.
+
+### Teams
+
+List team names under `subjects.teams`. Everyone in the team gets the Role, so access follows team membership: add someone to the team and they get it, remove them and they lose it.
+
+Binding Roles to teams, rather than to individual people, is usually easier to manage. You can also keep team membership in sync with your login provider's groups. See [Team Mapping](/docs/guide/permissions/team-mapping).
+
+### Playbooks, notifications and other automation
+
+A playbook acts with its own permissions, not the permissions of the person who started it. The same goes for a notification when it's sent. So when a playbook needs to call an API through a connection, the playbook itself needs a RoleBinding:
+
+```yaml title="playbook-connection.yaml" file=<rootDir>/modules/mission-control/playbook/testdata/rbac/allow-playbook-connection.yaml
+
+```
+
+Here the subject is the `http-authorized` playbook in the `mc` namespace, and the Role lets it use the `httpbin` connection. Whoever runs the playbook doesn't need access to the connection themselves.
+
+You can select `playbooks`, `notifications`, `scrapers`, `canaries`, `topologies` and `plugins` this way, each by `namespace` and `name`. Use `name: "*"` to match every name, or leave out `name` to match everything in a namespace.
+
+:::warning
+A binding by namespace also covers resources created there later. Anyone who can create a playbook in that namespace gets a playbook with the binding's access. For sensitive Roles, such as using a connection that pages people, bind each playbook or notification by its exact namespace and name.
+:::
+
+## Limiting a Role to some resources
+
+Sometimes several teams do the same job on different resources. Team A operates tenant A's configs, and team B operates tenant B's. Instead of writing a Role per team, write one Role and add a **constraint** to each team's RoleBinding.
+
+A constraint names a Scope, and narrows every rule of the Role to the resources in that Scope:
+
+| Constraint field              | Narrows                                                             |
+| ----------------------------- | ------------------------------------------------------------------- |
+| `constraint.resource.scopeRef` | What the rules act on, such as the configs that may be read, or the playbooks that may be run |
+| `constraint.target.scopeRef`   | What playbooks may be run against                                   |
+
+For example, bind a shared `production-operator` Role to team A with both fields set to a `tenant-a` Scope. Team A can then read, and run playbooks on, only the production configs that are also in `tenant-a`. Team B's binding does the same with `tenant-b`.
+
+Some tips for constraints:
+
+- **Set both `resource` and `target`** when the Role runs playbooks. Running a playbook on a config also needs `read` on that config, and a `read` rule is only narrowed by `resource`.
+- **Check `AllRulesApply`.** A constraint can't narrow every kind of rule. For example, creating and deleting are always granted for a whole type. Those rules are left out of the binding rather than granted in full, and the binding's `AllRulesApply` status names each one. If a team gets less than you expected, look there first.
+- **To narrow rules differently, use separate Roles.** A constraint applies to the whole Role.
+
+## Refusing a Role
+
+Set `deny: true` on a RoleBinding to refuse its Role instead of granting it. A deny wins over everything else, including `admin`. For example, a deny binding of a `read-secrets` Role to the `contractors` team keeps contractors from reading those configs, even if someone later binds them to a broader Role by mistake.
+
+Use deny bindings as a safety net, not as the main way of controlling access. Because nothing is allowed by default, the simplest way to keep something from someone is not to grant it. Keep these limits in mind:
+
+- **A broken deny binding denies nothing.** If its Role or Scope is missing, the binding shows `Ready=False` and has no effect. Check its status after you create it.
+- **A deny only blocks actions, not the data itself.** Denying `read` on some configs doesn't remove them from a view that shows them, or stop a playbook the person may run from reading them. Deny the view as well.
+- **A deny can't lock admins out.** Deny bindings never cover RoleBindings, so an admin can always delete one.
+
+## Checking a RoleBinding
+
+Every RoleBinding has a `Ready` status. `Ready=False` means it isn't granting anything yet, for example because its Role doesn't exist. It starts working as soon as the problem is fixed, so you can create a RoleBinding before its Role.
+
+To see what someone can actually do, open the **Subjects** page under Settings. It explains which rules match a given person and action.
+
+:::warning
+Anyone who can create or change RoleBindings can give anyone, themselves included, any Role. Only let people you'd trust as admins write Scopes, Roles and RoleBindings, in the UI or in Kubernetes. The namespace a RoleBinding lives in doesn't limit what it can grant.
+:::

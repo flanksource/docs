@@ -103,32 +103,32 @@ spec:
 
 ## Permissions
 
-Playbook permissions control who can perform various actions on playbooks.
+[Roles](/docs/guide/permissions/roles) control who may run, approve and cancel playbooks. This manifest lets `john@doe.com` run, approve and cancel any playbook on configs tagged `cluster=aws` or `cluster=demo`:
 
-```yaml
+```yaml title="john-playbook-run.yaml" file=<rootDir>/modules/mission-control/playbook/testdata/rbac/allow-playbook.yaml
+
 ```
 
-### Required Permissions
+### Required permissions
 
-To run a playbook, a principal (user, team, or service account) needs:
-1. The `playbook:run` permission on the playbook
-2. A `read` permission on the resource the playbook targets
+To run a playbook on a resource, a subject needs:
 
-For example, to run a playbook that scales a Kubernetes deployment, the principal needs:
-- `playbook:run` permission on the scaling playbook
-- `read` permission on the target Kubernetes deployment resource
+1. `playbook:run` on the playbook, with the resource in the rule's `target` Scope
+2. `read` on the resource
 
-### Permission Types
+A rule without a `target` only covers runs with no resource. Approving or cancelling a run needs `playbook:approve` or `playbook:cancel`, and `read` on the run's resource.
 
-| Permission | Description |
-|------------|-------------|
-| `playbook:run` | Run a playbook |
-| `playbook:approve` | Approve a playbook run |
-| `playbook:cancel` | Cancel a running playbook |
+| Action             | Description               |
+| ------------------ | ------------------------- |
+| `playbook:run`     | Run a playbook            |
+| `playbook:approve` | Approve a playbook run    |
+| `playbook:cancel`  | Cancel a running playbook |
+| `mcp:run`          | Run a playbook through MCP |
 
-### Permission Inheritance
+### Who a run acts as
 
 :::info
-When a playbook triggers another playbook, the permissions are evaluated using the playbook's identity, not the original user who initiated the first playbook.
-This means the triggering playbook must have permission to run the target playbook and to read the resources.
+A run's actions are checked as its playbook, not as the person who started it. A playbook that no RoleBinding selects can't read a config, use a connection or run another playbook. When a playbook triggers another playbook, the first playbook needs `playbook:run` on the second and `read` on its target.
 :::
+
+Whoever may run a playbook may have it act with the playbook's grants, through the parameters they pass too.

@@ -1,0 +1,88 @@
+---
+title: Scopes
+sidebar_position: 2
+sidebar_custom_props:
+  icon: target
+---
+
+A Scope is a named group of resources, such as "the staging configs", "every playbook in the `monitoring` namespace" or "everything pushed by the production agent". You give the group a name once, then use that name in Roles whenever you want to talk about those resources.
+
+A Scope only says _which_ resources. It doesn't say what anyone may do with them, and it grants nothing on its own. That's the job of a [Role](/docs/guide/permissions/roles).
+
+## A first Scope
+
+This Scope groups every config in the `monitoring` namespace of the `homelab` cluster:
+
+```yaml title="homelab-monitoring.yaml" file=<rootDir>/modules/mission-control/fixtures/scopes/homelab-all-resources.yaml
+
+```
+
+Each entry under `targets` picks resources of one type, here `config`. The fields inside it describe which ones: here, configs with both the `cluster=homelab` and `namespace=monitoring` tags.
+
+## Combining targets
+
+A Scope can have several targets. A resource belongs to the Scope when it matches **any** of them:
+
+```yaml title="prod-agent-configs.yaml" file=<rootDir>/modules/mission-control/fixtures/scopes/prod-agent-configs.yaml
+
+```
+
+This Scope holds the configs pushed by `agent-prod-1` **or** `agent-prod-2`.
+
+Inside one target, every field has to match. A target with `namespace: staging` and `tagSelector: team=payments` picks only the payments configs in staging, not every staging config.
+
+Targets can pick different types too. One Scope can hold a tenant's configs and the playbooks that tenant uses, so you can refer to "everything that belongs to tenant A" by one name.
+
+## What you can select
+
+| Type                  | What it selects       | Select by                                                                   |
+| --------------------- | --------------------- | --------------------------------------------------------------------------- |
+| `config`              | Config items          | `name`, `namespace`, `id`, `agent`, `types`, `tagSelector`, `labelSelector` |
+| `component`           | Topology components   | `name`, `namespace`, `id`, `agent`, `types`, `labelSelector`                |
+| `check`               | Health checks         | `name`, `namespace`, `id`, `agent`, `types`, `labelSelector`                |
+| `canary`              | Canaries              | `name`, `namespace`, `id`, `agent`, `labelSelector`                         |
+| `playbook`            | Playbooks             | `name`, `namespace`, `id`                                                   |
+| `connection`          | Connections           | `name`, `namespace`, `id`, `types`                                          |
+| `scraper`             | Config scrapers       | `name`, `namespace`, `id`, `agent`                                          |
+| `view`                | Views                 | `name`, `namespace`, `id`                                                   |
+
+You can also select every application, notification, notification silence, agent, person, team, Scope, Role or RoleBinding with `application`, `notification`, `notificationSilence`, `agent`, `person`, `team`, `scope`, `role` or `roleBinding`. These types can only be selected whole, with `name: "*"`.
+
+Some notes on the fields:
+
+- `tagSelector` and `labelSelector` take `key=value` pairs separated by commas, and every pair must match, for example `env=prod,region=eu`.
+- The namespace of a config is its `namespace` tag, so `namespace: staging` and `tagSelector: namespace=staging` select the same configs.
+- `agent` is the name of the agent that pushed the resource.
+- `types` is a list of resource types, such as `[Kubernetes::Pod, Kubernetes::Deployment]`.
+
+### Matching names
+
+`name` takes an exact name, `*` for every name, or a prefix ending in `*`:
+
+| Value     | Matches                                       |
+| --------- | --------------------------------------------- |
+| `prod-db` | Only `prod-db`                                |
+| `prod-*`  | `prod-db`, `prod-api`, and every name starting with `prod-` |
+| `*`       | Every name                                    |
+
+Patterns like `*-db` aren't supported. If you need to group resources by something other than a name prefix, tag them and use `tagSelector` instead.
+
+To give someone a whole type, such as every config, use a target with only `name: "*"`:
+
+```yaml title="all-topology.yaml" file=<rootDir>/modules/mission-control/fixtures/scopes/all-topology.yaml
+
+```
+
+Some actions need a whole-type Scope. Creating, changing and deleting resources, and reading connections, are always granted for a whole type at a time.
+
+## Tips
+
+- **Select by what a resource is, not its state.** Scopes can't select by health or status. Access that changed every time a resource went unhealthy would be impossible to reason about. Use tags, namespaces and agents instead.
+- **Agents set their own tags.** If several agents push data, a tag-based Scope can include resources from any of them. To be sure a Scope only holds one agent's resources, select by `agent` as well.
+- **A Scope that matches nothing is fine.** It selects nothing until matching resources appear, for example after a scraper runs.
+- **Reuse the shipped Scopes.** Mission Control ships one Scope per type, such as `mission-control-builtin/all-configs` and `mission-control-builtin/all-playbooks`, so you don't have to write your own whole-type Scopes. See [Shipped Roles](/docs/reference/permissions/shipped-roles#shipped-scopes).
+- **Check its status.** A Scope that names an agent that isn't registered shows `Ready=False` and selects nothing until the agent registers.
+
+## Next steps
+
+Now that you can describe a group of resources, use it in a [Role](/docs/guide/permissions/roles) to say what may be done to them.

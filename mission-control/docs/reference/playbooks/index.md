@@ -132,13 +132,7 @@ Approvals allow requiring one or more people to approve before a playbook runs.
 
 ## Permissions
 
-Permissions grant roles and teams the ability to run this playbook, in addition to the global [permissions](/docs/guide/permissions).
-
-| Field  | Description                                                         | Scheme   | Required |
-| ------ | ------------------------------------------------------------------- | -------- | -------- |
-| `role` | Name of a [role](/docs/guide/permissions/roles)                     | `string` | `false`  |
-| `team` | Name of a team                                                      | `string` | `false`  |
-| `ref`  | Name of a [Permission](/docs/guide/permissions/permission) resource | `string` | `false`  |
+The `permissions` field is deprecated and grants nothing. To let people or resources run a playbook, bind a [Role](/docs/guide/permissions/roles) with `playbook:run` on it. See [Permissions](/docs/guide/permission).
 
 ## MCP
 

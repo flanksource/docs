@@ -1,21 +1,24 @@
 ### Identity Mapper
 
-The Identity Role Mapper script is a CEL script that is evaluated after Kratos runs the JSONNET claims mapper to map users to roles and membership in Mission Control teams.
+The Identity Role Mapper script is a CEL script that is evaluated after Kratos runs the JSONNET claims mapper to map users into Mission Control teams. It never grants a Role: bind Roles to the teams it returns with [RoleBindings](/docs/guide/permissions/role-bindings). See [Team Mapping](/docs/guide/permissions/team-mapping).
 
 | Value                                            | Description                             |
 | ------------------------------------------------ | --------------------------------------- |
 | identityRoleMapper.configMap.key                 |                                         |
 | identityRoleMapper.configMap.mountPath           | Defaults to `/etc/identity-role-mapper` |
 | identityRoleMapper.configMap.name                |                                         |
-| identityRoleMapper.script                        | CEL script to return a JSON object with a `role` and list of `teams` an identity to should be mapped to                                        |
+| identityRoleMapper.script                        | CEL script that returns the list of `teams` an identity should be mapped to                                        |
 
 
-To grant the `admin` role to all users in the `admins` group (as returned by the identity provider)
+To make every user in the `admins` group, as returned by the identity provider, a member of the shipped `admins` team, and everyone else a member of `viewers`:
+
 ```javascript title=identity-role-mapper
 {
-  "role": "admins" in identity.traits.groups ?  "admin":  "viewer"
-}.toJSON()
+  "teams": "admins" in identity.traits.groups ? ["admins"] : ["viewers"]
+}
 ```
+
+The shipped `admins` team is bound to the `admin` Role. Create the `viewers` team and bind a Role to it, such as `mission-control-builtin/viewer`.
 
 ### Input
 
@@ -76,24 +79,20 @@ The CEL script can make use of any of these Identity fields provided by Kratos
 
 
 ### Output
-The CEL script needs to return a JSON object that looks like:
+The CEL script returns either a list of team names, or a JSON object that looks like:
 
 ```json title=output.json
 {
-  "role": "admin",
-  "teams": [],
+  "teams": ["platform"]
 }
 ```
 
 <Fields rows={
   [{
-    field: "role",
-    description: "Mission control role. See [RBAC](/docs/reference/rbac)",
-    scheme: "`admin` | `viewer` | `editor`",
-  },
-  {
     field: "teams",
-    description: "List of name or id of the teams the OIDC identity will be put into",
+    description: "Names of the teams the identity is put into. Teams that don't exist are skipped",
     scheme: "`[]string`",
   }]
 } />
+
+An object with any other field, such as the `role` field older scripts returned, is logged as an error and changes nothing. The person's mapped teams follow the script on every sign-in: they join the teams it returns and leave mapped teams it no longer returns. Teams an admin added them to directly aren't touched.

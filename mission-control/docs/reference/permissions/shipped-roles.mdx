@@ -1,0 +1,89 @@
+---
+title: Shipped Roles
+sidebar_position: 2
+sidebar_custom_props:
+  icon: shield
+---
+
+Mission Control ships a few Roles, the Scopes they use, and an `admins` team in the reserved `mission-control-builtin` namespace. They're ordinary Roles: they grant nothing until a RoleBinding binds them, and you bind them like any other Role, as `mission-control-builtin/<name>`.
+
+## Roles
+
+| Role               | Allows                                                                                                                                                                       |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `viewer`           | `read` on `config`, `component`, `check`, `canary`, `playbook`, `view`, `application`, `person` and `team`                                                                   |
+| `admin`            | Every action on every type, and every action without a resource, except plugin operations                                                                                   |
+| `access-manage`    | `access:review`, `read` on `scope`, `role`, `roleBinding`, `person`, `team`, `playbook` and `connection`, and `create`, `update` and `delete` on `scope`, `role` and `roleBinding` |
+| `kubernetes-proxy` | `kubernetes-proxy:read` and `kubernetes-proxy:write`. It's the Role of the personal access token in a downloaded kubeconfig                                                          |
+| `mcp-user`         | `mcp:use`                                                                                                                                                                    |
+| `plugin-admin`     | Every operation of the installed plugins (`invoke:<plugin>:<operation>`), on any config                                                                                      |
+
+```yaml title="viewer-role.yaml" file=<rootDir>/modules/mission-control/rbac/shipped/shipped.yaml#L195-L238
+
+```
+
+### viewer
+
+`viewer` reads the resources people operate on, and nothing that configures access, holds credentials or exposes Mission Control's internals. It doesn't read connections, notifications, notification silences, scrapers, agents, Scopes, Roles or RoleBindings, and has neither `event:read` nor `job:read`. Each of those takes an explicit grant, for example `read` on `scope`, `role` and `roleBinding` for an auditor.
+
+`viewer` reads views. A view can show data from any source, such as an SQL query through a connection, and whoever writes the view decides what its readers see.
+
+### access-manage
+
+`access-manage` is for subjects who review and manage access without being admins, for example through the Role Bindings, Scopes and Subjects pages under Settings. It's as privileged as `admin`: a holder can bind anyone, themselves included, to any Role.
+
+### mcp-user
+
+`mcp-user` is for personal access tokens made for AI agents. A token can connect to the MCP server only when both its owner and one of its Roles allow `mcp:use`, so bind a token for an agent to `mcp-user` and to the Roles that say what it may reach, such as `viewer`. The MCP setup flow in the UI selects it when it creates a token. See [MCP client setup](/docs/guide/mcp/client-setup).
+
+### plugin-admin
+
+`plugin-admin` holds a rule for every operation of every installed plugin, and Mission Control rewrites it whenever a plugin is installed, upgraded, or removed. It's kept apart from `admin`, so no plugin can change what `admin` grants. Bind an admin who should run plugin operations to both. `plugin-admin` only exists while some plugin has an operation.
+
+## Shipped Scopes
+
+Each rule of a shipped Role needs a Scope, so Mission Control ships one whole-type Scope per type, named `all-<type>` in the plural: `all-configs`, `all-components`, `all-checks`, `all-canaries`, `all-playbooks`, `all-connections`, `all-scrapers`, `all-views`, `all-applications`, `all-notifications`, `all-notification-silences`, `all-agents`, `all-people`, `all-teams`, `all-scopes`, `all-roles` and `all-role-bindings`.
+
+```yaml title="all-configs-scope.yaml" file=<rootDir>/modules/mission-control/rbac/shipped/shipped.yaml#L8-L17
+
+```
+
+Your Roles in any namespace can use them, as `mission-control-builtin/all-configs`. Each always selects exactly its one type. A future type gets a new Scope, so a release never widens what an existing Role grants.
+
+## The admins team
+
+See [Bootstrap](/docs/guide/permissions/bootstrap) for how the first admins sign in with each authentication mode.
+
+Mission Control ships an `admins` team, with RoleBindings named `admins` and `plugin-admins` that bind `admin` and `plugin-admin` to it. Its first members depend on the auth mode:
+
+| Auth mode     | Members of `admins`                                                                                                                         |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Kratos, basic | `admin@local`, the local admin account. It's added on every start as a direct member, so a team mapper never removes it                     |
+| Clerk         | Organization admins, through Clerk's default [team mapper](/docs/guide/permissions/team-mapping). There's no `admin@local`                  |
+
+Only the team and its bindings are protected. Its members are managed like any team's, through the UI or API, which needs `update` on `team`. Anyone else becomes an admin by joining the team, or through a RoleBinding of their own.
+
+An [external identity provider](/docs/guide/permissions/external-identity-providers) can only map its users into `admins` when its `allowed` list includes that team. The provider's status warns about that.
+
+### Restoring admin access
+
+Mission Control writes the shipped team and bindings when it starts, and recreates them if they were deleted. In the worst case, such as every member removed from `admins`, a restart puts `admin@local` back in the team, and Clerk organization admins rejoin it on their next request. A deny binding can't block this, because a deny never covers RoleBindings.
+
+## Reserved namespaces
+
+Mission Control owns every Scope, Role and RoleBinding name in two namespaces:
+
+| Namespace                       | Holds                                                                                   |
+| ------------------------------- | --------------------------------------------------------------------------------------- |
+| `mission-control-builtin`       | The shipped Roles, Scopes and bindings, including names Mission Control doesn't ship yet |
+| `mission-control-access-tokens` | The RoleBindings of [personal access tokens](/docs/guide/permissions/personal-access-tokens)              |
+
+- The API refuses writes to either namespace with `409 Conflict`.
+- A Scope, Role or RoleBinding applied to `mission-control-builtin` through Kubernetes is stored as `Ready=False` with reason `Shipped`, and has no effect.
+- One applied to `mission-control-access-tokens` is marked `Ready=False` with reason `AccessToken`, and nothing of it is stored.
+- A Team named `admins` applied through Kubernetes is stored as `Ready=False` with reason `Shipped`, and doesn't change the shipped team or its members.
+- Other Kubernetes resources in namespaces with these names aren't affected. The shipped objects are only in Mission Control's database, so binding them needs no Kubernetes namespace called `mission-control-builtin`.
+
+You can use any name in your own namespaces, including `admin` and names starting with `all-`. Those objects are unrelated to the shipped ones.
+
+The shipped objects change only with Mission Control itself, apart from `plugin-admin`, and can't be changed or deleted through the API or Kubernetes.
