@@ -5,7 +5,9 @@ sidebar_custom_props:
   icon: mdi:badge-account-outline
 ---
 
-An `ExternalIdentityProvider` lets an external application send its own users to Mission Control. The application signs a JWT for the user with its own issuer, and Mission Control accepts it as a bearer token, as a person in the teams the provider maps them into.
+Use an `ExternalIdentityProvider` when your own application calls Mission Control's API on behalf of its users, for example when you embed Mission Control in your product. It isn't for signing people in to the Mission Control UI. For that, see [Single Sign-On](/docs/installation/self-hosted/sso).
+
+Your application signs a JWT for each of its users with its own issuer, and sends it with each request. Mission Control treats the request as coming from that user: a person named `<provider>:<username>`, who belongs to the teams the provider maps them into.
 
 A provider answers three questions, in this order:
 
@@ -31,22 +33,19 @@ ExternalIdentityProviders are managed through Kubernetes only.
 | `spec.identity.username`     | Yes      |                                                 | [CEL](/docs/reference/scripting/cel) expression returning the person's username   |
 | `spec.identity.name`         | No       | The username                                    | CEL expression returning the person's display name                                  |
 | `spec.identity.email`        | No       |                                                 | CEL expression returning an email, shown on the person only                         |
-| `spec.identity.teams.mapper` | Yes, with `teams` |                                        | CEL expression returning a list of team names                                       |
-| `spec.identity.teams.allowed` | Yes, with `teams` |                                       | The only teams this provider may add anyone to. At least one                        |
+| `spec.identity.teams.mapper` | If `teams` is set |                                        | CEL expression returning a list of team names                                       |
+| `spec.identity.teams.allowed` | If `teams` is set |                                       | The only teams this provider may add anyone to. At least one                        |
 | `spec.disabled`              | No       | `false`                                         | Rejects every token from this provider, without removing it                         |
 
 For example, a provider named `oipa`, with issuer `https://auth.oipa.example.com`, `identity.username` set to `claims.user.id`, and a team mapper with `allowed: [acme-operator, acme-viewer]`, signs in a token whose `user.id` claim is `u-4821` as the person `oipa:u-4821`.
 
-## Authentication
+## How a request is signed in
 
-Mission Control reads a bearer token's `iss` claim before verifying it:
+Your application sends the user's token in the `Authorization: Bearer <token>` header of every request. There's no session or cookie.
 
-- If no provider has that issuer, Mission Control's other authenticators try the token as usual.
-- If a provider has that issuer, the token must pass that provider's verification. A token that fails gets `401 Unauthorized` and isn't passed to other authenticators.
+Mission Control looks at the token's `iss` claim. If it matches a provider's `issuer`, the token must pass that provider's checks, or the request is refused with `401 Unauthorized`. Tokens from other issuers are handled by Mission Control's normal sign-in, as if no provider existed.
 
-A provider whose `issuer` is one that Mission Control's own authentication uses, such as its embedded OIDC issuer or the configured Clerk issuer, is `Ready=False` and claims no tokens.
-
-There's no session or cookie: the application sends a token on every request.
+Don't set `issuer` to the issuer Mission Control's own sign-in uses, such as its Clerk issuer. Such a provider shows `Ready=False` and is ignored.
 
 ## Verification
 
@@ -70,10 +69,17 @@ Every token that passes these checks is trusted, so the issuer must be dedicated
 
 ### Algorithms and keys
 
-- Only asymmetric algorithms are accepted: `RS256`, `RS384`, `RS512`, `PS256`, `PS384`, `PS512`, `ES256`, `ES384`, `ES512` and `EdDSA`. `HS256` and `none` are rejected.
-- Signing keys are fetched from `jwksURL` or, without one, from the `jwks_uri` of `<issuer>/.well-known/openid-configuration`.
-- `issuer`, `jwksURL` and a discovered `jwks_uri` must use `https`. Plain `http` is only allowed for `localhost` and loopback addresses. Redirects are followed at most 5 times, and never from https to http.
+- Only asymmetric algorithms such as `RS256`, `ES256` and `EdDSA` are accepted. Shared-secret algorithms such as `HS256` are rejected.
+- `issuer` and `jwksURL` must use `https`, except for `localhost` during development.
+- Mission Control fetches the signing keys from `jwksURL`, or from your issuer's `/.well-known/openid-configuration`, and picks up rotated keys automatically.
+
+<details summary="All accepted algorithms and key fetching details">
+
+- Accepted algorithms: `RS256`, `RS384`, `RS512`, `PS256`, `PS384`, `PS512`, `ES256`, `ES384`, `ES512` and `EdDSA`. `none` is never accepted.
+- A discovered `jwks_uri` must use `https` too. Redirects are followed at most 5 times, and never from https to http.
 - Keys are fetched on the provider's first token, cached, and refreshed in the background. If they can't be fetched, the request fails with `500 Internal Server Error`, and the next token retries.
+
+</details>
 
 ## Identity
 
@@ -111,7 +117,7 @@ has(claims.org.roles) ? claims.org.roles.map(r, "acme-" + r) : []
 - **Removing a team from `allowed`**, or removing `identity.teams`, removes this provider's memberships of those teams at once.
 - **Without `teams`**, the provider adds no one to any team. Its users get only what RoleBindings grant them by name.
 
-Memberships count everywhere a membership counts, including team approvers and access reviews, until the person's next request changes them.
+These memberships work like any other team membership, including for playbook approvers and on the Subjects page, until the person's next request changes them. [Team Mapping](/docs/guide/permissions/team-mapping) covers team mappers in general.
 
 ## How changes take effect
 
@@ -122,11 +128,15 @@ Memberships count everywhere a membership counts, including team approvers and a
 | `disabled: true`                              | Its tokens get `401`, and everything else is kept                                                                                       |
 | `issuer` changes                              | Rejected. A provider for another issuer is a new provider                                                                               |
 | Teams are added to `allowed`, or the mapper changes | Apply on each person's next request                                                                                               |
-| The provider is deleted                       | Its people are retired: kept for audit, removed from every team, and never signed in as again. RoleBindings that name `<provider>:...` stay, and select the users of whichever provider later has that name |
+| The provider is deleted                       | Its people are retired: kept for audit, removed from every team, and never signed in as again. See the warning below |
 
 `issuer` must be unique across all providers, and `name` across all namespaces. Of providers that share either, the one with the earliest creation timestamp wins and the others are `Ready=False`.
 
 A provider is rejected when its `issuer` uses `http`, it uses `HS256`, `maxTokenAge` isn't a positive duration, `audience` or `identity.username` is missing, or a team mapper has no `allowed`. A provider whose CEL expression doesn't compile is stored as `Ready=False` with reason `Invalid`.
+
+:::warning
+Deleting a provider doesn't delete the RoleBindings that name its users, such as `<provider>:u-4821` or `<provider>:*`. A new provider created later with the same name gets those bindings. Delete them along with the provider.
+:::
 
 ## Limitations
 

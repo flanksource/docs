@@ -128,7 +128,7 @@ Use this approach when your MCP client does not support OAuth, or when you want 
 
 ### Create a personal access token
 
-Use the Setup MCP flow to create a personal access token with MCP permissions. The flow binds the token to the shipped [`mcp-user`](/docs/reference/permissions/shipped-roles#mcp-user) Role, next to the Roles that say what it may reach, such as `viewer`. A token can only reach the MCP server when both you and one of its Roles allow `mcp:use`.
+Use the Setup MCP flow to create a personal access token with MCP permissions. The flow binds the token to the shipped [`mcp-user`](/docs/reference/permissions/shipped-roles#mcp-user) Role, next to the Roles that say what it may reach, such as `viewer`. A token can only reach the MCP server when both you and one of its Roles allow `mcp:use`. To let the agent run playbooks as tools, also bind a Role with [`mcp:run`](/docs/guide/mcp/tools/playbook_tools) on those playbooks.
 
 1. In Mission Control, open the user menu and select **Setup MCP**.
 

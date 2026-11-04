@@ -23,7 +23,11 @@ Every [Role](/docs/guide/permissions/roles) rule names exactly one action. Actio
 | `invoke:<plugin>:<operation>` | Config                                   | None                                 | Invoking a plugin operation on a config                                                        |
 | `connection:use`              | Connection                               | None                                 | Acting with a connection's credentials, and testing the connection                             |
 
-The types are those of [Scopes](/docs/guide/permissions/scopes#what-you-can-select). Checks are only written by Mission Control itself, people are managed with `person:manage`, and views are only read through the API.
+The types are those of [Scopes](/docs/guide/permissions/scopes#what-you-can-select). Checks are only written by Mission Control itself, and people are managed with `person:manage`. Views are defined as Kubernetes resources, so Mission Control has no create or update for them.
+
+`read` on connections, and `create`, `update` and `delete` on every type, need a Scope that selects the whole type.
+
+These actions govern the Mission Control UI and API. Applying Mission Control resources with `kubectl` is controlled by your cluster's Kubernetes RBAC instead.
 
 ## Actions without a resource
 
@@ -32,7 +36,7 @@ A rule with one of these actions omits `resource` and `target`. These rules neve
 | Action                   | Allows                                                                                                                                                |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `person:manage`          | Inviting, disabling, re-enabling and deleting accounts, and changing their properties, name or email                                                  |
-| `access:review`          | Asking what any subject may do, through `/rbac/subject-access-reviews` and `/rbac/subject-access-search`                                              |
+| `access:review`          | Asking what any subject may do, on the Subjects page under Settings or through `/rbac/subject-access-reviews` and `/rbac/subject-access-search`         |
 | `mcp:use`                | Using Mission Control's [MCP](/docs/guide/mcp) server at all. Each MCP tool still checks what it touches                                              |
 | `property:manage`        | Reading private properties, and creating, changing and deleting any property                                                                          |
 | `event:read`             | Reading the event queue, and the recent events playbooks and notifications have handled                                                               |
@@ -56,7 +60,9 @@ Every proxy request is checked as the subject making it, so a token's limit and 
 
 ## What each operation checks
 
-An operation can make more than one check, and each check needs its own matching rule. A check carries only the resources its action can match: an action without a target is checked on the resource alone.
+An operation can make more than one check, and each check needs its own matching rule. For example, running playbook P on config X needs two rules: `playbook:run` with P in its `resource` Scope and X in its `target` Scope, and `read` with X in its `resource` Scope. To find P in the UI, you also need `read` on P.
+
+In the table, "P, then X" means the first check is made on P and the second on X.
 
 | Operation                                                    | Check                                                                    | Resource                         | Target                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------ | -------------------------------- | ----------------------- |
@@ -78,6 +84,6 @@ An operation can make more than one check, and each check needs its own matching
 | Test connection C                                            | `connection:use`                                                         | C                                | None                    |
 | Create, change or delete a resource of type T                | `create`, `update` or `delete`                                           | Every resource of T              | None                    |
 
-Each check is made as the subject performing the operation: the caller or, when there's no caller, the resource doing the work. A plugin's connection lookups are checked as the plugin.
+Starting an operation is checked as the person who starts it. Everything a playbook run then does is checked as the playbook, and a notification is checked as itself when it's sent. A plugin acts as the person who invoked it, but its connection lookups are checked as the plugin. See [Permissions for automation](/docs/guide/permissions/role-bindings#permissions-for-automation).
 
 Approving or cancelling a run checks `read` on its resource for the same reason running it does: the run, its parameters and its results are only readable with that resource.

@@ -17,7 +17,7 @@ This Scope groups every config in the `monitoring` namespace of the `homelab` cl
 
 ```
 
-Each entry under `targets` picks resources of one type, here `config`. The fields inside it describe which ones: here, configs with both the `cluster=homelab` and `namespace=monitoring` tags.
+Each entry under `targets` picks resources of one type, here `config`. The fields inside it describe which ones: here, configs with both the `cluster=homelab` and `namespace=monitoring` [tags](/docs/guide/config-db/concepts/tags). Although its description says "all resources", this Scope only holds configs. To include components or checks too, add a target for each type.
 
 ## Combining targets
 
@@ -52,8 +52,10 @@ Some notes on the fields:
 
 - `tagSelector` and `labelSelector` take `key=value` pairs separated by commas, and every pair must match, for example `env=prod,region=eu`.
 - The namespace of a config is its `namespace` tag, so `namespace: staging` and `tagSelector: namespace=staging` select the same configs.
-- `agent` is the name of the agent that pushed the resource.
-- `types` is a list of resource types, such as `[Kubernetes::Pod, Kubernetes::Deployment]`.
+- `agent` is the name of the agent that pushed the resource, as shown on the Agents page.
+- `types` is a list of resource types, such as `[Kubernetes::Pod, Kubernetes::Deployment]`. The type of a config is shown on its page in the catalog.
+- `id` is the resource's ID, the UUID in its URL in the UI.
+- `labelSelector` matches labels in the same `key=value` form as `tagSelector`. Components, checks and canaries have labels but no tags.
 
 ### Matching names
 
@@ -77,11 +79,11 @@ Some actions need a whole-type Scope. Creating, changing and deleting resources,
 
 ## Tips
 
-- **Select by what a resource is, not its state.** Scopes can't select by health or status. Access that changed every time a resource went unhealthy would be impossible to reason about. Use tags, namespaces and agents instead.
+- **Select by what a resource is, not its state.** Scopes can't select by health or status. Use tags, namespaces and agents instead.
 - **Agents set their own tags.** If several agents push data, a tag-based Scope can include resources from any of them. To be sure a Scope only holds one agent's resources, select by `agent` as well.
 - **A Scope that matches nothing is fine.** It selects nothing until matching resources appear, for example after a scraper runs.
 - **Reuse the shipped Scopes.** Mission Control ships one Scope per type, such as `mission-control-builtin/all-configs` and `mission-control-builtin/all-playbooks`, so you don't have to write your own whole-type Scopes. See [Shipped Roles](/docs/reference/permissions/shipped-roles#shipped-scopes).
-- **Check its status.** A Scope that names an agent that isn't registered shows `Ready=False` and selects nothing until the agent registers.
+- **Check its status.** Matching nothing isn't an error, but naming an agent that isn't registered is. Such a Scope shows `Ready=False` and selects nothing until the agent registers.
 
 ## Next steps
 

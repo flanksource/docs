@@ -15,13 +15,15 @@ Nothing is allowed by default. A new user can't see anything until you grant the
 
 ## How it fits together
 
-You write a grant with three custom resources, each describing one part of it:
+Access is described with three kinds of object. You can create them from **Settings** in the UI, or as Kubernetes resources:
 
 - A [**Scope**](/docs/guide/permissions/scopes) picks out a set of resources, such as "every config tagged `env=staging`" or "the playbooks in the `monitoring` namespace".
 - A [**Role**](/docs/guide/permissions/roles) lists what's allowed on those Scopes, such as "read the staging configs" or "run the monitoring playbooks on them". Write a Role once and reuse it for as many people as you need.
-- A [**RoleBinding**](/docs/guide/permissions/role-bindings) gives a Role to people, teams, or to playbooks and notifications that act on their own. A RoleBinding can also narrow the Role to fewer resources, or refuse it outright.
+- A [**RoleBinding**](/docs/guide/permissions/role-bindings) gives a Role to people, teams, or resources that act on their own, such as playbooks and notifications. A RoleBinding can also narrow the Role to fewer resources, or refuse it outright.
 
-A Scope or a Role on its own grants nothing. Access only starts when a RoleBinding connects a Role to someone.
+A Scope or a Role on its own grants nothing. Access only starts when a RoleBinding connects a Role to someone. Whoever a RoleBinding gives a Role to is called its **subject**.
+
+Because RoleBindings decide who can do what, anyone who can create or change them can give themselves any access. Only let people you'd trust as admins manage them.
 
 ## Example
 
@@ -35,7 +37,9 @@ This manifest lets `john@doe.com` run, approve and cancel any playbook on config
 - `john-playbook-run` is the Role. Each rule pairs an action with the playbooks it acts on (`resource`) and the configs it acts against (`target`).
 - The RoleBinding of the same name gives the Role to John.
 
-Running a playbook on a config also needs `read` on that config, so John also needs a Role that lets him read those configs.
+Running a playbook on a config also needs `read` on that config, so John also needs a Role that lets him read those configs. The [Quickstart](/docs/guide/permissions/quickstart) gives everyone `read` with the shipped `viewer` Role.
+
+The example defines its own `all-playbooks` Scope to keep the manifest self-contained. Mission Control also ships one, `mission-control-builtin/all-playbooks`, which you can reference instead.
 
 :::warning Permission and PermissionGroup are deprecated
 `Permission` and `PermissionGroup` resources no longer grant anything. Recreate them as Scopes, Roles, and RoleBindings. See [Migrating from Permissions](/docs/guide/permissions/migrating).
@@ -50,5 +54,8 @@ Running a playbook on a config also needs `read` on that config, so John also ne
   <Card link="/docs/guide/permissions/roles" title="Roles" icon="lock" />
   <Card link="/docs/guide/permissions/role-bindings" title="RoleBindings" icon="user" />
   <Card link="/docs/guide/permissions/personal-access-tokens" title="Personal Access Tokens" icon="mdi:key-variant" />
+  <Card link="/docs/guide/permissions/team-mapping" title="Team Mapping" icon="group" />
   <Card link="/docs/guide/permissions/migrating" title="Migrating from Permissions" icon="tutorial" />
+  <Card link="/docs/reference/permissions/actions" title="Actions Reference" icon="cog" />
+  <Card link="/docs/reference/permissions/shipped-roles" title="Shipped Roles" icon="shield" />
 </Cards>

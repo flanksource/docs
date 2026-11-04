@@ -25,6 +25,19 @@ The manifest has three parts:
 2. A Role with one rule, `read`, on that Scope.
 3. A RoleBinding that gives the Role to `john@doe.com`.
 
+The three objects share a name only so the example reads clearly. Names are independent.
+
+A rule has these fields:
+
+| Field               | Meaning                                                                                       |
+| ------------------- | --------------------------------------------------------------------------------------------- |
+| `name`              | A name for the rule, unique within the Role. It appears in status messages                   |
+| `action`            | What the rule allows, such as `read` or `playbook:run`                                        |
+| `resource.scopeRef` | The Scope of resources the action acts on                                                     |
+| `target.scopeRef`   | For playbook actions, the Scope of configs, components or checks a playbook may run against   |
+
+A Role works only while every one of its rules is valid. If one rule breaks, for example because its Scope was deleted, the whole Role stops granting and its status shows `Ready=False` with the reason.
+
 ## Running playbooks: resource and target
 
 Some actions involve two resources. When you run a playbook on a config, the playbook is what you act **on**, and the config is what you act **against**. A rule names each of them:
@@ -41,7 +54,8 @@ This Role lets John run, approve and cancel the `retry-echo` playbook on any con
 A few things to keep in mind when granting playbooks:
 
 - **Running a playbook on a config also needs `read` on that config.** A run works with the data of the config, so whoever starts it must be able to see the config. Give John a separate `read` rule, or bind a Role such as `viewer`.
-- **A rule without a `target` only covers playbooks that run on nothing**, such as one that creates a namespace. To let a playbook run on configs, the rule needs a `target`.
+- **A rule without a `target` only covers runs that don't start from a config, component or check**, such as a playbook you run from the playbooks list. To let a playbook run on configs, the rule needs a `target`.
+- **To find a playbook in the UI, John needs `read` on it.** The shipped `viewer` Role reads every playbook.
 - **Keep each pairing in its own rule.** A rule pairs its playbooks only with its own targets. If `echo` may run on staging and `restart-pod` only on production, write two rules, so neither playbook can run on the other's configs.
 
 ## Common actions
@@ -50,7 +64,8 @@ A few things to keep in mind when granting playbooks:
 | ----------------------------------------------------- | -------------------------------------------------------------------------- |
 | `read`                                                | See resources, in listings and when opening them                           |
 | `create`, `update`, `delete`                          | Create, change or delete resources of a type                               |
-| `playbook:run`, `playbook:approve`, `playbook:cancel` | Run playbooks, approve runs that need approval, and cancel runs            |
+| `playbook:run`, `playbook:approve`, `playbook:cancel` | Run playbooks, [approve runs](/docs/guide/playbooks/concepts/approval) that need approval, and cancel runs |
+| `mcp:run`                                             | Run playbooks from an AI agent through [MCP](/docs/guide/mcp/tools/playbook_tools) |
 | `connection:use`                                      | Act with a connection's credentials, for example to send a notification   |
 | `mcp:use`                                             | Connect to Mission Control's MCP server                                    |
 
@@ -63,11 +78,11 @@ Being able to see a connection and being able to use its credentials are differe
 - `read` lets someone see a connection's name, type and settings. Credentials are always hidden.
 - `connection:use` lets someone, or something, act with those credentials.
 
-This matters most for playbooks and notifications. A notification that sends to Slack needs `connection:use` on the Slack connection. A person who only needs to choose a connection in the UI needs `read`.
+This matters most for playbooks and notifications. A notification that sends to Slack needs `connection:use` on the Slack connection. A person who only needs to choose a connection in the UI needs `read`. Reading connections is granted for every connection at once, while `connection:use` can be limited to some. See also [Connection permissions](/docs/reference/connections#permissions).
 
 ### Writing is granted for a whole type
 
-`create`, `update` and `delete` are always granted for every resource of a type. Their Scope must select the whole type, such as `mission-control-builtin/all-configs`. You can let someone edit all playbooks, but not only some of them.
+`create`, `update` and `delete`, and `read` on connections, are always granted for every resource of a type. Their Scope must select the whole type, such as `mission-control-builtin/all-configs`. You can let someone edit all playbooks, but not only some of them.
 
 ## Combining Roles
 
@@ -80,8 +95,8 @@ To take access away from someone regardless of what else they hold, use a [deny 
 ## Tips
 
 - **Start from the shipped Roles.** `viewer` already reads the catalog, topology, health checks, playbooks and views. Bind it first, then write Roles only for what people need beyond that. See [Shipped Roles](/docs/reference/permissions/shipped-roles).
-- **Name rules after what they allow**, such as `read-staging` or `run-monitoring`. The names appear in status messages and access reviews.
-- **Keep Roles small.** If one rule of a Role breaks, for example because its Scope was deleted, the whole Role stops working until it's fixed, and its status shows `Ready=False` with the reason.
+- **Name rules after what they allow**, such as `read-staging` or `run-monitoring`. The names appear in status messages and on the Subjects page.
+- **Keep Roles small.** Since one broken rule stops the whole Role, small Roles limit the damage.
 - **Reference Scopes in other namespaces** with `namespace/name`, such as `mission-control-builtin/all-configs`. A bare name refers to a Scope in the Role's own namespace.
 
 ## Next steps
