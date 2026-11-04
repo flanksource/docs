@@ -5,17 +5,21 @@ sidebar_custom_props:
   icon: tutorial
 ---
 
-`Permission` and `PermissionGroup` are deprecated and grant nothing. Scopes, Roles and RoleBindings replace them, and built-in roles are gone. Recreate what you had before relying on the upgraded installation.
+:::danger Access is lost on upgrade
+After upgrading, only members of the shipped `admins` team keep their access. Everyone else, and every playbook, notification, scraper and canary, loses access to configs and connections until you create Scopes, Roles and RoleBindings for them. Plan the steps below before you upgrade.
+:::
+
+`Permission` and `PermissionGroup` are deprecated and grant nothing. Scopes, Roles and RoleBindings replace them.
 
 ## What happens to existing objects
 
-- A Permission or PermissionGroup, whether a Kubernetes resource or a row in the database, doesn't allow or deny anything, in checks, listings or the access summary.
+- A Permission or PermissionGroup, whether a Kubernetes resource or one created in the UI, doesn't allow or deny anything.
 - A Permission or PermissionGroup applied through Kubernetes is marked `Ready=False` with reason `Deprecated`, and nothing of it is stored. Deleting one deletes the row it was stored as, if any.
-- Existing rows are kept, so you can see what they granted and recreate it. They can't be created or changed. Reading them needs `read` on `roleBinding`, and deleting them needs `delete` on `roleBinding`.
-- The built-in `editor` and `guest` roles no longer exist. `admin` and `viewer` are now [shipped Roles](/docs/reference/permissions/shipped-roles) that grant nothing until a RoleBinding binds them.
+- Permissions created in the UI are kept, so you can see what they granted and recreate them. They can't be created or changed. Reading them needs `read` on `roleBinding`, and deleting them needs `delete` on `roleBinding`.
+- The old login roles, `admin`, `editor`, `viewer` and `guest`, are gone. Mission Control now ships ordinary Roles named `admin` and `viewer` in the `mission-control-builtin` namespace. Like any Role, they grant nothing until a RoleBinding binds them. See [Shipped Roles](/docs/reference/permissions/shipped-roles).
 - A person who used to get a role by signing in gets nothing until a RoleBinding selects them or their team.
-- The playbook `spec.permissions` field grants nothing. Bind a Role with `playbook:run` instead.
-- The permissive defaults are gone. Playbooks, notifications, scrapers, canaries and topologies no longer read connections, configs or components without a RoleBinding that selects them.
+- The playbook `spec.permissions` field, which listed who may run the playbook, grants nothing. Bind a Role with `playbook:run` on the playbook instead.
+- The permissive defaults are gone. Playbooks, notifications, scrapers, canaries and topologies no longer read connections, configs or components without a RoleBinding that selects them. See [Permissions for automation](/docs/guide/permissions/role-bindings#permissions-for-automation).
 
 ## Map old concepts to new ones
 
@@ -25,7 +29,7 @@ sidebar_custom_props:
 | `subject.person: "Jane Doe"`                    | `people: [jane@example.com]`. An entry is an email, never a name                                                                                                     |
 | `subject.notification: monitoring/alerts`       | `notifications: [{namespace: monitoring, name: alerts}]`                                                                                                             |
 | `PermissionGroup` and `subject.group`           | A team for people, or a list of resource subjects on the RoleBinding                                                                                                 |
-| `Permission.spec.object`, `agents`, Scope references | A [Scope](/docs/guide/permissions/scopes). Use the `agent` selector field for agent-based permissions                                                           |
+| `Permission.spec.object` and `agents`, which chose the objects a Permission applied to | A [Scope](/docs/guide/permissions/scopes). Use the `agent` selector field for agent-based permissions                      |
 | `Permission.spec.actions`                       | One [Role](/docs/guide/permissions/roles) rule per action                                                                                                            |
 | `actions: ["*"]` or `create,read,update,delete` | Bind `mission-control-builtin/admin`, or write one rule per action                                                                                                   |
 | `playbook:*`                                    | Separate rules for `playbook:run`, `playbook:approve` and `playbook:cancel`. Patterns aren't supported                                                               |
@@ -36,11 +40,11 @@ sidebar_custom_props:
 | The `viewer` role                               | A RoleBinding to `mission-control-builtin/viewer`                                                                                                                    |
 | The `editor` role                               | A Role of your own with the `create`, `update` and `delete` rules editors need                                                                                       |
 | Identity mapper `role` output                   | Map people into teams with a [team mapper](/docs/guide/permissions/team-mapping), and bind Roles to the teams                                                        |
-| The `system` PermissionGroup                    | Bindings that select each playbook, notification or scraper by namespace and name. There's no system subject                                                         |
+| The `system` PermissionGroup                    | Bindings that select each playbook, notification or scraper by namespace and name, with the Roles they need, such as `connection:use` on their connections and `read` on configs. There's no system subject |
 
 ## Steps
 
-1. List the existing rows from the `permissions` and `permission_groups` tables, as a subject with `read` on `roleBinding`, and collect your Permission manifests from Git.
+1. Collect your Permission manifests from Git. For Permissions created in the UI, read them through Mission Control's database API at `/api/db/permissions` and `/api/db/permission_groups`, as an admin.
 2. Create a Scope for each set of resources the Permissions selected.
 3. Create Roles for each set of actions. Keep Roles small and group rules by the Scopes they share.
 4. Create RoleBindings that bind each Role to the people, teams and resources that held the Permission. For playbooks and notifications that use connections, bind a Role with `connection:use`.

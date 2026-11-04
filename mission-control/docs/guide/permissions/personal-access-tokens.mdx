@@ -9,20 +9,20 @@ A personal access token is a long-lived credential for clients that aren't a bro
 
 ## Creating a token
 
-You can create, list and delete your own tokens without any grant, from **Settings → Tokens**, the API, or the `auth token` CLI command. Every token needs at least one Role, chosen when you create it:
+You can create, list and delete your own tokens without any grant, from **Settings → Tokens**, the API, or the `mission-control auth token` command. Every token needs at least one Role, chosen when you create it:
 
 | Field        | Description                                                                                                                     |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------- |
 | `name`       | Unique among your tokens                                                                                                        |
-| `expiry`     | How long the token is valid. Defaults to 90 days through the API, configurable with the `access_token.default_expiry` property, and 4 hours with the `auth token` CLI command |
+| `expiry`     | How long the token is valid, as a duration such as `720h`. Defaults to 90 days through the API and 4 hours with the `mission-control auth token` command. Administrators can change the API default with the `access_token.default_expiry` property |
 | `auto_renew` | Extends the expiry by 30 days whenever the token is used within its last 15 days                                                |
 | `roles`      | The Roles that limit the token, each with a `namespace` and a `name`, such as `mission-control-builtin` and `viewer`. Required |
 
-Send these as JSON in a `POST /auth/create_token` request. The `auth token` CLI command takes each Role as `--role namespace/name`, such as `--role mission-control-builtin/viewer`, and rejects a bare name, because a token has no namespace to resolve one in.
+Through the API, send these as JSON in a `POST /auth/create_token` request, signed in as yourself. The `mission-control auth token` command is the Mission Control server binary, run where it can reach Mission Control's database, for example inside its pod. It takes each Role as `--role namespace/name`, such as `--role mission-control-builtin/viewer`. A bare name isn't accepted, because a token has no namespace to look one up in.
 
 The token is shown once, when it's created. Mission Control stores only a hash of it.
 
-- A token created through the API or the UI is usable as soon as it's returned. One created with the CLI can take a few seconds.
+- A token created through the API or the UI is usable as soon as it's returned. One created with `mission-control auth token` writes directly to the database, so it can take a few seconds to work.
 - A request made with a token can't create, list or delete tokens, whatever its Roles.
 - Users of an external identity provider can't create tokens.
 - No one can create, change or delete a token for another person.
@@ -37,8 +37,8 @@ A token may do what its owner may do, and only what a rule of one of its Roles a
 
 For example, Alice may read, change and delete every config, run playbooks and read connections. With a token bound to `mission-control-builtin/viewer`, she can read configs, playbooks and components, but can't run a playbook, delete a config or read a connection. Her own rules allow each of them, but no rule of `viewer` does.
 
-- **A limit, not a grant.** Each check passes only when the owner's rules allow it and a rule of the token's Roles also matches it. A listing returns the rows both allow.
-- **Any Role.** A token's Roles needn't be bound to anyone else, and you can pick any Role by namespace and name, even one you can't read.
+- **A limit, not a grant.** Each check passes only when the owner's rules allow it and a rule of the token's Roles also matches it. A list shows only the items both allow.
+- **Any Role.** You can pick any Role by namespace and name. It doesn't have to be one you hold yourself.
 - **Every check of an operation.** A token meant to run a playbook on a config also needs a Role with `read` on the config.
 - **Live.** Every check uses the owner's current grants. When the owner loses an action, every token of theirs loses it on the next request.
 - **Fixed Roles.** A token's Roles can't change after it's created. To change what a token may do, create a new one.
@@ -47,17 +47,14 @@ For example, Alice may read, change and delete every config, run playbooks and r
 - **The owner's deny bindings apply** to every request made with the token.
 
 :::note
-A token can be bound to a Role with rules its owner doesn't hold. Those rules do nothing until the owner gains matching grants, and then take effect for the token. Mission Control doesn't warn about this.
+A token never does more than you can do yourself, even if its Role allows more. If you later gain those permissions, the token gains them too.
 :::
 
-### Token bindings
+### Where a token's Roles are stored
 
-Each Role a token is created with becomes a RoleBinding that selects the token, created and deleted in the same transaction as the token. Token bindings live in the reserved `mission-control-access-tokens` namespace, are named `token-<token id>-<hash>`, and name their Role as `namespace/name`.
+Mission Control stores each Role a token is created with as a RoleBinding in the reserved `mission-control-access-tokens` namespace, and deletes it with the token. You can't create, change or delete these bindings yourself, so no one can change another person's token.
 
-- Neither a custom resource nor the RoleBinding API can select a token, and both are refused in that namespace, so no one can change another person's token.
-- A token binding never sets `deny`.
-- Your token list shows each token's Roles and whether each binding is `Ready`. The validation message is shown only when you may read the Role.
-- The Role Bindings page and the RoleBinding API leave token bindings out unless you ask for them, for example with `include=access-tokens`.
+Your token list shows each token's Roles, and whether each one is working. The Role Bindings page leaves them out, because they limit a token rather than grant anyone access.
 
 ## Lifetime
 
@@ -69,7 +66,7 @@ Each Role a token is created with becomes a RoleBinding that selects the token, 
 
 ## Agent tokens
 
-An agent's token is created with the agent, by a subject with `create` on `agent`, and has no Roles. It isn't limited on requests made as its agent, which may only push its own data and fetch what's assigned to it.
+When you register an [agent](/docs/installation/saas/agent), Mission Control creates a token for it. Agent tokens have no Roles: the agent can push its own data and fetch work assigned to it, and nothing else. Registering an agent needs `create` on `agent`.
 
 | Operation                     | Needs              |
 | ----------------------------- | ------------------ |
@@ -80,4 +77,4 @@ Listing an agent's tokens shows when each was created and expires, never the tok
 
 ## Kubeconfig downloads
 
-Downloading a kubeconfig for Mission Control's Kubernetes proxy needs `kubernetes-proxy:read` or `kubernetes-proxy:write`. Its credential is a new personal access token of yours, bound to the shipped `kubernetes-proxy` Role, so it can only use the proxy, and no more there than you may. See [Kubernetes proxy](/docs/reference/permissions/actions#kubernetes-proxy).
+On Mission Control SaaS, you can [download a kubeconfig](/docs/installation/saas/kubectl) to use `kubectl` against your instance through Mission Control's Kubernetes proxy. Downloading one needs `kubernetes-proxy:read` or `kubernetes-proxy:write`. Its credential is a new personal access token of yours, bound to the shipped `kubernetes-proxy` Role, so it can only use the proxy, and no more there than you may. See [Kubernetes proxy](/docs/reference/permissions/actions#kubernetes-proxy).
