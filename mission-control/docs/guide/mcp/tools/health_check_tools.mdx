@@ -54,6 +54,10 @@ Get a health check's execution history. Each entry contains the status, time, du
 
 Execute a health check immediately and return the result, along with execution status and timing.
 
+:::info Permissions
+Running a check needs `create` on canaries, the same as running it from the UI or the API. If the caller authenticates with a personal access token, one of the token's Roles must also allow it.
+:::
+
 <Fields rows={[
   {field: "id", scheme: "string", description: "Health check ID to run", required: true}
 ]} />

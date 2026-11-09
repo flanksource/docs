@@ -17,7 +17,8 @@ Mission Control provides an MCP (Model Context Protocol) server that enables AI 
 - Query the config catalog and explore infrastructure relationships
 - List and inspect health checks across your environment
 - Execute playbooks to remediate issues or perform operations
-- Manage connections, artifacts, and notifications
+- Audit who has access to a resource and when it was last reviewed
+- Inspect notification history, playbook run artifacts, and background job runs
 - Enable AI-assisted troubleshooting and incident response
 
 ## MCP Server
@@ -28,13 +29,18 @@ Mission Control exposes an MCP server endpoint that AI assistants can connect to
 
 | Tool | Description |
 |------|-------------|
-| **Catalog** | Query config items, search by type, and explore relationships |
-| **Health Checks** | List canary health checks, view status and history |
-| **Playbooks** | List available playbooks and trigger executions |
-| **Connections** | Browse configured connections to external systems |
-| **Artifacts** | List and retrieve artifacts from playbook runs |
-| **Notifications** | View notification configurations |
-| **Jobs** | Monitor scheduled jobs and their status |
+| **Catalog** | Query config items and their changes, and explore relationships |
+| **Access** | Audit who has access to a resource, their sign-ins, and access reviews |
+| **Health Checks** | Search health checks, view their history, and run them |
+| **Playbooks** | Run each permitted playbook as its own tool, and inspect past runs |
+| **Views** | Run each permitted view as its own tool |
+| **Connections** | List configured connections, without their settings or credentials |
+| **Artifacts** | Read artifacts produced by playbook runs and health checks |
+| **Notifications** | View the notifications sent for a resource |
+| **Templates** | Evaluate CEL expressions and Go templates |
+| **Jobs** | List scheduled jobs and inspect their run history |
+
+See [MCP Tools](/docs/guide/mcp/tools) for each tool's parameters.
 
 ### Connecting Claude Desktop
 
@@ -46,7 +52,7 @@ For client-specific setup, see [Client Setup](/docs/guide/mcp/client-setup).
 
 Mission Control authenticates MCP clients with OAuth. Compatible clients use Client ID Metadata Documents (CIMD). Clients that do not support CIMD fall back to Dynamic Client Registration (DCR).
 
-Point the client at the MCP server URL. The authenticating user needs the [`mcp:use`](/docs/reference/permissions/actions#actions-without-a-resource) action.
+Point the client at the MCP server URL. The authenticating user needs the [`mcp:use`](/docs/reference/permissions/actions#actions-without-a-resource) action. A personal access token used for MCP also needs a Role that allows `mcp:use`, such as the shipped [`mcp-user`](/docs/reference/permissions/shipped-roles#mcp-user) Role. Each tool then checks the caller's permissions on what it reads or runs.
 
 ### Example Interactions
 
@@ -62,7 +68,7 @@ Once connected, you can ask Claude questions like:
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │  Claude/AI      │────▶│  MCP Server     │────▶│  Mission Control│
-│  Assistant      │◀────│  (SSE/HTTP)     │◀────│  API            │
+│  Assistant      │◀────│  (HTTP)         │◀────│  API            │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
 

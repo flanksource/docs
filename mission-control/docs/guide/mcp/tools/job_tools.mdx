@@ -1,0 +1,75 @@
+---
+title: Job
+sidebar_custom_props:
+  icon: mdi:clock-outline
+---
+
+# Job Tools
+
+Tools for inspecting Mission Control's background jobs, such as scrapers, notification senders and cleanup jobs, and their run history.
+
+:::info Permissions
+All job tools need the [`job:read`](/docs/reference/permissions/actions#actions-without-a-resource) action. `job:read` grants all job history or none, and job details can mention resources the caller can't otherwise read.
+:::
+
+## list_jobs
+
+List the jobs scheduled on this Mission Control server, with their cron schedule, last run and next run. Use [`list_job_runs`](#list_job_runs) for execution history.
+
+<Fields rows={[
+  {field: "name", scheme: "string", description: "Case-insensitive partial match against the job name or its aliases"},
+  {field: "resource_type", scheme: "string", description: "Exact resource type filter"},
+  {field: "resource_id", scheme: "string", description: "Exact resource ID filter"},
+  {field: "limit", scheme: "number", description: "Maximum number of jobs to return. Defaults to 50, maximum 100"}
+]} />
+
+### Example Usage
+
+**Prompt:** "When does the Kubernetes scraper run next?"
+
+**Result:** Returns the matching jobs with their schedule and next run time.
+
+## list_job_runs
+
+List job run history, most recent first. Each run includes its status, success and error counts, duration and error messages. Use [`get_job_run`](#get_job_run) for a run's full details.
+
+<Fields rows={[
+  {field: "name", scheme: "string", description: "Case-insensitive partial match against the job name"},
+  {field: "status", scheme: "[]string", description: "Statuses to include: `RUNNING`, `SUCCESS`, `WARNING`, `FAILED`, `STALE` or `SKIPPED`"},
+  {field: "resource_type", scheme: "string", description: "Exact resource type filter"},
+  {field: "resource_id", scheme: "string", description: "Exact resource ID filter"},
+  {field: "agent_id", scheme: "string", description: "Exact agent ID filter"},
+  {field: "has_errors", scheme: "bool", description: "Return only runs with errors (`true`) or without errors (`false`)"},
+  {field: "since", scheme: "string", description: "Inclusive start time, as a datemath expression e.g. `now-24h`, or an RFC 3339 timestamp"},
+  {field: "before", scheme: "string", description: "Inclusive end time, as a datemath expression e.g. `now-1h`, or an RFC 3339 timestamp"},
+  {field: "limit", scheme: "number", description: "Maximum number of runs to return. Defaults to 20, maximum 100"}
+]} />
+
+### Example Usage
+
+**Prompt:** "Which jobs failed in the last day?"
+
+**Parameters Used:**
+
+```json
+{
+  "status": ["FAILED"],
+  "since": "now-24h"
+}
+```
+
+**Result:** Returns the failed runs with their error messages.
+
+## get_job_run
+
+Get the complete record of a job run, including its details and errors.
+
+<Fields rows={[
+  {field: "id", scheme: "string", description: "Job run ID, from `list_job_runs` results", required: true}
+]} />
+
+### Example Usage
+
+**Prompt:** "Why did that scraper run fail?"
+
+**Result:** Returns the run's full details and every error it recorded.

@@ -6,41 +6,39 @@ sidebar_custom_props:
 
 # Connection Tools
 
-Tools for managing connections in Mission Control.
+Tools for discovering the [connections](/docs/reference/connections) configured in Mission Control.
 
 ## list_connections
 
-List all available connections in the system
+List connections by ID, name, namespace, type, and source. The tool doesn't return connection settings or credentials, and returns an empty array when no connections are configured.
+
+:::info Permissions
+The caller needs `read` on connections.
+:::
 
 ### Example Usage
 
 **Prompt:** "What connections are configured in the system?"
 
-**AI Response:** "I'll list all the available connections configured in your Mission Control system."
-
-**Result:** Returns a list of all connections with details like:
-- Connection names and namespaces
-- Connection types (Slack, AWS, Azure, database connections, etc.)
-- Status information
-- Configuration metadata
+**Result:** Returns the identity of each connection.
 
 **Example Output:**
+
 ```json
 [
   {
+    "id": "0193b2c4-2a6f-7d8e-9b1a-4c5d6e7f8a9b",
     "name": "slack-alerts",
     "namespace": "default",
     "type": "slack",
+    "source": "KubernetesCRD"
   },
   {
+    "id": "0193b2c4-2a6f-7d8e-9b1a-4c5d6e7f8a9c",
     "name": "aws-prod",
     "namespace": "production",
     "type": "aws",
-  },
-  {
-    "name": "postgres-main",
-    "namespace": "database",
-    "type": "postgres",
+    "source": "UI"
   }
 ]
 ```
