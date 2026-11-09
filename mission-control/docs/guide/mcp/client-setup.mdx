@@ -34,46 +34,43 @@ The MCP server URL uses one of these formats:
 
 ## Permissions
 
-An AI agent connected through MCP acts as the person who connected it. It can never do more than that person can do in Mission Control, and Mission Control checks permissions at three points:
+An AI agent connected through MCP has no permissions of its own. It acts as the person who connected it, so it can never see or do more than that person can in Mission Control.
 
-| Step                          | What's checked                                                                                                  | Who has it by default                                             |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| Connect to the MCP server     | [`mcp:use`](/docs/reference/permissions/actions#actions-without-a-resource)                                     | The shipped `admin` and `mcp-user` Roles. `viewer` doesn't have it |
-| Read data through a tool      | The same permission as in the UI, such as `read` on the config, view, check or connection                       | `viewer` reads configs, health checks, playbooks and views        |
-| Run a playbook as a tool      | [`mcp:run`](/docs/reference/permissions/actions) on the playbook, then the checks of any playbook run           | `admin` only                                                      |
+On top of what that person can already do, MCP adds two actions that only MCP checks:
+
+- [`mcp:use`](/docs/reference/permissions/actions#actions-without-a-resource) lets the person connect an agent at all. Without it, the MCP server refuses every request.
+- [`mcp:run`](/docs/reference/permissions/actions) lets the person's agent run a playbook. It's granted per playbook, so it decides which playbooks agents can run.
+
+Everything else the agent does is checked exactly as in the UI. If someone can't open a config, a view or a health check in the UI, their agent can't read it either. If they can't run a playbook from the UI, their agent can't run it, even with `mcp:run`.
+
+So to let someone use MCP, an admin grants them `mcp:use`, and `mcp:run` on the playbooks their agent may run. Their existing permissions decide the rest. The sections below explain each step.
 
 ### Connecting: mcp:use {#connecting-mcp-use}
 
-`mcp:use` only lets someone connect. Without it, every request to the MCP server fails with `403 forbidden: user <id> does not have mcp:use permission`, before any tool runs.
+`mcp:use` lets someone connect an agent to the MCP server. It doesn't let the agent read or run anything by itself. Without it, every request to the MCP server fails with `403 forbidden: user <id> does not have mcp:use permission`, before any tool runs.
 
-Only two shipped Roles have it: `admin`, and `mcp-user`, which has nothing else:
+`mcp:use` acts on Mission Control itself, not on a resource, so a [Role](/docs/guide/permissions/roles) rule that grants it has only a name and the action, with no Scope:
 
-```yaml title="mcp-user.yaml" file=<rootDir>/modules/mission-control/rbac/shipped/shipped.yaml#L664-L673
+| Rule field | Value     |
+| ---------- | --------- |
+| `name`     | `use-mcp` |
+| `action`   | `mcp:use` |
 
-```
-
-To let people use MCP, an admin binds `mission-control-builtin/mcp-user` to them, or to their team, with a [RoleBinding](/docs/guide/permissions/role-bindings), for example from **Settings → Role Bindings**:
-
-| Field  | Value                              |
-| ------ | ---------------------------------- |
-| Role   | `mission-control-builtin/mcp-user` |
-| Teams  | The teams that should use MCP      |
-
-Use `*` under **People** to let everyone who signs in use MCP.
+To let people use MCP, an admin gives that Role to them, or to their teams, with a [RoleBinding](/docs/guide/permissions/role-bindings).
 
 ### Reading data: the same permissions as the UI
 
-Once connected, each tool and resource checks the same permission that the matching page of the UI checks, and returns only what the person may see. `mcp-user` grants none of these, so people also need Roles that let them read, such as the shipped `viewer` Role.
+Once connected, each tool and resource checks the same permission as the matching page of the UI, and returns only what the person may see. `mcp:use` doesn't grant any of these, so people need them from their other Roles.
 
-| Tools                                               | Need                                                  |
-| --------------------------------------------------- | ----------------------------------------------------- |
-| Catalog, changes, access, related configs            | `read` on the configs. Results leave out the rest     |
-| Health check search and history                     | `read` on the checks                                  |
-| View tools                                          | `read` on the view. Each readable view becomes a tool |
-| `run_health_check`                                  | `create` on canaries                                  |
-| Connections                                         | `read` on connections. Credentials are never returned |
-| Notifications                                       | `read` on notifications                               |
-| Jobs                                                | `job:read`                                            |
+| Tools                                     | Need                                                  |
+| ----------------------------------------- | ----------------------------------------------------- |
+| Catalog, changes, access, related configs | `read` on the configs. Results leave out the rest     |
+| Health check search and history           | `read` on the checks                                  |
+| View tools                                | `read` on the view. Each readable view becomes a tool |
+| `run_health_check`                        | `create` on canaries                                  |
+| Connections                               | `read` on connections. Credentials are never returned |
+| Notifications                             | `read` on notifications                               |
+| Jobs                                      | `job:read`                                            |
 
 ### Running playbooks: mcp:run {#running-playbooks-mcp-run}
 
@@ -84,12 +81,12 @@ Once connected, each tool and resource checks the same permission that the match
 
 So to let a team run some playbooks from an agent, give them a Role with these rules, each on a Scope that selects those playbooks:
 
-| Rule action    | Resource Scope            | Target Scope                          |
-| -------------- | ------------------------- | ------------------------------------- |
-| `mcp:run`      | The playbooks to expose   | None                                  |
-| `playbook:run` | The same playbooks        | The configs they may run on, if any   |
+| Rule action    | Resource Scope          | Target Scope                        |
+| -------------- | ----------------------- | ----------------------------------- |
+| `mcp:run`      | The playbooks to expose | None                                |
+| `playbook:run` | The same playbooks      | The configs they may run on, if any |
 
-Start from the Role in the [permissions quickstart](/docs/guide/permissions/quickstart#3-let-someone-run-playbooks), which already grants `playbook:run`, and add an `mcp:run` rule on the same playbook Scope. To expose every playbook, use the shipped `mission-control-builtin/all-playbooks` Scope.
+The [permissions quickstart](/docs/guide/permissions/quickstart#3-let-someone-run-playbooks) shows a Role that grants `playbook:run`. Add an `mcp:run` rule on the same playbook Scope to offer those playbooks to agents.
 
 The playbook's [`mcp` field](/docs/reference/playbooks#mcp) only changes how the tool is described to the agent, such as its title and hints. It doesn't grant or remove access.
 
@@ -97,18 +94,18 @@ The playbook's [`mcp` field](/docs/reference/playbooks#mcp) only changes how the
 
 The two ways to authenticate differ in what the agent may do:
 
-- **OAuth**: the agent has everything the person has. Their own `mcp:use`, read permissions and `mcp:run` are all that's checked.
+- **OAuth**: the agent has everything the person has. Only the person's own permissions are checked.
 - **Personal access token**: the agent is also limited by the token's Roles. Each check must be allowed both by the person and by a rule of one of the token's Roles. See [How a token is limited](/docs/guide/permissions/personal-access-tokens#how-a-token-is-limited).
 
-So a token for MCP needs Roles that cover each step, not only the person:
+So the Roles of a token for MCP must cover every step the agent takes, not only the person's:
 
-| The agent should                | Bind the token to                                                                          |
-| ------------------------------- | ------------------------------------------------------------------------------------------ |
-| Connect                         | `mission-control-builtin/mcp-user`. The Setup MCP flow selects it for you                  |
-| Read the catalog, checks, views | `mission-control-builtin/viewer`, or a Role of your own                                    |
-| Run playbooks                   | A Role with `mcp:run` and `playbook:run` on those playbooks, as described above            |
+| The agent should                | The token's Roles need                                       |
+| ------------------------------- | ------------------------------------------------------------ |
+| Connect                         | `mcp:use`. The Setup MCP flow adds a Role with it for you    |
+| Read the catalog, checks, views | `read` on what the agent should see                          |
+| Run playbooks                   | `mcp:run` and `playbook:run` on those playbooks              |
 
-Without `mcp-user`, or another Role with `mcp:use`, a token fails with `403 forbidden: the access token's roles don't grant mcp:use`. A token's Roles can't change after it's created, so to give an agent more, create a new token.
+If none of the token's Roles allows `mcp:use`, requests fail with `403 forbidden: the access token's roles don't grant mcp:use`. A token's Roles can't change after it's created, so to give an agent more, create a new token.
 
 ### When changes take effect
 
@@ -210,7 +207,7 @@ Use this approach when your MCP client does not support OAuth, or when you want 
 
 ### Create a personal access token
 
-Use the Setup MCP flow to create a personal access token with MCP permissions. The flow binds the token to the shipped [`mcp-user`](/docs/reference/permissions/shipped-roles#mcp-user) Role, next to the Roles that say what it may reach, such as `viewer`. The agent can only do what both you and the token's Roles allow, so to let it run playbooks, also bind a Role with `mcp:run` and `playbook:run` on them. See [OAuth and personal access tokens](#oauth-and-personal-access-tokens).
+Use the Setup MCP flow to create a personal access token with MCP permissions. The flow gives the token a Role with `mcp:use`, next to the Roles you choose for what it may reach. The agent can only do what both you and the token's Roles allow, so to let it run playbooks, also choose a Role with `mcp:run` and `playbook:run` on them. See [OAuth and personal access tokens](#oauth-and-personal-access-tokens).
 
 1. In Mission Control, open the user menu and select **Setup MCP**.
 
@@ -517,15 +514,15 @@ ws.on('open', () => {
    - Check if Basic prefix is included
 
 3. **403 forbidden: does not have mcp:use permission**
-   - Bind `mission-control-builtin/mcp-user` to the user or their team. See [Connecting: mcp:use](#connecting-mcp-use)
-   - If the message says the access token's roles don't grant `mcp:use`, create a new token bound to `mcp-user`
+   - Give the user, or their team, a Role with `mcp:use`. See [Connecting: mcp:use](#connecting-mcp-use)
+   - If the message says the access token's roles don't grant `mcp:use`, create a new token with a Role that allows it, for example through the Setup MCP flow
 
 4. **Playbooks Don't Appear as Tools**
    - The user needs `mcp:run` on each playbook, and so does a token's Role. See [Running playbooks: mcp:run](#running-playbooks-mcp-run)
    - Reconnect the client after a permission change, because the tool list is built when the client connects
 
 5. **Tools Return Nothing or Fail with forbidden**
-   - The user, and a token's Roles, need the same `read` permissions as in the UI, such as the `viewer` Role. See [Reading data](#reading-data-the-same-permissions-as-the-ui)
+   - The user, and a token's Roles, need the same `read` permissions as in the UI. See [Reading data](#reading-data-the-same-permissions-as-the-ui)
 
 6. **Tools Not Appearing**
    - Restart the client application
