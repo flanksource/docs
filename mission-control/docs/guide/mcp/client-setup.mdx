@@ -19,11 +19,7 @@ Use the Setup MCP flow to get the MCP server URL for your Mission Control tenant
 
 1. In Mission Control, open the user menu and select **Setup MCP**.
 
-<Screenshot
-  img="/img/mcp-profile-menu.png"
-  size="420px"
-  alt="Mission Control user menu with Setup MCP option"
-/>
+   <Screenshot img="/img/mcp-profile-menu.png" size="420px" alt="Mission Control user menu with Setup MCP option" />
 
 2. Copy the MCP server URL from the setup dialog.
 
@@ -32,12 +28,92 @@ The MCP server URL uses one of these formats:
 - SaaS users: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
 - Self-hosted users: `https://your.domain.com/api/mcp`
 
+## Permissions
+
+An AI agent connected through MCP has no permissions of its own. It acts as the person who connected it, so it can never see or do more than that person can in Mission Control.
+
+On top of what that person can already do, MCP adds two actions that only MCP checks:
+
+- [`mcp:use`](/docs/reference/permissions/actions#actions-without-a-resource) lets the person connect an agent at all. Without it, the MCP server refuses every request.
+- [`mcp:run`](/docs/reference/permissions/actions) lets the person's agent run a playbook. It's granted per playbook, so it decides which playbooks agents can run.
+
+Everything else the agent does is checked exactly as in the UI. If someone can't open a config, a view or a health check in the UI, their agent can't read it either. If they can't run a playbook from the UI, their agent can't run it, even with `mcp:run`.
+
+Two things work the same through MCP as in the UI, and can reach data the person can't read directly:
+
+- **Views** show whatever their queries return. Someone who can read a view sees its rows, even rows from configs they can't open.
+- **Playbook runs** act as the playbook once they start. The person's permissions decide whether the run can start, but each action of the run, such as reading configs or using a connection, is checked as the playbook. If a run fails on a permission, the playbook needs it, not the person. See [Playbooks, notifications and other automation](/docs/guide/permissions/role-bindings#playbooks-notifications-and-other-automation).
+
+So to let someone use MCP, an admin grants them `mcp:use`, and `mcp:run` on the playbooks their agent may run. Their existing permissions decide the rest. The sections below explain each step.
+
+### Connecting: mcp:use {#connecting-mcp-use}
+
+`mcp:use` lets someone connect an agent to the MCP server. It doesn't let the agent read or run anything by itself. Without it, every request to the MCP server fails with `403 forbidden: user <id> does not have mcp:use permission`, before any tool runs.
+
+`mcp:use` acts on Mission Control itself, not on a resource, so a [Role](/docs/guide/permissions/roles) rule that grants it has only a name and the action, with no Scope:
+
+| Rule field | Value     |
+| ---------- | --------- |
+| `name`     | `use-mcp` |
+| `action`   | `mcp:use` |
+
+To let people use MCP, an admin gives that Role to them, or to their teams, with a [RoleBinding](/docs/guide/permissions/role-bindings). Don't add a [constraint](/docs/guide/permissions/role-bindings#limiting-a-role-to-some-resources) to that RoleBinding: a rule without a resource, such as `mcp:use`, never applies through a RoleBinding with a constraint, so a constrained binding leaves people without `mcp:use`.
+
+### Reading data: the same permissions as the UI
+
+Once connected, each tool and resource checks the same permission as the matching page of the UI, and returns only what the person may see. `mcp:use` doesn't grant any of these, so people need them from their other Roles.
+
+| Tools                                     | Need                                                  |
+| ----------------------------------------- | ----------------------------------------------------- |
+| Catalog, changes, access, related configs | `read` on the configs. Results leave out the rest     |
+| Health check search and history           | `read` on the checks                                  |
+| View tools                                | `read` on the view. Each readable view becomes a tool |
+| `run_health_check`                        | `create` on canaries                                  |
+| Connections                               | `read` on connections. Credentials are never returned |
+| Notifications                             | `read` on notifications                               |
+| Jobs                                      | `job:read`                                            |
+| `eval_template`                           | `read` on the config, change or check it loads        |
+
+### Running playbooks: mcp:run {#running-playbooks-mcp-run}
+
+`mcp:run` decides which playbooks an agent can run. It's granted per playbook, through the [Scope](/docs/guide/permissions/scopes) of the rule that grants it, so it's how an admin turns MCP on or off for each playbook:
+
+- A playbook appears as a tool only for people with `mcp:run` on it. A playbook outside every `mcp:run` Scope is never offered to an agent, even to someone who can run it from the UI.
+- Running it through MCP then makes the same checks as running it from the UI: `playbook:run` on the playbook, with the config, component or check it runs on in the rule's `target` Scope, and `read` on that config, component or check. See [Running playbooks: resource and target](/docs/guide/permissions/roles#running-playbooks-resource-and-target).
+
+So to let a team run some playbooks from an agent, give them a Role with these rules, each on a Scope that selects those playbooks:
+
+| Rule action    | Resource Scope          | Target Scope                        |
+| -------------- | ----------------------- | ----------------------------------- |
+| `mcp:run`      | The playbooks to expose | None                                |
+| `playbook:run` | The same playbooks      | The configs they may run on, if any |
+
+The [permissions quickstart](/docs/guide/permissions/quickstart#3-let-someone-run-playbooks) shows a Role that grants `playbook:run`. Add an `mcp:run` rule on the same playbook Scope to offer those playbooks to agents.
+
+The playbook's [`mcp` field](/docs/reference/playbooks#mcp) only changes how the tool is described to the agent, such as its title and hints. It doesn't grant or remove access.
+
+### When changes take effect
+
+Mission Control builds the list of playbook and view tools when the client connects. After you grant or remove `mcp:run`, or `read` on a view, reconnect the client to see the new list. Every call still checks permissions when it runs, so a removed permission blocks the call immediately.
+
 ## Choose an authentication method
 
-Mission Control supports two MCP authentication flows:
+Mission Control supports two ways to authenticate an MCP client. They differ in what the agent may do:
 
-- OAuth: Use an MCP client that supports OAuth for remote MCP servers.
-- Personal access token: Create a Mission Control personal access token and add it to your MCP client configuration.
+- **OAuth**: use an MCP client that supports OAuth for remote MCP servers. You sign in from a browser, and the agent has everything you have: only your own [permissions](#permissions) are checked.
+- **Personal access token**: create a Mission Control personal access token and add it to your MCP client configuration. The agent is also limited by the token's Roles: each check must be allowed both by you and by a rule of one of the token's Roles. See [How a token is limited](/docs/guide/permissions/personal-access-tokens#how-a-token-is-limited).
+
+### What a token's Roles must allow {#token-roles}
+
+The Roles of a token for MCP must cover every step the agent takes, not only yours:
+
+| The agent should                | The token's Roles need                                    |
+| ------------------------------- | --------------------------------------------------------- |
+| Connect                         | `mcp:use`. The Setup MCP flow adds a Role with it for you |
+| Read the catalog, checks, views | `read` on what the agent should see                       |
+| Run playbooks                   | `mcp:run` and `playbook:run` on those playbooks           |
+
+If none of the token's Roles allows `mcp:use`, requests fail with `403 forbidden: the access token's roles don't grant mcp:use`. A token's Roles can't change after it's created, so to give an agent more, create a new token.
 
 <Tabs groupId="mcp-auth" queryString>
 <TabItem value="oauth" label="OAuth" default>
@@ -54,7 +130,7 @@ Clients that do not support CIMD fall back to Dynamic Client Registration (DCR) 
 
 The client discovers the authorization server, registers with CIMD or DCR, and opens a browser for you to sign in. On the consent screen, check the client name and redirect address before you allow access.
 
-The authenticating user needs the [`mcp:use`](/docs/reference/permissions/actions#actions-without-a-resource) action.
+The agent acts with all your own permissions. You need `mcp:use`, and `mcp:run` on any playbook the agent should run. See [Permissions](#permissions).
 
 ### Claude Code
 
@@ -72,6 +148,8 @@ Create or edit `.mcp.json` in your project root and add the Mission Control MCP 
 }
 ```
 
+Then start Claude Code, run `/mcp`, select `mission-control` and choose **Authenticate**. Claude Code opens a browser to sign in to Mission Control. After you allow access, `/mcp` shows `mission-control` as connected with its tools.
+
 ### VS Code
 
 Create or edit `.vscode/mcp.json` in your project root and add the Mission Control MCP server.
@@ -86,6 +164,8 @@ Create or edit `.vscode/mcp.json` in your project root and add the Mission Contr
   "inputs": []
 }
 ```
+
+Start the server from `mcp.json`. VS Code asks to authenticate with Mission Control and opens a browser to sign in. After you allow access, Mission Control's tools appear in Copilot Chat's tools list in agent mode.
 
 ### Claude Desktop Connectors
 
@@ -124,42 +204,49 @@ Mission Control tools appear in Claude Desktop after the OAuth flow completes.
 
 ## Personal access token
 
-Use this approach when your MCP client does not support OAuth, or when you want to pass a Mission Control personal access token in the client configuration.
+Use this approach when your MCP client doesn't support OAuth, or when you want to pass a Mission Control personal access token in the client configuration.
 
 ### Create a personal access token
 
-Use the Setup MCP flow to create a personal access token with MCP permissions. The flow binds the token to the shipped [`mcp-user`](/docs/reference/permissions/shipped-roles#mcp-user) Role, next to the Roles that say what it may reach, such as `viewer`. A token can only reach the MCP server when both you and one of its Roles allow `mcp:use`. To let the agent run playbooks as tools, also bind a Role with [`mcp:run`](/docs/guide/mcp/tools/playbook_tools) on those playbooks.
+The agent can only do what both you and the token's Roles allow, so choose the token's Roles for what the agent should do. See [What a token's Roles must allow](#token-roles).
 
 1. In Mission Control, open the user menu and select **Setup MCP**.
 
-<Screenshot img="/img/mcp-user-profile.png" size="300px" alt="User profile" />
+   <Screenshot img="/img/mcp-user-profile.png" size="300px" alt="User profile" />
 
-2. Enter a token name.
+2. Fill in the form:
 
-<Screenshot img="/img/mcp-create-token.png" size="600px" alt="Create token" />
+   | Field             | Value                                                                                                                                                                             |
+   | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | **Name**          | A name for the token, unique among your tokens                                                                                                                                 |
+   | **Expiry**        | How long the token is valid. Defaults to 90 days                                                                                                                               |
+   | **Auto Renew**    | Extends the expiry while the token is in use                                                                                                                                   |
+   | **Role Bindings** | The Roles that limit the token. The form preselects a Role that allows `mcp:use`; keep it. Add Roles with `read` on what the agent should see, and with `mcp:run` and `playbook:run` on the playbooks it should run |
 
-3. Copy the generated config for your MCP client, or copy the token value.
+   A token's Roles can't change later. If no Role grants what the agent needs, ask an admin to create one, then create the token.
 
-<Screenshot img="/img/mcp-copy-token.png" size="600px" alt="Use token" />
+3. Select **Create Token**, then copy the generated configuration for your MCP client, or copy the token value. Mission Control shows the token only once.
 
-:::info
-Some MCP clients use the personal access token as a bearer token. Other MCP clients use Basic authentication with username `token` and password `<token value>`.
+   <Screenshot img="/img/mcp-copy-token.png" size="600px" alt="Use token" />
 
-When you use the `Authorization: Basic <base64_token>` header, encode `token:<token_value>` as the `base64_token` value.
-:::
+### Authentication header
+
+Send the token in the `Authorization` header as `Bearer <token>`. Every configuration that Setup MCP generates, and every example below, uses this form.
+
+Clients that only support basic authentication can use the username `token` and the token as the password. The header is then `Authorization: Basic <credentials>`, where `<credentials>` is the Base64 encoding of `token:<token>`.
 
 ### Configure a client
+
+Replace `<token>` with your token and the URL with your [MCP server URL](#mcp-server-url). Clients that can't send headers to a remote MCP server use the [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) bridge, which runs locally through `npx` and needs Node.js.
 
 <!-- Source: modules/flanksource-ui/src/components/Tokens/Add/TokenDisplayModal.tsx#McpSetupTabs -->
 
 <Tabs>
 <TabItem value="claude-desktop" label="Claude Desktop">
 
-Use the Claude Desktop configuration file when you need to pass an MCP bearer token directly from Claude Desktop.
-
 1. Open Claude Desktop settings.
 2. Select **Developer** → **Edit Config**.
-3. Add the Mission Control MCP server configuration.
+3. Add the Mission Control MCP server configuration:
 
 ```json title="claude_desktop_config.json"
 {
@@ -168,31 +255,22 @@ Use the Claude Desktop configuration file when you need to pass an MCP bearer to
       "command": "npx",
       "args": [
         "-y",
-        "mcp-remote@latest",
+        "mcp-remote",
         "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
         "--header",
-        "Authorization:${AUTH_HEADER}"
-      ],
-      "env": {
-        "AUTH_HEADER": "Bearer YOUR_TOKEN_HERE"
-      }
+        "Authorization:Bearer <token>"
+      ]
     }
   }
 }
 ```
 
-4. Restart Claude Desktop.
-5. Mission Control tools appear in the tools menu.
+4. Restart Claude Desktop. Mission Control's tools appear in the tools menu.
 
 </TabItem>
 <TabItem value="claude-code" label="Claude Code">
 
-Claude Code CLI supports MCP through the `.mcp.json` configuration file.
-
-### Setup Steps
-
-1. Create or edit the `.mcp.json` file in your project root or home directory
-2. Add the Mission Control MCP server configuration:
+1. Create or edit `.mcp.json` in your project root and add the Mission Control MCP server:
 
 ```json title=".mcp.json"
 {
@@ -202,106 +280,62 @@ Claude Code CLI supports MCP through the `.mcp.json` configuration file.
       "type": "http",
       "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
       "headers": {
-        "Authorization": "Bearer YOUR_TOKEN_HERE"
+        "Authorization": "Bearer <token>"
       }
     }
   }
 }
 ```
 
-3. Save the file and restart Claude Code
-4. Mission Control tools will be available in your sessions
+2. Restart Claude Code, then run `/mcp` to check that `mission-control` is connected and lists its tools.
 
 </TabItem>
-<TabItem value="vscode-copilot" label="VS Code Copilot">
+<TabItem value="vscode" label="VS Code">
 
-GitHub Copilot Chat in VS Code supports MCP through the Copilot extensibility API.
+1. Create or edit `.vscode/mcp.json` in your project root and add the Mission Control MCP server:
 
-### Setup Steps
-
-1. Ensure you have GitHub Copilot Chat installed in VS Code
-2. Install the MCP extension for Copilot:
-
-   ```bash
-   code --install-extension github.copilot-mcp
-   ```
-
-3. Open VS Code settings (Cmd/Ctrl + ,)
-4. Search for "Copilot MCP"
-5. Add Mission Control configuration:
-
-```json
+```json title=".vscode/mcp.json"
 {
-  "github.copilot.mcp.servers": {
+  "servers": {
     "mission-control": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-http",
-        "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
-      ],
-      "env": {
-        "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
+      "type": "http",
+      "url": "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
+      "headers": {
+        "Authorization": "Bearer <token>"
       }
     }
   }
 }
 ```
 
-6. Reload VS Code window
-7. In Copilot Chat, type `@mcp` to access Mission Control tools
-
-### Using MCP in Copilot Chat
-
-- Use `@mcp list` to see available tools
-- Use `@mcp mission-control <command>` to execute specific tools
-- Example: `@mcp mission-control query-catalog namespace=production`
+2. Start the server from `mcp.json`, then open Copilot Chat in agent mode. Mission Control's tools appear in the tools list.
 
 </TabItem>
 <TabItem value="cline" label="Cline">
 
-Cline supports MCP through its settings configuration.
-
-### Setup Steps
-
-1. Install Cline extension in VS Code
-2. Open VS Code settings (Cmd/Ctrl + ,)
-3. Search for "Cline MCP"
-4. Add Mission Control server configuration:
+Add Mission Control to Cline's MCP server settings:
 
 ```json
 {
-  "cline.mcpServers": {
+  "mcpServers": {
     "mission-control": {
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-http",
-        "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
-      ],
-      "env": {
-        "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
-      }
+        "mcp-remote",
+        "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
+        "--header",
+        "Authorization:Bearer <token>"
+      ]
     }
   }
 }
 ```
 
-5. Reload VS Code window
-6. Mission Control tools will be available in Cline chat
-
 </TabItem>
 <TabItem value="continue" label="Continue.dev">
 
-Continue.dev supports MCP servers through its configuration file.
-
-### Setup Steps
-
-1. Open Continue configuration
-   - Click the gear icon in Continue sidebar
-   - Or edit `~/.continue/config.json` directly
-
-2. Add Mission Control to the `mcpServers` section:
+Add Mission Control to the `mcpServers` section of your Continue configuration:
 
 ```json
 {
@@ -311,153 +345,69 @@ Continue.dev supports MCP servers through its configuration file.
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-http",
-        "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
-      ],
-      "env": {
-        "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
-      }
+        "mcp-remote",
+        "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp",
+        "--header",
+        "Authorization:Bearer <token>"
+      ]
     }
   ]
 }
 ```
 
-3. Restart Continue
-4. Mission Control tools will be available in chat
-
-</TabItem>
-<TabItem value="zed" label="Zed Editor">
-
-Zed supports MCP through its assistant configuration.
-
-### Setup Steps
-
-1. Open Zed settings (Cmd/Ctrl + ,)
-2. Navigate to Assistant settings
-3. Add Mission Control MCP configuration:
-
-```json
-{
-  "assistant": {
-    "mcp": {
-      "servers": {
-        "mission-control": {
-          "command": "npx",
-          "args": [
-            "-y",
-            "@modelcontextprotocol/server-http",
-            "https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp"
-          ],
-          "env": {
-            "AUTHORIZATION": "Basic YOUR_TOKEN_HERE"
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-4. Restart Zed
-5. Mission Control tools will be available in the assistant
-
 </TabItem>
 <TabItem value="direct" label="Direct HTTP">
 
-For custom integrations or clients that support direct HTTP connections:
+The MCP server uses the MCP HTTP transport: JSON-RPC requests sent with `POST` to the MCP server URL. There's no other endpoint.
 
-### Connection Details
-
-- **Base URL**: `https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp`
-- **Protocol**: HTTP with SSE (Server-Sent Events)
-- **Authentication**: Basic token in Authorization header
-
-### Example Request
+Start a session with an `initialize` request:
 
 ```bash
-curl -X POST https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
-  -H "Authorization: Basic YOUR_TOKEN_HERE" \
+curl -i -X POST https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
+  -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
   -d '{
     "jsonrpc": "2.0",
     "method": "initialize",
     "params": {
       "protocolVersion": "2024-11-05",
-      "capabilities": {}
+      "capabilities": {},
+      "clientInfo": { "name": "curl", "version": "1.0" }
     },
     "id": 1
   }'
 ```
 
-### WebSocket Connection
+A successful response is `200 OK`, with `mission-control` as the server name in the result and an `Mcp-Session-Id` response header. Send that header with every later request of the session, such as `tools/list` and `tools/call`.
 
-For clients supporting WebSocket:
-
-```javascript
-const ws = new WebSocket(
-  'wss://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp/ws',
-  {
-    headers: {
-      Authorization: 'Basic YOUR_TOKEN_HERE'
-    }
-  }
-)
-
-ws.on('open', () => {
-  ws.send(
-    JSON.stringify({
-      jsonrpc: '2.0',
-      method: 'initialize',
-      params: {
-        protocolVersion: '2024-11-05',
-        capabilities: {}
-      },
-      id: 1
-    })
-  )
-})
-```
+</TabItem>
+</Tabs>
 
 </TabItem>
 </Tabs>
 
 ## Troubleshooting
 
-### Common Issues
+Each step of a connection fails in its own way, so start from the error you see:
 
-1. **Connection Refused**
-   - Verify the server URL is correct
-   - Check if you're behind a firewall or proxy
-   - Ensure the token has proper permissions
+| Symptom                                                                       | Cause                                                                                   | Fix                                                                                                                                         |
+| ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| The client can't reach the server                                             | Wrong URL, or a firewall or proxy in the way                                            | Check the [MCP server URL](#mcp-server-url), including `/mcp` or `/api/mcp`                                                                  |
+| `401 Unauthorized`                                                            | The client sent no credentials, or the token is wrong, expired or deleted              | With OAuth, sign in again from the client. With a token, check the `Authorization` header, or create a new token                           |
+| `403 forbidden: user <id> does not have mcp:use permission`                   | You don't have `mcp:use`                                                                | Ask an admin for a Role with `mcp:use`. See [Connecting: mcp:use](#connecting-mcp-use)                                                       |
+| `403 forbidden: the access token's roles don't grant mcp:use`                 | You have `mcp:use`, but none of the token's Roles allows it                             | Create a new token and keep the Role that allows `mcp:use`                                                                                  |
+| A playbook doesn't appear as a tool                                           | You, or the token's Roles, don't have `mcp:run` on it, or the client connected before the grant | Get `mcp:run` on the playbook, then reconnect. See [Running playbooks: mcp:run](#running-playbooks-mcp-run)                          |
+| A view doesn't appear as a tool                                               | You, or the token's Roles, can't read the view, or the client connected before the grant | Get `read` on the view, then reconnect                                                                                                      |
+| A tool returns nothing, or fails with `forbidden`                             | A permission the tool checks is missing                                                 | Find the tool's permission under [Reading data](#reading-data-the-same-permissions-as-the-ui). Running a playbook also needs `playbook:run` and `read` on its target |
+| A playbook run starts but an action fails with a permission error             | The run's actions are checked as the playbook, not as you                               | Give the playbook what it needs. See [Playbooks, notifications and other automation](/docs/guide/permissions/role-bindings#playbooks-notifications-and-other-automation) |
 
-2. **Authentication Failed**
-   - Verify token is valid and not expired
-   - Ensure the user has the `mcp:use` action, and the token is bound to a Role with `mcp:use`, such as `mcp-user`
-   - Check if Basic prefix is included
-
-3. **Tools Not Appearing**
-   - Restart the client application
-   - Check client logs for errors
-   - Verify MCP server is properly configured
-
-### Testing Connection
-
-You can test your MCP connection using the MCP CLI:
-
-```bash
-npx @modelcontextprotocol/cli connect \
-  --transport http \
-  --url https://mc.<org-id>.workload-prod-eu-02.flanksource.com/mcp \
-  --header "Authorization: Basic YOUR_TOKEN_HERE"
-```
-
-</TabItem>
-</Tabs>
+To see who can use MCP, and which playbooks and views each person or team gets through it, open **Settings → MCP**. Its pages need `access:review`.
 
 ## Next Steps
 
 Once connected, explore the available tools:
 
-- [Catalog Tools](./tools/catalog_tools.mdx) - Query and manage configuration items
-- [Connection Tools](./tools/connection_tools.mdx) - Manage connections and integrations
-- [Playbook Tools](./tools/playbook_tools.mdx) - Execute and manage playbooks
+- [Catalog Tools](./tools/catalog_tools.mdx) - Search config items, their changes and relationships
+- [Connection Tools](./tools/connection_tools.mdx) - List connections
+- [Playbook Tools](./tools/playbook_tools.mdx) - Run playbooks and inspect their runs

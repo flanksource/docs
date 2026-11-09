@@ -34,7 +34,7 @@ Mission Control ships a few Roles, the Scopes they use, and an `admins` team in 
 
 ### mcp-user
 
-`mcp-user` is for personal access tokens made for AI agents. A token can connect to the MCP server only when both its owner and one of its Roles allow `mcp:use`, so bind a token for an agent to `mcp-user` and to the Roles that say what it may reach, such as `viewer`. To let the agent run playbooks, also bind a Role with [`mcp:run`](/docs/guide/mcp/tools/playbook_tools) on them, since neither `mcp-user` nor `viewer` has it. The MCP setup flow in the UI selects `mcp-user` when it creates a token. See [MCP client setup](/docs/guide/mcp/client-setup).
+`mcp-user` is for personal access tokens made for AI agents. A token can connect to the MCP server only when both its owner and one of its Roles allow `mcp:use`, so bind a token for an agent to `mcp-user` and to the Roles that say what it may reach, such as `viewer`. To let the agent run playbooks, also bind a Role with [`mcp:run`](/docs/guide/mcp/client-setup#running-playbooks-mcp-run) and `playbook:run` on them, and `read` on what they run on, since neither `mcp-user` nor `viewer` has `mcp:run` or `playbook:run`. The MCP setup flow in the UI selects `mcp-user` when it creates a token. See [MCP client setup](/docs/guide/mcp/client-setup).
 
 ### plugin-admin
 

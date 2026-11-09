@@ -10,7 +10,7 @@ Tools for working with playbooks in Mission Control.
 
 ## Playbooks as tools
 
-Every playbook the caller is allowed to run is registered as its own MCP tool, rather than being run through one generic tool. The tool name is derived from the playbook:
+Every playbook the caller has `mcp:run` on is registered as its own MCP tool, rather than being run through one generic tool. The tool name is derived from the playbook:
 
 ```
 <title-or-name>_<namespace>_<category>

@@ -26,6 +26,17 @@ For detailed setup instructions for popular MCP clients, see [Client Setup](./cl
 
 Mission Control authenticates MCP clients with OAuth. Compatible clients use Client ID Metadata Documents (CIMD). Clients that do not support CIMD fall back to Dynamic Client Registration (DCR).
 
-You can also use a personal access token in the `Authorization` header. The authenticating user needs the [`mcp:use`](/docs/reference/permissions/actions#actions-without-a-resource) action. A request made with a personal access token also needs a token Role that allows `mcp:use`, such as the shipped [`mcp-user`](/docs/reference/permissions/shipped-roles#mcp-user) Role.
+You can also use a personal access token in the `Authorization` header. The authenticating user needs the [`mcp:use`](/docs/reference/permissions/actions#actions-without-a-resource) action. A request made with a personal access token also needs one of the token's Roles to allow `mcp:use`.
+
+`mcp:use` only lets a client connect. Each tool and resource still checks the caller's permissions on what it reads or runs, and a playbook is only offered as a tool to people with `mcp:run` on it. See [Permissions](/docs/guide/mcp/client-setup#permissions) for what to grant.
+
+## Prompts
+
+The MCP server also provides prompts that start common investigations:
+
+| Prompt                             | Arguments                                         | Description                                                                                                                         |
+| ---------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `Unhealthy catalog items`          | None                                              | Searches the catalog, across every agent, for config items that aren't healthy                                                      |
+| `troubleshoot_kubernetes_resource` | `query`: the catalog query that finds the resources | Finds the matching Kubernetes resources, then troubleshoots them step by step with `describe_catalog`, their changes and their tools |
 
 <DocCardList />

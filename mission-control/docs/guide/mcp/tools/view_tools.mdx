@@ -16,13 +16,14 @@ view_<name>_<namespace>
 
 So a view named `deployments` in the `mc` namespace becomes the tool `view_deployments_mc`.
 
-Table rows are returned by default. Use the parameters below to control the size and shape of the output:
+Table rows are returned by default and panels are left out. Use the parameters below to control the size and shape of the output:
 
 <Fields rows={[
-  {field: "withRows", scheme: "bool", description: "Return the view's table rows. Defaults to `true`. Set to `false` to fetch only the panels"},
-  {field: "select", scheme: "[]string", description: "Columns to include in the result"},
-  {field: "page", scheme: "number", description: "Page of results to return"},
-  {field: "limit", scheme: "number", description: "Number of rows per page"}
+  {field: "withRows", scheme: "bool", description: "Return the view's table rows. Defaults to `true`"},
+  {field: "withPanels", scheme: "bool", description: "Return the view's panels. Defaults to `false`"},
+  {field: "select", scheme: "[]string", description: "Columns to include in the result. Columns that the view doesn't define are ignored"},
+  {field: "page", scheme: "number", description: "Page of results to return, starting at 1. Defaults to `1`"},
+  {field: "limit", scheme: "number", description: "Number of rows per page. Defaults to the view's table page size, or 50. Capped at 500"}
 ]} />
 
 The view's own [`templating` variables](/docs/guide/views/concepts/templating) are exposed as additional parameters.
