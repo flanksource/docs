@@ -28,7 +28,7 @@ Mission Control authenticates MCP clients with OAuth. Compatible clients use Cli
 
 You can also use a personal access token in the `Authorization` header. The authenticating user needs the [`mcp:use`](/docs/reference/permissions/actions#actions-without-a-resource) action. A request made with a personal access token also needs a token Role that allows `mcp:use`, such as the shipped [`mcp-user`](/docs/reference/permissions/shipped-roles#mcp-user) Role.
 
-`mcp:use` only lets a client connect. Each tool and resource still checks the caller's permissions on what it reads or runs, so a client sees only the config items, playbooks, views and other resources that the caller can access.
+`mcp:use` only lets a client connect. Each tool and resource still checks the caller's permissions on what it reads or runs, and a playbook is only offered as a tool to people with `mcp:run` on it. See [Permissions](/docs/guide/mcp/client-setup#permissions) for what to grant.
 
 ## Prompts
 
