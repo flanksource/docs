@@ -92,33 +92,28 @@ The [permissions quickstart](/docs/guide/permissions/quickstart#3-let-someone-ru
 
 The playbook's [`mcp` field](/docs/reference/playbooks#mcp) only changes how the tool is described to the agent, such as its title and hints. It doesn't grant or remove access.
 
-### OAuth and personal access tokens
-
-The two ways to authenticate differ in what the agent may do:
-
-- **OAuth**: the agent has everything the person has. Only the person's own permissions are checked.
-- **Personal access token**: the agent is also limited by the token's Roles. Each check must be allowed both by the person and by a rule of one of the token's Roles. See [How a token is limited](/docs/guide/permissions/personal-access-tokens#how-a-token-is-limited).
-
-So the Roles of a token for MCP must cover every step the agent takes, not only the person's:
-
-| The agent should                | The token's Roles need                                       |
-| ------------------------------- | ------------------------------------------------------------ |
-| Connect                         | `mcp:use`. The Setup MCP flow adds a Role with it for you    |
-| Read the catalog, checks, views | `read` on what the agent should see                          |
-| Run playbooks                   | `mcp:run` and `playbook:run` on those playbooks              |
-
-If none of the token's Roles allows `mcp:use`, requests fail with `403 forbidden: the access token's roles don't grant mcp:use`. A token's Roles can't change after it's created, so to give an agent more, create a new token.
-
 ### When changes take effect
 
 Mission Control builds the list of playbook and view tools when the client connects. After you grant or remove `mcp:run`, or `read` on a view, reconnect the client to see the new list. Every call still checks permissions when it runs, so a removed permission blocks the call immediately.
 
 ## Choose an authentication method
 
-Mission Control supports two MCP authentication flows:
+Mission Control supports two ways to authenticate an MCP client. They differ in what the agent may do:
 
-- OAuth: Use an MCP client that supports OAuth for remote MCP servers.
-- Personal access token: Create a Mission Control personal access token and add it to your MCP client configuration.
+- **OAuth**: use an MCP client that supports OAuth for remote MCP servers. You sign in from a browser, and the agent has everything you have: only your own [permissions](#permissions) are checked.
+- **Personal access token**: create a Mission Control personal access token and add it to your MCP client configuration. The agent is also limited by the token's Roles: each check must be allowed both by you and by a rule of one of the token's Roles. See [How a token is limited](/docs/guide/permissions/personal-access-tokens#how-a-token-is-limited).
+
+### What a token's Roles must allow {#token-roles}
+
+The Roles of a token for MCP must cover every step the agent takes, not only yours:
+
+| The agent should                | The token's Roles need                                    |
+| ------------------------------- | --------------------------------------------------------- |
+| Connect                         | `mcp:use`. The Setup MCP flow adds a Role with it for you |
+| Read the catalog, checks, views | `read` on what the agent should see                       |
+| Run playbooks                   | `mcp:run` and `playbook:run` on those playbooks           |
+
+If none of the token's Roles allows `mcp:use`, requests fail with `403 forbidden: the access token's roles don't grant mcp:use`. A token's Roles can't change after it's created, so to give an agent more, create a new token.
 
 <Tabs groupId="mcp-auth" queryString>
 <TabItem value="oauth" label="OAuth" default>
@@ -213,7 +208,7 @@ Use this approach when your MCP client doesn't support OAuth, or when you want t
 
 ### Create a personal access token
 
-The agent can only do what both you and the token's Roles allow, so choose the token's Roles for what the agent should do. See [OAuth and personal access tokens](#oauth-and-personal-access-tokens).
+The agent can only do what both you and the token's Roles allow, so choose the token's Roles for what the agent should do. See [What a token's Roles must allow](#token-roles).
 
 1. In Mission Control, open the user menu and select **Setup MCP**.
 
