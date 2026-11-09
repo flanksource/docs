@@ -72,7 +72,7 @@ Once connected, you can ask Claude questions like:
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
 
-The MCP server translates natural language requests from AI assistants into Mission Control API calls, enabling conversational infrastructure management.
+The AI assistant decides which tool to call from your request and sends a structured tool call to the MCP server, which Mission Control serves at its `/mcp` endpoint. Mission Control authenticates the request, checks `mcp:use`, then runs the tool as you, with the same permission checks as the UI.
 
 ## Next Steps
 
