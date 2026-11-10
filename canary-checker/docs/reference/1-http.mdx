@@ -34,8 +34,6 @@ The HTTP check sends HTTP requests and evaluates the response.
   {field: "maxRedirects", description: "Maximum number of redirects to follow", default: 10, scheme: "int"},
   {field: "maxSSLExpiry", description: <>Maximum number of days until the SSL Certificate expires<br/>Equivalent to <code>test.expr: sslAge &lt; Age("7d")</code></>, scheme: "int"},
   {field: "env", description: "Environment variables that are accessible while templating", scheme: "[]EnvVar"},
-  {field: "ntlm", description: "When set to true, authenticates using NTLM v1 protocol", scheme: "bool"},
-  {field: "ntlmv2", description: "When set to true, authenticates using NTLM v2 protocol", scheme: "bool"},
   {field: "crawl", description: "Crawl configuration for following links", scheme: "[Crawl](#crawl-configuration)"},
   {field: "endpoint", description: "Deprecated: Use url instead", scheme: "string", deprecated: true},
 ]}/>
