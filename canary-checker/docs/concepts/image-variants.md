@@ -35,13 +35,9 @@ Canary checker comes with 3 image variants:
 
 Everything in the minimal image plus:
 
-- [k6](https://github.com/grafana/k6)
 - OpenJDK Temurin 21
-- [JMeter](https://jmeter.apache.org/)
 - [Robot Framework](https://robotframework.org/)
-- [benthos](https://benthos.dev)
 - [dsq](https://github.com/multiprocessio/dsq)
-- [restic](https://restic.net/)
 
 You can choose which variant to use in the helm chart using:
 

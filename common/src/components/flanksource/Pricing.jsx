@@ -130,7 +130,6 @@ const Pricing = () => {
         { name: 'File / S3 / GCS / SFTP / SMB / CIFS', starter: true, standard: true, enterprise: true, tooltip: 'Verify file presence, integrity, and accessibility across various storage systems and protocols' },
         { name: 'Exec', starter: true, standard: true, enterprise: true, tooltip: 'Execute custom scripts and commands to perform complex health checks and validations' },
         { name: 'JUnit', starter: true, standard: true, enterprise: true, tooltip: 'Run JUnit test suites as health checks to validate application functionality' },
-        { name: 'JMeter', starter: true, standard: true, enterprise: true, tooltip: 'Execute JMeter performance tests to validate system performance under load' },
         { name: 'AWS EC2', starter: true, standard: true, enterprise: true, tooltip: 'Monitor EC2 instance health, perform system checks, and validate AWS infrastructure' },
         { name: 'Kubernetes Pod/Ingress', starter: true, standard: true, enterprise: true, tooltip: 'Test pod functionality, ingress routing, and Kubernetes application health' }
       ]
