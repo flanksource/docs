@@ -31,7 +31,6 @@ const integrations = [
   { icon: "elasticsearch" },
   { icon: "opensearch", url: "elasticsearch" },
 
-  { icon: "jmeter", url: "jmeter" },
   { icon: "k6", url: "/examples/k6" },
   { icon: "postman", url: "/examples/newman" },
   { icon: "playwright", url: "/examples/playwright" },

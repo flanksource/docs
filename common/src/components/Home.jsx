@@ -89,7 +89,7 @@ function Home() {
                         Infrastructure
                       </h4>
                       <p className="mt-2 text-base leading-6 text-description">
-                        Batteries including support for HTTP, DNS, ICMP, LDAP, Prometheus, SQL, Mongo, Redis, Azure Devops, JMeter, K6, Playwright, Newman/Postman, SMB, SFTP, S3, and Kubernetes resources.
+                        Batteries including support for HTTP, DNS, ICMP, LDAP, Prometheus, SQL, Mongo, Redis, Azure Devops, K6, Playwright, Newman/Postman, SMB, SFTP, S3, and Kubernetes resources.
                       </p>
                     </div>
                   </div>
